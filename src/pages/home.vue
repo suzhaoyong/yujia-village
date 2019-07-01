@@ -2,7 +2,7 @@
   <div style="width:100%;height:100%;">
     <el-container>
         <el-header>Header</el-header>
-        <el-main>MainMain</el-main>
+        <el-main>MainMainMainMain</el-main>
         <el-footer>Footer</el-footer>
     </el-container>
   </div>
