@@ -1,15 +1,32 @@
 <template>
   <div style="width:100%;height:100%;">
     <el-container>
-        <el-header>Header</el-header>
-        <el-main>Main</el-main>
-        <el-footer>Footer</el-footer>
+      <!--头部-->
+        <el-header style="height:100%;">
+          <Header></Header>
+        </el-header>
+        <!--内容-->
+        <el-main>
+            <router-view></router-view>
+        </el-main>
+        <!--底部-->
+        <el-footer>
+          <Footer></Footer>
+        </el-footer>
     </el-container>
   </div>
 </template>
 <script>
+import Header from "../components/header";
+import Footer from "../components/footer";
+import Main from "../pages/main";
 export default {
   name: "home",
+  components:{
+    Header,
+    Footer,
+    Main
+  },
   data() {
     return {
     };
@@ -17,31 +34,17 @@ export default {
 };
 </script>
 <style scoped>
-.el-header,
-.el-footer {
-  background-color: #b3c0d1;
-  color: #333;
-  text-align: center;
-  line-height: 60px;
+.el-header{
+  padding: 0;
 }
-
+.el-footer{
+  padding: 0;
+}
 .el-main {
-  background-color: #e9eef3;
-  color: #333;
-  text-align: center;
-  line-height: 450px;
+  padding: 0;
 }
-
-body > .el-container {
+.el-container {
   margin-bottom: 40px;
-}
-
-.el-container:nth-child(5) .el-aside,
-.el-container:nth-child(6) .el-aside {
-  line-height: 260px;
-}
-
-.el-container:nth-child(7) .el-aside {
-  line-height: 320px;
+  padding: 0;
 }
 </style>
