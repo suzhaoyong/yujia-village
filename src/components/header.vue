@@ -3,12 +3,12 @@
         <el-col :span="24">
             <div class="header-main">
                 <div class="head-quan">
-                    <div class="head-left"><img src="../assets/ss.png"/></div>
+                    <div class="head-left"><img src="../assets/logo.png"/></div>
                     <div class="head-right">
                         <span class="span1">已购课程</span>
                         <span class="span1">登录</span>
                         <span class="span1">注册</span>
-                        <span><img class="img" src="../assets/ss.png"/></span>
+                        <span><img class="img" src="../assets/byg.png"/></span>
                     </div>
                 </div>
                 <div class="head">
@@ -114,8 +114,9 @@ export default {
             text-align: center;
             margin-top: 8px;
             img{
-                width: 130px;
+                width: 163px;
                 height: 40px;
+                margin-left: -20%;
             }
         }
         .head-right{
@@ -124,12 +125,12 @@ export default {
              margin-top: 18px;
              position: relative;
             .img{
-                width: 50px;
-                height:35px;
+                width: 35px;
+                height: 32px;
                 display: inline-block;
                 position: absolute;
-                top: -7px;
-                right: 29%;
+                top: -4px;
+                right: 32%;
             }
             .span1{
                 padding-right: 17px;
