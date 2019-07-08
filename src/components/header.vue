@@ -8,7 +8,7 @@
                         <span class="span1">已购课程</span>
                         <span class="span1">登录</span>
                         <span class="span1">注册</span>
-                        <span><img class="img" src="../assets/byg.png"/></span>
+                        <span><img class="img" src="../assets/cart.png"/></span>
                     </div>
                 </div>
                 <div class="head">
@@ -125,8 +125,8 @@ export default {
              margin-top: 18px;
              position: relative;
             .img{
-                width: 35px;
-                height: 32px;
+                width: 30px;
+                height: 28px;
                 display: inline-block;
                 position: absolute;
                 top: -4px;

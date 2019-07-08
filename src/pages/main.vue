@@ -7,9 +7,11 @@
                 </template>
                 <div class="nav-contunt">
                     <div class="nav-contunt-div1">
-                        <h2>热门课程</h2>
-                        <div class="nav-text">Sometimes beauty is so simple</div>
+                        <h2><img src="../assets/yujia.png"/>热门课程</h2>
+                         <p class="nav-text">Sometimes beauty is so simple</p>
                     </div>
+                    <div class="border-left"></div>
+                    <div class="border-right"></div>
                     <div class="nav-contunt-div2">
                         <el-carousel height="560px" :interval="5000" arrow="never" direction="vertical" :autoplay="false">
                             <el-carousel-item v-for="item in dataimg" :key="item.id">
@@ -29,8 +31,8 @@
                         </el-carousel>
                     </div>
                     <div class="nav-contunt-div3">
-                        <h2>瑜伽资讯</h2>
-                        <div class="nav-text">Sometimes beauty is so simple</div>
+                        <h2><img src="../assets/yujia.png"/>瑜伽资讯</h2>
+                        <p class="nav-text">Sometimes beauty is so simple</p>
                     </div>
                     <div class="nav-contunt-div4">
                         <div class="swiper-container gallery-top" :options="swiperOption">
@@ -57,8 +59,8 @@
                             </div>
                     </div>
                     <div class="nav-contunt-div3">
-                        <h2>瑜伽名师</h2>
-                        <div class="nav-text">Sometimes beauty is so simple</div>
+                        <h2><img src="../assets/yujia.png"/>瑜伽名师</h2>
+                        <p class="nav-text">Sometimes beauty is so simple</p>
                     </div>
                     <div class="nav-contunt-div5">
                         <el-carousel class="carousel5" height="660px" :interval="5000" arrow="never" direction="vertical" :autoplay="false">
@@ -113,6 +115,33 @@
                             </div>
                             </el-carousel-item>
                         </el-carousel>
+                    </div>
+                    <div class="nav-contunt-div3">
+                        <h2><img src="../assets/yujia.png"/>培训信息</h2>
+                        <p class="nav-text">Sometimes beauty is so simple</p>
+                    </div>
+                    <div class="nav-contunt-div6">
+                        <div class="explain3"></div>
+                    </div>
+                    <div class="nav-contunt-div3">
+                        <h2><img src="../assets/yujia.png"/>加盟会馆</h2>
+                        <p class="nav-text">Sometimes beauty is so simple</p>
+                    </div>
+                    <div class="nav-contunt-div7">
+                        <div class="explain4">
+                           <img class="nav-div7-img" src="../assets/ss.png"/>
+                           <img class="nav-div7-img" src="../assets/ss.png"/>
+                           <img class="nav-div7-img" src="../assets/ss.png"/>
+                           <img class="nav-div7-img" src="../assets/ss.png"/>
+                           <img class="nav-div7-img" src="../assets/ss.png"/>
+                           <img class="nav-div7-img" src="../assets/ss.png"/>
+                           <img class="nav-div7-img" src="../assets/ss.png"/>
+                           <img class="nav-div7-img" src="../assets/ss.png"/>
+                           <img class="nav-div7-img" src="../assets/ss.png"/>
+                           <img class="nav-div7-img" src="../assets/ss.png"/>
+                           <img class="nav-div7-img" src="../assets/ss.png"/>
+                           <img class="nav-div7-img" src="../assets/ss.png"/>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -205,12 +234,30 @@ export default {
     .nav-contunt{
         border: 1px solid;
         height: 100%;
-        display:flow-root;
+        display:inline-block;
+        position: relative;
+        .border-left{
+            width: 25%;
+            height: 1px;
+            background-color: #dcdcdc;
+            position: absolute;
+            top: 75px;
+            left: 17%;
+        }
+        .border-right{
+            width: 25%;
+            height: 1px;
+            background-color: #dcdcdc;
+            position: absolute;
+            right: 17%;
+            top: 75px;
+        }
         .nav-contunt-div1{
             width: 100%;
             height: 150px;
             text-align: center;
             border: 1px solid;
+            position: relative;
             .nav-text{
                 color: #999999;
                 font-size: 14px;
@@ -220,6 +267,12 @@ export default {
                 color: #2c2c2c;
                 font-size: 24px;
                 margin-top: 40px;
+                img{
+                    width: 28px;
+                    height: 28px;
+                    position: absolute;
+                    left: 44%;
+                }
             }
         }
         .nav-contunt-div2{
@@ -291,6 +344,7 @@ export default {
             height: 150px;
             text-align: center;
             border: 1px solid;
+            position: relative;
             .nav-text{
                 color: #999999;
                 font-size: 14px;
@@ -300,12 +354,20 @@ export default {
                 color: #2c2c2c;
                 font-size: 24px;
                 margin-top: 40px;
+                img{
+                    width: 28px;
+                    height: 28px;
+                    position: absolute;
+                    left: 44%;
+                }
             }
         }
         .nav-contunt-div4{
             width: 65%;
             margin:0 auto;
             height: 560px;
+            margin-top: 40px;
+            margin-bottom: 60px;
             border: 1px solid;
             .swiper-container {
                 width: 100%;
@@ -441,6 +503,35 @@ export default {
             }
             .carousel5-item:nth-child(2n+1){
                 background-color: #EEEADC !important;
+            }
+        }
+        .nav-contunt-div6{
+            width: 100%;
+            height: 660px;
+            margin: 0 auto;
+            margin-top: 40px;
+            .explain3{
+                width: 65%;
+                margin:0 auto;
+                height: 590px;
+                border: 1px solid;
+            }
+        }
+        .nav-contunt-div7{
+            width: 100%;
+            height: 660px;
+            margin: 0 auto;
+            margin-top: 40px;
+            .explain4{
+                width: 65%;
+                margin:0 auto;
+                height: 602px;
+                border: 1px solid;
+                .nav-div7-img{
+                    width: 243px;
+                    height: 198px;
+                    background-color: #eeeeee;
+                }
             }
         }
     }
