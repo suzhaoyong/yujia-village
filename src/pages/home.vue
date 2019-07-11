@@ -10,7 +10,7 @@
             <router-view></router-view>
         </el-main>
         <!--底部-->
-        <el-footer>
+        <el-footer style="height:100%;">
           <Footer></Footer>
         </el-footer>
     </el-container>
@@ -44,7 +44,6 @@ export default {
   padding: 0;
 }
 .el-container {
-  margin-bottom: 40px;
   padding: 0;
 }
 </style>

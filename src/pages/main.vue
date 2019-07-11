@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-col>
+        <el-col :span="24">
             <div class="nav-main">
                 <template>
                     <Nav></Nav>
@@ -9,10 +9,11 @@
                     <div class="nav-contunt-div1">
                         <h2><img src="../assets/yujia.png"/>热门课程</h2>
                          <p class="nav-text">Sometimes beauty is so simple</p>
+                        <div class="border-left"></div>
+                        <div class="border-right"></div>
                     </div>
-                    <div class="border-left"></div>
-                    <div class="border-right"></div>
                     <div class="nav-contunt-div2">
+                        <div class="contunt2">
                         <el-carousel height="560px" :interval="5000" arrow="never" direction="vertical" :autoplay="false">
                             <el-carousel-item v-for="item in dataimg" :key="item.id">
                             <div class="carousel-explain">
@@ -29,12 +30,16 @@
                             </div>
                             </el-carousel-item>
                         </el-carousel>
+                        </div>
                     </div>
                     <div class="nav-contunt-div3">
                         <h2><img src="../assets/yujia.png"/>瑜伽资讯</h2>
                         <p class="nav-text">Sometimes beauty is so simple</p>
+                        <div class="border-left"></div>
+                        <div class="border-right"></div>
                     </div>
                     <div class="nav-contunt-div4">
+                        <div class="contunt3">
                         <div class="swiper-container gallery-top" :options="swiperOption">
                                 <div class="swiper-wrapper">
                                 <div class="swiper-slide">
@@ -57,10 +62,13 @@
                                 </div>
                                 </div>
                             </div>
+                         </div>
                     </div>
                     <div class="nav-contunt-div3">
                         <h2><img src="../assets/yujia.png"/>瑜伽名师</h2>
                         <p class="nav-text">Sometimes beauty is so simple</p>
+                        <div class="border-left"></div>
+                        <div class="border-right"></div>
                     </div>
                     <div class="nav-contunt-div5">
                         <el-carousel class="carousel5" height="660px" :interval="5000" arrow="never" direction="vertical" :autoplay="false">
@@ -119,6 +127,8 @@
                     <div class="nav-contunt-div3">
                         <h2><img src="../assets/yujia.png"/>培训信息</h2>
                         <p class="nav-text">Sometimes beauty is so simple</p>
+                        <div class="border-left"></div>
+                        <div class="border-right"></div>
                     </div>
                     <div class="nav-contunt-div6">
                         <div class="explain3"></div>
@@ -126,6 +136,8 @@
                     <div class="nav-contunt-div3">
                         <h2><img src="../assets/yujia.png"/>加盟会馆</h2>
                         <p class="nav-text">Sometimes beauty is so simple</p>
+                        <div class="border-left"></div>
+                        <div class="border-right"></div>
                     </div>
                     <div class="nav-contunt-div7">
                         <div class="explain4">
@@ -235,29 +247,31 @@ export default {
         border: 1px solid;
         height: 100%;
         display:inline-block;
-        position: relative;
-        .border-left{
-            width: 25%;
-            height: 1px;
-            background-color: #dcdcdc;
-            position: absolute;
-            top: 75px;
-            left: 17%;
-        }
-        .border-right{
-            width: 25%;
-            height: 1px;
-            background-color: #dcdcdc;
-            position: absolute;
-            right: 17%;
-            top: 75px;
-        }
+        // position: relative;
+        margin: 0 auto;
+        width: 100%;
         .nav-contunt-div1{
             width: 100%;
             height: 150px;
             text-align: center;
             border: 1px solid;
             position: relative;
+            .border-left{
+            width: 20%;
+            height: 1px;
+            background-color: #dcdcdc;
+            position: absolute;
+            top: 45%;
+            left: 22%;
+            }
+            .border-right{
+                width: 20%;
+                height: 1px;
+                background-color: #dcdcdc;
+                position: absolute;
+                right: 22%;
+                top: 45%;
+            }
             .nav-text{
                 color: #999999;
                 font-size: 14px;
@@ -276,13 +290,16 @@ export default {
             }
         }
         .nav-contunt-div2{
-            width: 65%;
-            height: 560px;
+            width: 100%;
+            height: 660px;
             margin: 0 auto;
-            background-color: #939EC4;
             margin-top: 40px;
-            margin-bottom: 60px;
             // opacity: 0.6;
+            .contunt2{
+                width: 75%;
+                height: 560px;
+                margin: 0 auto;
+                 background-color: #939EC4;
             .carousel-explain{
                 height: 350px;
                 position: relative;
@@ -339,12 +356,29 @@ export default {
                 }
             }
         }
+    }
         .nav-contunt-div3{
             width: 100%;
             height: 150px;
             text-align: center;
             border: 1px solid;
             position: relative;
+            .border-left{
+            width: 20%;
+            height: 1px;
+            background-color: #dcdcdc;
+            position: absolute;
+            top: 45%;
+            left: 22%;
+            }
+            .border-right{
+                width: 20%;
+                height: 1px;
+                background-color: #dcdcdc;
+                position: absolute;
+                right: 22%;
+                top: 45%;
+            }
             .nav-text{
                 color: #999999;
                 font-size: 14px;
@@ -363,18 +397,20 @@ export default {
             }
         }
         .nav-contunt-div4{
-            width: 65%;
+            width: 100%;
             margin:0 auto;
-            height: 560px;
+            height: 660px;
             margin-top: 40px;
-            margin-bottom: 60px;
-            border: 1px solid;
+            .contunt3{
+                width: 75%;
+                margin: 0 auto;
+                height: 560px;
+                border: 1px solid;
             .swiper-container {
                 width: 100%;
                 height: 300px;
                 margin-left: auto;
                 margin-right: auto;
-               
             }
             .gallery-top {
                 height: 70%;
@@ -420,6 +456,7 @@ export default {
                 }
            }
         }
+        }
         .nav-contunt-div5{
             width: 100%;
             height: 660px;
@@ -428,7 +465,7 @@ export default {
             margin-bottom: 60px;
             // opacity: 0.6;
             .carousel5{
-               width: 65% !important;
+               width: 75% !important;
                 height: 660px;
                 margin: 0 auto;
                 // opacity: 0.3;
@@ -511,7 +548,7 @@ export default {
             margin: 0 auto;
             margin-top: 40px;
             .explain3{
-                width: 65%;
+                width: 75%;
                 margin:0 auto;
                 height: 590px;
                 border: 1px solid;
@@ -523,12 +560,12 @@ export default {
             margin: 0 auto;
             margin-top: 40px;
             .explain4{
-                width: 65%;
+                width: 75%;
                 margin:0 auto;
                 height: 602px;
                 border: 1px solid;
                 .nav-div7-img{
-                    width: 243px;
+                    width: 280px;
                     height: 198px;
                     background-color: #eeeeee;
                 }
