@@ -238,6 +238,9 @@ export default {
                     background-color: #E2DBC8;
                     margin: 10px;
                     float: left;
+                    h4{
+                        text-align: center;
+                    }
                 }
                 .block{
                     text-align: center;
