@@ -117,7 +117,7 @@ export default {
           label: '双皮奶'
         }],
         currentPage:1,
-        pagesize: 12,
+        pagesize: 10,
         value: '',
         value2: '',
         value3: '',
@@ -226,7 +226,7 @@ export default {
         height: 70px;
         display: flex;
         justify-content: space-around;
-        background-color: #fff;
+        background-color: #e2dbc8;
         .search-left{
             line-height: 68px;
             padding-left:16px;
@@ -384,7 +384,7 @@ export default {
                 .swiper-button-prev1{
                         position: absolute;
                         left: 85%;
-                        top: 37%;
+                        top: 36%;
                         width: 35px;
                         height: 35px;
                         border: 1px solid #e2dbc8;
@@ -397,7 +397,7 @@ export default {
                 .swiper-button-next1{
                         position: absolute;
                         right: 3%;
-                        top: 37%;
+                        top: 36%;
                         width: 35px;
                         height: 35px;
                         border: 1px solid #e2dbc8;
@@ -447,7 +447,6 @@ export default {
                         background-color: #CCE198;
                         color: #fff;
                     }
-                    
                 }
             }
         }

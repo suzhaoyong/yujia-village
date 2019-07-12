@@ -108,7 +108,7 @@ export default {
           desc: ''
         },
         currentPage:1,
-        pagesize: 12,
+        pagesize: 10,
     };
   },
   methods:{
