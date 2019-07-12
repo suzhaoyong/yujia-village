@@ -13,23 +13,23 @@
                 </div>
                 <div class="head">
                     <el-col :span="24">
-                    <!-- <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+                    <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
                     <el-menu-item index="main">首页</el-menu-item>
-                    <el-menu-item index="jiameng">加盟会馆</el-menu-item>
-                    <el-menu-item index="home">瑜伽名师</el-menu-item>
+                    <el-menu-item index="joinclubhouse">加盟会馆</el-menu-item>
+                    <el-menu-item index="yogoteacher">瑜伽名师</el-menu-item>
                     <el-menu-item index="home">培训信息</el-menu-item>
                     <el-menu-item index="home">瑜伽知识</el-menu-item>
                     <el-menu-item index="home">瑜伽资讯</el-menu-item>
                     <el-menu-item index="home">商城</el-menu-item>
                     <el-menu-item index="home">关于我们</el-menu-item>
                     <el-menu-item index="home">个人中心</el-menu-item> 
-                    </el-menu> -->
+                    </el-menu>
 
-                    <el-menu :default-active="this.$router.name" class="el-menu-demo" router mode="horizontal" @select="handleSelect">
+                    <!-- <el-menu :default-active="$router.path" class="el-menu-demo" router mode="horizontal" @select="handleSelect">
                         <el-menu-item v-for="(item,i) in navList" :key="i" :index="item.name">
                          {{ item.navItem }}
                         </el-menu-item>
-                    </el-menu>
+                    </el-menu> -->
                     </el-col>
                 </div>
             </div>
@@ -40,22 +40,57 @@
 export default {
   data() {
     return {
-        // activeIndex:"main",
-         navList:[
-            {name:'/main',navItem:'首页'},
-            {name:'/joinclubhouse',navItem:'加盟会馆'},
-            {name:'/home/main',navItem:'瑜伽名师'},
-            {name:'/home/main',navItem:'培训信息'},
-            {name:'/home/main',navItem:'瑜伽知识'},
-            {name:'/home/main',navItem:'瑜伽资讯'},
-            {name:'/home/main',navItem:'商城'},
-            {name:'/home/main',navItem:'关于我们'},
-            {name:'/home/main',navItem:'个人中心'},
-            ]
+        activeIndex:"main",
+        //  navList:[
+        //     {name:'/main',navItem:'首页'},
+        //     {name:'/joinclubhouse',navItem:'加盟会馆'},
+        //     {name:'/home/main',navItem:'瑜伽名师'},
+        //     {name:'/home/main',navItem:'培训信息'},
+        //     {name:'/home/main',navItem:'瑜伽知识'},
+        //     {name:'/home/main',navItem:'瑜伽资讯'},
+        //     {name:'/home/main',navItem:'商城'},
+        //     {name:'/home/main',navItem:'关于我们'},
+        //     {name:'/home/main',navItem:'个人中心'},
+        //     ]
     };
   },
+  watch:{
+      "$route":"fetchData"
+  },
+  mounted(){
+      this.changenav();
+  },
+  created(){
+      this.fetchData();
+  },
+  beforeUpdate(){
+       this.changenav();
+  },
   methods: {
+      //路由改变时的导航对应高亮
+      changenav(){
+          let path = this.$route.path;
+          let endIndex = path.lastIndexOf('\/');
+          let currNav = path.substring(endIndex+1,path.length);
+          this.activeIndex = currNav;
+      },
+      fetchData(){
+          if(this.$route.name == 'main'){
+              this.activeIndex = 'main';
+          }else if(this.$route.name == 'joinclubhouse'){
+              this.activeIndex = 'joinclubhouse';
+          }else if(this.$route.name == 'yogoteacher'){
+              this.activeIndex = 'yogoteacher';
+          }
+      },
       handleSelect(key, keyPath) {
+          if('main' === key){
+              this.$router.push('/main');
+          }else if('joinclubhouse' === key){
+              this.$router.push('/joinclubhouse');
+          }else if('yogoteacher' === key){
+              this.$router.push('/yogoteacher');
+          }
       }
     }
 };
