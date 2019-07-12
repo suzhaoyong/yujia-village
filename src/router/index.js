@@ -14,6 +14,14 @@ export default new Router({
       component: Home
     },
     {
+      path: '/login',
+      name: 'Login',
+      children: [
+        { path: '/login', component: () => import('@/pages/Login/login')},
+        { path: '/register', component: () => import('@/pages/Login/register')},
+      ]
+    },
+    {
         path: '/main',
         name: 'Home',
         component: Home,//首页
