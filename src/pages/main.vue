@@ -40,28 +40,20 @@
                     </div>
                     <div class="nav-contunt-div4">
                         <div class="contunt3">
-                        <div class="swiper-container gallery-top" :options="swiperOption">
-                                <div class="swiper-wrapper">
-                                <div class="swiper-slide">
-                                    <img src="../assets/172901eaaci443syyscwzw.jpg" alt="">
-                                </div>
-                                <div class="swiper-slide">
-                                    <img src="../assets/xiazai.png" alt="">
-                                </div>
-                                </div>
-                                <div class="swiper-button-next swiper-button-black"></div>
-                                <div class="swiper-button-prev swiper-button-black"></div>
-                            </div>
-                            <div class="swiper-container gallery-thumbs">
-                                <div class="swiper-wrapper">
-                                <div class="swiper-slide">
-                                    <img src="../assets/172901eaaci443syyscwzw.jpg" alt="">
-                                </div>
-                                <div class="swiper-slide">
-                                    <img src="../assets/172901eaaci443syyscwzw.jpg" alt="">
-                                </div>
-                                </div>
-                            </div>
+                            <swiper :options="swiperOptionTop" class="gallery-top" ref="swiperTop">
+                                <swiper-slide class="slide-1" ></swiper-slide>
+                                <swiper-slide class="slide-2"></swiper-slide>
+                                <swiper-slide class="slide-3"></swiper-slide>
+                                <swiper-slide class="slide-4"></swiper-slide>
+                                <div class="swiper-button-next swiper-button-white" slot="button-next"></div>
+                                <div class="swiper-button-prev swiper-button-white" slot="button-prev"></div>
+                            </swiper>
+                            <swiper :options="swiperOptionThumbs" class="gallery-thumbs" ref="swiperThumbs">
+                                <swiper-slide class="slide-1"></swiper-slide>
+                                <swiper-slide class="slide-2"></swiper-slide>
+                                <swiper-slide class="slide-3"></swiper-slide>
+                                <swiper-slide class="slide-4"></swiper-slide>
+                            </swiper>
                          </div>
                     </div>
                     <div class="nav-contunt-div3">
@@ -71,58 +63,18 @@
                         <div class="border-right"></div>
                     </div>
                     <div class="nav-contunt-div5">
-                        <el-carousel class="carousel5" height="660px" :interval="5000" arrow="never" direction="vertical" :autoplay="false">
-                            <el-carousel-item class="carousel5-item" v-for="item in famousteach" :key="item.id">
-                            <div class="carousel-explain2">
-                                <div class="explain2-left">
-                                    <img :src="item.img"/>
-                                    <div class="explain2-div">
-                                        <h3>{{item.name}}<span class="explain2-span">({{item.huiguan}})</span></h3>
-                                        <span class="explain2-span2">{{item.text}}</span>
-                                    </div>
-                                </div>
-                                <div class="explain2-right">
-                                    <div class="explain2-div">
-                                        <h3>{{item.name}}<span class="explain2-span">({{item.huiguan}})</span></h3>
-                                        <span class="explain2-span2">{{item.text}}</span>
-                                    </div>
-                                    <img :src="item.img"/>
+                        <swiper class="carousel5" :options="swiperOption" style="height:660px">
+                            <swiper-slide class="carousel5-item" v-for="(page,index) of pages" :key="index">
+                            <div class="carousel-explain2" v-for="item of page" :key="item.id">
+                                <img :src="item.img"/>
+                                <div class="explain2-div">
+                                    <h3>{{item.name}}<span class="explain2-span">({{item.huiguan}})</span></h3>
+                                    <span class="explain2-span2">{{item.text}}</span>
                                 </div>
                             </div>
-                            <div class="carousel-explain2">
-                                <div class="explain2-left">
-                                    <img :src="item.img"/>
-                                    <div class="explain2-div">
-                                        <h3>{{item.name}}<span class="explain2-span">({{item.huiguan}})</span></h3>
-                                        <span class="explain2-span2">{{item.text}}</span>
-                                    </div>
-                                </div>
-                                <div class="explain2-right">
-                                    <div class="explain2-div">
-                                        <h3>{{item.name}}<span class="explain2-span">({{item.huiguan}})</span></h3>
-                                        <span class="explain2-span2">{{item.text}}</span>
-                                    </div>
-                                    <img :src="item.img"/>
-                                </div>
-                            </div>
-                            <div class="carousel-explain2">
-                                <div class="explain2-left">
-                                    <img :src="item.img"/>
-                                    <div class="explain2-div">
-                                        <h3>{{item.name}}<span class="explain2-span">({{item.huiguan}})</span></h3>
-                                        <span class="explain2-span2">{{item.text}}</span>
-                                    </div>
-                                </div>
-                                <div class="explain2-right">
-                                    <div class="explain2-div">
-                                        <h3>{{item.name}}<span class="explain2-span">({{item.huiguan}})</span></h3>
-                                        <span class="explain2-span2">{{item.text}}</span>
-                                    </div>
-                                    <img :src="item.img"/>
-                                </div>
-                            </div>
-                            </el-carousel-item>
-                        </el-carousel>
+                            </swiper-slide>
+                            <div class="swiper-pagination" slot="pagination"></div>
+                        </swiper>
                     </div>
                     <div class="nav-contunt-div3">
                         <h2><img src="../assets/yujia.png"/>培训信息</h2>
@@ -191,33 +143,105 @@ export default {
             datels:'基础瑜伽又叫反重力瑜伽，利用空中瑜伽吊床，完成哈他瑜伽体式。练习者感受到身体体重，加深体式的伸展、阻力和正位能力，具有高效的放松、疗愈、瘦身效果，更具有趣味性和互动性 。'
             }
         ],
-        famousteach:[{
+        famousteach:[
+            {
             id:1,
             img:require('../assets/xiazai.png'),
             name:'新悦',
             huiguan:'观云瑜伽馆',
             text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
-        },
-        {
+            },
+            {
             id:2,
             img:require('../assets/xiazai.png'),
             name:'新悦',
             huiguan:'观云瑜伽馆',
             text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
-        }],
-        swiperOption:{
-           spaceBetween: 10,
-           thumbs: {
-            swiper: {
-            el: '.swiper-container',
-            spaceBetween: 10,
-            slidesPerView: 4,
-            watchSlidesVisibility: true,/*避免出现bug*/
             },
-        }
+            {
+            id:3,
+            img:require('../assets/xiazai.png'),
+            name:'新悦',
+            huiguan:'观云瑜伽馆',
+            text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
+            },
+            {
+            id:4,
+            img:require('../assets/xiazai.png'),
+            name:'新悦',
+            huiguan:'观云瑜伽馆',
+            text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
+            },
+            {
+            id:5,
+            img:require('../assets/xiazai.png'),
+            name:'新悦',
+            huiguan:'观云瑜伽馆',
+            text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
+            },
+            {
+            id:6,
+            img:require('../assets/xiazai.png'),
+            name:'新悦',
+            huiguan:'观云瑜伽馆',
+            text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
+            },
+            {
+            id:7,
+            img:require('../assets/xiazai.png'),
+            name:'新悦',
+            huiguan:'观云瑜伽馆',
+            text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
+            }
+        ],
+        swiperOption: {
+          spaceBetween: 30,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true
+          },
+          loop: true,
+        },
+        swiperOptionTop:{
+           spaceBetween: 10,
+          loop: true,
+          loopedSlides: 5,
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev'
+          }
+        },
+        swiperOptionThumbs: {
+          spaceBetween: 10,
+          slidesPerView: 4,
+          touchRatio: 0.2,
+          loop: true,
+          loopedSlides: 5,
+          slideToClickedSlide: true,
         }
     };
   },
+   computed: {
+      pages(){
+        const pages = []; // pages是为二维数组
+        this.famousteach.forEach((item, index) => {
+          const page = Math.floor(index / 6); // page本质是0.1.2.3分别表示第1,2,3,4页
+          if (!pages[page]) {
+            pages[page] = [];
+          }
+          pages[page].push(item);
+        });
+        return pages;
+      }
+  },
+   mounted() {
+      this.$nextTick(() => {
+        const swiperTop = this.$refs.swiperTop.swiper;
+        const swiperThumbs = this.$refs.swiperThumbs.swiper;
+        swiperTop.controller.control = swiperThumbs;
+        swiperThumbs.controller.control = swiperTop;
+      })
+    }
 };
 </script>
 <style lang="scss" scope>
@@ -238,6 +262,15 @@ export default {
     width: 10px !important;
     height: 10px !important;
     border-radius: 50% !important;
+}
+.swiper-pagination-bullet-active {
+    opacity: 1;
+    background: #2c2c2c;
+}
+.swiper-pagination-bullet{
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
 }
 .nav-main{
     height: 100%;
@@ -399,62 +432,49 @@ export default {
         .nav-contunt-div4{
             width: 100%;
             margin:0 auto;
-            height: 660px;
+            height: 700px;
             margin-top: 40px;
             .contunt3{
                 width: 75%;
                 margin: 0 auto;
-                height: 560px;
+                height: 624px;
                 border: 1px solid;
-            .swiper-container {
-                width: 100%;
-                height: 300px;
-                margin-left: auto;
-                margin-right: auto;
-            }
-            .gallery-top {
-                height: 70%;
-                width: 100%;
-                position: relative;
+             .swiper-container {
+                 width: 100%;
                  .swiper-slide {
                     background-size: cover;
                     background-position: center;
-                    img{
-                        width: 490px;
-                        height: 390px;
+                    &.slide-1 {
+                    background-image:url('../assets/ss.png');
+                    }
+                    &.slide-2 {
+                    background-image:url('../assets/172901eaaci443syyscwzw.jpg');
+                    }
+                    &.slide-3 {
+                    background-image:url('../assets/16394929757_1920x1080.jpg');
+                    }
+                    &.slide-4 {
+                    background-image:url('../assets/153_140620153629_2.jpg');
                     }
                 }
-                .swiper-button-next{
-                    position: absolute;
-                    top: 90%;
-                    width: 30px;
-                    height: 24px;
-                    right: 4%;
-                }
-                .swiper-button-prev{
-                    position: absolute;
-                    left: 83%;
-                    top: 90%;
-                    width: 30px;
-                    height: 24px;
-                }
-                }
-            .gallery-thumbs {
-                height: 30%;
+            }
+            .gallery-top {
+                height: 72%!important;
+                width: 100%;
+            }
+             .gallery-thumbs {
+                height: 27%!important;
                 box-sizing: border-box;
                 padding: 10px 0;
                 .swiper-slide {
-                height: 100%;
-                opacity: 0.4;
-                img{
-                    width: 200px;
+                    width: 25%;
                     height: 100%;
+                    opacity: 0.4;
                 }
+                 .swiper-slide-active {
+                    opacity: 1;
                 }
-                .swiper-slide-thumb-active {
-                  opacity: 1;
-                }
-           }
+            }
         }
         }
         .nav-contunt-div5{
@@ -470,12 +490,14 @@ export default {
                 margin: 0 auto;
                 // opacity: 0.3;
                 .carousel-explain2{
-                height: 200px;
+                height: 227px;
+                float: left;
+                width: 50%;
                 display: flex;
-                .explain2-left{
-                    width: 50%;
-                    display: flex;
-                    justify-content: flex-start;
+                // .explain2-left{
+                //     width: 50%;
+                //     display: flex;
+                //     justify-content: flex-start;
                     img{
                         width: 160px;
                         height: 160px;
@@ -501,7 +523,7 @@ export default {
                                 color: #000;
                             }
                     }
-                }
+                // }
                 .explain2-right{
                     width: 50%;
                     display: flex;
