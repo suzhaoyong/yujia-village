@@ -104,7 +104,7 @@ export default {
     width: 60%;
     margin: 0 auto;
     background: #E8F5DB;
-    height:99px;
+    height:64px;
 }
 .el-menu.el-menu--horizontal {
     border-bottom: solid 1px #E8F5DB;
@@ -115,11 +115,11 @@ export default {
     text-align: center;
     margin: 0 auto;
     font-weight: bold;
-    height: 100px;
+    height: 65px;
     background: #fff;
 }
 .el-menu-item {
-    height: 100px;
+    height: 65px;
     font-size: 16px;
     color: #2c2c2c;
     padding: 0 20px;
@@ -131,8 +131,8 @@ export default {
 }
 .el-menu--horizontal>.el-menu-item {
     float: left;
-    height: 100px;
-    line-height: 100px;
+    height: 65px;
+    line-height: 65px;
     margin: 0;
     border-bottom: 2px solid transparent;
     color: #2c2c2c;
@@ -145,13 +145,13 @@ export default {
     height: 100%;
     padding: 0;
     .head-quan{
-        height: 60px;
+        height: 40px;
         display: flex;
         background: #FCFBF1;
         .head-left{
             width: 50%;
             text-align: center;
-            margin-top: 8px;
+            margin-top: 0px;
             img{
                 width: 163px;
                 height: 40px;
@@ -161,7 +161,7 @@ export default {
         .head-right{
             width: 50%;
              text-align: center;
-             margin-top: 18px;
+             margin-top: 7px;
              position: relative;
             .img{
                 width: 30px;
@@ -178,7 +178,7 @@ export default {
         }
     }
     .head{
-       height: 100px;
+       height:65px;
        background: #E8F5DB;
     }
 }

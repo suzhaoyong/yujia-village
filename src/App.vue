@@ -27,9 +27,8 @@ body {
   padding: 0;
   overflow-x: hidden;
 }
-*{
+/* *{
   margin: 0;
   border: 0;
-  
-}
+} */
 </style>
