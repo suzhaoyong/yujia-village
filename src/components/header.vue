@@ -18,7 +18,7 @@
                     <el-menu-item index="joinclubhouse">加盟会馆</el-menu-item>
                     <el-menu-item index="yogoteacher">瑜伽名师</el-menu-item>
                     <el-menu-item index="home">培训信息</el-menu-item>
-                    <el-menu-item index="home">瑜伽知识</el-menu-item>
+                    <el-menu-item index="yogoknowledge">瑜伽知识</el-menu-item>
                     <el-menu-item index="home">瑜伽资讯</el-menu-item>
                     <el-menu-item index="home">商城</el-menu-item>
                     <el-menu-item index="home">关于我们</el-menu-item>
@@ -44,9 +44,9 @@ export default {
         //  navList:[
         //     {name:'/main',navItem:'首页'},
         //     {name:'/joinclubhouse',navItem:'加盟会馆'},
-        //     {name:'/home/main',navItem:'瑜伽名师'},
+        //     {name:'/yogoteacher',navItem:'瑜伽名师'},
         //     {name:'/home/main',navItem:'培训信息'},
-        //     {name:'/home/main',navItem:'瑜伽知识'},
+        //     {name:'/yogoknowledge',navItem:'瑜伽知识'},
         //     {name:'/home/main',navItem:'瑜伽资讯'},
         //     {name:'/home/main',navItem:'商城'},
         //     {name:'/home/main',navItem:'关于我们'},
@@ -81,6 +81,8 @@ export default {
               this.activeIndex = 'joinclubhouse';
           }else if(this.$route.name == 'yogoteacher'){
               this.activeIndex = 'yogoteacher';
+          }else if(this.$route.name == 'yogoknowledge'){
+              this.activeIndex = 'yogoknowledge';
           }
       },
       handleSelect(key, keyPath) {
@@ -90,6 +92,8 @@ export default {
               this.$router.push('/joinclubhouse');
           }else if('yogoteacher' === key){
               this.$router.push('/yogoteacher');
+          }else if('yogoknowledge' === key){
+              this.$router.push('/yogoknowledge');
           }
       }
     }

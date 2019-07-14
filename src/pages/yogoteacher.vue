@@ -37,7 +37,35 @@
                             <div class="border-right"></div>
                        </div>
                        <div class="yogo-cont-div2">
-                           <div class="yogocontunt"></div>
+                           <div class="yogocontunt">
+                               <swiper :options="swiperOption" style="height:850px">
+                                <swiper-slide v-for="(page,index) of pages" :key="index">
+                                    <div class="yogocontunt-swiper">
+                                        <div class="yogoswiper-img">
+                                            <img src="../assets/ss.png"/>
+                                        </div>
+                                        <div class="yogoswiper-text">
+                                            <h3>小鱼(Tina)</h3>
+                                            <p class="p1">2014年全美瑜伽联盟RYT200X小时认证</p>
+                                            <p class="p2">瑜伽是以一个连接意识和无意识的途径，当你改变无意识的状态，更能感受生命的精彩和不一样的魅力</p>
+                                            <div class="yogoswiper-butt">
+                                            <el-button type="text">预约</el-button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="icon" v-for="item of page" :key="item.id">
+                                    <div class="icon-img">
+                                        <img class="icon-img-content" :src="item.imgUrl">
+                                    </div>
+                                    <h3>{{item.name}}</h3>
+                                    <p class="icon-desc">{{item.title}}</p>
+                                    <p class="icon-desc2">{{item.desc}}</p>
+                                    </div>
+                                </swiper-slide>
+                                <div class="swiper-button-prev1" slot="button-prev"></div>
+                                 <div class="swiper-button-next1" slot="button-next"></div>
+                                </swiper>
+                           </div>
                        </div>
                        <div class="yogo-cont-div1">
                             <h2><img src="../assets/yujia.png"/>瑜伽名师展</h2>
@@ -74,7 +102,7 @@
 import Nav from "../components/nav";
 export default {
     components:{
-        Nav
+        Nav,
     },
   data() {
     return {
@@ -89,7 +117,7 @@ export default {
           label: '双皮奶'
         }],
         currentPage:1,
-        pagesize: 12,
+        pagesize: 10,
         value: '',
         value2: '',
         value3: '',
@@ -108,7 +136,62 @@ export default {
             {id:12,text:'内容'},
             {id:13,text:'内容'},
             ],
+        iconList: [
+          {
+            id: "0001",
+            imgUrl:require('../assets/ss.png'),
+            name:"小鱼(Tina)",
+            title: "从业时间: 5年",
+            desc:"2014年全美瑜伽联盟RYT200X小时认证"
+          }, {
+            id: "0002",
+            imgUrl:require('../assets/ss.png'),
+            name:"小鱼(Tina)",
+            title: "从业时间: 5年",
+            desc:"2014年全美瑜伽联盟RYT200X小时认证"
+          }, {
+            id: "0003",
+            imgUrl:require('../assets/ss.png'),
+            name:"小鱼(Tina)",
+            title: "从业时间: 5年",
+            desc:"2014年全美瑜伽联盟RYT200X小时认证"
+          }, {
+            id: "0004",
+            imgUrl:require('../assets/ss.png'),
+            name:"小鱼(Tina)",
+            title: "从业时间: 5年",
+            desc:"2014年全美瑜伽联盟RYT200X小时认证"
+          }, {
+            id: "0005",
+            imgUrl:require('../assets/ss.png'),
+            name:"小鱼(Tina)",
+            title: "从业时间: 5年",
+            desc:"2014年全美瑜伽联盟RYT200X小时认证"
+          }],
+        swiperOption: {
+          pagination: ".swiper-pagination",
+          autoplay: false,
+          loopFillGroupWithBlank: true,
+          loop: true,
+          navigation: {
+            nextEl: '.swiper-button-next1',
+            prevEl: '.swiper-button-prev1'
+          },
+        }
     };
+  },
+  computed: {
+      pages(){
+        const pages = []; // pages是为二维数组
+        this.iconList.forEach((item, index) => {
+          const page = Math.floor(index / 4); // page本质是0.1.2.3分别表示第1,2,3,4页
+          if (!pages[page]) {
+            pages[page] = [];
+          }
+          pages[page].push(item);
+        });
+        return pages;
+      }
   },
   methods:{
       onSubmit() {
@@ -143,7 +226,7 @@ export default {
         height: 70px;
         display: flex;
         justify-content: space-around;
-        background-color: #fff;
+        background-color: #e2dbc8;
         .search-left{
             line-height: 68px;
             padding-left:16px;
@@ -214,10 +297,116 @@ export default {
             margin-top: 40px;
             .yogocontunt{
                 width: 75%;
-                height: 600px;
+                height: 100%;
                 border: 1px solid;
                 margin: 0 auto;
                 margin-bottom: 50px;
+                position: relative;
+                .icon{
+                    float: left;
+                    width: 22%;
+                    height: 426px;
+                    margin-top: 25px;
+                    margin-left: 27px;
+                    box-shadow: 1px 1px 6px 0px rgba(36, 36, 36, 0.2);
+                    .icon-img{
+                        width: 100%;
+                        height: 270px;
+                        .icon-img-content{
+                            width: 100%;
+                            height: 100%;
+                        }
+                    }
+                    h3{
+                        text-align: center;
+                        color: #2c2c2c;
+                        font-size: 18px;
+                    }
+                    .icon-desc{
+                        text-align: center;
+                        color: #2c2c2c;
+                        font-size: 14px;
+                        }
+                    .icon-desc2{
+                        text-align: center;
+                        width: 92%;
+                        margin: 0 auto;
+                        color: #2c2c2c;
+                        font-size: 14px;
+                    }
+                }
+                .yogocontunt-swiper{
+                    width: 100%;
+                    border: 1px solid;
+                    height: 350px;
+                    margin: 0 auto;
+                    display: flex;
+                    .yogoswiper-img{
+                        width: 50%;
+                        height: 100%;
+                        img{
+                            width: 100%;
+                            height: 100%;
+                        }
+                    }
+                    .yogoswiper-text{
+                        width: 30%;
+                        height: 100%;
+                        margin-left: 35px;
+                        .yogoswiper-butt{
+                            width: 120px;
+                            border: 1px solid #e2dbc8;
+                            background: #e2dbc8;
+                            text-align: center;
+                            margin-top:45px;
+                            .el-button--text{
+                                color: #2c2c2c;
+                                background: 0 0;
+                                padding-left: 0;
+                                padding-right: 0;
+                            }
+                        }
+                        h3{
+                            text-align: left;
+                            line-height: 45px;
+                        }
+                        .p1{
+                            color: #2c2c2c;
+                            font-size: 14px;
+                        }
+                        .p2{
+                            color: #999999;
+                            font-size: 14px;
+                            margin-top:30px;
+                        }
+                    }
+                }
+                .swiper-button-prev1{
+                        position: absolute;
+                        left: 85%;
+                        top: 36%;
+                        width: 35px;
+                        height: 35px;
+                        border: 1px solid #e2dbc8;
+                        border-radius: 50%;
+                        z-index: 10;
+                        background-size: 32px 35px;
+                        background-color: #fff;
+                        background-image: url('../assets/left.png');
+                }
+                .swiper-button-next1{
+                        position: absolute;
+                        right: 3%;
+                        top: 36%;
+                        width: 35px;
+                        height: 35px;
+                        border: 1px solid #e2dbc8;
+                        border-radius: 50%;
+                        z-index: 10;
+                        background-size: 32px 35px;
+                        background-color: #fff;
+                        background-image: url('../assets/right.png');
+                }
             }
         }
         .yogo-cont-div3{
@@ -258,7 +447,6 @@ export default {
                         background-color: #CCE198;
                         color: #fff;
                     }
-                    
                 }
             }
         }
