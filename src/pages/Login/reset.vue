@@ -9,32 +9,34 @@
         <div class="form">
           <div class="form-box">
             <div class="item">
-              <div class="item-box left">
-                <div class="item-box-title">用户名/USERNAME</div>
-                <div class="item-box-input"><input type="text"/></div>
-                <div class="item-box-tips">{{true?'用户昵称已占用':''}}</div>
-              </div>
-              <div class="item-box right">
-                <div class="item-box-title">电话/PHONE</div>
-                <div class="item-box-input"><input type="text"/></div>
-                <div class="item-box-tips">{{true?'手机号码已注册':''}}</div>
+              <div class="item-title" style="width:7em;line-height:1.2rem">您当前手机号:</div>
+              <div class="item-content" style="color:#2C2C2C;font-weight:bold;">152*****093</div>
+            </div>
+            <div class="item">
+              <div class="item-title">验证码</div>
+              <div class="item-content">
+                <div class="item-content-input"><input type="text"/><div class="get_code">发送验证码</div></div>
+                <div class="item-content-tips">{{true?'验证码错误':''}}</div>
               </div>
             </div>
             <div class="item">
-              <div class="item-box">
-                <div class="item-box-input"><input type="text"/><div class="get_code">发送验证码</div></div>
-                <div class="item-box-tips">{{true?'验证码有误，请重新输入':''}}</div>
+              <div class="item-title">新密码</div>
+              <div class="item-content">
+                <div class="item-content-input"><input type="password" name="" id=""/></div>
+                <div class="item-content-tips">{{true?'密码存在异常字符':''}}</div>
               </div>
             </div>
             <div class="item">
-              <div class="item-box left">
-                <div class="item-box-title">请设置密码/PASSWORD</div>
-                <div class="item-box-input" style="padding-bottom:0;"><input type="password" style="height:1.5rem;width:125%;"/></div>
-                <div class="item-box-input"><input type="password" style="height:1.5rem;width:125%;"/></div>
-                <div class="item-box-tips">{{true?'两次密码不一致':''}}</div>
+              <div class="item-title">再次确认</div>
+              <div class="item-content">
+                <div class="item-content-input"><input type="password" name="" id=""/></div>
+                <div class="item-content-tips">{{true?'二次密码不一致，请仔细确认':''}}</div>
               </div>
-              <div class="item-box right">
-                <div class="item-box-btn">注册</div>
+            </div>
+            <div class="item">
+              <div class="item-content" style="display: flex;justify-content: flex-end; padding-top:0.5rem;">
+                <div class="item-content-btn">返回</div>
+                <div class="item-content-btn">提交</div>
               </div>
             </div>
           </div>
@@ -44,7 +46,7 @@
               <div class="auto_login-icon"></div>
               <div class="auto_login-icon"></div>
             </div>
-            <div class="register" @click="goLogin">已有账号</div>
+            <div class="register" @click="goRegister">注册</div>
           </div>
         </div>
       </div>
@@ -60,9 +62,9 @@ export default {
     }
   },
   methods: {
-    goLogin() {
+    goRegister() {
       this.$router.push({
-        name: 'Login'
+        name: 'Register'
       })
     }
   }
@@ -105,32 +107,20 @@ input:focus {outline: none;}
       padding: 3rem 2rem 2rem;
       background-color: #d9ebc5;
       position: relative;
+      font-size: 0.7rem;
       &-box{
         .item{
           display: flex;
           padding: 0.1rem 0;
-          &-box{
-            position: relative;
-            // border: 1px solid red;
+          &-title{
+            width: 5em;
+            line-height: 2rem;
+          }
+          &-content{
+            // border:1px solid red;
             flex-grow: 1;
-            font-size:12px;
-            font-family:MicrosoftYaHei;
-            font-weight:400;
-            color:rgba(44,44,44,1);
-            &.left{
-              flex-basis: 50%;
-            
-
-            }
-            &.right{
-              flex-basis: 50%;
-            }
-            &-title{
-              padding-left: 15px;
-            }
             &-input{
               width: 100%;
-              padding: 5px 10px;
               position: relative;
               input{
                 width: 100%;
@@ -141,62 +131,44 @@ input:focus {outline: none;}
                 border-radius:0.3rem;
                 padding-left: 5px;
               }
-              .get_code {
+              .get_code{
                 cursor: pointer;
                 user-select: none;
                 width: 6rem;
-                height: 1.6rem;
-                margin-right: 1.2rem;
+                height: 2rem;
                 border-radius: 5px;
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 background: #fff;
+                position: absolute;
                 font-size:0.88rem;
                 font-family:MicrosoftYaHei;
                 font-weight:400;
                 color:rgba(44,44,44,1);
-                position: absolute;
                 right: 0;
                 top: 50%;
                 transform: translateY(-50%);
               }
             }
             &-tips{
-              padding-left: 15px;
-              font-size:0.6rem;
-              font-family:MicrosoftYaHei;
-              font-weight:400;
-              color:rgba(206,85,26,1);
+              color:#D83211;
+              padding-top: 0.3rem;
+              padding-left: 1rem;
               height: 1.2rem;
             }
             &-btn{
-                
-              &:hover{
-                border:none;
-                background: #efefef;
-              }
-              position: absolute;
-              right: 0;
-              bottom: 0;
-              transform: translateY(-50%);
-              outline: none;
-              border:none;
-              width: 100%;
-              width: 6.15rem;
-              height: 2.15rem;
-              font-family: MicrosoftYaHei;
-              font-size: 0.40rem;
-              font-weight: normal;
-              font-stretch: normal;
-              // line-height: 0.2rem;
-              letter-spacing: 0rem;
-              color: #2c2c2c;            
-              background: #fff;
-              border-radius: 1.3rem;
+              width: 5rem;
+              height: 2rem;
+              background-color: #fff;
+              border-radius: 5px;
               display: flex;
               justify-content: center;
               align-items: center;
+              cursor: pointer;
+              &:nth-child(2){
+                margin-left: 2rem;
+              }
             }
           }
         }

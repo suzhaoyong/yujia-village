@@ -4,6 +4,7 @@ const Home = resolve => require(['@/pages/home'], resolve)//首页
 const Main = resolve => require(['@/pages/main'], resolve)//主页
 const Joinclubhouse= resolve => require(['@/pages/joinclubhouse'], resolve)//加盟会馆
 const Yogoteacher= resolve => require(['@/pages/yogoteacher'], resolve)//瑜伽名师
+const Login = resolve => require(['@/pages/Login/login'], resolve)
 Vue.use(Router)
 
 export default new Router({
@@ -17,10 +18,20 @@ export default new Router({
     {
       path: '/login',
       name: 'Login',
+      component: Login,
       children: [
-        { path: '/login', component: () => import('@/pages/Login/login')},
-        { path: '/register', component: () => import('@/pages/Login/register')},
+        { path: '/login', component: Login },
       ]
+    },
+    {
+      path: '/register',
+      name: 'Register',
+      component: () => import('@/pages/Login/register'),
+    },
+    {
+      path: '/reset',
+      name: 'Reset',
+      component: () => import('@/pages/Login/reset'),
     },
     {
         path: '/main',
