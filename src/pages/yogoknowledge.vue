@@ -214,17 +214,17 @@ export default {
                         position: relative;
                         .img1{
                             width: 27px;
-                            height: 23px;
+                            height: 20px;
                             position: absolute;
-                            top: 3%;
-                            left: -90px;
+                            top: 1%;
+                            left: -87px;
                         }
                         .img2{
                             width: 30px;
                             height: 25px;
                             position: absolute;
-                            top:-3%;
-                            left: -33px;
+                            top:-4%;
+                            left: -40px;
                         }
                     }
                 }
