@@ -73,7 +73,7 @@ export default {
         count: 0
       },
       accountErrorRule: {
-        name: {show: false, msg:'请输入手机号'},
+        name: {show: false, msg:'请输入正确的手机号'},
         password: {show: false, msg:'请输入密码'},
       },
       accountRuleForm: {
@@ -81,7 +81,7 @@ export default {
         password: '',
       },
       messageErrorRule: {
-        phone: {show: false, msg:'请输入手机号'},
+        phone: {show: false, msg:'请输入正确的手机号'},
         code: {show: false, msg:'请输入验证码'},
       },
       messageRuleForm: {
@@ -128,6 +128,11 @@ export default {
         }
       }, 1000);
     },
+    goRegister() {
+      this.$router.push({
+        name: 'Register'
+      })
+    },
     resetCode() { // 重置获取验证码
       this.codeTips.msg = '发送验证码';
       this.codeTips.count = 0;
@@ -151,14 +156,9 @@ export default {
         _form[key] = '';
       }
     },
-    goRegister() {
-      this.$router.push({
-        name: 'Register'
-      })
-    },
+    
     checkEmtypeInputBox(item) { // 输入框失去焦点适合有值，空则显示错误提示
       let isRightExp = this.checkExpInputItem(item);
-      console.log(isRightExp)
       if (!isRightExp) {
         this[`${this.loginWay}ErrorRule`][item].show = true;
         return;

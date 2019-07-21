@@ -11,27 +11,27 @@
             <div class="item">
               <div class="item-box left">
                 <div class="item-box-title">用户名/USERNAME</div>
-                <div class="item-box-input"><input type="text"/></div>
-                <div class="item-box-tips">{{true?'用户昵称已占用':''}}</div>
+                <div class="item-box-input"><input type="text" v-model="ruleForm.userName"/></div>
+                <div class="item-box-tips">{{isError('userName')}}</div>
               </div>
               <div class="item-box right">
                 <div class="item-box-title">电话/PHONE</div>
-                <div class="item-box-input"><input type="text"/></div>
-                <div class="item-box-tips">{{true?'手机号码已注册':''}}</div>
+                <div class="item-box-input"><input type="text" v-model="ruleForm.phone"/></div>
+                <div class="item-box-tips">{{isError('phone')}}</div>
               </div>
             </div>
             <div class="item">
               <div class="item-box">
-                <div class="item-box-input"><input type="text"/><div class="get_code">发送验证码</div></div>
-                <div class="item-box-tips">{{true?'验证码有误，请重新输入':''}}</div>
+                <div class="item-box-input"><input type="text" v-model="ruleForm.code"/><div class="get_code">发送验证码</div></div>
+                <div class="item-box-tips">{{isError('code')}}</div>
               </div>
             </div>
             <div class="item">
               <div class="item-box left">
                 <div class="item-box-title">请设置密码/PASSWORD</div>
-                <div class="item-box-input" style="padding-bottom:0;"><input type="password" style="height:1.5rem;width:125%;"/></div>
-                <div class="item-box-input"><input type="password" style="height:1.5rem;width:125%;"/></div>
-                <div class="item-box-tips">{{true?'两次密码不一致':''}}</div>
+                <div class="item-box-input" style="padding-bottom:0;"><input type="password" style="height:1.5rem;width:125%;" v-model="ruleForm.password1"/></div>
+                <div class="item-box-input"><input type="password" style="height:1.5rem;width:125%;" v-model="ruleForm.password2"/></div>
+                <div class="item-box-tips">{{isError('password1')}}</div>
               </div>
               <div class="item-box right">
                 <div class="item-box-btn">注册</div>
@@ -56,10 +56,45 @@ import 'bulma/css/bulma.css'
 export default {
   data() {
     return {
-      loginWay: 'account'
+      loginWay: 'account',
+      ruleForm: {
+        userName: '',
+        phone: '',
+        code: '',
+        password1: '',
+        password2: ''
+      },
+      ruleFormErrorRule: {
+        userName: {show: false, msg:'请输入用户名'},
+        phone: {show: false, msg:'请输入电话'},
+        code: {show: false, msg:'请输入验证码'},
+        password1: {show: false, msg:'请输入密码'},
+        password2: {show: false, msg:'请输入密码'},
+      },
+      ruleFormCheckErrorRule: {
+        userName: {show: false, msg:'用户昵称已占用'},
+        phone: {show: false, msg:'手机号码已注册'},
+        code: {show: false, msg:'验证码有误，请重新输入'},
+        password1: {show: false, msg:'两次密码不一致'},
+        password2: {show: false, msg:'两次密码不一致'},
+      },
     }
   },
+  computed: {
+    isError() {
+      return function (item) {
+          if(this.ruleFormErrorRule[item].show){
+            return this.ruleFormErrorRule[item].msg
+          }
+          if(this.ruleFormCheckErrorRule[item].show){
+            return this.ruleFormCheckErrorRule[item].msg
+          }
+          return '';
+      }
+    },
+  },
   methods: {
+
     goLogin() {
       this.$router.push({
         name: 'Login'
