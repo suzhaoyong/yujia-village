@@ -3,7 +3,6 @@
         <el-col :span="24">
             <div class="header-main">
                 <div class="head-quan">
-                    <div class="head-left"><img src="../assets/logo.png"/></div>
                     <div class="head-right">
                         <span class="span1">已购课程</span>
                         <span class="span1">登录</span>
@@ -13,15 +12,16 @@
                 </div>
                 <div class="head">
                     <el-col :span="24">
+                    <div class="head-left"><img src="../assets/logo.png"/></div>
                     <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
                     <el-menu-item index="main">首页</el-menu-item>
                     <el-menu-item index="joinclubhouse">加盟会馆</el-menu-item>
                     <el-menu-item index="yogoteacher">瑜伽名师</el-menu-item>
                     <el-menu-item index="home">培训信息</el-menu-item>
                     <el-menu-item index="yogoknowledge">瑜伽知识</el-menu-item>
-                    <el-menu-item index="home">瑜伽资讯</el-menu-item>
+                    <el-menu-item index="yogoinformation">瑜伽资讯</el-menu-item>
                     <el-menu-item index="home">商城</el-menu-item>
-                    <el-menu-item index="home">关于我们</el-menu-item>
+                    <el-menu-item index="aboutus">关于我们</el-menu-item>
                     <el-menu-item index="home">个人中心</el-menu-item> 
                     </el-menu>
 
@@ -83,6 +83,10 @@ export default {
               this.activeIndex = 'yogoteacher';
           }else if(this.$route.name == 'yogoknowledge'){
               this.activeIndex = 'yogoknowledge';
+          }else if(this.$route.name == 'yogoinformation'){
+              this.activeIndex = 'yogoinformation';
+          }else if(this.$route.name == 'aboutus'){
+              this.activeIndex = 'aboutus';
           }
       },
       handleSelect(key, keyPath) {
@@ -94,6 +98,10 @@ export default {
               this.$router.push('/yogoteacher');
           }else if('yogoknowledge' === key){
               this.$router.push('/yogoknowledge');
+          }else if('yogoinformation' === key){
+              this.$router.push('/yogoinformation');
+          }else if('aboutus' === key){
+              this.$router.push('/aboutus');
           }
       }
     }
@@ -101,13 +109,14 @@ export default {
 </script>
 <style lang="scss" scoped>
 .el-menu{
-    width: 60%;
+    width: 62%;
     margin: 0 auto;
     background: #E8F5DB;
     height:64px;
 }
 .el-menu.el-menu--horizontal {
     border-bottom: solid 1px #E8F5DB;
+     margin-top: -44px;
 }
 .el-menu--horizontal>.el-menu-item.is-active {
     border-bottom: 1px solid #E8F5DB;
@@ -148,18 +157,9 @@ export default {
         height: 40px;
         display: flex;
         background: #FCFBF1;
-        .head-left{
-            width: 50%;
-            text-align: center;
-            margin-top: 0px;
-            img{
-                width: 163px;
-                height: 40px;
-                margin-left: -20%;
-            }
-        }
+        justify-content: flex-end;
         .head-right{
-            width: 50%;
+            width: 65%;
              text-align: center;
              margin-top: 7px;
              position: relative;
@@ -169,7 +169,7 @@ export default {
                 display: inline-block;
                 position: absolute;
                 top: -4px;
-                right: 32%;
+                right: 38%;
             }
             .span1{
                 padding-right: 17px;
@@ -180,6 +180,19 @@ export default {
     .head{
        height:65px;
        background: #E8F5DB;
+       .head-left{
+            width: 18%;
+            text-align: center;
+            margin-top: 0px;
+            margin-left: 89px;
+            img{
+                width: 163px;
+                height: 40px;
+                margin-left: -20%;
+                position: relative;
+                top: 14px;
+            }
+        }
     }
 }
 </style>

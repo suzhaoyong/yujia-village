@@ -6,6 +6,8 @@ const Joinclubhouse= resolve => require(['@/pages/joinclubhouse'], resolve)//加
 const Yogoteacher= resolve => require(['@/pages/yogoteacher'], resolve)//瑜伽名师
 const Login = resolve => require(['@/pages/Login/login'], resolve)
 const Yogoknowledge= resolve => require(['@/pages/yogoknowledge'], resolve)//瑜伽知识
+const Yogoinformation= resolve => require(['@/pages/yogoinformation'], resolve)//瑜伽资讯
+const Aboutus= resolve => require(['@/pages/aboutus'], resolve)//关于我们
 Vue.use(Router)
 
 export default new Router({
@@ -45,7 +47,7 @@ export default new Router({
     {
       path: '/joinclubhouse',
       name: 'Home',
-      component: Home,//加盟会馆
+      component: Home,
       children: [
         { path: '/joinclubhouse', component: Joinclubhouse}//加盟会馆
     ]
@@ -53,7 +55,7 @@ export default new Router({
     {
       path: '/yogoteacher',
       name: 'Home',
-      component: Home,//瑜伽名师
+      component: Home,
       children: [
         { path: '/yogoteacher', component: Yogoteacher}//瑜伽名师
     ]
@@ -61,9 +63,25 @@ export default new Router({
     {
       path: '/yogoknowledge',
       name: 'Home',
-      component: Home,//瑜伽知识
+      component: Home,
       children: [
         { path: '/yogoknowledge', component: Yogoknowledge}//瑜伽知识
+    ]
+    },
+    {
+      path: '/yogoinformation',
+      name: 'Home',
+      component: Home,
+      children: [
+        { path: '/yogoinformation', component: Yogoinformation}//瑜伽资讯
+    ]
+    },
+    {
+      path: '/aboutus',
+      name: 'Home',
+      component: Home,
+      children: [
+        { path: '/aboutus', component: Aboutus}//关于我们
     ]
     },
     ]
