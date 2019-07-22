@@ -37,6 +37,22 @@ export default new Router({
       component: () => import('@/pages/Login/reset'),
     },
     {
+      path: '/market',
+      name: 'market',
+      component: () => import('@/pages/market/index'),
+      children: [
+        { path: '/market/index', component: () => import('@/pages/market/index') },
+      ]
+    },
+    {
+      path: '/goods',
+      name: 'goods',
+      component: () => import('@/pages/goods/detail'),
+      children: [
+        { path: '/goods/detail', component: () => import('@/pages/goods/detail') },
+      ]
+    },
+    {
         path: '/main',
         name: 'Home',
         component: Home,//首页
