@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 const Home = resolve => require(['@/pages/home'], resolve)//首页
-const Main = resolve => require(['@/pages/main'], resolve)//主页
+const Main = resolve => require(['@/pages/main'], resolve)//首页
 const Joinclubhouse= resolve => require(['@/pages/joinclubhouse'], resolve)//加盟会馆
+const Joinclubhousedetails= resolve => require(['@/pages/joinclubhousedetails'], resolve)//加盟会馆---详情
 const Yogoteacher= resolve => require(['@/pages/yogoteacher'], resolve)//瑜伽名师
-const Login = resolve => require(['@/pages/Login/login'], resolve)
+const Login = resolve => require(['@/pages/Login/login'], resolve)//登录
 const Yogoknowledge= resolve => require(['@/pages/yogoknowledge'], resolve)//瑜伽知识
 const Yogoinformation= resolve => require(['@/pages/yogoinformation'], resolve)//瑜伽资讯
 const Aboutus= resolve => require(['@/pages/aboutus'], resolve)//关于我们
@@ -16,7 +17,7 @@ export default new Router({
     {
       path: '/',
       name: 'Home',
-      component: Home
+      component: Home,
     },
     {
       path: '/login',
@@ -49,7 +50,8 @@ export default new Router({
       name: 'Home',
       component: Home,
       children: [
-        { path: '/joinclubhouse', component: Joinclubhouse}//加盟会馆
+        { path: '/joinclubhouse', component: Joinclubhouse},//加盟会馆
+        { path: '/joinclubhouse/joinclubhousedetails', component: Joinclubhousedetails}//加盟会馆----详情
     ]
     },
     {

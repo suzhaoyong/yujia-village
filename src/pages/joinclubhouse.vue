@@ -123,13 +123,22 @@ export default {
         });
       },
       selectItem(item){
+          console.log(item.id);
+           this.$router.push({
+            path: "/joinclubhouse/joinclubhousedetails",
+            query: {
+            id: item.id
+            }
+        });
       },
       onMouseOver(index){
           this.ishow = index;
       },
-      handleSizeChange(val) {
+      handleSizeChange(size) {
+          this.pagesize = size;
       },
-      handleCurrentChange(val) {
+      handleCurrentChange(currentPage) {
+          this.currentPage = currentPage;
       }
   }
 };

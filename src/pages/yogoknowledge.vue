@@ -96,13 +96,45 @@ export default {
             huiguan:'观云瑜伽',
             desc:'练习孕妇瑜伽逐渐成为孕妇界的时尚代名词，想要做个健康、美丽的瑜伽妈妈，一些瑜伽技巧，呼吸方法也是必须知道的，下面小编就指导你如何练好孕妇瑜伽...',
             eye:'2341'
+        },
+        {
+            id:5,
+            imgurl:require('../assets/172901eaaci443syyscwzw.jpg'),
+            title:'练习孕产瑜伽的必备小常识',
+            date:'2018-01-30',
+            name:'IVAN',
+            huiguan:'观云瑜伽',
+            desc:'练习孕妇瑜伽逐渐成为孕妇界的时尚代名词，想要做个健康、美丽的瑜伽妈妈，一些瑜伽技巧，呼吸方法也是必须知道的，下面小编就指导你如何练好孕妇瑜伽...',
+            eye:'2341'
+        },
+        {
+            id:6,
+            imgurl:require('../assets/172901eaaci443syyscwzw.jpg'),
+            title:'练习孕产瑜伽的必备小常识',
+            date:'2018-01-30',
+            name:'IVAN',
+            huiguan:'观云瑜伽',
+            desc:'练习孕妇瑜伽逐渐成为孕妇界的时尚代名词，想要做个健康、美丽的瑜伽妈妈，一些瑜伽技巧，呼吸方法也是必须知道的，下面小编就指导你如何练好孕妇瑜伽...',
+            eye:'2341'
+        },
+        {
+            id:7,
+            imgurl:require('../assets/172901eaaci443syyscwzw.jpg'),
+            title:'练习孕产瑜伽的必备小常识',
+            date:'2018-01-30',
+            name:'IVAN',
+            huiguan:'观云瑜伽',
+            desc:'练习孕妇瑜伽逐渐成为孕妇界的时尚代名词，想要做个健康、美丽的瑜伽妈妈，一些瑜伽技巧，呼吸方法也是必须知道的，下面小编就指导你如何练好孕妇瑜伽...',
+            eye:'2341'
         }]
     };
   },
   methods:{
-      handleSizeChange(val) {
+      handleSizeChange(size) {
+          this.pagesize = size;
       },
-      handleCurrentChange(val) {
+      handleCurrentChange(currentPage) {
+          this.currentPage = currentPage;
       },
        selectItem(item){
       },

@@ -201,9 +201,11 @@ export default {
       },
       onMouseOver(index){
       },
-      handleSizeChange(val) {
+      handleSizeChange(size) {
+          this.pagesize = size;
       },
-      handleCurrentChange(val) {
+      handleCurrentChange(currentPage) {
+          this.currentPage = currentPage;
       }
   }
 };
