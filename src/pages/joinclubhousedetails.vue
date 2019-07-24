@@ -35,6 +35,7 @@
                         <div class="left1">
                             <h2><img src="../assets/yujia.png"/>会馆环境</h2>
                             <p class="nav-text">Sometimes beauty is so simple</p>
+                            <img src="../assets/image18.png" class="bg-image4"/>
                         </div>
                         <div class="left2">观云瑜伽拥有1000平米场馆，瑜伽教练团队专业，分工明确。重金聘请印度瑜伽名师Deepak来馆内任教，无论你是新手还是专业人才，在这里都能有所收获。馆内拥有专业的保洁团队，准时清洁每一块场地，每一个死角，确保您始终处于健康安全舒适的环境中。</div>
                         <div class="left3">
@@ -63,18 +64,22 @@
                     <div class="border-right"></div>
                 </div>
                 <div class="joinclubdetails-cont-div5">
+                    <img src="../assets/image52.png" class="bg-image5"/>
+                    <img src="../assets/image53.png" class="bg-image6"/>
+                    <img src="../assets/image54.png" class="bg-image7"/>
                     <swiper class="carousel5" :options="swiperOption2" style="height:660px">
-                            <swiper-slide class="carousel5-item" v-for="(page2,index) of pages2" :key="index">
-                            <div class="carousel-explain2" v-for="item of page2" :key="item.id">
-                                <img :src="item.img"/>
-                                <div class="explain2-div">
-                                    <h3>{{item.name}}<span class="explain2-span">({{item.huiguan}})</span></h3>
-                                    <span class="explain2-span2">{{item.text}}</span>
-                                </div>
+                        <swiper-slide class="carousel5-item" v-for="(page2,index) of pages2" :key="index">
+                        <div class="carousel-explain2" v-for="item of page2" :key="item.id">
+                            <img :src="item.img"/>
+                            <div class="explain2-div">
+                                <h3>{{item.name}}<span class="explain2-span">({{item.huiguan}})</span></h3>
+                                <span class="explain2-span2">{{item.text}}</span>
                             </div>
-                            </swiper-slide>
-                            <div class="swiper-pagination" slot="pagination"></div>
-                        </swiper>
+                        </div>
+                        </swiper-slide>
+                        <div class="swiper-pagination" slot="pagination"></div>
+                    </swiper>
+                    <img src="../assets/image55.png" class="bg-image8"/>
                 </div>
             </div>
         </el-col>
@@ -243,8 +248,8 @@ export default {
             width: 100%;
             height: 150px;
             text-align: center;
-            border: 1px solid;
             position: relative;
+            margin-top: 20px;
             display: inline-block;
             .border-left{
                 width: 20%;
@@ -371,9 +376,11 @@ export default {
     }
     .joinclubdetails-cont-div3{
         width: 100%;
-        border: 1px solid;
         height: 543px;
-        background-color: #ebebeb;
+        display: inline-block;
+        background-image: url('../assets/image50.png');
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
         .joinclubdetails-div3-main{
             width: 80%;
             margin: 0 auto;
@@ -388,8 +395,16 @@ export default {
                  .left1{
                      width: 100%;
                      height: 140px;
+                     margin-top: 30px;
                     position: relative;
                     display: inline-block;
+                    .bg-image4{
+                        position: absolute;
+                        width: 270px;
+                        height: 90px;
+                        right: 15%;
+                        top: 5%;
+                    }
                     .nav-text{
                         color: #999999;
                         font-size: 14px;
@@ -432,7 +447,7 @@ export default {
              .joinclubdetails-right{
                 width: 50%;
                 height: 85%;
-                margin-top: 35px;
+                margin-top: 54px;
                 .imgpic{
                     margin-top: 7px;
                     .img1{
@@ -459,11 +474,11 @@ export default {
         }
     }
     .joinclubdetails-cont-div4{
-        width: 100%;
+            width: 100%;
             height: 150px;
             text-align: center;
-            border: 1px solid;
             position: relative;
+            margin-top: 20px;
             display: inline-block;
             .border-left{
                 width: 20%;
@@ -503,19 +518,50 @@ export default {
         height: 660px;
         margin: 0 auto;
         margin-bottom: 60px;
-        background-color: #ebebeb;
+        background-image: url('../assets/image51.png');
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        position: relative;
+        .bg-image5{
+            position: absolute;
+            width: 79%;
+            height: 710px;
+            top: 3%;
+            right: 3%;
+        }
+        .bg-image6{
+            position: absolute;
+            width: 328px;
+            height: 62px;
+            top: 86%;
+            left: 8%;
+        }
+        .bg-image7{
+            position: absolute;
+            width: 145px;
+            height: 47px;
+            top: 88%;
+            left: 15%;
+        }
+        .bg-image8{
+            position: absolute;
+            width: 145px;
+            height: 47px;
+            top: 83%;
+            right: 10%;
+        }
         .carousel5{
             width: 75% !important;
             height: 660px;
             margin: 0 auto;
             .carousel-explain2{
-            height: 227px;
+            height: 183px;
             float: left;
             width: 50%;
             display: flex;
                 img{
-                    width: 160px;
-                    height: 160px;
+                    width: 150px;
+                    height: 150px;
                     border-radius: 50%;
                     margin-top: 18px;
                     margin-left: 10px;
