@@ -3,7 +3,7 @@
         <el-col :span="24">
             <div class="nav-main">
                 <template>
-                    <Nav></Nav>
+                    <Banner></Banner>
                 </template>
                 <div class="nav-contunt">
                     <div class="nav-contunt-div1">
@@ -93,18 +93,18 @@
                     </div>
                     <div class="nav-contunt-div7">
                         <div class="explain4">
-                           <img class="nav-div7-img" src="../assets/ss.png"/>
-                           <img class="nav-div7-img" src="../assets/ss.png"/>
-                           <img class="nav-div7-img" src="../assets/ss.png"/>
-                           <img class="nav-div7-img" src="../assets/ss.png"/>
-                           <img class="nav-div7-img" src="../assets/ss.png"/>
-                           <img class="nav-div7-img" src="../assets/ss.png"/>
-                           <img class="nav-div7-img" src="../assets/ss.png"/>
-                           <img class="nav-div7-img" src="../assets/ss.png"/>
-                           <img class="nav-div7-img" src="../assets/ss.png"/>
-                           <img class="nav-div7-img" src="../assets/ss.png"/>
-                           <img class="nav-div7-img" src="../assets/ss.png"/>
-                           <img class="nav-div7-img" src="../assets/ss.png"/>
+                           <img class="nav-div7-img" src="../assets/image9.png"/>
+                           <img class="nav-div7-img" src="../assets/image9.png"/>
+                           <img class="nav-div7-img" src="../assets/image9.png"/>
+                           <img class="nav-div7-img" src="../assets/image9.png"/>
+                           <img class="nav-div7-img" src="../assets/image9.png"/>
+                           <img class="nav-div7-img" src="../assets/image9.png"/>
+                           <img class="nav-div7-img" src="../assets/image9.png"/>
+                           <img class="nav-div7-img" src="../assets/image9.png"/>
+                           <img class="nav-div7-img" src="../assets/image9.png"/>
+                           <img class="nav-div7-img" src="../assets/image9.png"/>
+                           <img class="nav-div7-img" src="../assets/image9.png"/>
+                           <img class="nav-div7-img" src="../assets/image9.png"/>
                         </div>
                     </div>
                 </div>
@@ -113,11 +113,11 @@
     </div>
 </template>
 <script>
-import Nav from "../components/nav";
+import Banner from "../components/banner";
 import { swiper, swiperSlide } from "vue-awesome-swiper";
 export default {
     components:{
-        Nav,
+        Banner,
         swiper,
         swiperSlide
     },
@@ -127,7 +127,7 @@ export default {
             {
             id:1,
             img1:require('../assets/172901eaaci443syyscwzw.jpg'),
-            img2:require('../assets/16394929757_1920x1080.jpg'),
+            img2:require('../assets/image2.png'),
             name:'空中瑜伽',
             train:'Pilates',
             rate:1,
@@ -146,49 +146,49 @@ export default {
         famousteach:[
             {
             id:1,
-            img:require('../assets/xiazai.png'),
+            img:require('../assets/image9.png'),
             name:'新悦',
             huiguan:'观云瑜伽馆',
             text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
             },
             {
             id:2,
-            img:require('../assets/xiazai.png'),
+            img:require('../assets/image9.png'),
             name:'新悦',
             huiguan:'观云瑜伽馆',
             text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
             },
             {
             id:3,
-            img:require('../assets/xiazai.png'),
+            img:require('../assets/image9.png'),
             name:'新悦',
             huiguan:'观云瑜伽馆',
             text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
             },
             {
             id:4,
-            img:require('../assets/xiazai.png'),
+            img:require('../assets/image9.png'),
             name:'新悦',
             huiguan:'观云瑜伽馆',
             text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
             },
             {
             id:5,
-            img:require('../assets/xiazai.png'),
+            img:require('../assets/image9.png'),
             name:'新悦',
             huiguan:'观云瑜伽馆',
             text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
             },
             {
             id:6,
-            img:require('../assets/xiazai.png'),
+            img:require('../assets/image9.png'),
             name:'新悦',
             huiguan:'观云瑜伽馆',
             text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
             },
             {
             id:7,
-            img:require('../assets/xiazai.png'),
+            img:require('../assets/image9.png'),
             name:'新悦',
             huiguan:'观云瑜伽馆',
             text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
@@ -445,16 +445,16 @@ export default {
                     background-size: cover;
                     background-position: center;
                     &.slide-1 {
-                    background-image:url('../assets/ss.png');
+                    background-image:url('../assets/image3.png');
                     }
                     &.slide-2 {
-                    background-image:url('../assets/172901eaaci443syyscwzw.jpg');
+                    background-image:url('../assets/image4.png');
                     }
                     &.slide-3 {
-                    background-image:url('../assets/16394929757_1920x1080.jpg');
+                    background-image:url('../assets/image5.png');
                     }
                     &.slide-4 {
-                    background-image:url('../assets/153_140620153629_2.jpg');
+                    background-image:url('../assets/image6.png');
                     }
                 }
             }

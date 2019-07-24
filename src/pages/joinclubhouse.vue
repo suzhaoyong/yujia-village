@@ -3,7 +3,7 @@
         <el-col :span="24">
             <div class="joinclub-main">
                 <template>
-                    <Nav></Nav>
+                    <Banner></Banner>
                 </template>
                 <div class="joinclub-cont">
                     <div class="joinclub-cont-div1">
@@ -14,7 +14,7 @@
                     </div>
                     <div class="joinclub-cont-div2">
                         <div class="clubhouse">
-                            <div class="clubhouse-left"><img src="../assets/ss.png"/></div>
+                            <div class="clubhouse-left"><img src="../assets/image10.png"/></div>
                             <div class="clubhouse-right">
                                 <p>商务合作卡</p>
                                 <div class="clubhouse-form">
@@ -43,7 +43,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="joinclub-cont-div1">
+                    <div class="joinclub-cont-div4">
                         <h2><img src="../assets/yujia.png"/>会馆展示</h2>
                          <p class="nav-text">Sometimes beauty is so simple</p>
                          <div class="border-left"></div>
@@ -77,28 +77,28 @@
     </div>
 </template>
 <script>
-import Nav from "../components/nav";
+import Banner from "../components/banner";
 export default {
     components:{
-        Nav
+        Banner
     },
   data() {
     return {
         ishow:false,
         joinlist:[
-            {id:1,img:require('../assets/ss.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'1000平米场馆'},
-            {id:2,img:require('../assets/ss.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'2000平米场馆'},
-            {id:3,img:require('../assets/ss.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'3000平米场馆'},
-            {id:4,img:require('../assets/ss.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'500平米场馆'},
-            {id:5,img:require('../assets/ss.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'700平米场馆'},
-            {id:6,img:require('../assets/ss.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'800平米场馆'},
-            {id:7,img:require('../assets/ss.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'900平米场馆'},
-            {id:8,img:require('../assets/ss.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'1200平米场馆'},
-            {id:9,img:require('../assets/ss.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'1300平米场馆'},
-            {id:10,img:require('../assets/ss.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'500平米场馆'},
-            {id:11,img:require('../assets/ss.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'300平米场馆'},
-            {id:12,img:require('../assets/ss.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'500平米场馆'},
-            {id:13,img:require('../assets/ss.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'500平米场馆'}],
+            {id:1,img:require('../assets/image11.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'1000平米场馆'},
+            {id:2,img:require('../assets/image12.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'2000平米场馆'},
+            {id:3,img:require('../assets/image13.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'3000平米场馆'},
+            {id:4,img:require('../assets/image14.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'500平米场馆'},
+            {id:5,img:require('../assets/image11.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'700平米场馆'},
+            {id:6,img:require('../assets/image12.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'800平米场馆'},
+            {id:7,img:require('../assets/image13.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'900平米场馆'},
+            {id:8,img:require('../assets/image14.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'1200平米场馆'},
+            {id:9,img:require('../assets/image11.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'1300平米场馆'},
+            {id:10,img:require('../assets/image12.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'500平米场馆'},
+            {id:11,img:require('../assets/image13.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'300平米场馆'},
+            {id:12,img:require('../assets/image14.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'500平米场馆'},
+            {id:13,img:require('../assets/image11.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'500平米场馆'}],
         labelPosition:'left',
         ruleForm: {
           name: '',
@@ -108,7 +108,7 @@ export default {
           desc: ''
         },
         currentPage:1,
-        pagesize: 10,
+        pagesize: 12,
     };
   },
   methods:{
@@ -156,15 +156,15 @@ export default {
     .joinclub-cont{
         width: 100%;
         margin: 0 auto;
-        border: 1px solid;
         height: 100%;
         display: inline-block;
         .joinclub-cont-div1{
             width: 100%;
             height: 150px;
             text-align: center;
-            border: 1px solid;
+            display: inline-block;
             position: relative;
+            margin-top: 20px;
             .border-left{
                 width: 20%;
                 height: 1px;
@@ -202,11 +202,9 @@ export default {
             width: 100%;
             height: 600px;
             margin: 0 auto;
-            margin-top: 40px;
             .clubhouse{
                 width: 75%;
                 height: 516px;
-                border: 1px solid;
                 margin: 0 auto;
                 display: flex;
                 justify-content: space-between;
@@ -246,10 +244,9 @@ export default {
                                 width: 100px;
                                 height: 35px;
                                 line-height: 11px;
-                                border:1px solid #8fc31f;
                             }
                             .el-button:hover{
-                                border:1px solid #8fc31f;
+                                background: #8fc31f;
                             }
                             .el-textarea__inner{
                                 height: 100px;
@@ -263,11 +260,9 @@ export default {
             width: 100%;
             height: 100%;
             margin: 0 auto;
-            margin-top: 40px;
             .clubhouse2{
                 width: 75%;
                 height: 100%;
-                border: 1px solid;
                 margin: 0 auto;
                 margin-bottom: 50px;
                 .clubhouse2-list{
@@ -294,7 +289,7 @@ export default {
                         color: #999999;
                     }
                     .kong{
-                        width: 91%;
+                        width: 262px;
                         height: 12%;
                         background-color: #8fc31f;
                         position: absolute;
@@ -324,6 +319,45 @@ export default {
                         color: #fff;
                     }
                     
+                }
+            }
+        }
+        .joinclub-cont-div4{
+            width: 100%;
+            height: 150px;
+            text-align: center;
+            display: inline-block;
+            position: relative;
+            .border-left{
+                width: 20%;
+                height: 1px;
+                background-color: #dcdcdc;
+                position: absolute;
+                left:22%;
+                top: 45%;
+            }
+            .border-right{
+                width: 20%;
+                height: 1px;
+                background-color: #dcdcdc;
+                position: absolute;
+                right: 22%;
+                top: 45%;
+            }
+            .nav-text{
+                color: #999999;
+                font-size: 14px;
+                margin-top: -8px;
+            }
+            h2{
+                color: #2c2c2c;
+                font-size: 24px;
+                margin-top: 40px;
+                img{
+                    width: 28px;
+                    height: 28px;
+                    position: absolute;
+                    left: 44%;
                 }
             }
         }

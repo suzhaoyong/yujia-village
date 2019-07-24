@@ -1,6 +1,6 @@
 <template>
     <el-col>
-        <el-carousel height="566px" indicator-position="none" :autoplay="true" :interval="5000" :loop="true">
+        <el-carousel height="566px" indicator-position="none" :autoplay="true" :interval="3000" :loop="true">
             <el-carousel-item v-for="item in imgList" :key="item.id">
             <el-row>
                 <el-col :span="24"><img :src="item.idView" class="banner_img"/></el-col>
@@ -14,9 +14,11 @@ export default {
   data() {
     return {
         imgList: [
-          {id: 0, idView: require('../assets/172901eaaci443syyscwzw.jpg')},
-          {id: 1, idView: require('../assets/16394929757_1920x1080.jpg')},
-          {id: 2, idView: require('../assets/eyucCpbjxAvtwAe.jpg')}
+          {id: 1, idView: require('../assets/banner1.png')},
+          {id: 2, idView: require('../assets/banner2.png')},
+          {id: 3, idView: require('../assets/banner3.png')},
+          {id: 4, idView: require('../assets/banner4.png')},
+          {id: 5, idView: require('../assets/banner5.png')}
         ]
     };
   }

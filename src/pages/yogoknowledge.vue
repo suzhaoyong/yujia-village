@@ -4,7 +4,7 @@
             <el-col :span="24">
                 <div class="knowledge-main">
                     <template>
-                       <Nav></Nav>
+                       <Banner></Banner>
                     </template>
                     <div class="knowledge-count">
                         <div class="knowledge-count-div1" v-for="(item,index) in knowledgeList.slice((currentPage-1)*pagesize,currentPage*pagesize)" :key="index" @click="selectItem(item)">
@@ -48,10 +48,10 @@
     </div>
 </template>
 <script>
-import Nav from "../components/nav";
+import Banner from "../components/banner";
 export default {
   components:{
-    Nav,
+    Banner,
   },
   data() {
     return {
@@ -59,7 +59,7 @@ export default {
         pagesize: 5,
         knowledgeList:[{
             id:1,
-            imgurl:require('../assets/172901eaaci443syyscwzw.jpg'),
+            imgurl:require('../assets/image20.png'),
             title:'练习孕产瑜伽的必备小常识',
             date:'2018-01-30',
             name:'IVAN',
@@ -69,7 +69,7 @@ export default {
         },
         {
             id:2,
-            imgurl:require('../assets/172901eaaci443syyscwzw.jpg'),
+            imgurl:require('../assets/image21.png'),
             title:'练习孕产瑜伽的必备小常识',
             date:'2018-01-30',
             name:'IVAN',
@@ -79,7 +79,7 @@ export default {
         },
         {
             id:3,
-            imgurl:require('../assets/172901eaaci443syyscwzw.jpg'),
+            imgurl:require('../assets/image23.png'),
             title:'练习孕产瑜伽的必备小常识',
             date:'2018-01-30',
             name:'IVAN',
@@ -89,7 +89,7 @@ export default {
         },
         {
             id:4,
-            imgurl:require('../assets/172901eaaci443syyscwzw.jpg'),
+            imgurl:require('../assets/image24.png'),
             title:'练习孕产瑜伽的必备小常识',
             date:'2018-01-30',
             name:'IVAN',
@@ -99,7 +99,7 @@ export default {
         },
         {
             id:5,
-            imgurl:require('../assets/172901eaaci443syyscwzw.jpg'),
+            imgurl:require('../assets/image15.png'),
             title:'练习孕产瑜伽的必备小常识',
             date:'2018-01-30',
             name:'IVAN',
@@ -109,7 +109,7 @@ export default {
         },
         {
             id:6,
-            imgurl:require('../assets/172901eaaci443syyscwzw.jpg'),
+            imgurl:require('../assets/image20.png'),
             title:'练习孕产瑜伽的必备小常识',
             date:'2018-01-30',
             name:'IVAN',
@@ -119,7 +119,7 @@ export default {
         },
         {
             id:7,
-            imgurl:require('../assets/172901eaaci443syyscwzw.jpg'),
+            imgurl:require('../assets/image21.png'),
             title:'练习孕产瑜伽的必备小常识',
             date:'2018-01-30',
             name:'IVAN',

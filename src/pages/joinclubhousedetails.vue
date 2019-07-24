@@ -46,12 +46,12 @@
                     </div>
                     <div class="joinclubdetails-right">
                         <div class="imgpic">
-                        <img src="../assets/ss.png" class="img1"/>
-                        <img src="../assets/ss.png" class="img2"/>
+                        <img src="../assets/image19.png" class="img1"/>
+                        <img src="../assets/image20.png" class="img2"/>
                         </div>
                         <div class="imgpic1">
-                        <img src="../assets/ss.png" class="img3"/>
-                        <img src="../assets/ss.png" class="img4"/>
+                        <img src="../assets/image20.png" class="img3"/>
+                        <img src="../assets/image19.png" class="img4"/>
                         </div>
                     </div>
                     </div>
@@ -105,7 +105,7 @@ export default {
         },
         swiperList:[{
             id:1,
-            img:require('../assets/ss.png'),
+            img:require('../assets/image15.png'),
             name:'鲁拉提',
             text:'Pilates',
             price:4800,
@@ -114,7 +114,7 @@ export default {
         },
         {
             id:2,
-            img:require('../assets/ss.png'),
+            img:require('../assets/image16.png'),
             name:'鲁拉提',
             text:'Pilates',
             price:4800,
@@ -123,7 +123,7 @@ export default {
         },
         {
             id:3,
-            img:require('../assets/ss.png'),
+            img:require('../assets/image17.png'),
             name:'鲁拉提',
             text:'Pilates',
             price:4800,
@@ -132,7 +132,7 @@ export default {
         },
         {
             id:4,
-            img:require('../assets/ss.png'),
+            img:require('../assets/image15.png'),
             name:'鲁拉提',
             text:'Pilates',
             price:4800,
@@ -142,49 +142,49 @@ export default {
         famousteach:[
             {
             id:1,
-            img:require('../assets/xiazai.png'),
+            img:require('../assets/image9.png'),
             name:'琦琦',
             huiguan:'馆主',
             text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
             },
             {
             id:2,
-            img:require('../assets/xiazai.png'),
+            img:require('../assets/image9.png'),
             name:'琦琦',
             huiguan:'馆主',
             text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
             },
             {
             id:3,
-            img:require('../assets/xiazai.png'),
+            img:require('../assets/image9.png'),
             name:'琦琦',
             huiguan:'馆主',
             text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
             },
             {
             id:4,
-            img:require('../assets/xiazai.png'),
+            img:require('../assets/image9.png'),
             name:'琦琦',
             huiguan:'馆主',
             text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
             },
             {
             id:5,
-            img:require('../assets/xiazai.png'),
+            img:require('../assets/image9.png'),
             name:'琦琦',
             huiguan:'馆主',
             text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
             },
             {
             id:6,
-            img:require('../assets/xiazai.png'),
+            img:require('../assets/image9.png'),
             name:'琦琦',
             huiguan:'馆主',
             text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
             },
             {
             id:7,
-            img:require('../assets/xiazai.png'),
+            img:require('../assets/image9.png'),
             name:'琦琦',
             huiguan:'馆主',
             text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
@@ -394,7 +394,7 @@ export default {
                         color: #999999;
                         font-size: 14px;
                         margin-top: -8px;
-                        padding-right: 21px;
+                        padding-right: 40px;
                         text-align: center;
                     }
                     h2{

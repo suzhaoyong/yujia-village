@@ -4,7 +4,7 @@
             <el-col :span="24">
                 <div class="yogo-main">
                     <template>
-                       <Nav></Nav>
+                       <Banner></Banner>
                     </template>
                     <div class="yogo-count">
                         <div class="yogo-search">
@@ -99,10 +99,10 @@
     </div>
 </template>
 <script>
-import Nav from "../components/nav";
+import Banner from "../components/banner";
 export default {
     components:{
-        Nav,
+        Banner,
     },
   data() {
     return {
