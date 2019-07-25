@@ -67,9 +67,9 @@
                                 </swiper>
                            </div>
                        </div>
-                       <div class="yogo-cont-div1">
+                       <div class="yogo-cont-div4">
                             <h2><img src="../assets/yujia.png"/>瑜伽名师展</h2>
-                            <p class="nav-text">Sometimes beauty is so simple</p>
+                            <p class="nav-text">The customer's excellent experience is our goal from beginning to end.</p>
                             <div class="border-left"></div>
                             <div class="border-right"></div>
                        </div>
@@ -250,14 +250,14 @@ export default {
     .yogo-count{
         width: 100%;
         margin: 0 auto;
-        border: 1px solid;
         height: 100%;
         display: inline-block;
         .yogo-cont-div1{
             width: 100%;
             height: 150px;
             text-align: center;
-            border: 1px solid;
+            display: inline-block;
+            margin-top: 20px;
             position: relative;
             .border-left{
                 width: 20%;
@@ -296,11 +296,10 @@ export default {
             width: 100%;
             height: 100%;
             margin: 0 auto;
-            margin-top: 40px;
+            margin-top: 20px;
             .yogocontunt{
-                width: 75%;
+                width: 74%;
                 height: 100%;
-                border: 1px solid;
                 margin: 0 auto;
                 margin-bottom: 50px;
                 position: relative;
@@ -339,7 +338,6 @@ export default {
                 }
                 .yogocontunt-swiper{
                     width: 100%;
-                    border: 1px solid;
                     height: 350px;
                     margin: 0 auto;
                     display: flex;
@@ -415,17 +413,15 @@ export default {
             width: 100%;
             height: 100%;
             margin: 0 auto;
-            margin-top: 40px;
+            margin-top: 10px;
             .yogocontunt2{
                 width: 75%;
                 height: 100%;
-                border: 1px solid;
                 margin: 0 auto;
                 margin-bottom: 50px;
                 .yogocontunt2-list{
                     width: 262px;
                     height: 270px;
-                    border:1px solid;
                     background-color: #E2DBC8;
                     margin: 10px;
                     float: left;
@@ -449,6 +445,45 @@ export default {
                         background-color: #CCE198;
                         color: #fff;
                     }
+                }
+            }
+        }
+        .yogo-cont-div4{
+            width: 100%;
+            height: 150px;
+            text-align: center;
+            display: inline-block;
+            position: relative;
+            .border-left{
+                width: 20%;
+                height: 1px;
+                background-color: #dcdcdc;
+                position: absolute;
+                left:22%;
+                top: 45%;
+            }
+            .border-right{
+                width: 20%;
+                height: 1px;
+                background-color: #dcdcdc;
+                position: absolute;
+                right: 22%;
+                top: 45%;
+            }
+            .nav-text{
+                color: #999999;
+                font-size: 14px;
+                margin-top: -8px;
+            }
+            h2{
+                color: #2c2c2c;
+                font-size: 24px;
+                margin-top: 40px;
+                img{
+                    width: 28px;
+                    height: 28px;
+                    position: absolute;
+                    left: 44%;
                 }
             }
         }
