@@ -189,6 +189,7 @@ export default {
             height: 540px;
             margin: 0 auto;
             display: flex;
+            justify-content: center;
             .Photowall-img1{
                 .Photowall-img1-bottom{
                     display: flex;
