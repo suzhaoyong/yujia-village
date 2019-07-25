@@ -12,6 +12,7 @@
                         <div class="border-left"></div>
                         <div class="border-right"></div>
                     </div>
+                    <el-col :span="24" class="bg-pic">
                     <div class="nav-contunt-div2">
                         <div class="contunt2">
                         <el-carousel height="560px" :interval="5000" arrow="never" direction="vertical" :autoplay="false">
@@ -56,13 +57,17 @@
                             </swiper>
                          </div>
                     </div>
-                    <div class="nav-contunt-div3">
+                    </el-col>
+                    <div class="nav-contunt-div8">
+                        <img src="../assets/image56.png" class="bg-pic2">
                         <h2><img src="../assets/yujia.png"/>瑜伽名师</h2>
                         <p class="nav-text">Sometimes beauty is so simple</p>
                         <div class="border-left"></div>
                         <div class="border-right"></div>
+                        <img src="../assets/image57.png" class="bg-pic3">
                     </div>
                     <div class="nav-contunt-div5">
+                        <img src="../assets/image52.png" class="bg-pic4">
                         <swiper class="carousel5" :options="swiperOption" style="height:660px">
                             <swiper-slide class="carousel5-item" v-for="(page,index) of pages" :key="index">
                             <div class="carousel-explain2" v-for="item of page" :key="item.id">
@@ -76,16 +81,34 @@
                             <div class="swiper-pagination" slot="pagination"></div>
                         </swiper>
                     </div>
-                    <div class="nav-contunt-div3">
+                    <div class="nav-contunt-div9">
+                        <img src="../assets/image58.png" class="bg-pic5">
                         <h2><img src="../assets/yujia.png"/>培训信息</h2>
                         <p class="nav-text">Sometimes beauty is so simple</p>
                         <div class="border-left"></div>
                         <div class="border-right"></div>
+                        <img src="../assets/image59.png" class="bg-pic6">
                     </div>
+                    <el-col :span="24" class="bg-pic7">
                     <div class="nav-contunt-div6">
-                        <div class="explain3"></div>
+                        <div class="explain3">
+                            <div class="explain3-border">
+                                <img src="../assets/image61.png" class="bg-border-img">
+                                <img src="../assets/image62.png" class="bg-border-img2">
+                            </div>
+                            <div class="explain3-text">
+                                <p class="text-p">The Dolphin Method RYT 200 小时</p>
+                                <h4 class="text-h4">RYT200小时瑜伽培训</h4>
+                                <p class="text-p2">全球最权威的认证机构</p>
+                                <p class="text-p3">全球含金量最高的瑜伽证书</p>
+                                <img src="../assets/image63.png" class="bg-border-img3">
+                                <div class="text-butt">
+                                    <el-button type="text" class="text-button">报名</el-button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="nav-contunt-div3">
+                    <div class="nav-contunt-div10">
                         <h2><img src="../assets/yujia.png"/>加盟会馆</h2>
                         <p class="nav-text">Sometimes beauty is so simple</p>
                         <div class="border-left"></div>
@@ -93,19 +116,23 @@
                     </div>
                     <div class="nav-contunt-div7">
                         <div class="explain4">
-                           <img class="nav-div7-img" src="../assets/image9.png"/>
-                           <img class="nav-div7-img" src="../assets/image9.png"/>
-                           <img class="nav-div7-img" src="../assets/image9.png"/>
-                           <img class="nav-div7-img" src="../assets/image9.png"/>
-                           <img class="nav-div7-img" src="../assets/image9.png"/>
-                           <img class="nav-div7-img" src="../assets/image9.png"/>
-                           <img class="nav-div7-img" src="../assets/image9.png"/>
-                           <img class="nav-div7-img" src="../assets/image9.png"/>
-                           <img class="nav-div7-img" src="../assets/image9.png"/>
-                           <img class="nav-div7-img" src="../assets/image9.png"/>
-                           <img class="nav-div7-img" src="../assets/image9.png"/>
-                           <img class="nav-div7-img" src="../assets/image9.png"/>
+                           <img class="nav-div7-img" src="../assets/image60.png"/>
+                           <img class="nav-div7-img" src="../assets/image60.png"/>
+                           <img class="nav-div7-img" src="../assets/image60.png"/>
+                           <img class="nav-div7-img" src="../assets/image60.png"/>
+                           <img class="nav-div7-img" src="../assets/image60.png"/>
+                           <img class="nav-div7-img" src="../assets/image60.png"/>
+                           <img class="nav-div7-img" src="../assets/image60.png"/>
+                           <img class="nav-div7-img" src="../assets/image60.png"/>
+                           <img class="nav-div7-img" src="../assets/image60.png"/>
+                           <img class="nav-div7-img" src="../assets/image60.png"/>
+                           <img class="nav-div7-img" src="../assets/image60.png"/>
+                           <img class="nav-div7-img" src="../assets/image60.png"/>
                         </div>
+                    </div>
+                    </el-col>
+                    <div class="bai">
+                        <img src="../assets/image60.png" class="bg-pic8"/>
                     </div>
                 </div>
             </div>
@@ -126,7 +153,7 @@ export default {
         dataimg:[
             {
             id:1,
-            img1:require('../assets/172901eaaci443syyscwzw.jpg'),
+            img1:require('../assets/image10.png'),
             img2:require('../assets/image2.png'),
             name:'空中瑜伽',
             train:'Pilates',
@@ -135,8 +162,8 @@ export default {
             },
             {
             id:2,
-            img1:require('../assets/eyucCpbjxAvtwAe.jpg'),
-            img2:require('../assets/153_140620153629_2.jpg'),
+            img1:require('../assets/image2.png'),
+            img2:require('../assets/image10.png'),
             name:'基础瑜伽',
             train:'YangFei',
             rate:2,
@@ -277,17 +304,16 @@ export default {
     padding: 0;
     overflow: hidden;
     .nav-contunt{
-        border: 1px solid;
         height: 100%;
         display:inline-block;
-        // position: relative;
         margin: 0 auto;
         width: 100%;
         .nav-contunt-div1{
             width: 100%;
             height: 150px;
             text-align: center;
-            border: 1px solid;
+            display:inline-block;
+            margin-top: 20px;
             position: relative;
             .border-left{
             width: 20%;
@@ -322,17 +348,21 @@ export default {
                 }
             }
         }
+        .bg-pic{
+            background-image: url('../assets/image8.png');
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
         .nav-contunt-div2{
             width: 100%;
-            height: 660px;
+            height: 590px;
             margin: 0 auto;
-            margin-top: 40px;
-            // opacity: 0.6;
+            margin-top: 17px;
             .contunt2{
                 width: 75%;
                 height: 560px;
                 margin: 0 auto;
-                 background-color: #939EC4;
+                background-color: #939EC4;
+                opacity: 0.7;
             .carousel-explain{
                 height: 350px;
                 position: relative;
@@ -394,7 +424,7 @@ export default {
             width: 100%;
             height: 150px;
             text-align: center;
-            border: 1px solid;
+            display: inline-block;
             position: relative;
             .border-left{
             width: 20%;
@@ -433,12 +463,11 @@ export default {
             width: 100%;
             margin:0 auto;
             height: 700px;
-            margin-top: 40px;
+            margin-top: 15px;
             .contunt3{
                 width: 75%;
                 margin: 0 auto;
                 height: 624px;
-                border: 1px solid;
              .swiper-container {
                  width: 100%;
                  .swiper-slide {
@@ -476,19 +505,29 @@ export default {
                 }
             }
         }
-        }
+      }
+    }
         .nav-contunt-div5{
             width: 100%;
             height: 660px;
             margin: 0 auto;
             margin-top: 40px;
-            margin-bottom: 60px;
-            // opacity: 0.6;
+            margin-bottom: 34px;
+            background-image: url('../assets/image51.png');
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            position: relative;
+            .bg-pic4{
+                position: absolute;
+                width: 70%;
+                right: 9%;
+                top: 11%;
+                height: 100%;
+            }
             .carousel5{
                width: 75% !important;
                 height: 660px;
                 margin: 0 auto;
-                // opacity: 0.3;
                 .carousel-explain2{
                 height: 227px;
                 float: left;
@@ -557,13 +596,11 @@ export default {
                 }
               }
             }
-            .carousel5-item:nth-child(2n){
-                background-color: #EEEADC !important;
-            }
-            .carousel5-item:nth-child(2n+1){
-                background-color: #EEEADC !important;
-            }
         }
+        .bg-pic7{
+            background-image: url('../assets/image7.png');
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
         .nav-contunt-div6{
             width: 100%;
             height: 660px;
@@ -573,24 +610,261 @@ export default {
                 width: 75%;
                 margin:0 auto;
                 height: 590px;
-                border: 1px solid;
+                display: flex;
+                .explain3-border{
+                    width: 67%;
+                    border: 10px solid #fff;
+                    height: 82%;
+                    margin: 0 auto;
+                    margin-top: 30px;
+                    margin-left: 14%;
+                    position: relative;
+                    .bg-border-img{
+                        width: 85%;
+                        height: 425px;
+                        position: absolute;
+                        top: 7%;
+                        left: -16%;
+                    }
+                    .bg-border-img2{
+                        width: 134px;
+                        height: 36px;
+                        position: absolute;
+                        top: 58%;
+                        left: -29%;
+                    }
+                }
+                .explain3-text{
+                    width: 32%;
+                    height: 82%;
+                    position: relative;
+                    .text-p{
+                        font-size: 20px;
+                        color: #2c2c2c;
+                        position: absolute;
+                        left: -65%;
+                        top: 20%;
+                    }
+                    .text-p2{
+                        font-size: 14px;
+                        color: #2c2c2c;
+                        position: absolute;
+                        left: 7%;
+                        top: 54%;
+                    }
+                    .text-p3{
+                        font-size: 14px;
+                        color: #2c2c2c;
+                        position: absolute;
+                        left: 7%;
+                        top: 62%;
+                    }
+                    .text-h4{
+                        font-size: 20px;
+                        color: #2c2c2c;
+                        position: absolute;
+                        left: -65%;
+                        top: 30%;
+                    }
+                    .bg-border-img3{
+                        width: 134px;
+                        height: 34px;
+                        position: absolute;
+                        top: 40%;
+                        right: -7%;
+                    }
+                    .text-butt{
+                        width: 122px;
+                        height: 53px;
+                        background-color: #ffffff;
+                        position: absolute;
+                        left: 7%;
+                        top: 90%;
+                        line-height: 52px;
+                        text-align: center;
+                        .text-button{
+                            color: #2c2c2c;
+                        }
+                    }
+                }
             }
         }
         .nav-contunt-div7{
             width: 100%;
             height: 660px;
             margin: 0 auto;
-            margin-top: 40px;
+            margin-top: 10px;
             .explain4{
                 width: 75%;
                 margin:0 auto;
                 height: 602px;
-                border: 1px solid;
                 .nav-div7-img{
                     width: 280px;
                     height: 198px;
                     background-color: #eeeeee;
                 }
+            }
+        }
+        .nav-contunt-div10{
+            width: 100%;
+            height: 150px;
+            text-align: center;
+            display: inline-block;
+            position: relative;
+            .border-left{
+            width: 20%;
+            height: 1px;
+            background-color: #dcdcdc;
+            position: absolute;
+            top: 45%;
+            left: 22%;
+            }
+            .border-right{
+                width: 20%;
+                height: 1px;
+                background-color: #dcdcdc;
+                position: absolute;
+                right: 22%;
+                top: 45%;
+            }
+            .nav-text{
+                color: #999999;
+                font-size: 14px;
+                margin-top: -8px;
+            }
+            h2{
+                color: #2c2c2c;
+                font-size: 24px;
+                margin-top: 40px;
+                img{
+                    width: 28px;
+                    height: 28px;
+                    position: absolute;
+                    left: 44%;
+                }
+            }
+        }
+    }
+        .nav-contunt-div8{
+            width: 100%;
+            height: 150px;
+            margin-top:20px;
+            text-align: center;
+            display: inline-block;
+            position: relative;
+            .bg-pic2{
+                position: absolute;
+                width: 350px;
+                height: 160px;
+                left: 0%;
+                top: -8%;
+            }
+            .bg-pic3{
+                position: absolute;
+                width: 620px;
+                height: 160px;
+                right: 10%;
+                top: -6%;
+            }
+            .border-left{
+                width: 20%;
+                height: 1px;
+                background-color: #dcdcdc;
+                position: absolute;
+                left:22%;
+                top: 45%;
+            }
+            .border-right{
+                width: 20%;
+                height: 1px;
+                background-color: #dcdcdc;
+                position: absolute;
+                right: 22%;
+                top: 45%;
+            }
+            .nav-text{
+                color: #999999;
+                font-size: 14px;
+                margin-top: -8px;
+            }
+            h2{
+                color: #2c2c2c;
+                font-size: 24px;
+                margin-top: 40px;
+                img{
+                    width: 28px;
+                    height: 28px;
+                    position: absolute;
+                    left: 44%;
+                }
+            }
+        }
+        .nav-contunt-div9{
+            width: 100%;
+            height: 150px;
+            text-align: center;
+            margin-bottom: 30px;
+            display: inline-block;
+            position: relative;
+            .bg-pic5{
+                position: absolute;
+                width: 560px;
+                height: 160px;
+                left: 0%;
+                top: -8%;
+            }
+            .bg-pic6{
+                position: absolute;
+                width: 390px;
+                height: 160px;
+                right: 0%;
+                top: -6%;
+            }
+            .border-left{
+            width: 20%;
+            height: 1px;
+            background-color: #dcdcdc;
+            position: absolute;
+            top: 45%;
+            left: 22%;
+            }
+            .border-right{
+                width: 20%;
+                height: 1px;
+                background-color: #dcdcdc;
+                position: absolute;
+                right: 22%;
+                top: 45%;
+            }
+            .nav-text{
+                color: #999999;
+                font-size: 14px;
+                margin-top: -8px;
+            }
+            h2{
+                color: #2c2c2c;
+                font-size: 24px;
+                margin-top: 40px;
+                img{
+                    width: 28px;
+                    height: 28px;
+                    position: absolute;
+                    left: 44%;
+                }
+            }
+        }
+        .bai{
+            width: 100%;
+            height: 60px;
+            background-color: #fff;
+            display: inline-block;
+            position: relative;
+            .bg-pic8{
+                position: absolute;
+                width: 235px;
+                height: 500px;
+                right: 0%;
+                bottom: 3%;
             }
         }
     }

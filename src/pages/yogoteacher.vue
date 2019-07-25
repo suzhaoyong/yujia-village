@@ -42,7 +42,7 @@
                                 <swiper-slide v-for="(page,index) of pages" :key="index">
                                     <div class="yogocontunt-swiper">
                                         <div class="yogoswiper-img">
-                                            <img src="../assets/ss.png"/>
+                                            <img src="../assets/image10.png"/>
                                         </div>
                                         <div class="yogoswiper-text">
                                             <h3>小鱼(Tina)</h3>
@@ -139,31 +139,31 @@ export default {
         iconList: [
           {
             id: "0001",
-            imgUrl:require('../assets/ss.png'),
+            imgUrl:require('../assets/image3.png'),
             name:"小鱼(Tina)",
             title: "从业时间: 5年",
             desc:"2014年全美瑜伽联盟RYT200X小时认证"
           }, {
             id: "0002",
-            imgUrl:require('../assets/ss.png'),
+            imgUrl:require('../assets/image4.png'),
             name:"小鱼(Tina)",
             title: "从业时间: 5年",
             desc:"2014年全美瑜伽联盟RYT200X小时认证"
           }, {
             id: "0003",
-            imgUrl:require('../assets/ss.png'),
+            imgUrl:require('../assets/image5.png'),
             name:"小鱼(Tina)",
             title: "从业时间: 5年",
             desc:"2014年全美瑜伽联盟RYT200X小时认证"
           }, {
             id: "0004",
-            imgUrl:require('../assets/ss.png'),
+            imgUrl:require('../assets/image6.png'),
             name:"小鱼(Tina)",
             title: "从业时间: 5年",
             desc:"2014年全美瑜伽联盟RYT200X小时认证"
           }, {
             id: "0005",
-            imgUrl:require('../assets/ss.png'),
+            imgUrl:require('../assets/image3.png'),
             name:"小鱼(Tina)",
             title: "从业时间: 5年",
             desc:"2014年全美瑜伽联盟RYT200X小时认证"
