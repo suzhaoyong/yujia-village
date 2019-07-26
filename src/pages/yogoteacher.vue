@@ -30,6 +30,7 @@
                                 </el-form>
                             </div>
                         </div>
+                        <el-col :span="24" class="bg-tupian1">
                         <div class="yogo-cont-div1">
                             <h2><img src="../assets/yujia.png"/>馆内名师</h2>
                             <p class="nav-text">Sometimes beauty is so simple</p>
@@ -67,6 +68,7 @@
                                 </swiper>
                            </div>
                        </div>
+                       <el-col :span="24" class="bg-tupian2">
                        <div class="yogo-cont-div4">
                             <h2><img src="../assets/yujia.png"/>瑜伽名师展</h2>
                             <p class="nav-text">The customer's excellent experience is our goal from beginning to end.</p>
@@ -92,6 +94,8 @@
                             </div>
                            </div>
                        </div>
+                       </el-col>
+                       </el-col>
                     </div>
                 </div>
             </el-col>
@@ -228,7 +232,7 @@ export default {
         height: 70px;
         display: flex;
         justify-content: space-around;
-        background-color: #e2dbc8;
+        background-color: #E2DBC8;
         .search-left{
             line-height: 68px;
             padding-left:16px;
@@ -252,6 +256,8 @@ export default {
         margin: 0 auto;
         height: 100%;
         display: inline-block;
+        .bg-tupian1{
+            background-color: #F6F4EE;
         .yogo-cont-div1{
             width: 100%;
             height: 150px;
@@ -310,6 +316,7 @@ export default {
                     margin-top: 25px;
                     margin-left: 27px;
                     box-shadow: 1px 1px 6px 0px rgba(36, 36, 36, 0.2);
+                    background-color: #fff;
                     .icon-img{
                         width: 100%;
                         height: 270px;
@@ -409,6 +416,10 @@ export default {
                 }
             }
         }
+        .bg-tupian2{
+            background-image: url('../assets/image64.png');
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
         .yogo-cont-div3{
             width: 100%;
             height: 100%;
@@ -487,6 +498,8 @@ export default {
                 }
             }
         }
+        }
+      }
     }
 }
 </style>
