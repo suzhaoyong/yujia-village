@@ -39,17 +39,20 @@ export default new Router({
     {
       path: '/market',
       name: 'market',
-      component: () => import('@/pages/market/index'),
+      component: Home,//首页
       children: [
         { path: '/market/index', component: () => import('@/pages/market/index') },
+        { path: '/market/detail', component: () => import('@/pages/market/detail') },
       ]
     },
     {
       path: '/goods',
       name: 'goods',
-      component: () => import('@/pages/goods/detail'),
+      component: Home,//首页
       children: [
         { path: '/goods/detail', component: () => import('@/pages/goods/detail') },
+        { path: '/goods/order', component: () => import('@/pages/goods/order') },
+        { path: '/goods/shop-car', component: () => import('@/pages/goods/shopcar') },
       ]
     },
     {

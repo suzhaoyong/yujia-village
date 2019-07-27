@@ -1,9 +1,20 @@
 <template>
   <div>
+    <div class="sub-menu">
+      <div class="select">
+        <div class="item">商品详细分类</div>
+        <div class="item">购物车</div>
+        <div class="item">收藏中心</div>
+      </div>
+      <div class="input-box">
+        <input type="text" class="form-control input" placeholder="商品名称">
+      </div>
+    </div>
     <div class="market">
       <div class="market_news">
         <div class="market_news-title">
           <div class="market_news-title_main">
+            <div class="icon"><img :src="titleIcon" alt="" srcset=""></div>
             新品推荐
           </div>
           <div class="market_news-title_tips">Sometimes beauty is so simple</div>
@@ -32,14 +43,15 @@
       <div class="market_time">
         <div class="market_time-title">
           <div class="market_time-title_main">
-            新品推荐
+            <div class="icon"><img :src="titleIcon" alt="" srcset=""></div>
+            限时优惠
           </div>
           <div class="market_time-title_tips">Sometimes beauty is so simple</div>
         </div>
         <div class="market_time-content">
           <div class="market_time-content_box">
             <div class="prev_btn-box">
-              <div class="prev_btn">prev</div>
+              <div class="prev_btn"></div>
             </div>
             <div class="goods_list">
               <div class="goods" v-for="(item,index) in 3" :key="index">
@@ -59,7 +71,7 @@
               </div>
             </div>
             <div class="next_btn-box">
-              <div class="next_btn">next</div>
+              <div class="next_btn"></div>
             </div>
           </div>
         </div>
@@ -67,7 +79,8 @@
       <div class="market_often">
         <div class="market_often-title">
           <div class="market_often-title_main">
-            新品推荐
+            <div class="icon"><img :src="titleIcon" alt="" srcset=""></div>
+            常用推荐
           </div>
           <div class="market_often-title_tips">Sometimes beauty is so simple</div>
         </div>
@@ -83,10 +96,10 @@
               <div class="img"></div>
               <div class="info">
                 <div class="title">爱暇步夏季新款瑜伽服女套装</div>
-                <div class="subtitle">年輕時尚，柔软舒适 拷贝 4</div>
+                <div class="subtitle">年輕時尚，柔软舒适 </div>
                 <div class="price">
-                  <div class="price-old">￥75.00 拷贝 4</div>
-                  <div class="price-new">￥55.00 拷贝 4</div>
+                  <div class="price-old">￥75.00 </div>
+                  <div class="price-new">￥55.00 </div>
                 </div>
               </div>
             </div>
@@ -94,11 +107,11 @@
               <div class="item" v-for="(item, index) in 4" :key="index">
                 <div class="img"></div>
                 <div class="info">
-                  <div class="title">爱暇步夏季新款瑜伽服女套装</div>
-                  <div class="subtitle">年輕時尚，柔软舒适 拷贝 4</div>
+                  <div class="title">爱暇步夏季新款123124213瑜伽服女套装</div>
+                  <div class="subtitle">年輕時尚，柔软舒适 </div>
                   <div class="price">
-                    <div class="price-old">￥75.00 拷贝 4</div>
-                    <div class="price-new">￥55.00 拷贝 4</div>
+                    <div class="price-old">￥75.00 </div>
+                    <div class="price-new">￥55.00 </div>
                   </div> 
                 </div>
               </div>
@@ -115,7 +128,13 @@
   </div>
 </template>
 <script>
+import TitleIcon from '@/assets/market/market_icon1.png';
 export default {
+  data() {
+    return{
+      titleIcon: TitleIcon,
+    }
+  }
   
 }
 </script>
@@ -125,26 +144,76 @@ export default {
   margin: 0;
   padding: 0;
 }
+.sub-menu{
+  width: 60rem;
+  height: 5rem;
+  padding: 0 1rem;
+  background: #fff;
+  box-shadow: 0 0.2rem 0.5rem rgba(143,143,143,0.4);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .select{
+    display: flex;
+    cursor: pointer;
+    .item{
+      margin-right: 2.15rem;
+      &:last-child{
+        margin-right: 0;
+      }
+    }
+  }
+  .input-box{
+    width: 13rem;
+    height: 2.55rem;
+    .input{
+      padding-left: 1.35rem;
+      height: 100%;
+    }
+  }
+}
 .market{
   width: 100%;
   &_news{
     &-title{
+      height: 13.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       text-align: center;
-      &_mian{
-
+      &_main{
+        color: #2C2C2C;
+        font-weight: 800;
+        vertical-align: bottom;
+        .icon{
+          width: 1rem;
+          height: 1.5rem;
+          display: inline-block;
+          vertical-align: super;
+          margin-right: 0.8rem;
+          img{
+            width: 100%;
+            height: 100%;
+          }
+        }
       }
       &_tips{
-
+        padding-top: 1.85rem;
       }
     }
     &-content{
       width: 100%;
+      background: #eee;
       &_box{
         height: 40rem;
         width: 60rem;
         margin: 0 auto;
         display: flex;
         border: 1px solid #ccc;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
         &-lf{
           position: relative;
           padding-bottom: 1rem;
@@ -170,10 +239,11 @@ export default {
             border-right: 1.4rem solid #7D7D7D;
             padding: 1.15rem;
             &-title{
-
+              color: #2C2C2C;
             }
             &-tips{
-
+              color: #999999;
+              font-size: 0.6rem;
             }
             &-price{
               align-self: flex-end;
@@ -182,13 +252,20 @@ export default {
               margin-right: -1.95rem;
             }
             &-tags{
-
+              color: #484848;
+              font-weight: 600;
+              font-family:MFLiHei_Noncommercial-Regular;
             }
             &-time{
-
+              font-size: 0.6rem;
             }
             &-logo{
+              padding-left: 2rem;
+              font-family:FZCCHJW--GB1-0;
+              font-weight:800;
+              color:rgba(44,44,44,1);
               align-self: flex-end;
+              border-bottom:0.2rem solid #313131;
             }
           }
         }
@@ -213,6 +290,8 @@ export default {
             }
           }
           .goods_buy-btn{
+            background: #313131;
+            color: #fff;
             margin-top: 1rem;
             margin-right: 2rem;
             align-self: flex-end;
@@ -225,12 +304,30 @@ export default {
   }
   &_time{
     &-title{
+      height: 13.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       text-align: center;
       &_main{
-
+        color: #2C2C2C;
+        font-weight: 800;
+        vertical-align: bottom;
+        .icon{
+          width: 1rem;
+          height: 1.5rem;
+          display: inline-block;
+          vertical-align: super;
+          margin-right: 0.8rem;
+          img{
+            width: 100%;
+            height: 100%;
+          }
+        }
       }
       &_tips{
-
+        padding-top: 1.85rem;
       }
     }
     &-content{
@@ -239,20 +336,35 @@ export default {
         justify-content: space-around;
         .prev_btn-box{
           border:1px solid #ccc;
+          position: relative;
           width: 10rem;
           // margin-left: -10rem;
             // transform: skewx(10deg) translatex(150px);
             // transform-origin: bottom left;
           .prev_btn{
-
+            width: 4rem;
+            height: 2rem;
+            background: url(../../assets/market/prev.png) no-repeat;
+            background-size: 100% 100%;
+            position: absolute;
+            bottom: 2rem;
+            left: 1rem;
           }
         }
         .next_btn-box{
           border:1px solid #ccc;
+          position: relative;
           width: 10rem;
             // transform: skewx(10deg) translatex(150px);
             // transform-origin: bottom left;
           .next_btn{
+            width: 4rem;
+            height: 2rem;
+            background: url(../../assets/market/next.png) no-repeat;
+            background-size: 100% 100%;
+            position: absolute;
+            left: 1rem;
+            top: 2rem;
           }
         }
         .goods_list{
@@ -266,22 +378,42 @@ export default {
             // transform-origin: bottom left;
             margin: 0 1rem;
             border:1px solid #ccc;
+            overflow: hidden;
             &-title{
-
+              font-weight: 600;
+              margin-top: 1rem;
+              padding: 0 0.3rem;
             }
             &-price{
+              padding-top: 1.5rem;
+              padding-bottom: 1rem;
+              padding-left: 0.3rem;
+              display: flex;
               &-old{
-
+                color: #999999;
+                text-decoration: line-through;
               }
               &-new{
-
+                color: #2C2C2C;
               }
             }
             &-img{
               height: 26.55rem;
               border:1px solid #ccc;
+              position: relative;
               .add-shop-btn{
-
+                width: 9rem;
+                height: 2rem;
+                background-color: #313131;
+                color: #fff;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+                position: absolute;
+                top: 2rem;
+                left: -0.3rem;
+                z-index: 4;
               }
             }
 
@@ -292,12 +424,30 @@ export default {
   }
   &_often{
     &-title{
+      height: 13.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       text-align: center;
       &_main{
-
+        color: #2C2C2C;
+        font-weight: 800;
+        vertical-align: bottom;
+        .icon{
+          width: 1rem;
+          height: 1.5rem;
+          display: inline-block;
+          vertical-align: super;
+          margin-right: 0.8rem;
+          img{
+            width: 100%;
+            height: 100%;
+          }
+        }
       }
       &_tips{
-
+        padding-top: 1.85rem;
       }
     }
     &-content{
@@ -311,10 +461,15 @@ export default {
             width: 9.85rem;
             border:1px solid #ccc;
             padding: 10px;
+            &:hover{
+              background: #839F6B;
+              color:#fff;
+            }
             .menu-title-en{
               position: relative;
-              color: red;
+              padding-left: 10px;
               margin-left: 10px;
+              width: 100%;
               &::before{
                 content: '';
                 display: block;
@@ -323,11 +478,10 @@ export default {
                 left: -10px;
                 border: 0.5rem solid transparent;
                 border-left-color:#313131;
-                // border-top-color: #313131;
-
               }
             }
             .menu-title-zh{
+              padding-left: 10px;
               margin-left: 10px;
             }
           }
@@ -339,22 +493,38 @@ export default {
           margin-left: 3rem;
           margin-right: 1.8rem;
           border:1px solid #ccc;
+          background: #eee;
+          padding: 1.3rem;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
           .img{
-
+            width: 20rem;
+            height: 20rem;
+            background: #ccc;
           }
           .info{
             .title{
-
+              padding-top: 1.45rem;
+              color: #2C2C2C;
             }
             .subtitle{
-
+              color: #999999;
+              font-size: 0.6rem;
+              text-align: center;
             }
             .price{
+              padding-top: 0.5rem;
+              display: flex;
               &-old{
-
+                color:#999;
+                font-size: 0.6rem;
+                text-decoration: line-through;
               }
               &-new{
-
+                padding-left: 0.4rem;
+                color:#999;
+                font-size: 0.7rem;
               }
             }
           }
@@ -374,24 +544,47 @@ export default {
               align-self: flex-end;
             }
             flex-shrink: 0;
-            width: 9.8rem;
+            width: 10rem;
             height: 14rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             border:1px solid #ccc;
             .img{
+              width: 9rem;
+              height: 9rem;
+              border-radius: 4px;
+              background: #ccc;
+              box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
             }
             .info{
+              padding-top: 0.6rem;
+              padding-left: 0.3rem;
+              padding-right: 0.3rem;
               .title{
-
+                width: 9rem;
+                overflow: hidden;
+                text-overflow:ellipsis;
+                white-space: nowrap;
+                color: #2C2C2C;
+                font-size: 0.7rem;
               }
               .subtitle{
-
+                color:#999;
+                font-size: 0.6rem;
               }
               .price{
+                padding-top: 0.5rem;
+                display: flex;
+                color: #999;
                 &-old{
-
+                  font-size: 0.6rem;
+                  text-decoration: line-through;
                 }
                 &-new{
-
+                  padding-left: 0.3rem;
+                  font-weight: 800;
+                  font-size: 0.7rem;
                 }
               }
             }
@@ -404,10 +597,13 @@ export default {
       margin-top: 5rem;
       margin-bottom: 9rem;
       .goods-detail-btn{
-        width: 7.85rem;
+        cursor: pointer;
+        width: 13rem;
         margin: 0 auto;
-        padding: 0.8rem 0.55rem 0.8rem 1.05rem;
-        border:1px solid #ccc;
+        padding: 0.8rem 0.55rem 1.4rem 5.4rem;
+        background: url(../../assets/market/btn-bg.png) no-repeat;
+        background-size: 100% 100%;
+        // border:1px solid #ccc;
       }
     }
   }
