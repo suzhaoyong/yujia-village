@@ -20,7 +20,7 @@
                     <el-menu-item index="home">培训信息</el-menu-item>
                     <el-menu-item index="yogoknowledge">瑜伽知识</el-menu-item>
                     <el-menu-item index="yogoinformation">瑜伽资讯</el-menu-item>
-                    <el-menu-item index="home">商城</el-menu-item>
+                    <el-menu-item index="market">商城</el-menu-item>
                     <el-menu-item index="aboutus">关于我们</el-menu-item>
                     <el-menu-item index="home">个人中心</el-menu-item> 
                     </el-menu>
@@ -102,6 +102,8 @@ export default {
               this.$router.push('/yogoinformation');
           }else if('aboutus' === key){
               this.$router.push('/aboutus');
+          }else{
+            this.$router.push(`/${key}/index`)
           }
       }
     }

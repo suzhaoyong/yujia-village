@@ -2,8 +2,17 @@
   <div>
     <div class="market">
       <div class="selected-search">
-        <div class="selected"><span>已选</span> <div class="tag">0-150 <i class="close"></i></div></div>
-        <div class="search"></div>
+        <div class="selected">
+          <span>已选</span>
+          <span>></span>
+          <div class="tag">
+            0-150
+            <i class="el-icon-close close"></i>
+          </div>
+        </div>
+        <div class="search">
+          <input type="text" class="form-control input" placeholder="商品名或关键词" />
+        </div>
       </div>
       <div class="select">
         <div class="price">
@@ -12,40 +21,219 @@
             <div class="item">不限</div>
             <div class="item">0-150</div>
           </div>
-          <div class="more">更多</div>
+          <div class="more">
+            <div class="dropdown show">
+              <a
+                class="btn dropdown-toggle"
+                style="color: #7F8F58;"
+                href="#"
+                role="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >更多</a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" href="#">更多1</a>
+                <a class="dropdown-item" href="#">更多1</a>
+                <a class="dropdown-item" href="#">更多1</a>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="kinds"></div>
-        <div class="material"></div>
-        <div class="use"></div>
+        <div class="kinds">
+          <div class="title">商品种类</div>
+          <div class="range">
+            <div class="item">不限</div>
+            <div class="item">0-150</div>
+          </div>
+          <div class="more">
+            <div class="dropdown show">
+              <a
+                class="btn dropdown-toggle"
+                style="color: #7F8F58;"
+                href="#"
+                role="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >更多</a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" href="#">更多1</a>
+                <a class="dropdown-item" href="#">更多1</a>
+                <a class="dropdown-item" href="#">更多1</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="material">
+          <div class="title">材质</div>
+          <div class="range">
+            <div class="item">不限</div>
+            <div class="item">0-150</div>
+          </div>
+          <div class="more">
+            <div class="dropdown show">
+              <a
+                class="btn dropdown-toggle"
+                style="color: #7F8F58;"
+                href="#"
+                role="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >更多</a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" href="#">更多1</a>
+                <a class="dropdown-item" href="#">更多1</a>
+                <a class="dropdown-item" href="#">更多1</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="use">
+          <div class="title">适用类别</div>
+          <div class="range">
+            <div class="item">不限</div>
+            <div class="item">0-150</div>
+          </div>
+          <div class="more">
+            <div class="dropdown show">
+              <a
+                class="btn dropdown-toggle"
+                style="color: #7F8F58;"
+                href="#"
+                role="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >更多</a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" href="#">更多1</a>
+                <a class="dropdown-item" href="#">更多1</a>
+                <a class="dropdown-item" href="#">更多1</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="senior">
           <div class="title">高级选项</div>
           <div class="select-list">
-            <div class="select-box">价格</div>
-            <div class="select-box">价格</div>
+            <div class="select-box">
+              <div class="dropdown show">
+                <a
+                  class="btn dropdown-toggle"
+                  style="color: #2c2c2c; border:1px solid #bfbfbf;padding-left:0.5rem;padding-right:0.5rem;"
+                  href="#"
+                  role="button"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >价格</a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                  <a class="dropdown-item" href="#">更多1</a>
+                  <a class="dropdown-item" href="#">更多1</a>
+                  <a class="dropdown-item" href="#">更多1</a>
+                </div>
+              </div>
+            </div>
+            <div class="select-box">
+              <div class="dropdown show">
+                <a
+                  class="btn dropdown-toggle"
+                  style="color: #2c2c2c; border:1px solid #bfbfbf;padding-left:0.5rem;padding-right:0.5rem;"
+                  href="#"
+                  role="button"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >价格</a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                  <a class="dropdown-item" href="#">更多1</a>
+                  <a class="dropdown-item" href="#">更多1</a>
+                  <a class="dropdown-item" href="#">更多1</a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
       <div class="goods-list">
         <div class="sort">
           <div class="range">
-            <div class="all">综合排序</div>
-            <div class="price">价格</div>
-            <div class="sale">价格</div>
+            <div class="select-box">
+              <div class="dropdown show">
+                <a
+                  class="btn dropdown-toggle"
+                  style="color: #2c2c2c; border:1px solid #bfbfbf;padding-left:0.5rem;padding-right:0.5rem;"
+                  href="#"
+                  role="button"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >价格</a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                  <a class="dropdown-item" href="#">更多1</a>
+                  <a class="dropdown-item" href="#">更多1</a>
+                  <a class="dropdown-item" href="#">更多1</a>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="tips">温馨提示： 如果选择困难，您可咨询馆内私人教练</div>
         </div>
         <div class="column">
-          <div class="goods-box" v-for="(item, index) in 10" :key="index"></div>
+          <div class="goods-box" v-for="(item, index) in 10" :key="index">
+            <div class="pic"></div>
+            <div class="title">哈他新品专注瑜伽伸展带拉伸拉筋带瑜珈绳拉力带艾扬格辅助瑜珈带</div>
+            <div class="price-views-collenct">
+              <div class="price">
+                <div class="old-price">￥98.00</div>
+                <div class="new-price">￥98.00</div>
+              </div>
+              <div class="views-collenct">
+                <div class="views">183231</div>
+                <div class="collenct">收藏</div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="pages"></div>
+        <div class="pages">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="page.current"
+            :page-sizes="[10, 20, 30, 40, 50, 100]"
+            :page-size="page.size"
+            background
+            layout="total, sizes, prev, pager, next, jumper"
+          ></el-pagination>
+        </div>
       </div>
       <div class="last-views">
         <div class="title">
-          <div class="title-zh">最近浏览</div>
-          <div class="title-en">show me</div>
+          <div class="title-zh">
+            <div class="icon">
+              <img :src="titleIcon" alt srcset />
+            </div>最近浏览
+          </div>
+          <div class="title-en">Sometimes beauty is so simple</div>
         </div>
         <div class="goods">
-          <div class="goods-box" v-for="(item, index) in 4" :key="index"></div>
+          <div class="goods-box" v-for="(item, index) in 4" :key="index">
+            <div class="pic"></div>
+            <div class="g-title">哈他新品专注瑜伽伸展带拉伸拉筋带瑜珈绳拉力带艾扬格辅助瑜珈带</div>
+            <div class="price-views-collenct">
+              <div class="price">
+                <div class="old-price">￥98.00</div>
+                <div class="new-price">￥98.00</div>
+              </div>
+              <div class="views-collenct">
+                <div class="views">183231</div>
+                <div class="collenct">收藏</div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="change">
           <div class="change-btn">换一批</div>
@@ -55,127 +243,391 @@
   </div>
 </template>
 <script>
+import TitleIcon from "@/assets/market/market_icon1.png";
 export default {
-  
-}
+  data() {
+    return {
+      titleIcon: TitleIcon,
+      page: { current: 1, size: 10 }
+    };
+  },
+  methods: {
+    handleSizeChange(val) {},
+    handleCurrentChange(val) {}
+  }
+};
 </script>
 <style lang="scss" scoped>
-*{margin:0; padding:0; box-sizing: border-box;}
-.market{
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.dropdown-item {
+  padding: 0.3rem;
+  padding-left: 1rem;
+}
+.market {
   width: 60rem;
   margin: 0 auto;
-  .selected-search{
+  .selected-search {
     display: flex;
     justify-content: space-between;
-    .selected{
+    .selected {
       display: flex;
-      span{
-
+      align-items: center;
+      color: #2c2c2c;
+      font-size: 0.7rem;
+      span {
+        padding-right: 0.5rem;
       }
-      .tag{
-        background: #ccc;
-        padding: 5px 30px 5px 10px;
+      .tag {
+        cursor: pointer;
+        background: #e3f3d5;
+        padding: 0.5rem 2rem 0.5rem 1.25rem;
+        border-radius: 0.3rem;
         position: relative;
-        .close{
+        .close {
           position: absolute;
-          right: 0;
-          top: 0;
-          width: 20px;
-          height: 20px;
+          font-size: 1rem;
+          right: 0.2rem;
+          top: 50%;
+          transform: translateY(-50%);
           border-radius: 50%;
-          background: pink;
         }
       }
     }
-    .search{
-      width: 200px;
-      height: 20px;
-      background: #ccc;
+    .search {
+      width: 14.25rem;
+      height: 2rem;
+      .input {
+        padding-left: 1.35rem;
+        height: 100%;
+      }
     }
   }
-  .select{
-    .price{
+  .select {
+    padding-top: 1.6rem;
+    .price, .kinds, .material, .use {
       display: flex;
       position: relative;
-      .title{}
-      .range{
+      height: 2.5rem;
+      margin-bottom: 0.5rem;
+      .title {
+        width: 6rem;
+        height: 100%;
+        line-height: 2.5rem;
+        text-align: center;
+        background: #cce198;
+      }
+      .range {
         display: flex;
-        .item{
+        align-items: center;
+        flex-grow: 1;
+        padding-left: 1rem;
+        height: 100%;
+        border-bottom: 1px solid #dcdcdc;
+        .item {
+          cursor: pointer;
           margin-left: 10px;
           padding: 0 10px;
+          border: 1px solid #ccc;
         }
       }
-      .more{
+      .more {
         position: absolute;
         right: 0;
-        top: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+        color: #7f8f58;
       }
     }
-    .senior{
+    .senior {
       display: flex;
-      .title{}
-      .select-list{
+      position: relative;
+      height: 2.5rem;
+      margin-bottom: 0.5rem;
+      .title {
+        width: 6rem;
+        height: 100%;
+        line-height: 2.5rem;
+        text-align: center;
+        background: #cce198;
+      }
+      .select-list {
         display: flex;
-        .select-box{
+        padding-left: 1rem;
+        align-items: center;
+        .select-box {
           margin-left: 10px;
         }
       }
     }
   }
-  .goods-list{
-    .sort{
-      display: flex;
-      position: relative;
-      .range{
-        display: flex;
-        .all{}
-        .price{}
-        .sale{}
-      }
-      .tips{
-        position: absolute;
-        right: 0;
-        top: 0;
-      }
-    }
-    .column{
-      display: flex;
-      flex-wrap: wrap;
-      .goods-box{
-        flex-basis: 20%;
-        margin: 20px;
-        width: 13.5rem;
-        height: 19.35rem;
-        background: #ccc;
-      }
-    }
-  }
-  .pages{
-    height: 100px;
-    background: #ccc;
-  }
-  .last-views{
-    .title{
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      &-zh{}
-      &-en{}
-    }
-    .goods{
+  .goods-list {
+    padding-top: 1rem;
+    .sort {
       display: flex;
       justify-content: space-between;
-      &-box{
-        width: 13.5rem;
-        height: 19.35rem;
-        background: #ccc;
+      position: relative;
+      padding: 0.6rem 1.4rem;
+      box-shadow: 0rem 0.05rem 0.8rem 0rem rgba(143, 143, 143, 0.32);
+      .range {
+        display: flex;
+        .all {
+        }
+        .price {
+        }
+        .sale {
+        }
+      }
+      .tips {
+        // position: absolute;
+        // right: 0;
+        // top: 0;
+        color: #8f8f8f;
       }
     }
-    .change{
+    .column {
+      padding-top: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      .goods-box {
+        flex-basis: 23%;
+        width: 13.5rem;
+        height: 19.35rem;
+        background: #fff;
+        margin-right: 1.6rem;
+        &:nth-child(4n) {
+          margin-right: 0rem;
+        }
+        .pic {
+          width: 100%;
+          height: 12.75rem;
+          background: #000;
+        }
+        .title {
+          padding: 1rem;
+          color: #2c2c2c;
+          font-size: 0.7rem;
+        }
+        .price-views-collenct {
+          display: flex;
+          justify-content: space-between;
+          padding: 0 1rem;
+          .price {
+            display: flex;
+            .old-price {
+              font-size: 0.6rem;
+              color: #999;
+              text-decoration: line-through;
+              margin-right: 0.1rem;
+            }
+            .new-price {
+              font-size: 0.7rem;
+              color: #2c2c2c;
+            }
+          }
+          .views-collenct {
+            color: #8f8f8f;
+            font-size: 0.7rem;
+            display: flex;
+            .views {
+              cursor: pointer;
+              position: relative;
+              padding-left: 0.4rem;
+              padding-right: 1.2rem;
+              &::before {
+                content: "";
+                display: block;
+                position: absolute;
+                top: 50%;
+                left: -0.6rem;
+                transform: translateY(-50%);
+                width: 0.9rem;
+                height: 0.7rem;
+                background: pink;
+                background: url("../../assets/eye.png") no-repeat;
+                background-size: 100% 100%;
+              }
+            }
+            .collenct {
+              cursor: pointer;
+              position: relative;
+              &::before {
+                content: "";
+                display: block;
+                position: absolute;
+                top: 50%;
+                left: -0.95rem;
+                transform: translateY(-50%);
+                width: 0.9rem;
+                height: 0.9rem;
+                background: pink;
+                background: url("../../assets/market/like.png") no-repeat;
+                background-size: 100% 100%;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .pages {
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #ccc;
+  }
+  .last-views {
+    .title {
+      height: 13.5rem;
       display: flex;
       flex-direction: column;
       align-items: center;
-      &-btn{}
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      &::before,
+      &::after {
+        content: "";
+        display: block;
+        width: 13rem;
+        height: 1px;
+        background: #dcdcdc;
+        position: absolute;
+      }
+      &::before {
+        top: 50%;
+        right: 40%;
+        transform: translate(-110%,-50%);
+      }
+      &::after {
+        top: 50%;
+        left: 40%;
+        transform: translate(110%,-50%);
+      }
+      &-zh {
+        color: #2c2c2c;
+        font-weight: 800;
+        vertical-align: bottom;
+        .icon {
+          width: 1rem;
+          height: 1.5rem;
+          display: inline-block;
+          vertical-align: super;
+          margin-right: 0.8rem;
+          img {
+            width: 100%;
+            height: 100%;
+          }
+        }
+      }
+      &-en {
+      }
+    }
+    .goods {
+      display: flex;
+      justify-content: space-between;
+      &-box {
+        width: 13.5rem;
+        height: 19.35rem;
+        background: #ccc;
+        flex-basis: 23%;
+        width: 13.5rem;
+        height: 19.35rem;
+        background: #fff;
+        margin-right: 1.6rem;
+        &:nth-child(4n) {
+          margin-right: 0rem;
+        }
+        .pic {
+          width: 100%;
+          height: 12.75rem;
+          background: #000;
+        }
+        .g-title {
+          padding: 1rem;
+          color: #2c2c2c;
+          font-size: 0.7rem;
+        }
+        .price-views-collenct {
+          display: flex;
+          justify-content: space-between;
+          padding: 0 1rem;
+          .price {
+            display: flex;
+            .old-price {
+              font-size: 0.6rem;
+              color: #999;
+              text-decoration: line-through;
+              margin-right: 0.1rem;
+            }
+            .new-price {
+              font-size: 0.7rem;
+              color: #2c2c2c;
+            }
+          }
+          .views-collenct {
+            color: #8f8f8f;
+            font-size: 0.7rem;
+            display: flex;
+            .views {
+              cursor: pointer;
+              position: relative;
+              padding-left: 0.4rem;
+              padding-right: 1.2rem;
+              &::before {
+                content: "";
+                display: block;
+                position: absolute;
+                top: 50%;
+                left: -0.6rem;
+                transform: translateY(-50%);
+                width: 0.9rem;
+                height: 0.7rem;
+                background: pink;
+                background: url("../../assets/eye.png") no-repeat;
+                background-size: 100% 100%;
+              }
+            }
+            .collenct {
+              cursor: pointer;
+              position: relative;
+              &::before {
+                content: "";
+                display: block;
+                position: absolute;
+                top: 50%;
+                left: -0.95rem;
+                transform: translateY(-50%);
+                width: 0.9rem;
+                height: 0.9rem;
+                background: pink;
+                background: url("../../assets/market/like.png") no-repeat;
+                background-size: 100% 100%;
+              }
+            }
+          }
+        }
+      }
+    }
+    .change {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 5rem;
+      margin-bottom: 9rem;
+      &-btn {
+        cursor: pointer;
+        // width: 13rem;
+        margin: 0 auto;
+        padding: 0.8rem 2rem 0.8rem 4.4rem;
+        background: url(../../assets/market/btn-bg.png) no-repeat;
+        background-size: 100% 100%;
+      }
     }
   }
 }

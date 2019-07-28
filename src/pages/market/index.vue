@@ -119,7 +119,7 @@
           </div>
         </div>
         <div class="market_often-btn">
-          <div class="goods-detail-btn">
+          <div class="goods-detail-btn" @click="goMarketDetail">
             商品详细分类
           </div>
         </div>
@@ -133,6 +133,11 @@ export default {
   data() {
     return{
       titleIcon: TitleIcon,
+    }
+  },
+  methods: {
+    goMarketDetail() {
+      this.$router.push("/market/detail")
     }
   }
   
@@ -603,7 +608,6 @@ export default {
         padding: 0.8rem 0.55rem 1.4rem 5.4rem;
         background: url(../../assets/market/btn-bg.png) no-repeat;
         background-size: 100% 100%;
-        // border:1px solid #ccc;
       }
     }
   }

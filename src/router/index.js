@@ -50,9 +50,10 @@ export default new Router({
       name: 'goods',
       component: Home,//首页
       children: [
-        { path: '/goods/detail', component: () => import('@/pages/goods/detail') },
-        { path: '/goods/order', component: () => import('@/pages/goods/order') },
-        { path: '/goods/shop-car', component: () => import('@/pages/goods/shopcar') },
+        { path: 'detail/:id', component: () => import('@/pages/goods/detail') },
+        { path: 'order/:id', component: () => import('@/pages/goods/order') },
+        { path: 'shop-car/:id', component: () => import('@/pages/goods/shopcar') },
+        { path: 'collect/:id', component: () => import('@/pages/goods/collect') },
       ]
     },
     {

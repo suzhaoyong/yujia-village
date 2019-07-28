@@ -6,7 +6,7 @@
           <div class="title-zh">
             <div class="icon">
               <img :src="titleIcon" alt srcset />
-            </div>购物车
+            </div>收藏中心
           </div>
           <div class="title-en">The customer's excellent experience is our goal from beginning</div>
         </div>
@@ -35,7 +35,7 @@
               <div class="new-price">￥55</div>
             </div>
             <div class="ops">
-              <div class="add">放入收藏夹</div>
+              <div class="add">放入购物车</div>
               <div class="delete">删除</div>
             </div>
           </div>
@@ -46,7 +46,6 @@
           <div class="select"></div>
           <div class="all">全选</div>
           <div class="delete">删除</div>
-          <div class="add">移入收藏夹</div>
           <div class="share">分享</div>
         </div>
         <div class="count">
@@ -54,11 +53,11 @@
             已选商品
             <b>2</b> 件
           </span>
-          <span class="title">应付金额</span>
+          <!-- <span class="title">应付金额</span>
           <span class="tips">(不含运费)</span>
-          <span class="price">¥115</span>
+          <span class="price">¥115</span> -->
         </div>
-        <div class="sumbit">去结算</div>
+        <div class="sumbit">加入购物车</div>
       </div>
     </div>
   </div>
