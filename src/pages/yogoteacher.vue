@@ -4,7 +4,7 @@
             <el-col :span="24">
                 <div class="yogo-main">
                     <template>
-                       <Nav></Nav>
+                       <Banner></Banner>
                     </template>
                     <div class="yogo-count">
                         <div class="yogo-search">
@@ -30,6 +30,7 @@
                                 </el-form>
                             </div>
                         </div>
+                        <el-col :span="24" class="bg-tupian1">
                         <div class="yogo-cont-div1">
                             <h2><img src="../assets/yujia.png"/>馆内名师</h2>
                             <p class="nav-text">Sometimes beauty is so simple</p>
@@ -42,7 +43,7 @@
                                 <swiper-slide v-for="(page,index) of pages" :key="index">
                                     <div class="yogocontunt-swiper">
                                         <div class="yogoswiper-img">
-                                            <img src="../assets/ss.png"/>
+                                            <img src="../assets/image10.png"/>
                                         </div>
                                         <div class="yogoswiper-text">
                                             <h3>小鱼(Tina)</h3>
@@ -67,9 +68,10 @@
                                 </swiper>
                            </div>
                        </div>
-                       <div class="yogo-cont-div1">
+                       <el-col :span="24" class="bg-tupian2">
+                       <div class="yogo-cont-div4">
                             <h2><img src="../assets/yujia.png"/>瑜伽名师展</h2>
-                            <p class="nav-text">Sometimes beauty is so simple</p>
+                            <p class="nav-text">The customer's excellent experience is our goal from beginning to end.</p>
                             <div class="border-left"></div>
                             <div class="border-right"></div>
                        </div>
@@ -92,6 +94,8 @@
                             </div>
                            </div>
                        </div>
+                       </el-col>
+                       </el-col>
                     </div>
                 </div>
             </el-col>
@@ -99,10 +103,10 @@
     </div>
 </template>
 <script>
-import Nav from "../components/nav";
+import Banner from "../components/banner";
 export default {
     components:{
-        Nav,
+        Banner,
     },
   data() {
     return {
@@ -139,31 +143,31 @@ export default {
         iconList: [
           {
             id: "0001",
-            imgUrl:require('../assets/ss.png'),
+            imgUrl:require('../assets/image3.png'),
             name:"小鱼(Tina)",
             title: "从业时间: 5年",
             desc:"2014年全美瑜伽联盟RYT200X小时认证"
           }, {
             id: "0002",
-            imgUrl:require('../assets/ss.png'),
+            imgUrl:require('../assets/image4.png'),
             name:"小鱼(Tina)",
             title: "从业时间: 5年",
             desc:"2014年全美瑜伽联盟RYT200X小时认证"
           }, {
             id: "0003",
-            imgUrl:require('../assets/ss.png'),
+            imgUrl:require('../assets/image5.png'),
             name:"小鱼(Tina)",
             title: "从业时间: 5年",
             desc:"2014年全美瑜伽联盟RYT200X小时认证"
           }, {
             id: "0004",
-            imgUrl:require('../assets/ss.png'),
+            imgUrl:require('../assets/image6.png'),
             name:"小鱼(Tina)",
             title: "从业时间: 5年",
             desc:"2014年全美瑜伽联盟RYT200X小时认证"
           }, {
             id: "0005",
-            imgUrl:require('../assets/ss.png'),
+            imgUrl:require('../assets/image3.png'),
             name:"小鱼(Tina)",
             title: "从业时间: 5年",
             desc:"2014年全美瑜伽联盟RYT200X小时认证"
@@ -201,9 +205,11 @@ export default {
       },
       onMouseOver(index){
       },
-      handleSizeChange(val) {
+      handleSizeChange(size) {
+          this.pagesize = size;
       },
-      handleCurrentChange(val) {
+      handleCurrentChange(currentPage) {
+          this.currentPage = currentPage;
       }
   }
 };
@@ -226,7 +232,7 @@ export default {
         height: 70px;
         display: flex;
         justify-content: space-around;
-        background-color: #e2dbc8;
+        background-color: #E2DBC8;
         .search-left{
             line-height: 68px;
             padding-left:16px;
@@ -248,14 +254,16 @@ export default {
     .yogo-count{
         width: 100%;
         margin: 0 auto;
-        border: 1px solid;
         height: 100%;
         display: inline-block;
+        .bg-tupian1{
+            background-color: #F6F4EE;
         .yogo-cont-div1{
             width: 100%;
             height: 150px;
             text-align: center;
-            border: 1px solid;
+            display: inline-block;
+            margin-top: 20px;
             position: relative;
             .border-left{
                 width: 20%;
@@ -294,11 +302,10 @@ export default {
             width: 100%;
             height: 100%;
             margin: 0 auto;
-            margin-top: 40px;
+            margin-top: 20px;
             .yogocontunt{
-                width: 75%;
+                width: 74%;
                 height: 100%;
-                border: 1px solid;
                 margin: 0 auto;
                 margin-bottom: 50px;
                 position: relative;
@@ -309,6 +316,7 @@ export default {
                     margin-top: 25px;
                     margin-left: 27px;
                     box-shadow: 1px 1px 6px 0px rgba(36, 36, 36, 0.2);
+                    background-color: #fff;
                     .icon-img{
                         width: 100%;
                         height: 270px;
@@ -337,7 +345,6 @@ export default {
                 }
                 .yogocontunt-swiper{
                     width: 100%;
-                    border: 1px solid;
                     height: 350px;
                     margin: 0 auto;
                     display: flex;
@@ -409,21 +416,23 @@ export default {
                 }
             }
         }
+        .bg-tupian2{
+            background-image: url('../assets/image64.png');
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
         .yogo-cont-div3{
             width: 100%;
             height: 100%;
             margin: 0 auto;
-            margin-top: 40px;
+            margin-top: 10px;
             .yogocontunt2{
                 width: 75%;
                 height: 100%;
-                border: 1px solid;
                 margin: 0 auto;
                 margin-bottom: 50px;
                 .yogocontunt2-list{
                     width: 262px;
                     height: 270px;
-                    border:1px solid;
                     background-color: #E2DBC8;
                     margin: 10px;
                     float: left;
@@ -450,6 +459,47 @@ export default {
                 }
             }
         }
+        .yogo-cont-div4{
+            width: 100%;
+            height: 150px;
+            text-align: center;
+            display: inline-block;
+            position: relative;
+            .border-left{
+                width: 20%;
+                height: 1px;
+                background-color: #dcdcdc;
+                position: absolute;
+                left:22%;
+                top: 45%;
+            }
+            .border-right{
+                width: 20%;
+                height: 1px;
+                background-color: #dcdcdc;
+                position: absolute;
+                right: 22%;
+                top: 45%;
+            }
+            .nav-text{
+                color: #999999;
+                font-size: 14px;
+                margin-top: -8px;
+            }
+            h2{
+                color: #2c2c2c;
+                font-size: 24px;
+                margin-top: 40px;
+                img{
+                    width: 28px;
+                    height: 28px;
+                    position: absolute;
+                    left: 44%;
+                }
+            }
+        }
+        }
+      }
     }
 }
 </style>

@@ -111,10 +111,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 .el-menu{
-    width: 62%;
+    width: 70%;
     margin: 0 auto;
     background: #E8F5DB;
     height:64px;
+    margin-left:20%;
 }
 .el-menu.el-menu--horizontal {
     border-bottom: solid 1px #E8F5DB;
@@ -183,16 +184,15 @@ export default {
        height:65px;
        background: #E8F5DB;
        .head-left{
-            width: 18%;
+            width: 17%;
             text-align: center;
             margin-top: 0px;
-            margin-left: 89px;
+            margin-left: 8%;
+            height: 44px;
             img{
-                width: 163px;
-                height: 40px;
-                margin-left: -20%;
+                width: 157px;
                 position: relative;
-                top: 14px;
+                top: 10px;
             }
         }
     }

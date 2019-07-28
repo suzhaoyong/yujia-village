@@ -4,11 +4,12 @@
             <el-col :span="24">
                 <div class="formation-main">
                     <template>
-                       <Nav></Nav>
+                       <Banner></Banner>
                     </template>
                     <div class="formation-count">
                         <div class="kongbai"></div>
                         <div class="formation-count-div1">
+                            <img class="bg-img3" src="../assets/image26.png"/>
                             <div class="count-img">
                                <div class="border"></div>
                                <h4>明星瑜伽TOP榜</h4>
@@ -27,17 +28,25 @@
                             </div>
                             <div class="count-desc">
                                 <div class="desc-img1">
-                                    <img src="../assets/153_140620153629_2.jpg"/>
+                                    <img src="../assets/image21.png"/>
                                 </div>
                                 <div class="desc-img2">
-                                    <img src="../assets/153_140620153629_2.jpg"/>
+                                    <img src="../assets/image22.png"/>
                                 </div>
                             </div>
+                            <div class="bg-border"></div>
+                            <div class="bg-re">YOGA</div>
+                            <img class="bg-img5" src="../assets/image31.png"/>
+                            <img class="bg-img4" src="../assets/image27.png"/>
                         </div>
                         <div class="formation-count-div2">
+                            <div class="bg-border2"></div>
+                            <div class="bg-re2">YOGA</div>
+                            <img class="bg-img6" src="../assets/image28.png"/>
+                            <img class="bg-img7" src="../assets/image31.png"/>
                             <div class="count-desc">
                                 <div class="desc-img1">
-                                    <img src="../assets/ss.png"/>
+                                    <img src="../assets/image23.png"/>
                                 </div>
                             </div>
                             <div class="count-img">
@@ -56,8 +65,10 @@
                                     <span class="span3">6543</span>
                                 </div>
                             </div>
+                            <img class="bg-img8" src="../assets/image29.png"/>
                         </div>
                         <div class="formation-count-div3">
+                            <img class="bg-image3" src="../assets/image30.png"/>
                             <div class="count-img">
                                <div class="border"></div>
                                <h4>胡可深圳学孕期瑜伽 称将与沙溢夫妻双修</h4>
@@ -76,12 +87,16 @@
                             </div>
                             <div class="count-desc">
                                 <div class="desc-img1">
-                                    <img src="../assets/172901eaaci443syyscwzw.jpg"/>
+                                    <img src="../assets/image24.png"/>
                                 </div>
                                 <div class="desc-img2">
-                                    <img src="../assets/172901eaaci443syyscwzw.jpg"/>
+                                    <img src="../assets/image25.png"/>
                                 </div>
                             </div>
+                            <div class="bg-border3"></div>
+                            <div class="bg-re3">YOGA</div>
+                            <img class="bg-image1" src="../assets/image31.png"/>
+                            <img class="bg-image2" src="../assets/image27.png"/>
                         </div>
                         <div class="kongbai"></div>
                     </div>
@@ -91,10 +106,10 @@
     </div>
 </template>
 <script>
-import Nav from "../components/nav";
+import Banner from "../components/banner";
 export default {
   components:{
-    Nav,
+    Banner,
   },
   data() {
     return {
@@ -126,6 +141,53 @@ export default {
             display: flex;
             justify-content: space-around;
             background-color: #eeeeee;
+            position: relative;
+            .bg-img3{
+                position: absolute;
+                width: 270px;
+                height: 570px;
+                left: 0%;
+                top: 20%;
+                opacity: 0.5;
+            }
+            .bg-img4{
+                position: absolute;
+                width: 130px;
+                height: 180px;
+                right: 7%;
+                top: 73%;
+            }
+            .bg-img5{
+                position:absolute;
+                width: 31px;
+                height: 33px;
+                right: 11%;
+                top: 32%;
+            }
+            .bg-border{
+                position:absolute;
+                width: 1px;
+                height: 40px;
+                background-color: #7d7d7d;
+                width: 2px;
+                height: 75px;
+                background-color: #7d7d7d;
+                right: 12%;
+                top: 8%;
+            }
+            .bg-re{
+                position:absolute;
+                right: 11%;
+                top: 25%;
+                color: #2c2c2c;
+                font-size: 14px;
+                transform:rotate(90deg);
+                -ms-transform:rotate(90deg); /* Internet Explorer 9*/
+                -moz-transform:rotate(90deg); /* Firefox */
+                -webkit-transform:rotate(90deg); /* Safari 和 Chrome */
+                -o-transform:rotate(90deg); /* Opera */
+                filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+            }
            .count-img{
                 width: 28%;
                 height: 84%;
@@ -238,11 +300,54 @@ export default {
         }
         .formation-count-div2{
             width: 100%;
-            height:660px;
+            height:670px;
             margin: 0 auto;
             display: flex;
             justify-content: space-around;
             background-color: #ffffff;
+            position: relative;
+            .bg-border2{
+                position: absolute;
+                width: 2px;
+                height: 75px;
+                background: #7d7d7d;
+                left: 11%;
+                top: 65%;
+            }
+            .bg-re2{
+                position: absolute;
+                left: 10%;
+                top: 81%;
+                color: #2c2c2c;
+                font-size: 14px;
+                transform:rotate(90deg);
+                -ms-transform:rotate(90deg); /* Internet Explorer 9*/
+                -moz-transform:rotate(90deg); /* Firefox */
+                -webkit-transform:rotate(90deg); /* Safari 和 Chrome */
+                -o-transform:rotate(90deg); /* Opera */
+                filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+            }
+            .bg-img6{
+                position: absolute;
+                width: 345px;
+                height: 250px;
+                left: 0%;
+                top: 2%;
+            }
+            .bg-img7{
+                position:absolute;
+                width: 31px;
+                height: 33px;
+                left: 10%;
+                top: 88%;
+            }
+            .bg-img8{
+                position:absolute;
+                width: 300px;
+                height: 430px;
+                right: 0%;
+                top: 36%;
+            }
            .count-img{
                 width: 28%;
                 height: 473px;
@@ -327,9 +432,10 @@ export default {
                     }
             }
             .count-desc{
-                width: 40%;
+                width: 39%;
                 height: 473px;
-                margin-top: 38px;
+                margin-top: 5%;
+                margin-left: 30px;
                 background-color: #eeeeee;
                 position: relative;
                 .desc-img1{
@@ -349,10 +455,57 @@ export default {
             display: flex;
             justify-content: space-around;
             background-color: #eeeeee;
+            position: relative;
+            .bg-image3{
+                position: absolute;
+                width: 320px;
+                height: 485px;
+                left: 0%;
+                top: 40%;
+            }
+            .bg-image1{
+                position: absolute;
+                width: 31px;
+                height: 33px;
+                right: 11%;
+                top: 32%;
+            }
+            .bg-image2{
+                position:absolute;
+                width: 130px;
+                height: 180px;
+                right: 7%;
+                top: 73%;
+            }
+            .bg-border3{
+                position:absolute;
+                width: 1px;
+                height: 40px;
+                background-color: #7d7d7d;
+                width: 2px;
+                height: 75px;
+                background-color: #7d7d7d;
+                right: 12%;
+                top: 8%;
+            }
+            .bg-re3{
+                position:absolute;
+                right: 11%;
+                top: 25%;
+                color: #2c2c2c;
+                font-size: 14px;
+                transform:rotate(90deg);
+                -ms-transform:rotate(90deg); /* Internet Explorer 9*/
+                -moz-transform:rotate(90deg); /* Firefox */
+                -webkit-transform:rotate(90deg); /* Safari 和 Chrome */
+                -o-transform:rotate(90deg); /* Opera */
+                filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+            }
            .count-img{
                 width: 28%;
                 height: 84%;
                 margin: 38px;
+                margin-left: -3%;
                 .border{
                     width: 100%;
                     height: 5px;
@@ -432,12 +585,12 @@ export default {
                     }
             }
             .count-desc{
-                width: 33%;
+                width: 30%;
                 height: 84%;
                 margin-top: 38px;
                 background-color: #eeeeee;
                 position: relative;
-                margin-left: -26%;
+                margin-left: -36%;
                 .desc-img1{
                     width: 100%;
                     height: 443px;

@@ -4,7 +4,7 @@
             <el-col :span="24">
                 <div class="aboutus-main">
                     <template>
-                       <Nav></Nav>
+                       <Banner></Banner>
                     </template>
                     <div class="aboutus-count">
                         <div class="aboutus-count-div1">
@@ -16,28 +16,29 @@
                         <div class="aboutus-count-div2">
                             <div class="Photowall-img1">
                                 <div class="Photowall-img1-bottom">
-                                    <img class="img1" src="../assets/153_140620153629_2.jpg"/>
-                                    <img class="img2" src="../assets/172901eaaci443syyscwzw.jpg"/>
+                                    <img class="img1" src="../assets/image32.png"/>
+                                    <img class="img2" src="../assets/image33.png"/>
                                 </div>
                                 <div class="Photowall-img1-top">
-                                    <img class="img1" src="../assets/16394929757_1920x1080.jpg"/>
-                                    <img class="img2" src="../assets/172901eaaci443syyscwzw.jpg"/>
+                                    <img class="img1" src="../assets/image34.png"/>
+                                    <img class="img2" src="../assets/image35.png"/>
                                 </div>
                             </div>
                             <div class="Photowall-img2">
-                                <img src="../assets/153_140620153629_2.jpg"/>
+                                <img src="../assets/image36.png"/>
                             </div>
                             <div class="Photowall-img3">
                                 <div class="Photowall-img3-bottom">
-                                    <img class="img1" src="../assets/eyucCpbjxAvtwAe.jpg"/>
-                                    <img class="img2" src="../assets/172901eaaci443syyscwzw.jpg"/>
+                                    <img class="img1" src="../assets/image37.png"/>
+                                    <img class="img2" src="../assets/image38.png"/>
                                 </div>
                                 <div class="Photowall-img3-top">
-                                    <img class="img1" src="../assets/16394929757_1920x1080.jpg"/>
-                                    <img class="img2" src="../assets/172901eaaci443syyscwzw.jpg"/>
+                                    <img class="img1" src="../assets/image39.png"/>
+                                    <img class="img2" src="../assets/image40.png"/>
                                 </div>
                             </div>
                         </div>
+                        <el-col :span="24" class="bg-img">
                         <div class="aboutus-count-div3">
                             <h2><img src="../assets/yujia.png"/>瑜伽村平台</h2>
                             <p class="nav-text">Sometimes beauty is so simple</p>
@@ -65,38 +66,40 @@
                          <div class="aboutus-count-div8">
                              <div class="aboutus-content">
                                  <div class="content-img">
-                                     <img src="../assets/153_140620153629_2.jpg"/>
+                                     <img src="../assets/image41.png"/>
                                      <h3>培训信息</h3>
                                      <p>发布、搜索全国最新培训信息</p>
                                  </div>
                                   <div class="content-img">
-                                     <img src="../assets/172901eaaci443syyscwzw.jpg"/>
+                                     <img src="../assets/image42.png"/>
                                      <h3>瑜伽会所展示</h3>
                                      <p>展示瑜伽馆信息及发布招聘信息</p>
                                  </div>
                                   <div class="content-img">
-                                     <img src="../assets/16394929757_1920x1080.jpg"/>
+                                     <img src="../assets/image9.png"/>
                                      <h3>瑜伽老师展示及求职</h3>
                                      <p>展示瑜伽馆信息及发布招聘信息</p>
                                  </div>
                                   <div class="content-img">
-                                     <img src="../assets/eyucCpbjxAvtwAe.jpg"/>
+                                     <img src="../assets/image43.png"/>
                                      <h3>容瑜伽知识学习</h3>
                                      <p>展示瑜伽馆信息及发布招聘信息</p>
                                  </div>
                                   <div class="content-img">
-                                     <img src="../assets/172901eaaci443syyscwzw.jpg"/>
+                                     <img src="../assets/image44.png"/>
                                      <h3>瑜伽视频</h3>
                                      <p>开放平台，供大家发布学习视频</p>
                                  </div>
                                   <div class="content-img">
-                                     <img src="../assets/16394929757_1920x1080.jpg"/>
+                                     <img src="../assets/image45.png"/>
                                      <h3>瑜伽新闻</h3>
                                      <p>最新的瑜伽行业时讯</p>
                                  </div>
                              </div>
                         </div>
+                        </el-col>
                         <div class="aboutus-count-div9">
+                            <img class="bg-img2" src="../assets/image49.png"/>
                             <h2><img src="../assets/yujia.png"/>联系方式</h2>
                             <p class="nav-text">Sometimes beauty is so simple</p>
                             <div class="border-left"></div>
@@ -104,7 +107,7 @@
                         </div>
                          <div class="aboutus-count-div10">
                              <div class="codeimg">
-                                 <img src="../assets/153_140620153629_2.jpg"/>
+                                 <img src="../assets/image47.png"/>
                              </div>
                              <div class="codetext">
                                  <p class="p1">地址：上海长宁区愚园路716号三楼</p>
@@ -118,10 +121,10 @@
     </div>
 </template>
 <script>
-import Nav from "../components/nav";
+import Banner from "../components/banner";
 export default {
   components:{
-    Nav,
+    Banner,
   },
   data() {
     return {
@@ -146,7 +149,7 @@ export default {
             width: 100%;
             height: 150px;
             text-align: center;
-            border: 1px solid;
+            display: inline-block;
             position: relative;
             .border-left{
                 width: 20%;
@@ -186,6 +189,7 @@ export default {
             height: 540px;
             margin: 0 auto;
             display: flex;
+            justify-content: center;
             .Photowall-img1{
                 .Photowall-img1-bottom{
                     display: flex;
@@ -252,11 +256,16 @@ export default {
                 }
             }
         }
+        .bg-img{
+            background-image: url('../assets/image48.png');
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
          .aboutus-count-div3{
             width: 100%;
             height: 150px;
             text-align: center;
-            border: 1px solid;
+            display: inline-block;
+            margin-top: 30px;
             position: relative;
             .border-left{
                 width: 20%;
@@ -293,7 +302,8 @@ export default {
         }
         .aboutus-count-div4{
             width: 100%;
-            height: 160px;
+            height: 155px;
+            line-height: 0px;
             margin: 0 auto;
             .abouts-p{
                 text-align: center;
@@ -308,7 +318,7 @@ export default {
             width: 100%;
             height: 150px;
             text-align: center;
-            border: 1px solid;
+            display: inline-block;
             position: relative;
             .border-left{
                 width: 20%;
@@ -345,8 +355,9 @@ export default {
         }
         .aboutus-count-div6{
             width: 100%;
-            height: 160px;
+            height: 155px;
             margin: 0 auto;
+            line-height: 0px;
             .abouts-p2{
                 text-align: center;
                 font-size: 14px;
@@ -359,8 +370,8 @@ export default {
         .aboutus-count-div7{
             width: 100%;
             height: 150px;
+            display: inline-block;
             text-align: center;
-            border: 1px solid;
             position: relative;
             .border-left{
                 width: 20%;
@@ -410,6 +421,7 @@ export default {
                     height: 220px;
                     position:absolute;
                     top: 10%;
+                    right: 80%;
                     img{
                         width: 155px;
                         height: 155px;
@@ -544,11 +556,12 @@ export default {
                 }
             }
         }
+    }
         .aboutus-count-div9{
             width: 100%;
             height: 150px;
             text-align: center;
-            border: 1px solid;
+            display: inline-block;
             position: relative;
             .border-left{
                 width: 20%;
@@ -582,13 +595,22 @@ export default {
                     left: 44%;
                 }
             }
+            .bg-img2{
+                width: 444px;
+                height: 210px;
+                position: absolute;
+                left: 0%;
+                top: -60%;
+            }
         }
         .aboutus-count-div10{
             width: 100%;
             height: 405px;
             margin: 0 auto;
             display: flex;
-            background-image: url('../assets/172901eaaci443syyscwzw.jpg');
+            background-image: url('../assets/image46.png');
+            background-repeat: no-repeat;
+            background-size: cover;
             .codeimg{
                 width: 229px;
                 height: 229px;
