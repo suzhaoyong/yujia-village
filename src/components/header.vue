@@ -22,7 +22,7 @@
                     <el-menu-item index="yogoinformation">瑜伽资讯</el-menu-item>
                     <el-menu-item index="market">商城</el-menu-item>
                     <el-menu-item index="aboutus">关于我们</el-menu-item>
-                    <el-menu-item index="home">个人中心</el-menu-item> 
+                    <el-menu-item index="personal">个人中心</el-menu-item> 
                     </el-menu>
 
                     <!-- <el-menu :default-active="$router.path" class="el-menu-demo" router mode="horizontal" @select="handleSelect">

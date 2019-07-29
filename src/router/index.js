@@ -47,6 +47,15 @@ export default new Router({
       ]
     },
     {
+      path: '/personal',
+      name: 'personal',
+      component: Home,
+      children: [
+        { path: 'index', component: () => import('@/pages/personalCenter/index') },
+        { path: 'certification', component: () => import('@/pages/personalCenter/certification') },
+      ]
+    },
+    {
       path: '/goods',
       name: 'goods',
       component: Home,//首页
