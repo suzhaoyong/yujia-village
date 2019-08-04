@@ -1,6 +1,6 @@
 <template>
     <el-col>
-        <el-carousel height="566px" indicator-position="none" :autoplay="true" :interval="3000" :loop="true">
+        <el-carousel height="566px" indicator-position="none" :autoplay="false" :interval="10000" :loop="false">
             <el-carousel-item v-for="item in imgList" :key="item.id">
             <el-row>
                 <el-col :span="24"><img :src="item.idView" class="banner_img"/></el-col>

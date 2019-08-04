@@ -78,6 +78,15 @@ export default new Router({
       ]
     },
     {
+      path: '/cultivate',
+      name: 'cultivate',
+      component: Home,
+      children: [
+        { path: '/cultivate/cultivate', component: () => import('@/pages/cultivate/cultivate') },//培训信息
+        { path: '/cultivate/detail', component: () => import('@/pages/cultivate/detail') },//培训信息-----详情
+      ]
+    },
+    {
         path: '/main',
         name: 'Main',
         component: Home,//首页

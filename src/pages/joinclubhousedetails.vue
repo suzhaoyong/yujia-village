@@ -311,11 +311,12 @@ export default {
                 }
                 .clubhouse-swiper-name{
                     width: 95%;
-                    height: 53px;
+                    height: 30px;
                     line-height: 16px;
                     display: flex;
                     margin: 0 auto;
                     justify-content: space-between;
+                    margin-top: 20px;
                     .name-p1{
                         font-size: 20px;
                         color: #2c2c2c;
