@@ -329,6 +329,7 @@ export default {
                         text-align: center;
                         color: #2c2c2c;
                         font-size: 18px;
+                        margin-top: 20px;
                     }
                     .icon-desc{
                         text-align: center;

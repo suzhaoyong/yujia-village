@@ -389,7 +389,7 @@ export default {
             .carousel-text{
                 width: 90%;
                 margin: 0 auto;
-                margin-top: -14px;
+                margin-top: 30px;
                 h4{
                     color: #fff;
                     font-size: 20px;
@@ -399,7 +399,7 @@ export default {
                 }
                 }
                 .el-rate{
-                    margin-top: -14px;
+                    margin-top: 1px;
                 }
             }
             .carousel-detals{

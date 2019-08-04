@@ -35,8 +35,10 @@
                                         <el-input type="textarea" v-model="ruleForm.desc"></el-input>
                                     </el-form-item>
                                     <el-form-item>
+                                        <div style="display: flex;margin-left: -30%;margin-top: -13px;">
                                         <span class="from-span">咨询服务热线<span style="padding-left:10px;color:#2c2c2c">400-100-7191</span></span>
                                         <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+                                        </div>
                                     </el-form-item>
                                     </el-form>
                                 </div>
@@ -234,12 +236,11 @@ export default {
                         .clubhouse-form{
                             width: 90%;
                             margin: 0 auto;
-                            margin-top: 50px;
+                            margin-top: 40px;
                             .from-span{
-                                margin-left: -30%;
+                                width: 100%;
                             }
                             .el-button{
-                                margin-left: 30%;
                                 background: #8fc31f;
                                 width: 100px;
                                 height: 35px;
@@ -266,8 +267,8 @@ export default {
                 margin: 0 auto;
                 margin-bottom: 50px;
                 .clubhouse2-list{
-                    width: 262px;
-                    height: 325px;
+                    width: 284px;
+                    height: 340px;
                     float: left;
                     padding: 11px;
                     position: relative;
@@ -279,6 +280,7 @@ export default {
                         text-align: center;
                         font-size: 14px;
                         color: #2c2c2c;
+                        margin-top: 15px;
                     }
                     .p2{
                         text-align: center;
@@ -293,7 +295,7 @@ export default {
                         height: 12%;
                         background-color: #8fc31f;
                         position: absolute;
-                        bottom: 112px;
+                        bottom: 105px;
                         right: 12px;
                         margin: 0 auto;
                         text-align: center;

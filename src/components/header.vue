@@ -17,10 +17,10 @@
                     <el-menu-item index="main">首页</el-menu-item>
                     <el-menu-item index="joinclubhouse">加盟会馆</el-menu-item>
                     <el-menu-item index="yogoteacher">瑜伽名师</el-menu-item>
-                    <el-menu-item index="home">培训信息</el-menu-item>
+                    <el-menu-item index="cultivate/cultivate">培训信息</el-menu-item>
                     <el-menu-item index="yogoknowledge">瑜伽知识</el-menu-item>
                     <el-menu-item index="yogoinformation">瑜伽资讯</el-menu-item>
-                    <el-menu-item index="market">商城</el-menu-item>
+                    <el-menu-item index="market/index">商城</el-menu-item>
                     <el-menu-item index="aboutus">关于我们</el-menu-item>
                     <el-menu-item index="home">个人中心</el-menu-item> 
                     </el-menu>
@@ -87,6 +87,10 @@ export default {
               this.activeIndex = 'yogoinformation';
           }else if(this.$route.name == 'aboutus'){
               this.activeIndex = 'aboutus';
+          }else if(this.$route.name == 'cultivate/cultivate'){
+              this.activeIndex = 'cultivate/cultivate';
+          }else if(this.$route.name == 'market/index'){
+              this.activeIndex = 'market/index';
           }
       },
       handleSelect(key, keyPath) {
@@ -102,6 +106,10 @@ export default {
               this.$router.push('/yogoinformation');
           }else if('aboutus' === key){
               this.$router.push('/aboutus');
+          }else if('cultivate/cultivate' === key){
+              this.$router.push('/cultivate/cultivate');
+          }else if('market/index' === key){
+              this.$router.push('/market/index');
           }else{
             this.$router.push(`/${key}/index`)
           }
