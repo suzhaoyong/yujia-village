@@ -27,7 +27,7 @@
                     </div>
                     <div class="item">
                       <div class="score">
-                        <el-rate disabled :colors="['#fff','#58B708','#fff']" :value="star"></el-rate>
+                        <el-rate disabled :colors="['#58B708','#58B708','#58B708']" :value="star"></el-rate>
                       </div>
                     </div>
                     <div class="item">

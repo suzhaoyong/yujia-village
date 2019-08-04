@@ -17,7 +17,7 @@
                     <el-menu-item index="main">首页</el-menu-item>
                     <el-menu-item index="joinclubhouse">加盟会馆</el-menu-item>
                     <el-menu-item index="yogoteacher">瑜伽名师</el-menu-item>
-                    <el-menu-item index="home">培训信息</el-menu-item>
+                    <el-menu-item index="train">培训信息</el-menu-item>
                     <el-menu-item index="yogoknowledge">瑜伽知识</el-menu-item>
                     <el-menu-item index="yogoinformation">瑜伽资讯</el-menu-item>
                     <el-menu-item index="market">商城</el-menu-item>

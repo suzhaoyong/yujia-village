@@ -47,12 +47,23 @@ export default new Router({
       ]
     },
     {
+      path: '/train',
+      name: 'train',
+      component: Home,//首页
+      children: [
+        { path: 'index', component: () => import('@/pages/train/index') },
+        { path: 'detail/:id', component: () => import('@/pages/train/detail') },
+      ]
+    },
+    {
       path: '/personal',
       name: 'personal',
       component: Home,
       children: [
         { path: 'index', component: () => import('@/pages/personalCenter/index') },
         { path: 'certification', component: () => import('@/pages/personalCenter/certification') },
+        { path: 'safety-center', component: () => import('@/pages/personalCenter/safetyCenter') },
+        { path: 'share', component: () => import('@/pages/personalCenter/share') },
       ]
     },
     {
