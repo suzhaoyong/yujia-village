@@ -5,9 +5,11 @@
         <div class="selected">
           <span>已选</span>
           <span>></span>
-          <div class="tag">
-            0-150
-            <i class="el-icon-close close"></i>
+          <div class="tags">
+            <div class="tag">
+              0-150
+              <i class="el-icon-close close"></i>
+            </div>
           </div>
         </div>
         <div class="search">
@@ -15,7 +17,7 @@
         </div>
       </div>
       <div class="select">
-        <div class="price">
+        <div class="price more_active">
           <div class="title">理想价位</div>
           <div class="range">
             <div class="item">不限</div>
@@ -248,7 +250,8 @@ export default {
   data() {
     return {
       titleIcon: TitleIcon,
-      page: { current: 1, size: 10 }
+      page: { current: 1, size: 10 },
+      tags: []
     };
   },
   methods: {
@@ -258,6 +261,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.dropdown-toggle::after{
+  color: #CCE198;
+}
 * {
   margin: 0;
   padding: 0;
@@ -311,8 +317,12 @@ export default {
     .price, .kinds, .material, .use {
       display: flex;
       position: relative;
+      z-index: 0;
       height: 2.5rem;
       margin-bottom: 0.5rem;
+      &.more_active {
+        z-index: 1;
+      }
       .title {
         width: 6rem;
         height: 100%;

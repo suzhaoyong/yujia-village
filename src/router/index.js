@@ -42,8 +42,8 @@ export default new Router({
       name: 'market',
       component: Home,//首页
       children: [
-        { path: '/market/index', component: () => import('@/pages/market/index') },
-        { path: '/market/detail', component: () => import('@/pages/market/detail') },
+        { path: '/market/index', name: 'market', component: () => import('@/pages/market/index') },
+        { path: '/market/detail', name: 'marketDetail', component: () => import('@/pages/market/detail') },
       ]
     },
     {
@@ -71,10 +71,10 @@ export default new Router({
       name: 'goods',
       component: Home,//首页
       children: [
-        { path: 'detail/:id', component: () => import('@/pages/goods/detail') },
-        { path: 'order/:id', component: () => import('@/pages/goods/order') },
-        { path: 'shop-car/:id', component: () => import('@/pages/goods/shopcar') },
-        { path: 'collect/:id', component: () => import('@/pages/goods/collect') },
+        { path: '/goods/detail/:id', name: 'detailGoods', component: () => import('@/pages/goods/detail') },
+        { path: 'order/:id', name: 'order', component: () => import('@/pages/goods/order') },
+        { path: 'shop-car/:id', name: 'shopCar', component: () => import('@/pages/goods/shopcar') },
+        { path: 'collect/:id', name: 'collect', component: () => import('@/pages/goods/collect') },
       ]
     },
     {
