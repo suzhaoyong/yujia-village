@@ -6,9 +6,9 @@
           <span>已选</span>
           <span>></span>
           <div class="tags">
-            <div class="tag">
-              0-150
-              <i class="el-icon-close close"></i>
+            <div class="tag" v-for="(item, index) in selected.tags">
+              {{item.name}}
+              <i class="el-icon-close close" @click="removeTags(item)"></i>
             </div>
           </div>
         </div>
@@ -17,13 +17,17 @@
         </div>
       </div>
       <div class="select">
-        <div class="price more_active">
+        <div :class="['price', tags.price.more.length > 0 ? 'more_active' : '']">
           <div class="title">理想价位</div>
           <div class="range">
             <div class="item">不限</div>
-            <div class="item">0-150</div>
+            <div
+              :class="['item', selected.tags.price.name === item.name ? 'active' : '' ]"
+              @click="chooseTagsFor('price', item)"
+              v-for="(item, index) in tags.price.list"
+            >{{item.name}}</div>
           </div>
-          <div class="more">
+          <div class="more" v-if="tags.price.more.length > 0">
             <div class="dropdown show">
               <a
                 class="btn dropdown-toggle"
@@ -35,20 +39,26 @@
                 aria-expanded="false"
               >更多</a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <a class="dropdown-item" href="#">更多1</a>
-                <a class="dropdown-item" href="#">更多1</a>
-                <a class="dropdown-item" href="#">更多1</a>
+                <a
+                  v-for="(item, index) in tags.price.more"
+                  class="dropdown-item"
+                  href="#"
+                >{{item.name}}</a>
               </div>
             </div>
           </div>
         </div>
-        <div class="kinds">
+        <div :class="['kinds', tags.kinds.more.length > 0 ? 'more_active' : '']">
           <div class="title">商品种类</div>
           <div class="range">
             <div class="item">不限</div>
-            <div class="item">0-150</div>
+            <div
+              :class="['item', selected.tags.kinds.name === item.name ? 'active' : '' ]"
+              @click="chooseTagsFor('kinds', item)"
+              v-for="(item, index) in tags.kinds.list"
+            >{{item.name}}</div>
           </div>
-          <div class="more">
+          <div class="more" v-if="tags.kinds.more.length > 0">
             <div class="dropdown show">
               <a
                 class="btn dropdown-toggle"
@@ -60,20 +70,26 @@
                 aria-expanded="false"
               >更多</a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <a class="dropdown-item" href="#">更多1</a>
-                <a class="dropdown-item" href="#">更多1</a>
-                <a class="dropdown-item" href="#">更多1</a>
+                <a
+                  v-for="(item, index) in tags.kinds.more"
+                  class="dropdown-item"
+                  href="#"
+                >{{item.name}}</a>
               </div>
             </div>
           </div>
         </div>
-        <div class="material">
+        <div :class="['material', tags.material.more.length > 0 ? 'more_active' : '']">
           <div class="title">材质</div>
           <div class="range">
             <div class="item">不限</div>
-            <div class="item">0-150</div>
+            <div
+              :class="['item', selected.tags.material.name === item.name ? 'active' : '' ]"
+              @click="chooseTagsFor('material', item)"
+              v-for="(item, index) in tags.material.list"
+            >{{item.name}}</div>
           </div>
-          <div class="more">
+          <div class="more" v-if="tags.material.more.length > 0">
             <div class="dropdown show">
               <a
                 class="btn dropdown-toggle"
@@ -85,20 +101,26 @@
                 aria-expanded="false"
               >更多</a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <a class="dropdown-item" href="#">更多1</a>
-                <a class="dropdown-item" href="#">更多1</a>
-                <a class="dropdown-item" href="#">更多1</a>
+                <a
+                  v-for="(item, index) in tags.material.more"
+                  class="dropdown-item"
+                  href="#"
+                >{{item.name}}</a>
               </div>
             </div>
           </div>
         </div>
-        <div class="use">
+        <div :class="['use', tags.useRange.more.length > 0 ? 'more_active' : '']">
           <div class="title">适用类别</div>
           <div class="range">
             <div class="item">不限</div>
-            <div class="item">0-150</div>
+            <div
+              :class="['item', selected.tags.useRange.name === item.name ? 'active' : '' ]"
+              @click="chooseTagsFor('useRange', item)"
+              v-for="(item, index) in tags.useRange.list"
+            >{{item.name}}</div>
           </div>
-          <div class="more">
+          <div class="more" v-if="tags.useRange.more.length > 0">
             <div class="dropdown show">
               <a
                 class="btn dropdown-toggle"
@@ -110,9 +132,11 @@
                 aria-expanded="false"
               >更多</a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <a class="dropdown-item" href="#">更多1</a>
-                <a class="dropdown-item" href="#">更多1</a>
-                <a class="dropdown-item" href="#">更多1</a>
+                <a
+                  v-for="(item, index) in tags.useRange.more"
+                  class="dropdown-item"
+                  href="#"
+                >{{item.name}}</a>
               </div>
             </div>
           </div>
@@ -251,18 +275,67 @@ export default {
     return {
       titleIcon: TitleIcon,
       page: { current: 1, size: 10 },
-      tags: []
+      tags: {
+        price: {},
+        material: {},
+        kinds: {},
+        useRange: {}
+      },
+      selected: {
+        tags: {
+          price: {},
+          material: {},
+          kinds: {},
+          useRange: {}
+        }
+      }
     };
   },
+  mounted() {
+    this.getMarketTags();
+  },
   methods: {
+    getMarketTags() {
+      this.axios.get("/market/detail/tags").then(({ data }) => {
+        const { price, material, kinds, use_range } = data.data.tags;
+        this.tags.price = getList(price);
+        this.tags.material = getList(material);
+        this.tags.kinds = getList(kinds);
+        this.tags.useRange = getList(use_range);
+
+        function getList(tag) {
+          const MAX_LENGTH = 4;
+          const obj = {
+            list: [],
+            more: []
+          };
+          if (tag.length > MAX_LENGTH) {
+            obj.more = tag.slice(MAX_LENGTH);
+          }
+          obj.list = tag.slice(0, MAX_LENGTH);
+          return obj;
+        }
+      });
+    },
+    chooseTagsFor(name, tag) {},
+    removeTags(tag) {},
     handleSizeChange(val) {},
     handleCurrentChange(val) {}
   }
 };
 </script>
 <style lang="scss" scoped>
-.dropdown-toggle::after{
-  color: #CCE198;
+@mixin no_select() {
+  -moz-user-select: -moz-none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.dropdown-toggle::after {
+  color: #cce198;
 }
 * {
   margin: 0;
@@ -274,6 +347,7 @@ export default {
   padding-left: 1rem;
 }
 .market {
+  @include no_select();
   width: 60rem;
   margin: 0 auto;
   .selected-search {
@@ -314,7 +388,10 @@ export default {
   }
   .select {
     padding-top: 1.6rem;
-    .price, .kinds, .material, .use {
+    .price,
+    .kinds,
+    .material,
+    .use {
       display: flex;
       position: relative;
       z-index: 0;
@@ -512,12 +589,12 @@ export default {
       &::before {
         top: 50%;
         right: 40%;
-        transform: translate(-110%,-50%);
+        transform: translate(-110%, -50%);
       }
       &::after {
         top: 50%;
         left: 40%;
-        transform: translate(110%,-50%);
+        transform: translate(110%, -50%);
       }
       &-zh {
         color: #2c2c2c;

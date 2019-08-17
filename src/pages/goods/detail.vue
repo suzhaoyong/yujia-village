@@ -12,44 +12,63 @@
       <div class="goods">
         <div class="info">
           <div class="imgs">
-            <div class="bg-img"></div>
+            <div class="bg-img">
+              <img :src="chooseItem.activeImg.img" alt />
+            </div>
             <div class="sm-imgs">
-              <div class="sm-img" v-for="(item, index) in 10" :key="index"></div>
+              <div
+                class="sm-img"
+                v-for="(item, index) in goods.imgs"
+                :key="index"
+                @click="chooseActiveImg(item)"
+              >
+                <img :src="item.img" alt />
+              </div>
             </div>
           </div>
           <div class="details">
-            <div class="title">2019春夏新款动力瑜珈裤女紧身弹力2019春夏新款动力瑜珈裤女紧身弹力显瘦瑜伽服高腰运动健身服显瘦瑜伽服高腰运动健身服</div>
+            <div class="title">{{goods.name}}</div>
             <div class="price">
               吊牌价：
-              <span>￥55</span>
+              <span>￥{{goods.price}}</span>
             </div>
             <div class="preferential">优惠折扣：</div>
             <div class="colors">
               <span>颜色:</span>
-              <div class="color" v-for="(item, index) in 3" :key="index">
-                <div class="img"></div>
-                <div class="color-name">黛蓝色</div>
+              <div
+                :class="['color', item.name === chooseItem.color.name ? 'active': '']"
+                v-for="(item, index) in goods.colors"
+                :key="index"
+                @click="chooseColor(item)"
+              >
+                <div class="img">
+                  <img :src="item.img" alt />
+                </div>
+                <div class="color-name">{{item.name}}</div>
               </div>
             </div>
             <div class="size">
               <span>尺码:</span>
               <div class="size-list">
-                <div class="item">M</div>
-                <div class="item">L</div>
-                <div class="item">XL</div>
+                <div
+                  :class="['item', item === chooseItem.size ? 'active': '']"
+                  v-for="(item, index) in goods.size"
+                  :key="index"
+                  @click="chooseSize(item)"
+                >{{item}}</div>
               </div>
             </div>
             <div class="number">
               <span>数量:</span>
               <div class="op">
-                <div class="reduce">-</div>
-                <div class="num">3</div>
-                <div class="add">+</div>
+                <div class="reduce" @click="numberOpFor('reduce', 1)">-</div>
+                <div class="num">{{chooseItem.number}}</div>
+                <div class="add" @click="numberOpFor('add', 1)">+</div>
               </div>
             </div>
             <div class="op-btn">
-              <div class="add-shop">加入购物车</div>
-              <div class="collect-goods">收藏商品</div>
+              <div class="add-shop" @click="addGoodsFor('shopCar')">加入购物车</div>
+              <div class="collect-goods" @click="addGoodsFor('collect')">收藏商品</div>
             </div>
             <div class="tips">温馨提示：如果您是初学者，咨询私人瑜伽教练可能会对您的选择有帮助哦!</div>
           </div>
@@ -58,9 +77,9 @@
         <div class="params">
           <div class="title">产品参数</div>
           <div class="content">
-            <div class="item" v-for="(item, index) in 5" :key="index">
-              <div class="key">商品名称:</div>
-              <div class="value">2019238</div>
+            <div class="item" v-for="(item, index) in goods.params" :key="index">
+              <div class="key">{{getParamsTitle(item)}}:</div>
+              <div class="value">{{getParamsValue(item)}}</div>
             </div>
           </div>
         </div>
@@ -89,13 +108,106 @@ import TitleIcon from "@/assets/market/market_icon1.png";
 export default {
   data() {
     return {
-      titleIcon: TitleIcon
+      titleIcon: TitleIcon,
+      chooseItem: {
+        activeImg: {
+          img: ""
+        },
+        color: {},
+        size: {},
+        number: 1
+      },
+      goods: {}
     };
   },
-  mounted() {}
+  computed: {
+    getParamsTitle() {
+      const enums = {
+        name: "商品名称",
+        material: "材质",
+        user_group: "用户",
+        kinds: "类型",
+        time: "使用季节"
+      };
+      return item => {
+        const [name, value] = Object.entries(item)[0];
+        return enums[name];
+      };
+    },
+    getParamsValue() {
+      return item => {
+        const [name, value] = Object.entries(item)[0];
+        return value;
+      };
+    }
+  },
+  mounted() {
+    const { id } = this.$route.params;
+    this.getGoodsDetail(1);
+  },
+  methods: {
+    getGoodsDetail(id) {
+      this.axios.get(`/goods/detail/${id}`).then(({ data }) => {
+        this.goods = data.data;
+        this.chooseItem.activeImg = data.data.imgs[0];
+      });
+    },
+    chooseActiveImg(img) {
+      this.chooseItem.activeImg = img;
+    },
+    chooseColor(color) {
+      this.chooseItem.color = color;
+    },
+    chooseSize(size) {
+      this.chooseItem.size = size;
+    },
+    numberOpFor(option, number) {
+      let _this = this;
+      const obj = {
+        reduce(number) {
+          if (_this.chooseItem.number <= 1) {
+            return;
+          }
+          _this.chooseItem.number -= number;
+        },
+        add(number) {
+          _this.chooseItem.number += number;
+        }
+      };
+      obj[option](number);
+    },
+    addGoodsFor(option) {
+      const { id } = this.$route.params;
+      
+      const { color, size} = this.chooseItem
+      if(Object.keys(color).length === 0) {
+        this.$message({
+          message: '请选择颜色',
+          type: 'warning'
+        })
+        return;
+      }
+      if(size === '') {
+        this.$message({
+          message: '请选择尺寸',
+          type: 'warning'
+        })
+        return;
+      }
+      const obj = {
+        shopCar() {},
+        collect() {}
+      };
+      obj[option]();
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
+img {
+  width: 100%;
+  height: 100%;
+}
 .goods-box {
   width: 60rem;
   margin: 0 auto;
@@ -129,6 +241,13 @@ export default {
         }
       }
       .details {
+        -moz-user-select: -moz-none;
+        -moz-user-select: none;
+        -o-user-select: none;
+        -khtml-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
         .title {
           margin-bottom: 1rem;
         }
@@ -152,6 +271,9 @@ export default {
             align-items: flex-end;
             padding-right: 0.95rem;
             cursor: pointer;
+            &.active {
+              color: #cce198;
+            }
             .img {
               width: 1.75rem;
               height: 2rem;
@@ -174,6 +296,9 @@ export default {
               margin-right: 0.3rem;
               padding: 0 1rem;
               cursor: pointer;
+              &.active {
+                color: #cce198;
+              }
             }
           }
         }

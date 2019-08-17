@@ -24,7 +24,7 @@
           <div class="market_news-content_box">
             <div class="market_news-content_box-lf">
               <div class="goods_img">
-                <img :src="market.news_good.big_img" alt="">
+                <img :src="market.news_good.big_img" alt />
               </div>
               <div class="goods_info">
                 <div class="goods_info-title">{{market.news_good.name}}</div>
@@ -37,12 +37,12 @@
             </div>
             <div class="market_news-content_box-rh">
               <div class="goods_subimg">
-                <img :src="market.news_good.mid_img" alt="">
+                <img :src="market.news_good.mid_img" alt />
               </div>
               <div class="goods_subimg">
-                <img :src="market.news_good.min_img" alt="">
+                <img :src="market.news_good.min_img" alt />
               </div>
-              <div class="goods_buy-btn">立即购买</div>
+              <div class="goods_buy-btn" @click="viewGoodsDetail(market.news_good)">立即购买</div>
             </div>
           </div>
         </div>
@@ -59,23 +59,31 @@
         <div class="market_time-content">
           <div class="market_time-content_box">
             <div class="prev_btn-box">
-              <div class="prev_btn"></div>
+              <div class="prev_btn" @click="changeDiscountsForu('prev')"></div>
             </div>
-            <div class="goods_list">
-              <div class="goods" v-for="(item,index) in 3" :key="index">
-                <div class="goods-title">暴走的萝莉 中强度运动内衣女聚拢瑜伽背心 美背防震跑步健身bra</div>
-                <div class="goods-price">
-                  <div class="goods-price-old">￥210</div>
-                  <div class="goods-price-new">￥410</div>
-                </div>
+            <transition name="list-complete">
+              <div class="goods_list">
+                <div
+                  class="goods"
+                  @click="viewGoodsDetail(item)"
+                  v-for="(item,index) in discounts_good"
+                  :key="index"
+                >
+                  <div class="goods-title">{{item.name}}</div>
+                  <div class="goods-price">
+                    <div class="goods-price-old">￥{{item.old_price}}</div>
+                    <div class="goods-price-new">￥{{item.new_price}}</div>
+                  </div>
 
-                <div class="goods-img">
-                  <div class="add-shop-btn">加入购物车</div>
+                  <div class="goods-img">
+                    <img :src="item.big_img" alt />
+                    <div class="add-shop-btn">加入购物车</div>
+                  </div>
                 </div>
               </div>
-            </div>
+            </transition>
             <div class="next_btn-box">
-              <div class="next_btn"></div>
+              <div class="next_btn" @click="changeDiscountsForu('next')"></div>
             </div>
           </div>
         </div>
@@ -92,31 +100,45 @@
         <div class="market_often-content">
           <div class="market_often-content_box">
             <div class="menu">
-              <div class="menu-item" v-for="(item, index) in 3" :key="index">
-                <div class="menu-title-en">Yogo</div>
-                <div class="menu-title-zh">瑜伽</div>
+              <div
+                :class="['menu-item', recommend_menu.select.id === item.id ? 'active' : '']"
+                v-for="(item, index) in type_list"
+                :key="index"
+                @click="selectRecommendMenuType(item)"
+              >
+                <div class="menu-title-en">{{item.en_name}}</div>
+                <div class="menu-title-zh">{{item.name}}</div>
               </div>
             </div>
-            <div class="bg-img">
-              <div class="img"></div>
+            <div class="bg-img" @click="viewGoodsDetail(recommend_main)">
+              <div class="img">
+                <img :src="recommend_main.min_img" alt />
+              </div>
               <div class="info">
-                <div class="title">爱暇步夏季新款瑜伽服女套装</div>
-                <div class="subtitle">年輕時尚，柔软舒适</div>
+                <div class="title">{{recommend_main.name}}</div>
+                <div class="subtitle">{{recommend_main.description}}</div>
                 <div class="price">
-                  <div class="price-old">￥75.00</div>
-                  <div class="price-new">￥55.00</div>
+                  <div class="price-old">￥{{recommend_main.old_price}}</div>
+                  <div class="price-new">￥{{recommend_main.new_price}}</div>
                 </div>
               </div>
             </div>
             <div class="sm-img">
-              <div class="item" v-for="(item, index) in 4" :key="index">
-                <div class="img"></div>
+              <div
+                class="item"
+                @click="viewGoodsDetail(item)"
+                v-for="(item, index) in recommend_list"
+                :key="index"
+              >
+                <div class="img">
+                  <img :src="item.min_img" alt />
+                </div>
                 <div class="info">
-                  <div class="title">爱暇步夏季新款123124213瑜伽服女套装</div>
-                  <div class="subtitle">年輕時尚，柔软舒适</div>
+                  <div class="title">{{item.name}}</div>
+                  <div class="subtitle">{{item.description}}</div>
                   <div class="price">
-                    <div class="price-old">￥75.00</div>
-                    <div class="price-new">￥55.00</div>
+                    <div class="price-old">￥{{item.old_price}}</div>
+                    <div class="price-new">￥{{item.new_price}}</div>
                   </div>
                 </div>
               </div>
@@ -138,13 +160,82 @@ export default {
       titleIcon: TitleIcon,
       market: {
         news_good: {}
-      }
+      },
+      discounts_good: [],
+      recommend_menu: {
+        select: {}
+      },
+      recommend_main: {},
+      recommend_list: [],
+      type_list: []
     };
   },
   mounted() {
     this.getMarketNews();
+    this.getMarketDiscounts();
+    this.getMarketTypeList();
+    this.getMarketRecommendBooks();
   },
   methods: {
+    viewGoodsDetail(goods) {
+      this.$router.push({
+        name: "detailGoods",
+        params: {
+          id: goods.id
+        }
+      });
+    },
+    changeDiscountsForu(option) {
+      const obj_temp = {
+        prev: this.getPrevDiscounts,
+        next: this.getNextDiscounts
+      };
+      obj_temp[option]();
+    },
+    selectRecommendMenuType(item) {
+      this.recommend_menu.select = item;
+      const obj_temp = {
+        1: this.getMarketRecommendSuit,
+        2: this.getMarketRecommendEquipment,
+        3: this.getMarketRecommendBooks
+      };
+      obj_temp[item.type]();
+    },
+    getMarketRecommendSuit() {
+      this.axios.get("/market/recommend/suit").then(({ data }) => {
+        this.recommend_main = data.data.main_item;
+        this.recommend_list = data.data.items;
+      });
+    },
+    getMarketRecommendEquipment() {
+      this.axios.get("/market/recommend/equipment").then(({ data }) => {
+        this.recommend_main = data.data.main_item;
+        this.recommend_list = data.data.items;
+      });
+    },
+    getMarketRecommendBooks() {
+      this.axios.get("/market/recommend/books").then(({ data }) => {
+        this.recommend_main = data.data.main_item;
+        this.recommend_list = data.data.items;
+      });
+    },
+    getMarketTypeList() {
+      this.axios.get("/market/recommend/lists").then(({ data }) => {
+        this.recommend_menu.select = data.data.items[0] || {};
+        this.type_list = data.data.items;
+      });
+    },
+    getMarketDiscounts() {
+      this.axios.get("/market/discounts").then(({ data }) => {
+        this.discounts_good = data.data.items;
+      });
+    },
+    getPrevDiscounts() {
+      this.getMarketDiscounts();
+    },
+    getNextDiscounts() {
+      this.getMarketDiscounts();
+    },
     getMarketNews() {
       this.axios.get("/market/news").then(({ data }) => {
         this.market.news_good = Object.assign({}, data.data);
@@ -176,7 +267,29 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-img{
+@mixin no_select() {
+  -moz-user-select: -moz-none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.list-complete-item {
+  transition: all 1s;
+  display: inline-block;
+  margin-right: 10px;
+}
+.list-complete-enter, .list-complete-leave-to
+/* .list-complete-leave-active for below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(30px);
+}
+.list-complete-leave-active {
+  position: absolute;
+}
+img {
   width: 100%;
   height: 100%;
 }
@@ -492,6 +605,7 @@ img{
       }
     }
     &-content {
+      @include no_select();
       &_box {
         width: 60rem;
         margin: 0 auto;
@@ -502,6 +616,11 @@ img{
             width: 9.85rem;
             border: 1px solid #ccc;
             padding: 10px;
+            cursor: default;
+            &.active {
+              background: #839f6b;
+              color: #fff;
+            }
             &:hover {
               background: #839f6b;
               color: #fff;
@@ -539,6 +658,7 @@ img{
           display: flex;
           flex-direction: column;
           align-items: center;
+          cursor: default;
           .img {
             width: 20rem;
             height: 20rem;
@@ -574,6 +694,7 @@ img{
           display: flex;
           flex-wrap: wrap;
           .item {
+            cursor: default;
             &:nth-of-type(1) {
               margin-right: 2.85rem;
             }
