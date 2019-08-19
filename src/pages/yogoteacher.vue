@@ -9,15 +9,13 @@
                     <div class="yogo-count">
                         <div class="yogo-search">
                             <div class="search-left">
-                                <el-select v-model="value" placeholder="瑜伽会所">
+                                <el-select v-model="value" placeholder="擅长类型">
                                     <el-option v-for="item in options"  :key="item.value" :label="item.label" :value="item.value"></el-option>
                                 </el-select>
-                                <el-select v-model="value2" placeholder="擅长类型">
+                                <el-select v-model="value2" placeholder="工作资历">
                                     <el-option v-for="item in options"  :key="item.value" :label="item.label" :value="item.value"></el-option>
                                 </el-select>
-                                <el-select v-model="value3" placeholder="工作资历">
-                                    <el-option v-for="item in options"  :key="item.value" :label="item.label" :value="item.value"></el-option>
-                                </el-select>
+                                <v-distpicker :province="province"  :city="city" hide-area @selected="onSelected"></v-distpicker>
                             </div>
                             <div class="search-right">
                                 <el-form :inline="true" :model="formInline" class="demo-form-inline">
@@ -104,9 +102,11 @@
 </template>
 <script>
 import Banner from "../components/banner";
+import VDistpicker from 'v-distpicker'
 export default {
     components:{
         Banner,
+        VDistpicker
     },
   data() {
     return {
@@ -123,6 +123,8 @@ export default {
         currentPage:1,
         pagesize: 10,
         value: '',
+        province:'',
+        city:'',
         value2: '',
         value3: '',
         yogolist:[
@@ -198,6 +200,10 @@ export default {
       }
   },
   methods:{
+      onSelected(data) {
+        this.province = data.province.value;
+        this.city = data.city.value;
+     },
       onSubmit() {
         console.log('submit!');
       },
@@ -210,7 +216,7 @@ export default {
       },
       handleCurrentChange(currentPage) {
           this.currentPage = currentPage;
-      }
+      },
   }
 };
 </script>
@@ -221,6 +227,9 @@ export default {
 }
 .el-select .el-input.is-focus .el-input__inner {
     border-color: #E2DBC8;
+}
+.distpicker-address-wrapper select{
+    width: 100px;
 }
 .yogo-main{
     width: 100%;
@@ -236,6 +245,7 @@ export default {
         .search-left{
             line-height: 68px;
             padding-left:16px;
+            display: flex;
             .el-select{
                 width: 140px;
             }

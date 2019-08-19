@@ -24,12 +24,6 @@
                     <el-menu-item index="aboutus">关于我们</el-menu-item>
                     <el-menu-item index="home">个人中心</el-menu-item> 
                     </el-menu>
-
-                    <!-- <el-menu :default-active="$router.path" class="el-menu-demo" router mode="horizontal" @select="handleSelect">
-                        <el-menu-item v-for="(item,i) in navList" :key="i" :index="item.name">
-                         {{ item.navItem }}
-                        </el-menu-item>
-                    </el-menu> -->
                     </el-col>
                 </div>
             </div>
@@ -41,17 +35,6 @@ export default {
   data() {
     return {
         activeIndex:"main",
-        //  navList:[
-        //     {name:'/main',navItem:'首页'},
-        //     {name:'/joinclubhouse',navItem:'加盟会馆'},
-        //     {name:'/yogoteacher',navItem:'瑜伽名师'},
-        //     {name:'/home/main',navItem:'培训信息'},
-        //     {name:'/yogoknowledge',navItem:'瑜伽知识'},
-        //     {name:'/home/main',navItem:'瑜伽资讯'},
-        //     {name:'/home/main',navItem:'商城'},
-        //     {name:'/home/main',navItem:'关于我们'},
-        //     {name:'/home/main',navItem:'个人中心'},
-        //     ]
     };
   },
   watch:{
