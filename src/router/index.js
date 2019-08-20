@@ -60,10 +60,10 @@ export default new Router({
       name: 'personal',
       component: Home,
       children: [
-        { path: 'index', component: () => import('@/pages/personalCenter/index') },
-        { path: 'certification', component: () => import('@/pages/personalCenter/certification') },
-        { path: 'safety-center', component: () => import('@/pages/personalCenter/safetyCenter') },
-        { path: 'share', component: () => import('@/pages/personalCenter/share') },
+        { path: 'index', name: 'personal', component: () => import('@/pages/personalCenter/index') },
+        { path: 'certification', name: 'certification', component: () => import('@/pages/personalCenter/certification') },
+        { path: 'safety-center', name: 'safety-center', component: () => import('@/pages/personalCenter/safetyCenter') },
+        { path: 'share', name: 'share', component: () => import('@/pages/personalCenter/share') },
       ]
     },
     {

@@ -114,7 +114,7 @@ export default {
           img: ""
         },
         color: {},
-        size: {},
+        size: "",
         number: 1
       },
       goods: {}
@@ -162,38 +162,44 @@ export default {
       this.chooseItem.size = size;
     },
     numberOpFor(option, number) {
-      let _this = this;
       const obj = {
-        reduce(number) {
-          if (_this.chooseItem.number <= 1) {
+        reduce: number => {
+          if (this.chooseItem.number <= 1) {
             return;
           }
-          _this.chooseItem.number -= number;
+          this.chooseItem.number -= number;
         },
-        add(number) {
-          _this.chooseItem.number += number;
+        add: number => {
+          this.chooseItem.number += number;
         }
       };
       obj[option](number);
     },
     addGoodsFor(option) {
+      let checkGoodsChoose = () => {
+        const { color, size } = this.chooseItem;
+        if (typeof color.name === "undefined") {
+          this.$message({
+            message: "请选择颜色",
+            type: "warning"
+          });
+          return false;
+        }
+        if (size === "") {
+          this.$message({
+            message: "请选择尺寸",
+            type: "warning"
+          });
+          return false;
+        }
+        return true;
+      };
+
+      if (!checkGoodsChoose()) {
+        return;
+      }
+
       const { id } = this.$route.params;
-      
-      const { color, size} = this.chooseItem
-      if(Object.keys(color).length === 0) {
-        this.$message({
-          message: '请选择颜色',
-          type: 'warning'
-        })
-        return;
-      }
-      if(size === '') {
-        this.$message({
-          message: '请选择尺寸',
-          type: 'warning'
-        })
-        return;
-      }
       const obj = {
         shopCar() {},
         collect() {}

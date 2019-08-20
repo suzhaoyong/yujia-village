@@ -4,11 +4,11 @@
       <session-title name="信息与安全中心"></session-title>
       <div class="body">
         <div class="tabs">
-          <div class="tab active">修改密码</div>
-          <div class="tab">修改绑定手机</div>
+          <div @click="tagsChange(0)" :class="['tab', {active: tagList[0].active}]">修改密码</div>
+          <div @click="tagsChange(1)" :class="['tab', {active: tagList[1].active}]">修改绑定手机</div>
         </div>
         <div class="content">
-          <div class="edit-password" v-show="false">
+          <div class="edit-password" v-show="tagList[0].active && tagList[0].methods === 'password'">
             <div class="form">
               <div class="item">
                 <span class="title">旧密码</span>
@@ -37,10 +37,10 @@
               </div>
             </div>
             <div class="tips">
-              <span>忘记密码？更换验证方式</span>
+              <span @click="tagList[0].methods = 'phone'">忘记密码？更换验证方式</span>
             </div>
           </div>
-          <div class="edit-password-by-code" v-show="false">
+          <div class="edit-password-by-code" v-show="tagList[1].active">
             <div class="form">
               <div class="item">
                 <span class="title">验证码</span>
@@ -75,7 +75,7 @@
               <span>152*****093</span>
             </div>
           </div>
-          <div class="edit-phone" v-show="false">
+          <div class="edit-phone" v-show="tagList[0].active && tagList[0].methods === 'phone'">
             <div class="form">
               <div class="item">
                 <span class="title">验证码</span>
@@ -93,7 +93,7 @@
                 </div>
               </div>
               <div class="submit">
-                <div class="btn">返回</div>
+                <div class="btn" @click="tagList[0].methods = 'password'">返回</div>
                 <div class="btn">更改</div>
               </div>
             </div>
@@ -103,7 +103,7 @@
               <span>152*****093</span>
             </div>
           </div>
-          <div class="success">
+          <div class="success" v-show="success">
             <span>更改成功！</span>
           </div>
         </div>
@@ -116,6 +116,27 @@ import SessionTitle from "./SessionTitle";
 export default {
   components: {
     SessionTitle
+  },
+  data() {
+    return {
+      success: false,
+      tagList: [
+        { type: "password", active: true, methods: 'password' },
+        { type: "phone", active: false }
+      ]
+    };
+  },
+  methods: {
+    tagsChange(cur_index) {
+      this.tagList = this.tagList.map((item, index) => {
+        if (index === cur_index) {
+          item.active = true;
+        } else {
+          item.active = false;
+        }
+        return item;
+      });
+    }
   }
 };
 </script>
@@ -216,6 +237,7 @@ export default {
               border-radius: 0.25rem;
               padding: 0 0.85rem;
               border: 1px solid #dcdcdc;
+              cursor: pointer;
             }
             .form_input-tips {
               color: #d83211;

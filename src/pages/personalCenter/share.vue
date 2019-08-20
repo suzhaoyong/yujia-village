@@ -14,10 +14,7 @@
               <span>分享到</span>
             </div>
             <div class="media">
-              <div class="item"></div>
-              <div class="item"></div>
-              <div class="item"></div>
-              <div class="item"></div>
+              <share :config="config"></share>
             </div>
           </div>
         </div>
@@ -27,9 +24,38 @@
 </template>
 <script>
 import SessionTitle from "./SessionTitle";
+// import socialShare from 'social-share.js'
 export default {
   components: {
     SessionTitle
+  },
+  data() {
+    return {
+      config: {
+        title: "234",
+        description: "123",
+        sites: ["qzone", "qq", "weibo", "wechat", "douban"],
+        // disabled: ["google", "facebook", "twitter"],
+        wechatQrcodeTitle: "微信扫一扫：分享", // 微信二维码提示文字
+        wechatQrcodeHelper:
+          "<p>微信里点“发现”，扫一下</p><p>二维码便可将本文分享至朋友圈。</p>"
+      }
+    };
+  },
+  mounted() {
+    this.initSocialConfig();
+  },
+  methods: {
+    initSocialConfig() {
+      var $config = {
+        title: "234",
+        description: "123",
+        wechatQrcodeTitle: "微信扫一扫：分享", // 微信二维码提示文字
+        wechatQrcodeHelper:
+          "<p>微信里点“发现”，扫一下</p><p>二维码便可将本文分享至朋友圈。</p>"
+      };
+      socialShare(".social-share-cs", $config);
+    }
   }
 };
 </script>
@@ -55,6 +81,7 @@ export default {
       width: 40rem;
       margin: 0 auto;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       padding-top: 1.65rem;
       padding-bottom: 1.4rem;

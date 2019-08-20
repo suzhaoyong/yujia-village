@@ -4,19 +4,19 @@
     <div class="body">
       <div class="step-title">
         <div class="step-box">
-          <div class="step active">
+          <div :class="['step',{active: step.cur_index >= 1}]">
             <div class="number">①</div>
             <div class="text">同意协议</div>
           </div>
           <i class="line"></i>
-          <div class="step">
+          <div :class="['step',{active: step.cur_index >= 2}]">
             <div class="number">②</div>
             <div class="text">填写资料</div>
           </div>
         </div>
       </div>
-      <div class="content" v-show="false"></div>
-      <div class="form">
+      <div class="content" v-show="step.cur_index === 1"></div>
+      <div class="form" v-show="step.cur_index === 2">
         <div class="name-address-phone">
           <div class="name-phone">
             <div class="name">
@@ -77,12 +77,16 @@
           </div>
         </div>
       </div>
-      <div class="agreen-next">
+      <div class="agreen-next" v-show="step.cur_index === 1">
         <div class="agreen">
-          <div class="select"></div>
-          <div class="text">我同意本协议所有内容</div>
+          <div :class="['select', { active: step.agree }]"></div>
+          <div class="text" @click="step.agree = true">我同意本协议所有内容</div>
         </div>
-        <div class="next">下一步</div>
+        <div class="next" @click="stepOpFor('next')">下一步</div>
+      </div>
+      <div class="agreen-next" v-show="step.cur_index === 2">
+        <div class="next" @click="stepOpFor('prev')">上一步</div>
+        <div class="next" @click="stepOpFor('finish')">完成</div>
       </div>
     </div>
   </div>
@@ -97,10 +101,33 @@ export default {
     return {
       dialogImageUrl: "",
       dialogVisible: false,
-      disabled: false
+      disabled: false,
+      step: {
+        cur_index: 1,
+        agree: false
+      }
     };
   },
   methods: {
+    stepOpFor(option) {
+      const obj = {
+        prev: () => {
+          this.step.cur_index -= 1;
+        },
+        next: () => {
+          if (!this.step.agree) {
+            this.$message({
+              type: "warning",
+              message: "请先同意协议内容"
+            });
+            return;
+          }
+          this.step.cur_index += 1;
+        },
+        finish: () => {}
+      };
+      obj[option]();
+    },
     handleRemove(file) {
       console.log(file);
     },
@@ -255,6 +282,9 @@ export default {
         background: #ccc;
         border-radius: 50%;
         display: inline-block;
+        &.active {
+          background: #000;
+        }
       }
       .text {
         margin-left: 0.45rem;

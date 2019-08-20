@@ -3,12 +3,12 @@
     <div class="market">
       <div class="selected-search">
         <div class="selected">
-          <span>已选</span>
-          <span>></span>
+          <span v-show="arrayNotEmpty(selected.tags)">已选</span>
+          <span v-show="arrayNotEmpty(selected.tags)">></span>
           <div class="tags">
-            <div class="tag" v-for="(item, index) in selected.tags">
+            <div class="tag" v-for="(item, index) in selected.tags" :key="index">
               {{item.name}}
-              <i class="el-icon-close close" @click="removeTags(item)"></i>
+              <i class="el-icon-close close" @click="removeTags(item, index)"></i>
             </div>
           </div>
         </div>
@@ -17,17 +17,17 @@
         </div>
       </div>
       <div class="select">
-        <div :class="['price', tags.price.more.length > 0 ? 'more_active' : '']">
+        <div :class="['price', arrayNotEmpty(tags.price.more) ? 'more_active' : '']">
           <div class="title">理想价位</div>
           <div class="range">
             <div class="item">不限</div>
             <div
-              :class="['item', selected.tags.price.name === item.name ? 'active' : '' ]"
+              :class="['item', isTagActive(item) ? 'active' : '' ]"
               @click="chooseTagsFor('price', item)"
               v-for="(item, index) in tags.price.list"
             >{{item.name}}</div>
           </div>
-          <div class="more" v-if="tags.price.more.length > 0">
+          <div class="more" v-if="arrayNotEmpty(tags.price.more)">
             <div class="dropdown show">
               <a
                 class="btn dropdown-toggle"
@@ -41,24 +41,25 @@
               <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                 <a
                   v-for="(item, index) in tags.price.more"
-                  class="dropdown-item"
-                  href="#"
+                  :key="index"
+                  :class="['dropdown-item', {'active': isTagActive(item)}]"
+                  @click="chooseTagsFor('price', item)"
                 >{{item.name}}</a>
               </div>
             </div>
           </div>
         </div>
-        <div :class="['kinds', tags.kinds.more.length > 0 ? 'more_active' : '']">
+        <div :class="['kinds', arrayNotEmpty(tags.kinds.more) ? 'more_active' : '']">
           <div class="title">商品种类</div>
           <div class="range">
             <div class="item">不限</div>
             <div
-              :class="['item', selected.tags.kinds.name === item.name ? 'active' : '' ]"
+              :class="['item', isTagActive(item) ? 'active' : '' ]"
               @click="chooseTagsFor('kinds', item)"
               v-for="(item, index) in tags.kinds.list"
             >{{item.name}}</div>
           </div>
-          <div class="more" v-if="tags.kinds.more.length > 0">
+          <div class="more" v-if="arrayNotEmpty(tags.kinds.more)">
             <div class="dropdown show">
               <a
                 class="btn dropdown-toggle"
@@ -73,23 +74,25 @@
                 <a
                   v-for="(item, index) in tags.kinds.more"
                   class="dropdown-item"
-                  href="#"
+                  :key="index"
+                  :class="['dropdown-item', {'active': isTagActive(item)}]"
+                  @click="chooseTagsFor('kinds', item)"
                 >{{item.name}}</a>
               </div>
             </div>
           </div>
         </div>
-        <div :class="['material', tags.material.more.length > 0 ? 'more_active' : '']">
+        <div :class="['material', arrayNotEmpty(tags.material.more) ? 'more_active' : '']">
           <div class="title">材质</div>
           <div class="range">
             <div class="item">不限</div>
             <div
-              :class="['item', selected.tags.material.name === item.name ? 'active' : '' ]"
+              :class="['item', isTagActive(item) ? 'active' : '' ]"
               @click="chooseTagsFor('material', item)"
               v-for="(item, index) in tags.material.list"
             >{{item.name}}</div>
           </div>
-          <div class="more" v-if="tags.material.more.length > 0">
+          <div class="more" v-if="arrayNotEmpty(tags.material.more)">
             <div class="dropdown show">
               <a
                 class="btn dropdown-toggle"
@@ -104,23 +107,25 @@
                 <a
                   v-for="(item, index) in tags.material.more"
                   class="dropdown-item"
-                  href="#"
+                  :key="index"
+                  :class="['dropdown-item', {'active': isTagActive(item)}]"
+                  @click="chooseTagsFor('material', item)"
                 >{{item.name}}</a>
               </div>
             </div>
           </div>
         </div>
-        <div :class="['use', tags.useRange.more.length > 0 ? 'more_active' : '']">
+        <div :class="['use', arrayNotEmpty(tags.useRange.more) ? 'more_active' : '']">
           <div class="title">适用类别</div>
           <div class="range">
             <div class="item">不限</div>
             <div
-              :class="['item', selected.tags.useRange.name === item.name ? 'active' : '' ]"
+              :class="['item', isTagActive(item) ? 'active' : '' ]"
               @click="chooseTagsFor('useRange', item)"
               v-for="(item, index) in tags.useRange.list"
             >{{item.name}}</div>
           </div>
-          <div class="more" v-if="tags.useRange.more.length > 0">
+          <div class="more" v-if="arrayNotEmpty(tags.useRange.more)">
             <div class="dropdown show">
               <a
                 class="btn dropdown-toggle"
@@ -135,7 +140,9 @@
                 <a
                   v-for="(item, index) in tags.useRange.more"
                   class="dropdown-item"
-                  href="#"
+                  :key="index"
+                  :class="['dropdown-item', {'active': isTagActive(item)}]"
+                  @click="chooseTagsFor('useRange', item)"
                 >{{item.name}}</a>
               </div>
             </div>
@@ -157,9 +164,14 @@
                   aria-expanded="false"
                 >价格</a>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                  <a class="dropdown-item" href="#">更多1</a>
-                  <a class="dropdown-item" href="#">更多1</a>
-                  <a class="dropdown-item" href="#">更多1</a>
+                  <a
+                    class="dropdown-item"
+                    v-for="(item, index) in tags.price.more"
+                    :key="index"
+                    :class="['dropdown-item', {'active': isTagActive(item)}]"
+                    @click="chooseTagsFor('price', item)"
+                    href="#"
+                  >{{item.name}}</a>
                 </div>
               </div>
             </div>
@@ -209,16 +221,23 @@
           <div class="tips">温馨提示： 如果选择困难，您可咨询馆内私人教练</div>
         </div>
         <div class="column">
-          <div class="goods-box" v-for="(item, index) in 10" :key="index">
-            <div class="pic"></div>
-            <div class="title">哈他新品专注瑜伽伸展带拉伸拉筋带瑜珈绳拉力带艾扬格辅助瑜珈带</div>
+          <div
+            class="goods-box"
+            @click="viewGoodsDetail(item)"
+            v-for="(item, index) in resultList"
+            :key="index"
+          >
+            <div class="pic">
+              <img :src="item.img" alt />
+            </div>
+            <div class="title">{{item.name}}</div>
             <div class="price-views-collenct">
               <div class="price">
-                <div class="old-price">￥98.00</div>
-                <div class="new-price">￥98.00</div>
+                <div class="old-price">￥{{item.old_price}}</div>
+                <div class="new-price">￥{{item.new_price}}</div>
               </div>
               <div class="views-collenct">
-                <div class="views">183231</div>
+                <div class="views">{{item.views}}</div>
                 <div class="collenct">收藏</div>
               </div>
             </div>
@@ -246,23 +265,30 @@
           <div class="title-en">Sometimes beauty is so simple</div>
         </div>
         <div class="goods">
-          <div class="goods-box" v-for="(item, index) in 4" :key="index">
-            <div class="pic"></div>
-            <div class="g-title">哈他新品专注瑜伽伸展带拉伸拉筋带瑜珈绳拉力带艾扬格辅助瑜珈带</div>
+          <div
+            class="goods-box"
+            @click="viewGoodsDetail(item)"
+            v-for="(item, index) in resultList"
+            :key="index"
+          >
+            <div class="pic">
+              <img :src="item.img" alt />
+            </div>
+            <div class="g-title">{{item.name}}</div>
             <div class="price-views-collenct">
               <div class="price">
-                <div class="old-price">￥98.00</div>
-                <div class="new-price">￥98.00</div>
+                <div class="old-price">￥{{item.old_price}}</div>
+                <div class="new-price">￥{{item.new_price}}</div>
               </div>
               <div class="views-collenct">
-                <div class="views">183231</div>
+                <div class="views">{{item.views}}</div>
                 <div class="collenct">收藏</div>
               </div>
             </div>
           </div>
         </div>
         <div class="change">
-          <div class="change-btn">换一批</div>
+          <div class="change-btn" @click="changeGoodsFor('last_view')">换一批</div>
         </div>
       </div>
     </div>
@@ -276,25 +302,52 @@ export default {
       titleIcon: TitleIcon,
       page: { current: 1, size: 10 },
       tags: {
-        price: {},
-        material: {},
-        kinds: {},
-        useRange: {}
+        price: {
+          list: [],
+          more: []
+        },
+        material: {
+          list: [],
+          more: []
+        },
+        kinds: {
+          list: [],
+          more: []
+        },
+        useRange: {
+          list: [],
+          more: []
+        }
       },
       selected: {
-        tags: {
-          price: {},
-          material: {},
-          kinds: {},
-          useRange: {}
-        }
-      }
+        tags: []
+      },
+      resultList: []
     };
+  },
+  computed: {
+    isTagActive() {
+      return item => {
+        return this.selected.tags.findIndex(tag => tag.id === item.id) >= 0;
+      };
+    },
+    arrayNotEmpty() {
+      return array => array.length > 0;
+    }
   },
   mounted() {
     this.getMarketTags();
+    this.getMarketList();
   },
   methods: {
+    changeGoodsFor(name) {
+      this.getMarketList();
+    },
+    getMarketList() {
+      this.axios.get("/market/detail/lists").then(({ data }) => {
+        this.resultList = data.data.items;
+      });
+    },
     getMarketTags() {
       this.axios.get("/market/detail/tags").then(({ data }) => {
         const { price, material, kinds, use_range } = data.data.tags;
@@ -317,10 +370,25 @@ export default {
         }
       });
     },
-    chooseTagsFor(name, tag) {},
-    removeTags(tag) {},
+    chooseTagsFor(name, tag) {
+      if (this.isTagActive(tag)) return;
+      this.selected.tags.push(tag);
+    },
+    removeTags(tag, index) {
+      this.selected.tags = this.selected.tags.filter(
+        item => item.id !== tag.id
+      );
+    },
     handleSizeChange(val) {},
-    handleCurrentChange(val) {}
+    handleCurrentChange(val) {},
+    viewGoodsDetail(goods) {
+      this.$router.push({
+        name: "detailGoods",
+        params: {
+          id: goods.id
+        }
+      });
+    }
   }
 };
 </script>
@@ -337,19 +405,28 @@ export default {
 .dropdown-toggle::after {
   color: #cce198;
 }
+.dropdown-item {
+  padding: 0.3rem;
+  padding-left: 1rem;
+}
+.dropdown-item.active {
+  background: #e3f3d5;
+  color: #2c2c2c;
+}
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-.dropdown-item {
-  padding: 0.3rem;
-  padding-left: 1rem;
+img {
+  width: 100%;
+  height: 100%;
 }
 .market {
   @include no_select();
   width: 60rem;
   margin: 0 auto;
+  margin-top: 10px;
   .selected-search {
     display: flex;
     justify-content: space-between;
@@ -360,12 +437,19 @@ export default {
       font-size: 0.7rem;
       span {
         padding-right: 0.5rem;
+        width: 4em;
+      }
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
       }
       .tag {
         cursor: pointer;
         background: #e3f3d5;
         padding: 0.5rem 2rem 0.5rem 1.25rem;
         border-radius: 0.3rem;
+        margin-right: 4px;
+        margin-top: 4px;
         position: relative;
         .close {
           position: absolute;
@@ -380,6 +464,7 @@ export default {
     .search {
       width: 14.25rem;
       height: 2rem;
+      flex-shrink: 0;
       .input {
         padding-left: 1.35rem;
         height: 100%;
@@ -388,6 +473,7 @@ export default {
   }
   .select {
     padding-top: 1.6rem;
+
     .price,
     .kinds,
     .material,
@@ -419,6 +505,9 @@ export default {
           margin-left: 10px;
           padding: 0 10px;
           border: 1px solid #ccc;
+        }
+        .item.active {
+          border: 1px solid #2cc;
         }
       }
       .more {
@@ -492,7 +581,6 @@ export default {
         .pic {
           width: 100%;
           height: 12.75rem;
-          background: #000;
         }
         .title {
           padding: 1rem;

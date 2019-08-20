@@ -8,6 +8,27 @@
         "min_img": "@image('320x300','red','#fff','avatar')",
         "old_price": "@natural( 10, 10000)",
         "new_price": "@natural( 10, 10000)",
+        "number": "1",
+        "color": "@cword(2)",
+        "size": "@cword('MSL')"
+      },
+      {
+        "id": "@id()",
+        "name": "@ctitle()",
+        "min_img": "@image('320x300','red','#fff','avatar')",
+        "old_price": "@natural( 10, 10000)",
+        "new_price": "@natural( 10, 10000)",
+        "number": "1",
+        "color": "@cword(2)",
+        "size": "@cword('MSL')"
+      },
+      {
+        "id": "@id()",
+        "name": "@ctitle()",
+        "min_img": "@image('320x300','red','#fff','avatar')",
+        "old_price": "@natural( 10, 10000)",
+        "new_price": "@natural( 10, 10000)",
+        "number": "1",
         "color": "@cword(2)",
         "size": "@cword('MSL')"
       }

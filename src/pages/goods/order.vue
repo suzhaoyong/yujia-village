@@ -160,6 +160,15 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@mixin no_select() {
+  -moz-user-select: -moz-none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 img {
   width: 100%;
   height: 100%;
@@ -172,6 +181,7 @@ img {
 .order-box {
   width: 60rem;
   margin: 0 auto;
+  @include no_select();
   .navs {
   }
   .order {
