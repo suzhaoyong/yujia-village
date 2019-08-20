@@ -154,6 +154,7 @@
 </template>
 <script>
 import TitleIcon from "@/assets/market/market_icon1.png";
+import { requestLogin } from "@/api/api";
 export default {
   data() {
     return {
@@ -171,10 +172,7 @@ export default {
     };
   },
   mounted() {
-    this.getMarketNews();
-    this.getMarketDiscounts();
-    this.getMarketTypeList();
-    this.getMarketRecommendBooks();
+    requestLogin("/knowledgeList", {}, "get").then(function(res) {});
   },
   methods: {
     viewGoodsDetail(goods) {

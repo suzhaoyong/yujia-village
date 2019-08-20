@@ -49,7 +49,9 @@
 </template>
 <script>
 import Banner from "../components/banner";
+import { requestLogin } from "@/api/api";
 export default {
+  inject: ["reload"],
   components:{
     Banner,
   },
@@ -129,7 +131,26 @@ export default {
         }]
     };
   },
+  created(){
+      this.listdata();
+  },
   methods:{
+      listdata(){
+        let _this = this;
+        requestLogin("/knowledgeList", {}, "get")
+        .then(function(res) {
+        })
+        .catch(error => {
+            let { response: { data: { errorCode, msg } } } = error;
+            if (errorCode != 0) {
+            this.$message({
+                message: msg,
+                type: "error"
+            });
+            return;
+            }
+        });
+      },
       handleSizeChange(size) {
           this.pagesize = size;
       },
