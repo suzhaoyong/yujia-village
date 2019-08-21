@@ -12,50 +12,36 @@
     </div>
     <div class="market">
       <div class="market_news">
-        <div class="market_news-title">
-          <div class="market_news-title_main">
-            <div class="icon">
-              <img :src="titleIcon" alt srcset />
-            </div>新品推荐
-          </div>
-          <div class="market_news-title_tips">Sometimes beauty is so simple</div>
-        </div>
+        <session-title name="新品推荐"></session-title>
         <div class="market_news-content">
           <div class="market_news-content_box">
             <div class="market_news-content_box-lf">
               <div class="goods_img">
-                <img :src="market.news_good.big_img" alt />
+                <img :src="good_recomment.new[0].new_url_one" alt />
               </div>
               <div class="goods_info">
-                <div class="goods_info-title">{{market.news_good.name}}</div>
-                <div class="goods_info-tips">{{market.news_good.description}}</div>
-                <div class="goods_info-price">￥{{market.news_good.price}}</div>
+                <div class="goods_info-title">{{good_recomment.new[0].desc}}</div>
+                <div class="goods_info-tips">{{good_recomment.new[0].describe}}</div>
+                <div class="goods_info-price">￥{{good_recomment.new[0].sell_price}}</div>
                 <div class="goods_info-tags">新款来袭</div>
-                <div class="goods_info-time">{{market.news_good.date}}发售</div>
+                <div class="goods_info-time">{{good_recomment.new[0].new_date}}发售</div>
                 <div class="goods_info-logo">yoga</div>
               </div>
             </div>
             <div class="market_news-content_box-rh">
               <div class="goods_subimg">
-                <img :src="market.news_good.mid_img" alt />
+                <img :src="good_recomment.new[0].new_url_two" alt />
               </div>
               <div class="goods_subimg">
-                <img :src="market.news_good.min_img" alt />
+                <img :src="good_recomment.new[0].new_url_three" alt />
               </div>
-              <div class="goods_buy-btn" @click="viewGoodsDetail(market.news_good)">立即购买</div>
+              <div class="goods_buy-btn" @click="viewGoodsDetail(good_recomment.new[0])">立即购买</div>
             </div>
           </div>
         </div>
       </div>
       <div class="market_time">
-        <div class="market_time-title">
-          <div class="market_time-title_main">
-            <div class="icon">
-              <img :src="titleIcon" alt srcset />
-            </div>限时优惠
-          </div>
-          <div class="market_time-title_tips">Sometimes beauty is so simple</div>
-        </div>
+        <session-title name="限时优惠" brief="Sometimes beauty is so simple"></session-title>
         <div class="market_time-content">
           <div class="market_time-content_box">
             <div class="prev_btn-box">
@@ -66,17 +52,17 @@
                 <div
                   class="goods"
                   @click="viewGoodsDetail(item)"
-                  v-for="(item,index) in discounts_good"
+                  v-for="(item,index) in good_recomment.discount"
                   :key="index"
                 >
-                  <div class="goods-title">{{item.name}}</div>
+                  <div class="goods-title">{{item.describe}}</div>
                   <div class="goods-price">
-                    <div class="goods-price-old">￥{{item.old_price}}</div>
-                    <div class="goods-price-new">￥{{item.new_price}}</div>
+                    <div class="goods-price-old">￥{{item.sell_price}}</div>
+                    <div class="goods-price-new">￥{{item.sell_price - item.discount}}</div>
                   </div>
 
                   <div class="goods-img">
-                    <img :src="item.big_img" alt />
+                    <img :src="item.discount_url" alt />
                     <div class="add-shop-btn">加入购物车</div>
                   </div>
                 </div>
@@ -89,37 +75,30 @@
         </div>
       </div>
       <div class="market_often">
-        <div class="market_often-title">
-          <div class="market_often-title_main">
-            <div class="icon">
-              <img :src="titleIcon" alt srcset />
-            </div>常用推荐
-          </div>
-          <div class="market_often-title_tips">Sometimes beauty is so simple</div>
-        </div>
+        <session-title name="常用推荐" brief="Sometimes beauty is so simple"></session-title>
         <div class="market_often-content">
           <div class="market_often-content_box">
             <div class="menu">
               <div
-                :class="['menu-item', recommend_menu.select.id === item.id ? 'active' : '']"
-                v-for="(item, index) in type_list"
+                :class="['menu-item', recommend_menu.select.sort_id == item.sort_id ? 'active' : '']"
+                v-for="(item, index) in good_recomment.comment"
                 :key="index"
                 @click="selectRecommendMenuType(item)"
               >
-                <div class="menu-title-en">{{item.en_name}}</div>
+                <!-- <div class="menu-title-en">{{item.name}}</div> -->
                 <div class="menu-title-zh">{{item.name}}</div>
               </div>
             </div>
             <div class="bg-img" @click="viewGoodsDetail(recommend_main)">
               <div class="img">
-                <img :src="recommend_main.min_img" alt />
+                <img :src="recommend_main.cover_url" alt />
               </div>
               <div class="info">
-                <div class="title">{{recommend_main.name}}</div>
-                <div class="subtitle">{{recommend_main.description}}</div>
+                <div class="title">{{recommend_main.desc}}</div>
+                <div class="subtitle">{{recommend_main.describe}}</div>
                 <div class="price">
-                  <div class="price-old">￥{{recommend_main.old_price}}</div>
-                  <div class="price-new">￥{{recommend_main.new_price}}</div>
+                  <div class="price-old">￥{{recommend_main.sell_price}}</div>
+                  <div class="price-new">￥{{recommend_main.sell_price - recommend_main.discount}}</div>
                 </div>
               </div>
             </div>
@@ -131,14 +110,14 @@
                 :key="index"
               >
                 <div class="img">
-                  <img :src="item.min_img" alt />
+                  <img :src="item.cover_url" alt />
                 </div>
                 <div class="info">
-                  <div class="title">{{item.name}}</div>
-                  <div class="subtitle">{{item.description}}</div>
+                  <div class="title">{{item.desc}}</div>
+                  <div class="subtitle">{{item.describe}}</div>
                   <div class="price">
-                    <div class="price-old">￥{{item.old_price}}</div>
-                    <div class="price-new">￥{{item.new_price}}</div>
+                    <div class="price-old">￥{{item.sell_price}}</div>
+                    <div class="price-new">￥{{item.sell_price - item.discount}}</div>
                   </div>
                 </div>
               </div>
@@ -153,12 +132,14 @@
   </div>
 </template>
 <script>
-import TitleIcon from "@/assets/market/market_icon1.png";
-import { requestLogin } from "@/api/api";
+import SessionTitle from "./SessionTitle";
 export default {
+  components: {
+    SessionTitle
+  },
   data() {
     return {
-      titleIcon: TitleIcon,
+      good_recomment: { new: [], comment: [], discount: [] },
       market: {
         news_good: {}
       },
@@ -172,7 +153,12 @@ export default {
     };
   },
   mounted() {
-    requestLogin("/knowledgeList", {}, "get").then(function(res) {});
+    this.$request("/goods/goodRecomment").then(data => {
+      this.good_recomment = data;
+      this.recommend_main = data.comment[0].data[0];
+      this.recommend_menu.select = data.comment[0];
+      this.recommend_list = data.comment[0].data;
+    });
   },
   methods: {
     viewGoodsDetail(goods) {
@@ -192,12 +178,8 @@ export default {
     },
     selectRecommendMenuType(item) {
       this.recommend_menu.select = item;
-      const obj_temp = {
-        1: this.getMarketRecommendSuit,
-        2: this.getMarketRecommendEquipment,
-        3: this.getMarketRecommendBooks
-      };
-      obj_temp[item.type]();
+      this.recommend_list = item.data;
+      this.recommend_main = item.data[0];
     },
     getMarketRecommendSuit() {
       this.axios.get("/market/recommend/suit").then(({ data }) => {
@@ -265,6 +247,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@mixin spare() {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
 @mixin no_select() {
   -moz-user-select: -moz-none;
   -moz-user-select: none;
@@ -732,6 +720,7 @@ img {
               .subtitle {
                 color: #999;
                 font-size: 0.6rem;
+                @include spare();
               }
               .price {
                 padding-top: 0.5rem;

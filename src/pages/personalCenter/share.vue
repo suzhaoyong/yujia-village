@@ -32,8 +32,10 @@ export default {
   data() {
     return {
       config: {
-        title: "234",
-        description: "123",
+        url: "http://www.yujiacun.net/index.html",
+        source: "www.bilibili.com",
+        title: "分享有好礼",
+        description: "本活动持续进行",
         sites: ["qzone", "qq", "weibo", "wechat", "douban"],
         // disabled: ["google", "facebook", "twitter"],
         wechatQrcodeTitle: "微信扫一扫：分享", // 微信二维码提示文字
@@ -48,8 +50,10 @@ export default {
   methods: {
     initSocialConfig() {
       var $config = {
-        title: "234",
-        description: "123",
+        url: "http://www.yujiacun.net/index.html",
+        source: "www.bilibili.com",
+        title: "分享有好礼",
+        description: "本活动持续进行",
         wechatQrcodeTitle: "微信扫一扫：分享", // 微信二维码提示文字
         wechatQrcodeHelper:
           "<p>微信里点“发现”，扫一下</p><p>二维码便可将本文分享至朋友圈。</p>"

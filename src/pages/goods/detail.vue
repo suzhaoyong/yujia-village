@@ -1,14 +1,14 @@
 <template>
   <div>
     <div class="goods-box">
-      <div class="navs">
+      <!-- <div class="navs">
         <el-breadcrumb separator-class="el-icon-arrow-right">
           <el-breadcrumb-item>首页</el-breadcrumb-item>
           <el-breadcrumb-item>活动管理</el-breadcrumb-item>
           <el-breadcrumb-item>活动列表</el-breadcrumb-item>
           <el-breadcrumb-item>活动详情</el-breadcrumb-item>
         </el-breadcrumb>
-      </div>
+      </div> -->
       <div class="goods">
         <div class="info">
           <div class="imgs">
@@ -27,17 +27,20 @@
             </div>
           </div>
           <div class="details">
-            <div class="title">{{goods.name}}</div>
+            <div class="title">{{goods.desc}}</div>
             <div class="price">
               吊牌价：
-              <span>￥{{goods.price}}</span>
+              <span>￥{{goods.sell_price}}</span>
             </div>
-            <div class="preferential">优惠折扣：</div>
+            <div class="preferential">
+              优惠折扣：
+              <span>￥{{goods.discount}}</span>
+            </div>
             <div class="colors">
               <span>颜色:</span>
               <div
                 :class="['color', item.name === chooseItem.color.name ? 'active': '']"
-                v-for="(item, index) in goods.colors"
+                v-for="(item, index) in goods.color_size"
                 :key="index"
                 @click="chooseColor(item)"
               >
@@ -52,10 +55,10 @@
               <div class="size-list">
                 <div
                   :class="['item', item === chooseItem.size ? 'active': '']"
-                  v-for="(item, index) in goods.size"
+                  v-for="(item, index) in goods.color_size[0].data"
                   :key="index"
                   @click="chooseSize(item)"
-                >{{item}}</div>
+                >{{item.size}}</div>
               </div>
             </div>
             <div class="number">
@@ -77,7 +80,7 @@
         <div class="params">
           <div class="title">产品参数</div>
           <div class="content">
-            <div class="item" v-for="(item, index) in goods.params" :key="index">
+            <div class="item" v-for="(item, index) of goods.params" :key="index">
               <div class="key">{{getParamsTitle(item)}}:</div>
               <div class="value">{{getParamsValue(item)}}</div>
             </div>
@@ -123,11 +126,12 @@ export default {
   computed: {
     getParamsTitle() {
       const enums = {
-        name: "商品名称",
+        desc: "商品名称",
+        describe: "商品描述",
         material: "材质",
-        user_group: "用户",
+        painter: "用户",
         kinds: "类型",
-        time: "使用季节"
+        season: "使用季节"
       };
       return item => {
         const [name, value] = Object.entries(item)[0];
@@ -143,7 +147,22 @@ export default {
   },
   mounted() {
     const { id } = this.$route.params;
-    this.getGoodsDetail(1);
+    this.$request(`/goods/${id}`).then(data => {
+      this.goods = data;
+      this.goods.imgs = [
+        data.new_url_one,
+        data.new_url_two,
+        data.new_url_three
+      ];
+      const { material, painter, season, desc, describe } = data;
+      this.goods.params = [
+        { desc },
+        { material },
+        { painter },
+        { season },
+        { describe }
+      ];
+    });
   },
   methods: {
     getGoodsDetail(id) {
@@ -394,6 +413,7 @@ img {
           .key {
             width: 8em;
             text-align: right;
+            flex-shrink: 0;
           }
           .value {
           }

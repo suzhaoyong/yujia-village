@@ -20,7 +20,6 @@
         <div :class="['price', arrayNotEmpty(tags.price.more) ? 'more_active' : '']">
           <div class="title">理想价位</div>
           <div class="range">
-            <div class="item">不限</div>
             <div
               :class="['item', isTagActive(item) ? 'active' : '' ]"
               @click="chooseTagsFor('price', item)"
@@ -49,17 +48,16 @@
             </div>
           </div>
         </div>
-        <div :class="['kinds', arrayNotEmpty(tags.kinds.more) ? 'more_active' : '']">
+        <div :class="['sort', arrayNotEmpty(tags.sort.more) ? 'more_active' : '']">
           <div class="title">商品种类</div>
           <div class="range">
-            <div class="item">不限</div>
             <div
               :class="['item', isTagActive(item) ? 'active' : '' ]"
-              @click="chooseTagsFor('kinds', item)"
-              v-for="(item, index) in tags.kinds.list"
+              @click="chooseTagsFor('sort', item)"
+              v-for="(item, index) in tags.sort.list"
             >{{item.name}}</div>
           </div>
-          <div class="more" v-if="arrayNotEmpty(tags.kinds.more)">
+          <div class="more" v-if="arrayNotEmpty(tags.sort.more)">
             <div class="dropdown show">
               <a
                 class="btn dropdown-toggle"
@@ -72,11 +70,11 @@
               >更多</a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                 <a
-                  v-for="(item, index) in tags.kinds.more"
+                  v-for="(item, index) in tags.sort.more"
                   class="dropdown-item"
                   :key="index"
                   :class="['dropdown-item', {'active': isTagActive(item)}]"
-                  @click="chooseTagsFor('kinds', item)"
+                  @click="chooseTagsFor('sort', item)"
                 >{{item.name}}</a>
               </div>
             </div>
@@ -85,7 +83,6 @@
         <div :class="['material', arrayNotEmpty(tags.material.more) ? 'more_active' : '']">
           <div class="title">材质</div>
           <div class="range">
-            <div class="item">不限</div>
             <div
               :class="['item', isTagActive(item) ? 'active' : '' ]"
               @click="chooseTagsFor('material', item)"
@@ -115,17 +112,16 @@
             </div>
           </div>
         </div>
-        <div :class="['use', arrayNotEmpty(tags.useRange.more) ? 'more_active' : '']">
+        <div :class="['use', arrayNotEmpty(tags.type.more) ? 'more_active' : '']">
           <div class="title">适用类别</div>
           <div class="range">
-            <div class="item">不限</div>
             <div
               :class="['item', isTagActive(item) ? 'active' : '' ]"
-              @click="chooseTagsFor('useRange', item)"
-              v-for="(item, index) in tags.useRange.list"
+              @click="chooseTagsFor('type', item)"
+              v-for="(item, index) in tags.type.list"
             >{{item.name}}</div>
           </div>
-          <div class="more" v-if="arrayNotEmpty(tags.useRange.more)">
+          <div class="more" v-if="arrayNotEmpty(tags.type.more)">
             <div class="dropdown show">
               <a
                 class="btn dropdown-toggle"
@@ -138,11 +134,11 @@
               >更多</a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                 <a
-                  v-for="(item, index) in tags.useRange.more"
+                  v-for="(item, index) in tags.type.more"
                   class="dropdown-item"
                   :key="index"
                   :class="['dropdown-item', {'active': isTagActive(item)}]"
-                  @click="chooseTagsFor('useRange', item)"
+                  @click="chooseTagsFor('type', item)"
                 >{{item.name}}</a>
               </div>
             </div>
@@ -162,11 +158,11 @@
                   data-toggle="dropdown"
                   aria-haspopup="true"
                   aria-expanded="false"
-                >价格</a>
+                >颜色</a>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                   <a
                     class="dropdown-item"
-                    v-for="(item, index) in tags.price.more"
+                    v-for="(item, index) in tags.color"
                     :key="index"
                     :class="['dropdown-item', {'active': isTagActive(item)}]"
                     @click="chooseTagsFor('price', item)"
@@ -185,11 +181,39 @@
                   data-toggle="dropdown"
                   aria-haspopup="true"
                   aria-expanded="false"
-                >价格</a>
+                >使用季节</a>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                  <a class="dropdown-item" href="#">更多1</a>
-                  <a class="dropdown-item" href="#">更多1</a>
-                  <a class="dropdown-item" href="#">更多1</a>
+                  <a
+                    class="dropdown-item"
+                    v-for="(item, index) in tags.season"
+                    :key="index"
+                    :class="['dropdown-item', {'active': isTagActive(item)}]"
+                    @click="chooseTagsFor('price', item)"
+                    href="#"
+                  >{{item.name}}</a>
+                </div>
+              </div>
+            </div>
+            <div class="select-box">
+              <div class="dropdown show">
+                <a
+                  class="btn dropdown-toggle"
+                  style="color: #2c2c2c; border:1px solid #bfbfbf;padding-left:0.5rem;padding-right:0.5rem;"
+                  href="#"
+                  role="button"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >适用人群</a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                  <a
+                    class="dropdown-item"
+                    v-for="(item, index) in tags.person"
+                    :key="index"
+                    :class="['dropdown-item', {'active': isTagActive(item)}]"
+                    @click="chooseTagsFor('price', item)"
+                    href="#"
+                  >{{item.name}}</a>
                 </div>
               </div>
             </div>
@@ -228,13 +252,13 @@
             :key="index"
           >
             <div class="pic">
-              <img :src="item.img" alt />
+              <img :src="item.cover_url" alt />
             </div>
-            <div class="title">{{item.name}}</div>
+            <div class="title">{{item.describe}}</div>
             <div class="price-views-collenct">
               <div class="price">
-                <div class="old-price">￥{{item.old_price}}</div>
-                <div class="new-price">￥{{item.new_price}}</div>
+                <div class="old-price">￥{{item.sell_price}}</div>
+                <div class="new-price">￥{{item.sell_price - item.discount}}</div>
               </div>
               <div class="views-collenct">
                 <div class="views">{{item.views}}</div>
@@ -310,11 +334,11 @@ export default {
           list: [],
           more: []
         },
-        kinds: {
+        sort: {
           list: [],
           more: []
         },
-        useRange: {
+        type: {
           list: [],
           more: []
         }
@@ -336,8 +360,33 @@ export default {
     }
   },
   mounted() {
-    this.getMarketTags();
-    this.getMarketList();
+    this.$request("/goods").then(data => {
+      const { color, material, person, price, season, sort, type } = data;
+      this.tags.price = getList(price);
+      this.tags.material = getList(material);
+      this.tags.sort = getList(sort);
+      this.tags.type = getList(type);
+      this.tags = Object.assign({}, this.tags, { color, season, person });
+
+      function getList(tag) {
+        const MAX_LENGTH = 8;
+        const obj = {
+          list: [],
+          more: []
+        };
+        if (tag.length > MAX_LENGTH) {
+          obj.more = tag.slice(MAX_LENGTH);
+        }
+        obj.list = tag.slice(0, MAX_LENGTH);
+        return obj;
+      }
+    });
+
+    //
+    this.$request("/goods/showGoodList").then(data => {
+      console.log(data);
+      this.resultList = data 
+    });
   },
   methods: {
     changeGoodsFor(name) {
@@ -350,11 +399,11 @@ export default {
     },
     getMarketTags() {
       this.axios.get("/market/detail/tags").then(({ data }) => {
-        const { price, material, kinds, use_range } = data.data.tags;
+        const { price, material, sort, type } = data.data.tags;
         this.tags.price = getList(price);
         this.tags.material = getList(material);
-        this.tags.kinds = getList(kinds);
-        this.tags.useRange = getList(use_range);
+        this.tags.sort = getList(sort);
+        this.tags.type = getList(type);
 
         function getList(tag) {
           const MAX_LENGTH = 4;
@@ -475,7 +524,7 @@ img {
     padding-top: 1.6rem;
 
     .price,
-    .kinds,
+    .sort,
     .material,
     .use {
       display: flex;

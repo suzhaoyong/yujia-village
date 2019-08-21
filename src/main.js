@@ -4,7 +4,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import App from './App'
 import router from './router'
-import axios from './vue-axios'
+import request from '@/utils/request';
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import {Carousel, CarouselItem} from 'element-ui'
@@ -18,8 +18,8 @@ Vue.use(ElementUI)
 Vue.use(VueAwesomeSwiper)
 Vue.use(Carousel)
 Vue.use(CarouselItem)
-Vue.use(axios);
 Vue.use(Vuex)
+Object.defineProperty(Vue.prototype, '$request', { value: request });
 Vue.config.productionTip = false
 
 const store = new Vuex.Store({
