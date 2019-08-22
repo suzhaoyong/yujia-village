@@ -16,9 +16,10 @@ function handleRequest(config) {
     expires_in: 3600,
     token_type: "bearer"
   }
+  config.headers['Authorization'] = xtoken.token_type + xtoken.access_token
   // 请求头添加token
   const access = sessionStorage.getItem('access')
-  config.headers['Authorization'] = access && `${JSON.parse(access).token_type}${JSON.parse(access).access_token}` || '';
+  // config.headers['Authorization'] = access && `${JSON.parse(access).token_type}${JSON.parse(access).access_token}` || '';
 
   config.baseURL = '/api';
   if (contentType === 'json') {
