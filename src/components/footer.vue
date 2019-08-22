@@ -4,7 +4,7 @@
             <div class="footer-main">
                 <div class="footer-center"></div>
                 <div class="footer-foot">
-                    <span>关于我们</span>
+                    <el-button type="text" @click="goto" style="color:#2c2c2c;font-size:14px;">关于我们</el-button>
                     <span class="span">商务合作</span>
                     <span class="span2">客服电话：021-621146321(周一至周六 9:30-18:00)</span>
                 </div>
@@ -21,6 +21,13 @@ export default {
   data() {
     return {
     };
+  },
+  methods:{
+      goto(){
+          this.$router.push({
+            path: "/aboutus",
+        });
+      }
   }
 };
 </script>

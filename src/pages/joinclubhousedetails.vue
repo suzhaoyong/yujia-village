@@ -14,13 +14,13 @@
                             <swiper-slide v-for="(page,index) of pages" :key="index">
                                 <div class="clubhouse-swiper" v-for="item of page" :key="item.id">
                                     <div class="clubhouse-swiper-img">
-                                        <img :src="item.img"/>
+                                        <img :src="item.path"/>
                                     </div>
                                     <div class="clubhouse-swiper-name">
-                                        <p class="name-p1">{{item.name}}<span class="name-span">{{item.text}}</span></p>
+                                        <p class="name-p1">{{item.theme}}<span class="name-span">{{item.name}}</span></p>
                                         <p class="name-p2">￥{{item.price}}</p>
                                     </div>
-                                    <el-rate v-model="item.rate"></el-rate>
+                                    <el-rate v-model="item.diff"></el-rate>
                                     <p class="name-p3">电话:{{item.tel}}</p>
                                 </div>
                             </swiper-slide>
@@ -37,22 +37,22 @@
                             <p class="nav-text">Sometimes beauty is so simple</p>
                             <img src="../assets/image18.png" class="bg-image4"/>
                         </div>
-                        <div class="left2">观云瑜伽拥有1000平米场馆，瑜伽教练团队专业，分工明确。重金聘请印度瑜伽名师Deepak来馆内任教，无论你是新手还是专业人才，在这里都能有所收获。馆内拥有专业的保洁团队，准时清洁每一块场地，每一个死角，确保您始终处于健康安全舒适的环境中。</div>
+                        <div class="left2" v-html="club.content">{{club.content}}</div>
                         <div class="left3">
-                            电话：400-100-7191
+                            电话：{{club.club_tel}}
                         </div>
                         <div class="left4">
-                            地址：成都市锦江区双桂路泰合财富中心7栋302
+                            地址：{{club.club_address}}
                         </div>
                     </div>
                     <div class="joinclubdetails-right">
                         <div class="imgpic">
-                        <img src="../assets/image19.png" class="img1"/>
-                        <img src="../assets/image20.png" class="img2"/>
+                        <img :src="club.path1" class="img1"/>
+                        <img :src="club.path2"  class="img2"/>
                         </div>
                         <div class="imgpic1">
-                        <img src="../assets/image20.png" class="img3"/>
-                        <img src="../assets/image19.png" class="img4"/>
+                        <img :src="club.path3"  class="img3"/>
+                        <img :src="club.path4"  class="img4"/>
                         </div>
                     </div>
                     </div>
@@ -70,10 +70,10 @@
                     <swiper class="carousel5" :options="swiperOption2" style="height:660px">
                         <swiper-slide class="carousel5-item" v-for="(page2,index) of pages2" :key="index">
                         <div class="carousel-explain2" v-for="item of page2" :key="item.id">
-                            <img :src="item.img"/>
+                            <img :src="item.path"/>
                             <div class="explain2-div">
-                                <h3>{{item.name}}<span class="explain2-span">({{item.huiguan}})</span></h3>
-                                <span class="explain2-span2">{{item.text}}</span>
+                                <h3>{{item.name}}</h3>
+                                <span class="explain2-span2" v-html="item.content">{{item.content}}</span>
                             </div>
                         </div>
                         </swiper-slide>
@@ -86,11 +86,12 @@
     </div>
 </template>
 <script>
-import { requestLogin } from "@/api/api";
 export default {
     inject: ["reload"],
   data() {
     return {
+        club:"",
+        club_img:"",
         swiperOption: {
           slidesPerView: 3,
           spaceBetween: 30,
@@ -110,93 +111,8 @@ export default {
           },
           loop: true,
         },
-        swiperList:[{
-            id:1,
-            img:require('../assets/image15.png'),
-            name:'鲁拉提',
-            text:'Pilates',
-            price:4800,
-            rate:2,
-            tel:15211373093
-        },
-        {
-            id:2,
-            img:require('../assets/image16.png'),
-            name:'鲁拉提',
-            text:'Pilates',
-            price:4800,
-            rate:3,
-            tel:15211373093
-        },
-        {
-            id:3,
-            img:require('../assets/image17.png'),
-            name:'鲁拉提',
-            text:'Pilates',
-            price:4800,
-            rate:1,
-            tel:15211373093
-        },
-        {
-            id:4,
-            img:require('../assets/image15.png'),
-            name:'鲁拉提',
-            text:'Pilates',
-            price:4800,
-            rate:2,
-            tel:15211373093
-        }],
-        famousteach:[
-            {
-            id:1,
-            img:require('../assets/image9.png'),
-            name:'琦琦',
-            huiguan:'馆主',
-            text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
-            },
-            {
-            id:2,
-            img:require('../assets/image9.png'),
-            name:'琦琦',
-            huiguan:'馆主',
-            text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
-            },
-            {
-            id:3,
-            img:require('../assets/image9.png'),
-            name:'琦琦',
-            huiguan:'馆主',
-            text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
-            },
-            {
-            id:4,
-            img:require('../assets/image9.png'),
-            name:'琦琦',
-            huiguan:'馆主',
-            text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
-            },
-            {
-            id:5,
-            img:require('../assets/image9.png'),
-            name:'琦琦',
-            huiguan:'馆主',
-            text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
-            },
-            {
-            id:6,
-            img:require('../assets/image9.png'),
-            name:'琦琦',
-            huiguan:'馆主',
-            text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
-            },
-            {
-            id:7,
-            img:require('../assets/image9.png'),
-            name:'琦琦',
-            huiguan:'馆主',
-            text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
-            }
-        ],
+        swiperList:[],
+        famousteach:[],
     };
   },
   computed: {
@@ -229,8 +145,11 @@ export default {
   methods:{
       joindatalist(){
         let _this = this;
-        requestLogin("/clubs/"+ _this.$route.query.id,{}, "get")
-        .then(function(res) {
+        this.$request(`/clubs/${_this.$route.query.id}`).then(res => {
+            let { club } = res;
+            _this.club = club;
+            _this.famousteach = res.teacher;
+            _this.swiperList= res.trains;
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -345,8 +264,8 @@ export default {
                     .name-p1{
                         font-size: 20px;
                         color: #2c2c2c;
-                        font-family:MicrosoftYaHei-Bold;
-                        font-weight:bold;
+                        font-family:Source Han Sans CN;
+                        font-weight:400;
                         .name-span{
                             font-size: 14px;
                             color: #2c2c2c;
@@ -358,7 +277,7 @@ export default {
                         font-family:MicrosoftYaHei-Bold;
                         font-weight:bold;
                          color: #2c2c2c;
-                         line-height: 34px;
+                         line-height: 25px;
                     }
                 }
                 .el-rate{
@@ -460,6 +379,10 @@ export default {
                      line-height: 30px;
                      width: 100%;
                      margin-bottom: 90px;
+                     display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp:5;// 限制快级元素的文本行数
+                    overflow: hidden;
                  }
                  .left3{
                      font-size: 14px;

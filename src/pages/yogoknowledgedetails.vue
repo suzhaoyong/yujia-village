@@ -26,7 +26,6 @@
     </div>
 </template>
 <script>
-import { requestLogin } from "@/api/api";
 export default {
     inject: ["reload"],
   data() {
@@ -40,8 +39,7 @@ export default {
   methods:{
       listdatadetails(){
         let _this = this;
-        requestLogin("/knowledgeInfo/"+ _this.$route.query.id,{}, "get")
-        .then(function(res) {
+        this.$request(`/knowledgeInfo/${_this.$route.query.id}`).then(res => {
             _this.knowinfo = res;
         })
         .catch(error => {

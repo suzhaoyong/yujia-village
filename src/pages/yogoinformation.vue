@@ -15,7 +15,7 @@
                                 <p class="span-title">{{item.updated_at}}</p>
                                 <p class="p-title">关键字：{{item.keyword}}</p>
                                 <p class="p-desc">{{item.summary}}</p>
-                                <div  class="count-button-but">
+                                <div class="count-button-but">
                                     <el-button type="text" @click="selectItem(item)">查看全部</el-button>
                                 </div>
                                 <div class="border2"></div>
@@ -118,7 +118,6 @@
 </template>
 <script>
 import Banner from "../components/banner";
-import { requestLogin } from "@/api/api";
 export default {
     inject: ["reload"],
   components:{
@@ -138,8 +137,7 @@ export default {
   methods:{
      mationdata(){
         let _this = this;
-        requestLogin("/informationList", {}, "get")
-        .then(function(res) {
+        this.$request("/informationList").then(res => {
             _this.formationList = res;
             _this.formationList.map(item =>{ 
                 if(item.data != null){
@@ -313,9 +311,9 @@ export default {
                 }
                 .count-button-but{
                         width: 110px;
-                        height: 36px;
+                        height: 40px;
                         text-align: center;
-                        line-height: 36px;
+                        line-height: 40px;
                         margin-top: 85px;
                         background-color:#313131; 
                         .el-button--text{

@@ -18,15 +18,15 @@
                         <el-carousel height="560px" :interval="5000" arrow="never" direction="vertical" :autoplay="false">
                             <el-carousel-item v-for="item in dataimg" :key="item.id">
                             <div class="carousel-explain">
-                                <img :src="item.img1" class="img1"/>
-                                <img :src="item.img2" class="img2"/>
+                                <img :src="item.train_image[0].path" class="img1"/>
+                                <img :src="item.train_image[0].path" class="img2"/>
                             </div>
                             <div class="carousel-text">
-                                <h4>{{item.name}}<span>{{item.train}}</span></h4>
-                                <el-rate v-model="item.rate"></el-rate>
+                                <h4>{{item.theme}}<span>{{item.name}}</span></h4>
+                                <el-rate v-model="item.diff"></el-rate>
                             </div>
                             <div class="carousel-detals">
-                                <span>{{item.datels}}</span>
+                                <span class="span">{{item.content}}</span>
                                 <el-button type="text" class="carousel-btn">了解更多</el-button>
                             </div>
                             </el-carousel-item>
@@ -71,9 +71,9 @@
                         <swiper class="carousel5" :options="swiperOption" style="height:660px">
                             <swiper-slide class="carousel5-item" v-for="(page,index) of pages" :key="index">
                             <div class="carousel-explain2" v-for="item of page" :key="item.id">
-                                <img :src="item.img"/>
+                                <img :src="item.path"/>
                                 <div class="explain2-div">
-                                    <h3>{{item.name}}<span class="explain2-span">({{item.huiguan}})</span></h3>
+                                    <h3>{{item.name}}</h3>
                                     <span class="explain2-span2">{{item.text}}</span>
                                 </div>
                             </div>
@@ -116,18 +116,7 @@
                     </div>
                     <div class="nav-contunt-div7">
                         <div class="explain4">
-                           <img class="nav-div7-img" src="../assets/image60.png"/>
-                           <img class="nav-div7-img" src="../assets/image60.png"/>
-                           <img class="nav-div7-img" src="../assets/image60.png"/>
-                           <img class="nav-div7-img" src="../assets/image60.png"/>
-                           <img class="nav-div7-img" src="../assets/image60.png"/>
-                           <img class="nav-div7-img" src="../assets/image60.png"/>
-                           <img class="nav-div7-img" src="../assets/image60.png"/>
-                           <img class="nav-div7-img" src="../assets/image60.png"/>
-                           <img class="nav-div7-img" src="../assets/image60.png"/>
-                           <img class="nav-div7-img" src="../assets/image60.png"/>
-                           <img class="nav-div7-img" src="../assets/image60.png"/>
-                           <img class="nav-div7-img" src="../assets/image60.png"/>
+                            <img class="nav-div7-img" v-for="(item,index) in clubInfo" :key="index" :src="item.path"/>
                         </div>
                     </div>
                     </el-col>
@@ -150,77 +139,9 @@ export default {
     },
   data() {
     return {
-        dataimg:[
-            {
-            id:1,
-            img1:require('../assets/image10.png'),
-            img2:require('../assets/image2.png'),
-            name:'空中瑜伽',
-            train:'Pilates',
-            rate:1,
-            datels:'空中瑜伽又叫反重力瑜伽，利用空中瑜伽吊床，完成哈他瑜伽体式。练习者感受到身体体重，加深体式的伸展、阻力和正位能力，具有高效的放松、疗愈、瘦身效果，更具有趣味性和互动性 。'
-            },
-            {
-            id:2,
-            img1:require('../assets/image2.png'),
-            img2:require('../assets/image10.png'),
-            name:'基础瑜伽',
-            train:'YangFei',
-            rate:2,
-            datels:'基础瑜伽又叫反重力瑜伽，利用空中瑜伽吊床，完成哈他瑜伽体式。练习者感受到身体体重，加深体式的伸展、阻力和正位能力，具有高效的放松、疗愈、瘦身效果，更具有趣味性和互动性 。'
-            }
-        ],
-        famousteach:[
-            {
-            id:1,
-            img:require('../assets/image9.png'),
-            name:'新悦',
-            huiguan:'观云瑜伽馆',
-            text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
-            },
-            {
-            id:2,
-            img:require('../assets/image9.png'),
-            name:'新悦',
-            huiguan:'观云瑜伽馆',
-            text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
-            },
-            {
-            id:3,
-            img:require('../assets/image9.png'),
-            name:'新悦',
-            huiguan:'观云瑜伽馆',
-            text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
-            },
-            {
-            id:4,
-            img:require('../assets/image9.png'),
-            name:'新悦',
-            huiguan:'观云瑜伽馆',
-            text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
-            },
-            {
-            id:5,
-            img:require('../assets/image9.png'),
-            name:'新悦',
-            huiguan:'观云瑜伽馆',
-            text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
-            },
-            {
-            id:6,
-            img:require('../assets/image9.png'),
-            name:'新悦',
-            huiguan:'观云瑜伽馆',
-            text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
-            },
-            {
-            id:7,
-            img:require('../assets/image9.png'),
-            name:'新悦',
-            huiguan:'观云瑜伽馆',
-            text:'2015年7月 获得国际瑜伽导师协会高级教师资格证书'
-            }
-        ],
+        dataimg:[],
+        famousteach:[],
+        clubInfo:[],
         swiperOption: {
           spaceBetween: 30,
           pagination: {
@@ -268,6 +189,29 @@ export default {
         swiperTop.controller.control = swiperThumbs;
         swiperThumbs.controller.control = swiperTop;
       })
+    },
+    created(){
+        this.listhomedata();
+    },
+    methods:{
+        listhomedata(){
+        let _this = this;
+        this.$request("/home").then(res => {
+            _this.famousteach = res.teachers;
+            _this.dataimg = res.hot_trains;
+            _this.clubInfo = res.clubInfo;
+        })
+        .catch(error => {
+            let { response: { data: { errorCode, msg } } } = error;
+            if (errorCode != 0) {
+            this.$message({
+                message: msg,
+                type: "error"
+            });
+            return;
+            }
+        });
+      },
     }
 };
 </script>
@@ -395,9 +339,13 @@ export default {
                 h4{
                     color: #fff;
                     font-size: 20px;
+                    font-family:Source Han Sans CN;
+                    font-weight:bold;
                     span{
                     padding-left: 13px;
                     font-size: 14px;
+                    font-family:Source Han Sans CN;
+                    font-weight:400;
                 }
                 }
                 .el-rate{
@@ -408,10 +356,14 @@ export default {
                 display: flex;
                 justify-content: space-around;
                 margin-top: 30px;
-                span{
-                        width: 67%;
-                        color: #fff;
-                        font-size: 14px;
+                .span{
+                    width: 67%;
+                    color: #fff;
+                    font-size: 14px;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 3;// 限制快级元素的文本行数
+                    overflow: hidden;
                 }
                 .carousel-btn{
                     width: 130px;
@@ -703,9 +655,11 @@ export default {
                 margin:0 auto;
                 height: 602px;
                 .nav-div7-img{
-                    width: 280px;
+                    width: 279px;
                     height: 198px;
                     background-color: #eeeeee;
+                    margin-left: 5px;
+                    margin-top: 5px;
                 }
             }
         }
