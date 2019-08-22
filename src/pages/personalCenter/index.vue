@@ -3,14 +3,7 @@
     <top-title></top-title>
     <div class="personal">
       <div class="buy">
-        <div class="title">
-          <div class="title-zh">
-            <div class="icon">
-              <img :src="titleIcon" alt srcset />
-            </div>已购买的课程
-          </div>
-          <div class="title-en">The customer's excellent experience is our goal from beginning</div>
-        </div>
+        <session-title name="已购买的课程"></session-title>
         <div class="body">
           <el-carousel indicator-position="none" arrow="always">
             <el-carousel-item v-for="item in 4" :key="item">
@@ -42,15 +35,9 @@
         </div>
       </div>
       <div class="cash-voucher">
-        <div class="title">
-          <div class="title-zh">
-            <div class="icon">
-              <img :src="titleIcon" alt srcset />
-            </div>现金券
-            <span style="color:#999;">(可拆分使用)</span>
-          </div>
-          <div class="title-en">The customer's excellent experience is our goal from beginning</div>
-        </div>
+        <session-title name="现金券">
+            <span slot="tips" style="color:#999;">(可拆分使用)</span>
+        </session-title>
         <div class="body">
           <div class="vouchers">
             <div class="voucher" v-for="(item, index) in 2" :key="index">
@@ -71,14 +58,7 @@
         </div>
       </div>
       <div class="useable-voucher">
-        <div class="title">
-          <div class="title-zh">
-            <div class="icon">
-              <img :src="titleIcon" alt srcset />
-            </div>可领取优惠券
-          </div>
-          <div class="title-en">The customer's excellent experience is our goal from beginning</div>
-        </div>
+        <session-title name="可领取优惠券"></session-title>
         <div class="body">
           <div class="vouchers">
             <div class="voucher" v-for="(item,index) in 1" :key="index">
@@ -103,17 +83,17 @@
   </div>
 </template>
 <script>
-import TitleIcon from "@/assets/market/market_icon1.png";
 import TopTitle from "./topTItle";
+import SessionTitle from "./SessionTitle";
 export default {
+  components: {
+    TopTitle,
+    SessionTitle
+  },
   data() {
     return {
-      titleIcon: TitleIcon,
       star: 3
     };
-  },
-  components: {
-    TopTitle
   }
 };
 </script>

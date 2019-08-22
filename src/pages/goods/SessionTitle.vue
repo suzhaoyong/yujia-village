@@ -5,7 +5,6 @@
         <div class="icon">
           <img :src="titleIcon" alt srcset />
         </div>{{name}}
-        <slot name="tips"></slot>
       </div>
       <div class="title-en">{{brief}}</div>
     </div>

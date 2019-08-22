@@ -100,14 +100,7 @@
         </div>
         <!-- 底部说明 -->
         <div class="explain">
-          <div class="title">
-            <div class="title-zh">
-              <div class="icon">
-                <img :src="titleIcon" alt srcset />
-              </div>热门课程
-            </div>
-            <div class="title-en">Sometimes beauty is so simple</div>
-          </div>
+          <session-title name="热门课程"></session-title>
           <div class="content">
             所售商品均为正品行货，若您收到的商品已损坏请尽快联系我们，我们将根据实际情况免费为您退换货。
             <br />注：图片本身可能有些许色差以及每个人的身高体型不同，如果您有相关疑问，欢迎联系客服。祝您购物愉快！
@@ -119,11 +112,13 @@
   </div>
 </template>
 <script>
-import TitleIcon from "@/assets/market/market_icon1.png";
+import SessionTitle from "./SessionTitle";
 export default {
+  components: {
+    SessionTitle
+  },
   data() {
     return {
-      titleIcon: TitleIcon,
       isBindClick: false,
       sizeList: [],
       chooseItem: {

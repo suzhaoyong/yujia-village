@@ -280,14 +280,7 @@
         </div>
       </div>
       <div class="last-views">
-        <div class="title">
-          <div class="title-zh">
-            <div class="icon">
-              <img :src="titleIcon" alt srcset />
-            </div>最近浏览
-          </div>
-          <div class="title-en">Sometimes beauty is so simple</div>
-        </div>
+        <session-title name="最近浏览"></session-title>
         <div class="goods">
           <div
             class="goods-box"
@@ -319,11 +312,13 @@
   </div>
 </template>
 <script>
-import TitleIcon from "@/assets/market/market_icon1.png";
+import SessionTitle from "./SessionTitle";
 export default {
+  components: {
+    SessionTitle
+  },
   data() {
     return {
-      titleIcon: TitleIcon,
       page: { current: 1, size: 10 },
       tags: {
         price: {
@@ -385,7 +380,7 @@ export default {
     //
     this.$request("/goods/showGoodList").then(data => {
       console.log(data);
-      this.resultList = data 
+      this.resultList = data;
     });
   },
   methods: {

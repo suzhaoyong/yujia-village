@@ -2,14 +2,7 @@
   <div>
     <div class="car">
       <div class="header">
-        <div class="title">
-          <div class="title-zh">
-            <div class="icon">
-              <img :src="titleIcon" alt srcset />
-            </div>购物车
-          </div>
-          <div class="title-en">The customer's excellent experience is our goal from beginning</div>
-        </div>
+        <session-title name="购物车"></session-title>
       </div>
       <div class="body">
         <div class="goods-box">
@@ -66,11 +59,13 @@
   </div>
 </template>
 <script>
-import TitleIcon from "@/assets/market/market_icon1.png";
+import SessionTitle from "./SessionTitle";
 export default {
+  components: {
+    SessionTitle
+  },
   data() {
     return {
-      titleIcon: TitleIcon,
       goods: []
     };
   },
@@ -185,53 +180,6 @@ img {
     align-items: center;
     background: #eee;
     padding: 3rem 0;
-    .title {
-      // height: 13.5rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      position: relative;
-      &::before,
-      &::after {
-        content: "";
-        display: block;
-        width: 13rem;
-        // height: 1px;
-        background: #dcdcdc;
-        position: absolute;
-      }
-      &::before {
-        top: 50%;
-        right: 40%;
-        transform: translate(-110%, -50%);
-      }
-      &::after {
-        top: 50%;
-        left: 40%;
-        transform: translate(110%, -50%);
-      }
-      &-zh {
-        color: #2c2c2c;
-        font-weight: 800;
-        vertical-align: bottom;
-        .icon {
-          width: 1rem;
-          height: 1.5rem;
-          display: inline-block;
-          vertical-align: super;
-          margin-right: 0.8rem;
-          img {
-            width: 100%;
-            height: 100%;
-          }
-        }
-      }
-      &-en {
-        padding-top: 1rem;
-      }
-    }
   }
   .body {
     width: 60rem;
