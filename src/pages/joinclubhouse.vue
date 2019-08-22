@@ -54,17 +54,17 @@
                     <div class="joinclub-cont-div3">
                        <div class="clubhouse2">
                             <div class="clubhouse2-list" v-for="(item, index) in joinlist.slice((currentPage-1)*pagesize,currentPage*pagesize)" :key="index" @mouseenter="onMouseOver(index)" @click="selectItem(item)">
-                                <img class="image" :src="item.img">
-                                <p class="p1">{{item.text}}</p>
-                                <p class="p2">{{item.detail}}</p>
-                                <div class="kong" v-show="index == ishow"><span>{{item.houtext}}</span></div>
+                                <img class="image" :src="item.club_img">
+                                <p class="p1">{{item.club_name}}</p>
+                                <p class="p2">{{item.club_address}}</p>
+                                <div class="kong" v-show="index == ishow"><span>{{item.club_name}}</span></div>
                             </div>
                             <div class="block">
                                 <el-pagination
                                     @size-change="handleSizeChange"
                                     @current-change="handleCurrentChange"
                                     :current-page="currentPage"
-                                    :page-sizes="[10, 20, 30, 40, 50, 100]"
+                                    :page-sizes="[12, 20, 30, 40, 50, 100]"
                                     :page-size="pagesize"
                                     background
                                     layout="total, sizes, prev, pager, next, jumper"
@@ -80,27 +80,16 @@
 </template>
 <script>
 import Banner from "../components/banner";
+import { requestLogin } from "@/api/api";
 export default {
+    inject: ["reload"],
     components:{
         Banner
     },
   data() {
     return {
         ishow:false,
-        joinlist:[
-            {id:1,img:require('../assets/image11.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'1000平米场馆'},
-            {id:2,img:require('../assets/image12.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'2000平米场馆'},
-            {id:3,img:require('../assets/image13.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'3000平米场馆'},
-            {id:4,img:require('../assets/image14.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'500平米场馆'},
-            {id:5,img:require('../assets/image11.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'700平米场馆'},
-            {id:6,img:require('../assets/image12.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'800平米场馆'},
-            {id:7,img:require('../assets/image13.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'900平米场馆'},
-            {id:8,img:require('../assets/image14.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'1200平米场馆'},
-            {id:9,img:require('../assets/image11.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'1300平米场馆'},
-            {id:10,img:require('../assets/image12.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'500平米场馆'},
-            {id:11,img:require('../assets/image13.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'300平米场馆'},
-            {id:12,img:require('../assets/image14.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'500平米场馆'},
-            {id:13,img:require('../assets/image11.png'),text:'观云瑜伽',detail:'四川省成都市锦江区双桂路泰和国际财富中心7栋302',houtext:'500平米场馆'}],
+        joinlist:[],
         labelPosition:'left',
         ruleForm: {
           name: '',
@@ -113,6 +102,9 @@ export default {
         pagesize: 12,
     };
   },
+  created(){
+      this.joindata();
+  },
   methods:{
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
@@ -124,8 +116,24 @@ export default {
           }
         });
       },
+       joindata(){
+        let _this = this;
+        requestLogin("/clubs", {}, "get")
+        .then(function(res) {
+            _this.joinlist = res;
+        })
+        .catch(error => {
+            let { response: { data: { errorCode, msg } } } = error;
+            if (errorCode != 0) {
+            this.$message({
+                message: msg,
+                type: "error"
+            });
+            return;
+            }
+        });
+      },
       selectItem(item){
-          console.log(item.id);
            this.$router.push({
             path: "/joinclubhouse/joinclubhousedetails",
             query: {
@@ -192,6 +200,8 @@ export default {
                 color: #2c2c2c;
                 font-size: 24px;
                 margin-top: 40px;
+                font-family:Microsoft YaHei;
+                font-weight:bold;
                 img{
                     width: 28px;
                     height: 28px;
@@ -292,16 +302,17 @@ export default {
                     }
                     .kong{
                         width: 262px;
-                        height: 12%;
+                        height: auto;
                         background-color: #8fc31f;
                         position: absolute;
                         bottom: 105px;
                         right: 12px;
                         margin: 0 auto;
                         text-align: center;
-                        line-height: 44px;
+                        line-height: 30px;
                         color: #fff;
                         font-size: 14px;
+                        opacity: 0.8;
                     }
                 }
                 .block{
@@ -355,6 +366,8 @@ export default {
                 color: #2c2c2c;
                 font-size: 24px;
                 margin-top: 40px;
+                font-family:Microsoft YaHei;
+                font-weight:bold;
                 img{
                     width: 28px;
                     height: 28px;

@@ -7,7 +7,9 @@ const Joinclubhousedetails= resolve => require(['@/pages/joinclubhousedetails'],
 const Yogoteacher= resolve => require(['@/pages/yogoteacher'], resolve)//瑜伽名师
 const Login = resolve => require(['@/pages/Login/login'], resolve)//登录
 const Yogoknowledge= resolve => require(['@/pages/yogoknowledge'], resolve)//瑜伽知识
+const Yogoknowledgedetails= resolve => require(['@/pages/yogoknowledgedetails'], resolve)//瑜伽知识---详情
 const Yogoinformation= resolve => require(['@/pages/yogoinformation'], resolve)//瑜伽资讯
+const Yogoinformationdetails= resolve => require(['@/pages/yogoinformationdetails'], resolve)//瑜伽资讯---详情
 const Aboutus= resolve => require(['@/pages/aboutus'], resolve)//关于我们
 Vue.use(Router)
 
@@ -96,7 +98,8 @@ export default new Router({
       name: 'Yogoknowledge',
       component: Home,
       children: [
-        { path: '/yogoknowledge', component: Yogoknowledge}//瑜伽知识
+        { path: '/yogoknowledge', component: Yogoknowledge},//瑜伽知识
+        { path: '/yogoknowledge/yogoknowledgedetails', component: Yogoknowledgedetails}//瑜伽知识----详情
     ]
     },
     {
@@ -104,7 +107,8 @@ export default new Router({
       name: 'Yogoinformation',
       component: Home,
       children: [
-        { path: '/yogoinformation', component: Yogoinformation}//瑜伽资讯
+        { path: '/yogoinformation', component: Yogoinformation},//瑜伽资讯
+        { path: '/yogoinformation/yogoinformationdetails', component: Yogoinformationdetails}//瑜伽资讯----详情
     ]
     },
     {

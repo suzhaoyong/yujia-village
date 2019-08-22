@@ -86,7 +86,9 @@
     </div>
 </template>
 <script>
+import { requestLogin } from "@/api/api";
 export default {
+    inject: ["reload"],
   data() {
     return {
         swiperOption: {
@@ -221,6 +223,27 @@ export default {
         return pages2;
       }
   },
+  created(){
+      this.joindatalist();
+  },
+  methods:{
+      joindatalist(){
+        let _this = this;
+        requestLogin("/clubs/"+ _this.$route.query.id,{}, "get")
+        .then(function(res) {
+        })
+        .catch(error => {
+            let { response: { data: { errorCode, msg } } } = error;
+            if (errorCode != 0) {
+            this.$message({
+                message: msg,
+                type: "error"
+            });
+            return;
+            }
+        });
+      },
+  }
 };
 </script>
 <style lang="scss" scope>
@@ -276,6 +299,8 @@ export default {
                 color: #2c2c2c;
                 font-size: 24px;
                 margin-top: 40px;
+                font-family:Microsoft YaHei;
+                font-weight:bold;
                 img{
                     width: 28px;
                     height: 28px;
@@ -418,6 +443,8 @@ export default {
                         font-size: 24px;
                         margin-top: 40px;
                         text-align: center;
+                        font-family:Microsoft YaHei;
+                        font-weight:bold;
                         img{
                             width: 28px;
                             height: 28px;
@@ -506,6 +533,8 @@ export default {
                 color: #2c2c2c;
                 font-size: 24px;
                 margin-top: 40px;
+                font-family:Microsoft YaHei;
+                font-weight:bold;
                 img{
                     width: 28px;
                     height: 28px;

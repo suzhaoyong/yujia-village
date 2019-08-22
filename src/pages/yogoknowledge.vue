@@ -7,40 +7,40 @@
                        <Banner></Banner>
                     </template>
                     <div class="knowledge-count">
-                        <div class="knowledge-count-div1" v-for="(item,index) in knowledgeList.slice((currentPage-1)*pagesize,currentPage*pagesize)" :key="index" @click="selectItem(item)">
+                        <div class="knowledge-count-div1" v-for="(item,index) in listdatas.slice((currentPage-1)*pagesize,currentPage*pagesize)" :key="index">
                             <div class="count-img">
-                                <img :src="item.imgurl"/>
+                                <img :src="item.icon_url"/>
                             </div>
                             <div class="count-desc">
                                 <div class="circle"></div>
-                                <h4>{{item.title}}</h4>
-                                <p class="span-title">{{item.date}}</p>
-                                <p class="p-title">编者：{{item.name}}<span class="span-title2">{{item.huiguan}}</span></p>
-                                <p class="p-desc">{{item.desc}}</p>
+                                <h4>{{item.headline}}</h4>
+                                <p class="span-title">{{item.updated_at}}</p>
+                                <p class="p-title">关键字：{{item.keyword}}</p>
+                                <p class="p-desc">{{item.summary}}</p>
                                 <div class="count-button">
                                     <div  class="count-button-but">
-                                        <el-button type="text">查看全部</el-button>
+                                        <el-button type="text" @click="selectItem(item)">查看全部</el-button>
                                     </div>
                                     <div class="count-button-right">
                                         <img class="img1" src="../assets/share.png"/>
                                         <img class="img2" src="../assets/eye.png"/>
-                                        <span>{{item.eye}}</span>
+                                        <span class="img3">{{item.views}}</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="block">
-                                <el-pagination
-                                    @size-change="handleSizeChange"
-                                    @current-change="handleCurrentChange"
-                                    :current-page="currentPage"
-                                    :page-sizes="[5, 10, 15, 20, 25, 30]"
-                                    :page-size="pagesize"
-                                    background
-                                    layout="total, sizes, prev, pager, next, jumper"
-                                    :total="knowledgeList.length">
-                                </el-pagination>
-                            </div>
+                            <el-pagination
+                                @size-change="handleSizeChange"
+                                @current-change="handleCurrentChange"
+                                :current-page="currentPage"
+                                :page-sizes="[5, 10, 15, 20, 25, 30]"
+                                :page-size="pagesize"
+                                background
+                                layout="total, sizes, prev, pager, next, jumper"
+                                :total="listdatas.length">
+                            </el-pagination>
+                        </div>
                     </div>
                 </div>
             </el-col>
@@ -59,76 +59,8 @@ export default {
     return {
         currentPage:1,
         pagesize: 5,
-        knowledgeList:[{
-            id:1,
-            imgurl:require('../assets/image20.png'),
-            title:'练习孕产瑜伽的必备小常识',
-            date:'2018-01-30',
-            name:'IVAN',
-            huiguan:'观云瑜伽',
-            desc:'练习孕妇瑜伽逐渐成为孕妇界的时尚代名词，想要做个健康、美丽的瑜伽妈妈，一些瑜伽技巧，呼吸方法也是必须知道的，下面小编就指导你如何练好孕妇瑜伽...',
-            eye:'2341'
-        },
-        {
-            id:2,
-            imgurl:require('../assets/image21.png'),
-            title:'练习孕产瑜伽的必备小常识',
-            date:'2018-01-30',
-            name:'IVAN',
-            huiguan:'观云瑜伽',
-            desc:'练习孕妇瑜伽逐渐成为孕妇界的时尚代名词，想要做个健康、美丽的瑜伽妈妈，一些瑜伽技巧，呼吸方法也是必须知道的，下面小编就指导你如何练好孕妇瑜伽...',
-            eye:'2341'
-        },
-        {
-            id:3,
-            imgurl:require('../assets/image23.png'),
-            title:'练习孕产瑜伽的必备小常识',
-            date:'2018-01-30',
-            name:'IVAN',
-            huiguan:'观云瑜伽',
-            desc:'练习孕妇瑜伽逐渐成为孕妇界的时尚代名词，想要做个健康、美丽的瑜伽妈妈，一些瑜伽技巧，呼吸方法也是必须知道的，下面小编就指导你如何练好孕妇瑜伽...',
-            eye:'2341'
-        },
-        {
-            id:4,
-            imgurl:require('../assets/image24.png'),
-            title:'练习孕产瑜伽的必备小常识',
-            date:'2018-01-30',
-            name:'IVAN',
-            huiguan:'观云瑜伽',
-            desc:'练习孕妇瑜伽逐渐成为孕妇界的时尚代名词，想要做个健康、美丽的瑜伽妈妈，一些瑜伽技巧，呼吸方法也是必须知道的，下面小编就指导你如何练好孕妇瑜伽...',
-            eye:'2341'
-        },
-        {
-            id:5,
-            imgurl:require('../assets/image15.png'),
-            title:'练习孕产瑜伽的必备小常识',
-            date:'2018-01-30',
-            name:'IVAN',
-            huiguan:'观云瑜伽',
-            desc:'练习孕妇瑜伽逐渐成为孕妇界的时尚代名词，想要做个健康、美丽的瑜伽妈妈，一些瑜伽技巧，呼吸方法也是必须知道的，下面小编就指导你如何练好孕妇瑜伽...',
-            eye:'2341'
-        },
-        {
-            id:6,
-            imgurl:require('../assets/image20.png'),
-            title:'练习孕产瑜伽的必备小常识',
-            date:'2018-01-30',
-            name:'IVAN',
-            huiguan:'观云瑜伽',
-            desc:'练习孕妇瑜伽逐渐成为孕妇界的时尚代名词，想要做个健康、美丽的瑜伽妈妈，一些瑜伽技巧，呼吸方法也是必须知道的，下面小编就指导你如何练好孕妇瑜伽...',
-            eye:'2341'
-        },
-        {
-            id:7,
-            imgurl:require('../assets/image21.png'),
-            title:'练习孕产瑜伽的必备小常识',
-            date:'2018-01-30',
-            name:'IVAN',
-            huiguan:'观云瑜伽',
-            desc:'练习孕妇瑜伽逐渐成为孕妇界的时尚代名词，想要做个健康、美丽的瑜伽妈妈，一些瑜伽技巧，呼吸方法也是必须知道的，下面小编就指导你如何练好孕妇瑜伽...',
-            eye:'2341'
-        }]
+        knowledgeList:[],
+        listdatas:[]
     };
   },
   created(){
@@ -139,6 +71,14 @@ export default {
         let _this = this;
         requestLogin("/knowledgeList", {}, "get")
         .then(function(res) {
+            _this.knowledgeList = res;
+            _this.knowledgeList.map(item =>{ 
+                if(item.data != null){
+                    for(var i=0;i<item.data.length;i++){
+                    _this.listdatas.push(item.data[i]);
+                  } 
+                }
+            })
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -158,6 +98,12 @@ export default {
           this.currentPage = currentPage;
       },
        selectItem(item){
+           this.$router.push({
+            path: "/yogoknowledge/yogoknowledgedetails",
+            query: {
+            id: item.lid
+            }
+        });
       },
   }
 };
@@ -209,7 +155,7 @@ export default {
                     background-color: #bfbfbf;
                     position:absolute;
                     right: 10%;
-                    top: 9%;
+                    top: 13%;
                 }
                 h4{
                     width: 80%;
@@ -217,6 +163,10 @@ export default {
                     font-size: 18px;
                     color: #2c2c2c;
                     line-height: 80px;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp:1;// 限制快级元素的文本行数
+                    overflow: hidden;
                 }
                 .span-title{
                     width: 80%;
@@ -230,11 +180,6 @@ export default {
                     margin: 0 auto;
                     font-size: 14px;
                     color: #2c2c2c;
-                    .span-title2{
-                        font-size: 14px;
-                        color: #2c2c2c;
-                        padding-left: 30px;
-                    }
                 }
                 .p-desc{
                     width: 80%;
@@ -243,6 +188,10 @@ export default {
                     color: #2c2c2c;
                     line-height: 28px;
                     margin-top: 50px;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 3;// 限制快级元素的文本行数
+                    overflow: hidden;
                 }
                 .count-button{
                     width: 80%;
@@ -252,10 +201,10 @@ export default {
                     justify-content: space-between;
                     .count-button-but{
                         width: 110px;
-                        height: 36px;
+                        height: 40px;
                         text-align: center;
-                        line-height: 36px;
-                        margin-top: 40px;
+                        line-height: 40px;
+                        margin-top: 37px;
                         background-color:#313131; 
                         .el-button--text{
                             color: #fff;
@@ -269,15 +218,20 @@ export default {
                             width: 27px;
                             height: 20px;
                             position: absolute;
-                            top: 1%;
-                            left: -87px;
+                            top: 16%;
+                            left: -120px;
                         }
                         .img2{
                             width: 30px;
                             height: 25px;
                             position: absolute;
-                            top:-4%;
-                            left: -40px;
+                            top:12%;
+                            left: -72px;
+                        }
+                        .img3{
+                            position: absolute;
+                            top: 12%;
+                            left: -36px;
                         }
                     }
                 }

@@ -340,6 +340,8 @@ export default {
                 color: #2c2c2c;
                 font-size: 24px;
                 margin-top: 40px;
+                font-family:Microsoft YaHei;
+                font-weight:bold;
                 img{
                     width: 28px;
                     height: 28px;
@@ -451,6 +453,8 @@ export default {
                 color: #2c2c2c;
                 font-size: 24px;
                 margin-top: 40px;
+                font-family:Microsoft YaHei;
+                font-weight:bold;
                 img{
                     width: 28px;
                     height: 28px;
@@ -736,6 +740,8 @@ export default {
                 color: #2c2c2c;
                 font-size: 24px;
                 margin-top: 40px;
+                font-family:Microsoft YaHei;
+                font-weight:bold;
                 img{
                     width: 28px;
                     height: 28px;
@@ -791,6 +797,8 @@ export default {
                 color: #2c2c2c;
                 font-size: 24px;
                 margin-top: 40px;
+                font-family:Microsoft YaHei;
+                font-weight:bold;
                 img{
                     width: 28px;
                     height: 28px;
@@ -845,6 +853,8 @@ export default {
                 color: #2c2c2c;
                 font-size: 24px;
                 margin-top: 40px;
+                font-family:Microsoft YaHei;
+                font-weight:bold;
                 img{
                     width: 28px;
                     height: 28px;
