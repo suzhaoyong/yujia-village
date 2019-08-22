@@ -139,7 +139,7 @@ export default {
   },
   data() {
     return {
-      good_recomment: { new: [], comment: [], discount: [] },
+      good_recomment: { new: [{ new_url_one: "" }], comment: [], discount: [] },
       market: {
         news_good: {}
       },

@@ -5,8 +5,8 @@
         <div class="head-quan">
           <div class="head-right">
             <span class="span1">已购课程</span>
-            <span class="span1">登录</span>
-            <span class="span1">注册</span>
+            <span class="span1" @click="account.type='login'">登录</span>
+            <span class="span1" @click="account.type='register'">注册</span>
             <span>
               <img class="img" src="../assets/cart.png" />
             </span>
@@ -46,13 +46,33 @@
         </div>
       </div>
     </el-col>
+    <div v-show="account.type==='login'">
+      <login @go-register="type=>this.account.type = type" @close="type=>this.account.type = type"></login>
+    </div>
+    <div v-show="account.type==='register'">
+      <register @go-login="type=>this.account.type = type" @close="type=>this.account.type = type" />
+    </div>
+    <div v-show="account.type==='reset'">
+      <reset />
+    </div>
   </div>
 </template>
 <script>
+import Login from "@/pages/Login/login";
+import Register from "@/pages/Login/register";
+import Reset from "@/pages/Login/reset";
 export default {
+  components: {
+    Login,
+    Register,
+    Reset
+  },
   data() {
     return {
-        activeIndex:"main",
+      activeIndex: "main",
+      account: {
+        type: ""
+      }
     };
   },
   watch: {
@@ -68,6 +88,10 @@ export default {
     this.changenav();
   },
   methods: {
+    xx(x) {
+      console.log(x, 1);
+      console.log(this.$on("goregister"));
+    },
     //路由改变时的导航对应高亮
     changenav() {
       let path = this.$route.path;

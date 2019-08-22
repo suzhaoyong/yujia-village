@@ -151,8 +151,8 @@ export default {
       });
     },
     getShopCar(id) {
-      this.axios.get(`/goods/car/${id}`).then(({ data }) => {
-        this.goods = data.data.items;
+      this.$request(`/userCart/create`).then((data) => {
+        console.log(data)
       });
     }
   }

@@ -8,7 +8,7 @@
           <el-breadcrumb-item>活动列表</el-breadcrumb-item>
           <el-breadcrumb-item>活动详情</el-breadcrumb-item>
         </el-breadcrumb>
-      </div> -->
+      </div>-->
       <div class="goods">
         <div class="info">
           <div class="imgs">
@@ -55,7 +55,7 @@
               <div class="size-list">
                 <div
                   :class="['item', item === chooseItem.size ? 'active': '']"
-                  v-for="(item, index) in goods.color_size[0].data"
+                  v-for="(item, index) in sizeList"
                   :key="index"
                   @click="chooseSize(item)"
                 >{{item.size}}</div>
@@ -68,10 +68,22 @@
                 <div class="num">{{chooseItem.number}}</div>
                 <div class="add" @click="numberOpFor('add', 1)">+</div>
               </div>
+              <span
+                style="margin-left:20px;"
+                v-show="chooseItem.size"
+              >剩余数量:({{chooseItem.size.num}})</span>
             </div>
             <div class="op-btn">
-              <div class="add-shop" @click="addGoodsFor('shopCar')">加入购物车</div>
-              <div class="collect-goods" @click="addGoodsFor('collect')">收藏商品</div>
+              <div
+                class="add-shop"
+                :style="`${isBindClick?'pointer-events:none;':''}`"
+                @click="addGoodsFor('shopCar')"
+              >加入购物车</div>
+              <div
+                class="collect-goods"
+                :style="`${isBindClick?'pointer-events:none;':''}`"
+                @click="addGoodsFor('collect')"
+              >收藏商品</div>
             </div>
             <div class="tips">温馨提示：如果您是初学者，咨询私人瑜伽教练可能会对您的选择有帮助哦!</div>
           </div>
@@ -112,6 +124,8 @@ export default {
   data() {
     return {
       titleIcon: TitleIcon,
+      isBindClick: false,
+      sizeList: [],
       chooseItem: {
         activeImg: {
           img: ""
@@ -154,6 +168,7 @@ export default {
         data.new_url_two,
         data.new_url_three
       ];
+      this.sizeList = data.color_size[0].data;
       const { material, painter, season, desc, describe } = data;
       this.goods.params = [
         { desc },
@@ -176,6 +191,7 @@ export default {
     },
     chooseColor(color) {
       this.chooseItem.color = color;
+      this.sizeList = color.data;
     },
     chooseSize(size) {
       this.chooseItem.size = size;
@@ -220,10 +236,62 @@ export default {
 
       const { id } = this.$route.params;
       const obj = {
-        shopCar() {},
+        shopCar: () => {
+          this.postUserCart();
+        },
         collect() {}
       };
       obj[option]();
+    },
+    /** 添加商品 */
+    postUserCart() {
+      this.isBindClick = true;
+      const {
+        color: { id: colorId },
+        size: { size },
+        number
+      } = this.chooseItem;
+
+      const params = {
+        id: this.$route.params.id,
+        num: number,
+        size: size,
+        color: colorId
+      };
+      this.$request
+        .post("/userCart", params)
+        .then(data => {
+          this.isBindClick = false;
+          this.$message({ type: "success", message: "收藏成功" });
+        })
+        .catch(() => {
+          this.isBindClick = false;
+        });
+    },
+    /** 添加收藏 */
+    postUserCollect() {
+      this.isBindClick = true;
+      const {
+        color: { id: colorId },
+        size: { size },
+        number
+      } = this.chooseItem;
+
+      const params = {
+        id: this.$route.params.id,
+        num: number,
+        size: size,
+        color: colorId
+      };
+      this.$request
+        .post("/userCollect", params)
+        .then(data => {
+          this.isBindClick = false;
+          this.$message({ type: "success", message: "收藏成功" });
+        })
+        .catch(() => {
+          this.isBindClick = false;
+        });
     }
   }
 };
