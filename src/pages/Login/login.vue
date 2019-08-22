@@ -127,16 +127,26 @@ export default {
       } else {
       }
     },
+    /** 个人信息 */
+    getPersonal() {
+      this.$request("/personal/home").then(data => {
+        sessionStorage.setItem('user', JSON.stringify(data))
+      });
+    },
+    /** 登录 */
     postAuthLogin() {
       this.isPostting = true;
       const params = Object.assign({}, this.accountRuleForm);
       this.$request
         .post("/auth/login", params)
         .then(data => {
-          sessionStorage.setItem('access', JSON.stringify(data))
+          sessionStorage.setItem("access", JSON.stringify(data));
           this.isPostting = false;
           this.$message({ message: "登录成功", type: "success" });
-          this.$emit('close', '')
+          this.$emit("close", "");
+        })
+        .then(_ => {
+          this.getPersonal();
         })
         .catch(() => {
           this.isPostting = false;

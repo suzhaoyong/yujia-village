@@ -105,6 +105,19 @@ export default {
       step: {
         cur_index: 1,
         agree: false
+      },
+      ruleForm: {
+        identity_auth: "",
+        real_name: "",
+        club_tel: "",
+        club_name: "",
+        city: "",
+        province: "",
+        area: "",
+        address: "",
+        img_exemption: "",
+        img_work: "",
+        img_license: ""
       }
     };
   },
