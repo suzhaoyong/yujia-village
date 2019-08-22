@@ -1,0 +1,15 @@
+{
+  "error":0,
+  "data":{
+      "items": [
+        {
+          "id": "@id()",
+          "name": "@ctitle()",
+          "used": "@cword('01')",
+          "new_price": "@natural(10, 1000)",
+          "star_date": "@date('yyyy.MM.dd')",
+          "end_date": "@date('yyyy.MM.dd')"
+        }
+      ]
+  }
+}

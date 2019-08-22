@@ -7,7 +7,7 @@
         </el-header>
         <!--内容-->
         <el-main>
-            <router-view></router-view>
+            <router-view exact></router-view>
         </el-main>
         <!--底部-->
         <el-footer style="height:100%;">

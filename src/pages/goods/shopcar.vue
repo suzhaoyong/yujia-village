@@ -2,137 +2,184 @@
   <div>
     <div class="car">
       <div class="header">
-        <div class="title">
-          <div class="title-zh">
-            <div class="icon">
-              <img :src="titleIcon" alt srcset />
-            </div>购物车
-          </div>
-          <div class="title-en">The customer's excellent experience is our goal from beginning</div>
-        </div>
+        <session-title name="购物车"></session-title>
       </div>
       <div class="body">
         <div class="goods-box">
-          <div class="goods" v-for="(item,index) in 3" :key="index">
+          <div class="goods" v-for="(item,index) in goods" :key="index">
             <div class="info">
-              <div class="select"></div>
-              <div class="img"></div>
+              <div :class="['select', {'active': item.select}]" @click="chooseGoods(item, index)"></div>
+              <div class="img">
+                <img :src="item.min_img" alt />
+              </div>
               <div class="name-size">
-                <div class="name">暴走的萝莉 中强度运动内衣女聚拢瑜伽背心美背防震跑步健身bra</div>
+                <div class="name">{{item.name}}</div>
                 <div class="color-size">
-                  <div class="color">颜色：粉色</div>
-                  <div class="size">尺码: M码</div>
+                  <div class="color">颜色：{{item.name}}</div>
+                  <div class="size">尺码: {{item.size}}码</div>
                 </div>
               </div>
             </div>
             <div class="number">
-              <div class="reduce">-</div>
-              <div class="num">3</div>
-              <div class="add">+</div>
+              <div class="reduce" @click="numberOpFor('reduce', 1, index)">-</div>
+              <div class="num">{{item.number}}</div>
+              <div class="add" @click="numberOpFor('add', 1, index)">+</div>
             </div>
             <div class="price">
-              <div class="old-price">￥85</div>
-              <div class="new-price">￥55</div>
+              <div class="old-price">￥{{item.old_price}}</div>
+              <div class="new-price">￥{{item.new_price}}</div>
             </div>
             <div class="ops">
-              <div class="add">放入收藏夹</div>
-              <div class="delete">删除</div>
+              <div class="add" @click="goodsOpFor('moveToCollect', item)">放入收藏夹</div>
+              <div class="delete" @click="goodsOpFor('detele', item)">删除</div>
             </div>
           </div>
         </div>
       </div>
       <div class="footer">
         <div class="op">
-          <div class="select"></div>
-          <div class="all">全选</div>
-          <div class="delete">删除</div>
-          <div class="add">移入收藏夹</div>
+          <div :class="['select', {active: isAllGoodsSelect}]" @click="footerOpFor('selectAll')"></div>
+          <div class="all" @click="footerOpFor('selectAll')">全选</div>
+          <div class="delete" @click="footerOpFor('detele')">删除</div>
+          <div class="add" @click="footerOpFor('moveToCollect')">移入收藏夹</div>
           <div class="share">分享</div>
         </div>
         <div class="count">
           <span class="num">
             已选商品
-            <b>2</b> 件
+            <b>{{getAllSelectNumberAndPrice.allGoodsNumber}}</b> 件
           </span>
           <span class="title">应付金额</span>
           <span class="tips">(不含运费)</span>
-          <span class="price">¥115</span>
+          <span class="price">¥{{getAllSelectNumberAndPrice.allPrice}}</span>
         </div>
-        <div class="sumbit">去结算</div>
+        <div class="sumbit" @click="payment">去结算</div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import TitleIcon from "@/assets/market/market_icon1.png";
+import SessionTitle from "./SessionTitle";
 export default {
+  components: {
+    SessionTitle
+  },
   data() {
     return {
-      titleIcon: TitleIcon
+      goods: []
     };
+  },
+  computed: {
+    isAllGoodsSelect() {
+      let allSelectGoods = this.goods.filter(item => item.select);
+      return allSelectGoods.length === this.goods.length;
+    },
+    getAllSelectNumberAndPrice() {
+      let allGoods = this.goods.filter(item => item.select);
+
+      let allPrice = allGoods.reduce((pre, cur) => {
+        return parseInt(pre) + parseInt(cur.number) * parseInt(cur.new_price);
+      }, 0);
+      return { allPrice, allGoodsNumber: allGoods.length };
+    }
+  },
+  mounted() {
+    this.getShopCar(1);
+  },
+  methods: {
+    goodsOpFor(option, goods) {
+      const obj = {
+        detele: goods => {
+          this.goods = this.goods.filter(item => item.id !== goods.id);
+        },
+        moveToCollect: goods => {}
+      };
+      obj[option](goods);
+    },
+    footerOpFor(option) {
+      const obj = {
+        selectAll: () => {
+          this.goods = this.goods.map(item => {
+            if (this.isAllGoodsSelect) {
+              item.select = false;
+            } else {
+              item.select = true;
+            }
+            return item;
+          });
+        },
+        detele: () => {
+          this.goods = this.goods.filter(item => !item.select);
+        },
+        moveToCollect: () => {
+          let selectGoods = this.goods.filter(item => item.select);
+          this.goods = this.goods.filter(item => !item.select);
+        }
+      };
+      obj[option]();
+    },
+    numberOpFor(option, number, index) {
+      const obj = {
+        reduce: number => {
+          if (this.goods[index].number <= 1) {
+            return;
+          }
+          this.goods[index].number -= number;
+        },
+        add: number => {
+          this.goods[index].number =
+            parseInt(this.goods[index].number) + number;
+        }
+      };
+      obj[option](number);
+    },
+    chooseGoods(goods, index) {
+      this.goods[index].select = !this.goods[index].select;
+      this.goods = [...this.goods];
+    },
+    payment() {
+      this.$router.push({
+        name: "order",
+        params: {
+          id: 1 
+        }
+      });
+    },
+    getShopCar(id) {
+      this.$request(`/userCart/create`).then((data) => {
+        console.log(data)
+      });
+    }
   }
 };
 </script>
 <style lang="scss" scoped>
+@mixin no_select() {
+  -moz-user-select: -moz-none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 * {
   border: 0;
   margin: 0;
   box-sizing: border-box;
 }
+img {
+  width: 100%;
+  height: 100%;
+}
 .car {
+  @include no_select();
   .header {
     display: flex;
     justify-content: center;
     align-items: center;
     background: #eee;
     padding: 3rem 0;
-    .title {
-      // height: 13.5rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      position: relative;
-      &::before,
-      &::after {
-        content: "";
-        display: block;
-        width: 13rem;
-        // height: 1px;
-        background: #dcdcdc;
-        position: absolute;
-      }
-      &::before {
-        top: 50%;
-        right: 40%;
-        transform: translate(-110%, -50%);
-      }
-      &::after {
-        top: 50%;
-        left: 40%;
-        transform: translate(110%, -50%);
-      }
-      &-zh {
-        color: #2c2c2c;
-        font-weight: 800;
-        vertical-align: bottom;
-        .icon {
-          width: 1rem;
-          height: 1.5rem;
-          display: inline-block;
-          vertical-align: super;
-          margin-right: 0.8rem;
-          img {
-            width: 100%;
-            height: 100%;
-          }
-        }
-      }
-      &-en {
-        padding-top: 1rem;
-      }
-    }
   }
   .body {
     width: 60rem;
@@ -158,6 +205,9 @@ export default {
             border-radius: 50%;
             background: #eee;
             margin: 0 2rem 0 1rem;
+            &.active {
+              background: #000;
+            }
           }
           .img {
             width: 7rem;
@@ -272,6 +322,9 @@ export default {
         border-radius: 50%;
         background: #eee;
         margin: 0 2rem 0 1rem;
+        &.active {
+          background: #000;
+        }
       }
       .all {
       }

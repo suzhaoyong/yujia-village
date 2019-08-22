@@ -49,4 +49,8 @@ body {
   margin: 0;
   border: 0;
 } */
+.title{
+  font-size: inherit!important;
+  font-weight: inherit!important;
+}
 </style>

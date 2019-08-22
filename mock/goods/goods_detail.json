@@ -1,0 +1,44 @@
+{
+  "error":0,
+  "data":{
+      "id": "@id()",
+      "name": "@ctitle()",
+      "imgs" : [
+        {
+          "img": "@image('320x300','red','#fff','avatar')"
+        },
+        {
+          "img": "@image('320x300','red','#fff','avatar')"
+        },
+        {
+          "img": "@image('320x300','red','#fff','avatar')"
+        },
+        {
+          "img": "@image('320x300','red','#fff','avatar')"
+        },
+        {
+          "img": "@image('320x300','red','#fff','avatar')"
+        }
+      ],
+      "price": "@natural( 10, 10000)",
+      "date": "@date('yyyy.MM.dd')",
+      "colors": [
+        {
+          "img": "@image('320x300','red','#fff','avatar')",
+          "name": "@cname()"
+        },
+        {
+          "img": "@image('320x300','red','#fff','avatar')",
+          "name": "@cname()"
+        }
+      ],
+      "size": ["@cword('SML')","@cword('SML')","@cword('SML')"],
+      "params": [
+        { "name": "@ctitle()" },
+        { "material": "@cword(3)" },
+        { "user_group": "@cword(4)" },
+        { "kinds": "@cword(2)" },
+        { "time": "@cword(2)" }
+      ]
+  }
+}

@@ -42,9 +42,9 @@
           </div>
           <div class="form-footer">
             <div class="auto_login">
-              <div class="auto_login-tips">第三方登录：</div>
+              <!-- <div class="auto_login-tips">第三方登录：</div>
               <div class="auto_login-icon"></div>
-              <div class="auto_login-icon"></div>
+              <div class="auto_login-icon"></div> -->
             </div>
             <div class="register" @click="goRegister">注册</div>
           </div>
@@ -54,7 +54,6 @@
   </div>
 </template>
 <script>
-import 'bulma/css/bulma.css'
 export default {
   data() {
     return {
@@ -63,9 +62,9 @@ export default {
   },
   methods: {
     goRegister() {
-      this.$router.push({
-        name: 'Register'
-      })
+      // this.$router.push({
+      //   name: 'Register'
+      // })
     }
   }
 }

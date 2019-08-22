@@ -1,55 +1,89 @@
 <template>
   <div>
     <div class="goods-box">
-      <div class="navs">
+      <!-- <div class="navs">
         <el-breadcrumb separator-class="el-icon-arrow-right">
           <el-breadcrumb-item>首页</el-breadcrumb-item>
           <el-breadcrumb-item>活动管理</el-breadcrumb-item>
           <el-breadcrumb-item>活动列表</el-breadcrumb-item>
           <el-breadcrumb-item>活动详情</el-breadcrumb-item>
         </el-breadcrumb>
-      </div>
+      </div>-->
       <div class="goods">
         <div class="info">
           <div class="imgs">
-            <div class="bg-img"></div>
+            <div class="bg-img">
+              <img :src="chooseItem.activeImg.img" alt />
+            </div>
             <div class="sm-imgs">
-              <div class="sm-img" v-for="(item, index) in 10" :key="index"></div>
+              <div
+                class="sm-img"
+                v-for="(item, index) in goods.imgs"
+                :key="index"
+                @click="chooseActiveImg(item)"
+              >
+                <img :src="item.img" alt />
+              </div>
             </div>
           </div>
           <div class="details">
-            <div class="title">2019春夏新款动力瑜珈裤女紧身弹力2019春夏新款动力瑜珈裤女紧身弹力显瘦瑜伽服高腰运动健身服显瘦瑜伽服高腰运动健身服</div>
+            <div class="title">{{goods.desc}}</div>
             <div class="price">
               吊牌价：
-              <span>￥55</span>
+              <span>￥{{goods.sell_price}}</span>
             </div>
-            <div class="preferential">优惠折扣：</div>
+            <div class="preferential">
+              优惠折扣：
+              <span>￥{{goods.discount}}</span>
+            </div>
             <div class="colors">
               <span>颜色:</span>
-              <div class="color" v-for="(item, index) in 3" :key="index">
-                <div class="img"></div>
-                <div class="color-name">黛蓝色</div>
+              <div
+                :class="['color', item.name === chooseItem.color.name ? 'active': '']"
+                v-for="(item, index) in goods.color_size"
+                :key="index"
+                @click="chooseColor(item)"
+              >
+                <div class="img">
+                  <img :src="item.img" alt />
+                </div>
+                <div class="color-name">{{item.name}}</div>
               </div>
             </div>
             <div class="size">
               <span>尺码:</span>
               <div class="size-list">
-                <div class="item">M</div>
-                <div class="item">L</div>
-                <div class="item">XL</div>
+                <div
+                  :class="['item', item === chooseItem.size ? 'active': '']"
+                  v-for="(item, index) in sizeList"
+                  :key="index"
+                  @click="chooseSize(item)"
+                >{{item.size}}</div>
               </div>
             </div>
             <div class="number">
               <span>数量:</span>
               <div class="op">
-                <div class="reduce">-</div>
-                <div class="num">3</div>
-                <div class="add">+</div>
+                <div class="reduce" @click="numberOpFor('reduce', 1)">-</div>
+                <div class="num">{{chooseItem.number}}</div>
+                <div class="add" @click="numberOpFor('add', 1)">+</div>
               </div>
+              <span
+                style="margin-left:20px;"
+                v-show="chooseItem.size"
+              >剩余数量:({{chooseItem.size.num}})</span>
             </div>
             <div class="op-btn">
-              <div class="add-shop">加入购物车</div>
-              <div class="collect-goods">收藏商品</div>
+              <div
+                class="add-shop"
+                :style="`${isBindClick?'pointer-events:none;':''}`"
+                @click="addGoodsFor('shopCar')"
+              >加入购物车</div>
+              <div
+                class="collect-goods"
+                :style="`${isBindClick?'pointer-events:none;':''}`"
+                @click="addGoodsFor('collect')"
+              >收藏商品</div>
             </div>
             <div class="tips">温馨提示：如果您是初学者，咨询私人瑜伽教练可能会对您的选择有帮助哦!</div>
           </div>
@@ -58,22 +92,15 @@
         <div class="params">
           <div class="title">产品参数</div>
           <div class="content">
-            <div class="item" v-for="(item, index) in 5" :key="index">
-              <div class="key">商品名称:</div>
-              <div class="value">2019238</div>
+            <div class="item" v-for="(item, index) of goods.params" :key="index">
+              <div class="key">{{getParamsTitle(item)}}:</div>
+              <div class="value">{{getParamsValue(item)}}</div>
             </div>
           </div>
         </div>
         <!-- 底部说明 -->
         <div class="explain">
-          <div class="title">
-            <div class="title-zh">
-              <div class="icon">
-                <img :src="titleIcon" alt srcset />
-              </div>热门课程
-            </div>
-            <div class="title-en">Sometimes beauty is so simple</div>
-          </div>
+          <session-title name="热门课程"></session-title>
           <div class="content">
             所售商品均为正品行货，若您收到的商品已损坏请尽快联系我们，我们将根据实际情况免费为您退换货。
             <br />注：图片本身可能有些许色差以及每个人的身高体型不同，如果您有相关疑问，欢迎联系客服。祝您购物愉快！
@@ -85,17 +112,190 @@
   </div>
 </template>
 <script>
-import TitleIcon from "@/assets/market/market_icon1.png";
+import SessionTitle from "./SessionTitle";
 export default {
+  components: {
+    SessionTitle
+  },
   data() {
     return {
-      titleIcon: TitleIcon
+      isBindClick: false,
+      sizeList: [],
+      chooseItem: {
+        activeImg: {
+          img: ""
+        },
+        color: {},
+        size: "",
+        number: 1
+      },
+      goods: {}
     };
   },
-  mounted() {}
+  computed: {
+    getParamsTitle() {
+      const enums = {
+        desc: "商品名称",
+        describe: "商品描述",
+        material: "材质",
+        painter: "用户",
+        kinds: "类型",
+        season: "使用季节"
+      };
+      return item => {
+        const [name, value] = Object.entries(item)[0];
+        return enums[name];
+      };
+    },
+    getParamsValue() {
+      return item => {
+        const [name, value] = Object.entries(item)[0];
+        return value;
+      };
+    }
+  },
+  mounted() {
+    const { id } = this.$route.params;
+    this.$request(`/goods/${id}`).then(data => {
+      this.goods = data;
+      this.goods.imgs = [
+        data.new_url_one,
+        data.new_url_two,
+        data.new_url_three
+      ];
+      this.sizeList = data.color_size[0].data;
+      const { material, painter, season, desc, describe } = data;
+      this.goods.params = [
+        { desc },
+        { material },
+        { painter },
+        { season },
+        { describe }
+      ];
+    });
+  },
+  methods: {
+    getGoodsDetail(id) {
+      this.axios.get(`/goods/detail/${id}`).then(({ data }) => {
+        this.goods = data.data;
+        this.chooseItem.activeImg = data.data.imgs[0];
+      });
+    },
+    chooseActiveImg(img) {
+      this.chooseItem.activeImg = img;
+    },
+    chooseColor(color) {
+      this.chooseItem.color = color;
+      this.sizeList = color.data;
+    },
+    chooseSize(size) {
+      this.chooseItem.size = size;
+    },
+    numberOpFor(option, number) {
+      const obj = {
+        reduce: number => {
+          if (this.chooseItem.number <= 1) {
+            return;
+          }
+          this.chooseItem.number -= number;
+        },
+        add: number => {
+          this.chooseItem.number += number;
+        }
+      };
+      obj[option](number);
+    },
+    addGoodsFor(option) {
+      let checkGoodsChoose = () => {
+        const { color, size } = this.chooseItem;
+        if (typeof color.name === "undefined") {
+          this.$message({
+            message: "请选择颜色",
+            type: "warning"
+          });
+          return false;
+        }
+        if (size === "") {
+          this.$message({
+            message: "请选择尺寸",
+            type: "warning"
+          });
+          return false;
+        }
+        return true;
+      };
+
+      if (!checkGoodsChoose()) {
+        return;
+      }
+
+      const { id } = this.$route.params;
+      const obj = {
+        shopCar: () => {
+          this.postUserCart();
+        },
+        collect() {}
+      };
+      obj[option]();
+    },
+    /** 添加商品 */
+    postUserCart() {
+      this.isBindClick = true;
+      const {
+        color: { id: colorId },
+        size: { size },
+        number
+      } = this.chooseItem;
+
+      const params = {
+        id: this.$route.params.id,
+        num: number,
+        size: size,
+        color: colorId
+      };
+      this.$request
+        .post("/userCart", params)
+        .then(data => {
+          this.isBindClick = false;
+          this.$message({ type: "success", message: "收藏成功" });
+        })
+        .catch(() => {
+          this.isBindClick = false;
+        });
+    },
+    /** 添加收藏 */
+    postUserCollect() {
+      this.isBindClick = true;
+      const {
+        color: { id: colorId },
+        size: { size },
+        number
+      } = this.chooseItem;
+
+      const params = {
+        id: this.$route.params.id,
+        num: number,
+        size: size,
+        color: colorId
+      };
+      this.$request
+        .post("/userCollect", params)
+        .then(data => {
+          this.isBindClick = false;
+          this.$message({ type: "success", message: "收藏成功" });
+        })
+        .catch(() => {
+          this.isBindClick = false;
+        });
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
+img {
+  width: 100%;
+  height: 100%;
+}
 .goods-box {
   width: 60rem;
   margin: 0 auto;
@@ -129,6 +329,13 @@ export default {
         }
       }
       .details {
+        -moz-user-select: -moz-none;
+        -moz-user-select: none;
+        -o-user-select: none;
+        -khtml-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
         .title {
           margin-bottom: 1rem;
         }
@@ -152,6 +359,9 @@ export default {
             align-items: flex-end;
             padding-right: 0.95rem;
             cursor: pointer;
+            &.active {
+              color: #cce198;
+            }
             .img {
               width: 1.75rem;
               height: 2rem;
@@ -174,6 +384,9 @@ export default {
               margin-right: 0.3rem;
               padding: 0 1rem;
               cursor: pointer;
+              &.active {
+                color: #cce198;
+              }
             }
           }
         }
@@ -263,6 +476,7 @@ export default {
           .key {
             width: 8em;
             text-align: right;
+            flex-shrink: 0;
           }
           .value {
           }

@@ -1,0 +1,64 @@
+{
+  "error":0,
+  "data":{
+    "main_item": {
+      "id": "@id()",
+      "title": "@ctitle()",
+      "big_img": "@image('400x780','red','#fff','avatar')",
+      "mid_img": "@image('420x380','red','#fff','avatar')",
+      "min_img": "@image('320x300','red','#fff','avatar')",
+      "description": "@csentence",
+      "old_price": "@natural( 10, 10000)",
+      "new_price": "@natural( 10, 10000)",
+      "date": "@date('yyyy.MM.dd')"
+    },
+    "items":[
+      
+      {
+        "id": "@id()",
+        "title": "@ctitle()",
+        "big_img": "@image('400x780','red','#fff','avatar')",
+        "mid_img": "@image('420x380','red','#fff','avatar')",
+        "min_img": "@image('320x300','red','#fff','avatar')",
+        "description": "@csentence",
+        "old_price": "@natural( 10, 10000)",
+        "new_price": "@natural( 10, 10000)",
+        "date": "@date('yyyy.MM.dd')"
+      },
+      {
+        "id": "@id()",
+        "title": "@ctitle()",
+        "big_img": "@image('400x780','red','#fff','avatar')",
+        "mid_img": "@image('420x380','red','#fff','avatar')",
+        "min_img": "@image('320x300','red','#fff','avatar')",
+        "description": "@csentence",
+        "old_price": "@natural( 10, 10000)",
+        "new_price": "@natural( 10, 10000)",
+        "date": "@date('yyyy.MM.dd')"
+      },
+      {
+        "id": "@id()",
+        "title": "@ctitle()",
+        "big_img": "@image('400x780','red','#fff','avatar')",
+        "mid_img": "@image('420x380','red','#fff','avatar')",
+        "min_img": "@image('320x300','red','#fff','avatar')",
+        "description": "@csentence",
+        "old_price": "@natural( 10, 10000)",
+        "new_price": "@natural( 10, 10000)",
+        "date": "@date('yyyy.MM.dd')"
+      },
+      {
+        "id": "@id()",
+        "title": "@ctitle()",
+        "big_img": "@image('400x780','red','#fff','avatar')",
+        "mid_img": "@image('420x380','red','#fff','avatar')",
+        "min_img": "@image('320x300','red','#fff','avatar')",
+        "description": "@csentence",
+        "price": "@natural( 10, 10000)",
+        "old_price": "@natural( 10, 10000)",
+        "new_price": "@natural( 10, 10000)",
+        "date": "@date('yyyy.MM.dd')"
+      }
+    ] 
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "error":0,
+  "data":{
+    "address": {
+      "name": "@cname()",
+      "phone": "@natural()",
+      "detail": "@county(true)"
+    },
+    "goods_items": [
+      {
+        "id": "@id()",
+        "name": "@ctitle()",
+        "min_img": "@image('320x300','red','#fff','avatar')",
+        "old_price": "@natural( 10, 10000)",
+        "new_price": "@natural( 10, 10000)",
+        "color": "@cword(2)",
+        "size": "@cword('MSL')",
+        "number": "@natural( 1, 100)" 
+      }
+    ]
+  }
+}
