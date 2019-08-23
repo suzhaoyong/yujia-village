@@ -38,7 +38,7 @@ function handleResponeseErr(err) {
     response = {}
   } = err;
   const {
-    data = {}, status
+    data = {}, status, config
   } = response;
 
   let message = '未知异常';
@@ -46,6 +46,7 @@ function handleResponeseErr(err) {
     request.post('/auth/refresh')
       .then(data => {
         sessionStorage.setItem('access', JSON.stringify(data))
+        window.location.reload();
       })
       .catch(() => {
         Message({

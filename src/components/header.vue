@@ -51,14 +51,17 @@
         </div>
       </div>
     </el-col>
-    <div v-show="account.type==='login'">
+    <div v-if="account.type==='login'">
       <login @go-register="type=>this.account.type = type" @close="type=>this.account.type = type"></login>
     </div>
-    <div v-show="account.type==='register'">
+    <div v-if="account.type==='register'">
       <register @go-login="type=>this.account.type = type" @close="type=>this.account.type = type" />
     </div>
-    <div v-show="account.type==='reset'">
+    <div v-if="account.type==='reset'">
       <reset />
+    </div>
+    <div v-if="showTopTitle">
+      <top-title />
     </div>
   </div>
 </template>
@@ -66,11 +69,13 @@
 import Login from "@/pages/Login/login";
 import Register from "@/pages/Login/register";
 import Reset from "@/pages/Login/reset";
+import TopTitle from "@/pages/personalCenter/topTItle";
 export default {
   components: {
     Login,
     Register,
-    Reset
+    Reset,
+    TopTitle
   },
   data() {
     return {
@@ -84,6 +89,10 @@ export default {
     info() {
       const user = sessionStorage.getItem("user");
       return user && JSON.parse(user);
+    },
+    showTopTitle() {
+      const show = this.$route.fullPath.startsWith("/personal");
+      return show;
     }
   },
   watch: {

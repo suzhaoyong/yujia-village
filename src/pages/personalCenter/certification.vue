@@ -1,6 +1,5 @@
 <template>
   <div>
-    <top-title></top-title>
     <div class="body">
       <div class="step-title">
         <div class="step-box">

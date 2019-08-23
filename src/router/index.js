@@ -63,6 +63,7 @@ export default new Router({
       component: Home,
       children: [
         { path: 'index', name: 'personal', component: () => import('@/pages/personalCenter/index') },
+        { path: 'identity', name: 'identity', component: () => import('@/pages/personalCenter/identity') },
         { path: 'certification', name: 'certification', component: () => import('@/pages/personalCenter/certification') },
         { path: 'safety-center', name: 'safety-center', component: () => import('@/pages/personalCenter/safetyCenter') },
         { path: 'share', name: 'share', component: () => import('@/pages/personalCenter/share') },

@@ -32,33 +32,37 @@ export default {
   data() {
     return {
       config: {
-        url: "http://www.yujiacun.net/index.html",
-        source: "www.bilibili.com",
-        title: "分享有好礼",
-        description: "本活动持续进行",
+        url: "",
+        source: "",
+        title: "",
+        description: "",
         sites: ["qzone", "qq", "weibo", "wechat", "douban"],
-        // disabled: ["google", "facebook", "twitter"],
         wechatQrcodeTitle: "微信扫一扫：分享", // 微信二维码提示文字
         wechatQrcodeHelper:
           "<p>微信里点“发现”，扫一下</p><p>二维码便可将本文分享至朋友圈。</p>"
       }
     };
   },
-  mounted() {
+  computed: {
+    info() {
+      const user = sessionStorage.getItem("user");
+      return user && JSON.parse(user);
+    }
+  },
+  created() {
     this.initSocialConfig();
   },
+  mounted() {},
   methods: {
     initSocialConfig() {
-      var $config = {
-        url: "http://www.yujiacun.net/index.html",
-        source: "www.bilibili.com",
-        title: "分享有好礼",
-        description: "本活动持续进行",
-        wechatQrcodeTitle: "微信扫一扫：分享", // 微信二维码提示文字
-        wechatQrcodeHelper:
-          "<p>微信里点“发现”，扫一下</p><p>二维码便可将本文分享至朋友圈。</p>"
-      };
-      socialShare(".social-share-cs", $config);
+      if (this.info) {
+        const params = {
+          url: `http://www.yujiacun.net/index.html?id=${this.info.user.id}`,
+          title: `金酒隐私`,
+          description: `欢迎加盟`
+        };
+        this.config = Object.assign({}, this.config, params);
+      }
     }
   }
 };

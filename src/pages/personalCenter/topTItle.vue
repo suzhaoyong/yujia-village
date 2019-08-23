@@ -14,7 +14,11 @@
           <div class="recharge">充值</div>
           <div class="withdraw" @click="withdraw">
             提现
-            <span class="identity" v-if="info.user.reason === '未认证'">未认证</span>
+            <span
+              class="identity"
+              v-if="info.user.reason === '未认证'"
+              @click.stop="goPage('identity')"
+            >未认证</span>
             <span class="identity" v-else>(馆主、教练)</span>
           </div>
         </div>
@@ -40,6 +44,9 @@ export default {
       this.$request("/personal/home").then(data => {
         this.user = data.user;
       });
+    },
+    goPage(name) {
+      this.$router.push(`/personal/${name}`);
     },
     withdraw() {
       this.$router.push("/personal/certification");

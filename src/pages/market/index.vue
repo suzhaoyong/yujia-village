@@ -133,6 +133,7 @@
 </template>
 <script>
 import SessionTitle from "./SessionTitle";
+import { getGoodRecomment } from "@/api/market";
 export default {
   components: {
     SessionTitle
@@ -153,7 +154,7 @@ export default {
     };
   },
   mounted() {
-    this.$request("/goods/goodRecomment").then(data => {
+    getGoodRecomment().then(data => {
       this.good_recomment = data;
       this.recommend_main = data.comment[0].data[0];
       this.recommend_menu.select = data.comment[0];
