@@ -338,9 +338,9 @@ export default {
                 margin-top: 35px;
                 margin-left: 60px;
                  .left1{
-                     width: 100%;
-                     height: 140px;
-                     margin-top: 30px;
+                    width: 100%;
+                    height: 140px;
+                    margin-top: 30px;
                     position: relative;
                     display: inline-block;
                     .bg-image4{
