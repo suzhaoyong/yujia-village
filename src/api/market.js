@@ -5,7 +5,7 @@ export function getGoodRecomment() {
   return request('/goods/goodRecomment')
 }
 /** 商品按条件查询  */
-export function postShowGoodList(args) {
+export function postShowGoodList(args={}) {
   let params = {
     type: "",
     sort: "",
@@ -34,7 +34,7 @@ export function getUserCollect() {
 }
 
 /** 收藏商品 */
-export function postUserCollect(args) {
+export function postUserCollect(args={}) {
   let params = {
     id: "",
     num: "",
@@ -58,7 +58,7 @@ export function getUserCart() {
 }
 
 /** 添加购物车 */
-export function postUserCart(args) {
+export function postUserCart(args={}) {
   let params = {
     id: "",
     num: "",
@@ -86,7 +86,7 @@ export function getUserAddress() {
 }
 
 /** 新增订单 */
-export function postGoodOrder(args) {
+export function postGoodOrder(args={}) {
   let params = {
     id: "", // 商品副列表 编号
     num: "",
@@ -106,7 +106,7 @@ export function postGoodOrder(args) {
 }
 
 /** 支付宝二维码展示 */
-export function postGetAlipayCode(args) {
+export function postGetAlipayCode(args={}) {
   let params = {
     out_trade_no: "", // 统一订单编号
     body: "", // 订单商品名称
@@ -117,7 +117,7 @@ export function postGetAlipayCode(args) {
 }
 
 /** 支付宝查询订单支付状态  */
-export function postGetAlipayOrder(args) {
+export function postGetAlipayOrder(args={}) {
   let params = {
     out_trade_no: "", // 统一订单编号
   }
@@ -127,7 +127,7 @@ export function postGetAlipayOrder(args) {
 
 
 /** 微信二维码展示 */
-export function postGetWechatpayCode(args) {
+export function postGetWechatpayCode(args={}) {
   let params = {
     out_trade_no: "", // 统一订单编号
     body: "", // 订单商品名称
@@ -138,7 +138,7 @@ export function postGetWechatpayCode(args) {
 }
 
 /** 微信查询订单支付状态  */
-export function postGetWechatOrder(args) {
+export function postGetWechatOrder(args={}) {
   let params = {
     out_trade_no: "", // 统一订单编号
   }

@@ -54,12 +54,16 @@
 </template>
 <script>
 import SessionTitle from "./SessionTitle";
+import { getUserCollect, deleteUserCollect } from "@/api/market";
 export default {
   components: {
     SessionTitle
   },
   data() {
     return {};
+  },
+  mounted() {
+    getUserCollect();
   }
 };
 </script>

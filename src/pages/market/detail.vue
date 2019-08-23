@@ -262,7 +262,7 @@
               </div>
               <div class="views-collenct">
                 <div class="views">{{item.views}}</div>
-                <div class="collenct">收藏</div>
+                <div class="collenct" @click="addCollect">收藏</div>
               </div>
             </div>
           </div>
@@ -289,13 +289,13 @@
             :key="index"
           >
             <div class="pic">
-              <img :src="item.img" alt />
+              <img :src="item.cover_url" alt />
             </div>
-            <div class="g-title">{{item.name}}</div>
+            <div class="g-title">{{item.describe}}</div>
             <div class="price-views-collenct">
               <div class="price">
-                <div class="old-price">￥{{item.old_price}}</div>
-                <div class="new-price">￥{{item.new_price}}</div>
+                <div class="old-price">￥{{item.sell_price}}</div>
+                <div class="new-price">￥{{item.sell_price - item.discount}}</div>
               </div>
               <div class="views-collenct">
                 <div class="views">{{item.views}}</div>
@@ -313,6 +313,7 @@
 </template>
 <script>
 import SessionTitle from "./SessionTitle";
+import { postShowGoodList, getGoods } from "@/api/market";
 export default {
   components: {
     SessionTitle
@@ -355,53 +356,34 @@ export default {
     }
   },
   mounted() {
-    this.$request("/goods").then(data => {
-      const { color, material, person, price, season, sort, type } = data;
-      this.tags.price = getList(price);
-      this.tags.material = getList(material);
-      this.tags.sort = getList(sort);
-      this.tags.type = getList(type);
-      this.tags = Object.assign({}, this.tags, { color, season, person });
-
-      function getList(tag) {
-        const MAX_LENGTH = 8;
-        const obj = {
-          list: [],
-          more: []
-        };
-        if (tag.length > MAX_LENGTH) {
-          obj.more = tag.slice(MAX_LENGTH);
-        }
-        obj.list = tag.slice(0, MAX_LENGTH);
-        return obj;
-      }
-    });
-
     //
-    this.$request("/goods/showGoodList").then(data => {
-      console.log(data);
-      this.resultList = data;
-    });
+    this.getMarketTags();
+    this.getMarketList();
   },
   methods: {
     changeGoodsFor(name) {
       this.getMarketList();
     },
+    /** 添加收藏 */
+    addCollect() {
+
+    },
     getMarketList() {
-      this.axios.get("/market/detail/lists").then(({ data }) => {
-        this.resultList = data.data.items;
+      postShowGoodList().then(data => {
+        this.resultList = data;
       });
     },
     getMarketTags() {
-      this.axios.get("/market/detail/tags").then(({ data }) => {
-        const { price, material, sort, type } = data.data.tags;
+      getGoods().then(data => {
+        const { color, material, person, price, season, sort, type } = data;
         this.tags.price = getList(price);
         this.tags.material = getList(material);
         this.tags.sort = getList(sort);
         this.tags.type = getList(type);
+        this.tags = Object.assign({}, this.tags, { color, season, person });
 
         function getList(tag) {
-          const MAX_LENGTH = 4;
+          const MAX_LENGTH = 8;
           const obj = {
             list: [],
             more: []

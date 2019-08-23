@@ -1,14 +1,14 @@
 <template>
   <div>
     <div class="order-box">
-      <div class="navs">
+      <!-- <div class="navs">
         <el-breadcrumb separator-class="el-icon-arrow-right">
           <el-breadcrumb-item>首页</el-breadcrumb-item>
           <el-breadcrumb-item>活动管理</el-breadcrumb-item>
           <el-breadcrumb-item>活动列表</el-breadcrumb-item>
           <el-breadcrumb-item>活动详情</el-breadcrumb-item>
         </el-breadcrumb>
-      </div>
+      </div>-->
       <div class="order">
         <session-title name="热门课程"></session-title>
         <div class="take-delivery">
@@ -141,6 +141,7 @@
 <script>
 import BackIcon from "@/assets/market/back.png";
 import SessionTitle from "./SessionTitle";
+import { getUserAddress, getUserOrder, postGoodOrder } from "@/api/market";
 export default {
   components: {
     SessionTitle
