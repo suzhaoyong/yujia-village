@@ -16,25 +16,25 @@
                         <div class="aboutus-count-div2">
                             <div class="Photowall-img1">
                                 <div class="Photowall-img1-bottom">
-                                    <img class="img1" src="../assets/image32.png"/>
-                                    <img class="img2" src="../assets/image33.png"/>
+                                    <img class="img1" :src="imgpic[0].url_pic" v-if="imgpic[0].url_pic"/>
+                                    <img class="img2" :src="imgpic[1].url_pic" v-if="imgpic[1].url_pic"/>
                                 </div>
                                 <div class="Photowall-img1-top">
-                                    <img class="img1" src="../assets/image34.png"/>
-                                    <img class="img2" src="../assets/image35.png"/>
+                                    <img class="img1" :src="imgpic[2].url_pic" v-if="imgpic[2].url_pic"/>
+                                    <img class="img2" :src="imgpic[3].url_pic" v-if="imgpic[3].url_pic"/>
                                 </div>
                             </div>
                             <div class="Photowall-img2">
-                                <img src="../assets/image36.png"/>
+                                <img :src="imgpic[4].url_pic" v-if="imgpic[4].url_pic"/>
                             </div>
                             <div class="Photowall-img3">
                                 <div class="Photowall-img3-bottom">
-                                    <img class="img1" src="../assets/image37.png"/>
-                                    <img class="img2" src="../assets/image38.png"/>
+                                    <img class="img1" :src="imgpic[5].url_pic" v-if="imgpic[5].url_pic"/>
+                                    <img class="img2" :src="imgpic[6].url_pic" v-if="imgpic[6].url_pic"/>
                                 </div>
                                 <div class="Photowall-img3-top">
-                                    <img class="img1" src="../assets/image39.png"/>
-                                    <img class="img2" src="../assets/image40.png"/>
+                                    <img class="img1" :src="imgpic[7].url_pic" v-if="imgpic[7].url_pic"/>
+                                    <img class="img2" :src="imgpic[8].url_pic" v-if="imgpic[8].url_pic"/>
                                 </div>
                             </div>
                         </div>
@@ -46,7 +46,7 @@
                             <div class="border-right"></div>
                         </div>
                          <div class="aboutus-count-div4">
-                             <p class="abouts-p">瑜伽村网络平台，是有几万人的公共平台、门户网站、微信群、QQ群、论坛组成的近十万用户的瑜伽多元网络平台。致力于做全国最大、最全、信息最丰富的瑜伽资讯平台。</p>
+                             <p class="abouts-p">{{aboutUs.intro}}</p>
                         </div>
                          <div class="aboutus-count-div5">
                             <h2><img src="../assets/yujia.png"/>瑜伽村群分布范围</h2>
@@ -55,7 +55,7 @@
                             <div class="border-right"></div>
                         </div>
                          <div class="aboutus-count-div6">
-                             <p class="abouts-p2">瑜伽村网络平台，是有几万人的公共平台、门户网站、微信群、QQ群、论坛组成的近十万用户的瑜伽多元网络平台。</p>
+                             <p class="abouts-p2">{{aboutUs.range}}</p>
                         </div>
                         <div class="aboutus-count-div7">
                             <h2><img src="../assets/yujia.png"/>瑜伽村网络板块</h2>
@@ -65,35 +65,10 @@
                         </div>
                          <div class="aboutus-count-div8">
                              <div class="aboutus-content">
-                                 <div class="content-img">
-                                     <img src="../assets/image41.png"/>
-                                     <h3>培训信息</h3>
-                                     <p>发布、搜索全国最新培训信息</p>
-                                 </div>
-                                  <div class="content-img">
-                                     <img src="../assets/image42.png"/>
-                                     <h3>瑜伽会所展示</h3>
-                                     <p>展示瑜伽馆信息及发布招聘信息</p>
-                                 </div>
-                                  <div class="content-img">
-                                     <img src="../assets/image9.png"/>
-                                     <h3>瑜伽老师展示及求职</h3>
-                                     <p>展示瑜伽馆信息及发布招聘信息</p>
-                                 </div>
-                                  <div class="content-img">
-                                     <img src="../assets/image43.png"/>
-                                     <h3>容瑜伽知识学习</h3>
-                                     <p>展示瑜伽馆信息及发布招聘信息</p>
-                                 </div>
-                                  <div class="content-img">
-                                     <img src="../assets/image44.png"/>
-                                     <h3>瑜伽视频</h3>
-                                     <p>开放平台，供大家发布学习视频</p>
-                                 </div>
-                                  <div class="content-img">
-                                     <img src="../assets/image45.png"/>
-                                     <h3>瑜伽新闻</h3>
-                                     <p>最新的瑜伽行业时讯</p>
+                                 <div class="content-img" v-for="(item,index) in aboutusmodel" :key="index">
+                                     <img :src="item.url_pic"/>
+                                     <h3>{{item.name}}</h3>
+                                     <p>{{item.describe}}</p>
                                  </div>
                              </div>
                         </div>
@@ -107,11 +82,11 @@
                         </div>
                          <div class="aboutus-count-div10">
                              <div class="codeimg">
-                                 <img src="../assets/image47.png"/>
+                                 <img :src="aboutUs.url_pic"/>
                              </div>
                              <div class="codetext">
-                                 <p class="p1">地址：上海长宁区愚园路716号三楼</p>
-                                 <p class="p2">电话：4001007191</p>
+                                 <p class="p1">地址：{{aboutUs.address}}</p>
+                                 <p class="p2">电话：{{aboutUs.tel}}</p>
                              </div>
                         </div>
                     </div>
@@ -128,10 +103,34 @@ export default {
   },
   data() {
     return {
+        aboutUs:"",
+        aboutusmodel:[],
+        imgpic:[]
     };
   },
-  methods:{
-  }
+  created(){
+      this.listhomedata();
+  },
+   methods:{
+        listhomedata(){
+        let _this = this;
+        this.$request("/aboutUs").then(res => {
+            _this.aboutUs = res;
+            _this.aboutusmodel = res.about_us_model;
+            _this.imgpic = res.img_pic;
+        })
+        .catch(error => {
+            let { response: { data: { errorCode, msg } } } = error;
+            if (errorCode != 0) {
+            this.$message({
+                message: msg,
+                type: "error"
+            });
+            return;
+            }
+        });
+      },
+    }
 };
 </script>
 <style lang="scss" scope>
@@ -440,6 +439,7 @@ export default {
                         text-align: center;
                         font-size: 16px;
                         color: #2c2c2c;
+                        margin-top: 14px;
                     }
                     p{
                         text-align: center;
@@ -463,6 +463,7 @@ export default {
                         text-align: center;
                         font-size: 16px;
                         color: #2c2c2c;
+                        margin-top: 14px;
                     }
                     p{
                         text-align: center;
@@ -486,6 +487,7 @@ export default {
                         text-align: center;
                         font-size: 16px;
                         color: #2c2c2c;
+                        margin-top: 14px;
                     }
                     p{
                         text-align: center;
@@ -509,6 +511,7 @@ export default {
                         text-align: center;
                         font-size: 16px;
                         color: #2c2c2c;
+                        margin-top: 14px;
                     }
                     p{
                         text-align: center;
@@ -532,6 +535,7 @@ export default {
                         text-align: center;
                         font-size: 16px;
                         color: #2c2c2c;
+                        margin-top: 14px;
                     }
                     p{
                         text-align: center;
@@ -555,6 +559,7 @@ export default {
                         text-align: center;
                         font-size: 16px;
                         color: #2c2c2c;
+                        margin-top: 14px;
                     }
                     p{
                         text-align: center;

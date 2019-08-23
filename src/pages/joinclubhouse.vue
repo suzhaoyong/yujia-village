@@ -54,10 +54,10 @@
                     <div class="joinclub-cont-div3">
                        <div class="clubhouse2">
                             <div class="clubhouse2-list" v-for="(item, index) in joinlist.slice((currentPage-1)*pagesize,currentPage*pagesize)" :key="index" @mouseenter="onMouseOver(index)" @click="selectItem(item)">
-                                <img class="image" :src="item.club_img">
+                                <img class="image" :src="item.path">
                                 <p class="p1">{{item.club_name}}</p>
                                 <p class="p2">{{item.club_address}}</p>
-                                <div class="kong" v-show="index == ishow"><span>{{item.club_name}}</span></div>
+                                <div class="kong" v-show="index == ishow"><span v-html="item.content">{{item.content}}</span></div>
                             </div>
                             <div class="block">
                                 <el-pagination
@@ -80,7 +80,6 @@
 </template>
 <script>
 import Banner from "../components/banner";
-import { requestLogin } from "@/api/api";
 export default {
     inject: ["reload"],
     components:{
@@ -118,8 +117,7 @@ export default {
       },
        joindata(){
         let _this = this;
-        requestLogin("/clubs", {}, "get")
-        .then(function(res) {
+        this.$request("/clubs").then(res => {
             _this.joinlist = res;
         })
         .catch(error => {
@@ -312,7 +310,7 @@ export default {
                         line-height: 30px;
                         color: #fff;
                         font-size: 14px;
-                        opacity: 0.8;
+                        opacity: 0.9;
                     }
                 }
                 .block{

@@ -49,7 +49,6 @@
 </template>
 <script>
 import Banner from "../components/banner";
-import { requestLogin } from "@/api/api";
 export default {
   inject: ["reload"],
   components:{
@@ -69,8 +68,7 @@ export default {
   methods:{
       listdata(){
         let _this = this;
-        requestLogin("/knowledgeList", {}, "get")
-        .then(function(res) {
+        this.$request("/knowledgeList").then(res => {
             _this.knowledgeList = res;
             _this.knowledgeList.map(item =>{ 
                 if(item.data != null){
@@ -78,7 +76,7 @@ export default {
                     _this.listdatas.push(item.data[i]);
                   } 
                 }
-            })
+            });
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
