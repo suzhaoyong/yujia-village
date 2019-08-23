@@ -11,15 +11,15 @@ function handleRequest(config) {
     url,
     contentType
   } = config;
-  const xtoken = {
-    access_token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vYXBpLmFvbWVuZ3l1amlhLmNvbS9hcGkvYXV0aC9sb2dpbiIsImlhdCI6MTU2NjQzMTcwNSwiZXhwIjoxNTY2NDM1MzA1LCJuYmYiOjE1NjY0MzE3MDUsImp0aSI6IkM2Mzk3VU9sc1VnTGlGdnAiLCJzdWIiOjE0LCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0._9SNoIBHmGRwH_rX8oNMSVZa2Bj9Y1intq8htgYKW9g",
-    expires_in: 3600,
-    token_type: "bearer"
-  }
-  config.headers['Authorization'] = xtoken.token_type + xtoken.access_token
+  // const xtoken = {
+  //   access_token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vYXBpLmFvbWVuZ3l1amlhLmNvbS9hcGkvYXV0aC9sb2dpbiIsImlhdCI6MTU2NjQzMTcwNSwiZXhwIjoxNTY2NDM1MzA1LCJuYmYiOjE1NjY0MzE3MDUsImp0aSI6IkM2Mzk3VU9sc1VnTGlGdnAiLCJzdWIiOjE0LCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0._9SNoIBHmGRwH_rX8oNMSVZa2Bj9Y1intq8htgYKW9g",
+  //   expires_in: 3600,
+  //   token_type: "bearer"
+  // }
+  // config.headers['Authorization'] = xtoken.token_type + xtoken.access_token
   // 请求头添加token
   const access = sessionStorage.getItem('access')
-  // config.headers['Authorization'] = access && `${JSON.parse(access).token_type}${JSON.parse(access).access_token}` || '';
+  config.headers['Authorization'] = access && `${JSON.parse(access).token_type}${JSON.parse(access).access_token}` || '';
 
   config.baseURL = '/api';
   if (contentType === 'json') {
@@ -38,11 +38,24 @@ function handleResponeseErr(err) {
     response = {}
   } = err;
   const {
-    data = {}, status
+    data = {}, status, config
   } = response;
 
   let message = '未知异常';
-  if (status === 404) {
+  if (status === 401) {
+    request.post('/auth/refresh')
+      .then(data => {
+        sessionStorage.setItem('access', JSON.stringify(data))
+        window.location.reload();
+      })
+      .catch(() => {
+        Message({
+          message: '重置令牌失败',
+          type: 'error',
+          duration: 5 * 1000
+        });
+      })
+  } else if (status === 404) {
     message = '接口不存在';
   } else if (status >= 400 && status < 500) {
     message = data.msg

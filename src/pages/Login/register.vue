@@ -182,7 +182,7 @@ export default {
         .then(data => {
           this.$message({ message: "注册成功", type: "success" });
           this.isPostting = false;
-          this.$$emit('close', '')
+          this.$emit('close', '')
         })
         .catch(() => {
           this.isPostting = false;

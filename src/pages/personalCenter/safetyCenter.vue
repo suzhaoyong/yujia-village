@@ -8,101 +8,145 @@
           <div @click="tagsChange(1)" :class="['tab', {active: tagList[1].active}]">修改绑定手机</div>
         </div>
         <div class="content">
-          <div class="edit-password" v-show="tagList[0].active && tagList[0].methods === 'password'">
-            <div class="form">
-              <div class="item">
-                <span class="title">旧密码</span>
-                <div class="form_input">
-                  <input type="password" class="form-control input" placeholder="请输入旧密码" />
-                  <div class="form_input-tips"></div>
+          <div v-show="!success">
+            <div
+              class="edit-password"
+              v-show="tagList[0].active && tagList[0].methods === 'password'"
+            >
+              <div class="form">
+                <div class="item">
+                  <span class="title">旧密码</span>
+                  <div class="form_input">
+                    <input
+                      type="password"
+                      v-model="ruleForm.old_password"
+                      class="form-control input"
+                      placeholder="请输入旧密码"
+                    />
+                    <div class="form_input-tips"></div>
+                  </div>
                 </div>
-              </div>
-              <div class="item">
-                <span class="title">新密码</span>
-                <div class="form_input">
-                  <input type="password" class="form-control input" placeholder="请输入旧密码" />
-                  <div class="form_input-tips">密码错误</div>
+                <div class="item">
+                  <span class="title">新密码</span>
+                  <div class="form_input">
+                    <input
+                      type="password"
+                      v-model="ruleForm.password"
+                      class="form-control input"
+                      placeholder="请输入旧密码"
+                    />
+                    <div class="form_input-tips"></div>
+                  </div>
                 </div>
-              </div>
-              <div class="item">
+                <!-- <div class="item">
                 <span class="title">二次确认</span>
                 <div class="form_input">
                   <input type="password" class="form-control input" placeholder="请输入旧密码" />
                   <div class="form_input-tips">密码错误</div>
                 </div>
-              </div>
-              <div class="submit">
-                <div class="btn">返回</div>
-                <div class="btn">更改</div>
-              </div>
-            </div>
-            <div class="tips">
-              <span @click="tagList[0].methods = 'phone'">忘记密码？更换验证方式</span>
-            </div>
-          </div>
-          <div class="edit-password-by-code" v-show="tagList[1].active">
-            <div class="form">
-              <div class="item">
-                <span class="title">验证码</span>
-                <div class="form_input">
-                  <input type="text" class="form-control input" placeholder="请输入验证码" />
-                  <div class="getcode">发送验证码</div>
-                  <div class="form_input-tips">密码错误</div>
+                </div>-->
+                <div class="submit">
+                  <!-- <div class="btn">返回</div> -->
+                  <div class="btn" @click="updatePassword">更改</div>
                 </div>
               </div>
-              <div class="item">
-                <span class="title">新密码</span>
-                <div class="form_input">
-                  <input type="password" class="form-control input" placeholder="请输入旧密码" />
-                  <div class="form_input-tips">密码错误</div>
-                </div>
+              <div class="tips">
+                <span
+                  @click="tagList[0].methods = 'phone';ruleForm = resetForm('ruleForm');"
+                >忘记密码？更换验证方式</span>
               </div>
-              <div class="item">
+            </div>
+            <div
+              class="edit-password-by-code"
+              v-show="tagList[0].active && tagList[0].methods === 'phone'"
+            >
+              <div class="form">
+                <div class="item">
+                  <span class="title">验证码</span>
+                  <div class="form_input">
+                    <input
+                      type="text"
+                      v-model="ruleForm.verification_code"
+                      class="form-control input"
+                      placeholder="请输入验证码"
+                    />
+                    <div class="getcode" @click="getCode">发送验证码</div>
+                    <div class="form_input-tips"></div>
+                  </div>
+                </div>
+                <div class="item">
+                  <span class="title">新密码</span>
+                  <div class="form_input">
+                    <input
+                      type="password"
+                      v-model="ruleForm.password"
+                      class="form-control input"
+                      placeholder="请输入旧密码"
+                    />
+                    <div class="form_input-tips"></div>
+                  </div>
+                </div>
+                <!-- <div class="item">
                 <span class="title">二次确认</span>
                 <div class="form_input">
                   <input type="password" class="form-control input" placeholder="请输入旧密码" />
                   <div class="form_input-tips">密码错误</div>
                 </div>
-              </div>
-              <div class="submit">
-                <div class="btn">返回</div>
-                <div class="btn">更改</div>
-              </div>
-            </div>
-            <div class="tips">
-              <span>您当前手机号:</span>
-              <br />
-              <span>152*****093</span>
-            </div>
-          </div>
-          <div class="edit-phone" v-show="tagList[0].active && tagList[0].methods === 'phone'">
-            <div class="form">
-              <div class="item">
-                <span class="title">验证码</span>
-                <div class="form_input">
-                  <input type="text" class="form-control input" placeholder="请输入验证码" />
-                  <div class="getcode">发送验证码</div>
-                  <div class="form_input-tips">密码错误</div>
+                </div>-->
+                <div class="submit">
+                  <div
+                    class="btn"
+                    @click="tagList[0].methods = 'password';ruleForm = resetForm('ruleForm');"
+                  >返回</div>
+                  <div class="btn" @click="updatePassword">更改</div>
                 </div>
               </div>
-              <div class="item">
-                <span class="title">新手机号</span>
-                <div class="form_input">
-                  <input type="text" class="form-control input" placeholder="请输入新手机号" />
-                  <div class="form_input-tips">密码错误</div>
+              <div class="tips">
+                <span>您当前手机号:</span>
+                <br />
+                <span>{{tel}}</span>
+              </div>
+            </div>
+            <div class="edit-phone" v-show="tagList[1].active ">
+              <div class="form">
+                <div class="item">
+                  <span class="title">验证码</span>
+                  <div class="form_input">
+                    <input
+                      type="text"
+                      v-model="telForm.verification_code"
+                      class="form-control input"
+                      placeholder="请输入验证码"
+                    />
+                    <div class="getcode" @click="getCode">发送验证码</div>
+                    <div class="form_input-tips"></div>
+                  </div>
+                </div>
+                <div class="item">
+                  <span class="title">新手机号</span>
+                  <div class="form_input">
+                    <input
+                      type="text"
+                      v-model="telForm.tel"
+                      class="form-control input"
+                      placeholder="请输入新手机号"
+                    />
+                    <div class="form_input-tips"></div>
+                  </div>
+                </div>
+                <div class="submit">
+                  <!-- <div class="btn">返回</div> -->
+                  <div class="btn" @click="updateTel">更改</div>
                 </div>
               </div>
-              <div class="submit">
-                <div class="btn" @click="tagList[0].methods = 'password'">返回</div>
-                <div class="btn">更改</div>
+              <div class="tips">
+                <span>您当前手机号:</span>
+                <br />
+                <span>{{tel}}</span>
               </div>
             </div>
-            <div class="tips">
-              <span>您当前手机号:</span>
-              <br />
-              <span>152*****093</span>
-            </div>
           </div>
+
           <div class="success" v-show="success">
             <span>更改成功！</span>
           </div>
@@ -121,13 +165,108 @@ export default {
     return {
       success: false,
       tagList: [
-        { type: "password", active: true, methods: 'password' },
+        { type: "password", active: true, methods: "password" },
         { type: "phone", active: false }
-      ]
+      ],
+      ruleForm: {
+        old_password: "",
+        password: "",
+        verification_key: "",
+        verification_code: ""
+      },
+      telForm: {
+        old_tel: "",
+        tel: "",
+        verification_key: "",
+        verification_code: ""
+      }
     };
   },
+  computed: {
+    info() {
+      const user = sessionStorage.getItem("user");
+      return user && JSON.parse(user);
+    },
+    /** 手机号码加密 */
+    tel() {
+      return (
+        this.info &&
+        `${this.info.user.tel.substr(0, 3)}****${this.info.user.tel.substr(
+          7,
+          11
+        )}`
+      );
+    }
+  },
   methods: {
+    resetForm(name) {
+      const form = {
+        ruleForm: {
+          old_password: "",
+          password: "",
+          verification_key: "",
+          verification_code: ""
+        },
+        telForm: {
+          old_tel: "",
+          tel: "",
+          verification_key: "",
+          verification_code: ""
+        }
+      };
+      return form[name];
+    },
+    /* 短信验证码 */
+    getCode() {
+      const { tel } = this.info && this.info.user;
+      tel &&
+        this.$request.post("/getCode", { tel }).then(data => {
+          this.$message({ message: "发送成功", type: "success" });
+          this.ruleForm.verification_key = data.key;
+          this.telForm.verification_key = data.key;
+        });
+    },
+    /** 修改手机号码 */
+    updateTel() {
+      const way = this.tagList[1];
+      if (!way.active) return;
+      const params = Object.assign({}, this.telForm, {
+        old_tel: this.info.user.tel
+      });
+
+      this.$request.post("/personal/updatePassword", params).then(data => {
+        this.$message({
+          type: "success",
+          message: "修改成功"
+        });
+      });
+    },
+    /** 修改密码 */
+    updatePassword() {
+      const way = this.tagList[0];
+      if (!way.active) return;
+      const params = Object.assign({}, this.ruleForm);
+      if (way.methods === "password") {
+        if (params.verification_key) delete params.verification_key;
+        if (params.verification_code) delete params.verification_code;
+      } else {
+        if (params.old_password) delete params.old_password;
+      }
+      this.$request.post("/personal/updatePassword", params).then(data => {
+        this.$message({
+          type: "success",
+          message: "修改成功"
+        });
+      });
+    },
+    /** 切换选项 */
     tagsChange(cur_index) {
+      this.success = false;
+      if (cur_index === 1) {
+        this.ruleForm = this.resetForm("ruleForm");
+      } else {
+        this.telForm = this.resetForm("telForm");
+      }
       this.tagList = this.tagList.map((item, index) => {
         if (index === cur_index) {
           item.active = true;

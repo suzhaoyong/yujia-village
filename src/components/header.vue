@@ -5,8 +5,13 @@
         <div class="head-quan">
           <div class="head-right">
             <span class="span1">已购课程</span>
-            <span class="span1" @click="account.type='login'">登录</span>
-            <span class="span1" @click="account.type='register'">注册</span>
+            <div style="display:inline-block;" v-if="info">
+              <span class="span1">{{info.user.name}}</span>
+            </div>
+            <div style="display:inline-block;" v-else>
+              <span class="span1" @click="account.type='login'">登录</span>
+              <span class="span1" @click="account.type='register'">注册</span>
+            </div>
             <span>
               <img class="img" src="../assets/cart.png" />
             </span>
@@ -39,21 +44,24 @@
                 <el-menu-item index="personal">现金券与优惠券</el-menu-item>
                 <el-menu-item index="safety-center">信息与安全中心</el-menu-item>
                 <el-menu-item index="share">分享邀请好友</el-menu-item>
-                <el-menu-item index="personal">退出</el-menu-item>
+                <el-menu-item index="out">退出</el-menu-item>
               </el-submenu>
             </el-menu>
           </el-col>
         </div>
       </div>
     </el-col>
-    <div v-show="account.type==='login'">
+    <div v-if="account.type==='login'">
       <login @go-register="type=>this.account.type = type" @close="type=>this.account.type = type"></login>
     </div>
-    <div v-show="account.type==='register'">
+    <div v-if="account.type==='register'">
       <register @go-login="type=>this.account.type = type" @close="type=>this.account.type = type" />
     </div>
-    <div v-show="account.type==='reset'">
+    <div v-if="account.type==='reset'">
       <reset />
+    </div>
+    <div v-if="showTopTitle">
+      <top-title />
     </div>
   </div>
 </template>
@@ -61,11 +69,13 @@
 import Login from "@/pages/Login/login";
 import Register from "@/pages/Login/register";
 import Reset from "@/pages/Login/reset";
+import TopTitle from "@/pages/personalCenter/topTItle";
 export default {
   components: {
     Login,
     Register,
-    Reset
+    Reset,
+    TopTitle
   },
   data() {
     return {
@@ -74,6 +84,16 @@ export default {
         type: ""
       }
     };
+  },
+  computed: {
+    info() {
+      const user = sessionStorage.getItem("user");
+      return user && JSON.parse(user);
+    },
+    showTopTitle() {
+      const show = this.$route.fullPath.startsWith("/personal");
+      return show;
+    }
   },
   watch: {
     $route: "fetchData"
@@ -88,10 +108,6 @@ export default {
     this.changenav();
   },
   methods: {
-    xx(x) {
-      console.log(x, 1);
-      console.log(this.$on("goregister"));
-    },
     //路由改变时的导航对应高亮
     changenav() {
       let path = this.$route.path;
@@ -144,6 +160,16 @@ export default {
       } else {
         this.$router.push(`/${key}/index`);
       }
+    },
+    /** 登出 */
+    logout() {
+      this.$request("/auth/logout").then(data => {
+        this.$message({ type: "success", message: "退出成功" });
+      });
+    },
+    /** 用户基本信息 */
+    getInfo() {
+      this.$request("/auth/me").then(data => {});
     }
   }
 };

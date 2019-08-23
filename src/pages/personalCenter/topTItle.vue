@@ -4,17 +4,22 @@
       <div class="header">
         <div class="user">
           <div class="photo"></div>
-          <div class="name">IVAN</div>
+          <div class="name">{{info.user.name}}</div>
         </div>
         <div class="info">
           <div class="balance">
             您的账户可用余额为
-            <span class="number">¥40000.00</span>
+            <span class="number">¥{{info.user.money}}</span>
           </div>
           <div class="recharge">充值</div>
           <div class="withdraw" @click="withdraw">
             提现
-            <span class="identity">(馆主、教练)</span>
+            <span
+              class="identity"
+              v-if="info.user.reason === '未认证'"
+              @click.stop="goPage('identity')"
+            >未认证</span>
+            <span class="identity" v-else>(馆主、教练)</span>
           </div>
         </div>
       </div>
@@ -23,7 +28,26 @@
 </template>
 <script>
 export default {
+  data() {
+    return {
+      user: {}
+    };
+  },
+  computed: {
+    info() {
+      const user = sessionStorage.getItem("user");
+      return user && JSON.parse(user);
+    }
+  },
   methods: {
+    getPersonal() {
+      this.$request("/personal/home").then(data => {
+        this.user = data.user;
+      });
+    },
+    goPage(name) {
+      this.$router.push(`/personal/${name}`);
+    },
     withdraw() {
       this.$router.push("/personal/certification");
     }

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <top-title></top-title>
     <div class="personal">
       <div class="buy">
         <session-title name="已购买的课程"></session-title>
@@ -36,7 +35,7 @@
       </div>
       <div class="cash-voucher">
         <session-title name="现金券">
-            <span slot="tips" style="color:#999;">(可拆分使用)</span>
+          <span slot="tips" style="color:#999;">(可拆分使用)</span>
         </session-title>
         <div class="body">
           <div class="vouchers">
@@ -83,17 +82,21 @@
   </div>
 </template>
 <script>
-import TopTitle from "./topTItle";
 import SessionTitle from "./SessionTitle";
 export default {
   components: {
-    TopTitle,
     SessionTitle
   },
   data() {
     return {
       star: 3
     };
+  },
+  methods: {
+    /** 现金券使用记录 */
+    usedRecord(id) {
+      this.$request(`/personal/home/${id}`).then(data => {});
+    }
   }
 };
 </script>
