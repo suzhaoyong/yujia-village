@@ -6,7 +6,7 @@
                     <Banner></Banner>
                 </template>
                 <div class="joinclub-cont">
-                    <div class="joinclub-cont-div1">
+                    <!-- <div class="joinclub-cont-div1">
                         <h2><img src="../assets/yujia.png"/>会馆加盟</h2>
                          <p class="nav-text">Sometimes beauty is so simple</p>
                          <div class="border-left"></div>
@@ -44,7 +44,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="joinclub-cont-div4">
                         <h2><img src="../assets/yujia.png"/>会馆展示</h2>
                          <p class="nav-text">Sometimes beauty is so simple</p>
@@ -57,7 +57,8 @@
                                 <img class="image" :src="item.path">
                                 <p class="p1">{{item.club_name}}</p>
                                 <p class="p2">{{item.club_address}}</p>
-                                <div class="kong" v-show="index == ishow"><span v-html="item.content">{{item.content}}</span></div>
+                                <!-- <div class="kong" v-show="index == ishow"><span v-html="item.content">{{item.content}}</span></div> -->
+                                <div class="kong"><span v-html="item.content">{{item.content}}</span></div>
                             </div>
                             <div class="block">
                                 <el-pagination
@@ -280,6 +281,7 @@ export default {
                     float: left;
                     padding: 11px;
                     position: relative;
+                    margin-bottom: 20px;
                     .image{
                         width: 100%;
                         height: 224px;
@@ -299,6 +301,19 @@ export default {
                         color: #999999;
                     }
                     .kong{
+                        width: 262px;
+                        height: auto;
+                        position: absolute;
+                        bottom: 105px;
+                        right: 12px;
+                        margin: 0 auto;
+                        text-align: center;
+                        line-height: 30px;
+                        color: #fff;
+                        font-size: 14px;
+                        opacity: 0;
+                    }
+                    .kong:hover{
                         width: 262px;
                         height: auto;
                         background-color: #8fc31f;
@@ -339,6 +354,7 @@ export default {
             text-align: center;
             display: inline-block;
             position: relative;
+            margin-top: 34px;
             .border-left{
                 width: 20%;
                 height: 1px;
