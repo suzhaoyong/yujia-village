@@ -15,18 +15,18 @@
                     <el-col :span="24" class="bg-pic">
                     <div class="nav-contunt-div2">
                         <div class="contunt2">
-                        <el-carousel height="560px" :interval="5000" arrow="never" direction="vertical" :autoplay="false">
+                        <el-carousel height="560px" :interval="5000" arrow="hover" direction="vertical" :autoplay="true">
                             <el-carousel-item v-for="item in dataimg" :key="item.id">
                             <div class="carousel-explain">
-                                <img :src="item.train_image[0].path" class="img1"/>
-                                <img :src="item.train_image[0].path" class="img2"/>
+                                <img :src="item.path1" class="img1"/>
+                                <img :src="item.path2" class="img2"/>
                             </div>
                             <div class="carousel-text">
                                 <h4>{{item.theme}}<span>{{item.name}}</span></h4>
                                 <el-rate v-model="item.diff"></el-rate>
                             </div>
                             <div class="carousel-detals">
-                                <span class="span">{{item.content}}</span>
+                                <span class="span">{{item.intro}}</span>
                                 <el-button type="text" class="carousel-btn">了解更多</el-button>
                             </div>
                             </el-carousel-item>
@@ -74,7 +74,7 @@
                                 <img :src="item.path"/>
                                 <div class="explain2-div">
                                     <h3>{{item.name}}</h3>
-                                    <span class="explain2-span2">{{item.text}}</span>
+                                    <span class="explain2-span2">{{item.good_at}}</span>
                                 </div>
                             </div>
                             </swiper-slide>
@@ -91,13 +91,15 @@
                     </div>
                     <el-col :span="24" class="bg-pic7">
                     <div class="nav-contunt-div6">
-                        <div class="explain3">
+                        <el-carousel height="560px" :interval="5000" arrow="hover" direction="vertical" :autoplay="true">
+                        <el-carousel-item v-for="item in newtrains" :key="item.id">
+                            <div class="explain3">
                             <div class="explain3-border">
-                                <img src="../assets/image61.png" class="bg-border-img">
+                                <img :src="item.path" class="bg-border-img">
                                 <img src="../assets/image62.png" class="bg-border-img2">
                             </div>
                             <div class="explain3-text">
-                                <p class="text-p">The Dolphin Method RYT 200 小时</p>
+                                <p class="text-p">{{item.theme}}</p>
                                 <h4 class="text-h4">RYT200小时瑜伽培训</h4>
                                 <p class="text-p2">全球最权威的认证机构</p>
                                 <p class="text-p3">全球含金量最高的瑜伽证书</p>
@@ -106,7 +108,9 @@
                                     <el-button type="text" class="text-button">报名</el-button>
                                 </div>
                             </div>
-                        </div>
+                            </div>
+                        </el-carousel-item>
+                        </el-carousel>
                     </div>
                     <div class="nav-contunt-div10">
                         <h2><img src="../assets/yujia.png"/>加盟会馆</h2>
@@ -140,8 +144,10 @@ export default {
   data() {
     return {
         dataimg:[],
+        newtrains:[],
         famousteach:[],
         clubInfo:[],
+        info:[],
         swiperOption: {
           spaceBetween: 30,
           pagination: {
@@ -180,7 +186,7 @@ export default {
           pages[page].push(item);
         });
         return pages;
-      }
+      },
   },
    mounted() {
       this.$nextTick(() => {
@@ -200,6 +206,8 @@ export default {
             _this.famousteach = res.teachers;
             _this.dataimg = res.hot_trains;
             _this.clubInfo = res.clubInfo;
+            _this.newtrains = res.new_trains;
+            _this.info = res.info;
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -217,12 +225,6 @@ export default {
 </script>
 <style lang="scss" scope>
 @import "swiper/dist/css/swiper.css";
-.el-carousel__item:nth-child(2n) {
-    background-color: #939EC4 !important;
-}
-.el-carousel__item:nth-child(2n+1) {
-    background-color: #939EC4 !important;
-}
 .el-rate__icon.hover{
     color: #fff !important;
 }
@@ -485,52 +487,28 @@ export default {
                 height: 660px;
                 margin: 0 auto;
                 .carousel-explain2{
-                height: 227px;
-                float: left;
-                width: 50%;
-                display: flex;
-                // .explain2-left{
-                //     width: 50%;
-                //     display: flex;
-                //     justify-content: flex-start;
-                    img{
-                        width: 160px;
-                        height: 160px;
-                        border-radius: 50%;
-                        margin-top: 18px;
-                        margin-left: 10px;
-                        background-color: #DCD9CC;
-                    }
-                    .explain2-div{
-                        height: auto;
-                        padding-top: 45px;
-                        padding-left: 13px;
-                        h3{
-                            font-size: 14px;
-                            color: #000;
-                            .explain2-span{
-                                font-size: 14px;
-                                color: #000;
-                            }
-                        }
-                        .explain2-span2{
-                                font-size: 12px;
-                                color: #000;
-                            }
-                    }
-                // }
-                .explain2-right{
+                    height: 227px;
+                    float: left;
                     width: 50%;
                     display: flex;
-                    justify-content: flex-end;
+                    img{
+                        width: 160px;
+                        height: 160px;
+                        border-radius: 50%;
+                        margin-top: 18px;
+                        background-color: #DCD9CC;
+                    }
                     .explain2-div{
                         height: auto;
-                        padding-right: 13px;
-                        padding-top: 45px;
-                        text-align: right;
+                        padding-top: 35px;
+                        padding-left: 13px;
+                        width: 69%;
+                        text-align: left;
                         h3{
                             font-size: 14px;
                             color: #000;
+                            font-family:Microsoft YaHei;
+                            font-weight:bold;
                             .explain2-span{
                                 font-size: 14px;
                                 color: #000;
@@ -541,15 +519,41 @@ export default {
                                 color: #000;
                             }
                     }
+              }
+              .carousel-explain2:nth-child(2n){
+                    height: 227px;
+                    float: left;
+                    width: 50%;
+                    display: flex;
                     img{
                         width: 160px;
                         height: 160px;
                         border-radius: 50%;
                         margin-top: 18px;
-                        margin-right: 10px;
+                        position: absolute;
+                        right: 0%;
                         background-color: #DCD9CC;
                     }
-                }
+                    .explain2-div{
+                        height: auto;
+                        padding-top: 35px;
+                        text-align: right;
+                        width: 69%;
+                        h3{
+                            font-size: 14px;
+                            color: #000;
+                            font-family:Microsoft YaHei;
+                            font-weight:bold;
+                            .explain2-span{
+                                font-size: 14px;
+                                color: #000;
+                            }
+                        }
+                        .explain2-span2{
+                                font-size: 12px;
+                                color: #000;
+                            }
+                    }
               }
             }
         }

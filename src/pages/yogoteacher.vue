@@ -76,14 +76,27 @@
                        <div class="yogo-cont-div3">
                            <div class="yogocontunt2">
                                <div class="yogocontunt2-list" v-for="(item, index) in yogolist.slice((currentPage-1)*pagesize,currentPage*pagesize)" :key="index" @mouseenter="onMouseOver(index)" @click="selectItem(item)">
-                                   <h4>{{item.text}}</h4>
+                                    <figure class="test5">
+                                        <img :src="item.path" class="yogocontunt2-img"/>
+                                        <figcaption>
+                                            <h4>{{item.name}}</h4>
+                                            <p class="p1">从业时间{{item.num}}年</p>
+                                            <p class="p2">{{item.info}}</p>
+                                            <div class="telimg">
+                                                <img src="../assets/market/like.png" class="tel-img"/>
+                                                <span class="telpp">{{item.tel}}</span>
+                                            </div>
+                                            <div class="div01"></div>
+                                            <div class="div02"></div>
+                                        </figcaption>
+                                    </figure>
                                </div>
                                <div class="block">
                                 <el-pagination
                                     @size-change="handleSizeChange"
                                     @current-change="handleCurrentChange"
                                     :current-page="currentPage"
-                                    :page-sizes="[10, 20, 30, 40, 50, 100]"
+                                    :page-sizes="[12, 20, 30, 40, 50, 100]"
                                     :page-size="pagesize"
                                     background
                                     layout="total, sizes, prev, pager, next, jumper"
@@ -121,27 +134,13 @@ export default {
           label: '双皮奶'
         }],
         currentPage:1,
-        pagesize: 10,
+        pagesize: 12,
         value: '',
         province:'',
         city:'',
         value2: '',
         value3: '',
-        yogolist:[
-            {id:1,text:'内容'},
-            {id:2,text:'内容'},
-            {id:3,text:'内容'},
-            {id:4,text:'内容'},
-            {id:5,text:'内容'},
-            {id:6,text:'内容'},
-            {id:7,text:'内容'},
-            {id:8,text:'内容'},
-            {id:9,text:'内容'},
-            {id:10,text:'内容'},
-            {id:11,text:'内容'},
-            {id:12,text:'内容'},
-            {id:13,text:'内容'},
-            ],
+        yogolist:[],
         iconList: [
           {
             id: "0001",
@@ -199,7 +198,26 @@ export default {
         return pages;
       }
   },
+  created(){
+      this.listyogodata();
+  },
   methods:{
+      listyogodata(){
+        let _this = this;
+        this.$request("/teachers").then(res => {
+            _this.yogolist = res.teachers;
+        })
+        .catch(error => {
+            let { response: { data: { errorCode, msg } } } = error;
+            if (errorCode != 0) {
+            this.$message({
+                message: msg,
+                type: "error"
+            });
+            return;
+            }
+        });
+      },
       onSelected(data) {
         this.province = data.province.value;
         this.city = data.city.value;
@@ -221,6 +239,118 @@ export default {
 };
 </script>
 <style lang="scss" scope>
+.test5{
+    width: 100%;
+    height: 100%;
+    position: relative;
+    }
+.test5 .yogocontunt2-img{
+        width: 100%;
+        height: 100%;
+    }
+.test5 figcaption{
+    width: 100%;
+    height: 100%; 
+    position: absolute;
+    top: 0%;
+    }
+.test5 figcaption h4{
+    opacity: 0;
+    font-size: 18px;
+    font-family: Microsoft YaHei; 
+    font-weight: bold;
+    margin: 0 auto;
+    text-align: center;
+    margin-top: 38px;
+    line-height: 40px;
+    }
+.test5 figcaption .p1{
+    text-align: center;
+    font-size:14px;
+    font-family:Microsoft YaHei;
+    font-weight:400;
+    opacity: 0;
+    color: #2c2c2c;
+    }
+.test5 figcaption .p2{
+    text-align: center;
+    opacity: 0;
+    font-size:13px;
+    font-family:Microsoft YaHei;
+    font-weight:400;
+    color: #2c2c2c;
+    }
+.test5 figcaption .telimg{
+    width: 100%;
+    margin: 0 auto;
+}
+.test5 figcaption .telimg .tel-img{
+    opacity: 0;
+}
+.test5 figcaption .telimg .telpp{
+    opacity: 0;
+}
+.test5 figcaption div{position: absolute;}
+.test5 figcaption div.div01{
+    width: 95%;
+    height:82%;
+    border-top: 2px solid #ffffff;
+    border-bottom: 2px solid #ffffff;
+    left:2%;
+    top:8%;
+    opacity: 0;
+    transform: scale(0.8);
+    }
+.test5 figcaption div.div02{
+    width: 85%;
+    height:93%;
+    border-left: 2px solid #ffffff;
+    border-right: 2px solid #ffffff;
+    left: 7%;
+    top:4%;
+    opacity: 0;
+    transform: scale(0.8);
+    }
+.test5:hover div.div01{
+    opacity: 1;
+    transform: scale(1);
+    transition: transform 0.3s ease-in
+    }
+.test5:hover div.div02{
+    opacity: 1;
+    transform: scale(1);
+    transition: transform 0.3s ease-in
+    }
+.test5:hover{
+    width:100%;
+    height: 340px;
+    background-color: #E2DBC8;
+}
+.test5:hover figcaption .p1{opacity: 1;}
+.test5:hover figcaption .p2{opacity: 1;margin-top: 15%;}
+.test5:hover figcaption h4{opacity: 1;}
+.test5:hover figcaption .telimg{
+    width: 100%;
+    margin: 0 auto;
+    top: 75%;
+}
+.test5:hover figcaption .telimg .tel-img{
+    opacity: 1;
+    width: 20px;
+    height: 20px;
+    margin-left: 29%;
+}
+.test5:hover figcaption .telimg .telpp{
+    opacity: 1;
+    font-size:14px;
+    font-family:Microsoft YaHei;
+    font-weight:400;
+    color: #2c2c2c;
+    margin-left: 7px;
+}
+.test5:hover img{
+    opacity: 0.1;
+    }
 .el-select-dropdown__item.selected {
     color: #8fc31f;
     font-weight: 700;
@@ -449,9 +579,15 @@ export default {
                     background-color: #E2DBC8;
                     margin: 10px;
                     float: left;
+                    position: relative;
+                    margin-bottom: 88px;
                     h4{
                         text-align: center;
                     }
+                    // .yogocontunt2-img{
+                    //     width: 100%;
+                    //     height: 100%;
+                    // }
                 }
                 .block{
                     text-align: center;

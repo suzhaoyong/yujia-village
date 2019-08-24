@@ -338,9 +338,9 @@ export default {
                 margin-top: 35px;
                 margin-left: 60px;
                  .left1{
-                     width: 100%;
-                     height: 140px;
-                     margin-top: 30px;
+                    width: 100%;
+                    height: 140px;
+                    margin-top: 30px;
                     position: relative;
                     display: inline-block;
                     .bg-image4{
@@ -508,25 +508,28 @@ export default {
             height: 660px;
             margin: 0 auto;
             .carousel-explain2{
-            height: 183px;
-            float: left;
-            width: 50%;
-            display: flex;
+                height: 183px;
+                float: left;
+                width: 50%;
+                display: flex;
                 img{
                     width: 150px;
                     height: 150px;
                     border-radius: 50%;
                     margin-top: 18px;
-                    margin-left: 10px;
                     background-color: #DCD9CC;
                 }
                 .explain2-div{
                     height: auto;
-                    padding-top: 45px;
+                    padding-top: 35px;
                     padding-left: 13px;
+                    width: 69%;
+                    text-align: left;
                     h3{
                         font-size: 14px;
                         color: #000;
+                        font-family:Microsoft YaHei;
+                        font-weight:bold;
                         .explain2-span{
                             font-size: 14px;
                             color: #000;
@@ -537,18 +540,32 @@ export default {
                             color: #000;
                         }
                 }
-            .explain2-right{
+            }
+            .carousel-explain2:nth-child(2n){
+                height: 183px;
+                float: left;
                 width: 50%;
                 display: flex;
-                justify-content: flex-end;
+                img{
+                    width: 150px;
+                    height: 150px;
+                    border-radius: 50%;
+                    margin-top: 18px;
+                    position: absolute;
+                    right: 0%;
+                    background-color: #DCD9CC;
+                }
                 .explain2-div{
                     height: auto;
-                    padding-right: 13px;
-                    padding-top: 45px;
+                    padding-top: 35px;
+                    padding-left: 13px;
+                    width: 69%;
                     text-align: right;
                     h3{
                         font-size: 14px;
                         color: #000;
+                        font-family:Microsoft YaHei;
+                        font-weight:bold;
                         .explain2-span{
                             font-size: 14px;
                             color: #000;
@@ -559,15 +576,6 @@ export default {
                             color: #000;
                         }
                 }
-                img{
-                    width: 160px;
-                    height: 160px;
-                    border-radius: 50%;
-                    margin-top: 18px;
-                    margin-right: 10px;
-                    background-color: #DCD9CC;
-                }
-            }
             }
         }
     }
