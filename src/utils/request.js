@@ -43,18 +43,26 @@ function handleResponeseErr(err) {
 
   let message = '未知异常';
   if (status === 401) {
-    request.post('/auth/refresh')
-      .then(data => {
-        sessionStorage.setItem('access', JSON.stringify(data))
-        window.location.reload();
-      })
-      .catch(() => {
-        Message({
-          message: '重置令牌失败',
-          type: 'error',
-          duration: 5 * 1000
-        });
-      })
+    message = '请先登录'
+    if (sessionStorage.getItem('access')) {
+      sessionStorage.removeItem('access')
+      request.post('/auth/refresh')
+        .then(data => {
+          sessionStorage.setItem('access', JSON.stringify(data))
+          window.location.reload();
+        })
+        .catch(() => {
+          Message({
+            message: '重置令牌失败',
+            type: 'error',
+            duration: 5 * 1000
+          });
+        })
+
+    } else {
+      sessionStorage.removeItem('user')
+    }
+
   } else if (status === 404) {
     message = '接口不存在';
   } else if (status >= 400 && status < 500) {

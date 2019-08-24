@@ -37,21 +37,22 @@
             </div>
             <div class="colors">
               <span>颜色:</span>
-              <div
-                :class="['color', item.name === chooseItem.color.name ? 'active': '']"
-                v-for="(item, index) in goods.color_size"
-                :key="index"
-                @click="chooseColor(item)"
-              >
-                <div class="img">
-                  <img :src="item.cover" alt />
+                <div
+                  :class="['color', item.name === chooseItem.color.name ? 'active': '']"
+                  v-for="(item, index) in goods.color_size"
+                  :key="index"
+                  @click="chooseColor(item)"
+                >
+                  <div class="img">
+                    <img :src="item.cover" alt />
+                  </div>
+                  <div class="color-name">{{item.name}}</div>
                 </div>
-                <div class="color-name">{{item.name}}</div>
-              </div>
+                <div v-if="goods.color_size.length === 0" class="size-list">暂无</div>
             </div>
             <div class="size">
               <span>尺码:</span>
-              <div class="size-list">
+              <div class="size-list" v-if="sizeList.length>0">
                 <div
                   :class="['item', item === chooseItem.size ? 'active': '']"
                   v-for="(item, index) in sizeList"
@@ -59,6 +60,7 @@
                   @click="chooseSize(item)"
                 >{{item.size}}</div>
               </div>
+              <div v-else class="size-list">暂无</div>
             </div>
             <div class="number">
               <span>数量:</span>
@@ -129,7 +131,9 @@ export default {
         size: "",
         number: 1
       },
-      goods: {}
+      goods: {
+        color_size: []
+      }
     };
   },
   computed: {
@@ -256,7 +260,7 @@ export default {
       postUserCart(params)
         .then(data => {
           this.isBindClick = false;
-          this.$message({ type: "success", message: "收藏成功" });
+          this.$message({ type: "success", message: "加入购物车成功" });
         })
         .catch(() => {
           this.isBindClick = false;

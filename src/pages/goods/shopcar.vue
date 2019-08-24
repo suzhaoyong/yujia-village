@@ -10,24 +10,24 @@
             <div class="info">
               <div :class="['select', {'active': item.select}]" @click="chooseGoods(item, index)"></div>
               <div class="img">
-                <img :src="item.min_img" alt />
+                <img :src="item.url" alt />
               </div>
               <div class="name-size">
-                <div class="name">{{item.name}}</div>
+                <div class="name">{{item.describe}}</div>
                 <div class="color-size">
-                  <div class="color">颜色：{{item.name}}</div>
+                  <div class="color">颜色：{{item.color}}</div>
                   <div class="size">尺码: {{item.size}}码</div>
                 </div>
               </div>
             </div>
             <div class="number">
               <div class="reduce" @click="numberOpFor('reduce', 1, index)">-</div>
-              <div class="num">{{item.number}}</div>
+              <div class="num">{{item.num}}</div>
               <div class="add" @click="numberOpFor('add', 1, index)">+</div>
             </div>
             <div class="price">
-              <div class="old-price">￥{{item.old_price}}</div>
-              <div class="new-price">￥{{item.new_price}}</div>
+              <div class="old-price">￥{{item.sell_price}}</div>
+              <div class="new-price">￥{{item.sell_price - item.discount}}</div>
             </div>
             <div class="ops">
               <div class="add" @click="goodsOpFor('moveToCollect', item)">放入收藏夹</div>
@@ -60,6 +60,12 @@
 </template>
 <script>
 import SessionTitle from "./SessionTitle";
+import {
+  getUserCart,
+  deleteUserCart,
+  postUserCart,
+  postUserCollect
+} from "@/api/market";
 export default {
   components: {
     SessionTitle
@@ -78,23 +84,38 @@ export default {
       let allGoods = this.goods.filter(item => item.select);
 
       let allPrice = allGoods.reduce((pre, cur) => {
-        return parseInt(pre) + parseInt(cur.number) * parseInt(cur.new_price);
+        return parseInt(pre) + parseInt(cur.num) * parseInt(cur.sell_price);
       }, 0);
       return { allPrice, allGoodsNumber: allGoods.length };
     }
   },
   mounted() {
-    this.getShopCar(1);
+    // const goods = sessionStorage.getItem("goods");
+    // if (goods) {
+    //   this.goods =
+    //     (goods && JSON.parse(goods).map(item => item.select)) || [];
+    // } else {
+      this.getShopCar();
+    // }
   },
   methods: {
     goodsOpFor(option, goods) {
       const obj = {
-        detele: goods => {
-          this.goods = this.goods.filter(item => item.id !== goods.id);
+        detele: item => {
+          deleteUserCollect(item.id).then(data => {
+            this.$message({ type: "success", message: "删除成功" });
+            // this.getColloct();
+            this.goods = this.goods.filter(sitem => sitem.id !== item.id);
+          });
         },
-        moveToCollect: goods => {}
+        moveToCollect: item => {
+          const { id, num, size, color } = item;
+          postUserCollect({ id, num, size, color }).then(data => {
+            this.$message({ type: "success", message: "添加成功" });
+          });
+        }
       };
-      obj[option](goods);
+      obj[option] && obj[option](goods);
     },
     footerOpFor(option) {
       const obj = {
@@ -116,38 +137,39 @@ export default {
           this.goods = this.goods.filter(item => !item.select);
         }
       };
-      obj[option]();
+      obj[option] && obj[option]();
     },
-    numberOpFor(option, number, index) {
+    numberOpFor(option, num, index) {
       const obj = {
-        reduce: number => {
-          if (this.goods[index].number <= 1) {
+        reduce: num => {
+          if (this.goods[index].num <= 1) {
             return;
           }
-          this.goods[index].number -= number;
+          this.goods[index].num -= num;
         },
-        add: number => {
-          this.goods[index].number =
-            parseInt(this.goods[index].number) + number;
+        add: num => {
+          this.goods[index].num =
+            parseInt(this.goods[index].num) + num;
         }
       };
-      obj[option](number);
+      obj[option](num);
     },
     chooseGoods(goods, index) {
       this.goods[index].select = !this.goods[index].select;
       this.goods = [...this.goods];
     },
     payment() {
+      sessionStorage.setItem("goods", JSON.stringify(this.goods));
       this.$router.push({
         name: "order",
         params: {
-          id: 1 
+          id: 1
         }
       });
     },
-    getShopCar(id) {
-      this.$request(`/userCart/create`).then((data) => {
-        console.log(data)
+    getShopCar() {
+      getUserCart().then(data => {
+        this.goods = data;
       });
     }
   }

@@ -82,7 +82,8 @@ export default {
       activeIndex: "main",
       account: {
         type: ""
-      }
+      },
+      
     };
   },
   computed: {
