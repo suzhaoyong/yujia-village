@@ -10,10 +10,10 @@
                         <div class="yogo-search">
                             <div class="search-left">
                                 <el-select v-model="value" placeholder="擅长类型">
-                                    <el-option v-for="item in options"  :key="item.value" :label="item.label" :value="item.value"></el-option>
+                                    <el-option v-for="item in coursetypes"  :key="item.id" :label="item.name" :value="item.id" @change="changecoure(val)"></el-option>
                                 </el-select>
                                 <el-select v-model="value2" placeholder="工作资历">
-                                    <el-option v-for="item in options"  :key="item.value" :label="item.label" :value="item.value"></el-option>
+                                    <el-option v-for="item in seniority"  :key="item.value" :label="item.label" :value="item.value"></el-option>
                                 </el-select>
                                 <v-distpicker :province="province"  :city="city" hide-area @selected="onSelected"></v-distpicker>
                             </div>
@@ -36,29 +36,37 @@
                             <div class="border-right"></div>
                        </div>
                        <div class="yogo-cont-div2">
+                           <img src="../assets/image79.png" class="yogo-img"/>
                            <div class="yogocontunt">
                                <swiper :options="swiperOption" style="height:850px">
                                 <swiper-slide v-for="(page,index) of pages" :key="index">
                                     <div class="yogocontunt-swiper">
                                         <div class="yogoswiper-img">
-                                            <img src="../assets/image10.png"/>
+                                            <div class="rhomb1">
+                                                <img :src="namelist.path"/>
+                                            </div>
+                                            <div class="rhomb2"></div>
+                                            <div class="rhomb3"></div>
+                                            <div class="rhomb4"></div>
                                         </div>
                                         <div class="yogoswiper-text">
-                                            <h3>小鱼(Tina)</h3>
-                                            <p class="p1">2014年全美瑜伽联盟RYT200X小时认证</p>
-                                            <p class="p2">瑜伽是以一个连接意识和无意识的途径，当你改变无意识的状态，更能感受生命的精彩和不一样的魅力</p>
+                                            <h3>{{namelist.name}}</h3>
+                                            <p class="p1">{{namelist.info}}</p>
+                                            <p class="p3">从业时间: {{namelist.num}}年</p>
+                                            <p class="p2">擅长：{{namelist.good_at}}</p>
+                                            <p class="p4">地址：{{namelist.address}}</p>
                                             <div class="yogoswiper-butt">
                                             <el-button type="text">预约</el-button>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="icon" v-for="item of page" :key="item.id">
+                                    <div class="icon" v-for="(item,idx) of page" :key="item.id" :class="activeClass == idx ? 'active':''" @click="selectItem(item,idx)">
                                     <div class="icon-img">
-                                        <img class="icon-img-content" :src="item.imgUrl">
+                                        <img class="icon-img-content" :src="item.path">
                                     </div>
                                     <h3>{{item.name}}</h3>
-                                    <p class="icon-desc">{{item.title}}</p>
-                                    <p class="icon-desc2">{{item.desc}}</p>
+                                    <p class="icon-desc">从业时间：{{item.num}}年</p>
+                                    <p class="icon-desc2">{{item.info}}</p>
                                     </div>
                                 </swiper-slide>
                                 <div class="swiper-button-prev1" slot="button-prev"></div>
@@ -75,7 +83,7 @@
                        </div>
                        <div class="yogo-cont-div3">
                            <div class="yogocontunt2">
-                               <div class="yogocontunt2-list" v-for="(item, index) in yogolist.slice((currentPage-1)*pagesize,currentPage*pagesize)" :key="index" @mouseenter="onMouseOver(index)" @click="selectItem(item)">
+                               <div class="yogocontunt2-list" v-for="(item, index) in yogolist.slice((currentPage-1)*pagesize,currentPage*pagesize)" :key="index" @mouseenter="onMouseOver(index)">
                                     <figure class="test5">
                                         <img :src="item.path" class="yogocontunt2-img"/>
                                         <figcaption>
@@ -126,12 +134,16 @@ export default {
          formInline: {
           user: '',
         },
-        options: [{
+        coursetypes: [],
+        seniority: [{
           value: '选项1',
           label: '黄金糕'
         }, {
-          value: '选项2',
-          label: '双皮奶'
+          value: '选项4',
+          label: '龙须面'
+        }, {
+          value: '选项5',
+          label: '北京烤鸭'
         }],
         currentPage:1,
         pagesize: 12,
@@ -140,39 +152,10 @@ export default {
         city:'',
         value2: '',
         value3: '',
+        activeClass: 0,
+        namelist:[],
         yogolist:[],
-        iconList: [
-          {
-            id: "0001",
-            imgUrl:require('../assets/image3.png'),
-            name:"小鱼(Tina)",
-            title: "从业时间: 5年",
-            desc:"2014年全美瑜伽联盟RYT200X小时认证"
-          }, {
-            id: "0002",
-            imgUrl:require('../assets/image4.png'),
-            name:"小鱼(Tina)",
-            title: "从业时间: 5年",
-            desc:"2014年全美瑜伽联盟RYT200X小时认证"
-          }, {
-            id: "0003",
-            imgUrl:require('../assets/image5.png'),
-            name:"小鱼(Tina)",
-            title: "从业时间: 5年",
-            desc:"2014年全美瑜伽联盟RYT200X小时认证"
-          }, {
-            id: "0004",
-            imgUrl:require('../assets/image6.png'),
-            name:"小鱼(Tina)",
-            title: "从业时间: 5年",
-            desc:"2014年全美瑜伽联盟RYT200X小时认证"
-          }, {
-            id: "0005",
-            imgUrl:require('../assets/image3.png'),
-            name:"小鱼(Tina)",
-            title: "从业时间: 5年",
-            desc:"2014年全美瑜伽联盟RYT200X小时认证"
-          }],
+        iconList: [],
         swiperOption: {
           pagination: ".swiper-pagination",
           autoplay: false,
@@ -206,6 +189,8 @@ export default {
         let _this = this;
         this.$request("/teachers").then(res => {
             _this.yogolist = res.teachers;
+            _this.iconList = res.elites;
+            _this.coursetypes = res.course_types;
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -222,10 +207,15 @@ export default {
         this.province = data.province.value;
         this.city = data.city.value;
      },
+     changecoure(val){
+         conssole.log(val);
+     },
       onSubmit() {
         console.log('submit!');
       },
-      selectItem(item){
+      selectItem(item,idx){
+          this.namelist = item;
+          this.activeClass = idx;
       },
       onMouseOver(index){
       },
@@ -424,7 +414,7 @@ export default {
             .nav-text{
                 color: #999999;
                 font-size: 14px;
-                margin-top: -8px;
+                margin-top: 8px;
             }
             h2{
                 color: #2c2c2c;
@@ -445,6 +435,14 @@ export default {
             height: 100%;
             margin: 0 auto;
             margin-top: 20px;
+            position: relative;
+            .yogo-img{
+                position: absolute;
+                right: 0%;
+                width: 185px;
+                height: 330px;
+                bottom: 80%;
+            }
             .yogocontunt{
                 width: 74%;
                 height: 100%;
@@ -470,8 +468,10 @@ export default {
                     h3{
                         text-align: center;
                         color: #2c2c2c;
-                        font-size: 18px;
                         margin-top: 20px;
+                        font-size:18px;
+                        font-family:Microsoft YaHei;
+                        font-weight:bold;
                     }
                     .icon-desc{
                         text-align: center;
@@ -486,6 +486,10 @@ export default {
                         font-size: 14px;
                     }
                 }
+                .active {
+                    box-shadow:2px 7px 9px 0px rgba(36,36,36,0.2);
+                    height: 450px;
+                    }
                 .yogocontunt-swiper{
                     width: 100%;
                     height: 350px;
@@ -494,9 +498,70 @@ export default {
                     .yogoswiper-img{
                         width: 50%;
                         height: 100%;
-                        img{
-                            width: 100%;
-                            height: 100%;
+                        position: relative;
+                        .rhomb1{
+                            width: 220px;
+                            height: 220px;
+                            border: 7px solid #fff;
+                            background-color: #E2DBC8;
+                            transform:rotate(45deg);
+                            position: absolute;
+                            right: 50%;
+                            top: 16%;
+                            img{
+                                width: 100%;
+                                height: 100%;
+                                transform:rotate(-90deg);
+                                }
+                        }
+                        .rhomb2{
+                            width: 220px;
+                            height: 220px;
+                            border: 7px solid #E2DBC8;
+                            transform:rotate(45deg);
+                            position: absolute;
+                            right: 30%;
+                            top: 14%;
+                            border-left: #fff;
+                            border-bottom: #fff;
+                        }
+                        .rhomb2:before{
+                            content: "";
+                            position: absolute;
+                            left: -19%;
+                            top: 17%;
+                            width: 42%;
+                            height: 7px;
+                            background-color: #E2DBC8;
+                            transform: rotate(89deg);
+                        }
+                        .rhomb2:after{
+                            content: "";
+                            position: absolute;
+                            left: 66%;
+                            top: 97%;
+                            width: 36%;
+                            height: 7px;
+                            background-color: #E2DBC8;
+                            transform: rotate(0deg);
+                        }
+                        .rhomb3{
+                            width: 55px;
+                            height: 55px;
+                            border: 4px solid #E2DBC8;
+                            transform:rotate(45deg);
+                            position: absolute;
+                            right: 12%;
+                            top: 5%;
+                        }
+                        .rhomb4{
+                            width: 95px;
+                            height: 95px;
+                            border: 4px solid #E2DBC8;
+                            transform:rotate(45deg);
+                            position: absolute;
+                            right: 8%;
+                            top:56%;
                         }
                     }
                     .yogoswiper-text{
@@ -508,7 +573,7 @@ export default {
                             border: 1px solid #e2dbc8;
                             background: #e2dbc8;
                             text-align: center;
-                            margin-top:45px;
+                            margin-top:20%;
                             .el-button--text{
                                 color: #2c2c2c;
                                 background: 0 0;
@@ -519,6 +584,10 @@ export default {
                         h3{
                             text-align: left;
                             line-height: 45px;
+                            font-family:Microsoft YaHei;
+                            font-weight:bold;
+                            font-size: 18px;
+                            color: #2c2c2c;
                         }
                         .p1{
                             color: #2c2c2c;
@@ -527,7 +596,15 @@ export default {
                         .p2{
                             color: #999999;
                             font-size: 14px;
-                            margin-top:30px;
+                            margin-top:13%;
+                        }
+                        .p3{
+                            color: #2c2c2c;
+                            font-size: 14px;
+                        }
+                        .p4{
+                            color: #999999;
+                            font-size: 14px;
                         }
                     }
                 }
@@ -633,7 +710,7 @@ export default {
             .nav-text{
                 color: #999999;
                 font-size: 14px;
-                margin-top: -8px;
+                margin-top: 8px;
             }
             h2{
                 color: #2c2c2c;

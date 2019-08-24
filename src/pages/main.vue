@@ -27,7 +27,7 @@
                             </div>
                             <div class="carousel-detals">
                                 <span class="span">{{item.intro}}</span>
-                                <el-button type="text" class="carousel-btn">了解更多</el-button>
+                                <el-button type="text" class="carousel-btn" @click="Learnmore(item)">了解更多</el-button>
                             </div>
                             </el-carousel-item>
                         </el-carousel>
@@ -40,20 +40,29 @@
                         <div class="border-right"></div>
                     </div>
                     <div class="nav-contunt-div4">
-                        <div class="contunt3">
-                            <swiper :options="swiperOptionTop" class="gallery-top" ref="swiperTop">
-                                <swiper-slide class="slide-1" ></swiper-slide>
-                                <swiper-slide class="slide-2"></swiper-slide>
-                                <swiper-slide class="slide-3"></swiper-slide>
-                                <swiper-slide class="slide-4"></swiper-slide>
-                                <div class="swiper-button-next swiper-button-white" slot="button-next"></div>
-                                <div class="swiper-button-prev swiper-button-white" slot="button-prev"></div>
-                            </swiper>
-                            <swiper :options="swiperOptionThumbs" class="gallery-thumbs" ref="swiperThumbs">
-                                <swiper-slide class="slide-1"></swiper-slide>
-                                <swiper-slide class="slide-2"></swiper-slide>
-                                <swiper-slide class="slide-3"></swiper-slide>
-                                <swiper-slide class="slide-4"></swiper-slide>
+                         <div class="contunt3">
+                            <swiper :options="swiperOptionData" style="height:630px">
+                                <swiper-slide v-for="(page2,index) of pages2" :key="index">
+                                    <div class="yogocontunt-swiper">
+                                        <div class="yogoswiper-img">
+                                            <div class="rhomb1">
+                                                <img :src="namelist.icon_url"/>
+                                            </div>
+                                        </div>
+                                        <div class="yogoswiper-text">
+                                            <h3>{{namelist.headline}}</h3>
+                                            <p class="p1">{{namelist.summary}}</p>
+                                            <div class="yogoswiper-butt">
+                                            <el-button type="text" @click="ViewAll(namelist)">查看全部</el-button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="icon" v-for="(item,idx) of page2" :key="item.id" :class="activeClass == idx ? 'active':''" @click="selectItem(item,idx)">
+                                        <img class="icon-img-content" :src="item.icon_url">
+                                    </div>
+                                </swiper-slide>
+                                <div class="swiper-button-prev1" slot="button-prev"></div>
+                                 <div class="swiper-button-next1" slot="button-next"></div>
                             </swiper>
                          </div>
                     </div>
@@ -148,6 +157,8 @@ export default {
         famousteach:[],
         clubInfo:[],
         info:[],
+        namelist:[],
+        activeClass: 0,
         swiperOption: {
           spaceBetween: 30,
           pagination: {
@@ -156,23 +167,16 @@ export default {
           },
           loop: true,
         },
-        swiperOptionTop:{
-           spaceBetween: 10,
+        swiperOptionData: {
+          pagination: ".swiper-pagination",
+          autoplay: false,
+          loopFillGroupWithBlank: true,
           loop: true,
-          loopedSlides: 5,
           navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev'
-          }
+            nextEl: '.swiper-button-next1',
+            prevEl: '.swiper-button-prev1'
+          },
         },
-        swiperOptionThumbs: {
-          spaceBetween: 10,
-          slidesPerView: 4,
-          touchRatio: 0.2,
-          loop: true,
-          loopedSlides: 5,
-          slideToClickedSlide: true,
-        }
     };
   },
    computed: {
@@ -187,19 +191,26 @@ export default {
         });
         return pages;
       },
+      pages2(){
+        const pages2 = []; // pages是为二维数组
+        this.info.forEach((item, index) => {
+          const page2 = Math.floor(index / 4); // page本质是0.1.2.3分别表示第1,2,3,4页
+          if (!pages2[page2]) {
+            pages2[page2] = [];
+          }
+          pages2[page2].push(item);
+        });
+        return pages2;
+      },
   },
-   mounted() {
-      this.$nextTick(() => {
-        const swiperTop = this.$refs.swiperTop.swiper;
-        const swiperThumbs = this.$refs.swiperThumbs.swiper;
-        swiperTop.controller.control = swiperThumbs;
-        swiperThumbs.controller.control = swiperTop;
-      })
-    },
     created(){
         this.listhomedata();
     },
     methods:{
+        selectItem(item,idx){
+          this.namelist = item;
+          this.activeClass = idx;
+      },
         listhomedata(){
         let _this = this;
         this.$request("/home").then(res => {
@@ -217,6 +228,22 @@ export default {
                 type: "error"
             });
             return;
+            }
+        });
+      },
+      Learnmore(item){
+          this.$router.push({
+            path: "/cultivate/detail",
+            query: {
+            id: item.id
+            }
+        });
+      },
+      ViewAll(namelist){
+          this.$router.push({
+            path: "/yogoinformation",
+            query: {
+            id: namelist.lid
             }
         });
       },
@@ -423,45 +450,119 @@ export default {
             height: 700px;
             margin-top: 15px;
             .contunt3{
-                width: 75%;
+                width: 74.9%;
                 margin: 0 auto;
                 height: 624px;
-             .swiper-container {
-                 width: 100%;
-                 .swiper-slide {
-                    background-size: cover;
-                    background-position: center;
-                    &.slide-1 {
-                    background-image:url('../assets/image3.png');
+                .icon{
+                    float: left;
+                    width: 23%;
+                    height: 198px;
+                    margin-top: 25px;
+                    margin-right:21px;
+                    box-shadow: 1px 1px 6px 0px rgba(36, 36, 36, 0.2);
+                    background-color: #fff;
+                        .icon-img-content{
+                            width: 100%;
+                            height: 100%;
+                        }
+                }
+                .active {
+                    box-shadow:2px 7px 9px 0px rgba(36,36,36,0.2);
                     }
-                    &.slide-2 {
-                    background-image:url('../assets/image4.png');
+                .yogocontunt-swiper{
+                    width: 100%;
+                    height: 400px;
+                    margin: 0 auto;
+                    display: flex;
+                    position: relative;
+                    .yogoswiper-img{
+                        width: 52%;
+                        height: 100%;
+                        position: relative;
+                        .rhomb1{
+                            width: 100%;
+                            height: 100%;
+                            background-color: #E2DBC8;
+                            img{
+                                width: 100%;
+                                height: 100%;
+                                }
+                        }
                     }
-                    &.slide-3 {
-                    background-image:url('../assets/image5.png');
-                    }
-                    &.slide-4 {
-                    background-image:url('../assets/image6.png');
+                    .yogoswiper-text{
+                        width: 30%;
+                        height: 85%;
+                        background-color: #fff;
+                        opacity: 0.6;
+                        position: absolute;
+                        bottom: 0%;
+                        right: 18%;
+                        .yogoswiper-butt{
+                            width: 120px;
+                            border: 1px solid #1B1B1B;
+                            background: #1B1B1B;
+                            text-align: center;
+                            margin-top: 23%;
+                            margin-left: 35px;
+                            .el-button--text{
+                                color: #fff;
+                                background: 0 0;
+                                padding-left: 0;
+                                padding-right: 0;
+                            }
+                        }
+                        h3{
+                            text-align: left;
+                            line-height:30px;
+                            color: #2c2c2c;
+                            font-size:16px;
+                            margin-top:20px;
+                            font-family:Source Han Sans CN;
+                            font-weight:bold;
+                            margin-left: 35px;
+                            display: -webkit-box;
+                            -webkit-box-orient: vertical;
+                            -webkit-line-clamp:2;// 限制快级元素的文本行数
+                            overflow: hidden;
+                        }
+                        .p1{
+                            color: #2c2c2c;
+                            margin-left: 35px;
+                            font-size: 14px;
+                            display: -webkit-box;
+                            -webkit-box-orient: vertical;
+                            -webkit-line-clamp:4;// 限制快级元素的文本行数
+                            overflow: hidden;
+                            margin-top: 14%;
+                        }
                     }
                 }
-            }
-            .gallery-top {
-                height: 72%!important;
-                width: 100%;
-            }
-             .gallery-thumbs {
-                height: 27%!important;
-                box-sizing: border-box;
-                padding: 10px 0;
-                .swiper-slide {
-                    width: 25%;
-                    height: 100%;
-                    opacity: 0.4;
+                .swiper-button-prev1{
+                        position: absolute;
+                        left: 86%;
+                        top: 57%;
+                        width: 35px;
+                        height: 35px;
+                        border: 1px solid #e2dbc8;
+                        border-radius: 50%;
+                        z-index: 10;
+                        background-size: 32px 35px;
+                        background-color: #fff;
+                        background-image: url('../assets/left.png');
                 }
-                 .swiper-slide-active {
-                    opacity: 1;
+                .swiper-button-next1{
+                        position: absolute;
+                        right: 2%;
+                        top: 57%;
+                        width: 35px;
+                        height: 35px;
+                        border: 1px solid #e2dbc8;
+                        border-radius: 50%;
+                        z-index: 10;
+                        background-size: 32px 35px;
+                        background-color: #fff;
+                        background-image: url('../assets/right.png');
                 }
-            }
         }
       }
     }
