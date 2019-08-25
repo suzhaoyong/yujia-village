@@ -37,18 +37,18 @@
             </div>
             <div class="colors">
               <span>颜色:</span>
-                <div
-                  :class="['color', item.name === chooseItem.color.name ? 'active': '']"
-                  v-for="(item, index) in goods.color_size"
-                  :key="index"
-                  @click="chooseColor(item)"
-                >
-                  <div class="img">
-                    <img :src="item.cover" alt />
-                  </div>
-                  <div class="color-name">{{item.name}}</div>
+              <div
+                :class="['color', item.name === chooseItem.color.name ? 'active': '']"
+                v-for="(item, index) in goods.color_size"
+                :key="index"
+                @click="chooseColor(item)"
+              >
+                <div class="img">
+                  <img :src="item.cover" alt />
                 </div>
-                <div v-if="goods.color_size.length === 0" class="size-list">暂无</div>
+                <div class="color-name">{{item.name}}</div>
+              </div>
+              <div v-if="goods.color_size.length === 0" class="size-list">暂无</div>
             </div>
             <div class="size">
               <span>尺码:</span>
@@ -124,9 +124,7 @@ export default {
       isBindClick: false,
       sizeList: [],
       chooseItem: {
-        activeImg: {
-          img: ""
-        },
+        activeImg: "",
         color: {},
         size: "",
         number: 1
@@ -174,6 +172,7 @@ export default {
           data.path4
         ];
         // this.sizeList = data.color_size[0].data;
+        this.chooseItem.activeImg = data.cover;
         const { material, painter, season, describe } = data;
         this.goods.params = [
           { material },

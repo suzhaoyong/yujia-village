@@ -5,15 +5,18 @@
         <div class="selected">
           <span v-show="arrayNotEmpty(selected.tags)">已选</span>
           <span v-show="arrayNotEmpty(selected.tags)">></span>
-          <div class="tags">
+          <div class="tags" v-show="arrayNotEmpty(selected.tags)">
             <div class="tag" v-for="(item, index) in selected.tags" :key="index">
               {{item.name}}
               <i class="el-icon-close close" @click="removeTags(item, index)"></i>
             </div>
+            <span style="margin-left:10px;">
+              <el-button icon="el-icon-search" @click="searchGoods" circle></el-button>
+            </span>
           </div>
         </div>
         <div class="search">
-          <input type="text" class="form-control input" placeholder="商品名或关键词" />
+          <!-- <input type="text" class="form-control input" placeholder="商品名或关键词" /> -->
         </div>
       </div>
       <div class="select">
@@ -162,7 +165,7 @@
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                   <a
                     class="dropdown-item"
-                    v-for="(item, index) in tags.color"
+                    v-for="(item, index) in tags.color.list"
                     :key="index"
                     :class="['dropdown-item', {'active': isTagActive(item)}]"
                     @click="chooseTagsFor('price', item)"
@@ -185,7 +188,7 @@
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                   <a
                     class="dropdown-item"
-                    v-for="(item, index) in tags.season"
+                    v-for="(item, index) in tags.season.list"
                     :key="index"
                     :class="['dropdown-item', {'active': isTagActive(item)}]"
                     @click="chooseTagsFor('price', item)"
@@ -208,7 +211,7 @@
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                   <a
                     class="dropdown-item"
-                    v-for="(item, index) in tags.person"
+                    v-for="(item, index) in tags.person.list"
                     :key="index"
                     :class="['dropdown-item', {'active': isTagActive(item)}]"
                     @click="chooseTagsFor('price', item)"
@@ -223,7 +226,7 @@
       <div class="goods-list">
         <div class="sort">
           <div class="range">
-            <div class="select-box">
+            <!-- <div class="select-box">
               <div class="dropdown show">
                 <a
                   class="btn dropdown-toggle"
@@ -240,7 +243,7 @@
                   <a class="dropdown-item" href="#">更多1</a>
                 </div>
               </div>
-            </div>
+            </div>-->
           </div>
           <div class="tips">温馨提示： 如果选择困难，您可咨询馆内私人教练</div>
         </div>
@@ -337,6 +340,18 @@ export default {
         type: {
           list: [],
           more: []
+        },
+        season: {
+          list: [],
+          more: []
+        },
+        color: {
+          list: [],
+          more: []
+        },
+        person: {
+          list: [],
+          more: []
         }
       },
       selected: {
@@ -348,7 +363,11 @@ export default {
   computed: {
     isTagActive() {
       return item => {
-        return this.selected.tags.findIndex(tag => tag.id === item.id) >= 0;
+        if (item.name !== "不限") {
+          return (
+            this.selected.tags.findIndex(tag => tag.name === item.name) >= 0
+          );
+        }
       };
     },
     arrayNotEmpty() {
@@ -361,13 +380,18 @@ export default {
     this.getMarketList();
   },
   methods: {
+    searchGoods() {
+      const parmas = {};
+      this.selected.tags.map(item => {
+        parmas[item.type] = item.value;
+      });
+      postShowGoodList();
+    },
     changeGoodsFor(name) {
       this.getMarketList();
     },
     /** 添加收藏 */
-    addCollect() {
-
-    },
+    addCollect() {},
     getMarketList() {
       postShowGoodList().then(data => {
         this.resultList = data;
@@ -375,34 +399,66 @@ export default {
     },
     getMarketTags() {
       getGoods().then(data => {
-        const { color, material, person, price, season, sort, type } = data;
-        this.tags.price = getList(price);
-        this.tags.material = getList(material);
-        this.tags.sort = getList(sort);
-        this.tags.type = getList(type);
-        this.tags = Object.assign({}, this.tags, { color, season, person });
+        let { color, material, person, price, season, sort, type } = data;
+        price = getList(price, "price");
+        material = getList(material, "material");
+        sort = getList(sort, "sort");
+        type = getList(type, "type");
+        color = getList(color, "color", false);
+        season = getList(season, "season", false);
+        person = getList(person, "person", false);
 
-        function getList(tag) {
-          const MAX_LENGTH = 8;
-          const obj = {
-            list: [],
-            more: []
-          };
-          if (tag.length > MAX_LENGTH) {
-            obj.more = tag.slice(MAX_LENGTH);
+        this.tags = Object.assign(
+          {},
+          { color, material, person, price, season, sort, type }
+        );
+
+        function getList(tag, name, is_split = true) {
+          tag = tag.map(item => {
+            item.type = name;
+            return item;
+          });
+          let obj = {};
+          if (is_split) {
+            const MAX_LENGTH = 8;
+            obj = {
+              list: [],
+              more: []
+            };
+            if (tag.length > MAX_LENGTH) {
+              obj.more = tag.slice(MAX_LENGTH);
+            }
+            obj.list = tag.slice(0, MAX_LENGTH);
+          } else {
+            obj = {
+              list: tag
+            };
           }
-          obj.list = tag.slice(0, MAX_LENGTH);
           return obj;
         }
       });
     },
     chooseTagsFor(name, tag) {
       if (this.isTagActive(tag)) return;
-      this.selected.tags.push(tag);
+      if (tag.name === "不限") {
+        this.selected.tags = this.selected.tags.filter(
+          item => item.type !== tag.type
+        );
+        return;
+      }
+      const checkHaveArray = this.selected.tags.filter(
+        item => item.type === tag.type
+      );
+      if (checkHaveArray.length === 0) {
+        this.selected.tags.push(tag);
+      } else {
+        checkHaveArray.map((item, index) => this.removeTags(item, index));
+        this.selected.tags.push(tag);
+      }
     },
     removeTags(tag, index) {
       this.selected.tags = this.selected.tags.filter(
-        item => item.id !== tag.id
+        item => item.name !== tag.name
       );
     },
     handleSizeChange(val) {},

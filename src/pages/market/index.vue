@@ -7,7 +7,7 @@
         <div class="item" @click="goto('collect')">收藏中心</div>
       </div>
       <div class="input-box">
-        <input type="text" class="form-control input" placeholder="商品名称" />
+        <!-- <input type="text" class="form-control input" placeholder="商品名称" /> -->
       </div>
     </div>
     <div class="market">

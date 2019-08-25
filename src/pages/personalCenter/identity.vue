@@ -17,7 +17,7 @@
           <div class="type">我是教练</div>
         </div>
       </div>
-      <div class="my-identity">
+      <div class="my-identity" v-show="false">
         <div class="icon"></div>
         <div class="info">
           <div class="balance">
@@ -46,7 +46,7 @@
           </div>
         </div>
       </div>
-      <div class="input-card">
+      <div class="input-card" v-show="false">
         <div class="icon"></div>
         <div class="card">
           <div class="title">
@@ -112,4 +112,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.identity{
+  
+}
 </style>

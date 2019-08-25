@@ -38,10 +38,9 @@
       </div>
       <div class="footer">
         <div class="op">
-          <div :class="['select', {active: isAllGoodsSelect}]"></div>
+          <div :class="['select', {active: isAllGoodsSelect}]" @click="operate('selectAll')"></div>
           <div class="all" @click="operate('selectAll')">全选</div>
           <div class="delete" @click="operate('allDelete')">删除</div>
-          <div class="share" @click="operate('share')">分享</div>
         </div>
         <div class="count">
           <span class="num">
@@ -56,7 +55,12 @@
 </template>
 <script>
 import SessionTitle from "./SessionTitle";
-import { getUserCollect, deleteUserCollect, postUserCart } from "@/api/market";
+import {
+  getUserCollect,
+  deleteUserCollect,
+  postUserCart,
+  postAddUserCart
+} from "@/api/market";
 export default {
   components: {
     SessionTitle
@@ -94,7 +98,7 @@ export default {
       const op_obj = {
         addGoods: item => {
           const { id, num, size, color } = item;
-          postUserCart({ id, num, size, color }).then(data => {
+          postAddUserCart({ id: [id], num: [num] }).then(data => {
             this.$message({ type: "success", message: "添加成功" });
           });
         },
@@ -115,8 +119,7 @@ export default {
             return item;
           });
         },
-        allDelete: () => {},
-        share: () => {}
+        allDelete: () => {}
       };
       op_obj[name] && op_obj[name](goods);
     },
@@ -129,8 +132,7 @@ export default {
           this.goods[index].num -= num;
         },
         add: num => {
-          this.goods[index].num =
-            parseInt(this.goods[index].num) + num;
+          this.goods[index].num = parseInt(this.goods[index].num) + num;
         }
       };
       obj[option](num);
@@ -180,6 +182,9 @@ img {
             border-radius: 50%;
             background: #eee;
             margin: 0 2rem 0 1rem;
+            &.active {
+              background: #000;
+            }
           }
           .img {
             width: 7rem;
@@ -294,6 +299,9 @@ img {
         border-radius: 50%;
         background: #eee;
         margin: 0 2rem 0 1rem;
+        &.active {
+          background: #000;
+        }
       }
       .all {
       }

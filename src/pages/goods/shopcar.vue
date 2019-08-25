@@ -64,7 +64,9 @@ import {
   getUserCart,
   deleteUserCart,
   postUserCart,
-  postUserCollect
+  postUserCollect,
+  postAddUserCollect,
+  postUserOrder
 } from "@/api/market";
 export default {
   components: {
@@ -95,7 +97,7 @@ export default {
     //   this.goods =
     //     (goods && JSON.parse(goods).map(item => item.select)) || [];
     // } else {
-      this.getShopCar();
+    this.getShopCar();
     // }
   },
   methods: {
@@ -110,7 +112,7 @@ export default {
         },
         moveToCollect: item => {
           const { id, num, size, color } = item;
-          postUserCollect({ id, num, size, color }).then(data => {
+          postAddUserCollect({ id: [id], num: [num] }).then(data => {
             this.$message({ type: "success", message: "添加成功" });
           });
         }
@@ -134,7 +136,12 @@ export default {
         },
         moveToCollect: () => {
           let selectGoods = this.goods.filter(item => item.select);
-          this.goods = this.goods.filter(item => !item.select);
+          // this.goods = this.goods.filter(item => !item.select);
+          const id = selectGoods.map(item => item.id);
+          const num = selectGoods.map(item => item.num);
+          postAddUserCollect({ id: [id], num: [num] }).then(data => {
+            this.$message({ type: "success", message: "添加成功" });
+          });
         }
       };
       obj[option] && obj[option]();
@@ -148,8 +155,7 @@ export default {
           this.goods[index].num -= num;
         },
         add: num => {
-          this.goods[index].num =
-            parseInt(this.goods[index].num) + num;
+          this.goods[index].num = parseInt(this.goods[index].num) + num;
         }
       };
       obj[option](num);
@@ -160,11 +166,14 @@ export default {
     },
     payment() {
       sessionStorage.setItem("goods", JSON.stringify(this.goods));
-      this.$router.push({
-        name: "order",
-        params: {
-          id: 1
-        }
+      const select = this.goods.filter(item => item.select);
+      const id = select.map(item => item.id);
+      const num = select.map(item => item.num);
+      postUserOrder({ id, num }).then(data => {
+        this.$router.push({
+          name: "order",
+          params: {}
+        });
       });
     },
     getShopCar() {

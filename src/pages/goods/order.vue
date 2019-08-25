@@ -24,8 +24,10 @@
                   <div class="name">IVAN</div>
                 </div>
                 <div style="align-self: flex-start; margin-left: 3.5rem;" v-if="address.length > 0">
-                  <div class="name-phone">xiang - 123123123</div>
-                  <div class="address">12312</div>
+                  <div
+                    class="name-phone"
+                  >{{`${addressActive.name} - ${addressActive.zone} ${addressActive.address}`}}</div>
+                  <div class="address">{{addressActive.tel}}</div>
 
                   <div
                     :class="['currently-deliviery', statusActive('0')]"
@@ -51,7 +53,7 @@
                   <div class="item">
                     <div class="key">所在区域</div>
                     <div class="value">
-                      <el-input type="text" v-model="ruleForm.userAddress" placeholder="请输入所在区域"></el-input>
+                      <el-input type="text" v-model="ruleForm.userZone" placeholder="请输入所在区域"></el-input>
                     </div>
                   </div>
                   <div class="item">
@@ -132,7 +134,7 @@
                   </div>
                   <div class="title-say">
                     <div class="title">{{item.describe}}</div>
-                    <div class="say"></div>
+                    <!-- <div class="say"></div> -->
                   </div>
                 </div>
                 <div class="specifications">
@@ -177,7 +179,13 @@ import alipayIcon from "@/assets/order/alipay.png";
 import wechatIcon from "@/assets/order/wechat.png";
 import bankIcon from "@/assets/order/bank.png";
 import SessionTitle from "./SessionTitle";
-import { getUserAddress, getUserOrder, postGoodOrder } from "@/api/market";
+import {
+  getUserAddress,
+  getUserOrder,
+  postGoodOrder,
+  postGetAlipayCode,
+  postGetWechatpayCode
+} from "@/api/market";
 export default {
   components: {
     SessionTitle
@@ -192,8 +200,10 @@ export default {
       },
       goods: [],
       address: [],
+      addressActive: {},
       ruleForm: {
-        id: "", // 商品副列表 编号
+        id: "", // 购物车列表编号
+        lid: "", // 商品副列表 编号
         num: "",
         sendTime: "1", // 送货时间 1-送货时间不限 2-仅周一周五送货 3-仅节假日/周末送货
         userName: "",
@@ -209,7 +219,8 @@ export default {
   },
   computed: {
     getAllSelectNumberAndPrice() {
-      let allGoods = this.goods.filter(item => item.select);
+      // let allGoods = this.goods.filter(item => item.select);
+      let allGoods = this.goods;
 
       let allPrice = allGoods.reduce((pre, cur) => {
         return parseInt(pre) + parseInt(cur.num) * parseInt(cur.sell_price);
@@ -233,10 +244,16 @@ export default {
     }
   },
   mounted() {
-    const goods = sessionStorage.getItem("goods");
-    this.goods = goods && JSON.parse(goods).filter(item => item.select);
+    // const goods = sessionStorage.getItem("goods");
+    // this.goods = goods && JSON.parse(goods).filter(item => item.select);
     getUserAddress().then(data => {
-      this.address = data;
+      this.address = data.address;
+      if (data.address.length === 0) {
+        this.ruleForm.status = "1";
+      } else {
+        this.addressActive = data.address[0];
+      }
+      this.goods = data.goods;
     });
   },
   methods: {
@@ -244,8 +261,45 @@ export default {
       this.$router.go(-1);
     },
     submitForm() {
-      const params = Object.assign({}, this.ruleForm);
-      postGoodOrder();
+      const { status } = this.ruleForm;
+      let params = Object.assign({}, this.ruleForm);
+      if (parseInt(status) === 0) {
+        if (this.address.length === 0) {
+          this.$message({
+            type: "warning",
+            message: "请先填写收货信息"
+          });
+          return;
+        }
+        const { zone, address, id, tel } = this.addressActive;
+        params = Object.assign({}, params, {
+          addressId: id,
+          userZone: zone,
+          userAddress: address,
+          userTel: tel
+        });
+      } else if (parseInt(status) === 1) {
+      }
+      if (params.payment === "") {
+        this.$message({
+          type: "warning",
+          message: "请先选择付款方式"
+        });
+        return;
+      }
+      const id = this.goods.map(item => item.id);
+      const lid = this.goods.map(item => item.goodListId);
+      const num = this.goods.map(item => item.num);
+      params = Object.assign({}, params, { id, lid, num });
+      postGoodOrder(params).then(data => {
+        const { payment, out_trade_no, totalPrice, body } = data;
+        if (parseInt(payment) === 2) {
+          postGetAlipayCode({ out_trade_no, totalPrice, body });
+        }
+        if (parseInt(payment) === 3) {
+          postGetWechatpayCode({ out_trade_no, totalPrice, body });
+        }
+      });
     }
   }
 };

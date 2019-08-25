@@ -13,7 +13,7 @@
               <span class="span1" @click="account.type='register'">注册</span>
             </div>
             <span>
-              <img class="img" src="../assets/cart.png" />
+              <img @click="goto('shopCar')" class="img" src="../assets/cart.png" />
             </span>
           </div>
         </div>
@@ -82,8 +82,7 @@ export default {
       activeIndex: "main",
       account: {
         type: ""
-      },
-      
+      }
     };
   },
   computed: {
@@ -171,6 +170,15 @@ export default {
     /** 用户基本信息 */
     getInfo() {
       this.$request("/auth/me").then(data => {});
+    },
+    goto(name, item) {
+      let id = item || "all";
+      this.$router.push({
+        name,
+        params: {
+          id
+        }
+      });
     }
   }
 };

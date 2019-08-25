@@ -45,7 +45,7 @@ function handleResponeseErr(err) {
   if (status === 401) {
     message = '请先登录'
     if (sessionStorage.getItem('access')) {
-      sessionStorage.removeItem('access')
+      // sessionStorage.removeItem('access')
       request.post('/auth/refresh')
         .then(data => {
           sessionStorage.setItem('access', JSON.stringify(data))

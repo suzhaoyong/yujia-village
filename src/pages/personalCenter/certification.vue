@@ -20,20 +20,22 @@
           <div class="name-phone">
             <div class="name">
               <span class="title">真实姓名</span>
-              <input type="text" class="form-control input" placeholder="商品名或关键词" />
+              <el-input v-model="ruleForm.real_name" placeholder="请填写真实姓名"></el-input>
             </div>
             <div class="phone">
               <span class="title">馆内联系电话</span>
-              <input type="text" class="form-control input" placeholder="商品名或关键词" />
+              <el-input v-model="ruleForm.club_tel" placeholder="请填写馆内联系电话"></el-input>
             </div>
             <div class="shop">
               <span class="title">加盟馆馆名</span>
-              <input type="text" class="form-control input" placeholder="商品名或关键词" />
+              <el-input v-model="ruleForm.club_name" placeholder="请填写加盟馆馆名"></el-input>
             </div>
           </div>
           <div class="address">
             <span class="title">加盟馆地址</span>
-            <input type="text" class="form-control input" placeholder="详细地址" />
+            <!-- <v-distpicker :province="province" :city="city" :area="area" @selected="selectAddress"></v-distpicker> -->
+            <v-distpicker @selected="selectAddress"></v-distpicker>
+            <el-input style="margin-right:20px;" v-model="ruleForm.address" placeholder="请填写加盟馆地址"></el-input>
           </div>
         </div>
         <div class="card">
@@ -42,33 +44,63 @@
             <div class="download">下载模版</div>
           </div>
           <div class="upload-box">
-            <el-upload action="#" list-type="picture-card" :auto-upload="false">
-              <i slot="default" class="el-icon-plus"></i>
-              <div slot="file" slot-scope="{file}">
-                <img class="el-upload-list__item-thumbnail" :src="file.url" alt />
-                <span class="el-upload-list__item-actions">
-                  <span
-                    class="el-upload-list__item-preview"
-                    @click="handlePictureCardPreview(file)"
-                  >
-                    <i class="el-icon-zoom-in"></i>
-                  </span>
-                  <span
-                    v-if="!disabled"
-                    class="el-upload-list__item-delete"
-                    @click="handleDownload(file)"
-                  >
-                    <i class="el-icon-download"></i>
-                  </span>
-                  <span
-                    v-if="!disabled"
-                    class="el-upload-list__item-delete"
-                    @click="handleRemove(file)"
-                  >
-                    <i class="el-icon-delete"></i>
-                  </span>
-                </span>
-              </div>
+            <el-upload
+              action="#"
+              :class="{disabled:uploadExemptionDisabled}"
+              :on-change="changeExemptionFile"
+              :on-remove="() => this.ruleForm['img_exemption'] = ''"
+              list-type="picture-card"
+              :limit="1"
+              :auto-upload="false"
+            >
+              <i class="el-icon-plus"></i>
+              <div class="el-upload__tip" slot="tip">支持jpg.jpeg.bmp.gif.png格式</div>
+            </el-upload>
+            <el-dialog :visible.sync="dialogVisible">
+              <img width="100%" :src="dialogImageUrl" alt />
+            </el-dialog>
+          </div>
+        </div>
+        <div class="card">
+          <div class="title-tips">
+            <div class="title">工作证明</div>
+            <div class="tips">请上传最新的工作证明(仅教练需要提交)</div>
+          </div>
+          <div class="upload-box">
+            <el-upload
+              action="#"
+              :class="{disabled:uploadWorkDisabled}"
+              :on-change="changeWorkFile"
+              :on-remove="() => this.ruleForm['img_work'] = ''"
+              list-type="picture-card"
+              :limit="1"
+              :auto-upload="false"
+            >
+              <i class="el-icon-plus"></i>
+              <div class="el-upload__tip" slot="tip">支持jpg.jpeg.bmp.gif.png格式</div>
+            </el-upload>
+            <el-dialog :visible.sync="dialogVisible">
+              <img width="100%" :src="dialogImageUrl" alt />
+            </el-dialog>
+          </div>
+        </div>
+        <div class="card">
+          <div class="title-tips">
+            <div class="title">营业执照</div>
+            <div class="tips">请上传最新的营业执照(仅馆主需要提交)</div>
+          </div>
+          <div class="upload-box">
+            <el-upload
+              action="#"
+              :class="{disabled:uploadLicenseDisabled}"
+              :on-change="changeLicenseFile"
+              :on-remove="() => this.ruleForm['img_license'] = ''"
+              list-type="picture-card"
+              :limit="1"
+              :auto-upload="false"
+            >
+              <i class="el-icon-plus"></i>
+              <div class="el-upload__tip" slot="tip">支持jpg.jpeg.bmp.gif.png格式</div>
             </el-upload>
             <el-dialog :visible.sync="dialogVisible">
               <img width="100%" :src="dialogImageUrl" alt />
@@ -78,8 +110,8 @@
       </div>
       <div class="agreen-next" v-show="step.cur_index === 1">
         <div class="agreen">
-          <div :class="['select', { active: step.agree }]"></div>
-          <div class="text" @click="step.agree = true">我同意本协议所有内容</div>
+          <div :class="['select', { active: step.agree }]" @click="step.agree = !step.agree"></div>
+          <div class="text" @click="step.agree = !step.agree">我同意本协议所有内容</div>
         </div>
         <div class="next" @click="stepOpFor('next')">下一步</div>
       </div>
@@ -92,9 +124,12 @@
 </template>
 <script>
 import TopTitle from "./topTItle";
+import VDistpicker from "v-distpicker";
+import { postTrains } from "@/api/trains";
 export default {
   components: {
-    TopTitle
+    TopTitle,
+    VDistpicker
   },
   data() {
     return {
@@ -102,7 +137,7 @@ export default {
       dialogVisible: false,
       disabled: false,
       step: {
-        cur_index: 1,
+        cur_index: 2,
         agree: false
       },
       ruleForm: {
@@ -120,7 +155,46 @@ export default {
       }
     };
   },
+  computed: {
+    uploadExemptionDisabled: function() {
+      return this.ruleForm.img_exemption;
+    },
+    uploadWorkDisabled: function() {
+      return this.ruleForm.img_work;
+    },
+    uploadLicenseDisabled: function() {
+      return this.ruleForm.img_license;
+    }
+  },
   methods: {
+    changeExemptionFile(file, fileList) {
+      this.changeFile(file, fileList, "img_exemption");
+    },
+    changeLicenseFile(file, fileList) {
+      this.changeFile(file, fileList, "img_license");
+    },
+    changeWorkFile(file, fileList) {
+      this.changeFile(file, fileList, "img_work");
+    },
+
+    changeFile(file, fileList, name) {
+      let This = this;
+      var reader = new FileReader();
+      reader.readAsDataURL(file.raw);
+      reader.onload = function(e) {
+        this.result; // 这个就是base64编码了
+        This.ruleForm[name] = this.result;
+      };
+    },
+    selectAddress(data) {
+      const { area, city, province } = data;
+      const parmas = {
+        province: province.value,
+        city: city.value,
+        area: area.value
+      };
+      this.ruleForm = Object.assign({}, this.ruleForm, params);
+    },
     stepOpFor(option) {
       const obj = {
         prev: () => {
@@ -139,21 +213,29 @@ export default {
         finish: () => {}
       };
       obj[option]();
-    },
-    handleRemove(file) {
-      console.log(file);
-    },
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
-    },
-    handleDownload(file) {
-      console.log(file);
     }
   }
 };
 </script>
+<style scoped>
+.form >>> .el-input__inner {
+  height: 30px;
+}
+.form >>> .distpicker-address-wrapper select {
+  height: 30px;
+  margin-right: 10px;
+}
+.form >>> .disabled .el-upload--picture-card {
+  display: none;
+}
+</style>
 <style lang="scss" scoped>
+.distpicker-address-wrapper {
+  display: flex;
+  select {
+    height: 30px;
+  }
+}
 * {
   margin: 0;
   padding: 0;
@@ -166,7 +248,7 @@ export default {
   .step-title {
     padding-top: 3.35rem;
     padding-bottom: 1.15rem;
-    border-bottom: 1px solid #dcdcdc;
+    // border-bottom: 1px solid #dcdcdc;
     .step-box {
       display: flex;
       align-items: center;
@@ -235,6 +317,7 @@ export default {
           align-items: center;
           .title {
             padding-right: 0.75rem;
+            flex-shrink: 0;
           }
           .input {
             width: 7rem;
@@ -249,6 +332,7 @@ export default {
         padding-left: 2rem;
         .title {
           margin-right: 1.6rem;
+          flex-shrink: 0;
         }
         .input {
           width: 32rem;

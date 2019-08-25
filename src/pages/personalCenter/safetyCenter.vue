@@ -70,7 +70,7 @@
                       class="form-control input"
                       placeholder="请输入验证码"
                     />
-                    <div class="getcode" @click="getCode">发送验证码</div>
+                    <div class="getcode" @click="getCode">{{codeTips.msg}}</div>
                     <div class="form_input-tips"></div>
                   </div>
                 </div>
@@ -96,7 +96,11 @@
                 <div class="submit">
                   <div
                     class="btn"
-                    @click="tagList[0].methods = 'password';ruleForm = resetForm('ruleForm');"
+                    @click="() => { 
+                      this.tagList[0].methods = 'password';
+                      this.ruleForm = this.resetForm('ruleForm');
+                      this.resetCode();
+                      }"
                   >返回</div>
                   <div class="btn" @click="updatePassword">更改</div>
                 </div>
@@ -118,7 +122,7 @@
                       class="form-control input"
                       placeholder="请输入验证码"
                     />
-                    <div class="getcode" @click="getCode">发送验证码</div>
+                    <div class="getcode" @click="getCode">{{codeTips.msg}}</div>
                     <div class="form_input-tips"></div>
                   </div>
                 </div>
@@ -164,6 +168,10 @@ export default {
   data() {
     return {
       success: false,
+      codeTips: {
+        msg: "发送验证码",
+        count: 0
+      },
       tagList: [
         { type: "password", active: true, methods: "password" },
         { type: "phone", active: false }
@@ -216,15 +224,34 @@ export default {
       };
       return form[name];
     },
+    resetCode() {
+      // 重置获取验证码
+      this.codeTips.msg = "发送验证码";
+      this.codeTips.count = 0;
+    },
+
     /* 短信验证码 */
     getCode() {
+      if (this.codeTips.count > 0) return;
+      this.codeTips.count = 59;
+      let timer = setInterval(() => {
+        this.codeTips.msg = `${this.codeTips.count--}s重新获取`;
+        if (this.codeTips.count <= 0) {
+          clearInterval(timer);
+          this.codeTips.msg = "重新获取";
+        }
+      }, 1000);
+
       const { tel } = this.info && this.info.user;
       tel &&
         this.$request.post("/getCode", { tel }).then(data => {
           this.$message({ message: "发送成功", type: "success" });
           this.ruleForm.verification_key = data.key;
           this.telForm.verification_key = data.key;
-        });
+        })
+        .catch(_ => {
+          this.resetCode();
+        })
     },
     /** 修改手机号码 */
     updateTel() {
@@ -262,6 +289,7 @@ export default {
     /** 切换选项 */
     tagsChange(cur_index) {
       this.success = false;
+      this.resetCode();
       if (cur_index === 1) {
         this.ruleForm = this.resetForm("ruleForm");
       } else {
