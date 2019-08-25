@@ -4,13 +4,13 @@
       <div class="header-main">
         <div class="head-quan">
           <div class="head-right">
-            <span class="span1">已购课程</span>
+            <el-button type="text" class="span2">已购课程</el-button>
             <div style="display:inline-block;" v-if="info">
               <span class="span1">{{info.user.name}}</span>
             </div>
             <div style="display:inline-block;" v-else>
-              <span class="span1" @click="account.type='login'">登录</span>
-              <span class="span1" @click="account.type='register'">注册</span>
+              <el-button type="text" class="span1" @click="account.type='login'">登录</el-button>
+              <el-button type="text" class="span1" @click="account.type='register'">注册</el-button>
             </div>
             <span>
               <img class="img" src="../assets/cart.png" />
@@ -247,18 +247,22 @@ export default {
     .head-right {
       width: 65%;
       text-align: center;
-      margin-top: 7px;
       position: relative;
       .img {
         width: 30px;
         height: 28px;
         display: inline-block;
         position: absolute;
-        top: -4px;
+        top: 4px;
         right: 38%;
       }
       .span1 {
-        padding-right: 17px;
+        padding-right: 5px;
+        color: #2c2c2c;
+        margin: 0 auto;
+      }
+      .span2 {
+        padding-right: 20px;
         color: #2c2c2c;
       }
     }
