@@ -20,8 +20,8 @@
             <div class="body">
               <div class="personal">
                 <div class="icon-name">
-                  <div class="icon"></div>
-                  <div class="name">IVAN</div>
+                  <div class="icon" style="background:#fff;"></div>
+                  <div class="name"></div>
                 </div>
                 <div style="align-self: flex-start; margin-left: 3.5rem;" v-if="address.length > 0">
                   <div
@@ -171,6 +171,11 @@
         </div>
       </div>
     </div>
+    <div class="pay-way" v-if="playcode.show" @click="playcode.show = false">
+      <div class="pay-code">
+        <img src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" alt />
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -192,6 +197,7 @@ export default {
   },
   data() {
     return {
+      playcode: { show: true },
       icon: {
         backIcon,
         alipayIcon,
@@ -271,11 +277,13 @@ export default {
           });
           return;
         }
-        const { zone, address, id, tel } = this.addressActive;
+        const { zone, address, id, tel, name, message } = this.addressActive;
         params = Object.assign({}, params, {
           addressId: id,
           userZone: zone,
           userAddress: address,
+          userName: name,
+          userMessage: message,
           userTel: tel
         });
       } else if (parseInt(status) === 1) {
@@ -294,10 +302,16 @@ export default {
       postGoodOrder(params).then(data => {
         const { payment, out_trade_no, totalPrice, body } = data;
         if (parseInt(payment) === 2) {
-          postGetAlipayCode({ out_trade_no, totalPrice, body });
+          postGetAlipayCode({ out_trade_no, total_fee: totalPrice, body });
         }
         if (parseInt(payment) === 3) {
-          postGetWechatpayCode({ out_trade_no, totalPrice, body });
+          postGetWechatpayCode({
+            out_trade_no,
+            total_fee: totalPrice,
+            body
+          }).then(data => {
+            console.log(data);
+          });
         }
       });
     }
@@ -310,6 +324,22 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.pay-way {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  .pay-code {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 200px;
+  }
+}
 @mixin no_select() {
   -moz-user-select: -moz-none;
   -moz-user-select: none;

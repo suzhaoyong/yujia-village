@@ -18,6 +18,15 @@ export function postShowGoodList(args = {}) {
   params = Object.assign({}, params, args)
   return request.post('/goods/showGoodList', params)
 }
+
+/** 最近浏览  */
+export function postRecentbrowse(args = {}) {
+  let params = {
+    page: ""
+  }
+  params = Object.assign({}, params, args)
+  return request.post('/goods/Recentbrowse', params)
+}
 /** 商品详细分类-筛选条件 */
 export function getGoods() {
   return request('/goods')
@@ -86,7 +95,7 @@ export function postAddUserCollect(args = {}) {
     num: []
   }
   params = Object.assign({}, params, args)
-  return request.post(`/userCart`, params)
+  return request.post(`/userCart/addUserCollect`, params)
 }
 
 /** 删除购物车

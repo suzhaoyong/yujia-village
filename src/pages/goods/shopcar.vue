@@ -5,7 +5,7 @@
         <session-title name="购物车"></session-title>
       </div>
       <div class="body">
-        <div class="goods-box">
+        <div class="goods-box" style="min-height: 80vh;">
           <div class="goods" v-for="(item,index) in goods" :key="index">
             <div class="info">
               <div :class="['select', {'active': item.select}]" @click="chooseGoods(item, index)"></div>
@@ -34,6 +34,7 @@
               <div class="delete" @click="goodsOpFor('detele', item)">删除</div>
             </div>
           </div>
+          <div v-if="goods.length === 0" style="text-align:center;height:100px;line-height:100px;">购物车空空如也~</div>
         </div>
       </div>
       <div class="footer">
@@ -42,7 +43,7 @@
           <div class="all" @click="footerOpFor('selectAll')">全选</div>
           <div class="delete" @click="footerOpFor('detele')">删除</div>
           <div class="add" @click="footerOpFor('moveToCollect')">移入收藏夹</div>
-          <div class="share">分享</div>
+          <!-- <div class="share">分享</div> -->
         </div>
         <div class="count">
           <span class="num">
@@ -112,6 +113,7 @@ export default {
         },
         moveToCollect: item => {
           const { id, num, size, color } = item;
+
           postAddUserCollect({ id: [id], num: [num] }).then(data => {
             this.$message({ type: "success", message: "添加成功" });
           });

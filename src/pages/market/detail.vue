@@ -257,7 +257,7 @@
             <div class="pic">
               <img :src="item.cover_url" alt />
             </div>
-            <div class="title">{{item.describe}}</div>
+            <div class="gtitle">{{item.describe}}</div>
             <div class="price-views-collenct">
               <div class="price">
                 <div class="old-price">￥{{item.sell_price}}</div>
@@ -269,8 +269,11 @@
               </div>
             </div>
           </div>
+          <div class="no_result" style="width:100%;" v-if="resultList.length === 0">
+            <div style="text-align:center;height:100px;line-height:100px;">暂未搜到结果</div>
+          </div>
         </div>
-        <div class="pages">
+        <!-- <div class="pages">
           <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
@@ -280,7 +283,7 @@
             background
             layout="total, sizes, prev, pager, next, jumper"
           ></el-pagination>
-        </div>
+        </div>-->
       </div>
       <div class="last-views">
         <session-title name="最近浏览"></session-title>
@@ -288,7 +291,7 @@
           <div
             class="goods-box"
             @click="viewGoodsDetail(item)"
-            v-for="(item, index) in resultList"
+            v-for="(item, index) in resenView"
             :key="index"
           >
             <div class="pic">
@@ -316,7 +319,7 @@
 </template>
 <script>
 import SessionTitle from "./SessionTitle";
-import { postShowGoodList, getGoods } from "@/api/market";
+import { postShowGoodList, getGoods, postRecentbrowse } from "@/api/market";
 export default {
   components: {
     SessionTitle
@@ -357,7 +360,8 @@ export default {
       selected: {
         tags: []
       },
-      resultList: []
+      resultList: [],
+      resenView: []
     };
   },
   computed: {
@@ -378,23 +382,29 @@ export default {
     //
     this.getMarketTags();
     this.getMarketList();
+    this.getLastView();
   },
   methods: {
-    searchGoods() {
-      const parmas = {};
-      this.selected.tags.map(item => {
-        parmas[item.type] = item.value;
+    getLastView(page = "") {
+      postRecentbrowse({ page }).then(data => {
+        this.resenView = data.data;
       });
-      postShowGoodList();
+    },
+    searchGoods() {
+      let params = {};
+      this.selected.tags.map(item => {
+        params[item.type] = item.id;
+      });
+      postShowGoodList(params).then(data => (this.resultList = data.data));
     },
     changeGoodsFor(name) {
-      this.getMarketList();
+      this.getLastView(2);
     },
     /** 添加收藏 */
     addCollect() {},
     getMarketList() {
       postShowGoodList().then(data => {
-        this.resultList = data;
+        this.resultList = data.data;
       });
     },
     getMarketTags() {
@@ -460,6 +470,9 @@ export default {
       this.selected.tags = this.selected.tags.filter(
         item => item.name !== tag.name
       );
+      if (this.selected.tags.length === 0) {
+        this.getMarketList();
+      }
     },
     handleSizeChange(val) {},
     handleCurrentChange(val) {},
@@ -654,7 +667,7 @@ img {
       .goods-box {
         flex-basis: 23%;
         width: 13.5rem;
-        height: 19.35rem;
+        // height: 19.35rem;
         background: #fff;
         margin-right: 1.6rem;
         &:nth-child(4n) {
@@ -664,7 +677,7 @@ img {
           width: 100%;
           height: 12.75rem;
         }
-        .title {
+        .gtitle {
           padding: 1rem;
           color: #2c2c2c;
           font-size: 0.7rem;
