@@ -72,8 +72,8 @@
                                     <p class="icon-desc2">{{item.info}}</p>
                                     </div>
                                 </swiper-slide>
-                                <div class="swiper-button-prev1" slot="button-prev"></div>
-                                 <div class="swiper-button-next1" slot="button-next"></div>
+                                <div class="swiper-button-prev1" slot="button-prev" @click="buttonprev(pages)"></div>
+                                 <div class="swiper-button-next1" slot="button-next" @click="buttonnext(pages)"></div>
                                 </swiper>
                            </div>
                        </div>
@@ -143,6 +143,7 @@ export default {
         pagesize: 12,
         value: '',
         province:'',
+        i:0,
         city:'',
         area:'',
         value2: '',
@@ -187,6 +188,7 @@ export default {
             _this.iconList = res.elites;
             _this.coursetypes = res.course_types;
             _this.yearlist = res.year;
+            _this.namelist = res.elites[0];
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -239,6 +241,14 @@ export default {
         this.namelist = item;
         this.activeClass = idx;
     },
+    buttonprev(m){ 
+         this.namelist=m[this.i-1][0];
+         this.i--;
+      },
+      buttonnext(m){
+        this.namelist=m[this.i+1][0];
+        this.i++;
+      },
     onMouseOver(index){
     },
     handleSizeChange(size) {
