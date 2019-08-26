@@ -5,15 +5,18 @@
         <div class="selected">
           <span v-show="arrayNotEmpty(selected.tags)">已选</span>
           <span v-show="arrayNotEmpty(selected.tags)">></span>
-          <div class="tags">
+          <div class="tags" v-show="arrayNotEmpty(selected.tags)">
             <div class="tag" v-for="(item, index) in selected.tags" :key="index">
               {{item.name}}
               <i class="el-icon-close close" @click="removeTags(item, index)"></i>
             </div>
+            <span style="margin-left:10px;">
+              <el-button icon="el-icon-search" @click="searchGoods" circle></el-button>
+            </span>
           </div>
         </div>
         <div class="search">
-          <input type="text" class="form-control input" placeholder="商品名或关键词" />
+          <!-- <input type="text" class="form-control input" placeholder="商品名或关键词" /> -->
         </div>
       </div>
       <div class="select">
@@ -162,7 +165,7 @@
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                   <a
                     class="dropdown-item"
-                    v-for="(item, index) in tags.color"
+                    v-for="(item, index) in tags.color.list"
                     :key="index"
                     :class="['dropdown-item', {'active': isTagActive(item)}]"
                     @click="chooseTagsFor('price', item)"
@@ -185,7 +188,7 @@
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                   <a
                     class="dropdown-item"
-                    v-for="(item, index) in tags.season"
+                    v-for="(item, index) in tags.season.list"
                     :key="index"
                     :class="['dropdown-item', {'active': isTagActive(item)}]"
                     @click="chooseTagsFor('price', item)"
@@ -208,7 +211,7 @@
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                   <a
                     class="dropdown-item"
-                    v-for="(item, index) in tags.person"
+                    v-for="(item, index) in tags.person.list"
                     :key="index"
                     :class="['dropdown-item', {'active': isTagActive(item)}]"
                     @click="chooseTagsFor('price', item)"
@@ -223,7 +226,7 @@
       <div class="goods-list">
         <div class="sort">
           <div class="range">
-            <div class="select-box">
+            <!-- <div class="select-box">
               <div class="dropdown show">
                 <a
                   class="btn dropdown-toggle"
@@ -240,7 +243,7 @@
                   <a class="dropdown-item" href="#">更多1</a>
                 </div>
               </div>
-            </div>
+            </div>-->
           </div>
           <div class="tips">温馨提示： 如果选择困难，您可咨询馆内私人教练</div>
         </div>
@@ -254,7 +257,7 @@
             <div class="pic">
               <img :src="item.cover_url" alt />
             </div>
-            <div class="title">{{item.describe}}</div>
+            <div class="gtitle">{{item.describe}}</div>
             <div class="price-views-collenct">
               <div class="price">
                 <div class="old-price">￥{{item.sell_price}}</div>
@@ -262,12 +265,15 @@
               </div>
               <div class="views-collenct">
                 <div class="views">{{item.views}}</div>
-                <div class="collenct">收藏</div>
+                <div class="collenct" @click="addCollect">收藏</div>
               </div>
             </div>
           </div>
+          <div class="no_result" style="width:100%;" v-if="resultList.length === 0">
+            <div style="text-align:center;height:100px;line-height:100px;">暂未搜到结果</div>
+          </div>
         </div>
-        <div class="pages">
+        <!-- <div class="pages">
           <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
@@ -277,7 +283,7 @@
             background
             layout="total, sizes, prev, pager, next, jumper"
           ></el-pagination>
-        </div>
+        </div>-->
       </div>
       <div class="last-views">
         <session-title name="最近浏览"></session-title>
@@ -285,17 +291,17 @@
           <div
             class="goods-box"
             @click="viewGoodsDetail(item)"
-            v-for="(item, index) in resultList"
+            v-for="(item, index) in resenView"
             :key="index"
           >
             <div class="pic">
-              <img :src="item.img" alt />
+              <img :src="item.cover_url" alt />
             </div>
-            <div class="g-title">{{item.name}}</div>
+            <div class="g-title">{{item.describe}}</div>
             <div class="price-views-collenct">
               <div class="price">
-                <div class="old-price">￥{{item.old_price}}</div>
-                <div class="new-price">￥{{item.new_price}}</div>
+                <div class="old-price">￥{{item.sell_price}}</div>
+                <div class="new-price">￥{{item.sell_price - item.discount}}</div>
               </div>
               <div class="views-collenct">
                 <div class="views">{{item.views}}</div>
@@ -313,6 +319,7 @@
 </template>
 <script>
 import SessionTitle from "./SessionTitle";
+import { postShowGoodList, getGoods, postRecentbrowse } from "@/api/market";
 export default {
   components: {
     SessionTitle
@@ -336,18 +343,35 @@ export default {
         type: {
           list: [],
           more: []
+        },
+        season: {
+          list: [],
+          more: []
+        },
+        color: {
+          list: [],
+          more: []
+        },
+        person: {
+          list: [],
+          more: []
         }
       },
       selected: {
         tags: []
       },
-      resultList: []
+      resultList: [],
+      resenView: []
     };
   },
   computed: {
     isTagActive() {
       return item => {
-        return this.selected.tags.findIndex(tag => tag.id === item.id) >= 0;
+        if (item.name !== "不限") {
+          return (
+            this.selected.tags.findIndex(tag => tag.name === item.name) >= 0
+          );
+        }
       };
     },
     arrayNotEmpty() {
@@ -355,73 +379,100 @@ export default {
     }
   },
   mounted() {
-    this.$request("/goods").then(data => {
-      const { color, material, person, price, season, sort, type } = data;
-      this.tags.price = getList(price);
-      this.tags.material = getList(material);
-      this.tags.sort = getList(sort);
-      this.tags.type = getList(type);
-      this.tags = Object.assign({}, this.tags, { color, season, person });
-
-      function getList(tag) {
-        const MAX_LENGTH = 8;
-        const obj = {
-          list: [],
-          more: []
-        };
-        if (tag.length > MAX_LENGTH) {
-          obj.more = tag.slice(MAX_LENGTH);
-        }
-        obj.list = tag.slice(0, MAX_LENGTH);
-        return obj;
-      }
-    });
-
     //
-    this.$request("/goods/showGoodList").then(data => {
-      console.log(data);
-      this.resultList = data;
-    });
+    this.getMarketTags();
+    this.getMarketList();
+    this.getLastView();
   },
   methods: {
-    changeGoodsFor(name) {
-      this.getMarketList();
+    getLastView(page = "") {
+      postRecentbrowse({ page }).then(data => {
+        this.resenView = data.data;
+      });
     },
+    searchGoods() {
+      let params = {};
+      this.selected.tags.map(item => {
+        params[item.type] = item.id;
+      });
+      postShowGoodList(params).then(data => (this.resultList = data.data));
+    },
+    changeGoodsFor(name) {
+      this.getLastView(2);
+    },
+    /** 添加收藏 */
+    addCollect() {},
     getMarketList() {
-      this.axios.get("/market/detail/lists").then(({ data }) => {
-        this.resultList = data.data.items;
+      postShowGoodList().then(data => {
+        this.resultList = data.data;
       });
     },
     getMarketTags() {
-      this.axios.get("/market/detail/tags").then(({ data }) => {
-        const { price, material, sort, type } = data.data.tags;
-        this.tags.price = getList(price);
-        this.tags.material = getList(material);
-        this.tags.sort = getList(sort);
-        this.tags.type = getList(type);
+      getGoods().then(data => {
+        let { color, material, person, price, season, sort, type } = data;
+        price = getList(price, "price");
+        material = getList(material, "material");
+        sort = getList(sort, "sort");
+        type = getList(type, "type");
+        color = getList(color, "color", false);
+        season = getList(season, "season", false);
+        person = getList(person, "person", false);
 
-        function getList(tag) {
-          const MAX_LENGTH = 4;
-          const obj = {
-            list: [],
-            more: []
-          };
-          if (tag.length > MAX_LENGTH) {
-            obj.more = tag.slice(MAX_LENGTH);
+        this.tags = Object.assign(
+          {},
+          { color, material, person, price, season, sort, type }
+        );
+
+        function getList(tag, name, is_split = true) {
+          tag = tag.map(item => {
+            item.type = name;
+            return item;
+          });
+          let obj = {};
+          if (is_split) {
+            const MAX_LENGTH = 8;
+            obj = {
+              list: [],
+              more: []
+            };
+            if (tag.length > MAX_LENGTH) {
+              obj.more = tag.slice(MAX_LENGTH);
+            }
+            obj.list = tag.slice(0, MAX_LENGTH);
+          } else {
+            obj = {
+              list: tag
+            };
           }
-          obj.list = tag.slice(0, MAX_LENGTH);
           return obj;
         }
       });
     },
     chooseTagsFor(name, tag) {
       if (this.isTagActive(tag)) return;
-      this.selected.tags.push(tag);
+      if (tag.name === "不限") {
+        this.selected.tags = this.selected.tags.filter(
+          item => item.type !== tag.type
+        );
+        return;
+      }
+      const checkHaveArray = this.selected.tags.filter(
+        item => item.type === tag.type
+      );
+      if (checkHaveArray.length === 0) {
+        this.selected.tags.push(tag);
+      } else {
+        checkHaveArray.map((item, index) => this.removeTags(item, index));
+        this.selected.tags.push(tag);
+      }
     },
     removeTags(tag, index) {
       this.selected.tags = this.selected.tags.filter(
-        item => item.id !== tag.id
+        item => item.name !== tag.name
       );
+      if (this.selected.tags.length === 0) {
+        this.getMarketList();
+      }
     },
     handleSizeChange(val) {},
     handleCurrentChange(val) {},
@@ -616,7 +667,7 @@ img {
       .goods-box {
         flex-basis: 23%;
         width: 13.5rem;
-        height: 19.35rem;
+        // height: 19.35rem;
         background: #fff;
         margin-right: 1.6rem;
         &:nth-child(4n) {
@@ -626,7 +677,7 @@ img {
           width: 100%;
           height: 12.75rem;
         }
-        .title {
+        .gtitle {
           padding: 1rem;
           color: #2c2c2c;
           font-size: 0.7rem;

@@ -6,60 +6,137 @@
       </div>
       <div class="body">
         <div class="goods-box">
-          <div class="goods" v-for="(item,index) in 3" :key="index">
+          <div class="goods" v-for="(item,index) in goods" :key="index">
             <div class="info">
-              <div class="select"></div>
-              <div class="img"></div>
+              <div :class="['select', {'active': item.select}]" @click="chooseGoods(item, index)"></div>
+              <div class="img">
+                <img :src="item.url" alt />
+              </div>
               <div class="name-size">
-                <div class="name">暴走的萝莉 中强度运动内衣女聚拢瑜伽背心美背防震跑步健身bra</div>
+                <div class="name">{{item.describe}}</div>
                 <div class="color-size">
-                  <div class="color">颜色：粉色</div>
-                  <div class="size">尺码: M码</div>
+                  <div class="color">颜色：{{item.color}}</div>
+                  <div class="size">尺码: {{item.size}}码</div>
                 </div>
               </div>
             </div>
             <div class="number">
-              <div class="reduce">-</div>
-              <div class="num">3</div>
-              <div class="add">+</div>
+              <div class="reduce" @click="numberOpFor('reduce', 1, index)">-</div>
+              <div class="num">{{item.num}}</div>
+              <div class="add" @click="numberOpFor('add', 1, index)">+</div>
             </div>
             <div class="price">
-              <div class="old-price">￥85</div>
-              <div class="new-price">￥55</div>
+              <div class="old-price">￥{{item.sell_price}}</div>
+              <div class="new-price">￥{{item.sell_price - item.discount}}</div>
             </div>
             <div class="ops">
-              <div class="add">放入购物车</div>
-              <div class="delete">删除</div>
+              <div class="add" @click="operate('addGoods', item)">放入购物车</div>
+              <div class="delete" @click="operate('deleteGoods', item)">删除</div>
             </div>
           </div>
         </div>
       </div>
       <div class="footer">
         <div class="op">
-          <div class="select"></div>
-          <div class="all">全选</div>
-          <div class="delete">删除</div>
-          <div class="share">分享</div>
+          <div :class="['select', {active: isAllGoodsSelect}]" @click="operate('selectAll')"></div>
+          <div class="all" @click="operate('selectAll')">全选</div>
+          <div class="delete" @click="operate('allDelete')">删除</div>
         </div>
         <div class="count">
           <span class="num">
             已选商品
-            <b>2</b> 件
+            <b>{{getAllSelectNumberAndPrice.allGoodsNumber}}</b> 件
           </span>
         </div>
-        <div class="sumbit">加入购物车</div>
+        <div class="sumbit" @click="operate('allAddCart')">加入购物车</div>
       </div>
     </div>
   </div>
 </template>
 <script>
 import SessionTitle from "./SessionTitle";
+import {
+  getUserCollect,
+  deleteUserCollect,
+  postUserCart,
+  postAddUserCart
+} from "@/api/market";
 export default {
   components: {
     SessionTitle
   },
   data() {
-    return {};
+    return {
+      goods: []
+    };
+  },
+  computed: {
+    isAllGoodsSelect() {
+      let allSelectGoods = this.goods.filter(item => item.select);
+      return allSelectGoods.length === this.goods.length;
+    },
+    getAllSelectNumberAndPrice() {
+      let allGoods = this.goods.filter(item => item.select);
+
+      return { allGoodsNumber: allGoods.length };
+    }
+  },
+  mounted() {
+    this.getColloct();
+  },
+  methods: {
+    getColloct() {
+      getUserCollect().then(data => {
+        this.goods = data;
+      });
+    },
+    chooseGoods(goods, index) {
+      this.goods[index].select = !this.goods[index].select;
+      this.goods = [...this.goods];
+    },
+    operate(name, goods) {
+      const op_obj = {
+        addGoods: item => {
+          const { id, num, size, color } = item;
+          postAddUserCart({ id: [id], num: [num] }).then(data => {
+            this.$message({ type: "success", message: "添加成功" });
+          });
+        },
+        deleteGoods: item => {
+          deleteUserCollect(item.id).then(data => {
+            this.$message({ type: "success", message: "删除成功" });
+            // this.getColloct();
+            this.goods = this.goods.filter(sitem => sitem.id !== item.id);
+          });
+        },
+        selectAll: () => {
+          this.goods = this.goods.map(item => {
+            if (this.isAllGoodsSelect) {
+              item.select = false;
+            } else {
+              item.select = true;
+            }
+            return item;
+          });
+        },
+        allDelete: () => {}
+      };
+      op_obj[name] && op_obj[name](goods);
+    },
+    numberOpFor(option, num, index) {
+      const obj = {
+        reduce: num => {
+          if (this.goods[index].num <= 1) {
+            return;
+          }
+          this.goods[index].num -= num;
+        },
+        add: num => {
+          this.goods[index].num = parseInt(this.goods[index].num) + num;
+        }
+      };
+      obj[option](num);
+    }
   }
 };
 </script>
@@ -68,6 +145,10 @@ export default {
   border: 0;
   margin: 0;
   box-sizing: border-box;
+}
+img {
+  width: 100%;
+  height: 100%;
 }
 .car {
   .header {
@@ -101,6 +182,9 @@ export default {
             border-radius: 50%;
             background: #eee;
             margin: 0 2rem 0 1rem;
+            &.active {
+              background: #000;
+            }
           }
           .img {
             width: 7rem;
@@ -215,6 +299,9 @@ export default {
         border-radius: 50%;
         background: #eee;
         margin: 0 2rem 0 1rem;
+        &.active {
+          background: #000;
+        }
       }
       .all {
       }

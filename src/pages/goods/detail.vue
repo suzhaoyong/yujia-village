@@ -13,7 +13,7 @@
         <div class="info">
           <div class="imgs">
             <div class="bg-img">
-              <img :src="chooseItem.activeImg.img" alt />
+              <img :src="chooseItem.activeImg" alt />
             </div>
             <div class="sm-imgs">
               <div
@@ -22,12 +22,11 @@
                 :key="index"
                 @click="chooseActiveImg(item)"
               >
-                <img :src="item.img" alt />
+                <img :src="item" alt />
               </div>
             </div>
           </div>
           <div class="details">
-            <div class="title">{{goods.desc}}</div>
             <div class="price">
               吊牌价：
               <span>￥{{goods.sell_price}}</span>
@@ -45,14 +44,15 @@
                 @click="chooseColor(item)"
               >
                 <div class="img">
-                  <img :src="item.img" alt />
+                  <img :src="item.cover" alt />
                 </div>
                 <div class="color-name">{{item.name}}</div>
               </div>
+              <div v-if="goods.color_size.length === 0" class="size-list">暂无</div>
             </div>
             <div class="size">
               <span>尺码:</span>
-              <div class="size-list">
+              <div class="size-list" v-if="sizeList.length>0">
                 <div
                   :class="['item', item === chooseItem.size ? 'active': '']"
                   v-for="(item, index) in sizeList"
@@ -60,6 +60,7 @@
                   @click="chooseSize(item)"
                 >{{item.size}}</div>
               </div>
+              <div v-else class="size-list">暂无</div>
             </div>
             <div class="number">
               <span>数量:</span>
@@ -113,6 +114,7 @@
 </template>
 <script>
 import SessionTitle from "./SessionTitle";
+import { getGoodsById, postUserCollect, postUserCart } from "@/api/market";
 export default {
   components: {
     SessionTitle
@@ -122,14 +124,14 @@ export default {
       isBindClick: false,
       sizeList: [],
       chooseItem: {
-        activeImg: {
-          img: ""
-        },
+        activeImg: "",
         color: {},
         size: "",
         number: 1
       },
-      goods: {}
+      goods: {
+        color_size: []
+      }
     };
   },
   computed: {
@@ -156,29 +158,28 @@ export default {
   },
   mounted() {
     const { id } = this.$route.params;
-    this.$request(`/goods/${id}`).then(data => {
-      this.goods = data;
-      this.goods.imgs = [
-        data.new_url_one,
-        data.new_url_two,
-        data.new_url_three
-      ];
-      this.sizeList = data.color_size[0].data;
-      const { material, painter, season, desc, describe } = data;
-      this.goods.params = [
-        { desc },
-        { material },
-        { painter },
-        { season },
-        { describe }
-      ];
-    });
+    this.getGoodsDetail(id);
   },
   methods: {
     getGoodsDetail(id) {
-      this.axios.get(`/goods/detail/${id}`).then(({ data }) => {
-        this.goods = data.data;
-        this.chooseItem.activeImg = data.data.imgs[0];
+      getGoodsById(id).then(data => {
+        this.goods = data;
+        this.goods.imgs = [
+          data.cover,
+          data.path1,
+          data.path2,
+          data.path3,
+          data.path4
+        ];
+        // this.sizeList = data.color_size[0].data;
+        this.chooseItem.activeImg = data.cover;
+        const { material, painter, season, describe } = data;
+        this.goods.params = [
+          { material },
+          { painter },
+          { season },
+          { describe }
+        ];
       });
     },
     chooseActiveImg(img) {
@@ -234,7 +235,9 @@ export default {
         shopCar: () => {
           this.postUserCart();
         },
-        collect() {}
+        collect: () => {
+          this.postUserCollect();
+        }
       };
       obj[option]();
     },
@@ -242,7 +245,7 @@ export default {
     postUserCart() {
       this.isBindClick = true;
       const {
-        color: { id: colorId },
+        color: { name: colorName },
         size: { size },
         number
       } = this.chooseItem;
@@ -251,13 +254,12 @@ export default {
         id: this.$route.params.id,
         num: number,
         size: size,
-        color: colorId
+        color: colorName
       };
-      this.$request
-        .post("/userCart", params)
+      postUserCart(params)
         .then(data => {
           this.isBindClick = false;
-          this.$message({ type: "success", message: "收藏成功" });
+          this.$message({ type: "success", message: "加入购物车成功" });
         })
         .catch(() => {
           this.isBindClick = false;
@@ -267,7 +269,7 @@ export default {
     postUserCollect() {
       this.isBindClick = true;
       const {
-        color: { id: colorId },
+        color: { name: colorName },
         size: { size },
         number
       } = this.chooseItem;
@@ -276,10 +278,9 @@ export default {
         id: this.$route.params.id,
         num: number,
         size: size,
-        color: colorId
+        color: colorName
       };
-      this.$request
-        .post("/userCollect", params)
+      postUserCollect(params)
         .then(data => {
           this.isBindClick = false;
           this.$message({ type: "success", message: "收藏成功" });

@@ -1,14 +1,14 @@
 <template>
   <div>
     <div class="order-box">
-      <div class="navs">
+      <!-- <div class="navs">
         <el-breadcrumb separator-class="el-icon-arrow-right">
           <el-breadcrumb-item>首页</el-breadcrumb-item>
           <el-breadcrumb-item>活动管理</el-breadcrumb-item>
           <el-breadcrumb-item>活动列表</el-breadcrumb-item>
           <el-breadcrumb-item>活动详情</el-breadcrumb-item>
         </el-breadcrumb>
-      </div>
+      </div>-->
       <div class="order">
         <session-title name="热门课程"></session-title>
         <div class="take-delivery">
@@ -20,47 +20,59 @@
             <div class="body">
               <div class="personal">
                 <div class="icon-name">
-                  <div class="icon"></div>
-                  <div class="name">IVAN</div>
+                  <div class="icon" style="background:#fff;"></div>
+                  <div class="name"></div>
                 </div>
-                <div class="name-phone">xiang - 123123123</div>
-                <div class="address">12312</div>
-                <div class="currently-deliviery">使用当前地址（默认）</div>
+                <div style="align-self: flex-start; margin-left: 3.5rem;" v-if="address.length > 0">
+                  <div
+                    class="name-phone"
+                  >{{`${addressActive.name} - ${addressActive.zone} ${addressActive.address}`}}</div>
+                  <div class="address">{{addressActive.tel}}</div>
+
+                  <div
+                    :class="['currently-deliviery', statusActive('0')]"
+                    @click="ruleForm.status = '0'"
+                  >使用当前地址（默认）</div>
+                </div>
+                <div v-else>暂无地址，快去添加一个吧～</div>
               </div>
               <div class="new-deliviery">
                 <div class="form">
                   <div class="item">
                     <div class="key">收货人</div>
                     <div class="value">
-                      <input class="form-control input" type="text" placeholder="请输入收货人" />
+                      <el-input type="text" v-model="ruleForm.userName" placeholder="请输入收货人"></el-input>
                     </div>
                   </div>
                   <div class="item">
                     <div class="key">联系电话</div>
                     <div class="value">
-                      <input class="form-control input" type="text" placeholder="请输入联系电话" />
+                      <el-input type="text" v-model="ruleForm.userTel" placeholder="请输入联系电话"></el-input>
                     </div>
                   </div>
                   <div class="item">
                     <div class="key">所在区域</div>
                     <div class="value">
-                      <input class="form-control input" type="text" placeholder="请输入所在区域" />
+                      <el-input type="text" v-model="ruleForm.userZone" placeholder="请输入所在区域"></el-input>
                     </div>
                   </div>
                   <div class="item">
                     <div class="key">详细地址</div>
                     <div class="value">
-                      <input class="form-control input" type="text" placeholder="请输入详细地址" />
+                      <el-input type="text" v-model="ruleForm.userAddress" placeholder="请输入详细地址"></el-input>
                     </div>
                   </div>
                   <div class="item">
                     <div class="key">留言</div>
                     <div class="value">
-                      <input class="form-control input" type="text" placeholder="请输入留言" />
+                      <el-input type="textarea" v-model="ruleForm.userMessage" placeholder="请输入留言"></el-input>
                     </div>
                   </div>
                 </div>
-                <div class="new-deliviery-address">使用新地址</div>
+                <div
+                  :class="['new-deliviery-address', statusActive('1')]"
+                  @click="ruleForm.status = '1'"
+                >使用新地址</div>
               </div>
             </div>
           </div>
@@ -71,9 +83,15 @@
                 <div class="tips">如不选择按默认发货</div>
               </div>
               <div class="select">
-                <div class="item active">送货时间不限(默认)</div>
-                <div class="item">仅周一周五送货</div>
-                <div class="item">仅节假日/周末送货</div>
+                <div
+                  :class="['item', sendTimeActive('1')]"
+                  @click="ruleForm.sendTime = '1'"
+                >送货时间不限(默认)</div>
+                <div :class="['item', sendTimeActive('2')]" @click="ruleForm.sendTime = '2'">仅周一周五送货</div>
+                <div
+                  :class="['item', sendTimeActive('3')]"
+                  @click="ruleForm.sendTime = '3'"
+                >仅节假日/周末送货</div>
               </div>
             </div>
             <div class="pay">
@@ -82,9 +100,21 @@
                 <div class="tips">asdfa</div>
               </div>
               <div class="icon-box">
-                <div class="icon"></div>
-                <div class="icon"></div>
-                <div class="icon"></div>
+                <div
+                  :class="['icon', paymentActive('1')]"
+                  :style="`background-image:url(${icon.bankIcon})`"
+                  @click="ruleForm.payment = '1'"
+                ></div>
+                <div
+                  :class="['icon', paymentActive('2')]"
+                  :style="`background-image:url(${icon.alipayIcon})`"
+                  @click="ruleForm.payment = '2'"
+                ></div>
+                <div
+                  :class="['icon', paymentActive('3')]"
+                  :style="`background-image:url(${icon.wechatIcon})`"
+                  @click="ruleForm.payment = '3'"
+                ></div>
               </div>
             </div>
           </div>
@@ -96,63 +126,220 @@
             <div class="item">价格/数量</div>
           </div>
           <div class="body">
-            <div class="goods" v-for="(item, index) in 3" :key="index">
-              <div class="info">
-                <div class="img"></div>
-                <div class="title-say">
-                  <div class="title">暴走的萝莉 中强度运动内衣女聚拢瑜伽背心美背防震跑步健身bra 拷贝 2</div>
-                  <div class="say"></div>
+            <div v-if="goods.length>0">
+              <div class="goods" v-for="(item, index) in goods" :key="index">
+                <div class="info">
+                  <div class="img">
+                    <img :src="item.url" alt />
+                  </div>
+                  <div class="title-say">
+                    <div class="title">{{item.describe}}</div>
+                    <!-- <div class="say"></div> -->
+                  </div>
                 </div>
-              </div>
-              <div class="specifications">
-                <div class="key-value">
-                  <div class="key">颜色:</div>
-                  <div class="value">粉色</div>
+                <div class="specifications">
+                  <div class="key-value">
+                    <div class="key">颜色:</div>
+                    <div class="value">{{item.color}}</div>
+                  </div>
+                  <div class="key-value">
+                    <div class="key">尺码:</div>
+                    <div class="value">{{item.size}}</div>
+                  </div>
                 </div>
-                <div class="key-value">
-                  <div class="key">尺码:</div>
-                  <div class="value">粉色</div>
+                <div class="price-number">
+                  <div class="price">￥{{item.sell_price - item.discount}}</div>
+                  <div class="number">x{{item.num}}</div>
                 </div>
-              </div>
-              <div class="price-number">
-                <div class="price">￥55</div>
-                <div class="number">x1</div>
               </div>
             </div>
+            <div v-else style="text-align:center;height:100px;line-height:100px;">购物车空空如也</div>
           </div>
         </div>
         <div class="sum">
-          <div class="back-shopcat">
+          <div class="back-shopcat" @click="back">
             <div class="img">
-              <img :src="backIcon" alt />
+              <img :src="icon.backIcon" alt />
             </div>返回购物车
           </div>
           <div class="count">
             <span class="title">应付金额</span>
             <span class="tips">(不含运费)</span>
-            <div class="price">¥115</div>
+            <div class="price">¥{{getAllSelectNumberAndPrice.allPrice}}</div>
           </div>
-          <div class="sumbit">提交订单</div>
+          <div class="sumbit" @click="submitForm">提交订单</div>
         </div>
+      </div>
+    </div>
+    <div class="pay-way" v-if="playcode.show" @click="playcode.show = false">
+      <div class="pay-code">
+        <img src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" alt />
       </div>
     </div>
   </div>
 </template>
 <script>
-import BackIcon from "@/assets/market/back.png";
+import backIcon from "@/assets/market/back.png";
+import alipayIcon from "@/assets/order/alipay.png";
+import wechatIcon from "@/assets/order/wechat.png";
+import bankIcon from "@/assets/order/bank.png";
 import SessionTitle from "./SessionTitle";
+import {
+  getUserAddress,
+  getUserOrder,
+  postGoodOrder,
+  postGetAlipayCode,
+  postGetWechatpayCode
+} from "@/api/market";
 export default {
   components: {
     SessionTitle
   },
   data() {
     return {
-      backIcon: BackIcon
+      playcode: { show: true },
+      icon: {
+        backIcon,
+        alipayIcon,
+        wechatIcon,
+        bankIcon
+      },
+      goods: [],
+      address: [],
+      addressActive: {},
+      ruleForm: {
+        id: "", // 购物车列表编号
+        lid: "", // 商品副列表 编号
+        num: "",
+        sendTime: "1", // 送货时间 1-送货时间不限 2-仅周一周五送货 3-仅节假日/周末送货
+        userName: "",
+        userTel: "",
+        userZone: "", // 地址省市区
+        userAddress: "",
+        userMessage: "",
+        status: "0", // 0不是新增地址 1是新增地址
+        addressId: "",
+        payment: "" // 付款方式 1-未支付 2-支付宝 3-微信
+      }
     };
+  },
+  computed: {
+    getAllSelectNumberAndPrice() {
+      // let allGoods = this.goods.filter(item => item.select);
+      let allGoods = this.goods;
+
+      let allPrice = allGoods.reduce((pre, cur) => {
+        return parseInt(pre) + parseInt(cur.num) * parseInt(cur.sell_price);
+      }, 0);
+      return { allPrice, allGoodsNumber: allGoods.length };
+    },
+    statusActive() {
+      return type => {
+        return { active: this.ruleForm.status == type };
+      };
+    },
+    sendTimeActive() {
+      return type => {
+        return { active: this.ruleForm.sendTime == type };
+      };
+    },
+    paymentActive() {
+      return type => {
+        return { active: this.ruleForm.payment == type };
+      };
+    }
+  },
+  mounted() {
+    // const goods = sessionStorage.getItem("goods");
+    // this.goods = goods && JSON.parse(goods).filter(item => item.select);
+    getUserAddress().then(data => {
+      this.address = data.address;
+      if (data.address.length === 0) {
+        this.ruleForm.status = "1";
+      } else {
+        this.addressActive = data.address[0];
+      }
+      this.goods = data.goods;
+    });
+  },
+  methods: {
+    back() {
+      this.$router.go(-1);
+    },
+    submitForm() {
+      const { status } = this.ruleForm;
+      let params = Object.assign({}, this.ruleForm);
+      if (parseInt(status) === 0) {
+        if (this.address.length === 0) {
+          this.$message({
+            type: "warning",
+            message: "请先填写收货信息"
+          });
+          return;
+        }
+        const { zone, address, id, tel, name, message } = this.addressActive;
+        params = Object.assign({}, params, {
+          addressId: id,
+          userZone: zone,
+          userAddress: address,
+          userName: name,
+          userMessage: message,
+          userTel: tel
+        });
+      } else if (parseInt(status) === 1) {
+      }
+      if (params.payment === "") {
+        this.$message({
+          type: "warning",
+          message: "请先选择付款方式"
+        });
+        return;
+      }
+      const id = this.goods.map(item => item.id);
+      const lid = this.goods.map(item => item.goodListId);
+      const num = this.goods.map(item => item.num);
+      params = Object.assign({}, params, { id, lid, num });
+      postGoodOrder(params).then(data => {
+        const { payment, out_trade_no, totalPrice, body } = data;
+        if (parseInt(payment) === 2) {
+          postGetAlipayCode({ out_trade_no, total_fee: totalPrice, body });
+        }
+        if (parseInt(payment) === 3) {
+          postGetWechatpayCode({
+            out_trade_no,
+            total_fee: totalPrice,
+            body
+          }).then(data => {
+            console.log(data);
+          });
+        }
+      });
+    }
   }
 };
 </script>
+<style scoped>
+.order-box >>> .el-input__inner {
+  height: 30px !important;
+}
+</style>
 <style lang="scss" scoped>
+.pay-way {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  .pay-code {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 200px;
+  }
+}
 @mixin no_select() {
   -moz-user-select: -moz-none;
   -moz-user-select: none;
@@ -221,6 +408,7 @@ img {
                 height: 4.25rem;
                 background: #ccc;
                 border-radius: 50%;
+                background-size: 100% 100%;
               }
               .name {
                 padding-top: 1rem;
@@ -228,28 +416,28 @@ img {
               }
             }
             .name-phone {
-              align-self: flex-start;
-              margin-left: 3.5rem;
+              // align-self: flex-start;
+              // margin-left: 3.5rem;
               border-bottom: 1px solid #313131;
             }
             .address {
-              align-self: flex-start;
+              // align-self: flex-start;
+              // margin-left: 3.5rem;
               margin-top: 0.3rem;
-              margin-left: 3.5rem;
               margin-bottom: 1.6rem;
               border-bottom: 1px solid #313131;
             }
             .currently-deliviery {
               width: 100%;
               // margin-left: 3.5rem;
-              padding-left: 3.5rem;
+              // padding-left: 3.5rem;
               position: relative;
-              &::before {
+              &.active::before {
                 content: "";
                 display: block;
                 position: absolute;
                 top: 50%;
-                left: 2.5rem;
+                left: -1rem;
                 transform: translateY(-50%);
                 width: 0.55rem;
                 height: 0.55rem;
@@ -284,7 +472,7 @@ img {
               // margin-left: 3.5rem;
               padding-left: 3.5rem;
               position: relative;
-              &::before {
+              &.active::before {
                 content: "";
                 display: block;
                 position: absolute;
@@ -380,7 +568,10 @@ img {
               width: 1.45rem;
               height: 1.45rem;
               margin: 0 0.4rem;
-              border: 1px solid #ccc;
+              background-size: 100% 100%;
+              &.active {
+                border: 1px solid #22bbbb;
+              }
             }
           }
         }

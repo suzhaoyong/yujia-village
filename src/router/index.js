@@ -75,7 +75,7 @@ export default new Router({
       component: Home,//首页
       children: [
         { path: '/goods/detail/:id', name: 'detailGoods', component: () => import('@/pages/goods/detail') },
-        { path: 'order/:id', name: 'order', component: () => import('@/pages/goods/order') },
+        { path: 'order', name: 'order', component: () => import('@/pages/goods/order') },
         { path: 'shop-car/:id', name: 'shopCar', component: () => import('@/pages/goods/shopcar') },
         { path: 'collect/:id', name: 'collect', component: () => import('@/pages/goods/collect') },
       ]

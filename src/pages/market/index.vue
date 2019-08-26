@@ -7,7 +7,7 @@
         <div class="item" @click="goto('collect')">收藏中心</div>
       </div>
       <div class="input-box">
-        <input type="text" class="form-control input" placeholder="商品名称" />
+        <!-- <input type="text" class="form-control input" placeholder="商品名称" /> -->
       </div>
     </div>
     <div class="market">
@@ -166,7 +166,7 @@ export default {
       this.$router.push({
         name: "detailGoods",
         params: {
-          id: goods.id
+          id: goods.id || goods.good_id
         }
       });
     },
@@ -182,35 +182,6 @@ export default {
       this.recommend_list = item.data;
       this.recommend_main = item.data[0];
     },
-    getMarketRecommendSuit() {
-      this.axios.get("/market/recommend/suit").then(({ data }) => {
-        this.recommend_main = data.data.main_item;
-        this.recommend_list = data.data.items;
-      });
-    },
-    getMarketRecommendEquipment() {
-      this.axios.get("/market/recommend/equipment").then(({ data }) => {
-        this.recommend_main = data.data.main_item;
-        this.recommend_list = data.data.items;
-      });
-    },
-    getMarketRecommendBooks() {
-      this.axios.get("/market/recommend/books").then(({ data }) => {
-        this.recommend_main = data.data.main_item;
-        this.recommend_list = data.data.items;
-      });
-    },
-    getMarketTypeList() {
-      this.axios.get("/market/recommend/lists").then(({ data }) => {
-        this.recommend_menu.select = data.data.items[0] || {};
-        this.type_list = data.data.items;
-      });
-    },
-    getMarketDiscounts() {
-      this.axios.get("/market/discounts").then(({ data }) => {
-        this.discounts_good = data.data.items;
-      });
-    },
     getPrevDiscounts() {
       this.getMarketDiscounts();
     },
@@ -218,19 +189,8 @@ export default {
       this.getMarketDiscounts();
     },
     getMarketNews() {
-      this.axios.get("/market/news").then(({ data }) => {
-        this.market.news_good = Object.assign({}, data.data);
-      });
     },
     getUserInfo() {
-      // this.userInfo = null;
-      this.axios.get("/user/userinfo").then(({ data }) => {
-        if (data.error === 0) {
-          this.userInfo = data.data;
-        } else {
-          this.userInfo = {};
-        }
-      });
     },
     goMarketDetail() {
       this.$router.push("/market/detail");
@@ -513,6 +473,8 @@ img {
           display: flex;
           // margin-left: -8rem;
           height: 34.65rem;
+          width: 80vw;
+          overflow-x: auto;
           .goods {
             width: 15rem;
             height: 100%;
@@ -520,6 +482,7 @@ img {
             // transform-origin: bottom left;
             margin: 0 1rem;
             border: 1px solid #ccc;
+            flex-shrink: 0;
             overflow: hidden;
             &-title {
               font-weight: 600;
