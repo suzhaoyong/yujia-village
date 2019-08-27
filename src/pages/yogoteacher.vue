@@ -9,28 +9,31 @@
                     <div class="yogo-count">
                         <div class="yogo-search">
                             <div class="search-left">
-                                <el-select v-model="value" placeholder="擅长类型">
-                                    <el-option v-for="item in coursetypes"  :key="item.id" :label="item.name" :value="item.id" @change="changecoure(val)"></el-option>
+                                <el-select v-model="value" placeholder="擅长类型" @change="changecoure">
+                                    <el-option v-for="item in coursetypes" :key="item.id" :label="item.name" :value="item.id"></el-option>
                                 </el-select>
-                                <el-select v-model="value2" placeholder="工作资历">
-                                    <el-option v-for="item in seniority"  :key="item.value" :label="item.label" :value="item.value"></el-option>
+                                <el-select v-model="value2" placeholder="最小资历" @change="yearchange" style="width:105px">
+                                    <el-option v-for="item in yearlist" :key="item.id" :label="item.name" :value="item.id"></el-option>
                                 </el-select>
-                                <v-distpicker :province="province"  :city="city" hide-area @selected="onSelected"></v-distpicker>
+                                <el-select v-model="value3" placeholder="最大资历" @change="yearchange" style="width:105px">
+                                    <el-option v-for="item in yearlist" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                                </el-select>
+                                <v-distpicker :province="province" :city="city" :area="area" @selected="onSelected"></v-distpicker>
                             </div>
                             <div class="search-right">
-                                <el-form :inline="true" :model="formInline" class="demo-form-inline">
+                                <el-form :inline="true" :model="formInline" class="demo-form-inline" @submit.native.prevent>
                                 <el-form-item label="">
-                                    <el-input v-model="formInline.user" placeholder="名师姓名/会馆名称/瑜伽类型"></el-input>
+                                    <el-input v-model.trim="formInline.user" placeholder="名师姓名"></el-input>
                                 </el-form-item>
                                 <el-form-item>
-                                    <el-button type="text" @click="onSubmit" style="color:#2c2c2c">查询</el-button>
+                                    <el-button type="text" @click="inquirysearch" style="color:#2c2c2c">搜索</el-button>
                                 </el-form-item>
                                 </el-form>
                             </div>
                         </div>
                         <el-col :span="24" class="bg-tupian1">
                         <div class="yogo-cont-div1">
-                            <h2><img src="../assets/yujia.png"/>馆内名师</h2>
+                            <h2><img src="../assets/yujia.png"/>名师精选</h2>
                             <p class="nav-text">Sometimes beauty is so simple</p>
                             <div class="border-left"></div>
                             <div class="border-right"></div>
@@ -69,8 +72,8 @@
                                     <p class="icon-desc2">{{item.info}}</p>
                                     </div>
                                 </swiper-slide>
-                                <div class="swiper-button-prev1" slot="button-prev"></div>
-                                 <div class="swiper-button-next1" slot="button-next"></div>
+                                <div class="swiper-button-prev1" slot="button-prev" @click="buttonprev(pages)"></div>
+                                 <div class="swiper-button-next1" slot="button-next" @click="buttonnext(pages)"></div>
                                 </swiper>
                            </div>
                        </div>
@@ -135,21 +138,14 @@ export default {
           user: '',
         },
         coursetypes: [],
-        seniority: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
+        yearlist:[],
         currentPage:1,
         pagesize: 12,
         value: '',
         province:'',
+        i:0,
         city:'',
+        area:'',
         value2: '',
         value3: '',
         activeClass: 0,
@@ -191,6 +187,37 @@ export default {
             _this.yogolist = res.teachers;
             _this.iconList = res.elites;
             _this.coursetypes = res.course_types;
+            _this.yearlist = res.year;
+            _this.namelist = res.elites[0];
+        })
+        .catch(error => {
+            let { response: { data: { errorCode, msg } } } = error;
+            if (errorCode != 0) {
+            this.$message({
+                message: msg,
+                type: "error"
+            });
+            return;
+            }
+        });
+      },
+      inquirysearch(){
+           let params = {
+                name:this.formInline.user,//老师名字
+                good_at:this.value,//擅长
+                min_num:this.value2,//最小资历
+                max_num:this.value3,//最大资历
+                city:this.city,//城市
+                province:this.province,//省
+                area:this.area//区
+            }
+        this.$request.post("/teachers", params)
+        .then(res => {
+            this.yogolist = res;
+            this.$message({
+                message: '查询成功',
+                type: "success"
+            });
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -206,25 +233,30 @@ export default {
       onSelected(data) {
         this.province = data.province.value;
         this.city = data.city.value;
+        this.area = data.area.value;
      },
-     changecoure(val){
-         conssole.log(val);
-     },
-      onSubmit() {
-        console.log('submit!');
+     changecoure(val){},
+     yearchange(val){},
+    selectItem(item,idx){
+        this.namelist = item;
+        this.activeClass = idx;
+    },
+    buttonprev(m){ 
+         this.namelist=m[this.i-1][0];
+         this.i--;
       },
-      selectItem(item,idx){
-          this.namelist = item;
-          this.activeClass = idx;
+      buttonnext(m){
+        this.namelist=m[this.i+1][0];
+        this.i++;
       },
-      onMouseOver(index){
-      },
-      handleSizeChange(size) {
-          this.pagesize = size;
-      },
-      handleCurrentChange(currentPage) {
-          this.currentPage = currentPage;
-      },
+    onMouseOver(index){
+    },
+    handleSizeChange(size) {
+        this.pagesize = size;
+    },
+    handleCurrentChange(currentPage) {
+        this.currentPage = currentPage;
+    },
   }
 };
 </script>
@@ -360,24 +392,46 @@ export default {
         width: 100%;
         height: 70px;
         display: flex;
-        justify-content: space-around;
         background-color: #E2DBC8;
         .search-left{
             line-height: 68px;
-            padding-left:16px;
+            line-height: 72px;
+            display: -webkit-box;
+            display: -ms-flexbox;
             display: flex;
+            width: 53%;
+            margin-left: 13%;
             .el-select{
                 width: 140px;
+                height: 40px;
+                margin-right:5px;
             }
             .el-input--suffix .el-input__inner{
                 background-color: #fff;
+                height: 40px !important;
+            }
+            .el-select__tags{
+                position: absolute;
+                line-height: normal;
+                white-space: normal;
+                z-index: 1;
+                top: 83%;
+                -webkit-transform: translateY(-50%);
+                transform: translateY(-50%);
+                display: -webkit-box;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-box-align: center;
+                -ms-flex-align: center;
+                align-items: center;
+                -ms-flex-wrap: wrap;
+                flex-wrap: wrap;
             }
         }
         .search-right{
              padding-top: 15px;
-             padding-right: 10px;
              .el-input{
-                 width: 333px;
+                 width: 275px;
              }
         }
     }

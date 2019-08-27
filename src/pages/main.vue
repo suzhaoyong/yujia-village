@@ -61,8 +61,8 @@
                                         <img class="icon-img-content" :src="item.icon_url">
                                     </div>
                                 </swiper-slide>
-                                <div class="swiper-button-prev1" slot="button-prev"></div>
-                                 <div class="swiper-button-next1" slot="button-next"></div>
+                                <div class="swiper-button-prev1" slot="button-prev" @click="buttonprev(pages2)"></div>
+                                <div class="swiper-button-next1" slot="button-next" @click="buttonnext(pages2)"></div>
                             </swiper>
                          </div>
                     </div>
@@ -159,6 +159,7 @@ export default {
         info:[],
         namelist:[],
         activeClass: 0,
+        i:0,
         swiperOption: {
           spaceBetween: 30,
           pagination: {
@@ -219,6 +220,7 @@ export default {
             _this.clubInfo = res.clubInfo;
             _this.newtrains = res.new_trains;
             _this.info = res.info;
+            _this.namelist=res.info[0];
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -230,6 +232,14 @@ export default {
             return;
             }
         });
+      },
+      buttonprev(m){ 
+         this.namelist=m[this.i-1][0];
+         this.i--;
+      },
+      buttonnext(m){
+        this.namelist=m[this.i+1][0];
+        this.i++;
       },
       Learnmore(item){
           this.$router.push({
