@@ -5,8 +5,8 @@
         <div class="head-quan">
           <div class="head-right">
             <el-button type="text" class="span2">已购课程</el-button>
-            <div style="display:inline-block;" v-if="info">
-              <span class="span1">{{info.user.name}}</span>
+            <div style="display:inline-block;" v-if="username || info.name">
+              <span class="span1">{{username || info.name}}</span>
             </div>
             <div style="display:inline-block;" v-else>
               <el-button type="text" class="span1" @click="account.type='login'">登录</el-button>
@@ -31,20 +31,20 @@
               <el-menu-item index="main">首页</el-menu-item>
               <el-menu-item index="joinclubhouse">加盟会馆</el-menu-item>
               <el-menu-item index="yogoteacher">瑜伽名师</el-menu-item>
-              <el-menu-item index="cultivate/cultivate">培训信息</el-menu-item>
+              <el-menu-item index="cultivate">培训信息</el-menu-item>
               <el-menu-item index="yogoknowledge">瑜伽知识</el-menu-item>
               <el-menu-item index="yogoinformation">瑜伽资讯</el-menu-item>
-              <el-menu-item index="market/index">商城</el-menu-item>
+              <el-menu-item index="market">商城</el-menu-item>
               <el-menu-item index="aboutus">关于我们</el-menu-item>
-              <el-submenu index="personal">
+              <el-submenu index="personal" v-show="username || info.name">
                 <template slot="title">
                   <div class="submenu">个人中心</div>
                 </template>
-                <el-menu-item index="personal">收藏的课程</el-menu-item>
+                <!-- <el-menu-item index="personal">收藏的课程</el-menu-item> -->
                 <el-menu-item index="personal">现金券与优惠券</el-menu-item>
                 <el-menu-item index="safety-center">信息与安全中心</el-menu-item>
                 <el-menu-item index="share">分享邀请好友</el-menu-item>
-                <el-menu-item index="out">退出</el-menu-item>
+                <el-menu-item index="out" @click="logout">退出</el-menu-item>
               </el-submenu>
             </el-menu>
           </el-col>
@@ -52,7 +52,11 @@
       </div>
     </el-col>
     <div v-if="account.type==='login'">
-      <login @go-register="type=>this.account.type = type" @close="type=>this.account.type = type"></login>
+      <login
+        @suc="name => this.username = name"
+        @go-register="type=>this.account.type = type"
+        @close="type=>this.account.type = type"
+      ></login>
     </div>
     <div v-if="account.type==='register'">
       <register @go-login="type=>this.account.type = type" @close="type=>this.account.type = type" />
@@ -70,6 +74,7 @@ import Login from "@/pages/Login/login";
 import Register from "@/pages/Login/register";
 import Reset from "@/pages/Login/reset";
 import TopTitle from "@/pages/personalCenter/topTItle";
+import Bus from "@/utils/Bus";
 export default {
   components: {
     Login,
@@ -80,6 +85,7 @@ export default {
   data() {
     return {
       activeIndex: "main",
+      username: "",
       account: {
         type: ""
       }
@@ -88,7 +94,7 @@ export default {
   computed: {
     info() {
       const user = sessionStorage.getItem("user");
-      return user && JSON.parse(user);
+      return (user && JSON.parse(user).user) || {};
     },
     showTopTitle() {
       const show = this.$route.fullPath.startsWith("/personal");
@@ -99,7 +105,11 @@ export default {
     $route: "fetchData"
   },
   mounted() {
-    this.changenav();
+    // this.changenav();
+    Bus.$on("login", () => {
+      this.account.type = "login";
+    });
+    this.activeIndex = this.$route.name || this.$route.path || "main";
   },
   created() {
     this.fetchData();
@@ -107,7 +117,16 @@ export default {
   beforeUpdate() {
     this.changenav();
   },
+  beforeDestory() {
+    Bus.$off("login");
+  },
   methods: {
+    successInfo() {
+      this.$on("success", name => {
+        console.log(name);
+        this.username = name;
+      });
+    },
     //路由改变时的导航对应高亮
     changenav() {
       let path = this.$route.path;
@@ -128,10 +147,10 @@ export default {
         this.activeIndex = "yogoinformation";
       } else if (this.$route.name == "aboutus") {
         this.activeIndex = "aboutus";
-      } else if (this.$route.name == "cultivate/cultivate") {
-        this.activeIndex = "cultivate/cultivate";
-      } else if (this.$route.name == "market/index") {
-        this.activeIndex = "market/index";
+      } else if (this.$route.name == "cultivate") {
+        this.activeIndex = "cultivate";
+      } else if (this.$route.name == "market") {
+        this.activeIndex = "market";
       }
     },
     handleSelect(key, keyPath) {
@@ -153,8 +172,8 @@ export default {
         this.$router.push("/yogoinformation");
       } else if ("aboutus" === key) {
         this.$router.push("/aboutus");
-      } else if ("cultivate/cultivate" === key) {
-        this.$router.push("/cultivate/cultivate");
+      } else if ("cultivate" === key) {
+        this.$router.push("/cultivate/index");
       } else if ("market/index" === key) {
         this.$router.push("/market/index");
       } else {
@@ -163,8 +182,12 @@ export default {
     },
     /** 登出 */
     logout() {
-      this.$request("/auth/logout").then(data => {
+      this.$request.post("/auth/logout").then(data => {
         this.$message({ type: "success", message: "退出成功" });
+        this.$router.push('/main')
+        this.username = ""
+        sessionStorage.removeItem('access')
+        sessionStorage.removeItem('user')
       });
     },
     /** 用户基本信息 */
@@ -172,7 +195,7 @@ export default {
       this.$request("/auth/me").then(data => {});
     },
     goto(name, item) {
-      let id = item || "all";
+      let id = item || "";
       this.$router.push({
         name,
         params: {
@@ -183,6 +206,12 @@ export default {
   }
 };
 </script>
+<style>
+.header-main .el-submenu__title {
+  border: none !important;
+  height: 100%!important;
+}
+</style>
 <style lang="scss" scoped>
 .el-menu {
   width: 80%;

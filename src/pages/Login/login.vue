@@ -92,6 +92,7 @@
 </template>
 <script>
 import { Exp } from "@/utils/bee.js";
+import Bus from "@/utils/Bus";
 export default {
   data() {
     return {
@@ -131,6 +132,9 @@ export default {
     getPersonal() {
       this.$request("/personal/home").then(data => {
         sessionStorage.setItem('user', JSON.stringify(data))
+        console.log(data.user.name)
+        window.location.reload();
+        this.$emit('suc', data.user.name)
       });
     },
     /** 登录 */
@@ -144,6 +148,7 @@ export default {
           this.isPostting = false;
           this.$message({ message: "登录成功", type: "success" });
           this.$emit("close", "");
+          
         })
         .then(_ => {
           this.getPersonal();

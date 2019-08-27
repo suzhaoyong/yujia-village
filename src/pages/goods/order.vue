@@ -10,7 +10,7 @@
         </el-breadcrumb>
       </div>-->
       <div class="order">
-        <session-title name="热门课程"></session-title>
+        <session-title name="订单详情"></session-title>
         <div class="take-delivery">
           <div class="delivery">
             <div class="header">
@@ -97,7 +97,7 @@
             <div class="pay">
               <div class="header">
                 <div class="title">支付方式</div>
-                <div class="tips">asdfa</div>
+                <div class="tips">pay way</div>
               </div>
               <div class="icon-box">
                 <div
@@ -173,7 +173,7 @@
     </div>
     <div class="pay-way" v-if="playcode.show" @click="playcode.show = false">
       <div class="pay-code">
-        <img src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" alt />
+        <img :src="playcode.src" alt />
       </div>
     </div>
   </div>
@@ -189,7 +189,9 @@ import {
   getUserOrder,
   postGoodOrder,
   postGetAlipayCode,
-  postGetWechatpayCode
+  postGetWechatpayCode,
+  postGetAlipayOrder,
+  postGetWechatOrder
 } from "@/api/market";
 export default {
   components: {
@@ -197,7 +199,7 @@ export default {
   },
   data() {
     return {
-      playcode: { show: true },
+      playcode: { show: false, src: "" },
       icon: {
         backIcon,
         alipayIcon,
@@ -287,6 +289,13 @@ export default {
           userTel: tel
         });
       } else if (parseInt(status) === 1) {
+        if (params.userAddress === "") {
+          this.$message({
+            type: "warning",
+            message: "请先填写收货信息"
+          });
+          return;
+        }
       }
       if (params.payment === "") {
         this.$message({
@@ -300,18 +309,55 @@ export default {
       const num = this.goods.map(item => item.num);
       params = Object.assign({}, params, { id, lid, num });
       postGoodOrder(params).then(data => {
-        const { payment, out_trade_no, totalPrice, body } = data;
+        const { payment, out_trade_no, body } = data;
+        const totalPrice = 0.01;
         if (parseInt(payment) === 2) {
-          postGetAlipayCode({ out_trade_no, total_fee: totalPrice, body });
+          postGetAlipayCode({ out_trade_no, total_fee: totalPrice, body })
+            .then(data => {
+              this.playcode.show = true;
+              this.playcode.src = data;
+            })
+            .then(_ => {
+              if (this.playcode.show) {
+                const timer = setInterval(() => {
+                  postGetAlipayOrder({ out_trade_no }).then(data => {
+                    console.log(data.msg);
+                    if (data.msg === "支付成功") {
+                      this.playcode.show = false;
+                    }
+                  });
+                  if (!this.playcode.show) {
+                    clearInterval(timer);
+                  }
+                }, 2000);
+              }
+            });
         }
         if (parseInt(payment) === 3) {
           postGetWechatpayCode({
             out_trade_no,
             total_fee: totalPrice,
             body
-          }).then(data => {
-            console.log(data);
-          });
+          })
+            .then(data => {
+              this.playcode.show = true;
+              this.playcode.src = data;
+            })
+            .then(_ => {
+              if (this.playcode.show) {
+                const timer = setInterval(() => {
+                  postGetWechatOrder({ out_trade_no }).then(data => {
+                    console.log(data.msg);
+                    if (data.msg === "支付成功") {
+                      this.playcode.show = false;
+                    }
+                  });
+                  if (!this.playcode.show) {
+                    clearInterval(timer);
+                  }
+                }, 2000);
+              }
+            });
         }
       });
     }

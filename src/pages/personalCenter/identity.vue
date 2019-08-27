@@ -1,51 +1,63 @@
 <template>
   <div>
     <div class="body">
-      <div class="identity" v-show="false">
+      <div class="back">
+        <span class="back-btn" @click="back">返回上一步</span>
+      </div>
+      <div class="identity" v-show="step.type === 'identity'">
         <div class="box">
           <div class="img">
             <img :src="icon.identity_1" alt />
           </div>
-          <div class="type">我是馆主</div>
+          <div class="type" @click="myIdentity('2')">我是馆主</div>
         </div>
 
         <div class="box id2">
           <div class="img">
             <img :src="icon.identity_2" alt />
           </div>
-          <div class="type">馆主&amp;教练</div>
+          <div class="type" @click="myIdentity('7')">馆主&amp;教练</div>
         </div>
 
         <div class="box id3">
           <div class="img">
             <img :src="icon.identity_3" alt />
           </div>
-          <div class="type">我是教练</div>
+          <div class="type" @click="myIdentity('4')">我是教练</div>
         </div>
       </div>
-      <div class="my-identity" v-show="false">
+      <div class="my-identity" v-show="step.type === 'my-card'">
         <div class="icon">
           <div class="img">
-            <img :src="icon.identity_1" alt />
+            <img :src="icon.active" alt />
           </div>
         </div>
         <div class="info">
           <div class="balance">
             <div class="title">
-              <span>账户余额</span>
-              <span style="color:#4093A5;margin-left:10px;">显示金额</span>
+              <span>账户金币</span>
+              <span
+                v-if="hiddenMoney"
+                style="color:#4093A5;margin-left:10px;"
+                @click="hiddenMoney = ''"
+              >隐藏金币</span>
+              <span
+                v-else
+                style="color:#4093A5;margin-left:10px;"
+                @click="hiddenMoney = '**.**'"
+              >显示金币</span>
             </div>
             <div class="money">
-              <span>8888</span>
-              <div class="recharge">充值</div>
-              <div class="cash">提现</div>
+              <span>{{hiddenMoney || info.money}}</span>
+              <div class="recharge" @click="step.type = 'recharge'">充值</div>
+              <!-- <div class="cash">提现</div> -->
             </div>
             <span class="all-card">我的全部银行卡</span>
           </div>
           <div class="card-wrap">
             <div class="title">
               <span>银行卡管理</span>
-              <span style="color:#4093A5;margin-left:10px;">添加银行卡</span>
+              <span style="color:#4093A5;margin-left:10px;" @click="step.type = 'input-card'">添加银行卡</span>
             </div>
             <div class="card-box">
               <div class="cards">
@@ -56,72 +68,73 @@
           </div>
         </div>
       </div>
-      <div class="input-card" v-show="false">
+      <div class="input-card" v-show="step.type === 'input-card'">
         <div class="icon">
           <div class="img">
-            <img :src="icon.identity_1" alt />
+            <img :src="icon.active" alt />
           </div>
         </div>
         <div class="card">
           <div class="title">
             尊贵的
-            <span>馆主</span> 未查询到您的银行卡信息，请完整信息：
+            <span>{{getIdentityAuth(info.identity_auth)}}</span> 未查询到您的银行卡信息，请完整信息：
           </div>
           <div style="padding-bottom:1em;">请填写银行卡号码</div>
           <div class="input-box">
             <el-input v-model="ruleForm.bank_card" type="text" />
             <div class="bank-card">
-              <div class="name">建设银行</div>
-              <div class="tipd">识别有误，手动填写</div>
+              <div v-show="false">
+                <div class="name">建设银行</div>
+                <div class="tipd">识别有误，手动填写</div>
+              </div>
             </div>
           </div>
-          <div>
-            <span class="sure">确定</span>
+          <div style="padding-top:2rem;">
+            <span class="sure" @click="changeBankCard">确定</span>
           </div>
         </div>
       </div>
-      <div class="pay-card" v-show="true">
+      <div class="pay-card" v-show="step.type === 'recharge'">
         <div class="icon">
           <div class="img">
-            <img :src="icon.identity_1" alt />
+            <img :src="icon.active" alt />
           </div>
         </div>
         <div class="info">
-          <div class="balance">
+          <div class="balance" v-show="false">
             <div class="title">
-              <span>账户余额</span>
-              <span style="color:#4093A5;margin-left:10px;">显示金额</span>
+              <span>账户金币</span>
+              <span style="color:#4093A5;margin-left:10px;">显示金币</span>
             </div>
             <div class="money">
-              <span>8888</span>
+              <span>{{info.money}}</span>
               <div class="recharge">充值</div>
-              <div class="cash">提现</div>
+              <!-- <div class="cash">提现</div> -->
             </div>
           </div>
           <div class="card-wrap">
             <div class="title">
-              <span>充值金额</span>
+              <span>充值金币</span>
             </div>
             <div class="money-wrap">
-              <span>300</span>
-              <span>500</span>
-              <span>800</span>
-              <span>1000</span>
-              <span>2000</span>
-              <span>5000</span>
+              <span :class="[isRechangeActive(300)]" @click="rechargeChange('num', 300)">300</span>
+              <span :class="[isRechangeActive(500)]" @click="rechargeChange('num', 500)">500</span>
+              <span :class="[isRechangeActive(800)]" @click="rechargeChange('num', 800)">800</span>
+              <span :class="[isRechangeActive(1000)]" @click="rechargeChange('num', 1000)">1000</span>
+              <span :class="[isRechangeActive(2000)]" @click="rechargeChange('num', 2000)">2000</span>
+              <span :class="[isRechangeActive(5000)]" @click="rechargeChange('num', 5000)">5000</span>
               <div class="input-money">
-                <input type="text" placeholder="填写金额">
+                <input v-model.number="money" type="text" placeholder="填写金币" />
               </div>
             </div>
-
           </div>
         </div>
         <div class="pay-way">
           <div>支付方式</div>
           <div class="way">
-            <span>微信</span>
-            <span>支付宝</span>
-            <span>银行卡</span>
+            <span @click="rechargeChange('payment', '3')">微信</span>
+            <span @click="rechargeChange('payment', '2')">支付宝</span>
+            <!-- <span>银行卡</span> -->
           </div>
           <div class="pay-code">
             <div class="code"></div>
@@ -139,6 +152,17 @@
 import identity_1 from "@/assets/personal/identity_1.png";
 import identity_2 from "@/assets/personal/identity_2.png";
 import identity_3 from "@/assets/personal/identity_3.png";
+import {
+  postChangeBankCard,
+  getBankCardInfo,
+  postRecharge
+} from "@/api/personal.js";
+import {
+  postGetAlipayCode,
+  postGetWechatpayCode,
+  postGetAlipayOrder,
+  postGetWechatOrder
+} from "@/api/market";
 export default {
   data() {
     return {
@@ -147,25 +171,85 @@ export default {
         identity_2,
         identity_3
       },
+      hiddenMoney: "",
+      money: "",
+      step: {
+        cur_index: 1,
+        type: "identity"
+      },
       ruleForm: {
         bank_card: ""
       },
       apply: {
         money: ""
       },
-      recharge: {
+      rechargeForm: {
         num: "",
         payment: ""
       }
     };
   },
+  watch: {
+    money(newvalue, oldvalue) {
+      this.rechargeForm.num = "";
+    }
+  },
+  computed: {
+    info() {
+      const user = sessionStorage.getItem("user");
+      return user && JSON.parse(user).user;
+    },
+    getIdentityAuth() {
+      return item => {
+        const obj = {
+          1: "用户",
+          2: "馆主",
+          4: "教练",
+          7: "馆主&教练"
+        };
+
+        return obj[item];
+      };
+    },
+    isRechangeActive() {
+      return money => {
+        return { active: this.rechargeForm.num === money };
+      };
+    }
+  },
   mounted() {
     // this.getBankCardInfo();
   },
   methods: {
+    back() {
+      const { type } = this.step;
+      const obj = {
+        identity: "identity",
+        "my-card": "identity",
+        "input-card": "my-card",
+        recharge: "my-card"
+      };
+      if(type === 'identity'){
+        this.$router.go(-1);
+      }
+      this.step.type = obj[type];
+    },
+    myIdentity(identity) {
+      this.step.type = "my-card";
+      const obj = {
+        1: "用户",
+        2: identity_1,
+        4: identity_3,
+        7: identity_2
+      };
+      this.icon.active = obj[identity];
+    },
+    rechargeChange(name, num) {
+      this.rechargeForm[name] = num;
+    },
     /** 充值 */
     reCharge() {
-      const params = Object.assign({}, this.recharge);
+      const params = Object.assign({}, this.rechargeForm);
       this.$request.post(`/personal/recharge`, params).then(data => {});
     },
     /** 提现申请 */
@@ -189,6 +273,20 @@ export default {
 * {
   font-size: 0.7rem;
 }
+.body {
+  position: relative;
+}
+.back {
+  position: absolute;
+  left: 4rem;
+  top: 1rem;
+  &-btn {
+    cursor: pointer;
+    padding: 0.2rem 0.3rem;
+    background: #000;
+    color: #fff;
+  }
+}
 img {
   width: 100%;
   height: 100%;
@@ -196,6 +294,8 @@ img {
 .identity {
   display: flex;
   justify-content: center;
+  padding-top: 4rem;
+  min-height: 30rem;
   .box {
     width: 17rem;
     height: 22rem;
@@ -227,11 +327,15 @@ img {
   }
 }
 .my-identity {
+  // min-height: 30rem;
   display: flex;
   min-height: 20rem;
-  border: 1px solid #ccc;
   width: 70rem;
   margin: 0 auto;
+  margin-top: 4rem;
+  margin-bottom: 10rem;
+  box-shadow: 0.1rem 0 0.35rem rgba(36, 36, 36, 0.2);
+  border-radius: 0.25rem;
   .icon {
     display: flex;
     align-items: center;
@@ -318,6 +422,10 @@ img {
   border: 1px solid #ccc;
   width: 70rem;
   margin: 0 auto;
+  margin-top: 4rem;
+  margin-bottom: 10rem;
+  box-shadow: 0.1rem 0 0.35rem rgba(36, 36, 36, 0.2);
+  border-radius: 0.25rem;
   .icon {
     display: flex;
     align-items: center;
@@ -363,6 +471,10 @@ img {
   border: 1px solid #ccc;
   width: 70rem;
   margin: 0 auto;
+  margin-top: 4rem;
+  margin-bottom: 10rem;
+  box-shadow: 0.1rem 0 0.35rem rgba(36, 36, 36, 0.2);
+  border-radius: 0.25rem;
   .icon {
     display: flex;
     align-items: center;
@@ -409,25 +521,30 @@ img {
       .title {
         padding-bottom: 0.4rem;
       }
-      .money-wrap{
-        span{
+      .money-wrap {
+        span {
           padding: 0 1em;
           border: 1px solid #ccc;
+          &.active {
+            border: 1px solid #fbecd2;
+            background: #fbecd2;
+            // color:#fff;
+          }
         }
-        .input-money{
+        .input-money {
           width: 5em;
           margin-top: 1em;
           position: relative;
-          &::after{
+          &::after {
             position: absolute;
             left: 100%;
             top: 50%;
             transform: translateY(-50%);
-            content:'元';
+            content: "元";
             display: inline-block;
             padding-left: 1em;
           }
-          input{
+          input {
             width: 100%;
           }
         }
@@ -445,7 +562,6 @@ img {
         padding: 0 1em;
         margin-right: 0.5em;
         cursor: pointer;
-
       }
     }
     .pay-code {

@@ -34,7 +34,10 @@
               <div class="delete" @click="goodsOpFor('detele', item)">删除</div>
             </div>
           </div>
-          <div v-if="goods.length === 0" style="text-align:center;height:100px;line-height:100px;">购物车空空如也~</div>
+          <div
+            v-if="goods.length === 0"
+            style="text-align:center;height:100px;line-height:100px;"
+          >购物车空空如也~</div>
         </div>
       </div>
       <div class="footer">
@@ -81,7 +84,9 @@ export default {
   computed: {
     isAllGoodsSelect() {
       let allSelectGoods = this.goods.filter(item => item.select);
-      return allSelectGoods.length === this.goods.length;
+      return (
+        allSelectGoods.length === this.goods.length && this.goods.length !== 0
+      );
     },
     getAllSelectNumberAndPrice() {
       let allGoods = this.goods.filter(item => item.select);
@@ -239,7 +244,8 @@ img {
             background: #eee;
             margin: 0 2rem 0 1rem;
             &.active {
-              background: #000;
+              background-image: url("../../assets/order/selected.png");
+              background-size: 100% 100%;
             }
           }
           .img {
@@ -356,7 +362,9 @@ img {
         background: #eee;
         margin: 0 2rem 0 1rem;
         &.active {
-          background: #000;
+          // background: #000;
+          background-image: url("../../assets/order/selected.png");
+          background-size: 100% 100%;
         }
       }
       .all {

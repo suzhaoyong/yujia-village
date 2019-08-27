@@ -1,10 +1,18 @@
 import axios from 'axios'
+import Bus from './Bus'
 import {
-  Message
+  Message,
+  Loading
 } from 'element-ui'
-
+let loadingInstance = ""
 // 处理非 get data 传参
 function handleRequest(config) {
+  loadingInstance = Loading.service({
+    lock: true,
+    text: 'Loading',
+    spinner: 'el-icon-loading',
+    background: 'rgba(0, 0, 0, 0)'
+  });
   const {
     method,
     data,
@@ -34,6 +42,7 @@ function handleRequestErr(err) {
 
 // // 处理 responese 报错
 function handleResponeseErr(err) {
+  loadingInstance.close();
   const {
     response = {}
   } = err;
@@ -60,6 +69,7 @@ function handleResponeseErr(err) {
         })
 
     } else {
+      Bus.$emit('login', true)
       sessionStorage.removeItem('user')
     }
 
@@ -87,6 +97,7 @@ function handleResponeseErr(err) {
 
 // 处理分页接口中的 meta ,element 分页组件，需要 number 类型
 function handleResponse(response) {
+  loadingInstance.close();
   const {
     status,
     data

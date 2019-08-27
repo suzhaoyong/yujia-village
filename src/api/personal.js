@@ -28,3 +28,27 @@ export function postUserInfo(args) {
 export function getUsedRecord(id) {
   return request(`/personal/home/${id}`)
 }
+
+/* 修改提现银行卡 */
+export function postChangeBankCard(args) {
+  let params = {
+    bank_card: ""
+  }
+  params = Object.assign({}, params, args)
+  return request.post(`/personal/changeBankCard`, params)
+}
+
+/* 获取银行卡信息 */
+export function getBankCardInfo() {
+  return request(`/personal/getBankCardInfo`)
+}
+
+/* 用户充值 */
+export function postRecharge(args) {
+  let params = {
+    num: "", // 充值金额
+    payment: "", // 支付方式
+  }
+  params = Object.assign({}, params, args)
+  return request.post(`/personal/recharge`, params)
+}

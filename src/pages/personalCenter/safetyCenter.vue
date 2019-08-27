@@ -4,8 +4,10 @@
       <session-title name="信息与安全中心"></session-title>
       <div class="body">
         <div class="tabs">
-          <div @click="tagsChange(0)" :class="['tab', {active: tagList[0].active}]">修改密码</div>
-          <div @click="tagsChange(1)" :class="['tab', {active: tagList[1].active}]">修改绑定手机</div>
+          <div @click="tagsChange(0)" :class="['tab', isTagActive(0)]">修改密码</div>
+          <div @click="tagsChange(1)" :class="['tab', isTagActive(1)]">修改绑定手机</div>
+          <div v-show="false" @click="tagsChange(2)" :class="['tab', isTagActive(2)]">个人信息</div>
+          <div v-show="false" @click="tagsChange(3)" :class="['tab', isTagActive(3)]">会馆信息</div>
         </div>
         <div class="content">
           <div v-show="!success">
@@ -111,7 +113,7 @@
                 <span>{{tel}}</span>
               </div>
             </div>
-            <div class="edit-phone" v-show="tagList[1].active ">
+            <div class="edit-phone" v-show="tagList[1].active">
               <div class="form">
                 <div class="item">
                   <span class="title">验证码</span>
@@ -149,6 +151,110 @@
                 <span>{{tel}}</span>
               </div>
             </div>
+            <div class="edit-personage" v-show="tagList[2].active">
+              <div class="item">
+                <div class="lable">用户名</div>
+                <div class="value">
+                  <el-input></el-input>
+                </div>
+              </div>
+              <div class="item">
+                <div class="lable">真实姓名</div>
+                <div class="value">
+                  <el-input></el-input>
+                </div>
+              </div>
+              <div class="item">
+                <div class="lable">性别</div>
+                <div class="value">
+                  <el-radio-group>
+                    <el-radio :label="3">男</el-radio>
+                    <el-radio :label="6">女</el-radio>
+                    <el-radio :label="9">保密</el-radio>
+                  </el-radio-group>
+                </div>
+              </div>
+              <div class="item">
+                <div class="lable">生日</div>
+                <div class="value">
+                  <el-input></el-input>
+                </div>
+              </div>
+              <div class="item">
+                <div class="lable">邮箱</div>
+                <div class="value">
+                  <el-input></el-input>
+                </div>
+              </div>
+              <div class="item">
+                <div class="lable">所在城市</div>
+                <div class="value">
+                  <v-distpicker></v-distpicker>
+                </div>
+              </div>
+              <div class="teach">
+                <div class="item">
+                  <div class="lable">系统认证身份</div>
+                  <div class="value"></div>
+                </div>
+                <div class="item">
+                  <div class="lable">教龄</div>
+                  <div class="value"></div>
+                </div>
+                <div class="item">
+                  <div class="lable">擅长领域</div>
+                  <div class="value"></div>
+                </div>
+                <div class="item">
+                  <div class="lable">个人简介</div>
+                  <div class="value"></div>
+                </div>
+                <div class="item">
+                  <div class="lable">荣誉/感悟</div>
+                  <div class="value">
+                    <el-input type="textarea"></el-input>
+                  </div>
+                </div>
+              </div>
+              <div class="btn-wrap">
+                <div class="btn" @click="updatePassword">更改</div>
+              </div>
+            </div>
+            <div class="edit-hall" v-show="tagList[3].active">
+              <div class="item">
+                <div class="lable">会馆名称</div>
+                <div class="value">
+                  <el-input></el-input>
+                </div>
+              </div>
+              <div class="item">
+                <div class="lable">会馆电话</div>
+                <div class="value">
+                  <el-input></el-input>
+                </div>
+              </div>
+              <div class="item">
+                <div class="lable">会馆地址</div>
+                <div class="value">
+                  <el-input></el-input>
+                </div>
+              </div>
+              <div class="item">
+                <div class="lable">会馆联系人</div>
+                <div class="value">
+                  <el-input></el-input>
+                </div>
+              </div>
+              <div class="item">
+                <div class="lable">联系人电话</div>
+                <div class="value">
+                  <el-input></el-input>
+                </div>
+              </div>
+              <div class="btn-wrap">
+                <div class="btn" @click="updatePassword">更改</div>
+              </div>
+            </div>
           </div>
 
           <div class="success" v-show="success">
@@ -161,9 +267,11 @@
 </template>
 <script>
 import SessionTitle from "./SessionTitle";
+import VDistpicker from "v-distpicker";
 export default {
   components: {
-    SessionTitle
+    SessionTitle,
+    VDistpicker
   },
   data() {
     return {
@@ -174,7 +282,9 @@ export default {
       },
       tagList: [
         { type: "password", active: true, methods: "password" },
-        { type: "phone", active: false }
+        { type: "phone", active: false },
+        { type: "personage", active: false },
+        { type: "hall", active: false }
       ],
       ruleForm: {
         old_password: "",
@@ -195,6 +305,11 @@ export default {
       const user = sessionStorage.getItem("user");
       return user && JSON.parse(user);
     },
+    isTagActive() {
+      return index => ({
+        active: this.tagList[index].active
+      });
+    },
     /** 手机号码加密 */
     tel() {
       return (
@@ -205,6 +320,10 @@ export default {
         )}`
       );
     }
+  },
+  mounted() {
+    console.log(this.isTagActive(2))
+    // this.tagsChange(2)
   },
   methods: {
     resetForm(name) {
@@ -244,14 +363,16 @@ export default {
 
       const { tel } = this.info && this.info.user;
       tel &&
-        this.$request.post("/getCode", { tel }).then(data => {
-          this.$message({ message: "发送成功", type: "success" });
-          this.ruleForm.verification_key = data.key;
-          this.telForm.verification_key = data.key;
-        })
-        .catch(_ => {
-          this.resetCode();
-        })
+        this.$request
+          .post("/getCode", { tel })
+          .then(data => {
+            this.$message({ message: "发送成功", type: "success" });
+            this.ruleForm.verification_key = data.key;
+            this.telForm.verification_key = data.key;
+          })
+          .catch(_ => {
+            this.resetCode();
+          });
     },
     /** 修改手机号码 */
     updateTel() {
@@ -307,15 +428,56 @@ export default {
   }
 };
 </script>
+<style scoped>
+.edit-personage >>> .distpicker-address-wrapper select {
+  height: 30px;
+  margin-right: 10px;
+}
+.edit-personage >>> .disabled .el-upload--picture-card {
+  display: none;
+}
+.edit-personage >>> .el-input__inner {
+  height: 30px;
+}
+.edit-hall >>> .el-input__inner {
+  height: 30px;
+}
+</style>
 <style lang="scss" scoped>
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+
+.edit-hall,
+.edit-personage {
+  .item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    .lable {
+      width: 8em;
+      text-align: right;
+      margin-right: 10px;
+    }
+    .value {
+    }
+  }
+  .btn-wrap {
+    margin-top: 3em;
+    margin-left: 9em;
+    .btn {
+      cursor: pointer;
+      border: 1px solid #7d7d7d;
+      padding: 0.55rem 1.95rem;
+    }
+  }
+}
 .safe {
   width: 60rem;
   margin: 0 auto;
+  min-height: 40rem;
   .body {
     display: flex;
     padding-bottom: 5rem;

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="personal">
-      <div class="buy">
+      <div class="buy" v-show="false">
         <session-title name="已购买的课程"></session-title>
         <div class="body">
           <el-carousel indicator-position="none" arrow="always">
@@ -39,16 +39,16 @@
         </session-title>
         <div class="body">
           <div class="vouchers">
-            <div class="voucher" v-for="(item, index) in 2" :key="index">
+            <div class="voucher" v-for="(item, index) in info.cash" :key="index">
               <div class="price">
                 <div class="sign">¥</div>
-                <div class="number">2000</div>
+                <div class="number">{{item.money}}</div>
               </div>
               <div class="name-time-used">
-                <div class="name">总券值</div>
+                <div class="name">{{item.name}}</div>
                 <div class="used" v-show="false">详细使用记录</div>
                 <div class="time-btn" v-show="true">
-                  <div class="time">有效期至 2019.05.21</div>
+                  <div class="time">有效期至 {{item.day}}</div>
                   <div class="btn">使用</div>
                 </div>
               </div>
@@ -60,18 +60,19 @@
         <session-title name="可领取优惠券"></session-title>
         <div class="body">
           <div class="vouchers">
-            <div class="voucher" v-for="(item,index) in 1" :key="index">
+            <div class="voucher" v-for="(item,index) in info.coupon" :key="index">
               <div class="content">
                 <div class="price">
                   <div class="number">
-                    15
+                    {{item.money}} 
                     <div class="unit">元</div>
                   </div>
                 </div>
-                <div class="name">优惠券</div>
+                <div class="name"></div>
                 <div class="condition">
-                  订单满2000元
-                  <br />可使用
+                  {{item.coupon.range}}、订单满{{item.coupon.limit_money}}元
+                  <!-- <br /> -->
+                  可使用
                 </div>
               </div>
             </div>
@@ -91,6 +92,12 @@ export default {
     return {
       star: 3
     };
+  },
+  computed: {
+    info() {
+      const user = sessionStorage.getItem("user");
+      return (user && JSON.parse(user)) || {};
+    },
   },
   methods: {
     /** 现金券使用记录 */
