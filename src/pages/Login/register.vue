@@ -4,7 +4,9 @@
       <div class="login-mask" @click="() => this.$emit('close', '')"></div>
       <div class="login">
         <div class="login-icon">
-          <div class="login-icon-pic"></div>
+          <div class="login-icon-pic">
+            <img :src="icon.logo" alt="">
+          </div>
         </div>
         <div class="form">
           <div class="form-box">
@@ -89,9 +91,13 @@
   </div>
 </template>
 <script>
+import logo from "@/assets/market/logo_max.png"
 export default {
   data() {
     return {
+      icon: {
+        logo
+      },
       loginWay: "account",
       ruleForm: {
         name: "", // 昵称
@@ -173,8 +179,8 @@ export default {
     },
     /** 注册 */
     register() {
-      let isPass = this.formVaildent('ruleForm');
-      if(!isPass) return;
+      let isPass = this.formVaildent("ruleForm");
+      if (!isPass) return;
       this.isPostting = true;
       const params = Object.assign({}, this.ruleForm);
       this.$request
@@ -182,7 +188,7 @@ export default {
         .then(data => {
           this.$message({ message: "注册成功", type: "success" });
           this.isPostting = false;
-          this.$emit('close', '')
+          this.$emit("close", "");
         })
         .catch(() => {
           this.isPostting = false;
@@ -261,6 +267,10 @@ input:focus {
     &-icon {
       width: 14.1rem;
       background: #12acac;
+      background: #f7faf2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       &-pic {
       }
     }

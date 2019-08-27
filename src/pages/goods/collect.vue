@@ -40,7 +40,7 @@
           >收藏夹空空如也~</div>
         </div>
       </div>
-      <div class="footer">
+      <div class="footer" v-if="goods.length > 0">
         <div class="op">
           <div :class="['select', {active: isAllGoodsSelect}]" @click="operate('selectAll')"></div>
           <div class="all" @click="operate('selectAll')">全选</div>

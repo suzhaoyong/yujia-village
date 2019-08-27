@@ -246,7 +246,7 @@ img {
   padding: 0;
 }
 .sub-menu {
-  width: 60rem;
+  width: 80vw;
   height: 5rem;
   padding: 0 1rem;
   background: #fff;

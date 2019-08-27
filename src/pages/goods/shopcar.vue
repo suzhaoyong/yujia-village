@@ -40,7 +40,7 @@
           >购物车空空如也~</div>
         </div>
       </div>
-      <div class="footer">
+      <div class="footer" v-if="goods.length > 0">
         <div class="op">
           <div :class="['select', {active: isAllGoodsSelect}]" @click="footerOpFor('selectAll')"></div>
           <div class="all" @click="footerOpFor('selectAll')">全选</div>

@@ -52,9 +52,9 @@
               <div class="recharge" @click="step.type = 'recharge'">充值</div>
               <!-- <div class="cash">提现</div> -->
             </div>
-            <span class="all-card">我的全部银行卡</span>
+            <span class="all-card" v-show="false">我的全部银行卡</span>
           </div>
-          <div class="card-wrap">
+          <div class="card-wrap" v-show="false">
             <div class="title">
               <span>银行卡管理</span>
               <span style="color:#4093A5;margin-left:10px;" @click="step.type = 'input-card'">添加银行卡</span>
@@ -132,8 +132,8 @@
         <div class="pay-way">
           <div>支付方式</div>
           <div class="way">
-            <span @click="rechargeChange('payment', '3')">微信</span>
-            <span @click="rechargeChange('payment', '2')">支付宝</span>
+            <span :class="[isPayActive(3)]" @click="rechargeChange('payment', '3')">微信</span>
+            <span :class="[isPayActive(2)]" @click="rechargeChange('payment', '2')">支付宝</span>
             <!-- <span>银行卡</span> -->
           </div>
           <div class="pay-code">
@@ -211,6 +211,11 @@ export default {
         return obj[item];
       };
     },
+    isPayActive() {
+      return payment => {
+        return { active: this.rechargeForm.payment == payment };
+      };
+    },
     isRechangeActive() {
       return money => {
         return { active: this.rechargeForm.num === money };
@@ -219,6 +224,7 @@ export default {
   },
   mounted() {
     // this.getBankCardInfo();
+    const { type } = this.$route.query;
   },
   methods: {
     back() {
@@ -229,7 +235,7 @@ export default {
         "input-card": "my-card",
         recharge: "my-card"
       };
-      if(type === 'identity'){
+      if (type === "identity") {
         this.$router.go(-1);
       }
       this.step.type = obj[type];
@@ -562,6 +568,9 @@ img {
         padding: 0 1em;
         margin-right: 0.5em;
         cursor: pointer;
+        &.active {
+          color: #4093a5;
+        }
       }
     }
     .pay-code {

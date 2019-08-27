@@ -25,6 +25,7 @@ const router = new Router({
       path: '/',
       name: 'Home',
       component: Home,
+      redirect: '/main'
     },
     {
       path: '/login',

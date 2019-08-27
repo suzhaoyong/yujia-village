@@ -372,14 +372,17 @@ export default {
     display: flex;
     justify-content: space-between;
     .agreen {
+      display: flex;
+      align-items: center;
       .select {
-        height: 0.75rem;
-        width: 0.75rem;
-        background: #ccc;
+        height: 1rem;
+        width: 1rem;
+        border:1px solid #ccc;
         border-radius: 50%;
         display: inline-block;
         &.active {
-          background: #000;
+          background-image: url("../../assets/order/selected.png");
+          background-size: 100% 100%;
         }
       }
       .text {

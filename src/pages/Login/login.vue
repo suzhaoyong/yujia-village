@@ -4,7 +4,9 @@
       <div class="login-mask" @click="() => this.$emit('close', '')"></div>
       <div class="login">
         <div class="login-icon">
-          <div class="login-icon-pic"></div>
+          <div class="login-icon-pic">
+            <img :src="icon.logo" alt="">
+          </div>
         </div>
         <div class="form">
           <div class="form_title" @click="changeLoginWay">
@@ -93,9 +95,13 @@
 <script>
 import { Exp } from "@/utils/bee.js";
 import Bus from "@/utils/Bus";
+import logo from "@/assets/market/logo_max.png"
 export default {
   data() {
     return {
+      icon: {
+        logo
+      },
       codeTips: {
         msg: "发送验证码",
         count: 0
@@ -280,7 +286,10 @@ input:focus {
     height: 21rem;
     &-icon {
       width: 14.1rem;
-      background: #12acac;
+      background: #F7FAF2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       &-pic {
       }
     }

@@ -42,6 +42,8 @@
                 </template>
                 <!-- <el-menu-item index="personal">收藏的课程</el-menu-item> -->
                 <el-menu-item index="personal">现金券与优惠券</el-menu-item>
+                <el-menu-item index="identity">个人信息</el-menu-item>
+                <el-menu-item index="hell">会馆信息</el-menu-item>
                 <el-menu-item index="safety-center">信息与安全中心</el-menu-item>
                 <el-menu-item index="share">分享邀请好友</el-menu-item>
                 <el-menu-item index="out" @click="logout">退出</el-menu-item>
@@ -155,6 +157,16 @@ export default {
     },
     handleSelect(key, keyPath) {
       if (keyPath.length >= 2) {
+        const obj = {
+          identity: () =>
+            this.$router.push({ name: "identity", query: { type: 2 } }),
+          hell: () =>
+            this.$router.push({ name: "identity", query: { type: 3 } })
+        };
+        if (obj[key]) {
+          obj[key]();
+          return;
+        }
         this.$router.push({
           name: key
         });
@@ -184,10 +196,10 @@ export default {
     logout() {
       this.$request.post("/auth/logout").then(data => {
         this.$message({ type: "success", message: "退出成功" });
-        this.$router.push('/main')
-        this.username = ""
-        sessionStorage.removeItem('access')
-        sessionStorage.removeItem('user')
+        this.$router.push("/main");
+        this.username = "";
+        sessionStorage.removeItem("access");
+        sessionStorage.removeItem("user");
       });
     },
     /** 用户基本信息 */
@@ -209,7 +221,7 @@ export default {
 <style>
 .header-main .el-submenu__title {
   border: none !important;
-  height: 100%!important;
+  height: 100% !important;
 }
 </style>
 <style lang="scss" scoped>
