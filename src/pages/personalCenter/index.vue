@@ -33,6 +33,64 @@
           </el-carousel>
         </div>
       </div>
+      <session-title name="已购买商品"></session-title>
+      <div class="my-class">
+        <div
+          class="goods-box"
+          @click="viewGoodsDetail(item)"
+          v-for="(item, index) in info.cart"
+          :key="index"
+        >
+          <div class="pic">
+            <img :src="item.url" alt />
+          </div>
+          <div class="gtitle">{{item.describe}}</div>
+          <div class="price-views-collenct">
+            <div class="price">
+              <div class="old-price">￥{{item.sell_price}}</div>
+              <div class="new-price">￥{{item.sell_price - item.discount}}</div>
+            </div>
+            <div class="views-collenct">
+              <!-- <div class="views">{{item.views}}</div>
+              <div class="collenct" @click="addCollect">收藏</div>-->
+            </div>
+          </div>
+        </div>
+        <div
+          v-if="info.cart&&info.cart.length === 0"
+          class="no_list"
+          style="text-align:center;width:100%;"
+        >空空如也～</div>
+      </div>
+      <session-title name="已收藏商品"></session-title>
+      <div class="my-class">
+        <div
+          class="goods-box"
+          @click="viewGoodsDetail(item)"
+          v-for="(item, index) in info.collect"
+          :key="index"
+        >
+          <div class="pic">
+            <img :src="item.url" alt />
+          </div>
+          <div class="gtitle">{{item.describe}}</div>
+          <div class="price-views-collenct">
+            <div class="price">
+              <div class="old-price">￥{{item.sell_price}}</div>
+              <div class="new-price">￥{{item.sell_price - item.discount}}</div>
+            </div>
+            <div class="views-collenct">
+              <!-- <div class="views">{{item.views}}</div>
+              <div class="collenct" @click="addCollect">收藏</div>-->
+            </div>
+          </div>
+        </div>
+        <div
+          v-if="info.collect&&info.collect.length === 0"
+          class="no_list"
+          style="text-align:center;width:100%;"
+        >空空如也～</div>
+      </div>
       <div class="cash-voucher">
         <session-title name="现金券">
           <span slot="tips" style="color:#999;">(可拆分使用)</span>
@@ -48,7 +106,7 @@
                 <div class="name">{{item.name}}</div>
                 <div class="used" v-show="false">详细使用记录</div>
                 <div class="time-btn" v-show="true">
-                  <div class="time">有效期至 {{item.day}}</div>
+                  <div class="time">有效期至 {{item.endDate}}</div>
                   <div class="btn">使用</div>
                 </div>
               </div>
@@ -64,13 +122,14 @@
               <div class="content">
                 <div class="price">
                   <div class="number">
-                    {{item.money}} 
+                    {{item.money}}
                     <div class="unit">元</div>
                   </div>
                 </div>
                 <div class="name"></div>
                 <div class="condition">
-                  {{item.coupon.range}}、订单满{{item.coupon.limit_money}}元
+                  {{item.range}}
+                  <!-- 订单满{{item.limit_money}}元 -->
                   <!-- <br /> -->
                   可使用
                 </div>
@@ -84,6 +143,8 @@
 </template>
 <script>
 import SessionTitle from "./SessionTitle";
+import { getUserOrder } from "@/api/market";
+
 export default {
   components: {
     SessionTitle
@@ -97,9 +158,20 @@ export default {
     info() {
       const user = sessionStorage.getItem("user");
       return (user && JSON.parse(user)) || {};
-    },
+    }
+  },
+  mounted(){
+    getUserOrder()
   },
   methods: {
+    viewGoodsDetail(goods) {
+      this.$router.push({
+        name: "detailGoods",
+        params: {
+          id: goods.id
+        }
+      });
+    },
     /** 现金券使用记录 */
     usedRecord(id) {
       this.$request(`/personal/home/${id}`).then(data => {});
@@ -129,6 +201,113 @@ export default {
 </style>
 
 <style lang="scss" scoped>
+img {
+  width: 100%;
+  height: 100%;
+}
+.my-class {
+  padding-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  max-height: 400px;
+  overflow-y: auto;
+  /* 设置滚动条的样式 */
+  &::-webkit-scrollbar {
+    width: 0.3rem;
+  }
+  /* 滚动槽 */
+  &::-webkit-scrollbar-track {
+    background: #dcdcdc;
+    border-radius: 0.15rem;
+  }
+  /* 滚动条滑块 */
+  &::-webkit-scrollbar-thumb {
+    background: #88bc37;
+    border-radius: 0.15rem;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #88bc37;
+  }
+
+  .goods-box {
+    flex-basis: 23%;
+    width: 13.5rem;
+    // height: 19.35rem;
+    background: #fff;
+    // margin-right: 1.6rem;
+    &:nth-child(4n) {
+      margin-right: 0rem;
+    }
+    .pic {
+      width: 100%;
+      height: 12.75rem;
+    }
+    .gtitle {
+      padding: 1rem;
+      color: #2c2c2c;
+      font-size: 0.7rem;
+    }
+    .price-views-collenct {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 1rem;
+      .price {
+        display: flex;
+        .old-price {
+          font-size: 0.6rem;
+          color: #999;
+          text-decoration: line-through;
+          margin-right: 0.1rem;
+        }
+        .new-price {
+          font-size: 0.7rem;
+          color: #2c2c2c;
+        }
+      }
+      .views-collenct {
+        color: #8f8f8f;
+        font-size: 0.7rem;
+        display: flex;
+        .views {
+          cursor: pointer;
+          position: relative;
+          padding-left: 0.4rem;
+          padding-right: 1.2rem;
+          &::before {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 50%;
+            left: -0.6rem;
+            transform: translateY(-50%);
+            width: 0.9rem;
+            height: 0.7rem;
+            background: pink;
+            background: url("../../assets/eye.png") no-repeat;
+            background-size: 100% 100%;
+          }
+        }
+        .collenct {
+          cursor: pointer;
+          position: relative;
+          &::before {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 50%;
+            left: -0.95rem;
+            transform: translateY(-50%);
+            width: 0.9rem;
+            height: 0.9rem;
+            background: pink;
+            background: url("../../assets/market/like.png") no-repeat;
+            background-size: 100% 100%;
+          }
+        }
+      }
+    }
+  }
+}
 @mixin title() {
   .title {
     // height: 13.5rem;

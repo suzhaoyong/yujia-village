@@ -137,7 +137,7 @@ export default {
       dialogVisible: false,
       disabled: false,
       step: {
-        cur_index: 2,
+        cur_index: 1,
         agree: false
       },
       ruleForm: {
