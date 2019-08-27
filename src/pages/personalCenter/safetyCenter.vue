@@ -6,8 +6,8 @@
         <div class="tabs">
           <div @click="tagsChange(0)" :class="['tab', isTagActive(0)]">修改密码</div>
           <div @click="tagsChange(1)" :class="['tab', isTagActive(1)]">修改绑定手机</div>
-          <div v-show="false" @click="tagsChange(2)" :class="['tab', isTagActive(2)]">个人信息</div>
-          <div v-show="false" @click="tagsChange(3)" :class="['tab', isTagActive(3)]">会馆信息</div>
+          <div @click="tagsChange(2)" :class="['tab', isTagActive(2)]">个人信息</div>
+          <div @click="tagsChange(3)" :class="['tab', isTagActive(3)]">会馆信息</div>
         </div>
         <div class="content">
           <div v-show="!success">
@@ -322,8 +322,8 @@ export default {
     }
   },
   mounted() {
-    console.log(this.isTagActive(2))
-    // this.tagsChange(2)
+    const { type } = this.$route.query;
+    type && this.tagsChange(type)
   },
   methods: {
     resetForm(name) {

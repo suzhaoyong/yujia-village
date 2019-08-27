@@ -224,7 +224,6 @@ export default {
   },
   mounted() {
     // this.getBankCardInfo();
-    const { type } = this.$route.query;
   },
   methods: {
     back() {

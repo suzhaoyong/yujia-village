@@ -52,3 +52,19 @@ export function postRecharge(args) {
   params = Object.assign({}, params, args)
   return request.post(`/personal/recharge`, params)
 }
+
+/* 用户修改资料 */
+export function postUpdateInfo(args) {
+
+  let params = {
+    name: "", //
+    real_name: "", //
+    sex: "", // 性别1-女 2-男 3-保密
+    birthday: "",
+    city: "",
+    province: "",
+    area: ""
+  }
+  params = Object.assign({}, params, args)
+  return request.post(`/personal/updateInfo`, params)
+}

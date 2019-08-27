@@ -159,9 +159,9 @@ export default {
       if (keyPath.length >= 2) {
         const obj = {
           identity: () =>
-            this.$router.push({ name: "identity", query: { type: 2 } }),
+            this.$router.push({ name: "safety-center", query: { type: 2 } }),
           hell: () =>
-            this.$router.push({ name: "identity", query: { type: 3 } })
+            this.$router.push({ name: "safety-center", query: { type: 3 } })
         };
         if (obj[key]) {
           obj[key]();
