@@ -79,23 +79,23 @@ export default {
     height: 566px;
     margin: 0;
   }
-  .banner_button{
-    position: absolute;
-    top: 74%;
-    width: 160px;
-    background-color: #9AB1C1;
-    height: 50px;
-    border-radius: 10px;
-    right: 45%;
-    text-align: center;
-    line-height: 50px;
-    .butt{
-      font-size:18px;
-      font-family:Microsoft YaHei;
-      font-weight:bold;
-      color: #FFFFFF;
-    }
-  }
+  // .banner_button{
+  //   position: absolute;
+  //   top: 74%;
+  //   width: 160px;
+  //   background-color: #9AB1C1;
+  //   height: 50px;
+  //   border-radius: 10px;
+  //   right: 45%;
+  //   text-align: center;
+  //   line-height: 50px;
+  //   .butt{
+  //     font-size:18px;
+  //     font-family:Microsoft YaHei;
+  //     font-weight:bold;
+  //     color: #FFFFFF;
+  //   }
+  // }
   // .el-carousel__item:nth-child(2n) {
   //   background-color: #99a9bf;
   // }
