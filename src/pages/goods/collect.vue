@@ -5,7 +5,7 @@
         <session-title name="收藏中心"></session-title>
       </div>
       <div class="body">
-        <div class="goods-box">
+        <div class="goods-box" style="min-height:80vh;">
           <div class="goods" v-for="(item,index) in goods" :key="index">
             <div class="info">
               <div :class="['select', {'active': item.select}]" @click="chooseGoods(item, index)"></div>
@@ -34,9 +34,13 @@
               <div class="delete" @click="operate('deleteGoods', item)">删除</div>
             </div>
           </div>
+          <div
+            v-if="goods.length === 0"
+            style="text-align:center;height:100px;line-height:100px;"
+          >收藏夹空空如也~</div>
         </div>
       </div>
-      <div class="footer">
+      <div class="footer" v-if="goods.length > 0">
         <div class="op">
           <div :class="['select', {active: isAllGoodsSelect}]" @click="operate('selectAll')"></div>
           <div class="all" @click="operate('selectAll')">全选</div>
@@ -183,7 +187,8 @@ img {
             background: #eee;
             margin: 0 2rem 0 1rem;
             &.active {
-              background: #000;
+              background-image: url("../../assets/order/selected.png");
+              background-size: 100% 100%;
             }
           }
           .img {
@@ -300,7 +305,8 @@ img {
         background: #eee;
         margin: 0 2rem 0 1rem;
         &.active {
-          background: #000;
+          background-image: url("../../assets/order/selected.png");
+          background-size: 100% 100%;
         }
       }
       .all {

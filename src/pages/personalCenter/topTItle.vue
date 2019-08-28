@@ -3,23 +3,23 @@
     <div class="top">
       <div class="header">
         <div class="user">
-          <div class="photo"></div>
-          <div class="name">{{info.user.name}}</div>
+          <!-- <div class="photo"></div> -->
+          <div class="name">{{info.name|| user.name}}</div>
         </div>
         <div class="info">
           <div class="balance">
-            您的账户可用余额为
-            <span class="number">¥{{info.user.money}}</span>
+            您的账户可金币用
+            <span class="number">{{info.money||user.money}}</span>
           </div>
-          <div class="recharge">充值</div>
+          <div class="recharge" v-if="info.reason !== '未认证'">充值</div>
           <div class="withdraw" @click="withdraw">
-            提现
+            <!-- 提现 -->
             <span
               class="identity"
-              v-if="info.user.reason === '未认证'"
-              @click.stop="goPage('identity')"
+              v-if="info.reason === '未认证'"
+              
             >未认证</span>
-            <span class="identity" v-else>(馆主、教练)</span>
+            <span class="identity" v-else @click.stop="goPage('identity')">(馆主、教练)</span>
           </div>
         </div>
       </div>
@@ -36,8 +36,11 @@ export default {
   computed: {
     info() {
       const user = sessionStorage.getItem("user");
-      return user && JSON.parse(user);
+      return user && JSON.parse(user).user || {};
     }
+  },
+  mounted() {
+    this.getPersonal();
   },
   methods: {
     getPersonal() {

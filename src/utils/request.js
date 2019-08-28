@@ -1,22 +1,28 @@
 import axios from 'axios'
+import Bus from './Bus'
 import {
-  Message
+  Message,
+  Loading
 } from 'element-ui'
-
+let loadingInstance = ""
 // 处理非 get data 传参
 function handleRequest(config) {
+  if (config.url.startsWith('/api/getAlipayOrder') && config.url.startsWith('/api/getWechatOrder')) {
+
+  } else {
+    loadingInstance = Loading.service({
+      lock: true,
+      text: 'Loading',
+      spinner: 'el-icon-loading',
+      background: 'rgba(0, 0, 0, 0)'
+    });
+  }
   const {
     method,
     data,
     url,
     contentType
   } = config;
-  // const xtoken = {
-  //   access_token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vYXBpLmFvbWVuZ3l1amlhLmNvbS9hcGkvYXV0aC9sb2dpbiIsImlhdCI6MTU2NjQzMTcwNSwiZXhwIjoxNTY2NDM1MzA1LCJuYmYiOjE1NjY0MzE3MDUsImp0aSI6IkM2Mzk3VU9sc1VnTGlGdnAiLCJzdWIiOjE0LCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0._9SNoIBHmGRwH_rX8oNMSVZa2Bj9Y1intq8htgYKW9g",
-  //   expires_in: 3600,
-  //   token_type: "bearer"
-  // }
-  // config.headers['Authorization'] = xtoken.token_type + xtoken.access_token
   // 请求头添加token
   const access = sessionStorage.getItem('access')
   config.headers['Authorization'] = access && `${JSON.parse(access).token_type}${JSON.parse(access).access_token}` || '';
@@ -34,6 +40,7 @@ function handleRequestErr(err) {
 
 // // 处理 responese 报错
 function handleResponeseErr(err) {
+  loadingInstance && loadingInstance.close();
   const {
     response = {}
   } = err;
@@ -60,6 +67,7 @@ function handleResponeseErr(err) {
         })
 
     } else {
+      Bus.$emit('login', true)
       sessionStorage.removeItem('user')
     }
 
@@ -87,6 +95,7 @@ function handleResponeseErr(err) {
 
 // 处理分页接口中的 meta ,element 分页组件，需要 number 类型
 function handleResponse(response) {
+  loadingInstance && loadingInstance.close();
   const {
     status,
     data

@@ -4,8 +4,10 @@
       <session-title name="信息与安全中心"></session-title>
       <div class="body">
         <div class="tabs">
-          <div @click="tagsChange(0)" :class="['tab', {active: tagList[0].active}]">修改密码</div>
-          <div @click="tagsChange(1)" :class="['tab', {active: tagList[1].active}]">修改绑定手机</div>
+          <div @click="tagsChange(0)" :class="['tab', isTagActive(0)]">修改密码</div>
+          <div @click="tagsChange(1)" :class="['tab', isTagActive(1)]">修改绑定手机</div>
+          <div @click="tagsChange(2)" :class="['tab', isTagActive(2)]">个人信息</div>
+          <div @click="tagsChange(3)" :class="['tab', isTagActive(3)]">会馆信息</div>
         </div>
         <div class="content">
           <div v-show="!success">
@@ -111,7 +113,7 @@
                 <span>{{tel}}</span>
               </div>
             </div>
-            <div class="edit-phone" v-show="tagList[1].active ">
+            <div class="edit-phone" v-show="tagList[1].active">
               <div class="form">
                 <div class="item">
                   <span class="title">验证码</span>
@@ -149,6 +151,143 @@
                 <span>{{tel}}</span>
               </div>
             </div>
+            <div class="edit-personage" v-show="tagList[2].active">
+              <div class="item">
+                <div class="lable">用户名</div>
+                <div class="value">
+                  <el-input v-model="userForm.name"></el-input>
+                </div>
+              </div>
+              <div class="item">
+                <div class="lable">真实姓名</div>
+                <div class="value">
+                  <el-input v-model="userForm.real_name"></el-input>
+                </div>
+              </div>
+              <div class="item">
+                <div class="lable">性别</div>
+                <div class="value">
+                  <el-radio-group v-model="userForm.sex">
+                    <el-radio label="2">男</el-radio>
+                    <el-radio label="1">女</el-radio>
+                    <el-radio label="3">保密</el-radio>
+                  </el-radio-group>
+                </div>
+              </div>
+              <div class="item">
+                <div class="lable">生日</div>
+                <div class="value">
+                  <el-date-picker
+                    v-model="userForm.birthday"
+                    type="date"
+                    placeholder="选择日期"
+                    value-format="yyyy-MM-dd"
+                  ></el-date-picker>
+                </div>
+              </div>
+              <div class="item" v-show="false">
+                <div class="lable">邮箱</div>
+                <div class="value"></div>
+              </div>
+              <div class="item">
+                <div class="lable">所在城市</div>
+                <div class="value">
+                  <v-distpicker
+                    :province="userForm.province"
+                    :city="userForm.city"
+                    :area="userForm.area"
+                    @selected="onDistpickerSelected"
+                  ></v-distpicker>
+                </div>
+              </div>
+              <div class="teach" v-show="userForm.identity_auth !== 1">
+                <div class="item">
+                  <div class="lable">系统认证身份</div>
+                  <div class="value"></div>
+                </div>
+                <div class="item">
+                  <div class="lable">教龄</div>
+                  <div class="value">{{teacherForm.num}}</div>
+                </div>
+                <div class="item">
+                  <div class="lable">擅长领域</div>
+                  <div class="value">{{teacherForm.good_at}}</div>
+                </div>
+                <div class="item">
+                  <div class="lable">个人简介</div>
+                  <div class="value">{{teacherForm.content}}</div>
+                </div>
+                <div class="item">
+                  <div class="lable">荣誉/感悟</div>
+                  <div class="value">
+                    <el-input v-model="teacherForm.info" type="textarea"></el-input>
+                  </div>
+                </div>
+              </div>
+              <div class="btn-wrap">
+                <div class="btn" @click="updateTeachUser">更改</div>
+              </div>
+            </div>
+            <div class="edit-hall" v-show="tagList[3].active">
+              <div class="item">
+                <div class="lable">会馆名称</div>
+                <div class="value">
+                  <el-select
+                    v-model="clubForm.club_name"
+                    @change="changeClub"
+                    placeholder="请选择会馆名称"
+                  >
+                    <el-option
+                      v-for="item in clubList"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    ></el-option>
+                  </el-select>
+                </div>
+              </div>
+
+              <div v-show="false">
+                <div class="item">
+                  <div class="lable">会馆电话</div>
+                  <div class="value">
+                    <el-input v-model="clubForm.name"></el-input>
+                  </div>
+                </div>
+                <div class="item">
+                  <div class="lable">会馆所在城市</div>
+                  <div class="value">
+                    <v-distpicker
+                      :province="clubForm.province"
+                      :city="clubForm.city"
+                      :area="clubForm.area"
+                      @selected="onDistpickerSelected"
+                    ></v-distpicker>
+                  </div>
+                </div>
+                <div class="item">
+                  <div class="lable">会馆地址</div>
+                  <div class="value">
+                    <el-input v-model="clubForm.club_address"></el-input>
+                  </div>
+                </div>
+                <div class="item">
+                  <div class="lable">会馆联系人</div>
+                  <div class="value">
+                    <el-input v-model="clubForm.club_name"></el-input>
+                  </div>
+                </div>
+                <div class="item">
+                  <div class="lable">联系人电话</div>
+                  <div class="value">
+                    <el-input v-model="clubForm.tel"></el-input>
+                  </div>
+                </div>
+              </div>
+              <div class="btn-wrap">
+                <div class="btn" @click="updateClub">更改</div>
+              </div>
+            </div>
           </div>
 
           <div class="success" v-show="success">
@@ -161,20 +300,33 @@
 </template>
 <script>
 import SessionTitle from "./SessionTitle";
+import VDistpicker from "v-distpicker";
+import {
+  postUpdateTeacherInfo,
+  getTeacherInfo,
+  postUpdateClubInfo,
+  getClubInfo,
+  postUpdateInfo
+} from "@/api/personal";
+
 export default {
   components: {
-    SessionTitle
+    SessionTitle,
+    VDistpicker
   },
   data() {
     return {
       success: false,
+      clubList: [],
       codeTips: {
         msg: "发送验证码",
         count: 0
       },
       tagList: [
         { type: "password", active: true, methods: "password" },
-        { type: "phone", active: false }
+        { type: "phone", active: false },
+        { type: "personage", active: false },
+        { type: "hall", active: false }
       ],
       ruleForm: {
         old_password: "",
@@ -187,6 +339,33 @@ export default {
         tel: "",
         verification_key: "",
         verification_code: ""
+      },
+      clubForm: {
+        id: "", // 会馆id
+        name: "",
+        tel: "",
+        club_tel: "",
+        club_name: "",
+        club_address: "",
+        city: "",
+        province: "",
+        area: ""
+      },
+      teacherForm: {
+        id: "", // 会馆id
+        info: "",
+        city: "",
+        province: "",
+        area: ""
+      },
+      userForm: {
+        name: "", //
+        real_name: "", //
+        sex: "", // 性别1-女 2-男 3-保密
+        birthday: "",
+        city: "",
+        province: "",
+        area: ""
       }
     };
   },
@@ -194,6 +373,11 @@ export default {
     info() {
       const user = sessionStorage.getItem("user");
       return user && JSON.parse(user);
+    },
+    isTagActive() {
+      return index => ({
+        active: this.tagList[index].active
+      });
     },
     /** 手机号码加密 */
     tel() {
@@ -206,7 +390,21 @@ export default {
       );
     }
   },
+  mounted() {
+    const { type } = this.$route.query;
+    type && this.tagsChange(type);
+  },
   methods: {
+    onDistpickerSelected(data) {
+      const { area, city, province } = data;
+      if(this)
+      this.userForm = Object.assign({}, this.userForm, {
+        area: area.value,
+        city: city.value,
+        province: province.value
+      });
+    },
+    changeClub() {},
     resetForm(name) {
       const form = {
         ruleForm: {
@@ -244,14 +442,16 @@ export default {
 
       const { tel } = this.info && this.info.user;
       tel &&
-        this.$request.post("/getCode", { tel }).then(data => {
-          this.$message({ message: "发送成功", type: "success" });
-          this.ruleForm.verification_key = data.key;
-          this.telForm.verification_key = data.key;
-        })
-        .catch(_ => {
-          this.resetCode();
-        })
+        this.$request
+          .post("/getCode", { tel })
+          .then(data => {
+            this.$message({ message: "发送成功", type: "success" });
+            this.ruleForm.verification_key = data.key;
+            this.telForm.verification_key = data.key;
+          })
+          .catch(_ => {
+            this.resetCode();
+          });
     },
     /** 修改手机号码 */
     updateTel() {
@@ -272,13 +472,14 @@ export default {
     updatePassword() {
       const way = this.tagList[0];
       if (!way.active) return;
-      const params = Object.assign({}, this.ruleForm);
+      let params = Object.assign({}, this.ruleForm);
       if (way.methods === "password") {
-        if (params.verification_key) delete params.verification_key;
-        if (params.verification_code) delete params.verification_code;
+        delete params.verification_key;
+        delete params.verification_code;
       } else {
-        if (params.old_password) delete params.old_password;
+        delete params.old_password;
       }
+      console.log(params);
       this.$request.post("/personal/updatePassword", params).then(data => {
         this.$message({
           type: "success",
@@ -290,32 +491,131 @@ export default {
     tagsChange(cur_index) {
       this.success = false;
       this.resetCode();
-      if (cur_index === 1) {
+      if (cur_index == 1) {
         this.ruleForm = this.resetForm("ruleForm");
       } else {
         this.telForm = this.resetForm("telForm");
       }
       this.tagList = this.tagList.map((item, index) => {
-        if (index === cur_index) {
+        if (index == cur_index) {
           item.active = true;
         } else {
           item.active = false;
         }
         return item;
       });
+
+      const obj = {
+        2: this.getTeacher,
+        3: this.getClub
+      };
+      obj[cur_index] && obj[cur_index]();
+    },
+    getTeacher() {
+      const {
+        area,
+        province,
+        city,
+        birthday,
+        sex,
+        tel,
+        identity_auth,
+        name,
+        real_name
+      } = this.info.user;
+      this.userForm = Object.assign(
+        {},
+        {
+          area,
+          province,
+          city,
+          birthday,
+          sex,
+          tel,
+          identity_auth,
+          name,
+          real_name
+        }
+      );
+      if (identity_auth === 4 || identity_auth === 7) {
+        getTeacherInfo().then(data => (this.teacherForm = data));
+      }
+    },
+    getClub() {
+      getClubInfo().then(data => (this.clubList = data));
+    },
+    updateTeachUser() {
+      // postUpdateTeacherInfo();
+      let params = Object.assign({}, this.userForm);
+      postUpdateInfo(params);
+    },
+    updateClub() {
+      postUpdateClubInfo();
     }
   }
 };
 </script>
+<style scoped>
+.edit-personage >>> .el-input__icon {
+  display: none;
+}
+.edit-personage >>> .distpicker-address-wrapper select {
+  height: 30px;
+  margin-right: 10px;
+}
+.edit-personage >>> .disabled .el-upload--picture-card {
+  display: none;
+}
+.edit-personage >>> .el-input__inner {
+  height: 30px;
+}
+
+.edit-hall >>> .distpicker-address-wrapper select {
+  height: 30px;
+  margin-right: 10px;
+}
+.edit-hall >>> .disabled .el-upload--picture-card {
+  display: none;
+}
+.edit-hall >>> .el-input__inner {
+  height: 30px;
+}
+</style>
 <style lang="scss" scoped>
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+
+.edit-hall,
+.edit-personage {
+  .item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    .lable {
+      width: 8em;
+      text-align: right;
+      margin-right: 10px;
+    }
+    .value {
+    }
+  }
+  .btn-wrap {
+    margin-top: 3em;
+    margin-left: 9em;
+    .btn {
+      cursor: pointer;
+      border: 1px solid #7d7d7d;
+      padding: 0.55rem 1.95rem;
+    }
+  }
+}
 .safe {
   width: 60rem;
   margin: 0 auto;
+  min-height: 40rem;
   .body {
     display: flex;
     padding-bottom: 5rem;

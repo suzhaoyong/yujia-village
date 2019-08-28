@@ -14,6 +14,9 @@
           <div class="imgs">
             <div class="bg-img">
               <img :src="chooseItem.activeImg" alt />
+              <div v-if="config.url">
+                <share :config="config"></share>
+              </div>
             </div>
             <div class="sm-imgs">
               <div
@@ -101,7 +104,7 @@
         </div>
         <!-- 底部说明 -->
         <div class="explain">
-          <session-title name="热门课程"></session-title>
+          <session-title name="权限声明"></session-title>
           <div class="content">
             所售商品均为正品行货，若您收到的商品已损坏请尽快联系我们，我们将根据实际情况免费为您退换货。
             <br />注：图片本身可能有些许色差以及每个人的身高体型不同，如果您有相关疑问，欢迎联系客服。祝您购物愉快！
@@ -122,6 +125,16 @@ export default {
   data() {
     return {
       isBindClick: false,
+      config: {
+        url: "",
+        source: "",
+        title: "",
+        description: "",
+        sites: ["qzone", "qq", "weibo", "wechat", "douban"],
+        wechatQrcodeTitle: "微信扫一扫：分享", // 微信二维码提示文字
+        wechatQrcodeHelper:
+          "<p>微信里点“发现”，扫一下</p><p>二维码便可将本文分享至朋友圈。</p>"
+      },
       sizeList: [],
       chooseItem: {
         activeImg: "",
@@ -159,28 +172,44 @@ export default {
   mounted() {
     const { id } = this.$route.params;
     this.getGoodsDetail(id);
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 2000);
   },
   methods: {
+    initSocialConfig() {
+      const { describe, material, painter, kinds, season } = this.goods;
+      const params = {
+        url: `http://www.yujiacun.net/index.html`,
+        title: describe,
+        description: `材质: ${material}, 适合${painter}使用`
+      };
+      this.config = Object.assign({}, this.config, params);
+    },
     getGoodsDetail(id) {
-      getGoodsById(id).then(data => {
-        this.goods = data;
-        this.goods.imgs = [
-          data.cover,
-          data.path1,
-          data.path2,
-          data.path3,
-          data.path4
-        ];
-        // this.sizeList = data.color_size[0].data;
-        this.chooseItem.activeImg = data.cover;
-        const { material, painter, season, describe } = data;
-        this.goods.params = [
-          { material },
-          { painter },
-          { season },
-          { describe }
-        ];
-      });
+      getGoodsById(id)
+        .then(data => {
+          this.goods = data;
+          this.goods.imgs = [
+            data.cover,
+            data.path1,
+            data.path2,
+            data.path3,
+            data.path4
+          ];
+          // this.sizeList = data.color_size[0].data;
+          this.chooseItem.activeImg = data.cover;
+          const { material, painter, season, describe } = data;
+          this.goods.params = [
+            { material },
+            { painter },
+            { season },
+            { describe }
+          ];
+        })
+        .then(_ => {
+          this.initSocialConfig();
+        });
     },
     chooseActiveImg(img) {
       this.chooseItem.activeImg = img;
@@ -456,7 +485,7 @@ img {
       }
     }
     .params {
-      margin-top: 2rem;
+      margin-top: 3rem;
       width: 100%;
       border: 1px solid #bfbfbf;
       .title {
