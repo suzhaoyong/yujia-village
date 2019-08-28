@@ -4,7 +4,10 @@
             <el-col :span="24">
                 <div class="formation-main">
                     <template>
-                       <Banner></Banner>
+                       <!-- <Banner></Banner> -->
+                        <div class="bg_img">
+                         <img src="../assets/banner3.png" alt />
+                        </div>
                     </template>
                     <div class="formation-count">
                         <div class="formation-count-div1" v-for="(item,index) in listdatas.slice((currentPage-1)*pagesize,currentPage*pagesize)" :key="index">
@@ -128,7 +131,8 @@ export default {
         currentPage:1,
         pagesize: 5,
         formationList:[],
-        listdatas:[]
+        listdatas:[],
+        banner:''
     };
   },
   created(){
@@ -176,6 +180,14 @@ export default {
 };
 </script>
 <style lang="scss" scope>
+.bg_img {
+  width: 100%;
+  height: 600px;
+  img{
+      width: 100%;
+      height: 100%;
+  }
+}
 .el-pagination.is-background .el-pager li:not(.disabled).active{
     background-color: #CCE198;
     color: #fff;

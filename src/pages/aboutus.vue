@@ -6,7 +6,7 @@
                     <template>
                        <!-- <Banner></Banner> -->
                        <div class="bg_img">
-                         <img :src="banner" alt />
+                         <img src="../assets/banner5.png" alt />
                         </div>
                     </template>
                     <div class="aboutus-count">
