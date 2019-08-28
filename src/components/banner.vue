@@ -1,13 +1,13 @@
 <template>
     <el-col>
-        <!-- <el-carousel height="566px" indicator-position="none" :autoplay="false" :interval="10000" :loop="false">
+        <el-carousel height="566px" indicator-position="none" :autoplay="false" :interval="10000" :loop="false">
             <el-carousel-item v-for="item in imgList" :key="item.id">
             <el-row>
                 <el-col :span="24"><img :src="item.idView" class="banner_img"/></el-col>
             </el-row>
             </el-carousel-item>
-        </el-carousel> -->
-        <el-carousel height="566px" indicator-position="none" :autoplay="false">
+        </el-carousel>
+        <!-- <el-carousel height="566px" indicator-position="none" :autoplay="false">
         <el-carousel-item>
             <el-row>
                 <el-col :span="24">
@@ -53,27 +53,21 @@
                 </el-col>
             </el-row>
         </el-carousel-item>
-        </el-carousel>
+        </el-carousel> -->
     </el-col>
 </template>
 <script>
 export default {
-  props:[
-    'menubanner'
-  ],
   data() {
     return {
-        // imgList: [
-        //   {id: 1, idView: require('../assets/banner1.png')},
-        //   {id: 2, idView: require('../assets/banner2.png')},
-        //   {id: 3, idView: require('../assets/banner3.png')},
-        //   {id: 4, idView: require('../assets/banner4.png')},
-        //   {id: 5, idView: require('../assets/banner5.png')}
-        // ]
+        imgList: [
+          {id: 1, idView: require('../assets/banner1.png')},
+          {id: 2, idView: require('../assets/banner2.png')},
+          {id: 3, idView: require('../assets/banner3.png')},
+          {id: 4, idView: require('../assets/banner4.png')},
+          {id: 5, idView: require('../assets/banner5.png')}
+        ]
     };
-  },
-  created(){
-    console.log(this.menubanner);
   },
   methods:{
   }
