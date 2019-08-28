@@ -4,7 +4,10 @@
       <el-col :span="24">
         <div class="cultivate-main">
           <template>
-            <Banner></Banner>
+            <!-- <Banner></Banner> -->
+            <div class="bg_img">
+              <img :src="banner" alt />
+            </div>
           </template>
           <div class="cultivate-count">
             <div class="cultivate-count-div1">
@@ -67,16 +70,38 @@
                       :class="{active2 : active2 == item.name}"
                       v-for="item in classfiy"
                       :key="item.name"
-                      @click="selected2(item.name)"
+                      @click="selected2(item)"
                     >{{item.name}}</el-button>
+                  </div>
+                  <div class="more" v-if="true">
+                    <div class="dropdown show">
+                      <a
+                        class="btn dropdown-toggle"
+                        style="color: #7F8F58;"
+                        href="#"
+                        role="button"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                      >更多</a>
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a
+                          v-for="(item, index) in moreClassfiy"
+                          class="dropdown-item"
+                          :key="index"
+                          :class="['dropdown-item', {'active': false}]"
+                        >{{item.name}}</a>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="cultivate1-six">
                   <span class="span">已选：</span>
                   <el-tag
-                    v-for="tag in tags"
+                    v-for="tag in selectTags"
                     :key="tag.name"
                     closable
+                    @close="handleClose(tag)"
                     :type="tag.type"
                     class="tag"
                   >{{tag.name}}</el-tag>
@@ -84,20 +109,25 @@
               </div>
               <div class="fruit">找到下列结果</div>
               <div class="fruit-list">
-                <div class="fruit-list-li" v-for="(item,index) in fruitlist" :key="index">
+                <div
+                  class="fruit-list-li"
+                  v-for="(item,index) in fruitlist"
+                  @click="selectItem(item)"
+                  :key="index"
+                >
                   <div class="fruit-list-li-img">
-                    <img :src="item.img" />
+                    <img :src="item.teacher_img" />
                   </div>
                   <div class="fruit-list-li-text">
                     <h4>{{item.name}}</h4>
                     <div class="list-eye">
-                      <img src="../../assets/eye.png" />
-                      <span class="span">{{item.num}}</span>
+                      <!-- <img src /> -->
+                      <span class="span">{{item.views}}</span>
                     </div>
                   </div>
-                  <el-rate v-model="item.value2"></el-rate>
+                  <el-rate disabled :value="item.diff"></el-rate>
                   <div class="fruit-price">￥{{item.price}}</div>
-                  <div class="fruit-detail">{{item.dateil}}</div>
+                  <div class="fruit-detail">{{item.address}}</div>
                 </div>
               </div>
               <div class="market_often-btn">
@@ -120,18 +150,18 @@
                 @click="selectItem(item)"
               >
                 <div class="fruit-list-li-img">
-                  <img :src="item.img" />
+                  <img :src="item.teacher_img" />
                 </div>
                 <div class="fruit-list-li-text">
                   <h4>{{item.name}}</h4>
                   <div class="list-eye">
-                    <img src="../../assets/eye.png" />
+                    <!-- <img src="../../assets/eye.png" /> -->
                     <span class="span">{{item.num}}</span>
                   </div>
                 </div>
-                <el-rate v-model="item.value3"></el-rate>
+                <el-rate disabled :value="item.diff"></el-rate>
                 <div class="fruit-price">￥{{item.price}}</div>
-                <div class="fruit-detail">{{item.dateil}}</div>
+                <div class="fruit-detail">{{item.address}}</div>
               </div>
             </div>
             <div class="cultivate-count-div4">
@@ -142,24 +172,25 @@
               <div class="border-left"></div>
               <div class="border-right"></div>
             </div>
-            <div class="cultivate-count-div5">
-              <img src="../../assets/image23.png" />
-              <div class="bian"></div>
-              <div class="div5-list">
-                <div class="li-text">
-                  <h4>维密普拉提瑜伽</h4>
-                  <div class="list-eye">￥4800</div>
+            <div class="cultivate-count-div5" v-for="(item, index) in newList" :key="index">
+              <img :src="item.teacher_img" />
+              <div class="bian">
+                <div class="div5-list">
+                  <div class="li-text">
+                    <h4>{{item.theme}}</h4>
+                    <div class="list-eye">￥{{item.price}}</div>
+                  </div>
+                  <el-rate :value="item.diff"></el-rate>
+                  <div class="li-text2">课 时：12课时</div>
+                  <div class="li-text3">开课时间：{{item.startTime}}/{{item.endTime}}</div>
+                  <div class="li-text4">地 址：{{item.address}}</div>
+                  <img class="li-text5" src="../../assets/image-jiao.png" />
                 </div>
-                <el-rate v-model="rate"></el-rate>
-                <div class="li-text2">课 时：12课时</div>
-                <div class="li-text3">开课时间：2019.05.20-20.19-0526</div>
-                <div class="li-text4">地 址：四川省成都市锦江区锦东路668号</div>
-                <img class="li-text5" src="../../assets/image-jiao.png" />
               </div>
               <div class="border-bo"></div>
               <img class="border-img" src="../../assets/image47.png" />
             </div>
-            <div class="cultivate-count-div6">
+            <div class="cultivate-count-div6" v-show="false">
               <img src="../../assets/image23.png" />
               <div class="bian"></div>
               <div class="div5-list">
@@ -185,6 +216,7 @@
 <script>
 import Banner from "@/components/banner";
 import VDistpicker from "v-distpicker";
+import { getTrains, postTrains, getTrainsById } from "@/api/trains";
 export default {
   components: {
     Banner,
@@ -192,6 +224,8 @@ export default {
   },
   data() {
     return {
+      banner: "",
+      moreClassfiy: [],
       value2: "",
       value3: "",
       province: "",
@@ -221,41 +255,7 @@ export default {
           name: "5星"
         }
       ],
-      classfiy: [
-        {
-          name: "阿斯汤加"
-        },
-        {
-          name: "空中瑜伽"
-        },
-        {
-          name: "哈他瑜伽"
-        },
-        {
-          name: "孕产瑜伽"
-        },
-        {
-          name: "理疗瑜伽"
-        },
-        {
-          name: "普拉提"
-        },
-        {
-          name: "艾扬格瑜伽"
-        },
-        {
-          name: "流瑜伽"
-        },
-        {
-          name: "阴瑜伽"
-        },
-        {
-          name: "阿育吠陀"
-        },
-        {
-          name: "昆达里尼"
-        }
-      ],
+      classfiy: [],
       priceList: [
         {
           name: "1500-3000"
@@ -267,93 +267,24 @@ export default {
           name: "4001-5000"
         }
       ],
-      tags: [{ name: "理疗瑜伽", type: "success" }],
-      fruitlist: [
-        {
-          id: 1,
-          img: require("../../assets/image16.png"),
-          name: "理疗瑜伽",
-          num: 2232,
-          value2: 2,
-          price: 4800,
-          dateil: "贵州省铜仁市碧江区蓝波湾小区B栋1104"
-        },
-        {
-          id: 2,
-          img: require("../../assets/image21.png"),
-          name: "理疗瑜伽",
-          num: 2232,
-          value2: 3,
-          price: 4800,
-          dateil: "贵州省铜仁市碧江区蓝波湾小区B栋1104"
-        },
-        {
-          id: 3,
-          img: require("../../assets/image17.png"),
-          name: "理疗瑜伽",
-          num: 2232,
-          value2: 1,
-          price: 4800,
-          dateil: "贵州省铜仁市碧江区蓝波湾小区B栋1104"
-        },
-        {
-          id: 4,
-          img: require("../../assets/image15.png"),
-          name: "理疗瑜伽",
-          num: 2232,
-          value2: 4,
-          price: 4800,
-          dateil: "贵州省铜仁市碧江区蓝波湾小区B栋1104"
-        },
-        {
-          id: 5,
-          img: require("../../assets/image13.png"),
-          name: "理疗瑜伽",
-          num: 2232,
-          value2: 2,
-          price: 4800,
-          dateil: "贵州省铜仁市碧江区蓝波湾小区B栋1104"
-        },
-        {
-          id: 6,
-          img: require("../../assets/image14.png"),
-          name: "理疗瑜伽",
-          num: 2232,
-          value2: 2,
-          price: 4800,
-          dateil: "贵州省铜仁市碧江区蓝波湾小区B栋1104"
-        }
-      ],
-      fruitclasslist: [
-        {
-          id: 1,
-          img: require("../../assets/image16.png"),
-          name: "理疗瑜伽",
-          num: 2232,
-          value3: 2,
-          price: 4800,
-          dateil: "贵州省铜仁市碧江区蓝波湾小区B栋1104"
-        },
-        {
-          id: 2,
-          img: require("../../assets/image21.png"),
-          name: "理疗瑜伽",
-          num: 2232,
-          value3: 3,
-          price: 4800,
-          dateil: "贵州省铜仁市碧江区蓝波湾小区B栋1104"
-        },
-        {
-          id: 3,
-          img: require("../../assets/image17.png"),
-          name: "理疗瑜伽",
-          num: 2232,
-          value3: 1,
-          price: 4800,
-          dateil: "贵州省铜仁市碧江区蓝波湾小区B栋1104"
-        }
-      ]
+      selectTags: [],
+      fruitlist: [],
+      fruitclasslist: [],
+      newList: []
     };
+  },
+  mounted() {
+    getTrains().then(data => {
+      const { all, hot, course_types, banner } = data;
+      this.fruitlist = all;
+      this.fruitclasslist = hot;
+      this.newList = data.new;
+      if (course_types.length > 8) {
+        this.classfiy = course_types.slice(0, 8);
+        this.moreClassfiy = course_types.slice(8);
+      }
+      this.banner = banner;
+    });
   },
   methods: {
     onSelected(data) {
@@ -364,8 +295,12 @@ export default {
     selected(name) {
       this.active = name;
     },
-    selected2(name) {
-      this.active2 = name;
+    selected2(item) {
+      this.active2 = item.name;
+      this.selectTags.push(item);
+    },
+    handleClose(tag) {
+      this.selectTags.splice(this.selectTags.indexOf(tag), 1);
     },
     selected3(name) {
       this.active3 = name;
@@ -384,7 +319,24 @@ export default {
   }
 };
 </script>
+<style scope>
+.cultivate-main >>> .el-button--text {
+  border: none !important;
+}
+.cultivate-main >>> .el-button--text:active {
+  border: none !important;
+  background: #000;
+}
+</style>
 <style lang="scss" scoped>
+.bg_img {
+  width: 100%;
+  height: 400px;
+}
+img {
+  width: 100%;
+  height: 100%;
+}
 .el-rate__icon {
   color: #58b708 !important;
 }
@@ -399,6 +351,7 @@ export default {
   .cultivate-count {
     width: 100%;
     margin: 0 auto;
+    margin-top: -150px;
     height: 100%;
     display: inline-block;
     .cultivate-count-div1 {
@@ -407,7 +360,7 @@ export default {
       margin: 0 auto;
       display: inline-block;
       .cultivate1 {
-        width: 75%;
+        width: 90vw;
         height: 24.6rem;
         margin: 0 auto;
         background-color: #ffffff;
@@ -422,6 +375,7 @@ export default {
           display: flex;
           border-bottom: 1px solid #dcdcdc;
           .span {
+            width: 4em;
             font-size: 0.9rem;
             font-family: MicrosoftYaHei;
             font-weight: bold;
@@ -445,6 +399,9 @@ export default {
           display: flex;
           border-bottom: 1px solid #dcdcdc;
           .span {
+            width: 4em;
+            flex-shrink: 0;
+            flex-shrink: 0;
             font-size: 0.9rem;
             font-family: MicrosoftYaHei;
             font-weight: bold;
@@ -482,6 +439,8 @@ export default {
           display: flex;
           border-bottom: 1px solid #dcdcdc;
           .span {
+            width: 4em;
+            flex-shrink: 0;
             font-size: 0.9rem;
             font-family: MicrosoftYaHei;
             font-weight: bold;
@@ -503,6 +462,8 @@ export default {
           display: flex;
           border-bottom: 1px solid #dcdcdc;
           .span {
+            width: 4em;
+            flex-shrink: 0;
             font-size: 0.9rem;
             font-family: MicrosoftYaHei;
             font-weight: bold;
@@ -532,7 +493,10 @@ export default {
           padding-left: 3rem;
           display: flex;
           border-bottom: 1px solid #dcdcdc;
+          position: relative;
           .span {
+            width: 4em;
+            flex-shrink: 0;
             font-size: 0.9rem;
             font-family: MicrosoftYaHei;
             font-weight: bold;
@@ -554,6 +518,10 @@ export default {
               border: none;
             }
           }
+          .more {
+            position: absolute;
+            right: 0;
+          }
         }
         .cultivate1-six {
           width: 100%;
@@ -561,6 +529,8 @@ export default {
           line-height: 4.1rem;
           padding-left: 3rem;
           .span {
+            width: 4em;
+            flex-shrink: 0;
             font-size: 0.9rem;
             font-family: MicrosoftYaHei;
             font-weight: bold;
@@ -583,6 +553,7 @@ export default {
       .fruit-list {
         width: 75%;
         height: 77rem;
+        overflow: scroll;
         margin: 0 auto;
         .fruit-list-li {
           width: 22rem;
@@ -612,6 +583,17 @@ export default {
               color: #2c2c2c;
             }
             .list-eye {
+              position: relative;
+              &::before {
+                background-image: url("../../assets/trains/eye.png");
+                background-size: 100% 100%;
+                content: "";
+                width: 20px;
+                height: 20px;
+                position: absolute;
+                top: 4px;
+                left: -30px;
+              }
               img {
                 width: 1.6rem;
                 height: 1.5rem;
@@ -702,6 +684,7 @@ export default {
         border-radius: 0.3rem;
         float: left;
         margin-left: 1.4rem;
+        margin-top: 2rem;
         .fruit-list-li-img {
           width: 100%;
           height: 21.7rem;
@@ -799,8 +782,8 @@ export default {
       .bian {
         width: 15.7rem;
         height: 17rem;
-        background-color: #cce198;
-        opacity: 0.33;
+        background-color: #eef5dd;
+        // opacity: 0.33;
         margin-top: 4.7rem;
       }
       .div5-list {
@@ -871,8 +854,8 @@ export default {
       .bian {
         width: 15.7rem;
         height: 17rem;
-        background-color: #cce198;
-        opacity: 0.33;
+        background-color: #eef5dd;
+        // opacity: 0.33;
         margin-top: 4.7rem;
       }
       .div5-list {

@@ -129,19 +129,23 @@
             </div>
           </div>
         </div>
-        <div class="pay-way">
+        <div class="pay-way" v-show="rechargeForm.num || money">
           <div>支付方式</div>
           <div class="way">
             <span :class="[isPayActive(3)]" @click="rechargeChange('payment', '3')">微信</span>
             <span :class="[isPayActive(2)]" @click="rechargeChange('payment', '2')">支付宝</span>
             <!-- <span>银行卡</span> -->
           </div>
-          <div class="pay-code">
-            <div class="code"></div>
-            <div class="tips">刷新二维码</div>
+          <div class="sure" style="padding-top:2em;">
+            <span @click="reCharge">确定</span>
           </div>
-          <div class="sure">
-            <span>确定</span>
+
+          <div class="pay-code" v-show="playcode.show">
+            <div class="code">
+              <img :src="playcode.src" alt />
+            </div>
+            <!-- <div class="tips">刷新二维码</div> -->
+            <div class="tips">{{playcode.count}}s后关闭</div>
           </div>
         </div>
       </div>
@@ -171,6 +175,7 @@ export default {
         identity_2,
         identity_3
       },
+      playcode: { show: false, src: "", count: 0 },
       hiddenMoney: "",
       money: "",
       step: {
@@ -240,6 +245,13 @@ export default {
       this.step.type = obj[type];
     },
     myIdentity(identity) {
+      if (this.info.identity_auth !== identity) {
+        this.$message({
+          type: "warning",
+          message: "请确认自己的身份"
+        });
+        return;
+      }
       this.step.type = "my-card";
       const obj = {
         1: "用户",
@@ -251,11 +263,87 @@ export default {
     },
     rechargeChange(name, num) {
       this.rechargeForm[name] = num;
+      if (name === "payment") {
+        // (this.rechargeForm.num || this.money) && this.reCharge();
+      }
     },
     /** 充值 */
     reCharge() {
+      if (this.rechargeForm.payment == "") {
+        this.$message({
+          type: "warning",
+          message: "请选择支付方式"
+        });
+        return;
+      }
       const params = Object.assign({}, this.rechargeForm);
-      this.$request.post(`/personal/recharge`, params).then(data => {});
+      params.num = params.num || this.money;
+      this.$request.post(`/personal/recharge`, params).then(data => {
+        const { payment, out_trade_no, body } = data;
+        const totalPrice = 0.01;
+        if (parseInt(payment) === 2) {
+          postGetAlipayCode({ out_trade_no, total_fee: totalPrice, body })
+            .then(data => {
+              this.playcode.show = true;
+              this.playcode.count = 30;
+              this.playcode.src = data;
+            })
+            .then(_ => {
+              if (this.playcode.show) {
+                const timer = setInterval(() => {
+                  if (this.playcode.count < 0 || !this.playcode.show) {
+                    this.playcode.show = false;
+                    clearInterval(timer);
+                  }
+
+                  postGetAlipayOrder({ out_trade_no }).then(data => {
+                    this.playcode.count -= 1;
+                    if (data.msg === "支付成功") {
+                      this.playcode.show = false;
+                      this.$message({
+                        type: "success",
+                        message: "支付成功"
+                      });
+                    }
+                  });
+                }, 1000);
+              }
+            });
+        }
+        if (parseInt(payment) === 3) {
+          postGetWechatpayCode({
+            out_trade_no,
+            total_fee: totalPrice,
+            body
+          })
+            .then(data => {
+              this.playcode.show = true;
+              this.playcode.count = 30;
+              this.playcode.src = data;
+            })
+            .then(_ => {
+              if (this.playcode.show) {
+                const timer = setInterval(() => {
+                  if (this.playcode.count <= 0 || !this.playcode.show) {
+                    this.playcode.show = false;
+                    clearInterval(timer);
+                  }
+
+                  postGetWechatOrder({ out_trade_no }).then(data => {
+                    this.playcode.count -= 1;
+                    if (data.msg === "支付成功") {
+                      this.playcode.show = false;
+                      this.$message({
+                        type: "success",
+                        message: "支付成功"
+                      });
+                    }
+                  });
+                }, 1000);
+              }
+            });
+        }
+      });
     },
     /** 提现申请 */
     cashWithdrawal() {
@@ -277,6 +365,10 @@ export default {
 <style lang="scss" scoped>
 * {
   font-size: 0.7rem;
+}
+img {
+  width: 100%;
+  height: 100%;
 }
 .body {
   position: relative;
@@ -579,8 +671,8 @@ img {
       justify-content: center;
       flex-direction: column;
       .code {
-        width: 3rem;
-        height: 3rem;
+        width: 5rem;
+        height: 5rem;
         border: 1px solid #ccc;
       }
       .tips {

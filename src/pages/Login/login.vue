@@ -16,6 +16,7 @@
             >密码登录</div>
             <i class="border"></i>
             <div
+              v-show="false"
               :class="['form_title-item', (loginWay==='message'?'active':'')]"
               data-way="message"
             >短信登录</div>

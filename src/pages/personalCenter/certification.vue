@@ -125,7 +125,7 @@
 <script>
 import TopTitle from "./topTItle";
 import VDistpicker from "v-distpicker";
-import { postTrains } from "@/api/trains";
+import { postUserInfo } from "@/api/personal";
 export default {
   components: {
     TopTitle,
@@ -164,6 +164,10 @@ export default {
     },
     uploadLicenseDisabled: function() {
       return this.ruleForm.img_license;
+    },
+    info() {
+      const user = sessionStorage.getItem("user");
+      return user && JSON.parse(user).user;
     }
   },
   methods: {
@@ -178,8 +182,10 @@ export default {
     },
 
     changeFile(file, fileList, name) {
+      this.ruleForm[name] = file;
+      return;
       let This = this;
-      var reader = new FileReader();
+      let reader = new FileReader();
       reader.readAsDataURL(file.raw);
       reader.onload = function(e) {
         this.result; // 这个就是base64编码了
@@ -188,7 +194,7 @@ export default {
     },
     selectAddress(data) {
       const { area, city, province } = data;
-      const parmas = {
+      let params = {
         province: province.value,
         city: city.value,
         area: area.value
@@ -210,7 +216,21 @@ export default {
           }
           this.step.cur_index += 1;
         },
-        finish: () => {}
+        finish: () => {
+          this.ruleForm.identity_auth = this.info.identity_auth;
+
+          let formData = new FormData();
+          for (const arr of Object.entries(this.ruleForm)) {
+            const [k, v] = arr;
+            formData.append(k, v);
+          }
+          this.$request.post("/personal/home", formData).then(data => {
+            this.$message({
+              type: "success",
+              message: "提交成功"
+            });
+          });
+        }
       };
       obj[option]();
     }
@@ -377,7 +397,7 @@ export default {
       .select {
         height: 1rem;
         width: 1rem;
-        border:1px solid #ccc;
+        border: 1px solid #ccc;
         border-radius: 50%;
         display: inline-block;
         &.active {
