@@ -4,7 +4,10 @@
             <el-col :span="24">
                 <div class="yogo-main">
                     <template>
-                       <Banner></Banner>
+                       <!-- <Banner></Banner> -->
+                       <div class="bg_img">
+                         <img :src="banner" alt />
+                        </div>
                     </template>
                     <div class="yogo-count">
                         <div class="yogo-search">
@@ -144,6 +147,7 @@ export default {
         value: '',
         province:'',
         i:0,
+        banner:'',
         city:'',
         area:'',
         value2: '',
@@ -189,6 +193,7 @@ export default {
             _this.coursetypes = res.course_types;
             _this.yearlist = res.year;
             _this.namelist = res.elites[0];
+            _this.banner = res.banner;
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -382,6 +387,14 @@ export default {
 }
 .distpicker-address-wrapper select{
     width: 100px;
+}
+.bg_img {
+  width: 100%;
+  height: 600px;
+  img{
+      width: 100%;
+      height: 100%;
+  }
 }
 .yogo-main{
     width: 100%;

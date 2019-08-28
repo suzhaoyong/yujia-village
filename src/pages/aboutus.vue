@@ -4,7 +4,10 @@
             <el-col :span="24">
                 <div class="aboutus-main">
                     <template>
-                       <Banner></Banner>
+                       <!-- <Banner></Banner> -->
+                       <div class="bg_img">
+                         <img :src="banner" alt />
+                        </div>
                     </template>
                     <div class="aboutus-count">
                         <div class="aboutus-count-div1">
@@ -105,7 +108,8 @@ export default {
     return {
         aboutUs:"",
         aboutusmodel:[],
-        imgpic:[]
+        imgpic:[],
+        banner:''
     };
   },
   created(){
@@ -118,6 +122,7 @@ export default {
             _this.aboutUs = res;
             _this.aboutusmodel = res.about_us_model;
             _this.imgpic = res.img_pic;
+            _this.banner = res.banner;
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -134,6 +139,14 @@ export default {
 };
 </script>
 <style lang="scss" scope>
+.bg_img {
+  width: 100%;
+  height: 600px;
+  img{
+      width: 100%;
+      height: 100%;
+  }
+}
 .aboutus-main{
     width: 100%;
     height: 100%;

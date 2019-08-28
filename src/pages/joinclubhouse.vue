@@ -4,6 +4,9 @@
             <div class="joinclub-main">
                 <template>
                     <Banner></Banner>
+                    <!-- <div class="bg_img">
+                        <img :src="banner" alt />
+                    </div> -->
                 </template>
                 <div class="joinclub-cont">
                     <!-- <div class="joinclub-cont-div1">
@@ -90,6 +93,7 @@ export default {
     return {
         ishow:false,
         joinlist:[],
+        banner:'',
         labelPosition:'left',
         ruleForm: {
           name: '',
@@ -153,6 +157,14 @@ export default {
 };
 </script>
 <style lang="scss" scope>
+.bg_img {
+  width: 100%;
+  height: 600px;
+  img{
+      width: 100%;
+      height: 100%;
+  }
+}
 .el-select-dropdown__item.selected {
         color: #CCE198;
         font-weight: 700;

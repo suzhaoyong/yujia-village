@@ -3,7 +3,10 @@
         <el-col :span="24">
             <div class="nav-main">
                 <template>
-                    <Banner></Banner>
+                    <!-- <Banner></Banner> -->
+                    <div class="bg_img">
+                      <img :src="banner" alt />
+                    </div>
                 </template>
                 <div class="nav-contunt">
                     <div class="nav-contunt-div1">
@@ -158,6 +161,7 @@ export default {
         clubInfo:[],
         info:[],
         namelist:[],
+        banner:'',
         activeClass: 0,
         i:0,
         swiperOption: {
@@ -221,6 +225,7 @@ export default {
             _this.newtrains = res.new_trains;
             _this.info = res.info;
             _this.namelist=res.info[0];
+            _this.banner = res.banner;
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -281,6 +286,14 @@ export default {
     width: 10px;
     height: 10px;
     border-radius: 50%;
+}
+.bg_img {
+  width: 100%;
+  height: 600px;
+  img{
+      width: 100%;
+      height: 100%;
+  }
 }
 .nav-main{
     height: 100%;
