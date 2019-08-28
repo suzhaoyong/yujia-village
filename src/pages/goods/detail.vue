@@ -180,7 +180,7 @@ export default {
     initSocialConfig() {
       const { describe, material, painter, kinds, season } = this.goods;
       const params = {
-        url: `http://www.yujiacun.net/index.html`,
+        url: `${location.href}`,
         title: describe,
         description: `材质: ${material}, 适合${painter}使用`
       };
