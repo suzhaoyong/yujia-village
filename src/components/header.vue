@@ -28,14 +28,14 @@
               mode="horizontal"
               @select="handleSelect"
             >
-              <el-menu-item index="main">首页</el-menu-item>
-              <el-menu-item index="joinclubhouse">加盟会馆</el-menu-item>
-              <el-menu-item index="yogoteacher">瑜伽名师</el-menu-item>
-              <el-menu-item index="cultivate/cultivate">培训信息</el-menu-item>
-              <el-menu-item index="yogoknowledge">瑜伽知识</el-menu-item>
-              <el-menu-item index="yogoinformation">瑜伽资讯</el-menu-item>
+              <el-menu-item index="main" :menubanner='menubanner'>首页</el-menu-item>
+              <el-menu-item index="joinclubhouse" :menubanner='2'>加盟会馆</el-menu-item>
+              <el-menu-item index="yogoteacher" :menubanner='3'>瑜伽名师</el-menu-item>
+              <el-menu-item index="cultivate/cultivate" :menubanner='4'>培训信息</el-menu-item>
+              <el-menu-item index="yogoknowledge" :menubanner='5'>瑜伽知识</el-menu-item>
+              <el-menu-item index="yogoinformation" :menubanner='6'>瑜伽资讯</el-menu-item>
               <el-menu-item index="market/index">商城</el-menu-item>
-              <el-menu-item index="aboutus">关于我们</el-menu-item>
+              <el-menu-item index="aboutus" :menubanner='7'>关于我们</el-menu-item>
               <el-submenu index="personal">
                 <template slot="title">
                   <div class="submenu">个人中心</div>
@@ -82,7 +82,8 @@ export default {
       activeIndex: "main",
       account: {
         type: ""
-      }
+      },
+      menubanner:'1'
     };
   },
   computed: {
@@ -170,6 +171,12 @@ export default {
     /** 用户基本信息 */
     getInfo() {
       this.$request("/auth/me").then(data => {});
+    },
+    adsdad(){
+      console.log('1');
+    },
+    adsdad2(){
+      console.log('2');
     },
     goto(name, item) {
       let id = item || "all";
