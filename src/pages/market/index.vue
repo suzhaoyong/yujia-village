@@ -52,7 +52,40 @@
                 <div
                   class="goods"
                   @click="viewGoodsDetail(item)"
-                  v-for="(item,index) in good_recomment.discount"
+                  v-for="(item,index) in good_recomment.discounts.re"
+                  :key="index"
+                >
+                  <div class="goods-title">{{item.describe}}</div>
+                  <div class="goods-price">
+                    <div class="goods-price-old">￥{{item.sell_price}}</div>
+                    <div class="goods-price-new">￥{{item.sell_price - item.discount}}</div>
+                  </div>
+
+                  <div class="goods-img">
+                    <img :src="item.discount_url" alt />
+                    <div class="add-shop-btn">加入购物车</div>
+                  </div>
+                </div>
+              </div>
+            </transition>
+            <div class="next_btn-box">
+              <div class="next_btn" @click="changeDiscountsForu('next')"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="market_time" style="margin-top: 10rem;">
+        <div class="market_time-content">
+          <div class="market_time-content_box">
+            <div class="prev_btn-box">
+              <div class="prev_btn" @click="changeDiscountsForu('prev')"></div>
+            </div>
+            <transition name="list-complete">
+              <div class="goods_list">
+                <div
+                  class="goods"
+                  @click="viewGoodsDetail(item)"
+                  v-for="(item,index) in good_recomment.discounts.de"
                   :key="index"
                 >
                   <div class="goods-title">{{item.describe}}</div>
@@ -140,7 +173,12 @@ export default {
   },
   data() {
     return {
-      good_recomment: { new: [{ new_url_one: "" }], comment: [], discount: [] },
+      good_recomment: {
+        new: [{ new_url_one: "" }],
+        comment: [],
+        discount: [],
+        discounts: {}
+      },
       market: {
         news_good: {}
       },
@@ -156,6 +194,9 @@ export default {
   mounted() {
     getGoodRecomment().then(data => {
       this.good_recomment = data;
+      this.good_recomment.discounts = {};
+      this.good_recomment.discounts.de = data.discount.slice(0, 3);
+      this.good_recomment.discounts.re = data.discount.slice(3);
       this.recommend_main = data.comment[0].data[0];
       this.recommend_menu.select = data.comment[0];
       this.recommend_list = data.comment[0].data;
@@ -188,10 +229,8 @@ export default {
     getNextDiscounts() {
       this.getMarketDiscounts();
     },
-    getMarketNews() {
-    },
-    getUserInfo() {
-    },
+    getMarketNews() {},
+    getUserInfo() {},
     goMarketDetail() {
       this.$router.push("/market/detail");
     },
@@ -211,7 +250,7 @@ export default {
 @mixin spare() {
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
   overflow: hidden;
 }
 @mixin no_select() {
@@ -312,7 +351,7 @@ img {
         width: 60rem;
         margin: 0 auto;
         display: flex;
-        border: 1px solid #ccc;
+        // border: 1px solid #ccc;
         padding-top: 1rem;
         padding-bottom: 1rem;
         &-lf {
@@ -322,7 +361,7 @@ img {
           .goods_img {
             width: 19rem;
             height: 100%;
-            border: 1px solid #ccc;
+            // border: 1px solid #ccc;
           }
           .goods_info {
             position: absolute;
@@ -333,7 +372,7 @@ img {
             display: flex;
             flex-direction: column;
             background: #fff;
-            border: 1px solid #ccc;
+            // border: 1px solid #ccc;
             border-top: 1.75rem solid #7d7d7d;
             border-bottom: 1.75rem solid #7d7d7d;
             border-left: 1.4rem solid #7d7d7d;
@@ -349,7 +388,7 @@ img {
             &-price {
               align-self: flex-end;
               padding: 2rem 3rem 1rem 1rem;
-              border: 1px solid #313131;
+              // border: 1px solid #313131;
               margin-right: -1.95rem;
             }
             &-tags {
@@ -379,14 +418,14 @@ img {
             &:nth-child(1) {
               width: 21rem;
               height: 19rem;
-              border: 1px solid #ccc;
+              // border: 1px solid #ccc;
               align-self: flex-end;
             }
             &:nth-child(2) {
               margin-top: 1rem;
               width: 16rem;
               height: 15rem;
-              border: 1px solid red;
+              // border: 1px solid red;
               align-self: flex-end;
             }
           }
@@ -397,7 +436,7 @@ img {
             margin-right: 2rem;
             align-self: flex-end;
             padding: 1rem 2rem;
-            border: 1px solid #ccc;
+            // border: 1px solid #ccc;
             cursor: default;
           }
         }
@@ -405,6 +444,8 @@ img {
     }
   }
   &_time {
+    width: 80vw;
+    margin: 0 auto;
     &-title {
       height: 13.5rem;
       display: flex;
@@ -437,7 +478,7 @@ img {
         display: flex;
         justify-content: space-around;
         .prev_btn-box {
-          border: 1px solid #ccc;
+          // border: 1px solid #ccc;
           position: relative;
           width: 10rem;
           // margin-left: -10rem;
@@ -454,7 +495,7 @@ img {
           }
         }
         .next_btn-box {
-          border: 1px solid #ccc;
+          // border: 1px solid #ccc;
           position: relative;
           width: 10rem;
           // transform: skewx(10deg) translatex(150px);
@@ -481,7 +522,7 @@ img {
             // transform: skewx(10deg) translatex(150px);
             // transform-origin: bottom left;
             margin: 0 1rem;
-            border: 1px solid #ccc;
+            // border: 1px solid #ccc;
             flex-shrink: 0;
             overflow: hidden;
             &-title {
@@ -504,7 +545,7 @@ img {
             }
             &-img {
               height: 26.55rem;
-              border: 1px solid #ccc;
+              // border: 1px solid #ccc;
               position: relative;
               .add-shop-btn {
                 width: 9rem;
@@ -564,7 +605,7 @@ img {
           flex-shrink: 0;
           &-item {
             width: 9.85rem;
-            border: 1px solid #ccc;
+            // border: 1px solid #ccc;
             padding: 10px;
             cursor: default;
             &.active {
@@ -602,7 +643,7 @@ img {
           height: 29.15rem;
           margin-left: 3rem;
           margin-right: 1.8rem;
-          border: 1px solid #ccc;
+          // border: 1px solid #ccc;
           background: #eee;
           padding: 1.3rem;
           display: flex;
@@ -661,7 +702,7 @@ img {
             display: flex;
             flex-direction: column;
             align-items: center;
-            border: 1px solid #ccc;
+            // border: 1px solid #ccc;
             .img {
               width: 9rem;
               height: 9rem;

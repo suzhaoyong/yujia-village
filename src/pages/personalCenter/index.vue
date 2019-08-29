@@ -34,6 +34,16 @@
         </div>
       </div>
       <session-title name="已购买商品"></session-title>
+
+      <div class="yun">
+        <img :src="icon.yun.yun_1" alt />
+      </div>
+      <div class="yun2">
+        <img :src="icon.yun.yun_2" alt />
+      </div>
+      <div class="yun3">
+        <img :src="icon.yun.yun_1" alt />
+      </div>
       <div class="my-class">
         <div
           class="goods-box"
@@ -97,7 +107,12 @@
         </session-title>
         <div class="body">
           <div class="vouchers">
-            <div class="voucher" v-for="(item, index) in info.cash" :key="index">
+            <div
+              class="voucher"
+              :style="`background-image:url(${voucherMoneyImg(index)}); background-size: 100% 100%;`"
+              v-for="(item, index) in info.cash"
+              :key="index"
+            >
               <div class="price">
                 <div class="sign">¥</div>
                 <div class="number">{{item.money}}</div>
@@ -106,7 +121,11 @@
                 <div class="name">{{item.name}}</div>
                 <div class="used" v-show="false">详细使用记录</div>
                 <div class="time-btn" v-show="true">
-                  <div class="time">有效期至 {{item.endDate}}</div>
+                  <div class="time">
+                    有效期至
+                    <br />
+                    {{item.endDate}}
+                  </div>
                   <div class="btn">使用</div>
                 </div>
               </div>
@@ -118,7 +137,12 @@
         <session-title name="可领取优惠券"></session-title>
         <div class="body">
           <div class="vouchers">
-            <div class="voucher" v-for="(item,index) in info.coupon" :key="index">
+            <div
+              class="voucher"
+              :style="`background-image:url(${voucherImg(index)}); background-size: 100% 100%;`"
+              v-for="(item,index) in info.coupon"
+              :key="index"
+            >
               <div class="content">
                 <div class="price">
                   <div class="number">
@@ -144,26 +168,75 @@
 <script>
 import SessionTitle from "./SessionTitle";
 import { getUserOrder } from "@/api/market";
-
+import quan_orgin from "@/assets/order/quan_orgin.png";
+import quan_pike from "@/assets/order/quan_pike.png";
+import quan_red from "@/assets/order/quan_red.png";
+import quan_zhi from "@/assets/order/quan_zhi.png";
+import money_qin from "@/assets/order/money_qin.png";
+import yun_1 from "@/assets/order/yun.png";
+import yun_2 from "@/assets/order/yun_2.png";
 export default {
   components: {
     SessionTitle
   },
   data() {
     return {
-      star: 3
+      star: 3,
+      icon: {
+        yun: {
+          yun_1,
+          yun_2
+        },
+        money: {
+          money_qin
+        },
+        quan: {
+          quan_orgin,
+          quan_pike,
+          quan_red,
+          quan_zhi
+        }
+      }
     };
   },
   computed: {
     info() {
       const user = sessionStorage.getItem("user");
       return (user && JSON.parse(user)) || {};
+    },
+    voucherMoneyImg() {
+      return index => {
+        const obj = {
+          0: money_qin
+        };
+        return obj[index % 1];
+      };
+    },
+    voucherImg() {
+      return index => {
+        const obj = {
+          0: quan_orgin,
+          1: quan_pike,
+          2: quan_zhi,
+          3: quan_red
+        };
+        return obj[index % 4];
+      };
     }
   },
-  mounted(){
-    getUserOrder()
+  mounted() {
+    this.getPersonal();
+    getUserOrder();
   },
   methods: {
+    /** 个人信息 */
+    getPersonal() {
+      this.$request("/personal/home").then(data => {
+        sessionStorage.setItem("user", JSON.stringify(data));
+        // window.location.reload();
+        // this.$emit('suc', data.user.name)
+      });
+    },
     viewGoodsDetail(goods) {
       this.$router.push({
         name: "detailGoods",
@@ -201,6 +274,33 @@ export default {
 </style>
 
 <style lang="scss" scoped>
+.yun {
+  position: absolute;
+  top: 10rem;
+  left: 5rem;
+  z-index: -1;
+  width: 25rem;
+  margin-top: -5rem;
+  margin-bottom: 1rem;
+}
+.yun2 {
+  position: absolute;
+  top: 3rem;
+  right: -10rem;
+  width: 12rem;
+  z-index: -1;
+  margin-left: 100%;
+}
+.yun3 {
+  position: absolute;
+  top: 100rem;
+  left: -10rem;
+  z-index: -1;
+  width: 25rem;
+  margin-top: -5rem;
+  margin-bottom: 1rem;
+}
+
 img {
   width: 100%;
   height: 100%;
@@ -372,6 +472,7 @@ img {
 }
 
 .personal {
+  position: relative;
   width: 60rem;
   margin: 0 auto;
   padding-bottom: 11rem;
@@ -383,7 +484,7 @@ img {
     @include title();
     .body {
       padding: 0 4rem;
-      border: 1px solid #ccc;
+      // border: 1px solid #ccc;
       .course {
         display: flex;
         justify-content: space-between;
@@ -433,7 +534,7 @@ img {
       .vouchers {
         max-height: 22rem;
         overflow: auto;
-        border: 1px solid #ccc;
+        // border: 1px solid #ccc;
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
@@ -458,7 +559,7 @@ img {
           margin: 0.1rem;
           width: 19.25rem;
           height: 7.65rem;
-          background: #ccc;
+          // background: #ccc;
           color: #fff;
           display: flex;
           justify-content: space-between;
@@ -478,7 +579,7 @@ img {
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding-right: 1.75rem;
+            padding-right: 1.05rem;
             .name {
               // padding-top: 2.85rem;
               font-size: 1.6rem;
@@ -516,7 +617,7 @@ img {
         display: flex;
         flex-wrap: wrap;
         justify-content: space-around;
-        border: 1px solid #ccc;
+        // border: 1px solid #ccc;
         overflow: auto;
         max-height: 32rem;
         /* 设置滚动条的样式 */
@@ -538,37 +639,38 @@ img {
         }
         .voucher {
           margin: 1rem;
-          width: 9rem;
+          width: 10rem;
           height: 12rem;
-          background: #ccc;
+          // background: #ccc;
           color: #fff;
           display: flex;
           flex-direction: column;
           justify-content: center;
-          align-items: center;
+          // align-items: center;
 
           .content {
-            padding: 0 1.5rem;
-            border-left: 1px dashed #000;
-            border-right: 1px dashed #000;
+            padding: 0 1rem;
+            // border-left: 1px dashed #000;
+            // border-right: 1px dashed #000;
           }
           .price {
             position: relative;
             font-size: 4rem;
-            text-align: center;
+            // text-align: center;
             .number {
               position: relative;
               display: inline;
               .unit {
                 position: absolute;
                 top: 0.7rem;
-                right: -1rem;
+                right: -0.5rem;
                 width: 1.12rem;
                 height: 1.12rem;
                 border-radius: 50%;
                 background: #fff;
                 color: #fb0b0b;
                 font-size: 0.6rem;
+                text-align: center;
               }
             }
           }

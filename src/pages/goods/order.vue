@@ -100,11 +100,11 @@
                 <div class="tips">pay way</div>
               </div>
               <div class="icon-box">
-                <div
+                <!-- <div
                   :class="['icon', paymentActive('1')]"
                   :style="`background-image:url(${icon.bankIcon})`"
                   @click="ruleForm.payment = '1'"
-                ></div>
+                ></div>-->
                 <div
                   :class="['icon', paymentActive('2')]"
                   :style="`background-image:url(${icon.alipayIcon})`"
@@ -199,7 +199,7 @@ export default {
   },
   data() {
     return {
-      playcode: { show: false, src: "" },
+      playcode: { show: false, src: "", count: 0 },
       icon: {
         backIcon,
         alipayIcon,
@@ -309,27 +309,34 @@ export default {
       const num = this.goods.map(item => item.num);
       params = Object.assign({}, params, { id, lid, num });
       postGoodOrder(params).then(data => {
-        const { payment, out_trade_no, body } = data;
-        const totalPrice = 0.01;
+        const { payment, out_trade_no, body, totalPrice } = data;
+        // const totalPrice = 0.01;
         if (parseInt(payment) === 2) {
           postGetAlipayCode({ out_trade_no, total_fee: totalPrice, body })
             .then(data => {
               this.playcode.show = true;
+              this.playcode.count = 30;
               this.playcode.src = data;
             })
             .then(_ => {
               if (this.playcode.show) {
                 const timer = setInterval(() => {
-                  postGetAlipayOrder({ out_trade_no }).then(data => {
-                    console.log(data.msg);
-                    if (data.msg === "支付成功") {
-                      this.playcode.show = false;
-                    }
-                  });
-                  if (!this.playcode.show) {
+                  if (this.playcode.count < 0 || !this.playcode.show) {
+                    this.playcode.show = false;
                     clearInterval(timer);
                   }
-                }, 2000);
+
+                  postGetAlipayOrder({ out_trade_no }).then(data => {
+                    this.playcode.count -= 1;
+                    if (data.msg === "支付成功") {
+                      this.playcode.show = false;
+                      this.$message({
+                        type: "success",
+                        message: "支付成功"
+                      });
+                    }
+                  });
+                }, 1000);
               }
             });
         }
@@ -341,21 +348,28 @@ export default {
           })
             .then(data => {
               this.playcode.show = true;
+              this.playcode.count = 30;
               this.playcode.src = data;
             })
             .then(_ => {
               if (this.playcode.show) {
                 const timer = setInterval(() => {
-                  postGetWechatOrder({ out_trade_no }).then(data => {
-                    console.log(data.msg);
-                    if (data.msg === "支付成功") {
-                      this.playcode.show = false;
-                    }
-                  });
-                  if (!this.playcode.show) {
+                  if (this.playcode.count <= 0 || !this.playcode.show) {
+                    this.playcode.show = false;
                     clearInterval(timer);
                   }
-                }, 2000);
+
+                  postGetWechatOrder({ out_trade_no }).then(data => {
+                    this.playcode.count -= 1;
+                    if (data.msg === "支付成功") {
+                      this.playcode.show = false;
+                      this.$message({
+                        type: "success",
+                        message: "支付成功"
+                      });
+                    }
+                  });
+                }, 1000);
               }
             });
         }

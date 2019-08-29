@@ -279,8 +279,8 @@ export default {
       const params = Object.assign({}, this.rechargeForm);
       params.num = params.num || this.money;
       this.$request.post(`/personal/recharge`, params).then(data => {
-        const { payment, out_trade_no, body } = data;
-        const totalPrice = 0.01;
+        const { payment, out_trade_no, body, totalPrice } = data;
+        // const totalPrice = 0.01;
         if (parseInt(payment) === 2) {
           postGetAlipayCode({ out_trade_no, total_fee: totalPrice, body })
             .then(data => {

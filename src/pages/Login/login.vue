@@ -5,7 +5,7 @@
       <div class="login">
         <div class="login-icon">
           <div class="login-icon-pic">
-            <img :src="icon.logo" alt="">
+            <img :src="icon.logo" alt />
           </div>
         </div>
         <div class="form">
@@ -96,7 +96,7 @@
 <script>
 import { Exp } from "@/utils/bee.js";
 import Bus from "@/utils/Bus";
-import logo from "@/assets/market/logo_max.png"
+import logo from "@/assets/market/logo_max.png";
 export default {
   data() {
     return {
@@ -138,10 +138,9 @@ export default {
     /** 个人信息 */
     getPersonal() {
       this.$request("/personal/home").then(data => {
-        sessionStorage.setItem('user', JSON.stringify(data))
-        console.log(data.user.name)
+        sessionStorage.setItem("user", JSON.stringify(data));
         window.location.reload();
-        this.$emit('suc', data.user.name)
+        this.$emit("suc", data.user.name);
       });
     },
     /** 登录 */
@@ -155,7 +154,6 @@ export default {
           this.isPostting = false;
           this.$message({ message: "登录成功", type: "success" });
           this.$emit("close", "");
-          
         })
         .then(_ => {
           this.getPersonal();
@@ -170,6 +168,9 @@ export default {
       let _form = this[`${name}RuleForm`];
       let is_pass = true;
       for (let key of Object.keys(_form)) {
+        if (this.accountErrorRule[key].show) {
+          is_pass = false;
+        }
         if (_form[key] === "") {
           _error[key].show = true;
           is_pass = false;
@@ -287,7 +288,7 @@ input:focus {
     height: 21rem;
     &-icon {
       width: 14.1rem;
-      background: #F7FAF2;
+      background: #f7faf2;
       display: flex;
       justify-content: center;
       align-items: center;

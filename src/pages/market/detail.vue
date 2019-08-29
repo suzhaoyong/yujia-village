@@ -273,6 +273,9 @@
             <div style="text-align:center;height:100px;line-height:100px;">暂未搜到结果</div>
           </div>
         </div>
+        <div class="pages">
+          <el-pagination background layout="prev, pager, next, jumper" :total="108"></el-pagination>
+        </div>
         <!-- <div class="pages">
           <el-pagination
             @size-change="handleSizeChange"
@@ -291,7 +294,7 @@
           <div
             class="goods-box"
             @click="viewGoodsDetail(item)"
-            v-for="(item, index) in resenView"
+            v-for="(item, index) in resenView.data"
             :key="index"
           >
             <div class="pic">
@@ -361,7 +364,11 @@ export default {
         tags: []
       },
       resultList: [],
-      resenView: []
+      resenView: {
+        cur_page: 1,
+        count: 1,
+        data: []
+      }
     };
   },
   computed: {
@@ -387,7 +394,10 @@ export default {
   methods: {
     getLastView(page = "") {
       postRecentbrowse({ page }).then(data => {
-        this.resenView = data.data;
+        if (this.resenView.cur_page >= data.count) {
+          this.resenView.cur_page = 0;
+        }
+        this.resenView = Object.assign({}, this.resenView, data);
       });
     },
     searchGoods() {
@@ -398,7 +408,8 @@ export default {
       postShowGoodList(params).then(data => (this.resultList = data.data));
     },
     changeGoodsFor(name) {
-      this.getLastView(2);
+      this.resenView.cur_page += 1;
+      this.getLastView(this.resenView.cur_page);
     },
     /** 添加收藏 */
     addCollect() {},
@@ -599,10 +610,11 @@ img {
           cursor: pointer;
           margin-left: 10px;
           padding: 0 10px;
-          border: 1px solid #ccc;
+          // border: 1px solid #ccc;
         }
         .item.active {
-          border: 1px solid #2cc;
+          // border: 1px solid #2cc;
+          color: #cce198;
         }
       }
       .more {

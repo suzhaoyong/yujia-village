@@ -1,7 +1,8 @@
 <template>
   <div>
-    <div class="share">
+    <div class="share" style="position:relative;">
       <session-title name="邀请好友"></session-title>
+      <cloud :arr="[1]"></cloud>
       <div class="body">
         <div class="title">当前已成功邀请 0 位, 0 位好友充值，0位好友消费，您可获得 0 积分</div>
         <div class="content">
@@ -24,10 +25,12 @@
 </template>
 <script>
 import SessionTitle from "./SessionTitle";
+import Cloud from "./cloud";
 // import socialShare from 'social-share.js'
 export default {
   components: {
-    SessionTitle
+    SessionTitle,
+    Cloud
   },
   data() {
     return {

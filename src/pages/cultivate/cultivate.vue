@@ -354,6 +354,8 @@ img {
     margin-top: -150px;
     height: 100%;
     display: inline-block;
+    position: relative;
+    z-index: 10;
     .cultivate-count-div1 {
       width: 100%;
       height: 100%;

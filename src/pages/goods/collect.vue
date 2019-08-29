@@ -61,6 +61,7 @@
 import SessionTitle from "./SessionTitle";
 import {
   getUserCollect,
+  deleteUserCollectDelCollect,
   deleteUserCollect,
   postUserCart,
   postAddUserCart
@@ -107,7 +108,7 @@ export default {
           });
         },
         deleteGoods: item => {
-          deleteUserCollect(item.id).then(data => {
+          deleteUserCollectDelCollect({ id: [item.id] }).then(data => {
             this.$message({ type: "success", message: "删除成功" });
             // this.getColloct();
             this.goods = this.goods.filter(sitem => sitem.id !== item.id);
@@ -123,7 +124,20 @@ export default {
             return item;
           });
         },
-        allDelete: () => {}
+        allDelete: () => {
+          let id = this.goods.filter(item => item.select).map(item => item.id);
+          deleteUserCollectDelCollect({ id }).then(data => {
+            this.goods = this.goods.filter(item => !item.select);
+            this.$message({ type: "success", message: "删除成功" });
+          });
+        },
+        allAddCart: () => {
+          const id = this.goods.map(item => item.id);
+          const num = this.goods.map(item => item.num);
+          postAddUserCart({ id: id, num: num }).then(data => {
+            this.$message({ type: "success", message: "添加成功" });
+          });
+        }
       };
       op_obj[name] && op_obj[name](goods);
     },

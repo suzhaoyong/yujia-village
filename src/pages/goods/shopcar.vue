@@ -67,6 +67,7 @@ import SessionTitle from "./SessionTitle";
 import {
   getUserCart,
   deleteUserCart,
+  deleteUserCartDelCart,
   postUserCart,
   postUserCollect,
   postAddUserCollect,
@@ -110,7 +111,7 @@ export default {
     goodsOpFor(option, goods) {
       const obj = {
         detele: item => {
-          deleteUserCollect(item.id).then(data => {
+          deleteUserCartDelCart({ id: [item.id] }).then(data => {
             this.$message({ type: "success", message: "删除成功" });
             // this.getColloct();
             this.goods = this.goods.filter(sitem => sitem.id !== item.id);
@@ -139,14 +140,18 @@ export default {
           });
         },
         detele: () => {
-          this.goods = this.goods.filter(item => !item.select);
+          let id = this.goods.filter(item => item.select).map(item => item.id);
+          deleteUserCartDelCart({ id }).then(data => {
+            this.goods = this.goods.filter(item => !item.select);
+            this.$message({ type: "success", message: "删除成功" });
+          });
         },
         moveToCollect: () => {
           let selectGoods = this.goods.filter(item => item.select);
           // this.goods = this.goods.filter(item => !item.select);
           const id = selectGoods.map(item => item.id);
           const num = selectGoods.map(item => item.num);
-          postAddUserCollect({ id: [id], num: [num] }).then(data => {
+          postAddUserCollect({ id: id, num: num }).then(data => {
             this.$message({ type: "success", message: "添加成功" });
           });
         }

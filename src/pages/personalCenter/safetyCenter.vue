@@ -2,12 +2,13 @@
   <div>
     <div class="safe">
       <session-title name="信息与安全中心"></session-title>
+      <cloud :arr="[1,2,4]"></cloud>
       <div class="body">
         <div class="tabs">
           <div @click="tagsChange(0)" :class="['tab', isTagActive(0)]">修改密码</div>
           <div @click="tagsChange(1)" :class="['tab', isTagActive(1)]">修改绑定手机</div>
           <div @click="tagsChange(2)" :class="['tab', isTagActive(2)]">个人信息</div>
-          <div @click="tagsChange(3)" :class="['tab', isTagActive(3)]">会馆信息</div>
+          <div v-show="parseInt(info.user.identity_auth) !== 1" @click="tagsChange(3)" :class="['tab', isTagActive(3)]">会馆信息</div>
         </div>
         <div class="content">
           <div v-show="!success">
@@ -301,6 +302,7 @@
 <script>
 import SessionTitle from "./SessionTitle";
 import VDistpicker from "v-distpicker";
+import Cloud from './cloud';
 import {
   postUpdateTeacherInfo,
   getTeacherInfo,
@@ -312,7 +314,8 @@ import {
 export default {
   components: {
     SessionTitle,
-    VDistpicker
+    VDistpicker,
+    Cloud
   },
   data() {
     return {
@@ -613,6 +616,7 @@ export default {
   }
 }
 .safe {
+  position: relative;
   width: 60rem;
   margin: 0 auto;
   min-height: 40rem;

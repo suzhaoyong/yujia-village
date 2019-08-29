@@ -36,17 +36,22 @@
               <el-menu-item index="yogoinformation">瑜伽资讯</el-menu-item>
               <el-menu-item index="market">商城</el-menu-item>
               <el-menu-item index="aboutus">关于我们</el-menu-item>
-              <el-submenu index="personal" v-show="username || info.name">
+              <el-submenu index="personal">
                 <template slot="title">
                   <div class="submenu">个人中心</div>
                 </template>
                 <!-- <el-menu-item index="personal">收藏的课程</el-menu-item> -->
-                <el-menu-item index="personal">现金券与优惠券</el-menu-item>
-                <el-menu-item index="identity">个人信息</el-menu-item>
-                <el-menu-item index="hell">会馆信息</el-menu-item>
-                <el-menu-item index="safety-center">信息与安全中心</el-menu-item>
-                <el-menu-item index="share">分享邀请好友</el-menu-item>
-                <el-menu-item index="out" @click="logout">退出</el-menu-item>
+                <div v-show="!info.name">
+                  <el-menu-item index="login">请先登录</el-menu-item>
+                </div>
+                <div v-show="username || info.name">
+                  <el-menu-item index="personal">现金券与优惠券</el-menu-item>
+                  <el-menu-item index="identity">个人信息</el-menu-item>
+                  <el-menu-item index="hell">会馆信息</el-menu-item>
+                  <el-menu-item index="safety-center">信息与安全中心</el-menu-item>
+                  <el-menu-item index="share">分享邀请好友</el-menu-item>
+                  <el-menu-item index="out" @click="logout">退出</el-menu-item>
+                </div>
               </el-submenu>
             </el-menu>
           </el-col>
@@ -90,7 +95,7 @@ export default {
       username: "",
       account: {
         type: ""
-      },
+      }
     };
   },
   computed: {
@@ -125,7 +130,6 @@ export default {
   methods: {
     successInfo() {
       this.$on("success", name => {
-        console.log(name);
         this.username = name;
       });
     },
@@ -161,7 +165,10 @@ export default {
           identity: () =>
             this.$router.push({ name: "safety-center", query: { type: 2 } }),
           hell: () =>
-            this.$router.push({ name: "safety-center", query: { type: 3 } })
+            this.$router.push({ name: "safety-center", query: { type: 3 } }),
+          login: () => {
+            this.account.type = "login";
+          }
         };
         if (obj[key]) {
           obj[key]();

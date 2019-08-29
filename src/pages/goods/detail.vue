@@ -340,7 +340,7 @@ img {
         .bg-img {
           width: 23.45rem;
           height: 23rem;
-          border: 1px solid #ccc;
+          // border: 1px solid #ccc;
         }
         .sm-imgs {
           margin-left: 0.5rem;
@@ -354,7 +354,7 @@ img {
             &:last-child {
               margin-bottom: 0;
             }
-            border: 1px solid #ccc;
+            // border: 1px solid #ccc;
           }
         }
       }
@@ -395,7 +395,7 @@ img {
             .img {
               width: 1.75rem;
               height: 2rem;
-              border: 1px solid #ccc;
+              // border: 1px solid #ccc;
             }
             .color-name {
               line-height: 1.1rem;

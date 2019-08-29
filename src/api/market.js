@@ -71,6 +71,17 @@ export function deleteUserCollect(id) {
   return request.delete(`/userCollect/${id}`)
 }
 
+/** 删除收藏商品
+ * @param id 商品主列表 编号
+ */
+export function deleteUserCollectDelCollect(args) {
+  let params = {
+    id: ""
+  }
+  params = Object.assign({}, params, args)
+  return request.post(`/userCollect/delCollect`, args)
+}
+
 /** 我的购物车 */
 export function getUserCart() {
   return request(`/userCart/create`)
@@ -103,6 +114,18 @@ export function postAddUserCollect(args = {}) {
  */
 export function deleteUserCart(id) {
   return request.delete(`/userCart/${id}`)
+}
+
+/**
+  删除购物车
+ * @param id 商品主列表 编号
+ */
+export function deleteUserCartDelCart(args) {
+  let params = {
+    id: ""
+  }
+  params = Object.assign({}, params, args)
+  return request.post(`/userCart/delCart`, params)
 }
 
 /** 用户订单 */
