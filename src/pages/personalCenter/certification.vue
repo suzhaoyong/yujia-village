@@ -14,7 +14,11 @@
           </div>
         </div>
       </div>
-      <div class="content" v-show="step.cur_index === 1"></div>
+      <div class="content" v-show="step.cur_index === 1">
+        <!-- <pdf src="../../../static/doc/瑜伽村平台认证服务协议.pdf"></pdf> -->
+        <iframe src='../../../static/doc/瑜伽村平台认证服务协议.pdf' width='100%' height='100%' frameborder='1'>
+			</iframe>
+      </div>
       <div class="form" v-show="step.cur_index === 2">
         <div class="name-address-phone">
           <div class="name-phone">
@@ -126,10 +130,12 @@
 import TopTitle from "./topTItle";
 import VDistpicker from "v-distpicker";
 import { postUserInfo } from "@/api/personal";
+import pdf from 'vue-pdf'
 export default {
   components: {
     TopTitle,
-    VDistpicker
+    VDistpicker,
+    pdf
   },
   data() {
     return {

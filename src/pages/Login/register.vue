@@ -79,6 +79,9 @@
           </div>
           <div class="form-footer">
             <div class="auto_login">
+              <div class="shuoming">
+                <p>注册即等于同意<a href="../../../static/doc/瑜伽村隐私政策.DOCX" class="file">《瑜伽村隐私政策》</a>和<a href="../../../static/doc/瑜伽村使用协议.DOCX" class="file">《瑜伽村使用协议》</a></p>
+              </div>
               <!-- <div class="auto_login-tips">第三方登录：</div>
               <div class="auto_login-icon"></div>
               <div class="auto_login-icon"></div>-->
@@ -263,7 +266,7 @@ input:focus {
     display: flex;
     border-radius: 0.5vw;
     overflow: hidden;
-    height: 22rem;
+    // height: 22rem;
     &-icon {
       width: 14.1rem;
       background: #12acac;
@@ -275,8 +278,8 @@ input:focus {
       }
     }
     .form {
-      width: 26rem;
-      padding: 3rem 2rem 2rem;
+      // width: 26rem;
+      padding: 3rem 1rem 2rem;
       background-color: #d9ebc5;
       position: relative;
       &-box {
@@ -405,6 +408,14 @@ input:focus {
         .auto_login {
           display: flex;
           align-items: center;
+          p{
+            font-size: 0.4rem;
+            margin: 0;
+            .file{
+              color:#6bc839;
+              margin-right: 0.3rem;
+            }
+          }
           &-tips {
           }
           &-icon {
@@ -418,7 +429,9 @@ input:focus {
         .register {
           cursor: pointer;
           display: flex;
+          flex-shrink: 0;
           align-items: center;
+          margin-bottom: -2em;
         }
       }
     }
