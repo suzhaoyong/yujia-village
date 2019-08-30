@@ -6,7 +6,7 @@
                     <template>
                        <!-- <Banner></Banner> -->
                        <div class="bg_img">
-                         <img src="../assets/banner5.png" alt />
+                         <img :src="banner" alt />
                         </div>
                     </template>
                     <div class="aboutus-count">
@@ -19,25 +19,25 @@
                         <div class="aboutus-count-div2">
                             <div class="Photowall-img1">
                                 <div class="Photowall-img1-bottom">
-                                    <img class="img1" :src="imgpic[0].url_pic" v-if="imgpic[0].url_pic"/>
-                                    <img class="img2" :src="imgpic[1].url_pic" v-if="imgpic[1].url_pic"/>
+                                    <img class="img1" :src="aboutUs.img1"/>
+                                    <img class="img2" :src="aboutUs.img2"/>
                                 </div>
                                 <div class="Photowall-img1-top">
-                                    <img class="img1" :src="imgpic[2].url_pic" v-if="imgpic[2].url_pic"/>
-                                    <img class="img2" :src="imgpic[3].url_pic" v-if="imgpic[3].url_pic"/>
+                                    <img class="img1" :src="aboutUs.img3"/>
+                                    <img class="img2" :src="aboutUs.img4"/>
                                 </div>
                             </div>
                             <div class="Photowall-img2">
-                                <img :src="imgpic[4].url_pic" v-if="imgpic[4].url_pic"/>
+                                <img :src="aboutUs.img5"/>
                             </div>
                             <div class="Photowall-img3">
                                 <div class="Photowall-img3-bottom">
-                                    <img class="img1" :src="imgpic[5].url_pic" v-if="imgpic[5].url_pic"/>
-                                    <img class="img2" :src="imgpic[6].url_pic" v-if="imgpic[6].url_pic"/>
+                                    <img class="img1" :src="aboutUs.img6"/>
+                                    <img class="img2" :src="aboutUs.img7"/>
                                 </div>
                                 <div class="Photowall-img3-top">
-                                    <img class="img1" :src="imgpic[7].url_pic" v-if="imgpic[7].url_pic"/>
-                                    <img class="img2" :src="imgpic[8].url_pic" v-if="imgpic[8].url_pic"/>
+                                    <img class="img1" :src="aboutUs.img8"/>
+                                    <img class="img2" :src="aboutUs.img9"/>
                                 </div>
                             </div>
                         </div>
@@ -76,13 +76,15 @@
                              </div>
                         </div>
                         </el-col>
-                        <div class="aboutus-count-div9">
+                        <el-col class="bg-div">
                             <img class="bg-img2" src="../assets/image49.png"/>
+                        <div class="aboutus-count-div9">
                             <h2><img src="../assets/yujia.png"/>联系方式</h2>
                             <p class="nav-text">Sometimes beauty is so simple</p>
                             <div class="border-left"></div>
                             <div class="border-right"></div>
                         </div>
+                        </el-col>
                          <div class="aboutus-count-div10">
                              <div class="codeimg">
                                  <img :src="aboutUs.url_pic"/>
@@ -158,43 +160,44 @@ export default {
         height: 100%;
         display: inline-block;
         .aboutus-count-div1{
-            width: 100%;
+            width: 1200px;
             height: 150px;
             text-align: center;
-            display: inline-block;
+            margin: 0 auto;
             position: relative;
             .border-left{
                 width: 20%;
                 height: 1px;
                 background-color: #dcdcdc;
                 position: absolute;
-                left:22%;
-                top: 45%;
+                left:19%;
+                top: 41%;
             }
             .border-right{
                 width: 20%;
                 height: 1px;
                 background-color: #dcdcdc;
                 position: absolute;
-                right: 22%;
-                top: 45%;
+                right: 19%;
+                top: 41%;
             }
             .nav-text{
                 color: #999999;
                 font-size: 14px;
-                margin-top: -8px;
+                margin-top: 8px;
             }
             h2{
                 color: #2c2c2c;
-                font-size: 24px;
-                margin-top: 40px;
+                font-size: 1.6rem;
+                margin-top: 20px;
                 font-family:Microsoft YaHei;
                 font-weight:bold;
+                padding-top: 24px;
                 img{
                     width: 28px;
                     height: 28px;
                     position: absolute;
-                    left: 44%;
+                    left: 42%;
                 }
             }
         }
@@ -275,10 +278,10 @@ export default {
             background-repeat: no-repeat;
             background-size: 100% 100%;
          .aboutus-count-div3{
-            width: 100%;
+            width: 1200px;
             height: 150px;
             text-align: center;
-            display: inline-block;
+            margin: 0 auto;
             margin-top: 30px;
             position: relative;
             .border-left{
@@ -286,38 +289,39 @@ export default {
                 height: 1px;
                 background-color: #dcdcdc;
                 position: absolute;
-                left:22%;
-                top: 45%;
+                left:19%;
+                top: 41%;
             }
             .border-right{
                 width: 20%;
                 height: 1px;
                 background-color: #dcdcdc;
                 position: absolute;
-                right: 22%;
-                top: 45%;
+                right: 19%;
+                top: 41%;
             }
             .nav-text{
                 color: #999999;
                 font-size: 14px;
-                margin-top: -8px;
+                margin-top: 8px;
             }
             h2{
                 color: #2c2c2c;
-                font-size: 24px;
+                font-size: 1.6rem;
                 margin-top: 40px;
+                padding-top:24px;
                 font-family:Microsoft YaHei;
                 font-weight:bold;
                 img{
                     width: 28px;
                     height: 28px;
                     position: absolute;
-                    left: 44%;
+                    left: 42%;
                 }
             }
         }
         .aboutus-count-div4{
-            width: 100%;
+            width: 1200px;
             height: 155px;
             line-height: 0px;
             margin: 0 auto;
@@ -331,48 +335,48 @@ export default {
             }
         }
         .aboutus-count-div5{
-            width: 100%;
+            width: 1200px;
             height: 150px;
             text-align: center;
-            display: inline-block;
+            margin: 0 auto;
             position: relative;
             .border-left{
                 width: 20%;
                 height: 1px;
                 background-color: #dcdcdc;
                 position: absolute;
-                left:20%;
-                top: 45%;
+                left:16%;
+                top: 41%;
             }
             .border-right{
                 width: 20%;
                 height: 1px;
                 background-color: #dcdcdc;
                 position: absolute;
-                right: 22%;
-                top: 45%;
+                right: 16%;
+                top: 41%;
             }
             .nav-text{
                 color: #999999;
                 font-size: 14px;
-                margin-top: -8px;
+                margin-top: 8px;
             }
             h2{
                 color: #2c2c2c;
-                font-size: 24px;
-                margin-top: 40px;
+                font-size: 1.6rem;
                 font-family:Microsoft YaHei;
                 font-weight:bold;
+                padding-top: 24px;
                 img{
                     width: 28px;
                     height: 28px;
                     position: absolute;
-                    left: 42%;
+                    left: 38%;
                 }
             }
         }
         .aboutus-count-div6{
-            width: 100%;
+            width: 1200px;
             height: 155px;
             margin: 0 auto;
             line-height: 0px;
@@ -386,9 +390,9 @@ export default {
             }
         }
         .aboutus-count-div7{
-            width: 100%;
+            width: 1200px;
             height: 150px;
-            display: inline-block;
+            margin: 0 auto;
             text-align: center;
             position: relative;
             .border-left{
@@ -396,33 +400,34 @@ export default {
                 height: 1px;
                 background-color: #dcdcdc;
                 position: absolute;
-                left:20%;
-                top: 45%;
+                left:17%;
+                top: 41%;
             }
             .border-right{
                 width: 20%;
                 height: 1px;
                 background-color: #dcdcdc;
                 position: absolute;
-                right: 22%;
-                top: 45%;
+                right: 17%;
+                top: 41%;
             }
             .nav-text{
                 color: #999999;
                 font-size: 14px;
-                margin-top: -8px;
+                margin-top: 8px;
             }
             h2{
                 color: #2c2c2c;
-                font-size: 24px;
+                font-size: 1.6rem;
                 margin-top: 40px;
                 font-family:Microsoft YaHei;
                 font-weight:bold;
+                padding-top: 24px;
                 img{
                     width: 28px;
                     height: 28px;
                     position: absolute;
-                    left: 42%;
+                    left: 39%;
                 }
             }
         }
@@ -431,7 +436,7 @@ export default {
             height: 600px;
             margin: 0 auto;
             .aboutus-content{
-                width: 80%;
+                width: 1200px;
                 height: 100%;
                 margin: 0 auto;
                 display: flex;
@@ -441,7 +446,7 @@ export default {
                     height: 220px;
                     position:absolute;
                     top: 10%;
-                    right: 80%;
+                    right: 83%;
                     img{
                         width: 155px;
                         height: 155px;
@@ -464,8 +469,8 @@ export default {
                     width: 220px;
                     height: 220px;
                     position:absolute;
-                    top: 50%;
-                    right: 67%;
+                    top: 52%;
+                    right: 68%;
                     img{
                         width: 155px;
                         height: 155px;
@@ -512,8 +517,8 @@ export default {
                     width: 220px;
                     height: 220px;
                     position:absolute;
-                    top: 40%;
-                    right: 34%;
+                    top: 42%;
+                    right: 31%;
                     img{
                         width: 155px;
                         height: 155px;
@@ -537,7 +542,7 @@ export default {
                     height: 220px;
                     position:absolute;
                     top: 1%;
-                    right: 19%;
+                    right: 17%;
                     img{
                         width: 155px;
                         height: 155px;
@@ -561,7 +566,7 @@ export default {
                     height: 220px;
                     position:absolute;
                     top: 51%;
-                    right: 6%;
+                    right: 0%;
                     img{
                         width: 155px;
                         height: 155px;
@@ -583,18 +588,27 @@ export default {
             }
         }
     }
+     .bg-div{
+         position: relative;
+         .bg-img2{
+                width: 444px;
+                height: 210px;
+                position: absolute;
+                left: 0%;
+                top: -60%;
+            }
         .aboutus-count-div9{
-            width: 100%;
+            width: 1200px;
             height: 150px;
             text-align: center;
-            display: inline-block;
+            margin: 0 auto;
             position: relative;
             .border-left{
                 width: 20%;
                 height: 1px;
                 background-color: #dcdcdc;
                 position: absolute;
-                left:22%;
+                left:19%;
                 top: 45%;
             }
             .border-right{
@@ -602,35 +616,30 @@ export default {
                 height: 1px;
                 background-color: #dcdcdc;
                 position: absolute;
-                right: 22%;
+                right: 19%;
                 top: 45%;
             }
             .nav-text{
                 color: #999999;
                 font-size: 14px;
-                margin-top: -8px;
+                margin-top: 8px;
             }
             h2{
                 color: #2c2c2c;
-                font-size: 24px;
+                font-size: 1.6rem;
                 margin-top: 40px;
+                padding-top: 24px;
                 font-family:Microsoft YaHei;
                 font-weight:bold;
                 img{
                     width: 28px;
                     height: 28px;
                     position: absolute;
-                    left: 44%;
+                    left: 42%;
                 }
             }
-            .bg-img2{
-                width: 444px;
-                height: 210px;
-                position: absolute;
-                left: 0%;
-                top: -60%;
-            }
         }
+    }
         .aboutus-count-div10{
             width: 100%;
             height: 405px;

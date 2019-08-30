@@ -9,10 +9,11 @@
                     <div class="border-right"></div>
                 </div>
                 <div class="joinclubdetails-cont-div2">
+                    <el-col>
                     <div class="clubhouse">
                         <swiper :options="swiperOption" style="height:530px">
                             <swiper-slide v-for="(page,index) of pages" :key="index">
-                                <div class="clubhouse-swiper" v-for="item of page" :key="item.id">
+                                <div class="clubhouse-swiper" v-for="item of page" :key="item.id" @click="clubhouseItem(item)">
                                     <div class="clubhouse-swiper-img">
                                         <img :src="item.path"/>
                                     </div>
@@ -24,10 +25,11 @@
                                     <p class="name-p3">电话:{{item.tel}}</p>
                                 </div>
                             </swiper-slide>
-                            <div class="swiper-button-prev1" slot="button-prev"></div>
-                            <div class="swiper-button-next1" slot="button-next"></div>
                         </swiper>
+                        <div class="swiper-button-prev1" slot="button-prev"></div>
+                        <div class="swiper-button-next1" slot="button-next"></div>
                     </div>
+                    </el-col>
                 </div>
                 <div class="joinclubdetails-cont-div3">
                     <div class="joinclubdetails-div3-main">
@@ -162,6 +164,14 @@ export default {
             }
         });
       },
+      clubhouseItem(item){
+          this.$router.push({
+            path: "/cultivate/detail",
+            query: {
+            id: item.id
+            }
+        });
+      }
   }
 };
 </script>
@@ -187,44 +197,45 @@ export default {
     margin: 0 auto;
     overflow: hidden;
     .joinclubdetails-cont-div1{
-            width: 100%;
+            width: 1200px;
             height: 150px;
             text-align: center;
             position: relative;
             margin-top: 20px;
-            display: inline-block;
+            margin: 0 auto;
             .border-left{
                 width: 20%;
                 height: 1px;
                 background-color: #dcdcdc;
                 position: absolute;
-                left:22%;
-                top: 45%;
+                left:19%;
+                top: 41%;
             }
             .border-right{
                 width: 20%;
                 height: 1px;
                 background-color: #dcdcdc;
                 position: absolute;
-                right: 22%;
-                top: 45%;
+                right:19%;
+                top: 41%;
             }
             .nav-text{
                 color: #999999;
                 font-size: 14px;
-                margin-top: -8px;
+                margin-top: 8px;
             }
             h2{
                 color: #2c2c2c;
-                font-size: 24px;
+                font-size: 1.6rem;
                 margin-top: 40px;
+                padding-top: 24px;
                 font-family:Microsoft YaHei;
                 font-weight:bold;
                 img{
                     width: 28px;
                     height: 28px;
                     position: absolute;
-                    left: 44%;
+                    left: 42%;
                 }
             }
         }
@@ -234,19 +245,20 @@ export default {
         margin: 0 auto;
         margin-top: 40px;
         .clubhouse{
-            width: 80%;
+            width: 1200px;
             height: 530px;
             margin: 0 auto;
             position: relative;
             .clubhouse-swiper{
-                width: 100%;
-                height: 514px;
+                width: 370px;
+                height: 500px;
                 background:rgba(255,255,255,1);
                 box-shadow:2px 3px 20px 1px rgba(164,164,164,0.26);
                 border-radius:5px;
+                margin-left: 5px;
                 .clubhouse-swiper-img{
                     width: 100%;
-                    height: 403px;
+                    height: 390px;
                     border-radius:5px 5px 0px 0px;
                     img{
                         width: 100%;
@@ -254,7 +266,7 @@ export default {
                     }
                 }
                 .clubhouse-swiper-name{
-                    width: 95%;
+                    width: 90%;
                     height: 30px;
                     line-height: 16px;
                     display: flex;
@@ -281,10 +293,10 @@ export default {
                     }
                 }
                 .el-rate{
-                    margin-left: 9px;
+                    margin-left: 20px;
                 }
                 .name-p3{
-                    width: 95%;
+                    width: 90%;
                     text-align: right;
                     margin: 0 auto;
                     font-size: 14px;
@@ -293,7 +305,7 @@ export default {
             }
             .swiper-button-prev1{
                     position: absolute;
-                    left: 0%;
+                    left: -4%;
                     top: 36%;
                     width: 35px;
                     height: 35px;
@@ -302,11 +314,11 @@ export default {
                     z-index: 10;
                     background-size: 32px 35px;
                     background-color: #fff;
-                    background-image: url('../assets/left.png');
+                    background-image: url('../assets/prev.png');
             }
             .swiper-button-next1{
                     position: absolute;
-                    right: 0%;
+                    right: -4%;
                     top: 36%;
                     width: 35px;
                     height: 35px;
@@ -315,7 +327,7 @@ export default {
                     z-index: 10;
                     background-size: 32px 35px;
                     background-color: #fff;
-                    background-image: url('../assets/right.png');
+                    background-image: url('../assets/next.png');
             }
         }
     }
@@ -327,7 +339,7 @@ export default {
         background-repeat: no-repeat;
         background-size: 100% 100%;
         .joinclubdetails-div3-main{
-            width: 80%;
+            width: 1200px;
             margin: 0 auto;
             height: 100%;
             display: flex;
@@ -379,10 +391,10 @@ export default {
                      line-height: 30px;
                      width: 100%;
                      margin-bottom: 90px;
-                     display: -webkit-box;
-                    -webkit-box-orient: vertical;
-                    -webkit-line-clamp:5;// 限制快级元素的文本行数
-                    overflow: hidden;
+                     display: -webkit-box !important;
+                    -webkit-box-orient: vertical !important;
+                    -webkit-line-clamp:5 !important;// 限制快级元素的文本行数
+                    overflow: hidden !important;
                  }
                  .left3{
                      font-size: 14px;
@@ -396,28 +408,27 @@ export default {
                  }
              }
              .joinclubdetails-right{
-                width: 50%;
                 height: 85%;
                 margin-top: 54px;
                 .imgpic{
-                    margin-top: 7px;
+                    margin-top: 5px;
                     .img1{
-                        width: 49%;
+                        width: 300px;
                         height: 226px;
                     }
                     .img2{
-                        width: 50%;
+                        width: 300px;
                         height: 226px;
                     }
                 }
                 .imgpic1{
-                    margin-top: 2px;
+                    margin-top: 5px;
                     .img3{
-                        width: 49%;
+                        width: 300px;
                         height: 226px;
                         }
                     .img4{
-                        width: 50%;
+                        width: 300px;
                         height: 226px;
                     }
                 }
@@ -425,44 +436,45 @@ export default {
         }
     }
     .joinclubdetails-cont-div4{
-            width: 100%;
+            width: 1200px;
             height: 150px;
             text-align: center;
             position: relative;
             margin-top: 20px;
-            display: inline-block;
+            margin: 0 auto;
             .border-left{
                 width: 20%;
                 height: 1px;
                 background-color: #dcdcdc;
                 position: absolute;
-                left:20%;
-                top: 45%;
+                left:19%;
+                top: 41%;
             }
             .border-right{
                 width: 20%;
                 height: 1px;
                 background-color: #dcdcdc;
                 position: absolute;
-                right: 22%;
-                top: 45%;
+                right: 19%;
+                top: 41%;
             }
             .nav-text{
                 color: #999999;
                 font-size: 14px;
-                margin-top: -8px;
+                margin-top: 8px;
             }
             h2{
                 color: #2c2c2c;
-                font-size: 24px;
+                font-size: 1.6rem;
                 margin-top: 40px;
+                padding-top: 24px;
                 font-family:Microsoft YaHei;
                 font-weight:bold;
                 img{
                     width: 28px;
                     height: 28px;
                     position: absolute;
-                    left: 43%;
+                    left: 40%;
                 }
             }
     }
@@ -504,9 +516,12 @@ export default {
             right: 10%;
         }
         .carousel5{
-            width: 75% !important;
+            width: 1200px !important;
             height: 660px;
             margin: 0 auto;
+            .carousel5-item{
+                width: 1200px !important;
+                margin-right:0px !important;
             .carousel-explain2{
                 height: 183px;
                 float: left;
@@ -522,7 +537,7 @@ export default {
                 .explain2-div{
                     height: auto;
                     padding-top: 35px;
-                    padding-left: 13px;
+                    padding-left: 20px;
                     width: 69%;
                     text-align: left;
                     h3{
@@ -577,6 +592,7 @@ export default {
                         }
                 }
             }
+         }
         }
     }
 }

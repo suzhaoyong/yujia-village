@@ -5,7 +5,7 @@
                 <template>
                     <!-- <Banner></Banner> -->
                     <div class="bg_img">
-                        <img src="../assets/banner2.png" alt />
+                        <img :src="banner" alt />
                         <div class="banner_button">
                             <el-button type="text" class="butt">申请加盟</el-button>
                         </div>
@@ -126,7 +126,8 @@ export default {
        joindata(){
         let _this = this;
         this.$request("/clubs").then(res => {
-            _this.joinlist = res;
+            _this.joinlist = res.data;
+            _this.banner = res.banner;
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -171,15 +172,15 @@ export default {
   .banner_button{
     position: absolute;
     top: 77%;
-    width: 172px;
+    width: 11%;
     background-color: #9AB1C1;
-    height: 45px;
+    height: 43px;
     border-radius: 18px;
     right: 44%;
     text-align: center;
-    line-height: 45px;
+    line-height: 43px;
     .butt{
-      font-size:18px;
+      font-size:1.1rem;
       font-family:Microsoft YaHei;
       font-weight:bold;
       color: #FFFFFF;
@@ -304,17 +305,17 @@ export default {
             height: 100%;
             margin: 0 auto;
             .clubhouse2{
-                width: 75%;
+                width: 1200px;
                 height: 100%;
                 margin: 0 auto;
                 margin-bottom: 50px;
                 .clubhouse2-list{
-                    width: 284px;
-                    height: 340px;
+                    width: 278px;
+                    height: auto;
                     float: left;
-                    padding: 11px;
-                    position: relative;
+                    margin: 10px;
                     margin-bottom: 20px;
+                    position: relative;
                     .image{
                         width: 100%;
                         height: 224px;
@@ -330,35 +331,37 @@ export default {
                         width: 90%;
                         margin: 0 auto;
                         margin-bottom: 15px;
-                        font-size: 14px;
+                        font-size: 0.9rem;
                         color: #999999;
                     }
                     .kong{
-                        width: 262px;
+                        width: 100%;
                         height: auto;
                         position: absolute;
-                        bottom: 105px;
-                        right: 12px;
+                        bottom: 110px;
+                        right: 0px;
                         margin: 0 auto;
                         text-align: center;
                         line-height: 30px;
                         color: #fff;
                         font-size: 14px;
                         opacity: 0;
+                        transition: all .5s ease;
                     }
                     .kong:hover{
-                        width: 262px;
+                        width: 100%;
                         height: auto;
                         background-color: #8fc31f;
                         position: absolute;
-                        bottom: 105px;
-                        right: 12px;
+                        bottom: 110px;
+                        right: 0px;
                         margin: 0 auto;
                         text-align: center;
                         line-height: 30px;
                         color: #fff;
                         font-size: 14px;
                         opacity: 0.9;
+                        transition: all .8s ease;
                     }
                 }
                 .block{
@@ -382,10 +385,10 @@ export default {
             }
         }
         .joinclub-cont-div4{
-            width: 100%;
+            width: 1200px;
             height: 150px;
             text-align: center;
-            display: inline-block;
+            margin: 0 auto;
             position: relative;
             margin-top: 34px;
             .border-left{
@@ -393,33 +396,34 @@ export default {
                 height: 1px;
                 background-color: #dcdcdc;
                 position: absolute;
-                left:22%;
-                top: 45%;
+                left:19%;
+                top: 41%;
             }
             .border-right{
                 width: 20%;
                 height: 1px;
                 background-color: #dcdcdc;
                 position: absolute;
-                right: 22%;
-                top: 45%;
+                right: 19%;
+                top: 41%;
             }
             .nav-text{
                 color: #999999;
                 font-size: 14px;
-                margin-top: -8px;
+                margin-top: 8px;
             }
             h2{
                 color: #2c2c2c;
-                font-size: 24px;
+                font-size: 1.6rem;
                 margin-top: 40px;
                 font-family:Microsoft YaHei;
                 font-weight:bold;
+                padding-top: 24px;
                 img{
                     width: 28px;
                     height: 28px;
                     position: absolute;
-                    left: 44%;
+                    left: 42%;
                 }
             }
         }
