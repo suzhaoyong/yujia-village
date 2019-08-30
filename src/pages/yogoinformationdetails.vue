@@ -64,7 +64,7 @@ export default {
     overflow: hidden;
     background-color: #ECECEC;
     .yogoknowledgedetails-cont-div1{
-        width: 75%;
+        width: 1200px;
         height: 150px;
         margin: 0 auto;
         margin-top: 20px;
@@ -107,7 +107,7 @@ export default {
         }
     }
     .yogoknowledgedetails-cont-div2{
-        width: 75%;
+        width:1200px;
         height: 100%;
         margin: 0 auto;
         margin-bottom: 40px;

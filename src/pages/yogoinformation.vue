@@ -5,8 +5,13 @@
                 <div class="formation-main">
                     <template>
                        <!-- <Banner></Banner> -->
+                       <el-col class="selectitem">
+                       <div class="select-bg">
+                           <div v-for="(list,index) in navLists" :key="index" class="nav" :class="{ red:changeRed == index}" @click="reds(index)">{{list.text}}</div>
+                       </div>
+                       </el-col>
                         <div class="bg_img">
-                         <img src="../assets/banner3.png" alt />
+                         <img :src="banner" alt />
                         </div>
                     </template>
                     <div class="formation-count">
@@ -23,7 +28,7 @@
                                 </div>
                                 <div class="border2"></div>
                                 <div class="count-button-right">
-                                    <img class="img1" src="../assets/share.png"/>
+                                    <!-- <img class="img1" src="../assets/share.png"/> -->
                                     <img class="img2" src="../assets/eye.png"/>
                                     <span class="span3">{{item.views}}</span>
                                 </div>
@@ -132,7 +137,25 @@ export default {
         pagesize: 5,
         formationList:[],
         listdatas:[],
-        banner:''
+        banner:'',
+        navLists:[
+            {
+                "text":"推荐"                     
+            },
+            {
+                "text":"行业资讯"                     
+            },
+            {
+                "text":"业界要闻"                        
+            },
+            {
+                "text":"明星瑜伽"                     
+            },
+            {
+                "text":"热点人物"                     
+            }
+        ],
+        changeRed:0
     };
   },
   created(){
@@ -142,7 +165,8 @@ export default {
      mationdata(){
         let _this = this;
         this.$request("/informationList").then(res => {
-            _this.formationList = res;
+            _this.formationList = res.data;
+            _this.banner = res.banner;
             _this.formationList.map(item =>{ 
                 if(item.data != null){
                     for(var i=0;i<item.data.length;i++){
@@ -168,6 +192,9 @@ export default {
       handleCurrentChange(currentPage) {
           this.currentPage = currentPage;
       },
+      reds:function(index){
+       this.changeRed = index;
+    },
        selectItem(item){
            this.$router.push({
             path: "/yogoinformation/yogoinformationdetails",
@@ -187,6 +214,31 @@ export default {
       width: 100%;
       height: 100%;
   }
+}
+.selectitem{
+    position: relative;
+.select-bg{
+        width: 75%;
+        margin: 0 auto;
+        position: absolute;
+        left: 190px;
+        opacity: 0.7;
+        height: auto;
+        background-color: #fff;
+        .nav{
+            line-height: 50px;
+            display: inline-block;
+            margin-left: 40px;
+            cursor: pointer;
+            font-size:14px;
+        }
+        .red{
+            color: #2c2c2c;
+            font-size:18px;
+            font-family:Microsoft YaHei;
+            font-weight:bold;
+        }
+    }
 }
 .el-pagination.is-background .el-pager li:not(.disabled).active{
     background-color: #CCE198;
@@ -288,10 +340,10 @@ export default {
                     line-height: 60px;
                     font-family:Microsoft YaHei;
                     font-weight:bold;
-                    display: -webkit-box;
-                    -webkit-box-orient: vertical;
-                    -webkit-line-clamp:1;// 限制快级元素的文本行数
-                    overflow: hidden;
+                    display: -webkit-box !important;
+                    -webkit-box-orient: vertical !important;
+                    -webkit-line-clamp:1 !important;// 限制快级元素的文本行数
+                    overflow: hidden !important;
                 }
                 .span-title{
                     width: 100%;
@@ -316,10 +368,10 @@ export default {
                     color: #2c2c2c;
                     line-height: 28px;
                     margin-top: 43px;
-                    display: -webkit-box;
-                    -webkit-box-orient: vertical;
-                    -webkit-line-clamp:3;// 限制快级元素的文本行数
-                    overflow: hidden;
+                    display: -webkit-box !important;
+                    -webkit-box-orient: vertical !important;
+                    -webkit-line-clamp:3 !important;// 限制快级元素的文本行数
+                    overflow: hidden !important;
                 }
                 .count-button-but{
                         width: 110px;
@@ -347,12 +399,12 @@ export default {
                             width: 30px;
                             height: 25px;
                             position: absolute;
-                            bottom: -22px;
-                            left: 13%;
+                            bottom: -26px;
+                            left: 2%;
                         }
                         .span3{
                             position: absolute;
-                            left: 22%;
+                            left: 12%;
                         }
                     }
             }

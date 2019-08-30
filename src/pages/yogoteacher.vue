@@ -6,11 +6,12 @@
                     <template>
                        <!-- <Banner></Banner> -->
                        <div class="bg_img">
-                         <img src="../assets/banner7.png" alt />
+                         <img :src="banner" alt />
                         </div>
                     </template>
                     <div class="yogo-count">
                         <div class="yogo-search">
+                            <el-col class="yogo-lan">
                             <div class="search-left">
                                 <el-select v-model="value" placeholder="擅长类型" @change="changecoure">
                                     <el-option v-for="item in coursetypes" :key="item.id" :label="item.name" :value="item.id"></el-option>
@@ -33,6 +34,7 @@
                                 </el-form-item>
                                 </el-form>
                             </div>
+                            </el-col>
                         </div>
                         <el-col :span="24" class="bg-tupian1">
                         <div class="yogo-cont-div1">
@@ -44,7 +46,7 @@
                        <div class="yogo-cont-div2">
                            <img src="../assets/image79.png" class="yogo-img"/>
                            <div class="yogocontunt">
-                               <swiper :options="swiperOption" style="height:850px">
+                               <swiper :options="swiperOption" style="height:850px;width:1200px;">
                                 <swiper-slide v-for="(page,index) of pages" :key="index">
                                     <div class="yogocontunt-swiper">
                                         <div class="yogoswiper-img">
@@ -62,7 +64,7 @@
                                             <p class="p2">擅长：{{namelist.good_at}}</p>
                                             <p class="p4">地址：{{namelist.address}}</p>
                                             <div class="yogoswiper-butt">
-                                            <el-button type="text">预约</el-button>
+                                            <el-button type="text">详情</el-button>
                                             </div>
                                         </div>
                                     </div>
@@ -270,6 +272,7 @@ export default {
     width: 100%;
     height: 100%;
     position: relative;
+    transition: all 1s ease;
     }
 .test5 .yogocontunt2-img{
         width: 100%;
@@ -341,21 +344,25 @@ export default {
 .test5:hover div.div01{
     opacity: 1;
     transform: scale(1);
-    transition: transform 0.3s ease-in
+    transition: transform .5s ease-in;
+    transition: all 1s ease;
     }
 .test5:hover div.div02{
     opacity: 1;
     transform: scale(1);
-    transition: transform 0.3s ease-in
+    transition: transform 0.5s ease-in;
+    transition: all 1s ease;
     }
 .test5:hover{
     width:100%;
     height: 340px;
     background-color: #E2DBC8;
+    transition: transform 0.5s ease-in;
+    transition: all 1s ease;
 }
-.test5:hover figcaption .p1{opacity: 1;}
-.test5:hover figcaption .p2{opacity: 1;margin-top: 15%;}
-.test5:hover figcaption h4{opacity: 1;}
+.test5:hover figcaption .p1{opacity: 1;transition: transform 0.5s ease-in; transition: all 1s ease;}
+.test5:hover figcaption .p2{opacity: 1;margin-top: 15%;transition: transform 0.5s ease-in;transition: all 1s ease;}
+.test5:hover figcaption h4{opacity: 1;transition: transform 0.5s ease-in;transition: all 1s ease;}
 .test5:hover figcaption .telimg{
     width: 100%;
     margin: 0 auto;
@@ -366,6 +373,8 @@ export default {
     width: 20px;
     height: 20px;
     margin-left: 29%;
+    transition: transform 0.5s ease-in;
+    transition: all 1s ease;
 }
 .test5:hover figcaption .telimg .telpp{
     opacity: 1;
@@ -374,9 +383,13 @@ export default {
     font-weight:400;
     color: #2c2c2c;
     margin-left: 7px;
+    transition: transform 0.5s ease-in;
+    transition: all 1s ease;
 }
 .test5:hover img{
     opacity: 0.1;
+    transition: transform 0.5s ease-in;
+    transition: all 1s ease;
     }
 .el-select-dropdown__item.selected {
     color: #8fc31f;
@@ -406,14 +419,17 @@ export default {
         height: 70px;
         display: flex;
         background-color: #E2DBC8;
+        .yogo-lan{
+            width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            height: 100%;
         .search-left{
-            line-height: 68px;
             line-height: 72px;
             display: -webkit-box;
             display: -ms-flexbox;
             display: flex;
-            width: 53%;
-            margin-left: 13%;
             .el-select{
                 width: 140px;
                 height: 40px;
@@ -447,6 +463,7 @@ export default {
                  width: 275px;
              }
         }
+        }
     }
     .yogo-count{
         width: 100%;
@@ -456,10 +473,10 @@ export default {
         .bg-tupian1{
             background-color: #F6F4EE;
         .yogo-cont-div1{
-            width: 100%;
+            width: 1200px;
             height: 150px;
             text-align: center;
-            display: inline-block;
+            margin: 0 auto;
             margin-top: 20px;
             position: relative;
             .border-left{
@@ -467,16 +484,16 @@ export default {
                 height: 1px;
                 background-color: #dcdcdc;
                 position: absolute;
-                left:22%;
-                top: 45%;
+                left:19%;
+                top: 41%;
             }
             .border-right{
                 width: 20%;
                 height: 1px;
                 background-color: #dcdcdc;
                 position: absolute;
-                right: 22%;
-                top: 45%;
+                right: 19%;
+                top: 41%;
             }
             .nav-text{
                 color: #999999;
@@ -485,7 +502,8 @@ export default {
             }
             h2{
                 color: #2c2c2c;
-                font-size: 24px;
+                font-size: 1.6rem;
+                padding-top: 24px;
                 margin-top: 40px;
                 font-family:Microsoft YaHei;
                 font-weight:bold;
@@ -493,7 +511,7 @@ export default {
                     width: 28px;
                     height: 28px;
                     position: absolute;
-                    left: 44%;
+                    left: 42%;
                 }
             }
         }
@@ -511,7 +529,7 @@ export default {
                 bottom: 80%;
             }
             .yogocontunt{
-                width: 74%;
+                width: 1200px;
                 height: 100%;
                 margin: 0 auto;
                 margin-bottom: 50px;
@@ -640,7 +658,7 @@ export default {
                             border: 1px solid #e2dbc8;
                             background: #e2dbc8;
                             text-align: center;
-                            margin-top:20%;
+                            margin-top:17%;
                             .el-button--text{
                                 color: #2c2c2c;
                                 background: 0 0;
@@ -713,15 +731,15 @@ export default {
             margin: 0 auto;
             margin-top: 10px;
             .yogocontunt2{
-                width: 75%;
+                width: 1200px;
                 height: 100%;
                 margin: 0 auto;
                 margin-bottom: 50px;
                 .yogocontunt2-list{
-                    width: 262px;
-                    height: 270px;
+                    width: 270px;
+                    height: 279px;
                     background-color: #E2DBC8;
-                    margin: 10px;
+                    margin: 14px;
                     float: left;
                     position: relative;
                     margin-bottom: 88px;
@@ -753,26 +771,26 @@ export default {
             }
         }
         .yogo-cont-div4{
-            width: 100%;
+            width: 1200px;
             height: 150px;
             text-align: center;
-            display: inline-block;
+            margin: 0 auto;
             position: relative;
             .border-left{
                 width: 20%;
                 height: 1px;
-                background-color: #dcdcdc;
+                background-color: #F1EDE3;
                 position: absolute;
-                left:22%;
-                top: 45%;
+                left:19%;
+                top: 41%;
             }
             .border-right{
                 width: 20%;
                 height: 1px;
-                background-color: #dcdcdc;
+                background-color: #F1EDE3;
                 position: absolute;
-                right: 22%;
-                top: 45%;
+                right: 19%;
+                top: 41%;
             }
             .nav-text{
                 color: #999999;
@@ -781,15 +799,16 @@ export default {
             }
             h2{
                 color: #2c2c2c;
-                font-size: 24px;
+                font-size: 1.6rem;
                 margin-top: 40px;
                 font-family:Microsoft YaHei;
                 font-weight:bold;
+                padding-top: 24px;
                 img{
                     width: 28px;
                     height: 28px;
                     position: absolute;
-                    left: 44%;
+                    left: 42%;
                 }
             }
         }

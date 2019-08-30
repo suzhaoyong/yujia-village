@@ -209,10 +209,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 @mixin spare() {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-  overflow: hidden;
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 3 !important;
+  overflow: hidden !important;
 }
 @mixin no_select() {
   -moz-user-select: -moz-none;
