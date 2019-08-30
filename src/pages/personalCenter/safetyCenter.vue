@@ -8,7 +8,11 @@
           <div @click="tagsChange(0)" :class="['tab', isTagActive(0)]">修改密码</div>
           <div @click="tagsChange(1)" :class="['tab', isTagActive(1)]">修改绑定手机</div>
           <div @click="tagsChange(2)" :class="['tab', isTagActive(2)]">个人信息</div>
-          <div v-show="parseInt(info.user.identity_auth) !== 1" @click="tagsChange(3)" :class="['tab', isTagActive(3)]">会馆信息</div>
+          <div
+            v-show="parseInt(info.user.identity_auth) == 2  || parseInt(info.user.identity_auth) == 7"
+            @click="tagsChange(3)"
+            :class="['tab', isTagActive(3)]"
+          >会馆信息</div>
         </div>
         <div class="content">
           <div v-show="!success">
@@ -201,7 +205,10 @@
                   ></v-distpicker>
                 </div>
               </div>
-              <div class="teach" v-show="userForm.identity_auth !== 1">
+              <div
+                class="teach"
+                v-show="userForm.identity_auth == 4 || userForm.identity_auth == 7"
+              >
                 <div class="item">
                   <div class="lable">系统认证身份</div>
                   <div class="value"></div>
@@ -302,7 +309,7 @@
 <script>
 import SessionTitle from "./SessionTitle";
 import VDistpicker from "v-distpicker";
-import Cloud from './cloud';
+import Cloud from "./cloud";
 import {
   postUpdateTeacherInfo,
   getTeacherInfo,
@@ -400,12 +407,12 @@ export default {
   methods: {
     onDistpickerSelected(data) {
       const { area, city, province } = data;
-      if(this)
-      this.userForm = Object.assign({}, this.userForm, {
-        area: area.value,
-        city: city.value,
-        province: province.value
-      });
+      if (this)
+        this.userForm = Object.assign({}, this.userForm, {
+          area: area.value,
+          city: city.value,
+          province: province.value
+        });
     },
     changeClub() {},
     resetForm(name) {
@@ -463,13 +470,20 @@ export default {
       const params = Object.assign({}, this.telForm, {
         old_tel: this.info.user.tel
       });
-
+      if (this.checkoutEmpty(params)) return;
       this.$request.post("/personal/updatePassword", params).then(data => {
         this.$message({
           type: "success",
           message: "修改成功"
         });
       });
+    },
+    checkoutEmpty(form) {
+      for (const item of Object.entries(form)) {
+        const [k, v] = item;
+        if (!v) return true;
+      }
+      return false;
     },
     /** 修改密码 */
     updatePassword() {
@@ -479,10 +493,11 @@ export default {
       if (way.methods === "password") {
         delete params.verification_key;
         delete params.verification_code;
+        if (this.checkoutEmpty(params)) return;
       } else {
         delete params.old_password;
+        if (this.checkoutEmpty(params)) return;
       }
-      console.log(params);
       this.$request.post("/personal/updatePassword", params).then(data => {
         this.$message({
           type: "success",
@@ -550,10 +565,20 @@ export default {
     updateTeachUser() {
       // postUpdateTeacherInfo();
       let params = Object.assign({}, this.userForm);
-      postUpdateInfo(params);
+      postUpdateInfo(params).then(data => {
+        this.$message({
+          type: "success",
+          message: "修改成功"
+        });
+      });
     },
     updateClub() {
-      postUpdateClubInfo();
+      postUpdateClubInfo().then(data => {
+        this.$message({
+          type: "success",
+          message: "修改成功"
+        });
+      });
     }
   }
 };

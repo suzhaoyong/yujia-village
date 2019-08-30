@@ -60,8 +60,8 @@ export default {
     initSocialConfig() {
       if (this.info) {
         const params = {
-          url: `http://www.yujiacun.net/index.html?id=${this.info.user.id}`,
-          title: `金酒隐私`,
+          url: `https://sutaojie.github.io/mobile-village/public/frontend/#/login`,
+          title: `瑜伽村`,
           description: `欢迎加盟`
         };
         this.config = Object.assign({}, this.config, params);

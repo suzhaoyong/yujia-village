@@ -196,6 +196,13 @@ export default {
           quan_red,
           quan_zhi
         }
+      },
+      info: {
+        user: {},
+        coupon: [],
+        collect: [],
+        cash: [],
+        cart: []
       }
     };
   },
@@ -233,6 +240,7 @@ export default {
     getPersonal() {
       this.$request("/personal/home").then(data => {
         sessionStorage.setItem("user", JSON.stringify(data));
+        this.info = data
         // window.location.reload();
         // this.$emit('suc', data.user.name)
       });
@@ -252,7 +260,7 @@ export default {
   }
 };
 </script>
-<style scope>
+<style scoped>
 .void-icon {
   border: 1px solid #58b708;
   height: 100%;

@@ -47,7 +47,7 @@
                 <div v-show="username || info.name">
                   <el-menu-item index="personal">现金券与优惠券</el-menu-item>
                   <el-menu-item index="identity">个人信息</el-menu-item>
-                  <el-menu-item index="hell">会馆信息</el-menu-item>
+                  <el-menu-item v-show="parseInt(info.identity_auth) === 7 || parseInt(info.identity_auth) === 2" index="hell">会馆信息</el-menu-item>
                   <el-menu-item index="safety-center">信息与安全中心</el-menu-item>
                   <el-menu-item index="share">分享邀请好友</el-menu-item>
                   <el-menu-item index="out" @click="logout">退出</el-menu-item>

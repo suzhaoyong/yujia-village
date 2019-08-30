@@ -132,6 +132,14 @@ export default {
           });
         },
         allAddCart: () => {
+          const select = this.goods.filter(item => item.select);
+          if (select.length === 0) {
+            this.$message({
+              type: "warning",
+              message: "请先选择商品"
+            });
+            return;
+          }
           const id = this.goods.map(item => item.id);
           const num = this.goods.map(item => item.num);
           postAddUserCart({ id: id, num: num }).then(data => {

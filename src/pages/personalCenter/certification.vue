@@ -182,8 +182,8 @@ export default {
     },
 
     changeFile(file, fileList, name) {
-      this.ruleForm[name] = file;
-      return;
+      // this.ruleForm[name] = file;
+      // return;
       let This = this;
       let reader = new FileReader();
       reader.readAsDataURL(file.raw);
@@ -217,14 +217,29 @@ export default {
           this.step.cur_index += 1;
         },
         finish: () => {
-          this.ruleForm.identity_auth = this.info.identity_auth;
-
-          let formData = new FormData();
-          for (const arr of Object.entries(this.ruleForm)) {
-            const [k, v] = arr;
-            formData.append(k, v);
+          const { img_license, img_work, img_exemption } = this.ruleForm;
+          let identity_auth = 1;
+          if (img_license && img_work) {
+            identity_auth = 7;
+          } else if (img_license) {
+            identity_auth = 4;
+          } else if (img_work) {
+            identity_auth = 2;
+          } else {
+            this.$message({
+              type: "warning",
+              message: "请上传符合自身角色的图片"
+            })
+            return;
           }
-          this.$request.post("/personal/home", formData).then(data => {
+          this.ruleForm.identity_auth = identity_auth;
+
+          // let formData = new FormData();
+          // for (const arr of Object.entries(this.ruleForm)) {
+          //   const [k, v] = arr;
+          //   formData.append(k, v);
+          // }
+          this.$request.post("/personal/home", this.ruleForm).then(data => {
             this.$message({
               type: "success",
               message: "提交成功"

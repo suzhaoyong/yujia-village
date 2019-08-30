@@ -53,7 +53,8 @@
                   <div class="item">
                     <div class="key">所在区域</div>
                     <div class="value">
-                      <el-input type="text" v-model="ruleForm.userZone" placeholder="请输入所在区域"></el-input>
+                      <v-distpicker @selected="selectAddress"></v-distpicker>
+                      <!-- <el-input type="text" v-model="ruleForm.userZone" placeholder="请输入所在区域"></el-input> -->
                     </div>
                   </div>
                   <div class="item">
@@ -76,7 +77,7 @@
               </div>
             </div>
           </div>
-          <div class="time-pay">
+          <div class="time-pay" v-show="false">
             <div class="time">
               <div class="header">
                 <div class="title">送货时间</div>
@@ -107,12 +108,12 @@
                 ></div>-->
                 <div
                   :class="['icon', paymentActive('2')]"
-                  :style="`background-image:url(${icon.alipayIcon})`"
+                  :style="`background-image:url(${ruleForm.payment === '2'?icon.alipayActiveIcon : icon.alipayIcon})`"
                   @click="ruleForm.payment = '2'"
                 ></div>
                 <div
                   :class="['icon', paymentActive('3')]"
-                  :style="`background-image:url(${icon.wechatIcon})`"
+                  :style="`background-image:url(${ruleForm.payment === '3'?icon.wechatActiveIcon:icon.wechatIcon})`"
                   @click="ruleForm.payment = '3'"
                 ></div>
               </div>
@@ -179,9 +180,12 @@
   </div>
 </template>
 <script>
+import VDistpicker from "v-distpicker";
 import backIcon from "@/assets/market/back.png";
 import alipayIcon from "@/assets/order/alipay.png";
 import wechatIcon from "@/assets/order/wechat.png";
+import alipayActiveIcon from "@/assets/order/alipay_active.png";
+import wechatActiveIcon from "@/assets/order/wechat_active.png";
 import bankIcon from "@/assets/order/bank.png";
 import SessionTitle from "./SessionTitle";
 import {
@@ -195,7 +199,8 @@ import {
 } from "@/api/market";
 export default {
   components: {
-    SessionTitle
+    SessionTitle,
+    VDistpicker
   },
   data() {
     return {
@@ -203,7 +208,9 @@ export default {
       icon: {
         backIcon,
         alipayIcon,
+        alipayActiveIcon,
         wechatIcon,
+        wechatActiveIcon,
         bankIcon
       },
       goods: [],
@@ -265,6 +272,16 @@ export default {
     });
   },
   methods: {
+    selectAddress(data) {
+      const { area, city, province } = data;
+      let params = {
+        province: province.value,
+        city: city.value,
+        area: area.value
+      };
+      let userZone = `${params.province}${params.city}${params.area}`;
+      this.ruleForm = Object.assign({}, this.ruleForm, { userZone });
+    },
     back() {
       this.$router.go(-1);
     },
@@ -382,6 +399,10 @@ export default {
 .order-box >>> .el-input__inner {
   height: 30px !important;
 }
+.order-box >>> .distpicker-address-wrapper select {
+  height: 30px;
+  margin-right: 10px;
+}
 </style>
 <style lang="scss" scoped>
 .pay-way {
@@ -432,7 +453,7 @@ img {
       justify-content: space-between;
       margin-bottom: 0.75rem;
       .delivery {
-        width: 44rem;
+        width: 100%;
         box-shadow: 0rem 0.05rem 0.1rem #ccc;
         // height: 23.85rem;
         border: 1px solid #ccc;
@@ -457,9 +478,10 @@ img {
           padding-bottom: 3.2rem;
           .personal {
             flex-shrink: 0;
-            flex-basis: 50%;
+            flex-basis: 40%;
             display: flex;
             flex-direction: column;
+            justify-content: flex-end;
             align-items: center;
             .icon-name {
               padding-bottom: 4.3rem;
@@ -508,7 +530,7 @@ img {
           }
           .new-deliviery {
             flex-shrink: 0;
-            flex-basis: 50%;
+            flex-basis: 60%;
             border-left: 1px solid #dcdcdc;
             .form {
               padding-bottom: 1.75rem;
@@ -519,6 +541,7 @@ img {
                   width: 6rem;
                   text-align: right;
                   padding-right: 1rem;
+                  flex-shrink: 0;
                 }
                 .value {
                   .input {
@@ -630,7 +653,7 @@ img {
               margin: 0 0.4rem;
               background-size: 100% 100%;
               &.active {
-                border: 1px solid #22bbbb;
+                // border: 1px solid #22bbbb;
               }
             }
           }

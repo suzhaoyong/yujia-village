@@ -122,6 +122,16 @@ const router = new Router({
           component: () => import('@/pages/goods/order')
         },
         {
+          path: 'recode',
+          name: 'recode',
+          component: () => import('@/pages/goods/recode')
+        },
+        {
+          path: 'payway',
+          name: 'payway',
+          component: () => import('@/pages/goods/payway')
+        },
+        {
           path: 'shop-car/:id',
           name: 'shopCar',
           component: () => import('@/pages/goods/shopcar')

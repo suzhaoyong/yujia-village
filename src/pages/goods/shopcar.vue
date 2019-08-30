@@ -181,6 +181,13 @@ export default {
       const select = this.goods.filter(item => item.select);
       const id = select.map(item => item.id);
       const num = select.map(item => item.num);
+      if (select.length === 0) {
+        this.$message({
+          type: "warning",
+          message: "请先选择商品"
+        });
+        return;
+      }
       postUserOrder({ id, num }).then(data => {
         this.$router.push({
           name: "order",

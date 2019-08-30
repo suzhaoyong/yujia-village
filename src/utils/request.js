@@ -70,17 +70,23 @@ function handleResponeseErr(err) {
     } else {
       Bus.$emit('login', true)
       sessionStorage.removeItem('user')
+      sessionStorage.removeItem('access')
     }
 
   } else if (status === 404) {
     message = '接口不存在';
   } else if (status >= 400 && status < 500) {
     message = data.msg
-  } else if (status > 500) {
+  } else if (status >= 500) {
     message = '服务器错误';
+    if (data.url == 'api/auth/refresh') {
+      Bus.$emit('login', true)
+      sessionStorage.removeItem('user')
+      sessionStorage.removeItem('access')
+    }
   }
-  if (data.message) {
-    message = data.message;
+  if (data.msg) {
+    message = data.msg;
   }
 
   // 手动阻止（未配置接口域名）
