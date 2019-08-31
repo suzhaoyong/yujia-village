@@ -90,7 +90,7 @@
                             <div class="border-right"></div>
                        </div>
                        <div class="yogo-cont-div3">
-                           <div class="yogocontunt2">
+                           <div class="yogocontunt2" v-if="this.yogolist.length > 0">
                                <div class="yogocontunt2-list" v-for="(item, index) in yogolist.slice((currentPage-1)*pagesize,currentPage*pagesize)" :key="index" @mouseenter="onMouseOver(index)">
                                     <figure class="test5">
                                         <img :src="item.path" class="yogocontunt2-img"/>
@@ -120,6 +120,12 @@
                                 </el-pagination>
                             </div>
                            </div>
+                           <div class="Default-page3" v-else>
+                                <div class="Default-main3">
+                                <img src="../assets/default.png"/>
+                                <span class="page-span3">暂无数据</span>
+                                </div>
+                            </div>
                        </div>
                        </el-col>
                        </el-col>
@@ -834,6 +840,29 @@ export default {
                         background-color: #CCE198;
                         color: #fff;
                     }
+                }
+            }
+            .Default-page3{
+                width: 100%;
+                height: 600px;
+                margin: 0 auto;
+                text-align: center;
+                line-height: 600px;
+                background-color: #F0ECE2;
+                .Default-main3{
+                    width: 1200px;
+                    height: 100%;
+                    margin: 0 auto;
+                img{
+                    width: 500px;
+                    height: 300px;
+                }
+                .page-span3{
+                    font-size:22px;
+                    font-family:PingFang SC;
+                    font-weight:500;
+                    color: #999;
+                }
                 }
             }
         }

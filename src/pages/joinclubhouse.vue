@@ -7,7 +7,7 @@
                     <div class="bg_img">
                         <img :src="banner" alt />
                         <div class="banner_button">
-                            <el-button type="text" class="butt">申请加盟</el-button>
+                            <el-button type="text" class="butt" @click="goto()">申请加盟</el-button>
                         </div>
                     </div>
                 </template>
@@ -58,13 +58,23 @@
                          <div class="border-right"></div>
                     </div>
                     <div class="joinclub-cont-div3">
-                       <div class="clubhouse2">
+                       <div class="clubhouse2" v-if="this.joinlist.length > 0">
                             <div class="clubhouse2-list" v-for="(item, index) in joinlist.slice((currentPage-1)*pagesize,currentPage*pagesize)" :key="index" @mouseenter="onMouseOver(index)" @click="selectItem(item)">
-                                <img class="image" :src="item.path">
-                                <p class="p1">{{item.club_name}}</p>
-                                <p class="p2">{{item.club_address}}</p>
+                                <!-- <img class="image" :src="item.path"> -->
+                                <!-- <p class="p1">{{item.club_name}}</p> -->
+                                 <!-- <p class="p2">{{item.club_address}}</p> -->
                                 <!-- <div class="kong" v-show="index == ishow"><span v-html="item.content">{{item.content}}</span></div> -->
-                                <div class="kong"><span v-html="item.content">{{item.content}}</span></div>     
+                                <!-- <div class="kong"><span v-html="item.content">{{item.content}}</span></div> -->
+                                <figure class="test6">
+                                    <img :src="item.path" class="yogocontunt2-img"/>
+                                    <p class="p1">{{item.club_name}}</p>
+                                    <p class="p2">{{item.club_address}}</p>
+                                    <figcaption>
+                                        <div class="telimg">
+                                            <span v-html="item.content" class="telpp">{{item.content}}</span>
+                                        </div>
+                                    </figcaption>
+                                </figure>
                             </div>
                             <div class="block">
                                 <el-pagination
@@ -79,6 +89,12 @@
                                 </el-pagination>
                             </div>
                        </div>
+                       <div class="Default-page4" v-else>
+                            <div class="Default-main4">
+                            <img src="../assets/default.png"/>
+                            <span class="page-span4">暂无会馆数据</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -87,6 +103,7 @@
 </template>
 <script>
 import Banner from "../components/banner";
+import Bus from "@/utils/Bus";
 export default {
     inject: ["reload"],
     components:{
@@ -148,6 +165,9 @@ export default {
             }
         });
       },
+    goto() {
+      Bus.$emit("login", true);
+    },
       onMouseOver(index){
           this.ishow = index;
       },
@@ -161,6 +181,64 @@ export default {
 };
 </script>
 <style lang="scss" scope>
+.test6{
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: all 1s ease;
+    }
+.test6 .yogocontunt2-img{
+    width: 100%;
+    height: 224px;
+    }
+.test6 figcaption{
+    width: 100%;
+    height: 224px; 
+    position: absolute;
+    top: 0%;
+    }
+.test6 figcaption .telimg{
+    width: 100%;
+    margin: 0 auto;
+    bottom: 0;
+    opacity: 0;
+}
+.test6 figcaption .telimg .telpp{
+    opacity: 0;
+    text-align: center;
+}
+.test6:hover .yogocontunt2-img{
+    width:100%;
+    height:224px;
+    background-color: #8fc31f;
+    opacity: 1;
+    transition: transform 0.5s ease-in;
+    transition: all 1s ease;
+}
+.test6:hover figcaption .telimg{
+    width: 100%;
+    margin: 0 auto;
+    top: 30%;
+    opacity: .9;
+    background-color: #8fc31f;
+    transition: transform 0.5s ease-in;
+    transition: all 1s ease;
+}
+.test6:hover figcaption .telimg .telpp{
+    opacity: 1;
+    font-size:14px;
+    font-family:Microsoft YaHei;
+    font-weight:400;
+    color: #fff;
+    margin-left: 7px;
+    transition: transform 0.5s ease-in;
+    transition: all 1s ease;
+}
+.test6:hover img{
+    opacity: 0.1;
+    transition: transform 0.5s ease-in;
+    transition: all 1s ease;
+    }
 .bg_img {
   width: 100%;
   height: 100%;
@@ -179,7 +257,7 @@ export default {
     right: 44%;
     text-align: center;
     .butt{
-      font-size:5vh;
+      font-size:1.2vw;
       font-family:Microsoft YaHei;
       font-weight:bold;
       color: #FFFFFF;
@@ -316,10 +394,10 @@ export default {
                     margin-bottom: 20px;
                     position: relative;
                     cursor:pointer;
-                    .image{
-                        width: 100%;
-                        height: 224px;
-                    }
+                    // .image{
+                    //     width: 100%;
+                    //     height: 224px;
+                    // }
                     .p1{
                         text-align: center;
                         font-size: 14px;
@@ -381,6 +459,29 @@ export default {
                         color: #fff;
                     }
                     
+                }
+            }
+            .Default-page4{
+                width: 100%;
+                height: 600px;
+                margin: 0 auto;
+                text-align: center;
+                line-height: 600px;
+                background-color: #F0ECE2;
+                .Default-main4{
+                    width: 1200px;
+                    height: 100%;
+                    margin: 0 auto;
+                img{
+                    width: 500px;
+                    height: 300px;
+                }
+                .page-span4{
+                    font-size:22px;
+                    font-family:PingFang SC;
+                    font-weight:500;
+                    color: #999;
+                }
                 }
             }
         }

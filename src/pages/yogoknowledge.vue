@@ -14,7 +14,7 @@
                          <img :src="banner" alt />
                         </div>
                     </template>
-                    <div class="knowledge-count">
+                    <div class="knowledge-count" v-if="this.listdatas.length > 0">
                         <div class="knowledge-count-div1" v-for="(item,index) in listdatas.slice((currentPage-1)*pagesize,currentPage*pagesize)" :key="index">
                             <div class="count-img">
                                 <img :src="item.icon_url"/>
@@ -51,6 +51,12 @@
                             </el-pagination>
                         </div>
                     </div>
+                    <div class="Default-page" v-else>
+                        <div class="Default-main">
+                        <img src="../assets/default.png"/>
+                        <span class="page-span">暂无数据~~请选择其他类别</span>
+                        </div>
+                    </div>
                 </div>
             </el-col>
         </el-row>
@@ -84,13 +90,15 @@ export default {
             _this.knowledgeList = res.data;
             _this.banner = res.banner;
             _this.navLists = res.data;
-            _this.knowledgeList.map(item =>{ 
-                if(item.data != null){
-                    for(var i=0;i<item.data.length;i++){
-                    _this.listdatas.push(item.data[i]);
-                  } 
-                }
-            });
+            // _this.knowledgeList.map(item =>{ 
+            //     if(item.data != null){
+            //         for(var i=0;i<item.data.length;i++){
+            //         _this.listdatas.push(item.data[i]);
+            //       } 
+            //     // _this.listdatas = res.data[0];
+            //     }
+            // });
+            _this.listdatas = res.data[0].data;
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -111,6 +119,15 @@ export default {
     },
     reds:function(index){
        this.changeRed = index;
+       for(var i=0;i<this.knowledgeList.length;i++){
+           if(index==i){
+               if(this.knowledgeList[i].data==undefined){
+                  this.listdatas=[];
+               }else{
+                  this.listdatas=this.knowledgeList[i].data;
+               }
+           }
+       }
     },
     selectItem(item){
         this.$router.push({
@@ -496,6 +513,29 @@ export default {
                 color: #303133;
                 font-weight: 700;
             }
+        }
+    }
+    .Default-page{
+        width: 100%;
+        height: 600px;
+        margin: 0 auto;
+        text-align: center;
+        line-height: 600px;
+        background-color: #F1F1F1;
+        .Default-main{
+            width: 1200px;
+            height: 100%;
+            margin: 0 auto;
+        img{
+            width: 500px;
+            height: 300px;
+        }
+        .page-span{
+            font-size:22px;
+            font-family:PingFang SC;
+            font-weight:500;
+            color: #999;
+        }
         }
     }
 }

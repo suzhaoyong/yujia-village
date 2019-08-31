@@ -10,7 +10,7 @@
                 </div>
                 <div class="joinclubdetails-cont-div2">
                     <el-col>
-                    <div class="clubhouse">
+                    <div class="clubhouse" v-if="this.swiperList.length > 0">
                         <swiper :options="swiperOption" style="height:530px">
                             <swiper-slide v-for="(page,index) of pages" :key="index">
                                 <div class="clubhouse-swiper" v-for="item of page" :key="item.id" @click="clubhouseItem(item)">
@@ -21,13 +21,19 @@
                                         <p class="name-p1">{{item.theme}}<span class="name-span">{{item.name}}</span></p>
                                         <p class="name-p2">￥{{item.price}}</p>
                                     </div>
-                                    <el-rate v-model="item.diff"></el-rate>
+                                    <el-rate :value="item.diff" disabled disabled-void-color="#c0c4cc" :colors="['#58B708']"></el-rate>
                                     <p class="name-p3">电话:{{item.tel}}</p>
                                 </div>
                             </swiper-slide>
                         </swiper>
                         <div class="swiper-button-prev1" slot="button-prev"></div>
                         <div class="swiper-button-next1" slot="button-next"></div>
+                    </div>
+                     <div class="Default-page5" v-else>
+                        <div class="Default-main5">
+                        <img src="../assets/default.png"/>
+                        <span class="page-span5">暂无会馆课程数据</span>
+                        </div>
                     </div>
                     </el-col>
                 </div>
@@ -65,7 +71,7 @@
                     <div class="border-left"></div>
                     <div class="border-right"></div>
                 </div>
-                <div class="joinclubdetails-cont-div5">
+                <div class="joinclubdetails-cont-div5" v-if="this.famousteach.length > 0">
                     <img src="../assets/image52.png" class="bg-image5"/>
                     <img src="../assets/image53.png" class="bg-image6"/>
                     <img src="../assets/image54.png" class="bg-image7"/>
@@ -82,6 +88,12 @@
                         <div class="swiper-pagination" slot="pagination"></div>
                     </swiper>
                     <img src="../assets/image55.png" class="bg-image8"/>
+                </div>
+                 <div class="Default-page6" v-else>
+                    <div class="Default-main6">
+                    <img src="../assets/default.png"/>
+                    <span class="page-span6">暂无馆内人员数据</span>
+                    </div>
                 </div>
             </div>
         </el-col>
@@ -184,12 +196,6 @@ export default {
 };
 </script>
 <style lang="scss" scope>
-.el-rate__icon{
-    color: #58B708 !important;
-}
-.el-rate__icon.hover{
-    color: #58B708 !important;
-}
 .swiper-pagination-bullet-active {
     opacity: 1;
     background: #2c2c2c;
@@ -377,6 +383,29 @@ export default {
                     background-size: 32px 35px;
                     background-color: #fff;
                     background-image: url('../assets/right.png');
+            }
+        }
+        .Default-page5{
+            width: 100%;
+            height: 530px;
+            margin: 0 auto;
+            text-align: center;
+            line-height: 530px;
+            background-color: #fff;
+            .Default-main5{
+                width: 1200px;
+                height: 100%;
+                margin: 0 auto;
+            img{
+                width: 500px;
+                height: 300px;
+            }
+            .page-span5{
+                font-size:22px;
+                font-family:PingFang SC;
+                font-weight:500;
+                color: #999;
+            }
             }
         }
     }
@@ -651,6 +680,29 @@ export default {
                 }
             }
          }
+        }
+    }
+    .Default-page6{
+        width: 100%;
+        height: 660px;
+        margin: 0 auto;
+        text-align: center;
+        line-height: 660px;
+        background-color: #F7F3E9;
+        .Default-main6{
+            width: 1200px;
+            height: 100%;
+            margin: 0 auto;
+        img{
+            width: 500px;
+            height: 300px;
+        }
+        .page-span6{
+            font-size:22px;
+            font-family:PingFang SC;
+            font-weight:500;
+            color: #999;
+        }
         }
     }
 }
