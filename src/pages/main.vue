@@ -27,7 +27,8 @@
                                 </div>
                                 <div class="carousel-text">
                                     <h4>{{item.theme}}<span>{{item.name}}</span></h4>
-                                    <el-rate v-model="item.diff"></el-rate>
+                                    <!-- <el-rate v-model="item.diff" ></el-rate> -->
+                                    <el-rate :colors="['#58B708','#58B708','#58B708']" disabled :value="item.diff"></el-rate>
                                 </div>
                                 <div class="carousel-detals">
                                     <span class="span">{{item.intro}}</span>

@@ -46,6 +46,25 @@
                 class="form_input-tips"
               >{{accountErrorRule.password.show?accountErrorRule.password.msg:''}}</div>
             </div>
+            <div class="form_input">
+              <div class="item" style="align-items: flex-end;">
+                <div class="item-box left">
+                  <div class="item-box-title">请在下方填写图形验证码</div>
+                  <div class="item-box-code-img">
+                    <img :src="verification.code_img" alt />
+                    <div class="change-code" @click="getVerificationCode">看不清？摇一摇</div>
+                  </div>
+                  <div class="item-box-input">
+                    <input
+                      type="text"
+                      @blur="checkEmtypeInputBox('captcha')"
+                      v-model="accountRuleForm.captcha"
+                    />
+                  </div>
+                  <div class="item-box-tips">{{isError('captcha')}}</div>
+                </div>
+              </div>
+            </div>
             <div class="form_btn">
               <button @click.stop="submitForm('account')" :disabled="isPostting">登录</button>
             </div>
@@ -109,11 +128,13 @@ export default {
       },
       accountErrorRule: {
         tel: { show: false, msg: "请输入正确的手机号" },
-        password: { show: false, msg: "请输入密码" }
+        password: { show: false, msg: "请输入正确的密码" },
+        captcha: { show: false, msg: "请输入正确的验证码" }
       },
       accountRuleForm: {
         tel: "",
-        password: ""
+        password: "",
+        captcha: ""
       },
       messageErrorRule: {
         phone: { show: false, msg: "请输入正确的手机号" },
@@ -124,8 +145,25 @@ export default {
         code: ""
       },
       loginWay: "account",
-      isPostting: false
+      isPostting: false,
+      verification: {
+        code_img: "",
+        code_key: ""
+      }
     };
+  },
+  computed: {
+    isError() {
+      return function(item) {
+        if (this.accountErrorRule[item].show) {
+          return this.accountErrorRule[item].msg;
+        }
+        return "";
+      };
+    }
+  },
+  mounted() {
+    this.getVerificationCode()
   },
   methods: {
     submitForm(name) {
@@ -134,6 +172,23 @@ export default {
         this.postAuthLogin();
       } else {
       }
+    },
+    /* 图形验证码 */
+    getVerificationCode() {
+      this.$request("/verificationCode").then(data => {
+        const { img, key } = data;
+        this.verification.code_img = img;
+        this.accountRuleForm.key = key;
+      });
+    },
+    /* 图形验证码校验 */
+    postVerificationCode() {
+      const { captcha, key } = this.accountRuleForm;
+      captcha &&
+        key &&
+        this.$request
+          .post("/verificationCode", { captcha, key })
+          .then(data => {});
     },
     /** 个人信息 */
     getPersonal() {
@@ -168,7 +223,7 @@ export default {
       let _form = this[`${name}RuleForm`];
       let is_pass = true;
       for (let key of Object.keys(_form)) {
-        if (this.accountErrorRule[key].show) {
+        if (this.accountErrorRule[key] && this.accountErrorRule[key].show) {
           is_pass = false;
         }
         if (_form[key] === "") {
@@ -246,7 +301,8 @@ export default {
       let { PhoneUtils, StringUtils } = Exp();
       let _check_item = {
         tel: PhoneUtils.isPhoneNum,
-        password: StringUtils.isSpecialCharacterAlphanumeric
+        password: StringUtils.isSpecialCharacterAlphanumeric,
+        captcha: (item) => true
       };
       let _input_value = this[`${this.loginWay}RuleForm`][item];
       let _is_pass = _check_item[item] && _check_item[item](_input_value);
@@ -258,6 +314,10 @@ export default {
 <style lang="scss" scoped>
 * {
   box-sizing: border-box !important;
+}
+img{
+  width: 100%;
+  height: 100%;
 }
 input {
   outline: none !important;
@@ -285,7 +345,7 @@ input:focus {
     display: flex;
     border-radius: 0.5vw;
     overflow: hidden;
-    height: 21rem;
+    // height: 21rem;
     &-icon {
       width: 14.1rem;
       background: #f7faf2;
@@ -336,6 +396,118 @@ input:focus {
             font-family: MicrosoftYaHei;
             font-weight: 400;
             color: rgba(206, 85, 26, 1);
+          }
+          .item {
+            display: flex;
+            padding: 0.1rem 0;
+            &-box {
+              position: relative;
+              // border: 1px solid red;
+              flex-grow: 1;
+              font-size: 12px;
+              font-family: MicrosoftYaHei;
+              font-weight: 400;
+              color: rgba(44, 44, 44, 1);
+              &.left {
+                flex-basis: 50%;
+              }
+              &.right {
+                flex-basis: 50%;
+              }
+              &-title {
+                padding-left: 15px;
+              }
+              &-code-img {
+                height: 2.35rem;
+                background: #fff;
+                width: 9.45rem;
+                // margin: 0 auto;
+                position: relative;
+                .change-code {
+                  position: absolute;
+                  padding-left: 10px;
+                  color: #6bc839;
+                  left: 100%;
+                  top: 50%;
+                  transform: translateY(-50%);
+                  text-decoration: underline;
+                  width: 10em;
+                  cursor: default;
+                }
+                input{
+                  width: auto;
+                }
+              }
+              &-input {
+                width: 10rem;
+                padding: 5px 10px;
+                position: relative;
+                input {
+                  width: 100%;
+                  height: 2rem;
+                  background: #e7f0da;
+                  opacity: 1;
+                  border: 1px solid #ffffff;
+                  border-radius: 0.3rem;
+                  padding-left: 5px;
+                }
+                .get_code {
+                  cursor: pointer;
+                  user-select: none;
+                  width: 4rem;
+                  height: 1.6rem;
+                  margin-right: 1.2rem;
+                  border-radius: 5px;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  background: #fff;
+                  font-size: 10px;
+                  font-family: MicrosoftYaHei;
+                  font-weight: 400;
+                  color: rgba(44, 44, 44, 1);
+                  position: absolute;
+                  right: 0;
+                  top: 50%;
+                  transform: translateY(-50%);
+                }
+              }
+              &-tips {
+                padding-left: 15px;
+                font-size: 0.6rem;
+                font-family: MicrosoftYaHei;
+                font-weight: 400;
+                color: rgba(206, 85, 26, 1);
+                height: 1.2rem;
+              }
+              &-btn {
+                &:hover {
+                  border: none;
+                  background: #efefef;
+                }
+                position: absolute;
+                right: 0;
+                bottom: 0;
+                transform: translateY(-50%);
+                outline: none;
+                border: none;
+                width: 100%;
+                width: 6.15rem;
+                height: 2.15rem;
+                font-family: MicrosoftYaHei;
+                font-size: 0.4rem;
+                font-weight: normal;
+                font-stretch: normal;
+                // line-height: 0.2rem;
+                letter-spacing: 0rem;
+                color: #2c2c2c;
+                background: #fff;
+                border-radius: 1.3rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              }
+            }
           }
           input {
             box-shadow: none;
