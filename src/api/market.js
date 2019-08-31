@@ -153,19 +153,32 @@ export function postGoodOrder(args = {}) {
     id: "", // 购物车列表编号
     lid: "", // 商品副列表 编号
     num: "",
-    sendTime: "", // 送货时间 1-送货时间不限 2-仅周一周五送货 3-仅节假日/周末送货
     userName: "",
     userTel: "",
-    userZone: "", // 地址省市区
+    province: "",
+    area: "",
+    city: "",
     userAddress: "",
     userMessage: "",
     status: "", // 0不是新增地址 1是新增地址
     addressId: "",
-    payment: "", // 付款方式 1-未支付 2-支付宝 3-微信
-
+    cashId: "", //现金券编号
+    cashMoney: "",  //现金券使用金额
+    couponId: "", //优惠券编号
+    fraction: "", //使用积分
   }
   params = Object.assign({}, params, args)
   return request.post(`/goodOrder`, params)
+}
+/** 订单金币支付 */
+export function postGoldPay(args = {}) {
+  let params = {
+    out_trade_no: "", // 统一订单编号
+    password: "", // 密码
+    total_fee: "", // 总价格
+  }
+  params = Object.assign({}, params, args)
+  return request.post(`/goldPay`, params)
 }
 
 /** 支付宝二维码展示 */

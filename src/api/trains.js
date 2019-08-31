@@ -1,8 +1,12 @@
 import request from '@/utils/request';
 
 /* 培训信息列表 */
-export function getTrains() {
-  return request('/trains')
+export function getTrains(page = 1) {
+  return request(`/trains?page=${page}`)
+}
+/* 最新最热 */
+export function getOrderByTrains(page = 1) {
+  return request(`/orderByTrains?page=${page}`)
 }
 
 /** 培训信息筛选 */

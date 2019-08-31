@@ -52,7 +52,7 @@ export default {
       this.$router.push(`/personal/${name}`);
     },
     withdraw() {
-      this.$router.push("/personal/certification");
+      this.$router.push("/personal/identity");
     }
   }
 };

@@ -173,9 +173,9 @@
                 <div class="lable">性别</div>
                 <div class="value">
                   <el-radio-group v-model="userForm.sex">
-                    <el-radio label="2">男</el-radio>
-                    <el-radio label="1">女</el-radio>
-                    <el-radio label="3">保密</el-radio>
+                    <el-radio :label="2">男</el-radio>
+                    <el-radio :label="1">女</el-radio>
+                    <el-radio :label="3">保密</el-radio>
                   </el-radio-group>
                 </div>
               </div>

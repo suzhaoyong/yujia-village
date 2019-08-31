@@ -111,7 +111,7 @@
               <div class="fruit-list">
                 <div
                   class="fruit-list-li"
-                  v-for="(item,index) in fruitlist"
+                  v-for="(item,index) in fruit.data"
                   @click="selectItem(item)"
                   :key="index"
                 >
@@ -125,13 +125,19 @@
                       <span class="span">{{item.views}}</span>
                     </div>
                   </div>
-                  <el-rate disabled :value="item.diff"></el-rate>
+                  <el-rate :colors="['#58B708','#58B708','#58B708']" disabled :value="item.diff"></el-rate>
                   <div class="fruit-price">￥{{item.price}}</div>
                   <div class="fruit-detail">{{item.address}}</div>
                 </div>
               </div>
-              <div class="market_often-btn">
-                <div class="goods-detail-btn" @click="goMarketDetail">more</div>
+              <div class="pages">
+                <el-pagination
+                  background
+                  layout="prev, pager, next, jumper"
+                  :page-size="12"
+                  @current-change="changePage"
+                  :total="fruit.total"
+                ></el-pagination>
               </div>
             </div>
             <div class="cultivate-count-div2">
@@ -159,7 +165,7 @@
                     <span class="span">{{item.num}}</span>
                   </div>
                 </div>
-                <el-rate disabled :value="item.diff"></el-rate>
+                <el-rate :colors="['#58B708','#58B708','#58B708']" disabled :value="item.diff"></el-rate>
                 <div class="fruit-price">￥{{item.price}}</div>
                 <div class="fruit-detail">{{item.address}}</div>
               </div>
@@ -172,7 +178,12 @@
               <div class="border-left"></div>
               <div class="border-right"></div>
             </div>
-            <div class="cultivate-count-div5" v-for="(item, index) in newList" :key="index">
+            <div
+              :class="['cultivate-count-div5',{left: index%2 == 1}]"
+              v-for="(item, index) in newList"
+              @click="selectItem(item)"
+              :key="index"
+            >
               <img :src="item.teacher_img" />
               <div class="bian">
                 <div class="div5-list">
@@ -180,32 +191,17 @@
                     <h4>{{item.theme}}</h4>
                     <div class="list-eye">￥{{item.price}}</div>
                   </div>
-                  <el-rate :value="item.diff"></el-rate>
-                  <div class="li-text2">课 时：12课时</div>
+                  <el-rate :value="item.diff" :colors="['#58B708','#58B708','#58B708']" disabled></el-rate>
+                  <!-- <div class="li-text2">适用人群：{{crowdList(item.crowd)}}</div> -->
+                  <div class="li-text2">
+                    适用人群：
+                    <pre>{{item.crowd}}</pre>
+                  </div>
                   <div class="li-text3">开课时间：{{item.startTime}}/{{item.endTime}}</div>
                   <div class="li-text4">地 址：{{item.address}}</div>
-                  <img class="li-text5" src="../../assets/image-jiao.png" />
                 </div>
+                <img class="border-img" src="../../assets/image47.png" />
               </div>
-              <div class="border-bo"></div>
-              <img class="border-img" src="../../assets/image47.png" />
-            </div>
-            <div class="cultivate-count-div6" v-show="false">
-              <img src="../../assets/image23.png" />
-              <div class="bian"></div>
-              <div class="div5-list">
-                <div class="li-text">
-                  <h4>维密普拉提瑜伽</h4>
-                  <div class="list-eye">￥4800</div>
-                </div>
-                <el-rate v-model="rate"></el-rate>
-                <div class="li-text2">课 时：12课时</div>
-                <div class="li-text3">开课时间：2019.05.20-20.19-0526</div>
-                <div class="li-text4">地 址：四川省成都市锦江区锦东路668号</div>
-                <img class="li-text5" src="../../assets/image-jiao.png" />
-              </div>
-              <div class="border-bo"></div>
-              <img class="border-img" src="../../assets/image47.png" />
             </div>
           </div>
         </div>
@@ -216,7 +212,12 @@
 <script>
 import Banner from "@/components/banner";
 import VDistpicker from "v-distpicker";
-import { getTrains, postTrains, getTrainsById } from "@/api/trains";
+import {
+  getTrains,
+  getOrderByTrains,
+  postTrains,
+  getTrainsById
+} from "@/api/trains";
 export default {
   components: {
     Banner,
@@ -268,25 +269,41 @@ export default {
         }
       ],
       selectTags: [],
-      fruitlist: [],
+      fruit: {
+        data: []
+      },
       fruitclasslist: [],
       newList: []
     };
   },
+  computed: {
+    crowdList() {
+      return item => item.split("●");
+    }
+  },
   mounted() {
-    getTrains().then(data => {
-      const { all, hot, course_types, banner } = data;
-      this.fruitlist = all;
-      this.fruitclasslist = hot;
-      this.newList = data.new;
-      if (course_types.length > 8) {
-        this.classfiy = course_types.slice(0, 8);
-        this.moreClassfiy = course_types.slice(8);
-      }
-      this.banner = banner;
+    this.getTrainsList();
+    getOrderByTrains().then(data => {
+      this.newList = data.new.data;
+      this.fruitclasslist = data.hot.data;
     });
   },
   methods: {
+    getTrainsList(page = 1) {
+      getTrains(page).then(data => {
+        const { all, hot, course_types, banner } = data;
+        this.fruit = all;
+        if (page > 1) return;
+        if (course_types.length > 8) {
+          this.classfiy = course_types.slice(0, 8);
+          this.moreClassfiy = course_types.slice(8);
+        }
+        this.banner = banner;
+      });
+    },
+    changePage(val) {
+      this.getTrainsList(val);
+    },
     onSelected(data) {
       this.province = data.province.value;
       this.city = data.city.value;
@@ -319,7 +336,10 @@ export default {
   }
 };
 </script>
-<style scope>
+<style scoped>
+.cultivate-main >>> .el-rate__icon {
+  font-size: 0.7rem !important;
+}
 .cultivate-main >>> .el-button--text {
   border: none !important;
 }
@@ -329,6 +349,10 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.pages {
+  display: flex;
+  justify-content: center;
+}
 .bg_img {
   width: 100%;
   height: 600px;
@@ -349,11 +373,12 @@ img {
   margin: 0 auto;
   overflow: hidden;
   .cultivate-count {
-    width: 100%;
+    width: 60rem;
     margin: 0 auto;
     margin-top: -150px;
     height: 100%;
-    display: inline-block;
+    padding-bottom: 3rem;
+    // display: inline-block;
     position: relative;
     z-index: 10;
     .cultivate-count-div1 {
@@ -362,7 +387,7 @@ img {
       margin: 0 auto;
       display: inline-block;
       .cultivate1 {
-        width: 90vw;
+        // width: 90vw;
         height: 24.6rem;
         margin: 0 auto;
         background-color: #ffffff;
@@ -544,7 +569,7 @@ img {
         }
       }
       .fruit {
-        width: 75%;
+        width: 100%;
         margin: 0 auto;
         margin-top: 2rem;
         font-family: MicrosoftYaHei;
@@ -553,22 +578,25 @@ img {
         color: #2c2c2c;
       }
       .fruit-list {
-        width: 75%;
-        height: 77rem;
-        overflow: scroll;
+        width: 100%;
+        // height: 77rem;
+        padding-bottom: 2rem;
+        overflow: hidden;
         margin: 0 auto;
         .fruit-list-li {
-          width: 22rem;
-          height: 35.6rem;
+          width: 18rem;
+          height: 28.6rem;
+          // padding-bottom: 1rem;
           background-color: #ffffff;
           box-shadow: 0.1rem 0.2rem 1.3rem 0.1rem rgba(164, 164, 164, 0.39);
           border-radius: 0.3rem;
           float: left;
           margin-left: 1.4rem;
-          margin-top: 2rem;
+          margin-top: 1rem;
+          font-size: 0.7rem;
           .fruit-list-li-img {
             width: 100%;
-            height: 21.7rem;
+            height: 17.7rem;
             img {
               width: 100%;
               height: 100%;
@@ -579,7 +607,7 @@ img {
             justify-content: space-between;
             width: 90%;
             margin: 0 auto;
-            margin-top: 2.5rem;
+            margin-top: 1rem;
             h4 {
               font-size: 1.3rem;
               color: #2c2c2c;
@@ -618,7 +646,7 @@ img {
           .fruit-detail {
             width: 90%;
             margin: 0 auto;
-            margin-top: 2rem;
+            margin-top: 1rem;
           }
         }
       }
@@ -675,21 +703,23 @@ img {
       }
     }
     .cultivate-count-div3 {
-      width: 75%;
+      width: 100%;
       height: 37rem;
       margin: 0 auto;
       .fruit-list-li {
-        width: 22rem;
-        height: 35.6rem;
+        width: 18rem;
+        height: 28.6rem;
+        // padding-bottom: 1rem;
         background-color: #ffffff;
         box-shadow: 0.1rem 0.2rem 1.3rem 0.1rem rgba(164, 164, 164, 0.39);
         border-radius: 0.3rem;
         float: left;
         margin-left: 1.4rem;
-        margin-top: 2rem;
+        margin-top: 1rem;
+        font-size: 0.7rem;
         .fruit-list-li-img {
           width: 100%;
-          height: 21.7rem;
+          height: 17.7rem;
           img {
             width: 100%;
             height: 100%;
@@ -700,7 +730,7 @@ img {
           justify-content: space-between;
           width: 90%;
           margin: 0 auto;
-          margin-top: 2.5rem;
+          margin-top: 1rem;
           h4 {
             font-size: 1.3rem;
             color: #2c2c2c;
@@ -728,7 +758,7 @@ img {
         .fruit-detail {
           width: 90%;
           margin: 0 auto;
-          margin-top: 2rem;
+          margin-top: 1rem;
         }
       }
     }
@@ -771,32 +801,84 @@ img {
         }
       }
     }
+    .cultivate-count-div5.left {
+      justify-content: flex-end;
+      img {
+        order: 3;
+      }
+      .bian {
+        background: linear-gradient(
+          to right,
+          #ffffff 0%,
+          #ffffff 50%,
+          #cce198 50%,
+          #cce198 100%
+        );
+        &::after {
+          left: 0;
+          right: 100%;
+        }
+        .border-img {
+          // left: 0;
+          margin-left: 0;
+          left: -50%;
+        }
+      }
+      .li-text4 {
+        &::after {
+          left: 0;
+          right: 100%;
+          transform: rotate(180deg);
+        }
+      }
+    }
     .cultivate-count-div5 {
-      width: 75%;
+      width: 100%;
       margin: 0 auto;
       height: 26rem;
       display: flex;
+      align-items: flex-end;
       position: relative;
       img {
-        width: 31.2rem;
-        height: 21.7rem;
+        width: 25rem;
+        height: 18rem;
       }
       .bian {
-        width: 15.7rem;
-        height: 17rem;
-        background-color: #eef5dd;
+        width: 22rem;
+        // height: 14rem;
+        padding: 3rem 4rem;
+        // background-color: #cce198;
+        background: linear-gradient(
+          to right,
+          #cce198 0%,
+          #cce198 50%,
+          #ffffff 50%,
+          #ffffff 100%
+        );
+        z-index: 1;
+        position: relative;
         // opacity: 0.33;
-        margin-top: 4.7rem;
+        &::after {
+          display: block;
+          position: absolute;
+          right: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          content: "";
+          width: 1px;
+          height: 11rem;
+          background: #bfbfbf;
+        }
       }
       .div5-list {
-        position: absolute;
-        left: 51%;
-        top: 24%;
+        // position: absolute;
+        // left: 51%;
+        // top: 24%;
         .li-text {
           display: flex;
           justify-content: space-between;
           h4 {
-            font-size: 1.3rem;
+            font-size: 1rem;
             color: #2c2c2c;
           }
           .list-eye {
@@ -805,19 +887,34 @@ img {
           }
         }
         .li-text2 {
-          font-size: 0.9rem;
+          font-size: 0.7rem;
           color: #2c2c2c;
-          margin-top: 2rem;
+          margin-top: 1rem;
+          height: 3.5rem;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
         }
         .li-text3 {
-          font-size: 0.9rem;
+          font-size: 0.7rem;
           color: #2c2c2c;
-          margin-top: 1.8rem;
+          margin-top: 1rem;
         }
         .li-text4 {
-          font-size: 0.9rem;
+          font-size: 0.7rem;
           color: #2c2c2c;
-          margin-top: 0.5rem;
+          margin-top: 0.2rem;
+          position: relative;
+          &::after {
+            position: absolute;
+            content: "";
+            height: 1.5rem;
+            width: 0.8rem;
+            bottom: -2em;
+            right: 0;
+            z-index: 112;
+            background-image: url("../../assets/image-jiao.png");
+          }
         }
         .li-text5 {
           width: 1rem;
@@ -827,24 +924,19 @@ img {
           bottom: -18%;
         }
       }
-      .border-bo {
-        background-color: #bfbfbf;
-        width: 0.1rem;
-        height: 13.9rem;
-        position: absolute;
-        right: 20%;
-        top: 20%;
-      }
       .border-img {
         width: 5.1rem;
         height: 5.1rem;
+        margin-left: 2.5rem;
         position: absolute;
-        right: 10%;
-        top: 34%;
+        top: 50%;
+        left: 100%;
+        transform: translateY(-50%);
+        right: 0;
       }
     }
     .cultivate-count-div6 {
-      width: 75%;
+      width: 100%;
       margin: 0 auto;
       height: 26rem;
       display: flex;
@@ -861,9 +953,9 @@ img {
         margin-top: 4.7rem;
       }
       .div5-list {
-        position: absolute;
-        left: 51%;
-        top: 24%;
+        // position: absolute;
+        // left: 51%;
+        // top: 24%;
         .li-text {
           display: flex;
           justify-content: space-between;

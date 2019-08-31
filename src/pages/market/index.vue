@@ -167,6 +167,8 @@
 <script>
 import SessionTitle from "./SessionTitle";
 import { getGoodRecomment } from "@/api/market";
+import Bus from "@/utils/Bus";
+import alipayActiveIcon from '@/assets/order/alipay_active.png';
 export default {
   components: {
     SessionTitle
@@ -190,6 +192,12 @@ export default {
       recommend_list: [],
       type_list: []
     };
+  },
+  computed: {
+    info() {
+      const user = sessionStorage.getItem("user");
+      return user && JSON.parse(user).user;
+    }
   },
   mounted() {
     getGoodRecomment().then(data => {
@@ -236,6 +244,10 @@ export default {
     },
     goto(name, item) {
       let id = item || "all";
+      if (name !== "marketDetail" && !this.info) {
+        Bus.$emit("login", true);
+        return;
+      }
       this.$router.push({
         name,
         params: {

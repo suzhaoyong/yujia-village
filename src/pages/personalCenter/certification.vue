@@ -45,7 +45,7 @@
         <div class="card">
           <div class="title-tips">
             <div class="title">免责声明</div>
-            <div class="download">下载模版</div>
+            <div class="download"><a style="color:#2c2c2c;" href="http://api.aomengyujia.com/api/personal/download/template" download>下载模版</a></div>
           </div>
           <div class="upload-box">
             <el-upload
@@ -65,7 +65,7 @@
             </el-dialog>
           </div>
         </div>
-        <div class="card">
+        <div class="card" v-show="isShow('7') || isShow('4')">
           <div class="title-tips">
             <div class="title">工作证明</div>
             <div class="tips">请上传最新的工作证明(仅教练需要提交)</div>
@@ -88,7 +88,7 @@
             </el-dialog>
           </div>
         </div>
-        <div class="card">
+        <div class="card" v-show="isShow('7') || isShow('2')">
           <div class="title-tips">
             <div class="title">营业执照</div>
             <div class="tips">请上传最新的营业执照(仅馆主需要提交)</div>
@@ -132,6 +132,7 @@ import VDistpicker from "v-distpicker";
 import { postUserInfo } from "@/api/personal";
 import pdf from 'vue-pdf'
 export default {
+  props: ['certificate'],
   components: {
     TopTitle,
     VDistpicker,
@@ -174,7 +175,13 @@ export default {
     info() {
       const user = sessionStorage.getItem("user");
       return user && JSON.parse(user).user;
+    },
+    isShow() {
+      return id => this.certificate.identity == id
     }
+  },
+  mounted() {
+    console.log(this.certificate)
   },
   methods: {
     changeExemptionFile(file, fileList) {

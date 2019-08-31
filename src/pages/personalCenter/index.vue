@@ -207,10 +207,10 @@ export default {
     };
   },
   computed: {
-    info() {
-      const user = sessionStorage.getItem("user");
-      return (user && JSON.parse(user)) || {};
-    },
+    // info() {
+    //   const user = sessionStorage.getItem("user");
+    //   return (user && JSON.parse(user)) || {};
+    // },
     voucherMoneyImg() {
       return index => {
         const obj = {
@@ -233,7 +233,7 @@ export default {
   },
   mounted() {
     this.getPersonal();
-    getUserOrder();
+    
   },
   methods: {
     /** 个人信息 */
@@ -316,6 +316,7 @@ img {
 .my-class {
   padding-top: 1rem;
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
   max-height: 400px;
   overflow-y: auto;
@@ -339,6 +340,7 @@ img {
 
   .goods-box {
     flex-basis: 23%;
+    margin: 0.3rem;
     width: 13.5rem;
     // height: 19.35rem;
     background: #fff;

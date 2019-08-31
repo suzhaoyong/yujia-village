@@ -7,6 +7,7 @@ import {
 let loadingInstance = ""
 // 处理非 get data 传参
 function handleRequest(config) {
+  console.log(config);
   if (config.url.startsWith('/api/getAlipayOrder') && config.url.startsWith('/api/getWechatOrder')) {
 
   } else {

@@ -1,49 +1,245 @@
 <template>
   <div>
-    <div class="order">订单提交成功，请尽快付款！订单号：10000001000000</div>
+    <div class="order">订单提交成功，请尽快付款！订单号：{{order.out_trade_no}}</div>
     <div class="payway">
       <div class="payway_money">
-        <div class="title">余额支付</div>
+        <div class="title">金币支付</div>
         <div class="fee">
           支付
-          <span style="color:#BC2E33;">55.00</span>元
+          <span style="color:#BC2E33;">{{order.totalPrice}}</span>元
         </div>
         <div class="balance">
-          <div class="icon"></div>
-          <span class="text">账号余额</span>
-          <span style="padding-left:5rem;">可用余额1000金币</span>
+          <div class="icon">
+            <el-checkbox v-model="goldpay.allow" :disabled="isDisable"></el-checkbox>
+          </div>
+          <div class="pay_icon">
+            <img :src="icon.qianbaoIcon" alt />
+          </div>
+          <span class="text">账号金币</span>
+          <span style="padding-left:5rem;" v-if="isDisable">金币不足</span>
+          <span style="padding-left:5rem;" v-else>可用{{info.fraction}}金币</span>
         </div>
-        <div class="pay_password">
+        <div class="pay_password" v-if="goldpay.allow">
           <div class="tips">请输入密码支付</div>
           <div class="input-box">
-            <el-input class="password" type="password"></el-input>
-            <div class="password-tips">忘记密码</div>
+            <el-input v-model="goldpay.password" class="password" type="password"></el-input>
+            <div
+              class="password-tips"
+              @click="() => {this.$router.push({name: 'safety-center',})}"
+            >忘记密码</div>
+          </div>
+          <div class="btn-wrap">
+            <div class="btn" @click="submintPay">确认支付</div>
           </div>
         </div>
       </div>
       <div class="payway_code">
         <div class="title">扫码支付</div>
         <div class="tags">
-          <div class="tag active">支付宝扫码</div>
-          <div class="tag">微信扫码</div>
+          <div @click="changePayWay('2')" :class="['tag', isActive('2')]">支付宝扫码</div>
+          <div @click="changePayWay('3')" :class="['tag', isActive('3')]">微信扫码</div>
         </div>
         <div class="tags_body">
           <div class="code">
             <div class="code_tips">
               距离二维码过期还有
-              <span style="color:#BC2E33;">57</span>秒,过期后请重新刷新页面获取二维码
+              <span style="color:#BC2E33;">{{payway.count}}</span> 秒,过期后请重新刷新页面获取二维码
             </div>
-            <div class="code_play"></div>
+            <div :class="`code_play${payway.way}`">
+              <img
+                v-if="payway.success"
+                style="width:3rem;height:3rem;position: absolute; top: 70%; left: 60%;"
+                :src="icon.success"
+                alt
+              />
+              <img :src="payway.src" alt />
+            </div>
           </div>
-          <div class="code_img"></div>
+          <div class="code_img">
+            <img :src="icon.active" alt />
+          </div>
         </div>
       </div>
     </div>
   </div>
-</template><script>
-export default {};
+</template>
+<script>
+import qianbaoIcon from "@/assets/order/qianbao.png";
+import success from "@/assets/order/pay_success.png";
+import alipayIcon from "@/assets/order/alipay_img.png";
+import wechatIcon from "@/assets/order/wechat_img.png";
+import {
+  postGoldPay,
+  postGetAlipayCode,
+  postGetWechatpayCode,
+  postGetAlipayOrder,
+  postGetWechatOrder
+} from "@/api/market";
+let timer = null;
+export default {
+  props: ["order"],
+  data() {
+    return {
+      icon: {
+        qianbaoIcon,
+        success,
+        alipayIcon,
+        wechatIcon,
+        active: alipayIcon
+      },
+      payway: {
+        show: false,
+        success: false,
+        count: 0,
+        src: "",
+        way: "2"
+      },
+      goldpay: {
+        allow: false,
+        out_trade_no: this.order.out_trade_no, // 统一订单编号
+        password: "", // 密码
+        total_fee: this.order.totalPrice // 总价格
+      }
+    };
+  },
+  computed: {
+    info() {
+      const user = sessionStorage.getItem("user");
+      return user && JSON.parse(user).user;
+    },
+    isDisable() {
+      if (this.order.totalPrice > this.info.fraction) {
+        return true;
+      }
+      return false;
+    },
+    isActive() {
+      return type => ({ active: this.payway.way == type });
+    }
+  },
+  mounted() {
+    this.changePayWay(this.payway.way);
+  },
+  beforeDestroy() {
+    timer && clearInterval(timer);
+  },
+  methods: {
+    submintPay() {
+      let pwd = this.goldpay.password;
+      if (pwd.length === 0 || pwd.length < 6) {
+        this.$message({
+          type: "warning",
+          message: "密码不能位空或不少与六位"
+        });
+        return;
+      }
+      let params = Object.assign({}, this.goldpay);
+      delete params.allow;
+      postGoldPay(params).then(data => {
+        this.$message({
+          type: "success",
+          message: "支付成功"
+        });
+      });
+    },
+    async changePayWay(payment) {
+      timer && clearInterval(timer);
+      this.payway.way = payment;
+      if (this.payway.success) {
+        this.$message({
+          type: "success",
+          message: "已成功支付"
+        });
+        return;
+      }
+
+      let { out_trade_no, body, totalPrice } = this.order;
+      // totalPrice = 0.01;
+      if (parseInt(payment) === 2) {
+        this.icon.active = alipayIcon;
+        postGetAlipayCode({ out_trade_no, total_fee: totalPrice, body })
+          .then(data => {
+            this.payway.show = true;
+            this.payway.success = false;
+            this.payway.count = 59;
+            this.payway.src = data;
+          })
+          .then(_ => {
+            if (this.payway.show) {
+              timer = setInterval(() => {
+                if (this.payway.success) {
+                  clearInterval(timer);
+                }
+                if (this.payway.count <= 1 || !this.payway.show) {
+                  this.changePayWay("2");
+                  // this.payway.show = false;
+                  clearInterval(timer);
+                }
+                this.payway.count -= 1;
+                if (this.payway.count % 5 !== 0) return;
+                postGetAlipayOrder({ out_trade_no }).then(data => {
+                  if (data.msg === "支付成功") {
+                    // this.payway.show = false;
+                    this.payway.success = true;
+                    this.$message({
+                      type: "success",
+                      message: "支付成功"
+                    });
+                  }
+                });
+              }, 1000);
+            }
+          });
+      }
+      if (parseInt(payment) === 3) {
+        this.icon.active = wechatIcon;
+        postGetWechatpayCode({
+          out_trade_no,
+          total_fee: totalPrice,
+          body
+        })
+          .then(data => {
+            this.payway.show = true;
+            this.payway.success = false;
+            this.payway.count = 59;
+            this.payway.src = data;
+          })
+          .then(_ => {
+            if (this.payway.show) {
+              timer = setInterval(() => {
+                if (this.payway.success) {
+                  clearInterval(timer);
+                }
+                if (this.payway.count <= 1 || !this.payway.show) {
+                  this.changePayWay("3");
+                  // this.payway.show = false;
+                  clearInterval(timer);
+                }
+                this.payway.count -= 1;
+                if (this.payway.count % 5 !== 0) return;
+                postGetWechatOrder({ out_trade_no }).then(data => {
+                  if (data.msg === "支付成功") {
+                    // this.payway.show = false;
+                    this.payway.success = true;
+                    this.$message({
+                      type: "success",
+                      message: "支付成功"
+                    });
+                  }
+                });
+              }, 1000);
+            }
+          });
+      }
+    }
+  }
+};
 </script>
 <style scoped lang="scss">
+img {
+  width: 100%;
+  height: 100%;
+}
 .order {
   width: 60rem;
   margin: 0 auto;
@@ -60,6 +256,12 @@ export default {};
   background: rgba(255, 255, 255, 1);
   box-shadow: 1px 1px 9px 1px rgba(92, 92, 92, 0.28);
   margin-bottom: 2rem;
+  .pay_icon {
+    width: 1.6rem;
+    height: 1.6rem;
+    display: inline-block;
+    margin-right: 1rem;
+  }
   .payway_money {
     position: relative;
     padding: 0 2.65rem;
@@ -84,6 +286,8 @@ export default {};
       padding: 0.9rem 1.45rem;
       border: 1px solid #3a794b;
       .icon {
+        display: inline-block;
+        margin-right: 1rem;
       }
       .text {
         font-weight: bolder;
@@ -106,6 +310,15 @@ export default {};
           color: #24a3d8;
           padding-left: 1rem;
           cursor: pointer;
+        }
+      }
+      .btn-wrap {
+        margin-top: 1em;
+        margin-left: 0em;
+        .btn {
+          cursor: pointer;
+          border: 1px solid #7d7d7d;
+          padding: 0.55rem 1.95rem;
         }
       }
     }
@@ -149,18 +362,33 @@ export default {};
         .code_tips {
           padding-bottom: 2rem;
         }
-        .code_play {
+        .code_play2,
+        .code_play3 {
           margin-left: 3rem;
           width: 14rem;
           height: 14rem;
           position: relative;
           border: 1px solid #ccc;
+        }
+        .code_play2 {
           &::after {
             content: "请使用支付宝扫一扫功能";
             width: 100%;
             margin-top: 0.5rem;
             position: absolute;
             top: 100%;
+            left: 0;
+            text-align: center;
+          }
+        }
+        .code_play3 {
+          &::after {
+            content: "请使用微信扫一扫功能";
+            width: 100%;
+            margin-top: 0.5rem;
+            position: absolute;
+            top: 100%;
+            left: 0;
             text-align: center;
           }
         }
@@ -169,7 +397,7 @@ export default {};
         margin-left: 8rem;
         width: 14rem;
         height: 20rem;
-        border: 1px solid #ccc;
+        // border: 1px solid #ccc;
       }
     }
   }

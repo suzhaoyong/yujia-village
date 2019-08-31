@@ -86,6 +86,11 @@ const router = new Router({
           component: () => import('@/pages/personalCenter/index')
         },
         {
+          path: 'recode',
+          name: 'recode',
+          component: () => import('@/pages/personalCenter/recode')
+        },
+        {
           path: 'identity',
           name: 'identity',
           component: () => import('@/pages/personalCenter/identity')
@@ -120,11 +125,6 @@ const router = new Router({
           path: 'order',
           name: 'order',
           component: () => import('@/pages/goods/order')
-        },
-        {
-          path: 'recode',
-          name: 'recode',
-          component: () => import('@/pages/goods/recode')
         },
         {
           path: 'payway',

@@ -251,7 +251,7 @@
           <div
             class="goods-box"
             @click="viewGoodsDetail(item)"
-            v-for="(item, index) in resultList"
+            v-for="(item, index) in result.list"
             :key="index"
           >
             <div class="pic">
@@ -269,12 +269,12 @@
               </div>
             </div>
           </div>
-          <div class="no_result" style="width:100%;" v-if="resultList.length === 0">
+          <div class="no_result" style="width:100%;" v-if="result.list.length === 0">
             <div style="text-align:center;height:100px;line-height:100px;">暂未搜到结果</div>
           </div>
         </div>
         <div class="pages">
-          <el-pagination background layout="prev, pager, next, jumper" :total="108"></el-pagination>
+          <el-pagination background layout="prev, pager, next, jumper" :page-size="12" :total="(result.page * 12)"></el-pagination>
         </div>
         <!-- <div class="pages">
           <el-pagination
@@ -363,7 +363,11 @@ export default {
       selected: {
         tags: []
       },
-      resultList: [],
+      result: {
+        list: [],
+        count: 1,
+        cur_page: 1
+      },
       resenView: {
         cur_page: 1,
         count: 1,
@@ -405,7 +409,7 @@ export default {
       this.selected.tags.map(item => {
         params[item.type] = item.id;
       });
-      postShowGoodList(params).then(data => (this.resultList = data.data));
+      postShowGoodList(params).then(data => (this.result.list = data.data));
     },
     changeGoodsFor(name) {
       this.resenView.cur_page += 1;
@@ -415,7 +419,8 @@ export default {
     addCollect() {},
     getMarketList() {
       postShowGoodList().then(data => {
-        this.resultList = data.data;
+        this.result.list = data.data;
+        this.result.page = data.count
       });
     },
     getMarketTags() {
@@ -761,7 +766,7 @@ img {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #ccc;
+    // background: #ccc;
   }
   .last-views {
     .title {

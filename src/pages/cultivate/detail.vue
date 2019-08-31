@@ -13,7 +13,13 @@
           </div>
           <div class="detail-count-div2">
             <div class="count-div2-img">
-              <img v-for="(item, index) in train.train_image" :key="index" class="img1" :src="item.path" />
+              <img
+                @click="train.teacher_img = item.path"
+                v-for="(item, index) in train.train_image"
+                :key="index"
+                class="img1"
+                :src="item.path"
+              />
             </div>
             <div class="count-div2-imgpic">
               <img class="img1" :src="train.teacher_img" />
@@ -23,7 +29,7 @@
               <h4>￥{{train.price}}</h4>
               <div class="rate-nandu">
                 <span class="rate-nandu-span">难度级别：</span>
-                <el-rate disabled :value="train.diff"></el-rate>
+                <el-rate :colors="['#58B708','#58B708','#58B708']" disabled :value="train.diff"></el-rate>
               </div>
               <div class="cultivate">
                 培训老师：
@@ -32,9 +38,9 @@
               <div class="cultivate-text1">培训时间：{{train.startTime}} / {{train.endTime}}</div>
               <div class="cultivate-text2">培训地址：{{train.address}}</div>
               <div class="cultivate-button">
-                <el-button type="text" class="button">电话咨询</el-button>
+                <div class="button" @click="callTel">电话咨询</div>
               </div>
-              <img class="imgpic1" src="../../assets/image69.png" />
+              <!-- <img class="imgpic1" src="../../assets/image69.png" /> -->
               <img class="imgpic2" src="../../assets/image70.png" />
             </div>
           </div>
@@ -48,20 +54,10 @@
               <div class="border-right"></div>
             </div>
             <div class="div3-crowd">
-              <div class="div3-crowd-li">
+              <div class="div3-crowd-li" v-for="(item, index) in train.crowd">
                 <h5>Easy to navigate</h5>
                 <img src="../../assets/image71.png" />
-                <p>具备基础瑜伽教学资质的瑜伽老师、馆主。</p>
-              </div>
-              <div class="div3-crowd-li">
-                <h5>Easy to navigate</h5>
-                <img src="../../assets/image72.png" />
-                <p>有专业瑜伽会员课程1年以上的瑜伽爱好者，及舞蹈爱好者。</p>
-              </div>
-              <div class="div3-crowd-li">
-                <h5>Slightly difficult</h5>
-                <img src="../../assets/image73.png" />
-                <p>韧带较柔软，身体平衡性较好的未接触瑜伽的小白</p>
+                <p>{{item}}</p>
               </div>
             </div>
           </div>
@@ -101,11 +97,24 @@ export default {
     getTrainsById(id).then(data => {
       this.train = data;
       const content = data.content.split("\n").filter(item => item);
+      const crowd = data.crowd.split(/；/).filter(item => item);
       this.train.content = content;
+      this.train.crowd = crowd;
     });
+  },
+  methods: {
+    callTel() {
+      this.$alert(`会馆电话: 021-621146321`, "会馆电话", {
+      });
+    }
   }
 };
 </script>
+<style scoped>
+.detail-main >>> .el-rate__icon {
+  font-size: 0.7rem !important;
+}
+</style>
 <style lang="scss" scoped>
 .detail-main {
   width: 100%;
@@ -137,7 +146,7 @@ export default {
     }
     .nav-text {
       color: #999999;
-      font-size: 0.9rem;
+
       margin-top: -8px;
     }
     h2 {
@@ -153,21 +162,26 @@ export default {
     }
   }
   .detail-count-div2 {
-    width: 75%;
+    width: 60rem;
     margin: 0 auto;
-    height: 30rem;
+    // height: 30rem;
     background-color: #ffffff;
     overflow: hidden;
     display: flex;
+    font-size: 0.7rem;
+    padding-bottom: 4rem;
     .count-div2-img {
       width: 5.8rem;
-      margin-left: 5rem;
-      height: 6.3rem;
+      margin-left: 4rem;
+      // height: 6.3rem;
+      overflow: scroll;
+      height: 14rem;
+      margin-top: 3rem;
       .img1 {
         width: 100%;
-        height: 100%;
+        // height: 100%;
         margin-bottom: 1rem;
-        margin-top: 3rem;
+        // margin-top: 3rem;
       }
       .img2 {
         width: 100%;
@@ -180,19 +194,19 @@ export default {
       }
     }
     .count-div2-imgpic {
-      width: 22.5rem;
-      margin-left: 3rem;
-      height: 25.4rem;
+      width: 18rem;
+      margin-left: 1.5rem;
+      height: 20rem;
       .img1 {
         width: 100%;
         height: 100%;
       }
     }
     .count-div2-text {
-      width: 25rem;
+      width: 20rem;
       margin-left: 4rem;
-      height: 20rem;
-      margin-top: 6rem;
+      // height: 20rem;
+      margin-top: 3rem;
       position: relative;
       h4 {
         font-size: 18px;
@@ -201,29 +215,28 @@ export default {
       }
       .rate-nandu {
         display: flex;
-        margin-top: 1.5rem;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
         .rate-nandu-span {
           color: #2c2c2c;
-          font-size: 0.9rem;
         }
       }
       .cultivate {
         color: #2c2c2c;
-        font-size: 0.9rem;
-        margin-top: 1.2rem;
+
+        margin-top: 0.4rem;
         .cultivate-span {
           color: #22ac38;
-          font-size: 0.9rem;
         }
       }
       .cultivate-text1 {
         color: #2c2c2c;
-        font-size: 0.9rem;
-        margin-top: 1rem;
+
+        margin-top: 0.5rem;
       }
       .cultivate-text2 {
         color: #2c2c2c;
-        font-size: 0.9rem;
+
         margin-top: 0.5rem;
       }
       .cultivate-button {
@@ -232,11 +245,10 @@ export default {
         background: rgba(49, 49, 49, 1);
         border-radius: 5px;
         line-height: 3rem;
-        margin-top: 3.4rem;
+        margin-top: 1.4rem;
         text-align: center;
         .button {
           color: #ffffff;
-          font-size: 0.9rem;
         }
       }
       .imgpic1 {
@@ -258,12 +270,12 @@ export default {
   .detail-count-div3 {
     width: 75%;
     margin: 0 auto;
-    height: 30.4rem;
+    // height: 30.4rem;
     background-color: #ffffff;
     margin-top: 2rem;
     .count-div3-cumtrl {
       width: 100%;
-      height: 9.4rem;
+      // height: 9.4rem;
       text-align: center;
       display: inline-block;
       position: relative;
@@ -285,7 +297,7 @@ export default {
       }
       .nav-text {
         color: #999999;
-        font-size: 0.9rem;
+
         margin-top: -4px;
       }
       h2 {
@@ -303,37 +315,40 @@ export default {
     .div3-crowd {
       width: 70%;
       margin: 0 auto;
-      height: 18rem;
+      // height: 18rem;
       display: flex;
       justify-content: space-around;
       .div3-crowd-li {
-        width: 170px;
+        width: 20em;
         height: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
         h5 {
           font-family: MicrosoftYaHei;
           font-weight: 400;
-          font-size: 0.9rem;
+
           color: #999999;
           text-align: center;
         }
         img {
           margin-top: 1.2rem;
+          margin: 0 auto;
         }
         p {
           font-family: MicrosoftYaHei;
           font-weight: 400;
-          font-size: 0.9rem;
           color: #2c2c2c;
-          text-align: center;
+          text-align: left;
           margin-top: 1.5rem;
         }
       }
     }
   }
   .detail-count-div4 {
-    width: 75%;
+    width: 60rem;
     margin: 0 auto;
-    // height: 32rem;
+    min-height: 24rem;
     padding-bottom: 4rem;
     background-color: #ffffff;
     margin-top: 2rem;
@@ -347,7 +362,7 @@ export default {
       position: relative;
       .nav-text {
         color: #999999;
-        font-size: 0.9rem;
+
         margin-top: 11px;
       }
       h2 {
@@ -365,46 +380,51 @@ export default {
     }
     .cumtrl2-text {
       line-height: 1rem;
-      width: 75%;
-      margin-left: 13rem;
+      margin-left: 16rem;
+      width: 35rem;
+      font-size: 0.7rem;
       p {
         color: #2c2c2c;
-        font-size: 0.9rem;
+        // line-height: 0.3em;
+        margin: 0;
       }
     }
     .bg-picimg1 {
       position: absolute;
-      top: 40%;
-      left: 0%;
+      top: 4rem;
+      left: 1rem;
       width: 15rem;
-      height: 19rem;
+      z-index: 10;
+      height: 20rem;
     }
     .bg-picimg2 {
       position: absolute;
-      top: 5%;
-      left: 3%;
-      width: 7rem;
-      height: 30rem;
+      top: 0;
+      left: 2rem;
+      width: 10rem;
+      height: 23rem;
     }
     .bg-picimg3 {
       position: absolute;
       right: 0%;
-      top: 48%;
+      top: 28%;
     }
     .bg-picimg4 {
       position: absolute;
       right: 0%;
       top: 0%;
+      height: 24rem;
     }
     .h3-bgpic {
+      z-index: 10;
       position: absolute;
       margin: 0 auto;
       width: 30px;
       line-height: 29px;
       font-family: MicrosoftYaHei-Bold;
       font-weight: bold;
-      top: 57%;
-      left: 8%;
+      top: 8rem;
+      left: 7rem;
       font-size: 1.3rem;
     }
   }

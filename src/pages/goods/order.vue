@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="order-box">
+    <div class="order-box" v-show="!playcode.show">
       <!-- <div class="navs">
         <el-breadcrumb separator-class="el-icon-arrow-right">
           <el-breadcrumb-item>首页</el-breadcrumb-item>
@@ -24,9 +24,7 @@
                   <div class="name"></div>
                 </div>
                 <div style="align-self: flex-start; margin-left: 3.5rem;" v-if="address.length > 0">
-                  <div
-                    class="name-phone"
-                  >{{`${addressActive.name} - ${addressActive.zone} ${addressActive.address}`}}</div>
+                  <div class="name-phone">{{`${addressActive.name} - ${addressActive.userAddress}`}}</div>
                   <div class="address">{{addressActive.tel}}</div>
 
                   <div
@@ -54,7 +52,6 @@
                     <div class="key">所在区域</div>
                     <div class="value">
                       <v-distpicker @selected="selectAddress"></v-distpicker>
-                      <!-- <el-input type="text" v-model="ruleForm.userZone" placeholder="请输入所在区域"></el-input> -->
                     </div>
                   </div>
                   <div class="item">
@@ -77,7 +74,7 @@
               </div>
             </div>
           </div>
-          <div class="time-pay" v-show="false">
+          <!-- <div class="time-pay" v-show="false">
             <div class="time">
               <div class="header">
                 <div class="title">送货时间</div>
@@ -101,11 +98,6 @@
                 <div class="tips">pay way</div>
               </div>
               <div class="icon-box">
-                <!-- <div
-                  :class="['icon', paymentActive('1')]"
-                  :style="`background-image:url(${icon.bankIcon})`"
-                  @click="ruleForm.payment = '1'"
-                ></div>-->
                 <div
                   :class="['icon', paymentActive('2')]"
                   :style="`background-image:url(${ruleForm.payment === '2'?icon.alipayActiveIcon : icon.alipayIcon})`"
@@ -118,7 +110,7 @@
                 ></div>
               </div>
             </div>
-          </div>
+          </div>-->
         </div>
         <div class="goods-box">
           <div class="header">
@@ -172,22 +164,28 @@
         </div>
       </div>
     </div>
-    <div class="pay-way" v-if="playcode.show" @click="playcode.show = false">
+    <div class="payway" v-if="playcode.show">
+      <payway v-if="playcode.show" :order="playcode.order"></payway>
+    </div>
+    <!-- <div class="pay-way" v-if="playcode.show" @click="playcode.show = false">
+      
       <div class="pay-code">
         <img :src="playcode.src" alt />
       </div>
-    </div>
+    </div>-->
   </div>
 </template>
 <script>
 import VDistpicker from "v-distpicker";
 import backIcon from "@/assets/market/back.png";
+
 import alipayIcon from "@/assets/order/alipay.png";
 import wechatIcon from "@/assets/order/wechat.png";
 import alipayActiveIcon from "@/assets/order/alipay_active.png";
 import wechatActiveIcon from "@/assets/order/wechat_active.png";
 import bankIcon from "@/assets/order/bank.png";
 import SessionTitle from "./SessionTitle";
+import Payway from "./payway";
 import {
   getUserAddress,
   getUserOrder,
@@ -200,11 +198,20 @@ import {
 export default {
   components: {
     SessionTitle,
+    Payway,
     VDistpicker
   },
   data() {
     return {
-      playcode: { show: false, src: "", count: 0 },
+      playcode: {
+        show: false,
+        order: {
+          body: "",
+          totalPrice: "",
+          out_trade_no: ""
+        },
+        count: 0
+      },
       icon: {
         backIcon,
         alipayIcon,
@@ -220,15 +227,19 @@ export default {
         id: "", // 购物车列表编号
         lid: "", // 商品副列表 编号
         num: "",
-        sendTime: "1", // 送货时间 1-送货时间不限 2-仅周一周五送货 3-仅节假日/周末送货
         userName: "",
         userTel: "",
-        userZone: "", // 地址省市区
+        province: "",
+        area: "",
+        city: "",
         userAddress: "",
         userMessage: "",
-        status: "0", // 0不是新增地址 1是新增地址
+        status: "", // 0不是新增地址 1是新增地址
         addressId: "",
-        payment: "" // 付款方式 1-未支付 2-支付宝 3-微信
+        cashId: "", //现金券编号
+        cashMoney: "", //现金券使用金额
+        couponId: "", //优惠券编号
+        fraction: "" //使用积分
       }
     };
   },
@@ -238,7 +249,9 @@ export default {
       let allGoods = this.goods;
 
       let allPrice = allGoods.reduce((pre, cur) => {
-        return parseInt(pre) + parseInt(cur.num) * parseInt(cur.sell_price);
+        return (
+          parseInt(pre) + parseInt(cur.num) * (cur.sell_price - cur.discount)
+        );
       }, 0);
       return { allPrice, allGoodsNumber: allGoods.length };
     },
@@ -266,7 +279,8 @@ export default {
       if (data.address.length === 0) {
         this.ruleForm.status = "1";
       } else {
-        this.addressActive = data.address[0];
+        this.addressActive = data.address[data.address.length-1];
+        this.ruleForm.status = "0";
       }
       this.goods = data.goods;
     });
@@ -279,8 +293,7 @@ export default {
         city: city.value,
         area: area.value
       };
-      let userZone = `${params.province}${params.city}${params.area}`;
-      this.ruleForm = Object.assign({}, this.ruleForm, { userZone });
+      this.ruleForm = Object.assign({}, this.ruleForm, params);
     },
     back() {
       this.$router.go(-1);
@@ -296,10 +309,23 @@ export default {
           });
           return;
         }
-        const { zone, address, id, tel, name, message } = this.addressActive;
+        const {
+          province,
+          area,
+          city,
+          zone,
+          address,
+          id,
+          tel,
+          name,
+          message
+        } = this.addressActive;
         params = Object.assign({}, params, {
+          province,
+          area,
+          city,
           addressId: id,
-          userZone: zone,
+          userZone: province,
           userAddress: address,
           userName: name,
           userMessage: message,
@@ -326,70 +352,9 @@ export default {
       const num = this.goods.map(item => item.num);
       params = Object.assign({}, params, { id, lid, num });
       postGoodOrder(params).then(data => {
-        const { payment, out_trade_no, body, totalPrice } = data;
-        // const totalPrice = 0.01;
-        if (parseInt(payment) === 2) {
-          postGetAlipayCode({ out_trade_no, total_fee: totalPrice, body })
-            .then(data => {
-              this.playcode.show = true;
-              this.playcode.count = 30;
-              this.playcode.src = data;
-            })
-            .then(_ => {
-              if (this.playcode.show) {
-                const timer = setInterval(() => {
-                  if (this.playcode.count < 0 || !this.playcode.show) {
-                    this.playcode.show = false;
-                    clearInterval(timer);
-                  }
-
-                  postGetAlipayOrder({ out_trade_no }).then(data => {
-                    this.playcode.count -= 1;
-                    if (data.msg === "支付成功") {
-                      this.playcode.show = false;
-                      this.$message({
-                        type: "success",
-                        message: "支付成功"
-                      });
-                    }
-                  });
-                }, 1000);
-              }
-            });
-        }
-        if (parseInt(payment) === 3) {
-          postGetWechatpayCode({
-            out_trade_no,
-            total_fee: totalPrice,
-            body
-          })
-            .then(data => {
-              this.playcode.show = true;
-              this.playcode.count = 30;
-              this.playcode.src = data;
-            })
-            .then(_ => {
-              if (this.playcode.show) {
-                const timer = setInterval(() => {
-                  if (this.playcode.count <= 0 || !this.playcode.show) {
-                    this.playcode.show = false;
-                    clearInterval(timer);
-                  }
-
-                  postGetWechatOrder({ out_trade_no }).then(data => {
-                    this.playcode.count -= 1;
-                    if (data.msg === "支付成功") {
-                      this.playcode.show = false;
-                      this.$message({
-                        type: "success",
-                        message: "支付成功"
-                      });
-                    }
-                  });
-                }, 1000);
-              }
-            });
-        }
+        const { out_trade_no, body, totalPrice } = data;
+        this.playcode.show = true;
+        this.playcode.order = { out_trade_no, body, totalPrice }
       });
     }
   }

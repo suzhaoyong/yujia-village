@@ -26,6 +26,9 @@
           <div class="type" @click="myIdentity('4')">我是教练</div>
         </div>
       </div>
+      <div class="to-certification" v-show="step.type === 'certification'">
+        <certification v-if="step.type == 'certification'" :certificate="certificate"></certification>
+      </div>
       <div class="my-identity" v-show="step.type === 'my-card'">
         <div class="icon">
           <div class="img">
@@ -156,6 +159,7 @@
 import identity_1 from "@/assets/personal/identity_1.png";
 import identity_2 from "@/assets/personal/identity_2.png";
 import identity_3 from "@/assets/personal/identity_3.png";
+import certification from "./certification";
 import {
   postChangeBankCard,
   getBankCardInfo,
@@ -168,12 +172,18 @@ import {
   postGetWechatOrder
 } from "@/api/market";
 export default {
+  components: {
+    certification
+  },
   data() {
     return {
       icon: {
         identity_1,
         identity_2,
         identity_3
+      },
+      certificate: {
+        identity: ""
       },
       playcode: { show: false, src: "", count: 0 },
       hiddenMoney: "",
@@ -235,6 +245,7 @@ export default {
       const { type } = this.step;
       const obj = {
         identity: "identity",
+        certification: "identity",
         "my-card": "identity",
         "input-card": "my-card",
         recharge: "my-card"
@@ -245,21 +256,22 @@ export default {
       this.step.type = obj[type];
     },
     myIdentity(identity) {
-      if (this.info.identity_auth !== identity) {
-        this.$message({
-          type: "warning",
-          message: "请确认自己的身份"
-        });
-        return;
-      }
-      this.step.type = "my-card";
-      const obj = {
-        1: "用户",
-        2: identity_1,
-        4: identity_3,
-        7: identity_2
-      };
-      this.icon.active = obj[identity];
+      // if (this.info.identity_auth !== identity) {
+      //   this.$message({
+      //     type: "warning",
+      //     message: "请确认自己的身份"
+      //   });
+      //   return;
+      // }
+      this.step.type = "certification";
+      this.certificate.identity = identity
+      // const obj = {
+      //   1: "用户",
+      //   2: identity_1,
+      //   4: identity_3,
+      //   7: identity_2
+      // };
+      // this.icon.active = obj[identity];
     },
     rechargeChange(name, num) {
       this.rechargeForm[name] = num;

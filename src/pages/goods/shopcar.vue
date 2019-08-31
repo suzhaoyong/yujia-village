@@ -93,7 +93,7 @@ export default {
       let allGoods = this.goods.filter(item => item.select);
 
       let allPrice = allGoods.reduce((pre, cur) => {
-        return parseInt(pre) + parseInt(cur.num) * parseInt(cur.sell_price);
+        return parseInt(pre) + parseInt(cur.num) * (cur.sell_price - cur.discount);
       }, 0);
       return { allPrice, allGoodsNumber: allGoods.length };
     }
