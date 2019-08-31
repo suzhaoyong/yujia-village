@@ -331,7 +331,7 @@ export default {
 <style lang="scss" scoped>
 .bg_img {
   width: 100%;
-  height: 600px;
+  height: 100%;
 }
 img {
   width: 100%;
