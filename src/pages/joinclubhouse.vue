@@ -64,7 +64,7 @@
                                 <p class="p1">{{item.club_name}}</p>
                                 <p class="p2">{{item.club_address}}</p>
                                 <!-- <div class="kong" v-show="index == ishow"><span v-html="item.content">{{item.content}}</span></div> -->
-                                <div class="kong"><span v-html="item.content">{{item.content}}</span></div>
+                                <div class="kong"><span v-html="item.content">{{item.content}}</span></div>     
                             </div>
                             <div class="block">
                                 <el-pagination
@@ -141,7 +141,7 @@ export default {
         });
       },
       selectItem(item){
-           this.$router.push({
+        this.$router.push({
             path: "/joinclubhouse/joinclubhousedetails",
             query: {
             id: item.id
@@ -163,7 +163,7 @@ export default {
 <style lang="scss" scope>
 .bg_img {
   width: 100%;
-  height: 600px;
+  height: 100%;
   position: relative;
   img{
       width: 100%;
@@ -174,13 +174,12 @@ export default {
     top: 77%;
     width: 11%;
     background-color: #9AB1C1;
-    height: 43px;
-    border-radius: 18px;
+    height: 7%;
+    border-radius: 4vh;
     right: 44%;
     text-align: center;
-    line-height: 43px;
     .butt{
-      font-size:1.1rem;
+      font-size:5vh;
       font-family:Microsoft YaHei;
       font-weight:bold;
       color: #FFFFFF;
@@ -316,6 +315,7 @@ export default {
                     margin: 10px;
                     margin-bottom: 20px;
                     position: relative;
+                    cursor:pointer;
                     .image{
                         width: 100%;
                         height: 224px;

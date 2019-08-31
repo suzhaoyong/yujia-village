@@ -71,7 +71,7 @@
                     <img src="../assets/image54.png" class="bg-image7"/>
                     <swiper class="carousel5" :options="swiperOption2" style="height:660px">
                         <swiper-slide class="carousel5-item" v-for="(page2,index) of pages2" :key="index">
-                        <div class="carousel-explain2" v-for="item of page2" :key="item.id">
+                        <div class="carousel-explain2" v-for="item of page2" :key="item.id" @click="explain2swiper(item)">
                             <img :src="item.path"/>
                             <div class="explain2-div">
                                 <h3>{{item.name}}</h3>
@@ -171,6 +171,14 @@ export default {
             id: item.id
             }
         });
+      },
+      explain2swiper(item){
+          this.$router.push({
+            path: "/yogoteacher/yogoteacherdetails",
+            query: {
+            id: item.id
+            }
+        });
       }
   }
 };
@@ -249,6 +257,7 @@ export default {
             height: 530px;
             margin: 0 auto;
             position: relative;
+            cursor:pointer;
             .clubhouse-swiper{
                 width: 370px;
                 height: 500px;
@@ -256,6 +265,7 @@ export default {
                 box-shadow:2px 3px 20px 1px rgba(164,164,164,0.26);
                 border-radius:5px;
                 margin-left: 5px;
+                transition: all 1s;
                 .clubhouse-swiper-img{
                     width: 100%;
                     height: 390px;
@@ -303,6 +313,15 @@ export default {
                     color: #2c2c2c;
                 }
             }
+            .clubhouse-swiper:hover{
+                width: 370px;
+                height: 500px;
+                background:rgba(255,255,255,1);
+                box-shadow:2px 3px 20px 1px rgba(164,164,164,0.26);
+                border-radius:5px;
+                margin-left: 5px;
+                transform: scale(.98);
+            }
             .swiper-button-prev1{
                     position: absolute;
                     left: -4%;
@@ -313,8 +332,23 @@ export default {
                     border-radius: 50%;
                     z-index: 10;
                     background-size: 32px 35px;
+                    transition: all .9s;
                     background-color: #fff;
                     background-image: url('../assets/prev.png');
+            }
+            .swiper-button-prev1:hover{
+                    position: absolute;
+                    left: -4%;
+                    top: 36%;
+                    width: 35px;
+                    height: 35px;
+                    border: 1px solid #e2dbc8;
+                    border-radius: 50%;
+                    z-index: 10;
+                    background-size: 32px 35px;
+                    transform: scale(.9);
+                    background-color: #fff;
+                    background-image: url('../assets/left.png');
             }
             .swiper-button-next1{
                     position: absolute;
@@ -325,9 +359,24 @@ export default {
                     border: 1px solid #e2dbc8;
                     border-radius: 50%;
                     z-index: 10;
+                    transition: all .9s;
                     background-size: 32px 35px;
                     background-color: #fff;
                     background-image: url('../assets/next.png');
+            }
+            .swiper-button-next1:hover{
+                    position: absolute;
+                    right: -4%;
+                    top: 36%;
+                    width: 35px;
+                    height: 35px;
+                    border: 1px solid #e2dbc8;
+                    border-radius: 50%;
+                    z-index: 10;
+                    transform: scale(.9);
+                    background-size: 32px 35px;
+                    background-color: #fff;
+                    background-image: url('../assets/right.png');
             }
         }
     }
@@ -519,9 +568,9 @@ export default {
             width: 1200px !important;
             height: 660px;
             margin: 0 auto;
+            cursor:pointer;
             .carousel5-item{
                 width: 1200px !important;
-                margin-right:0px !important;
             .carousel-explain2{
                 height: 183px;
                 float: left;
@@ -532,6 +581,15 @@ export default {
                     height: 150px;
                     border-radius: 50%;
                     margin-top: 18px;
+                    transition: all 1s;
+                    background-color: #DCD9CC;
+                }
+                img:hover{
+                    width: 150px;
+                    height: 150px;
+                    border-radius: 50%;
+                    margin-top: 18px;
+                    transform: scale(.9);
                     background-color: #DCD9CC;
                 }
                 .explain2-div{

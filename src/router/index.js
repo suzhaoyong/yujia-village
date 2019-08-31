@@ -5,6 +5,7 @@ const Main = resolve => require(['@/pages/main'], resolve) //首页
 const Joinclubhouse = resolve => require(['@/pages/joinclubhouse'], resolve) //加盟会馆
 const Joinclubhousedetails = resolve => require(['@/pages/joinclubhousedetails'], resolve) //加盟会馆---详情
 const Yogoteacher = resolve => require(['@/pages/yogoteacher'], resolve) //瑜伽名师
+const Yogoteacherdetails = resolve => require(['@/pages/yogoteacherdetails'], resolve) //瑜伽名师---详情
 const Login = resolve => require(['@/pages/Login/login'], resolve) //登录
 const Yogoknowledge = resolve => require(['@/pages/yogoknowledge'], resolve) //瑜伽知识
 const Yogoknowledgedetails = resolve => require(['@/pages/yogoknowledgedetails'], resolve) //瑜伽知识---详情
@@ -189,7 +190,11 @@ const router = new Router({
       children: [{
           path: '/yogoteacher',
           component: Yogoteacher
-        } //瑜伽名师
+        }, //瑜伽名师
+        {
+          path: '/yogoteacher/yogoteacherdetails',
+          component: Yogoteacherdetails
+        } //瑜伽名师----详情
       ]
     },
     {

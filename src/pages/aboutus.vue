@@ -86,12 +86,15 @@
                         </div>
                         </el-col>
                          <div class="aboutus-count-div10">
+                             <div class="aboutus-foo">
                              <div class="codeimg">
                                  <img :src="aboutUs.url_pic"/>
                              </div>
                              <div class="codetext">
                                  <p class="p1">地址：{{aboutUs.address}}</p>
                                  <p class="p2">电话：{{aboutUs.tel}}</p>
+                                 <p class="p3">YOGA</p>
+                             </div>
                              </div>
                         </div>
                     </div>
@@ -143,7 +146,7 @@ export default {
 <style lang="scss" scope>
 .bg_img {
   width: 100%;
-  height: 600px;
+  height: 100%;
   img{
       width: 100%;
       height: 100%;
@@ -207,6 +210,7 @@ export default {
             margin: 0 auto;
             display: flex;
             justify-content: center;
+            cursor: pointer;
             .Photowall-img1{
                 .Photowall-img1-bottom{
                     display: flex;
@@ -441,6 +445,7 @@ export default {
                 margin: 0 auto;
                 display: flex;
                 position: relative;
+                cursor: pointer;
                 .content-img{
                     width: 220px;
                     height: 220px;
@@ -647,34 +652,48 @@ export default {
             display: flex;
             background-image: url('../assets/image46.png');
             background-repeat: no-repeat;
-            background-size: cover;
-            .codeimg{
-                width: 229px;
-                height: 229px;
-                margin-left: 24%;
-                margin-top: 74px;
-                img{
-                    width: 100%;
-                    height: 100%;
+            background-size: 100% 100%;
+            cursor: pointer;
+            .aboutus-foo{
+                width: 1200px;
+                margin: 0 auto;
+                height: 100%;
+                display: flex;
+                .codeimg{
+                    width: 229px;
+                    height: 229px;
+                    margin-left: 10%;
+                    margin-top: 74px;
+                    img{
+                        width: 100%;
+                        height: 100%;
+                    }
                 }
-            }
-            .codetext{
-                width:618px;
-                height:196px;
-                margin-top: 17px;
-                background:rgba(49,49,49,1);
-                opacity:0.9;
-                margin-top: 90px;
-                .p1{
-                    font-size: 14px;
-                    color: #ffffff;
-                    padding-left: 50px;
-                    margin-top: 50px;
-                }
-                .p2{
-                    font-size: 14px;
-                    color: #ffffff;
-                    padding-left: 50px;
+                .codetext{
+                    width:493px;
+                    height:196px;
+                    margin-top: 17px;
+                    background:rgba(49,49,49,1);
+                    opacity:0.9;
+                    margin-top: 90px;
+                    .p1{
+                        font-size: 14px;
+                        color: #ffffff;
+                        padding-left: 50px;
+                        margin-top: 50px;
+                    }
+                    .p2{
+                        font-size: 14px;
+                        color: #ffffff;
+                        padding-left: 50px;
+                        margin-top: 20px;
+                    }
+                    .p3{
+                        font-size: 5rem;
+                        color: #fff;
+                        opacity: 0.2;
+                        padding-left: 46px;
+                    }
                 }
             }
         }

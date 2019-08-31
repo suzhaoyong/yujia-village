@@ -64,7 +64,7 @@
                                             <p class="p2">擅长：{{namelist.good_at}}</p>
                                             <p class="p4">地址：{{namelist.address}}</p>
                                             <div class="yogoswiper-butt">
-                                            <el-button type="text">详情</el-button>
+                                            <el-button type="text" @click="namelistItem(namelist)">详情</el-button>
                                             </div>
                                         </div>
                                     </div>
@@ -77,7 +77,7 @@
                                     <p class="icon-desc2">{{item.info}}</p>
                                     </div>
                                 </swiper-slide>
-                                <div class="swiper-button-prev1" slot="button-prev" @click="buttonprev(pages)"></div>
+                                 <div class="swiper-button-prev1" slot="button-prev" @click="buttonprev(pages)"></div>
                                  <div class="swiper-button-next1" slot="button-next" @click="buttonnext(pages)"></div>
                                 </swiper>
                            </div>
@@ -234,6 +234,14 @@ export default {
                 type: "error"
             });
             return;
+            }
+        });
+      },
+      namelistItem(namelist){
+          this.$router.push({
+            path: "/yogoteacher/yogoteacherdetails",
+            query: {
+            id: namelist.id
             }
         });
       },
@@ -403,7 +411,7 @@ export default {
 }
 .bg_img {
   width: 100%;
-  height: 600px;
+  height: 100%;
   img{
       width: 100%;
       height: 100%;
@@ -534,6 +542,7 @@ export default {
                 margin: 0 auto;
                 margin-bottom: 50px;
                 position: relative;
+                cursor:pointer;
                 .icon{
                     float: left;
                     width: 22%;
@@ -542,6 +551,7 @@ export default {
                     margin-left: 27px;
                     box-shadow: 1px 1px 6px 0px rgba(36, 36, 36, 0.2);
                     background-color: #fff;
+                    transition: all .9s;
                     .icon-img{
                         width: 100%;
                         height: 270px;
@@ -571,6 +581,16 @@ export default {
                         font-size: 14px;
                     }
                 }
+                .icon:hover{
+                    float: left;
+                    width: 22%;
+                    height: 440px;
+                    margin-top: 25px;
+                    margin-left: 27px;
+                    box-shadow:2px 7px 9px 0px rgba(36,36,36,0.2);
+                    background-color: #fff;
+                    transform: scale(.98);
+                }
                 .active {
                     box-shadow:2px 7px 9px 0px rgba(36,36,36,0.2);
                     height: 450px;
@@ -597,7 +617,7 @@ export default {
                                 width: 100%;
                                 height: 100%;
                                 transform:rotate(-90deg);
-                                }
+                            }
                         }
                         .rhomb2{
                             width: 220px;
@@ -659,6 +679,22 @@ export default {
                             background: #e2dbc8;
                             text-align: center;
                             margin-top:17%;
+                            transition: all 1s;
+                            .el-button--text{
+                                color: #2c2c2c;
+                                background: 0 0;
+                                padding-left: 0;
+                                padding-right: 0;
+                            }
+                        }
+                        .yogoswiper-butt:hover{
+                            width: 120px;
+                            border: 1px solid #e2dbc8;
+                            background: #e2dbc8;
+                            text-align: center;
+                            margin-top:17%;
+                            border-radius: 5px;
+                            transform: scale(.95);
                             .el-button--text{
                                 color: #2c2c2c;
                                 background: 0 0;
@@ -703,7 +739,22 @@ export default {
                         border-radius: 50%;
                         z-index: 10;
                         background-size: 32px 35px;
+                        transition: all .7s;
                         background-color: #fff;
+                        background-image: url('../assets/left.png');
+                }
+                .swiper-button-prev1:hover{
+                        position: absolute;
+                        left: 85%;
+                        top: 36%;
+                        width: 35px;
+                        height: 35px;
+                        border: 1px solid #e2dbc8;
+                        border-radius: 50%;
+                        z-index: 10;
+                        background-size: 32px 35px;
+                        transform: scale(.95);
+                        background-color: #e2dbc8;
                         background-image: url('../assets/left.png');
                 }
                 .swiper-button-next1{
@@ -715,8 +766,23 @@ export default {
                         border: 1px solid #e2dbc8;
                         border-radius: 50%;
                         z-index: 10;
+                        transition: all .7s;
                         background-size: 32px 35px;
                         background-color: #fff;
+                        background-image: url('../assets/right.png');
+                }
+                .swiper-button-next1:hover{
+                        position: absolute;
+                        right: 3%;
+                        top: 36%;
+                        width: 35px;
+                        height: 35px;
+                        border: 1px solid #e2dbc8;
+                        border-radius: 50%;
+                        z-index: 10;
+                        background-size: 32px 35px;
+                        transform: scale(.95);
+                        background-color: #e2dbc8;
                         background-image: url('../assets/right.png');
                 }
             }
@@ -735,6 +801,7 @@ export default {
                 height: 100%;
                 margin: 0 auto;
                 margin-bottom: 50px;
+                cursor:pointer;
                 .yogocontunt2-list{
                     width: 270px;
                     height: 279px;

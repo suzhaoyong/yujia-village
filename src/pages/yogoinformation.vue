@@ -3,14 +3,14 @@
         <el-row>
             <el-col :span="24">
                 <div class="formation-main">
+                    <div class="formationitem">
+                        <div class="select-bg">
+                            <div v-for="(list,index) in navLists" :key="index" class="nav" :class="{ red:changeRed == index}" @click="reds(index)">{{list.classify}}</div>
+                        </div>
+                    </div>
                     <template>
                        <!-- <Banner></Banner> -->
-                       <el-col class="selectitem">
-                       <div class="select-bg">
-                           <div v-for="(list,index) in navLists" :key="index" class="nav" :class="{ red:changeRed == index}" @click="reds(index)">{{list.text}}</div>
-                       </div>
-                       </el-col>
-                        <div class="bg_img">
+                        <div class="bg_img2">
                          <img :src="banner" alt />
                         </div>
                     </template>
@@ -36,6 +36,7 @@
                             <div class="count-desc">
                                 <div class="desc-img1">
                                     <img :src="item.icon_url"/>
+                                    <div class="box-content"></div>
                                 </div>
                                 <div class="desc-img2">
                                     <img :src="item.icon_url"/>
@@ -138,23 +139,7 @@ export default {
         formationList:[],
         listdatas:[],
         banner:'',
-        navLists:[
-            {
-                "text":"推荐"                     
-            },
-            {
-                "text":"行业资讯"                     
-            },
-            {
-                "text":"业界要闻"                        
-            },
-            {
-                "text":"明星瑜伽"                     
-            },
-            {
-                "text":"热点人物"                     
-            }
-        ],
+        navLists:[],
         changeRed:0
     };
   },
@@ -167,6 +152,7 @@ export default {
         this.$request("/informationList").then(res => {
             _this.formationList = res.data;
             _this.banner = res.banner;
+            _this.navLists = res.data;
             _this.formationList.map(item =>{ 
                 if(item.data != null){
                     for(var i=0;i<item.data.length;i++){
@@ -207,15 +193,18 @@ export default {
 };
 </script>
 <style lang="scss" scope>
-.bg_img {
+.bg_img2 {
   width: 100%;
-  height: 600px;
+  height: 100%;
   img{
       width: 100%;
       height: 100%;
   }
 }
-.selectitem{
+@media only screen and (max-width:990px){
+    .desc-img1{ margin-bottom: 30px; }
+}
+.formationitem{
     position: relative;
 .select-bg{
         width: 75%;
@@ -270,6 +259,7 @@ export default {
             background-color: #eeeeee;
             position: relative;
             margin-top: 130px;
+            cursor:pointer;
             .bg-img3{
                 position: absolute;
                 width: 270px;
@@ -374,39 +364,53 @@ export default {
                     overflow: hidden !important;
                 }
                 .count-button-but{
-                        width: 110px;
-                        height: 40px;
-                        text-align: center;
-                        line-height: 40px;
-                        margin-top: 85px;
-                        background-color:#313131; 
-                        .el-button--text{
-                            color: #fff;
-                        }
+                    width: 110px;
+                    height: 40px;
+                    text-align: center;
+                    line-height: 40px;
+                    margin-top: 85px;
+                    background-color:#313131; 
+                    transition: all 1s;
+                    .el-button--text{
+                        color: #fff;
                     }
-                    .count-button-right{
-                        font-size: 18px;
-                        margin-top: 20px;
-                        position: relative;
-                        .img1{
-                            width: 27px;
-                            height: 20px;
-                            position: absolute;
-                            top: 0px;
-                            left: 0%;
-                        }
-                        .img2{
-                            width: 30px;
-                            height: 25px;
-                            position: absolute;
-                            bottom: -26px;
-                            left: 2%;
-                        }
-                        .span3{
-                            position: absolute;
-                            left: 12%;
-                        }
+                }
+                .count-button-but:hover{
+                    width: 110px;
+                    height: 40px;
+                    text-align: center;
+                    line-height: 40px;
+                    margin-top: 85px;
+                    transform: scale(.95);
+                    border-radius: 5px;
+                    background-color:#313131; 
+                    .el-button--text{
+                        color: #fff;
                     }
+                }
+                .count-button-right{
+                    font-size: 18px;
+                    margin-top: 20px;
+                    position: relative;
+                    .img1{
+                        width: 27px;
+                        height: 20px;
+                        position: absolute;
+                        top: 0px;
+                        left: 0%;
+                    }
+                    .img2{
+                        width: 30px;
+                        height: 25px;
+                        position: absolute;
+                        bottom: -26px;
+                        left: 2%;
+                    }
+                    .span3{
+                        position: absolute;
+                        left: 12%;
+                    }
+                }
             }
             .count-desc{
                 width: 33%;
@@ -419,11 +423,61 @@ export default {
                     width: 100%;
                     height: 443px;
                     position: relative;
+                    perspective: 800px;
+                    overflow: hidden;
                     top: -18%;
                     img{
                         width: 100%;
                         height: 100%;
                     }
+                     .box-content{
+                        width: 100%;
+                        height: 100%;
+                        text-align: center;
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        z-index: 1;
+                    }
+                }
+                .desc-img1:hover:before{
+                    opacity: 0.3;
+                    transform: translateX(-50%) translateY(-50%) scale(1.5) rotate(0);
+                }
+                .desc-img1:hover:after{ opacity: 1; }
+                .desc-img1:before{
+                    content: "";
+                    width: 100%;
+                    height: 100%;
+                    background: linear-gradient(36deg, #272b66 42.34%, transparent 42.34%) 0 0,
+                    linear-gradient(72deg, #2d559f 75.48%, transparent 75.48%) 0 0,
+                    linear-gradient(-36deg, #9ac147 42.34%, transparent 42.34%) 100% 0,
+                    linear-gradient(-72deg, #639b47 75.48%, transparent 75.48%) 100% 0,
+                    linear-gradient(36deg, transparent 57.66%, #e1e23b 57.66%) 100% 100%,
+                    linear-gradient(72deg, transparent 24.52%, #f7941e 24.52%) 100% 100%,
+                    linear-gradient(-36deg, transparent 57.66%, #662a6c 57.66%) 0 100%,
+                    linear-gradient(-72deg, transparent 24.52%, #9a1d34 24.52%) 0 100%,
+                    #43a1cd linear-gradient(#ba3e2e, #ba3e2e) 50% 100%;
+                    background-repeat: no-repeat;
+                    background-size: 50% 50%;
+                    opacity: 0;
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    -webkit-clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
+                    clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
+                    transform: translateX(-50%) translateY(-50%) scale(0) rotate(360deg);
+                    transition: all 0.3s ease 0s;
+                }
+                .desc-img1:after{
+                    content: "";
+                    width: 100%;
+                    height: 100%;
+                    background: radial-gradient(rgba(255,255,255,0.9),transparent,transparent);
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    opacity: 0;
                 }
                 .desc-img2{
                     width: 103px;

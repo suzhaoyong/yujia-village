@@ -3,14 +3,14 @@
         <el-row>
             <el-col :span="24">
                 <div class="knowledge-main">
+                    <div class="knowledge-list">
+                        <div class="select-bg">
+                            <div v-for="(list,index) in navLists" :key="index" class="nav" :class="{ red:changeRed == index}" @click="reds(index)">{{list.classify}}</div>
+                        </div>
+                    </div>
                     <template>
                        <!-- <Banner></Banner> -->
-                       <el-col class="selectitem">
-                       <div class="select-bg">
-                           <div v-for="(list,index) in navLists" :key="index" class="nav" :class="{ red:changeRed == index}" @click="reds(index)">{{list.text}}</div>
-                       </div>
-                       </el-col>
-                        <div class="bg_img">
+                        <div class="bg_img1">
                          <img :src="banner" alt />
                         </div>
                     </template>
@@ -18,6 +18,7 @@
                         <div class="knowledge-count-div1" v-for="(item,index) in listdatas.slice((currentPage-1)*pagesize,currentPage*pagesize)" :key="index">
                             <div class="count-img">
                                 <img :src="item.icon_url"/>
+                                <div class="box-content"></div>
                             </div>
                             <div class="count-desc">
                                 <div class="circle"></div>
@@ -69,41 +70,7 @@ export default {
         knowledgeList:[],
         listdatas:[],
         banner:'',
-        navLists:[
-            {
-                "text":"推荐"                     
-            },
-            {
-                "text":"阿斯汤加"                     
-            },
-            {
-                "text":"空中瑜伽"                        
-            },
-            {
-                "text":"流瑜伽"                     
-            },
-            {
-                "text":"理疗瑜伽"                     
-            },
-            {
-                "text":"孕产瑜伽"                     
-            },
-            {
-                "text":"阴瑜伽"                     
-            },
-            {
-                "text":"普拉提"                     
-            },
-            {
-                "text":"阿育吠陀"
-            },
-            {
-                "text":"昆达里尼"
-            },
-            {
-                "text":"艾扬格瑜伽"
-            }
-        ],
+        navLists:[],
         changeRed:0
     };
   },
@@ -116,6 +83,7 @@ export default {
         this.$request("/knowledgeList").then(res => {
             _this.knowledgeList = res.data;
             _this.banner = res.banner;
+            _this.navLists = res.data;
             _this.knowledgeList.map(item =>{ 
                 if(item.data != null){
                     for(var i=0;i<item.data.length;i++){
@@ -156,15 +124,18 @@ export default {
 };
 </script>
 <style lang="scss" scope>
-.bg_img {
+.bg_img1 {
   width: 100%;
-  height: 600px;
+  height: 100%;
   img{
       width: 100%;
       height: 100%;
   }
 }
-.selectitem{
+@media only screen and (max-width:990px){
+    .count-img{ margin-bottom: 30px; }
+}
+.knowledge-list{
     position: relative;
 .select-bg{
         width: 75%;
@@ -212,15 +183,68 @@ export default {
             float: right;
             margin-top: 40px;
             display: flex;
+            cursor:pointer;
             box-shadow: 0px 1px 14px 1px rgba(36, 36, 36, 0.2);
            .count-img{
                 width: 38%;
                 height: 84%;
                 margin: 38px;
+                perspective: 800px;
+                overflow: hidden;
+                position: relative;
                 img{
                     width: 100%;
                     height: 100%;
                 }
+                .box-content{
+                    width: 100%;
+                    height: 100%;
+                    text-align: center;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    z-index: 1;
+                }
+            }
+            .count-img:hover:after{ opacity: 1; }
+            .count-img:before{
+                content: "";
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(36deg, #272b66 42.34%, transparent 42.34%) 0 0,
+                linear-gradient(72deg, #2d559f 75.48%, transparent 75.48%) 0 0,
+                linear-gradient(-36deg, #9ac147 42.34%, transparent 42.34%) 100% 0,
+                linear-gradient(-72deg, #639b47 75.48%, transparent 75.48%) 100% 0,
+                linear-gradient(36deg, transparent 57.66%, #e1e23b 57.66%) 100% 100%,
+                linear-gradient(72deg, transparent 24.52%, #f7941e 24.52%) 100% 100%,
+                linear-gradient(-36deg, transparent 57.66%, #662a6c 57.66%) 0 100%,
+                linear-gradient(-72deg, transparent 24.52%, #9a1d34 24.52%) 0 100%,
+                #43a1cd linear-gradient(#ba3e2e, #ba3e2e) 50% 100%;
+                background-repeat: no-repeat;
+                background-size: 50% 50%;
+                opacity: 0;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                -webkit-clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
+                clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
+                transform: translateX(-50%) translateY(-50%) scale(0) rotate(360deg);
+                transition: all 0.3s ease 0s;
+            }
+
+            .count-img:hover:before{
+                opacity: 0.3;
+                transform: translateX(-50%) translateY(-50%) scale(1.5) rotate(0);
+            }
+            .count-img:after{
+                content: "";
+                width: 100%;
+                height: 100%;
+                background: radial-gradient(rgba(255,255,255,0.9),transparent,transparent);
+                position: absolute;
+                top: 0;
+                left: 0;
+                opacity: 0;
             }
             .count-desc{
                 width: 50%;
@@ -285,6 +309,20 @@ export default {
                         text-align: center;
                         line-height: 40px;
                         margin-top: 37px;
+                        transition: all 1s;
+                        background-color:#313131; 
+                        .el-button--text{
+                            color: #fff;
+                        }
+                    }
+                    .count-button-but:hover{
+                        width: 110px;
+                        height: 40px;
+                        text-align: center;
+                        line-height: 40px;
+                        margin-top: 37px;
+                        transform: scale(.94);
+                        border-radius: 5px;
                         background-color:#313131; 
                         .el-button--text{
                             color: #fff;
@@ -324,6 +362,7 @@ export default {
             margin-top: 40px;
             display: flex;
             position: relative;
+            cursor:pointer;
             box-shadow: 0px 1px 14px 1px rgba(36, 36, 36, 0.2);
            .count-img{
                 width: 38%;

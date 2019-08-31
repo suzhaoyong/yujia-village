@@ -18,7 +18,7 @@
           </div>
         </div>
         <div class="head">
-          <el-col :span="24">
+            <div class="head-mu">
             <div class="head-left">
               <img src="../assets/logo.png" />
             </div>
@@ -55,7 +55,7 @@
                 </div>
               </el-submenu>
             </el-menu>
-          </el-col>
+            </div>
         </div>
       </div>
     </el-col>
@@ -303,16 +303,17 @@ export default {
     background: #fcfbf1;
     justify-content: flex-end;
     .head-right {
-      width: 65%;
+      width: 1200px;
       text-align: center;
       position: relative;
+      margin: 0 auto;
       .img {
         width: 30px;
         height: 28px;
         display: inline-block;
         position: absolute;
         top: 4px;
-        right: 38%;
+        right: 6%;
       }
       .span1 {
         padding-right: 5px;
@@ -321,6 +322,7 @@ export default {
       }
       .span2 {
         padding-right: 20px;
+        margin-left: 68%;
         color: #2c2c2c;
       }
     }
@@ -328,17 +330,22 @@ export default {
   .head {
     height: 65px;
     background: #e8f5db;
+    .head-mu{
+      height: 100%;
+      width: 1200px;
+      margin: 0 auto;
     .head-left {
-      width: 17%;
+      width: 15%;
       text-align: center;
-      margin-top: 0px;
-      margin-left: 8%;
+      margin-left: 5%;
       height: 44px;
+      line-height: 44px;
       img {
-        width: 157px;
+        width: 170px;
         position: relative;
-        top: 10px;
+        top: 8px;
       }
+    }
     }
   }
 }

@@ -17,7 +17,8 @@
                     </div>
                     <el-col :span="24" class="bg-pic">
                     <div class="nav-contunt-div2">
-                        <el-carousel height="596px" :interval="5000" arrow="hover" direction="vertical" :autoplay="true">
+                        <div class="carousel">
+                        <el-carousel height="620px" :interval="5000" arrow="always" trigger="click" direction="vertical" :autoplay="true">
                             <el-carousel-item v-for="item in dataimg" :key="item.id">
                                 <div class="contunt2">
                                 <div class="carousel-explain">
@@ -35,6 +36,7 @@
                             </div>
                             </el-carousel-item>
                         </el-carousel>
+                        </div>
                     </div>
                     <div class="nav-contunt-div3">
                         <h2><img src="../assets/yujia.png"/>瑜伽资讯</h2>
@@ -84,7 +86,7 @@
                         <img src="../assets/image52.png" class="bg-pic4">
                         <swiper class="carousel5" :options="swiperOption" style="height:660px;width:1200px;">
                             <swiper-slide class="carousel5-item" v-for="(page,index) of pages" :key="index">
-                            <div class="carousel-explain2" v-for="item of page" :key="item.id">
+                            <div class="carousel-explain2" v-for="item of page" :key="item.id" @click="carouselswiper(item)">
                                 <img :src="item.path"/>
                                 <div class="explain2-div">
                                     <h3>{{item.name}}</h3>
@@ -107,7 +109,8 @@
                     </el-col>
                     <el-col :span="24" class="bg-pic7">
                     <div class="nav-contunt-div6">
-                        <el-carousel height="560px" :interval="5000" arrow="hover" direction="vertical" :autoplay="false">
+                        <div class="navcount">
+                        <el-carousel height="560px" :interval="5000" arrow="hover" trigger="click" direction="vertical" :autoplay="true">
                         <el-carousel-item v-for="item in newtrains" :key="item.id">
                             <div class="explain3">
                             <div class="explain3-border">
@@ -118,7 +121,7 @@
                                 <p class="text-p">{{item.theme}}</p>
                                 <h4 class="text-h4">{{item.name}}</h4>
                                 <p class="text-p2">老师名字：{{item.teacherName}}</p>
-                                <div class="text-p3">课程难度：<el-rate v-model="item.diff"></el-rate></div>
+                                <div class="text-p3">课程难度：<el-rate v-model="item.diff"  disabled-void-color="#EFF2F7"></el-rate></div>
                                 <p class="text-p4">开课时间：{{item.startTime}}</p>
                                 <img src="../assets/image63.png" class="bg-border-img3">
                                 <div class="text-butt">
@@ -128,6 +131,7 @@
                             </div>
                         </el-carousel-item>
                         </el-carousel>
+                        </div>
                     </div>
                     <div class="nav-contunt-div10">
                         <h2><img src="../assets/yujia.png"/>加盟会馆</h2>
@@ -137,7 +141,7 @@
                     </div>
                     <div class="nav-contunt-div7">
                         <div class="explain4">
-                            <img class="nav-div7-img shake-slow" v-for="(item,index) in clubInfo" :key="index" :src="item.path"/>
+                            <img class="nav-div7-img" v-for="(item,index) in clubInfo" :key="index" :src="item.path" @click="ImgItem(item)"/>
                         </div>
                     </div>
                     </el-col>
@@ -267,6 +271,22 @@ export default {
             }
         });
       },
+      ImgItem(item){
+        this.$router.push({
+            path: "/joinclubhouse/joinclubhousedetails",
+            query: {
+            id: item.id
+            }
+        });
+      },
+      carouselswiper(item){
+        this.$router.push({
+            path: "/yogoteacher/yogoteacherdetails",
+            query: {
+            id: item.id
+            }
+        });
+      },
       ViewAll(namelist){
           this.$router.push({
             path: "/yogoinformation",
@@ -303,6 +323,16 @@ export default {
     border-radius: 100% !important;
     background: #000 !important;
     opacity: .2 !important;
+}
+.span{
+    width: 60%;
+    color: #fff;
+    font-size: 14px;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 2 !important;// 限制快级元素的文本行数
+    overflow: hidden !important;
+    margin-left: -65px;
 }
 .bg_img {
   width: 100%;
@@ -371,15 +401,20 @@ export default {
             background-size: 100% 100%;
         .nav-contunt-div2{
             width: 100%;
-            height: 596px;
+            height: 640px;
             margin: 0 auto;
+            .carousel{
+                width: 1350px;
+                margin: 0 auto;
+                height: 100%;
             .contunt2{
                 width: 1200px;
-                height: 596px;
+                height: 620px;
                 margin: 0 auto;
                 background-color: #939EC4;
                 opacity: 0.7;
-                margin-top: 5%;
+                margin-top: 6%;
+                cursor:pointer;
             .carousel-explain{
                 height: 350px;
                 position: relative;
@@ -449,8 +484,18 @@ export default {
                     height: 45px;
                     border: solid 1px #ffffff;
                     color: #fff;
+                    transition: all 1s;
+                }
+                .carousel-btn:hover{
+                    width: 130px;
+                    height: 45px;
+                    border: solid 1px #ffffff;
+                    color: #fff;
+                    transform: scale(.9);
+                    background-color: rgba(31,45,61,.11);
                 }
             }
+        }
         }
     }
         .nav-contunt-div3{
@@ -504,6 +549,7 @@ export default {
                 width: 1200px;
                 margin: 0 auto;
                 height: 624px;
+                cursor:pointer;
                 .icon{
                     float: left;
                     width: 23%;
@@ -512,9 +558,15 @@ export default {
                     margin-right:24px;
                     box-shadow: 1px 1px 6px 0px rgba(36, 36, 36, 0.2);
                     background-color: #fff;
-                        .icon-img-content{
+                    .icon-img-content{
+                        width: 100%;
+                        height: 100%;
+                        transition: all 1s;
+                    }
+                    .icon-img-content:hover{
                             width: 100%;
                             height: 100%;
+                            transform: scale(1.1)
                         }
                 }
                 .active {
@@ -555,13 +607,22 @@ export default {
                             text-align: center;
                             position: absolute;
                             bottom: 6%;
-                            right: 55%;
+                            right: 53%;
+                            transition: all .8s;
                             .el-button--text{
                                 color: #fff;
                                 background: 0 0;
                                 padding-left: 0;
                                 padding-right: 0;
                             }
+                        }
+                        .yogoswiper-butt:hover{
+                            width: 120px;
+                            border: 1px solid #130C0C;
+                            background: #130C0C;
+                            text-align: center;
+                            border-radius: 5px;
+                            transform: scale(.96);
                         }
                         h3{
                             text-align: left;
@@ -571,7 +632,7 @@ export default {
                             margin-top:20px;
                             font-family:Source Han Sans CN;
                             font-weight:bold;
-                            margin-left: 35px;
+                            margin-left: 50px;
                             display: -webkit-box !important;
                             -webkit-box-orient: vertical !important;
                             -webkit-line-clamp:2 !important;// 限制快级元素的文本行数
@@ -586,7 +647,7 @@ export default {
                             -webkit-line-clamp:2 !important;// 限制快级元素的文本行数
                             overflow: hidden !important;
                             position: absolute;
-                            width: 45%;
+                            width: 44%;
                             right: 0%;
                             top: 43%;
                         }
@@ -602,6 +663,21 @@ export default {
                         z-index: 10;
                         background-size: 24px 24px;
                         background-color: #fff;
+                        transition: all .8s;
+                        background-image: url('../assets/left.png');
+                }
+                .swiper-button-prev1:hover{
+                        position: absolute;
+                        left: 88%;
+                        top: 57%;
+                        width: 27px;
+                        height: 27px;
+                        border: 1px solid #e2dbc8;
+                        border-radius: 50%;
+                        z-index: 10;
+                        background-size: 28px 24px;
+                        transform: scale(.9);
+                        background-color: #fff;
                         background-image: url('../assets/left.png');
                 }
                 .swiper-button-next1{
@@ -613,6 +689,21 @@ export default {
                         border: 1px solid #e2dbc8;
                         border-radius: 50%;
                         z-index: 10;
+                        transition: all .8s;
+                        background-size: 24px 24px;
+                        background-color: #fff;
+                        background-image: url('../assets/right.png');
+                }
+                .swiper-button-next1:hover{
+                        position: absolute;
+                        right: 3%;
+                        top: 57%;
+                        width: 27px;
+                        height: 27px;
+                        border: 1px solid #e2dbc8;
+                        border-radius: 50%;
+                        z-index: 10;
+                        transform: scale(.9);
                         background-size: 24px 24px;
                         background-color: #fff;
                         background-image: url('../assets/right.png');
@@ -641,6 +732,7 @@ export default {
                width: 1200px !important;
                 height: 660px;
                 margin: 0 auto;
+                cursor:pointer;
                 .carousel-explain2{
                     height: 227px;
                     float: left;
@@ -652,6 +744,15 @@ export default {
                         border-radius: 50%;
                         margin-top: 18px;
                         background-color: #DCD9CC;
+                        transition: All 1s;
+                    }
+                    img:hover{
+                        width: 160px;
+                        height: 160px;
+                        border-radius: 50%;
+                        margin-top: 18px;
+                        background-color: #DCD9CC;
+                        transform: scale(.9);
                     }
                     .explain2-div{
                         height: auto;
@@ -721,11 +822,16 @@ export default {
             height: 660px;
             margin: 0 auto;
             margin-top: 40px;
+            .navcount{
+                width: 1280px;
+                margin: 0 auto;
+                height: 100%;
             .explain3{
                 width: 1200px;
                 margin:0 auto;
                 height: 590px;
                 display: flex;
+                cursor:pointer;
                 .explain3-border{
                     width: 67%;
                     border: 10px solid #fff;
@@ -815,12 +921,30 @@ export default {
                         top: 90%;
                         line-height: 52px;
                         text-align: center;
+                        transition: all 1s;
                         .text-button{
                             color: #2c2c2c;
                         }
                     }
+                    .text-butt:hover{
+                        width: 122px;
+                        height: 53px;
+                        background-color: #ffffff;
+                        position: absolute;
+                        left: 7%;
+                        top: 90%;
+                        line-height: 52px;
+                        text-align: center;
+                        border-radius: 5px;
+                        transform: scale(.9);
+                        .text-button{
+                            color: #2c2c2c;
+                            font-size: 14px;
+                        }
+                    }
                 }
             }
+          }
         }
         .nav-contunt-div7{
             width: 100%;
@@ -831,6 +955,7 @@ export default {
                 width: 1200px;
                 margin:0 auto;
                 height: 602px;
+                cursor:pointer;
                 .nav-div7-img{
                     width: 235px;
                     height: 198px;
