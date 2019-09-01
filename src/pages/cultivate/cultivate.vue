@@ -16,7 +16,10 @@
                   <span class="span">时间：</span>
                   <div type="text" class="butt" @click="removeTag('time')">全部</div>
                   <el-date-picker
-                    v-model="value1"
+                    v-model="time.range"
+                    @change="changeTime"
+                    :clearable="false"
+                    value-format="yyyy-MM-dd"
                     type="daterange"
                     range-separator="至"
                     start-placeholder="开始日期"
@@ -34,8 +37,18 @@
                       :key="item.name"
                       @click="selected(item)"
                     >{{item.name}}</div>
-                    <el-input v-model="input" placeholder="请输入金额" class="price-input1"></el-input>—
-                    <el-input v-model="input2" placeholder="请输入金额" class="price-input2"></el-input>
+                    <el-input
+                      v-model.lazy="priceInput.value.minPrice"
+                      @change="priceChange('minPrice')"
+                      placeholder="请输入金额"
+                      class="price-input1"
+                    ></el-input>—
+                    <el-input
+                      v-model.lazy="priceInput.value.maxPrice"
+                      @change="priceChange('maxPrice')"
+                      placeholder="请输入金额"
+                      class="price-input2"
+                    ></el-input>
                   </div>
                 </div>
                 <div class="cultivate1-three">
@@ -73,7 +86,7 @@
                       @click="selected(item)"
                     >{{item.name}}</div>
                   </div>
-                  <div class="more" v-if="true">
+                  <div class="more" v-if="moreClassfiy.length>0">
                     <div class="dropdown show">
                       <a
                         class="btn dropdown-toggle"
@@ -107,6 +120,7 @@
                     :type="tag.type"
                     class="tag"
                   >{{tag.name}}</el-tag>
+                  <el-button v-show="selectTags.length>0" @click="searchResult" class="search">搜索</el-button>
                 </div>
               </div>
               <div class="fruit">找到下列结果</div>
@@ -124,32 +138,28 @@
                     <h4>{{item.name}}</h4>
                     <div class="list-eye">
                       <!-- <img src /> -->
-                      <span class="span">{{item.views}}</span>
+                      <span class="span">{{item.views||100}}</span>
                     </div>
                   </div>
                   <el-rate :colors="['#58B708','#58B708','#58B708']" disabled :value="item.diff"></el-rate>
                   <div class="fruit-price">￥{{item.price}}</div>
                   <div class="fruit-detail">{{item.address}}</div>
                 </div>
+                <not-found v-if="fruit.data.length === 0" type="not-fond" msg="暂无相关信息"></not-found>
               </div>
               <div class="pages">
                 <el-pagination
                   background
+                  :hide-on-single-page="true"
                   layout="prev, pager, next, jumper"
                   :page-size="12"
                   @current-change="changePage"
+                  :current-page="fruit.current_page"
                   :total="fruit.total"
                 ></el-pagination>
               </div>
             </div>
-            <div class="cultivate-count-div2">
-              <h2>
-                <img src="../../assets/yujia.png" />热门课程
-              </h2>
-              <p class="nav-text">Sometimes beauty is so simple</p>
-              <div class="border-left"></div>
-              <div class="border-right"></div>
-            </div>
+            <session-title name="热门课程" brief="Sometimes beauty is so simple"></session-title>
             <div class="cultivate-count-div3">
               <div
                 class="fruit-list-li"
@@ -163,8 +173,8 @@
                 <div class="fruit-list-li-text">
                   <h4>{{item.name}}</h4>
                   <div class="list-eye">
-                    <!-- <img src="../../assets/eye.png" /> -->
-                    <span class="span">{{item.num}}</span>
+                    <img src="../../assets/eye.png" />
+                    <span class="span">{{item.views || 100}}</span>
                   </div>
                 </div>
                 <el-rate :colors="['#58B708','#58B708','#58B708']" disabled :value="item.diff"></el-rate>
@@ -172,14 +182,7 @@
                 <div class="fruit-detail">{{item.address}}</div>
               </div>
             </div>
-            <div class="cultivate-count-div4">
-              <h2>
-                <img src="../../assets/yujia.png" />最新发布
-              </h2>
-              <p class="nav-text">Sometimes beauty is so simple</p>
-              <div class="border-left"></div>
-              <div class="border-right"></div>
-            </div>
+            <session-title name="最新发布" brief="Sometimes beauty is so simple"></session-title>
             <div
               :class="['cultivate-count-div5',{left: index%2 == 1}]"
               v-for="(item, index) in newList"
@@ -214,8 +217,10 @@
 <script>
 import Banner from "@/components/banner";
 import VDistpicker from "v-distpicker";
+import SessionTitle from "./SessionTitle";
 import {
   getTrains,
+  postTrainsList,
   getOrderByTrains,
   postTrains,
   getTrainsById
@@ -223,7 +228,8 @@ import {
 export default {
   components: {
     Banner,
-    VDistpicker
+    VDistpicker,
+    SessionTitle
   },
   data() {
     return {
@@ -276,6 +282,25 @@ export default {
         }
       ],
       classfiy: [],
+      time: {
+        value: {
+          startTime: "",
+          endTime: ""
+        },
+        type: "time",
+        range: [],
+        isArray: false,
+        name: ""
+      },
+      priceInput: {
+        value: {
+          minPrice: "",
+          maxPrice: ""
+        },
+        type: "price",
+        isArray: false,
+        name: ""
+      },
       priceList: [
         {
           value: {
@@ -332,6 +357,37 @@ export default {
     });
   },
   methods: {
+    getFiltersParams(params = {}) {
+      this.selectTags.map(item => {
+        if (
+          item.type == "time" ||
+          item.type == "price" ||
+          item.type == "area"
+        ) {
+          params = Object.assign({}, params, item.value);
+        } else if (item.type == "classfiy") {
+          let course_type_id = params.course_type_id || [];
+          course_type_id.push(item.id);
+          params = Object.assign({}, params, {
+            course_type_id: course_type_id
+          });
+        } else {
+          params = Object.assign({}, params, { [item.type]: item.value });
+        }
+      });
+      return params;
+    },
+    searchResult() {
+      postTrains(this.getFiltersParams()).then(data => {
+        this.fruit = data;
+        // this.getTrainsList();
+      });
+    },
+    postGetTrainsList(page = 1, params) {
+      postTrainsList(page, params).then(data => {
+        this.fruit = data;
+      });
+    },
     getTrainsList(page = 1) {
       getTrains(page).then(data => {
         const mapClassfiy = array =>
@@ -344,15 +400,56 @@ export default {
         const { all, hot, course_types, banner } = data;
         this.fruit = all;
         if (page > 1) return;
-        if (course_types.length > 8) {
-          this.classfiy = mapClassfiy(course_types.slice(0, 8));
-          this.moreClassfiy = mapClassfiy(course_types.slice(8));
-        }
+        this.classfiy = mapClassfiy(course_types);
+        // if (course_types.length > 8) {
+        //   this.classfiy = mapClassfiy(course_types.slice(0, 8));
+        //   this.moreClassfiy = mapClassfiy(course_types.slice(8));
+        // }
         this.banner = banner;
       });
     },
     changePage(val) {
-      this.getTrainsList(val);
+      if (this.selectTags.length > 0) {
+        this.postGetTrainsList(val, this.getFiltersParams());
+        return;
+      } else {
+        this.getTrainsList(val);
+      }
+    },
+    changeTime(e) {
+      if (e.length > 1) {
+        this.time.name = e[0] + "/" + e[1];
+        this.time.value.startTime = e[0];
+        this.time.value.endTime = e[1];
+        this.selected(this.time);
+      } else {
+        this.resetTime();
+      }
+    },
+    priceChange(price) {
+      let {
+        value: { minPrice, maxPrice },
+        name
+      } = this.priceInput;
+      if (minPrice && maxPrice) {
+        if (minPrice > maxPrice) {
+          this.$message({
+            type: "warning",
+            message: "输入的范围不正确"
+          });
+          return;
+        }
+        if (maxPrice > 100000) {
+          this.$message({
+            type: "warning",
+            message: "输入的0-100000范围之内"
+          });
+          return;
+        }
+        name = `${minPrice} - ${maxPrice}`;
+        this.priceInput.name = name;
+        this.selected(this.priceInput);
+      }
     },
     onSelected(data) {
       const { province, city, area } = data;
@@ -371,17 +468,45 @@ export default {
         isArray: false,
         name: `${province.value} ${city.value} ${area.value}`
       };
-      console.log(area.value);
-      area.value && this.selected(tag);
+      area.value.length > 1 && this.selected(tag);
     },
     resetArea() {
       this.selectArea.province = "";
       this.selectArea.city = "";
       this.selectArea.area = "";
     },
+    resetTime() {
+      this.time = {
+        value: {
+          startTime: "",
+          endTime: ""
+        },
+        type: "time",
+        range: [],
+        isArray: false,
+        name: ""
+      };
+    },
+    resetPrice() {
+      this.priceInput = {
+        value: {
+          minPrice: "",
+          maxPrice: ""
+        },
+        type: "price",
+        isArray: false,
+        name: ""
+      };
+    },
     removeTag(type) {
       if (type == "area") {
         this.resetArea();
+      }
+      if (type === "time") {
+        this.resetTime();
+      }
+      if (type == "price") {
+        this.priceInput.name && this.resetPrice();
       }
       this.selectTags = this.selectTags.filter(item => item.type !== type);
     },
@@ -390,6 +515,9 @@ export default {
         this.selectTags.push(item);
         return;
       }
+      // if (item.type == "price") {
+      //   this.priceInput.name && this.resetPrice();
+      // }
       const hasIndex = this.selectTags
         .map((tag, index) => {
           if (tag.type == item.type) {
@@ -400,12 +528,20 @@ export default {
       hasIndex && this.selectTags.splice(hasIndex, 1);
       this.selectTags.push(item);
     },
-    selected2(item) {
-      this.active2 = item.name;
-      this.selectTags.push(item);
-    },
     handleClose(tag) {
+      if (tag.type === "area") {
+        this.resetArea();
+      }
+      if (tag.type === "time") {
+        this.resetTime();
+      }
+      if (tag.type == "price") {
+        this.priceInput.name && this.resetPrice();
+      }
       this.selectTags.splice(this.selectTags.indexOf(tag), 1);
+      if (this.selectTags.length === 0) {
+        this.getTrainsList();
+      }
     },
     selected3(name) {
       this.active3 = name;
@@ -425,8 +561,21 @@ export default {
 };
 </script>
 <style scoped>
+.cultivate-main >>> .el-date-table td.available.in-range.start-date {
+}
+.cultivate-main >>> .el-pager li:not(.disabled).active {
+  background: #e8f4db;
+  color: #2c2c2c;
+}
+.cultivate-main
+  >>> .el-pagination.is-background
+  .el-pager
+  li:not(.disabled):hover {
+  color: #2c2c2c;
+}
 .cultivate-main >>> .el-icon-close:hover {
   background: #fff;
+  color: #2c2c2c;
 }
 .cultivate-main >>> .el-icon-close {
   color: inherit;
@@ -435,11 +584,19 @@ export default {
   height: 30px;
 }
 .cultivate-main >>> .distpicker-address-wrapper select {
-  height: 30px;
+  height: 2em;
   margin-right: 10px;
+  font-size: 0.7rem;
 }
 .cultivate-main >>> .el-rate__icon {
   font-size: 0.7rem !important;
+}
+.cultivate-main >>> .el-button:hover {
+  border-color: #22cc22;
+  color: #2c2c2c;
+}
+.cultivate-main >>> .el-button:focus {
+  outline: none;
 }
 .cultivate-main >>> .el-button--text {
   border: none !important;
@@ -450,6 +607,15 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.search {
+  color: #2c2c2c;
+  background-color: #fff;
+  height: 2em;
+  line-height: 2em;
+  padding: 0;
+  width: 4em;
+  margin-left: 1em;
+}
 .pages {
   display: flex;
   justify-content: center;
@@ -490,7 +656,7 @@ img {
       display: inline-block;
       .cultivate1 {
         // width: 90vw;
-        height: 24.6rem;
+        // height: 24.6rem;
         margin: 0 auto;
         background-color: #ffffff;
         box-shadow: 2px 3px 20px 1px #a4a4a4;
@@ -638,7 +804,7 @@ img {
         }
         .cultivate1-five {
           width: 100%;
-          height: 4.1rem;
+          min-height: 4.1rem;
           line-height: 4.1rem;
           padding-left: 3rem;
           display: flex;
@@ -681,7 +847,7 @@ img {
         }
         .cultivate1-six {
           width: 100%;
-          height: 4.1rem;
+          min-height: 4.1rem;
           line-height: 4.1rem;
           padding-left: 3rem;
           .span {
@@ -977,7 +1143,7 @@ img {
       .bian {
         width: 22rem;
         // height: 14rem;
-        padding: 3rem 4rem;
+        // padding: 3rem 4rem;
         // background-color: #cce198;
         background: linear-gradient(
           to right,
@@ -1005,10 +1171,16 @@ img {
         // position: absolute;
         // left: 51%;
         // top: 24%;
+        margin: 3rem 4rem;
+        width: 20em;
         .li-text {
           display: flex;
           justify-content: space-between;
           h4 {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+            overflow: hidden;
             font-size: 1rem;
             color: #2c2c2c;
           }
@@ -1044,6 +1216,7 @@ img {
             bottom: -2em;
             right: 0;
             z-index: 112;
+            background-repeat: no-repeat;
             background-image: url("../../assets/image-jiao.png");
           }
         }
@@ -1087,6 +1260,8 @@ img {
         // position: absolute;
         // left: 51%;
         // top: 24%;
+        margin: 3rem 4rem;
+        width: 20em;
         .li-text {
           display: flex;
           justify-content: space-between;

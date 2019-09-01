@@ -1,16 +1,9 @@
 <template>
-  <div>
+  <div style="background:#eee;;">
     <el-row>
       <el-col :span="24">
         <div class="detail-main">
-          <div class="detail-count-div1">
-            <h2>
-              <img src="../../assets/yujia.png" />课程介绍
-            </h2>
-            <p class="nav-text">Sometimes beauty is so simple</p>
-            <div class="border-left"></div>
-            <div class="border-right"></div>
-          </div>
+          <session-title name="课程介绍" brief="Sometimes beauty is so simple"></session-title>
           <div class="detail-count-div2">
             <div class="count-div2-img">
               <img
@@ -45,14 +38,7 @@
             </div>
           </div>
           <div class="detail-count-div3">
-            <div class="count-div3-cumtrl">
-              <h2>
-                <img src="../../assets/yujia.png" />适宜人群
-              </h2>
-              <p class="nav-text">Sometimes beauty is so simple</p>
-              <div class="border-left"></div>
-              <div class="border-right"></div>
-            </div>
+            <session-title name="适宜人群" brief="Sometimes beauty is so simple"></session-title>
             <div class="div3-crowd">
               <div class="div3-crowd-li" v-for="(item, index) in train.crowd">
                 <h5>Easy to navigate</h5>
@@ -84,8 +70,12 @@
 </template>
 <script>
 import { getTrains, postTrains, getTrainsById } from "@/api/trains";
+import SessionTitle from "./SessionTitle";
 
 export default {
+  components: {
+    SessionTitle
+  },
   data() {
     return {
       value2: 4,
@@ -104,8 +94,7 @@ export default {
   },
   methods: {
     callTel() {
-      this.$alert(`会馆电话: 021-621146321`, "会馆电话", {
-      });
+      this.$alert(`会馆电话: 021-621146321`, "会馆电话", {});
     }
   }
 };
@@ -117,7 +106,7 @@ export default {
 </style>
 <style lang="scss" scoped>
 .detail-main {
-  width: 100%;
+  width: 60rem;
   height: 100%;
   background-color: #eeeeee;
   margin: 0 auto;
@@ -162,7 +151,6 @@ export default {
     }
   }
   .detail-count-div2 {
-    width: 60rem;
     margin: 0 auto;
     // height: 30rem;
     background-color: #ffffff;
@@ -268,11 +256,13 @@ export default {
     }
   }
   .detail-count-div3 {
-    width: 75%;
-    margin: 0 auto;
+    // width: 75%;
+    // margin: 0 auto;
     // height: 30.4rem;
     background-color: #ffffff;
     margin-top: 2rem;
+    padding-top: 0.1rem;
+    padding-bottom: 1rem;
     .count-div3-cumtrl {
       width: 100%;
       // height: 9.4rem;
@@ -313,7 +303,8 @@ export default {
       }
     }
     .div3-crowd {
-      width: 70%;
+      background: #fff;
+      // width: 70%;
       margin: 0 auto;
       // height: 18rem;
       display: flex;
@@ -327,7 +318,7 @@ export default {
         h5 {
           font-family: MicrosoftYaHei;
           font-weight: 400;
-
+          width: 100%;
           color: #999999;
           text-align: center;
         }
@@ -346,7 +337,6 @@ export default {
     }
   }
   .detail-count-div4 {
-    width: 60rem;
     margin: 0 auto;
     min-height: 24rem;
     padding-bottom: 4rem;

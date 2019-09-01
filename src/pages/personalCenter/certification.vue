@@ -270,8 +270,9 @@ export default {
   height: 30px;
 }
 .form >>> .distpicker-address-wrapper select {
-  height: 30px;
+  height: 2em;
   margin-right: 10px;
+  font-size: 0.7rem;
 }
 .form >>> .disabled .el-upload--picture-card {
   display: none;

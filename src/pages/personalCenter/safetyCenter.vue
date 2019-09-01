@@ -156,7 +156,7 @@
                 <span>{{tel}}</span>
               </div>
             </div>
-            <div class="edit-personage" v-show="tagList[2].active">
+            <div class="edit-personage" v-show="tagList[2].active && info.user.name">
               <div class="item">
                 <div class="lable">用户名</div>
                 <div class="value">
@@ -376,14 +376,17 @@ export default {
         city: "",
         province: "",
         area: ""
+      },
+      info: {
+        user: {}
       }
     };
   },
   computed: {
-    info() {
-      const user = sessionStorage.getItem("user");
-      return user && JSON.parse(user);
-    },
+    // info() {
+    //   const user = sessionStorage.getItem("user");
+    //   return user && JSON.parse(user);
+    // },
     isTagActive() {
       return index => ({
         active: this.tagList[index].active
@@ -393,6 +396,8 @@ export default {
     tel() {
       return (
         this.info &&
+        this.info.user &&
+        this.info.user.tel &&
         `${this.info.user.tel.substr(0, 3)}****${this.info.user.tel.substr(
           7,
           11
@@ -400,11 +405,46 @@ export default {
       );
     }
   },
+  created() {
+    this.getPersonal();
+  },
   mounted() {
     const { type } = this.$route.query;
     type && this.tagsChange(type);
   },
   methods: {
+    /** 个人信息 */
+    getPersonal() {
+      this.$request("/personal/home").then(data => {
+        sessionStorage.setItem("user", JSON.stringify(data));
+        this.info = data;
+        const {
+          area,
+          province,
+          city,
+          birthday,
+          sex,
+          tel,
+          identity_auth,
+          name,
+          real_name
+        } = this.info.user;
+        this.userForm = Object.assign(
+          {},
+          {
+            area,
+            province,
+            city,
+            birthday,
+            sex,
+            tel,
+            identity_auth,
+            name,
+            real_name
+          }
+        );
+      });
+    },
     onDistpickerSelected(data) {
       const { area, city, province } = data;
       if (this)
@@ -566,6 +606,7 @@ export default {
       // postUpdateTeacherInfo();
       let params = Object.assign({}, this.userForm);
       postUpdateInfo(params).then(data => {
+        this.getPersonal();
         this.$message({
           type: "success",
           message: "修改成功"
@@ -574,6 +615,7 @@ export default {
     },
     updateClub() {
       postUpdateClubInfo().then(data => {
+        this.getPersonal();
         this.$message({
           type: "success",
           message: "修改成功"
@@ -588,8 +630,9 @@ export default {
   display: none;
 }
 .edit-personage >>> .distpicker-address-wrapper select {
-  height: 30px;
+  height: 2em;
   margin-right: 10px;
+  font-size: 0.7rem;
 }
 .edit-personage >>> .disabled .el-upload--picture-card {
   display: none;
@@ -599,8 +642,9 @@ export default {
 }
 
 .edit-hall >>> .distpicker-address-wrapper select {
-  height: 30px;
+  height: 2em;
   margin-right: 10px;
+  font-size: 0.7rem;
 }
 .edit-hall >>> .disabled .el-upload--picture-card {
   display: none;

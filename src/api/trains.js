@@ -4,6 +4,22 @@ import request from '@/utils/request';
 export function getTrains(page = 1) {
   return request(`/trains?page=${page}`)
 }
+/* 培训信息列表 */
+export function postTrainsList(page = 1, args) {
+  let params = {
+    startTime: "",
+    endTime: "",
+    minPrice: "",
+    maxPrice: "",
+    province: "",
+    city: "",
+    area: "",
+    diff: "", // 难度,整数,小于10
+    course_type_id: [], // 瑜伽类型,数组传参且数组元素必须是正整数(数组元素是瑜伽类型的id)
+  }
+  params = Object.assign({}, params, args)
+  return request.post(`/trains?page=${page}`, params)
+}
 /* 最新最热 */
 export function getOrderByTrains(page = 1) {
   return request(`/orderByTrains?page=${page}`)
@@ -20,7 +36,7 @@ export function postTrains(args) {
     city: "",
     area: "",
     diff: "", // 难度,整数,小于10
-    course_type_id: "", // 瑜伽类型,数组传参且数组元素必须是正整数(数组元素是瑜伽类型的id)
+    course_type_id: [], // 瑜伽类型,数组传参且数组元素必须是正整数(数组元素是瑜伽类型的id)
   }
   params = Object.assign({}, params, args)
   return request.post('/trains', params)

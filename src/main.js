@@ -5,6 +5,7 @@ import Vuex from 'vuex'
 import App from './App'
 import router from './router'
 import request from '@/utils/request';
+import NotFound from '@/utils/not_found.js';
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import {Carousel, CarouselItem} from 'element-ui'
@@ -13,6 +14,7 @@ import 'swiper/dist/css/swiper.css'
 import Share from 'vue-social-share'
 import 'vue-social-share/dist/client.css';
 
+Vue.use(NotFound)
 Vue.use(Share)
 Vue.use(ElementUI)
 Vue.use(VueAwesomeSwiper)

@@ -241,8 +241,6 @@ export default {
       this.$request("/personal/home").then(data => {
         sessionStorage.setItem("user", JSON.stringify(data));
         this.info = data
-        // window.location.reload();
-        // this.$emit('suc', data.user.name)
       });
     },
     viewGoodsDetail(goods) {
