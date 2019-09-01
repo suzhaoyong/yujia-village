@@ -614,6 +614,7 @@ export default {
                             -webkit-box-orient: vertical !important;
                             -webkit-line-clamp:2 !important;// 限制快级元素的文本行数
                             overflow: hidden !important;
+                            width: 67%;
                         }
                     }
                     .p1{

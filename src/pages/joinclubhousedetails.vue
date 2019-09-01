@@ -47,7 +47,7 @@
                         </div>
                         <div class="left2" v-html="club.content">{{club.content}}</div>
                         <div class="left3">
-                            电话：{{club.club_tel}}
+                            <!-- 电话：{{club.club_tel}} -->
                         </div>
                         <div class="left4">
                             地址：{{club.club_address}}

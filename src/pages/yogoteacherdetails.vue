@@ -2,13 +2,13 @@
     <el-col :span="24">
         <div class="yogoteacher-main">
             <div class="yogoteacher-count-div1">
-                <div class="count-img">
-                    <img src="../assets/image80.png" class="img1"/>
+                <div class="count-img" :style="{ 'background-image': 'url(' + teacher.path + ')','background-repeat':'no-repeat','background-size':'100% 100%' }">
+                    <!-- <img :src="teacher.path" class="img1"/> -->
                     <div class="count-div">
                     <div class="count-name">
-                        <span class="span1">瑜伽名师<span class="span2"> — vivi</span></span>
+                        <span class="span1">瑜伽名师<span class="span2"> — {{teacher.name}}</span></span>
                     </div>
-                    <img src="../assets/image81.png" class="count-name-img"/>
+                    <img :src="teacher.cover" class="count-name-img"/>
                     </div>
                 </div>
             </div>
@@ -21,8 +21,8 @@
                     <div class="yogofigcaption-title">
                         <h2>个人简介</h2>
                         <p class="p1">Good at courses</p>
-                        <p class="p2">擅长课程：擅长课程：理疗修复、传统瑜伽、体态调整</p>
-                        <p class="p3">课程特色：将传统瑜伽、艾扬格、功能理疗结合成有特色的一对一私教课；累计课时超过5000小时多年的瑜伽练习带来身体和心理层面的巨大收获。在不断实践与学习中，更加笃定的去做瑜伽的传播者；信奉瑜伽即生活；</p>
+                        <p class="p2">擅长课程：<span>{{teacher.good_at}}</span></p>
+                        <div class="p3">课程特色：<span v-html="teacher.content">{{teacher.content}}</span></div>
                     </div>
                 </div>
             </div>
@@ -33,17 +33,25 @@
                     <div class="border-left"></div>
                     <div class="border-right"></div>
                 </div>
-                <div class="yogo-cont-show">
+                <div class="yogo-cont-show" v-if="this.showList.length > 0">
                     <div class="showlist" v-for="(item,index) in showList" :key="index">
+                        <div class="showlist-auto">
                         <div class="showimg">
-                           <img :src="item.imgurl" class="showimg1"/>
+                           <img :src="item.cover" class="showimg1"/>
                         </div>
-                        <div class="showtext">
-                            <span class="show-span">{{item.name}}</span>
+                        <!-- <div class="showtext">
+                            <span class="show-span">{{item.theme}}</span>
+                        </div> -->
                         </div>
                     </div>
                 </div>
-                <img src="../assets/image85.png" class="count-name-img5"/>
+                <div class="Default-page8" v-else>
+                    <div class="Default-main8">
+                    <img src="../assets/default.png"/>
+                    <span class="page-span8">暂无名师个人数据</span>
+                    </div>
+                </div>
+                <!-- <img src="../assets/image85.png" class="count-name-img5"/> -->
             </div>
         </div>
     </el-col>
@@ -52,24 +60,32 @@
 export default {
   data() {
     return {
-        showList:[{
-            id:1,
-            imgurl:require('../assets/image82.png'),
-            name:'普拉提'
-        },
-        {
-            id:2,
-            imgurl:require('../assets/image82.png'),
-            name:'普拉提'
-        },
-        {
-            id:3,
-            imgurl:require('../assets/image82.png'),
-            name:'普拉提'
-        }]
+        teacher:'',
+        showList:[]
     };
   },
+  created () {
+      this.yogoteacherdata();
+  },
   methods:{
+      yogoteacherdata(){
+        let _this = this;
+        this.$request(`/teachers/${_this.$route.query.id}`).then(res => {
+            let { teacher,course} = res;
+            _this.showList = res.course;
+            _this.teacher = res.teacher;
+        })
+        .catch(error => {
+            let { response: { data: { errorCode, msg } } } = error;
+            if (errorCode != 0) {
+            this.$message({
+                message: msg,
+                type: "error"
+            });
+            return;
+            }
+        });
+      },
   }
 };
 </script>
@@ -81,11 +97,12 @@ export default {
     overflow: hidden;
     .yogoteacher-count-div1{
         width: 100%;
-        height: auto;
+        height: 100%;
         margin: 0 auto;
+        background-color: #3E3E3E;
         .count-img{
             width: 100%;
-            height: 1315px;
+            height: 1334px;
             position: relative;
             cursor: pointer;
             .img1{
@@ -107,15 +124,16 @@ export default {
                 bottom: 14%;
                 right: 120px;
                 transition: all 1s;
+                line-height: 192px;
                 text-align: center;
                 .span1{
-                    font-size:7rem;
+                    font-size:4rem;
                     font-family:Gulim;
                     font-weight:400;
                     font-style:italic;
                     color: #C19765;
                     .span2{
-                        font-size:7rem;
+                        font-size:4rem;
                         font-family:Gulim;
                         font-weight:400;
                         font-style:italic;
@@ -131,16 +149,17 @@ export default {
                 position: absolute;
                 bottom: 14%;
                 right: 120px;
-                transform: scale(.97);
+                transform: scale(.98);
                 text-align: center;
+                line-height: 192px;
                 .span1{
-                    font-size:7rem;
+                    font-size:4rem;
                     font-family:Gulim;
                     font-weight:400;
                     font-style:italic;
                     color: #C19765;
                     .span2{
-                        font-size:7rem;
+                        font-size:4rem;
                         font-family:Gulim;
                         font-weight:400;
                         font-style:italic;
@@ -150,7 +169,7 @@ export default {
             }
             .count-name-img{
                 width: 500px;
-                height: 691px;
+                height: 670px;
                 position: absolute;
                 top: 10%;
             }
@@ -208,6 +227,7 @@ export default {
                .p3{
                    color: #fff;
                    font-size: 20px;
+                   display: flex;
                    font-family:Microsoft YaHei;
                }
            }
@@ -215,11 +235,13 @@ export default {
     }
     .yogoteacher-count-div4{
         width: 100%;
-        height: 903px;
+        height: 100%;
         background-image: url('../assets/image84.png');
         background-repeat: no-repeat;
         background-size: 100% 100%;
         position: relative;
+        display: inline-block;
+        padding-bottom: 20px;
         .yogo-cont-div4{
             width: 1200px;
             height: 200px;
@@ -262,15 +284,19 @@ export default {
             width: 1200px;
             margin: 0 auto;
             height: auto;
-            display: flex;
+            // display: flex;
             margin-top: 5%;
             cursor: pointer;
             .showlist{
-                width: 385px;
+                width: 380px;
                 height: 100%;
                 float: left;
+                display: flex;
+                justify-content: center;
                 margin: 10px;
-                transition: all 1s;
+                .showlist-auto{
+                    transition: all .9s;
+                    width: 100%;
                 .showimg{
                     width: 100%;
                     height: 370px;
@@ -293,13 +319,73 @@ export default {
                         color: #fff;
                     }
                 }
+                }
+                .showlist-auto:hover{
+                    transform: scale(.98);
+                    width: 100%;
+                .showimg{
+                    width: 100%;
+                    height: 370px;
+                    background-color: #fff;
+                    .showimg1{
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+                .showtext{
+                    width: 100%;
+                    height: 88px;
+                    background-color: #65627D;
+                    text-align: center;
+                    line-height: 88px;
+                    .show-span{
+                        font-size:1.7rem;
+                        font-family:Gulim;
+                        font-weight:400;
+                        color: #fff;
+                    }
+                }
+                }
             }
-            .showlist:hover{
-                width: 385px;
+            .block{
+                text-align: center;
+                margin: 0 auto;
+                width: 100%;
+                margin-top: 20px;
+                display: inline-block;
+                .el-pagination {
+                    white-space: nowrap;
+                    padding: 30px 5px;
+                    color: #303133;
+                    font-weight: 700;
+                }
+                .el-pagination.is-background .el-pager li:not(.disabled).active {
+                    background-color: #CCE198;
+                    color: #fff;
+                }
+            }
+        }
+        .Default-page8{
+            width: 100%;
+            height: 600px;
+            margin: 0 auto;
+            text-align: center;
+            line-height: 600px;
+            background-color: #D2CEE4;
+            .Default-main8{
+                width: 1200px;
                 height: 100%;
-                float: left;
-                margin: 10px;
-                transform: scale(.95);
+                margin: 0 auto;
+            img{
+                width: 500px;
+                height: 300px;
+            }
+            .page-span8{
+                font-size:22px;
+                font-family:PingFang SC;
+                font-weight:500;
+                color: #999;
+            }
             }
         }
         .count-name-img5{

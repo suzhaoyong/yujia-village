@@ -17,6 +17,7 @@
                     <div class="formation-count" v-if="this.listdatas.length > 0">
                         <div class="formation-count-div1" v-for="(item,index) in listdatas.slice((currentPage-1)*pagesize,currentPage*pagesize)" :key="index">
                             <img class="bg-img3" src="../assets/image26.png"/>
+                            <div class="formation-auto">
                             <div class="count-img">
                                <div class="border"></div>
                                <h4>{{item.headline}}</h4>
@@ -41,6 +42,7 @@
                                 <div class="desc-img2">
                                     <img :src="item.icon_url"/>
                                 </div>
+                            </div>
                             </div>
                             <div class="bg-border"></div>
                             <div class="bg-re">YOGA</div>
@@ -322,10 +324,18 @@ export default {
                 -o-transform:rotate(90deg); /* Opera */
                 filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
             }
+            .formation-auto{
+                width: 1200px;
+                height: auto;
+                display: flex;
+                margin: 0 auto;
+                position: relative;
            .count-img{
-                width: 28%;
+                width: 31%;
                 height: 84%;
                 margin: 38px;
+                position: absolute;
+                left: 8%;
                 .border{
                     width: 100%;
                     height: 5px;
@@ -429,12 +439,12 @@ export default {
                 }
             }
             .count-desc{
-                width: 33%;
+                width: 40%;
                 height: 84%;
                 margin-top: 38px;
                 background-color: #eeeeee;
-                position: relative;
-                margin-left: -26%;
+                position: absolute;
+                right: 8%;
                 .desc-img1{
                     width: 100%;
                     height: 443px;
@@ -505,6 +515,7 @@ export default {
                     }
                 }
             }
+        }
         }
         .block{
             text-align: center;

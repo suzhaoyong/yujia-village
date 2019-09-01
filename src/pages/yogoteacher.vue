@@ -68,6 +68,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="margin-auto">
                                     <div class="icon" v-for="(item,idx) of page" :key="item.id" :class="activeClass == idx ? 'active':''" @click="selectItem(item,idx)">
                                     <div class="icon-img">
                                         <img class="icon-img-content" :src="item.path">
@@ -75,6 +76,7 @@
                                     <h3>{{item.name}}</h3>
                                     <p class="icon-desc">从业时间：{{item.num}}年</p>
                                     <p class="icon-desc2">{{item.info}}</p>
+                                    </div>
                                     </div>
                                 </swiper-slide>
                                  <div class="swiper-button-prev1" slot="button-prev" @click="buttonprev(pages)"></div>
@@ -91,7 +93,7 @@
                        </div>
                        <div class="yogo-cont-div3">
                            <div class="yogocontunt2" v-if="this.yogolist.length > 0">
-                               <div class="yogocontunt2-list" v-for="(item, index) in yogolist.slice((currentPage-1)*pagesize,currentPage*pagesize)" :key="index" @mouseenter="onMouseOver(index)">
+                               <div class="yogocontunt2-list" v-for="(item, index) in yogolist.slice((currentPage-1)*pagesize,currentPage*pagesize)" :key="index" @mouseenter="onMouseOver(index)" @click="yogolink(item)">
                                     <figure class="test5">
                                         <img :src="item.path" class="yogocontunt2-img"/>
                                         <figcaption>
@@ -248,6 +250,14 @@ export default {
             path: "/yogoteacher/yogoteacherdetails",
             query: {
             id: namelist.id
+            }
+        });
+      },
+      yogolink(item){
+          this.$router.push({
+            path: "/yogoteacher/yogoteacherdetails",
+            query: {
+            id: item.id
             }
         });
       },
@@ -549,8 +559,14 @@ export default {
                 margin-bottom: 50px;
                 position: relative;
                 cursor:pointer;
+                .margin-auto{
+                    width: 100%;
+                    margin:0 auto;
+                    display: flex;
+                    justify-content: center;
+                    height: auto;
                 .icon{
-                    float: left;
+                    // float: left;
                     width: 22%;
                     height: 426px;
                     margin-top: 25px;
@@ -601,6 +617,7 @@ export default {
                     box-shadow:2px 7px 9px 0px rgba(36,36,36,0.2);
                     height: 450px;
                     }
+                }
                 .yogocontunt-swiper{
                     width: 100%;
                     height: 350px;
@@ -737,59 +754,63 @@ export default {
                 }
                 .swiper-button-prev1{
                         position: absolute;
-                        left: 85%;
+                        left: 86%;
                         top: 36%;
-                        width: 35px;
-                        height: 35px;
+                        width: 32px;
+                        height: 32px;
                         border: 1px solid #e2dbc8;
                         border-radius: 50%;
                         z-index: 10;
-                        background-size: 32px 35px;
+                        background-size: 24px 24px;
                         transition: all .7s;
                         background-color: #fff;
                         background-image: url('../assets/left.png');
+                        background-position: center;
                 }
                 .swiper-button-prev1:hover{
                         position: absolute;
-                        left: 85%;
+                        left: 86%;
                         top: 36%;
-                        width: 35px;
-                        height: 35px;
+                        width: 32px;
+                        height: 32px;
                         border: 1px solid #e2dbc8;
                         border-radius: 50%;
                         z-index: 10;
-                        background-size: 32px 35px;
+                        background-size: 24px 24px;
                         transform: scale(.95);
                         background-color: #e2dbc8;
                         background-image: url('../assets/left.png');
+                        background-position: center;
                 }
                 .swiper-button-next1{
                         position: absolute;
                         right: 3%;
                         top: 36%;
-                        width: 35px;
-                        height: 35px;
+                        width: 32px;
+                        height: 32px;
                         border: 1px solid #e2dbc8;
                         border-radius: 50%;
                         z-index: 10;
                         transition: all .7s;
-                        background-size: 32px 35px;
+                        background-size: 24px 24px;
                         background-color: #fff;
                         background-image: url('../assets/right.png');
+                        background-position: center;
                 }
                 .swiper-button-next1:hover{
                         position: absolute;
                         right: 3%;
                         top: 36%;
-                        width: 35px;
-                        height: 35px;
+                        width: 32px;
+                        height: 32px;
                         border: 1px solid #e2dbc8;
                         border-radius: 50%;
                         z-index: 10;
-                        background-size: 32px 35px;
+                        background-size: 24px 24px;
                         transform: scale(.95);
                         background-color: #e2dbc8;
                         background-image: url('../assets/right.png');
+                        background-position: center;
                 }
             }
         }

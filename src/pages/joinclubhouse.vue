@@ -257,7 +257,7 @@ export default {
     right: 44%;
     text-align: center;
     .butt{
-      font-size:1.2vw;
+      font-size:4vh;
       font-family:Microsoft YaHei;
       font-weight:bold;
       color: #FFFFFF;
