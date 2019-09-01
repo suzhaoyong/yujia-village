@@ -14,7 +14,7 @@
               <div class="cultivate1">
                 <div class="cultivate1-one">
                   <span class="span">时间：</span>
-                  <el-button type="text" class="butt">全部</el-button>
+                  <div type="text" class="butt" @click="removeTag('time')">全部</div>
                   <el-date-picker
                     v-model="value1"
                     type="daterange"
@@ -25,53 +25,53 @@
                 </div>
                 <div class="cultivate1-two">
                   <span class="span">价格：</span>
-                  <el-button type="text" class="butt">全部</el-button>
+                  <div type="text" class="butt" @click="removeTag('price')">全部</div>
                   <div class="button-price">
-                    <el-button
+                    <div
                       type="text"
-                      :class="{active3 : active3 == item.name}"
+                      :class="isTagActive(item)"
                       v-for="item in priceList"
                       :key="item.name"
-                      @click="selected3(item.name)"
-                    >{{item.name}}</el-button>
+                      @click="selected(item)"
+                    >{{item.name}}</div>
                     <el-input v-model="input" placeholder="请输入金额" class="price-input1"></el-input>—
                     <el-input v-model="input2" placeholder="请输入金额" class="price-input2"></el-input>
                   </div>
                 </div>
                 <div class="cultivate1-three">
                   <span class="span">地区：</span>
-                  <el-button type="text" class="butt">全部</el-button>
+                  <div type="text" class="butt" @click="removeTag('area')">全部</div>
                   <v-distpicker
-                    :province="province"
-                    :city="city"
-                    :area="area"
+                    :province="selectArea.province"
+                    :city="selectArea.city"
+                    :area="selectArea.area"
                     @selected="onSelected"
                   ></v-distpicker>
                 </div>
                 <div class="cultivate1-four">
                   <span class="span">难度：</span>
-                  <el-button type="text" class="butt">全部</el-button>
+                  <div type="text" class="butt" @click="removeTag('diff')">全部</div>
                   <div class="button-text">
-                    <el-button
+                    <div
                       type="text"
-                      :class="{active : active == item.name}"
+                      :class="isTagActive(item)"
                       v-for="item in wpList"
                       :key="item.name"
-                      @click="selected(item.name)"
-                    >{{item.name}}</el-button>
+                      @click="selected(item)"
+                    >{{item.name}}</div>
                   </div>
                 </div>
                 <div class="cultivate1-five">
                   <span class="span">类别：</span>
-                  <el-button type="text" class="butt">全部</el-button>
+                  <div type="text" class="butt" @click="removeTag('classfiy')">全部</div>
                   <div class="button-classfiy">
-                    <el-button
+                    <div
                       type="text"
-                      :class="{active2 : active2 == item.name}"
+                      :class="isTagActive(item)"
                       v-for="item in classfiy"
                       :key="item.name"
-                      @click="selected2(item)"
-                    >{{item.name}}</el-button>
+                      @click="selected(item)"
+                    >{{item.name}}</div>
                   </div>
                   <div class="more" v-if="true">
                     <div class="dropdown show">
@@ -98,6 +98,8 @@
                 <div class="cultivate1-six">
                   <span class="span">已选：</span>
                   <el-tag
+                    color="#EFF5DE"
+                    effect="Dark"
                     v-for="tag in selectTags"
                     :key="tag.name"
                     closable
@@ -229,9 +231,11 @@ export default {
       moreClassfiy: [],
       value2: "",
       value3: "",
-      province: "",
-      city: "",
-      area: "",
+      selectArea: {
+        province: "",
+        city: "",
+        area: ""
+      },
       input: "",
       input2: "",
       active: "",
@@ -241,30 +245,63 @@ export default {
       rate: 2,
       wpList: [
         {
+          value: 1,
+          type: "diff",
+          isArray: false,
           name: "1星"
         },
         {
+          value: 2,
+          type: "diff",
+          isArray: false,
           name: "2星"
         },
         {
+          value: 3,
+          type: "diff",
+          isArray: false,
           name: "3星"
         },
         {
+          value: 4,
+          type: "diff",
+          isArray: false,
           name: "4星"
         },
         {
+          value: 5,
+          type: "diff",
+          isArray: false,
           name: "5星"
         }
       ],
       classfiy: [],
       priceList: [
         {
+          value: {
+            minPrice: 1500,
+            maxPrice: 3000
+          },
+          type: "price",
+          isArray: false,
           name: "1500-3000"
         },
         {
+          value: {
+            minPrice: 3100,
+            maxPrice: 4000
+          },
+          type: "price",
+          isArray: false,
           name: "3001-4000"
         },
         {
+          value: {
+            minPrice: 4100,
+            maxPrice: 5000
+          },
+          type: "price",
+          isArray: false,
           name: "4001-5000"
         }
       ],
@@ -279,6 +316,12 @@ export default {
   computed: {
     crowdList() {
       return item => item.split("●");
+    },
+    isTagActive() {
+      return item => {
+        const select = this.selectTags.filter(tag => tag.name == item.name)[0];
+        return { active: select };
+      };
     }
   },
   mounted() {
@@ -291,12 +334,19 @@ export default {
   methods: {
     getTrainsList(page = 1) {
       getTrains(page).then(data => {
+        const mapClassfiy = array =>
+          array.map(item => {
+            item.type = "classfiy";
+            item.value = item.id;
+            item.isArray = true;
+            return item;
+          });
         const { all, hot, course_types, banner } = data;
         this.fruit = all;
         if (page > 1) return;
         if (course_types.length > 8) {
-          this.classfiy = course_types.slice(0, 8);
-          this.moreClassfiy = course_types.slice(8);
+          this.classfiy = mapClassfiy(course_types.slice(0, 8));
+          this.moreClassfiy = mapClassfiy(course_types.slice(8));
         }
         this.banner = banner;
       });
@@ -305,12 +355,50 @@ export default {
       this.getTrainsList(val);
     },
     onSelected(data) {
-      this.province = data.province.value;
-      this.city = data.city.value;
-      this.area = data.area.value;
+      const { province, city, area } = data;
+      this.selectArea = {
+        province: province.value,
+        city: city.value,
+        area: area.value
+      };
+      const tag = {
+        value: {
+          province: province.value,
+          city: city.value,
+          area: area.value
+        },
+        type: "area",
+        isArray: false,
+        name: `${province.value} ${city.value} ${area.value}`
+      };
+      console.log(area.value);
+      area.value && this.selected(tag);
     },
-    selected(name) {
-      this.active = name;
+    resetArea() {
+      this.selectArea.province = "";
+      this.selectArea.city = "";
+      this.selectArea.area = "";
+    },
+    removeTag(type) {
+      if (type == "area") {
+        this.resetArea();
+      }
+      this.selectTags = this.selectTags.filter(item => item.type !== type);
+    },
+    selected(item) {
+      if (item.isArray) {
+        this.selectTags.push(item);
+        return;
+      }
+      const hasIndex = this.selectTags
+        .map((tag, index) => {
+          if (tag.type == item.type) {
+            return index + "";
+          }
+        })
+        .filter(item => item)[0];
+      hasIndex && this.selectTags.splice(hasIndex, 1);
+      this.selectTags.push(item);
     },
     selected2(item) {
       this.active2 = item.name;
@@ -337,6 +425,19 @@ export default {
 };
 </script>
 <style scoped>
+.cultivate-main >>> .el-icon-close:hover {
+  background: #fff;
+}
+.cultivate-main >>> .el-icon-close {
+  color: inherit;
+}
+.cultivate-main >>> .el-input__inner {
+  height: 30px;
+}
+.cultivate-main >>> .distpicker-address-wrapper select {
+  height: 30px;
+  margin-right: 10px;
+}
 .cultivate-main >>> .el-rate__icon {
   font-size: 0.7rem !important;
 }
@@ -372,6 +473,7 @@ img {
   height: 100%;
   margin: 0 auto;
   overflow: hidden;
+  font-size: 0.7rem;
   .cultivate-count {
     width: 60rem;
     margin: 0 auto;
@@ -400,21 +502,24 @@ img {
           line-height: 4.1rem;
           padding-left: 3rem;
           display: flex;
+          align-items: center;
           border-bottom: 1px solid #dcdcdc;
           .span {
             width: 4em;
-            font-size: 0.9rem;
+            display: inline-block;
             font-family: MicrosoftYaHei;
             font-weight: bold;
             color: #2c2c2c;
           }
           .butt {
             color: #2c2c2c;
-            margin-left: 2rem;
+            cursor: pointer;
+            width: 3rem;
+            text-align: center;
           }
           .el-range-editor.el-input__inner {
-            margin-left: 2rem;
-            margin-top: 0.8rem;
+            // margin-left: 2rem;
+            // margin-top: 0.8rem;
             width: 50%;
           }
         }
@@ -429,32 +534,42 @@ img {
             width: 4em;
             flex-shrink: 0;
             flex-shrink: 0;
-            font-size: 0.9rem;
+
             font-family: MicrosoftYaHei;
             font-weight: bold;
             color: #2c2c2c;
           }
           .butt {
             color: #2c2c2c;
-            margin-left: 2rem;
+            cursor: pointer;
+            width: 3rem;
+            text-align: center;
           }
           .button-price {
+            div {
+              display: inline-block;
+              cursor: pointer;
+              padding-right: 2rem;
+            }
             .el-button--text {
+              display: inline-block;
               color: #2c2c2c;
               margin-left: 2rem;
-              font-size: 0.9rem;
             }
-            .active3 {
+            .active {
+              display: inline-block;
               color: #00bc71;
-              font-size: 0.9rem;
+
               border: none;
             }
             .price-input1 {
               margin-left: 2rem;
-              width: 8rem;
+              padding: 0;
+              width: 10em;
             }
             .price-input2 {
-              width: 8rem;
+              padding: 0;
+              width: 10em;
             }
           }
         }
@@ -468,17 +583,19 @@ img {
           .span {
             width: 4em;
             flex-shrink: 0;
-            font-size: 0.9rem;
+            display: inline-block;
             font-family: MicrosoftYaHei;
             font-weight: bold;
             color: #2c2c2c;
           }
           .butt {
             color: #2c2c2c;
-            margin-left: 2rem;
+            cursor: pointer;
+            width: 3rem;
+            text-align: center;
           }
           .distpicker-address-wrapper {
-            margin-left: 2rem;
+            // margin-left: 2rem;
           }
         }
         .cultivate1-four {
@@ -491,24 +608,30 @@ img {
           .span {
             width: 4em;
             flex-shrink: 0;
-            font-size: 0.9rem;
+            display: inline-block;
             font-family: MicrosoftYaHei;
             font-weight: bold;
             color: #2c2c2c;
           }
           .butt {
             color: #2c2c2c;
-            margin-left: 2rem;
+            cursor: pointer;
+            width: 3rem;
+            text-align: center;
           }
           .button-text {
+            div {
+              display: inline-block;
+              cursor: pointer;
+              padding-right: 1.5rem;
+            }
             .el-button--text {
               color: #2c2c2c;
               margin-left: 2rem;
-              font-size: 0.9rem;
             }
             .active {
               color: #00bc71;
-              font-size: 0.9rem;
+
               border: none;
             }
           }
@@ -524,24 +647,30 @@ img {
           .span {
             width: 4em;
             flex-shrink: 0;
-            font-size: 0.9rem;
+            display: inline-block;
             font-family: MicrosoftYaHei;
             font-weight: bold;
             color: #2c2c2c;
           }
           .butt {
             color: #2c2c2c;
-            margin-left: 2rem;
+            width: 3rem;
+            cursor: pointer;
+            text-align: center;
           }
           .button-classfiy {
+            div {
+              display: inline-block;
+              cursor: pointer;
+              padding-right: 1.5rem;
+            }
             .el-button--text {
               color: #2c2c2c;
               margin-left: 2rem;
-              font-size: 0.9rem;
             }
-            .active2 {
+            .active {
               color: #00bc71;
-              font-size: 0.9rem;
+
               border: none;
             }
           }
@@ -558,13 +687,15 @@ img {
           .span {
             width: 4em;
             flex-shrink: 0;
-            font-size: 0.9rem;
+            display: inline-block;
             font-family: MicrosoftYaHei;
             font-weight: bold;
             color: #2c2c2c;
           }
           .tag {
             margin-left: 1.5rem;
+            color: inherit;
+            border: none;
           }
         }
       }
@@ -574,7 +705,7 @@ img {
         margin-top: 2rem;
         font-family: MicrosoftYaHei;
         font-weight: bold;
-        font-size: 0.9rem;
+
         color: #2c2c2c;
       }
       .fruit-list {
@@ -969,17 +1100,14 @@ img {
           }
         }
         .li-text2 {
-          font-size: 0.9rem;
           color: #2c2c2c;
           margin-top: 2rem;
         }
         .li-text3 {
-          font-size: 0.9rem;
           color: #2c2c2c;
           margin-top: 1.8rem;
         }
         .li-text4 {
-          font-size: 0.9rem;
           color: #2c2c2c;
           margin-top: 0.5rem;
         }
