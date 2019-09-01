@@ -296,6 +296,7 @@ export default {
                 margin: 10px;
                 .showlist-auto{
                     transition: all .9s;
+                    width: 100%;
                 .showimg{
                     width: 100%;
                     height: 370px;
@@ -321,6 +322,7 @@ export default {
                 }
                 .showlist-auto:hover{
                     transform: scale(.98);
+                    width: 100%;
                 .showimg{
                     width: 100%;
                     height: 370px;
