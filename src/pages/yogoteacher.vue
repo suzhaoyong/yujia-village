@@ -125,7 +125,7 @@
                            <div class="Default-page3" v-else>
                                 <div class="Default-main3">
                                 <img src="../assets/default.png"/>
-                                <span class="page-span3">暂无数据</span>
+                                <span class="page-span3">我寻寻觅觅却找不到您的踪迹~</span>
                                 </div>
                             </div>
                        </div>
@@ -423,7 +423,8 @@ export default {
     border-color: #E2DBC8;
 }
 .distpicker-address-wrapper select{
-    width: 100px;
+    width: 145px;
+    padding-top: 3px;
 }
 .bg_img {
   width: 100%;

@@ -16,6 +16,7 @@
                     </template>
                     <div class="knowledge-count" v-if="this.listdatas.length > 0">
                         <div class="knowledge-count-div1" v-for="(item,index) in listdatas.slice((currentPage-1)*pagesize,currentPage*pagesize)" :key="index">
+                            <div class="knowledge-count-auto">
                             <div class="knowledge-auto">
                             <div class="count-img">
                                 <img :src="item.icon_url"/>
@@ -39,6 +40,7 @@
                                 </div>
                             </div>
                             </div>
+                            </div>
                         </div>
                         <div class="block">
                             <el-pagination
@@ -56,7 +58,7 @@
                     <div class="Default-page" v-else>
                         <div class="Default-main">
                         <img src="../assets/default.png"/>
-                        <span class="page-span">暂无数据~~请选择其他类别</span>
+                        <span class="page-span">我寻寻觅觅却找不到您的踪迹~</span>
                         </div>
                     </div>
                 </div>
@@ -155,12 +157,13 @@ export default {
     .count-img{ margin-bottom: 30px; }
 }
 .knowledge-list{
-    position: relative;
+    width: 1200px;
+    margin: 0 auto;
 .select-bg{
-        width: 75%;
+        width: 1200px;
         margin: 0 auto;
         position: absolute;
-        left: 190px;
+        // left: 190px;
         opacity: 0.7;
         height: auto;
         background-color: #fff;
@@ -197,19 +200,21 @@ export default {
         height: 100%;
         display: inline-block;
         .knowledge-count-div1{
-            width: 93%;
+            width: 85%;
             height: 500px;
             float: right;
             margin-top: 40px;
             display: flex;
             cursor:pointer;
             box-shadow: 0px 1px 14px 1px rgba(36, 36, 36, 0.2);
+            .knowledge-count-auto{
+                width: 1300px;
             .knowledge-auto{
                 width: 1200px;
                 margin: 0 auto;
                 height: 100%;
                 display: flex;
-           .count-img{
+              .count-img{
                 width: 38%;
                 height: 84%;
                 margin: 20px;
@@ -254,7 +259,7 @@ export default {
                 -webkit-clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
                 clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
                 transform: translateX(-50%) translateY(-50%) scale(0) rotate(360deg);
-                transition: all 0.3s ease 0s;
+                transition: all 0.7s ease 0s;
             }
             .count-img:hover:before{
                 opacity: 0.3;
@@ -291,6 +296,8 @@ export default {
                     font-size: 18px;
                     color: #2c2c2c;
                     line-height: 80px;
+                    font-family:Microsoft YaHei;
+                    font-weight:bold;
                     display: -webkit-box !important;
                     -webkit-box-orient: vertical !important;
                     -webkit-line-clamp:1 !important;// 限制快级元素的文本行数
@@ -379,9 +386,10 @@ export default {
                 }
             }
           }
+          }
         }
         .knowledge-count-div1:nth-child(3){
-            width: 93%;
+            width: 85%;
             height: 500px;
             float: left;
             margin-top: 40px;
@@ -389,6 +397,9 @@ export default {
             position: relative;
             cursor:pointer;
             box-shadow: 0px 1px 14px 1px rgba(36, 36, 36, 0.2);
+            .knowledge-count-auto{
+                width: 1300px;
+                margin: 0 auto;
              .knowledge-auto{
                 width: 1200px;
                 margin: 0 auto;
@@ -514,6 +525,7 @@ export default {
                     }
                 }
             }
+        }
         }
         }
         .block{

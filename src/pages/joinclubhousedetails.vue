@@ -2,41 +2,7 @@
     <div>
         <el-col :span="24">
             <div class="joinclubdetails-main">
-                <div class="joinclubdetails-cont-div1">
-                    <h2><img src="../assets/yujia.png"/>会馆课程</h2>
-                    <p class="nav-text">Sometimes beauty is so simple</p>
-                    <div class="border-left"></div>
-                    <div class="border-right"></div>
-                </div>
-                <div class="joinclubdetails-cont-div2">
-                    <el-col>
-                    <div class="clubhouse" v-if="this.swiperList.length > 0">
-                        <swiper :options="swiperOption" style="height:530px">
-                            <swiper-slide v-for="(page,index) of pages" :key="index">
-                                <div class="clubhouse-swiper" v-for="item of page" :key="item.id" @click="clubhouseItem(item)">
-                                    <div class="clubhouse-swiper-img">
-                                        <img :src="item.path"/>
-                                    </div>
-                                    <div class="clubhouse-swiper-name">
-                                        <p class="name-p1">{{item.theme}}<span class="name-span">{{item.name}}</span></p>
-                                        <p class="name-p2">￥{{item.price}}</p>
-                                    </div>
-                                    <el-rate :value="item.diff" disabled disabled-void-color="#c0c4cc" :colors="['#58B708']"></el-rate>
-                                    <p class="name-p3">电话:{{item.tel}}</p>
-                                </div>
-                            </swiper-slide>
-                        </swiper>
-                        <div class="swiper-button-prev1" slot="button-prev"></div>
-                        <div class="swiper-button-next1" slot="button-next"></div>
-                    </div>
-                     <div class="Default-page5" v-else>
-                        <div class="Default-main5">
-                        <img src="../assets/default.png"/>
-                        <span class="page-span5">暂无会馆课程数据</span>
-                        </div>
-                    </div>
-                    </el-col>
-                </div>
+                
                 <div class="joinclubdetails-cont-div3">
                     <div class="joinclubdetails-div3-main">
                     <div class="joinclubdetails-left">
@@ -92,8 +58,44 @@
                  <div class="Default-page6" v-else>
                     <div class="Default-main6">
                     <img src="../assets/default.png"/>
-                    <span class="page-span6">暂无馆内人员数据</span>
+                    <span class="page-span6">我寻寻觅觅却找不到您的踪迹~</span>
                     </div>
+                </div>
+
+                <div class="joinclubdetails-cont-div1">
+                    <h2><img src="../assets/yujia.png"/>会馆课程</h2>
+                    <p class="nav-text">Sometimes beauty is so simple</p>
+                    <div class="border-left"></div>
+                    <div class="border-right"></div>
+                </div>
+                <div class="joinclubdetails-cont-div2">
+                    <el-col>
+                    <div class="clubhouse" v-if="this.swiperList.length > 0">
+                        <swiper :options="swiperOption" style="height:530px">
+                            <swiper-slide v-for="(page,index) of pages" :key="index">
+                                <div class="clubhouse-swiper" v-for="item of page" :key="item.id" @click="clubhouseItem(item)">
+                                    <div class="clubhouse-swiper-img">
+                                        <img :src="item.path"/>
+                                    </div>
+                                    <div class="clubhouse-swiper-name">
+                                        <p class="name-p1">{{item.theme}}<span class="name-span">{{item.name}}</span></p>
+                                        <p class="name-p2">￥{{item.price}}</p>
+                                    </div>
+                                    <el-rate :value="item.diff" disabled disabled-void-color="#c0c4cc" :colors="['#58B708']"></el-rate>
+                                    <p class="name-p3">电话:{{item.tel}}</p>
+                                </div>
+                            </swiper-slide>
+                        </swiper>
+                        <div class="swiper-button-prev1" slot="button-prev"></div>
+                        <div class="swiper-button-next1" slot="button-next"></div>
+                    </div>
+                     <div class="Default-page5" v-else>
+                        <div class="Default-main5">
+                        <img src="../assets/default.png"/>
+                        <span class="page-span5">我寻寻觅觅却找不到您的踪迹~</span>
+                        </div>
+                    </div>
+                    </el-col>
                 </div>
             </div>
         </el-col>
