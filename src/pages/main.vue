@@ -299,7 +299,7 @@ export default {
     }
 };
 </script>
-<style lang="scss" scope>
+<style lang="scss" scoped>
 @import "swiper/dist/css/swiper.css";
 .el-rate__icon{
     color: #fff !important;

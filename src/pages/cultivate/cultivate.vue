@@ -362,10 +362,10 @@ img {
   height: 100%;
 }
 .el-rate__icon {
-  color: #58b708 !important;
+  // color: #58b708 !important;
 }
 .el-rate__icon.hover {
-  color: #58b708 !important;
+  // color: #58b708 !important;
 }
 .cultivate-main {
   width: 100%;

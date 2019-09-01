@@ -28,8 +28,8 @@ function handleRequest(config) {
   const access = sessionStorage.getItem('access')
   config.headers['Authorization'] = access && `${JSON.parse(access).token_type}${JSON.parse(access).access_token}` || '';
   // config.headers['Access-Control-Allow-Headers'] = 'Content-Type'
-  config.baseURL = '/api';
-  // config.baseURL = 'http://api.aomengyujia.com/api';
+  // config.baseURL = '/api';
+  config.baseURL = 'http://api.aomengyujia.com/api';
   if (contentType === 'json') {
     config.headers['Content-Type'] = 'application/json';
   }

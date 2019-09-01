@@ -183,7 +183,7 @@ export default {
   }
 };
 </script>
-<style lang="scss" scope>
+<style lang="scss" scoped>
 .el-rate__icon{
     color: #58B708 !important;
 }
