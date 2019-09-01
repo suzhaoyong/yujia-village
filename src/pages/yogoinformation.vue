@@ -14,7 +14,7 @@
                          <img :src="banner" alt />
                         </div>
                     </template>
-                    <div class="formation-count">
+                    <div class="formation-count" v-if="this.listdatas.length > 0">
                         <div class="formation-count-div1" v-for="(item,index) in listdatas.slice((currentPage-1)*pagesize,currentPage*pagesize)" :key="index">
                             <img class="bg-img3" src="../assets/image26.png"/>
                             <div class="count-img">
@@ -120,6 +120,12 @@
                         </div> -->
                         <div class="kongbai"></div>
                     </div>
+                    <div class="Default-page2" v-else>
+                        <div class="Default-main2">
+                        <img src="../assets/default.png"/>
+                        <span class="page-span2">暂无数据~~请选择其他类别</span>
+                        </div>
+                    </div>
                 </div>
             </el-col>
         </el-row>
@@ -153,13 +159,14 @@ export default {
             _this.formationList = res.data;
             _this.banner = res.banner;
             _this.navLists = res.data;
-            _this.formationList.map(item =>{ 
-                if(item.data != null){
-                    for(var i=0;i<item.data.length;i++){
-                    _this.listdatas.push(item.data[i]);
-                  } 
-                }
-            })
+            // _this.formationList.map(item =>{ 
+            //     if(item.data != null){
+            //         for(var i=0;i<item.data.length;i++){
+            //         _this.listdatas.push(item.data[i]);
+            //       } 
+            //     }
+            // })
+            _this.listdatas = res.data[0].data;
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -180,6 +187,15 @@ export default {
       },
       reds:function(index){
        this.changeRed = index;
+       for(var i=0;i<this.formationList.length;i++){
+           if(index==i){
+               if(this.formationList[i].data==undefined){
+                  this.listdatas=[];
+               }else{
+                  this.listdatas=this.formationList[i].data;
+               }
+           }
+       }
     },
        selectItem(item){
            this.$router.push({
@@ -502,6 +518,29 @@ export default {
                 color: #303133;
                 font-weight: 700;
             }
+        }
+    }
+    .Default-page2{
+        width: 100%;
+        height: 600px;
+        margin: 0 auto;
+        text-align: center;
+        line-height: 600px;
+        background-color: #F1F1F1;
+        .Default-main2{
+            width: 1200px;
+            height: 100%;
+            margin: 0 auto;
+        img{
+            width: 500px;
+            height: 300px;
+        }
+        .page-span2{
+            font-size:22px;
+            font-family:PingFang SC;
+            font-weight:500;
+            color: #999;
+        }
         }
     }
 }

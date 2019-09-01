@@ -106,6 +106,32 @@ export default {
                 position: absolute;
                 bottom: 14%;
                 right: 120px;
+                transition: all 1s;
+                text-align: center;
+                .span1{
+                    font-size:7rem;
+                    font-family:Gulim;
+                    font-weight:400;
+                    font-style:italic;
+                    color: #C19765;
+                    .span2{
+                        font-size:7rem;
+                        font-family:Gulim;
+                        font-weight:400;
+                        font-style:italic;
+                        color: #ffffff;
+                    }
+                }
+            }
+            .count-name:hover{
+                width: 80%;
+                margin: 0 auto;
+                border: 2px solid #AD8C66;
+                height: 192px;
+                position: absolute;
+                bottom: 14%;
+                right: 120px;
+                transform: scale(.97);
                 text-align: center;
                 .span1{
                     font-size:7rem;
@@ -244,6 +270,7 @@ export default {
                 height: 100%;
                 float: left;
                 margin: 10px;
+                transition: all 1s;
                 .showimg{
                     width: 100%;
                     height: 370px;
@@ -267,10 +294,17 @@ export default {
                     }
                 }
             }
+            .showlist:hover{
+                width: 385px;
+                height: 100%;
+                float: left;
+                margin: 10px;
+                transform: scale(.95);
+            }
         }
         .count-name-img5{
-            width: 480px;
-            height: 420px;
+            width: 460px;
+            height: 410px;
             position: absolute;
             right: 0;
             bottom: 0;

@@ -27,8 +27,7 @@
                                 </div>
                                 <div class="carousel-text">
                                     <h4>{{item.theme}}<span>{{item.name}}</span></h4>
-                                    <!-- <el-rate v-model="item.diff" ></el-rate> -->
-                                    <el-rate :colors="['#58B708','#58B708','#58B708']" disabled :value="item.diff"></el-rate>
+                                    <el-rate :value="item.diff" disabled disabled-void-color="#c0c4cc" :colors="['#fff']"></el-rate>
                                 </div>
                                 <div class="carousel-detals">
                                     <span class="span">{{item.intro}}</span>
@@ -122,7 +121,7 @@
                                 <p class="text-p">{{item.theme}}</p>
                                 <h4 class="text-h4">{{item.name}}</h4>
                                 <p class="text-p2">老师名字：{{item.teacherName}}</p>
-                                <div class="text-p3">课程难度：<el-rate v-model="item.diff"  disabled-void-color="#EFF2F7"></el-rate></div>
+                                <div class="text-p3">课程难度：<el-rate :value="item.diff" disabled disabled-void-color="#fff" :colors="['#58B708']"></el-rate></div>
                                 <p class="text-p4">开课时间：{{item.startTime}}</p>
                                 <img src="../assets/image63.png" class="bg-border-img3">
                                 <div class="text-butt">
@@ -301,12 +300,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "swiper/dist/css/swiper.css";
-.el-rate__icon{
-    color: #fff !important;
-}
-.el-rate__icon.hover{
-    color: #fff !important;
-}
 .el-carousel__button{
     width: 13px !important;
     height: 13px !important;
@@ -324,16 +317,6 @@ export default {
     border-radius: 100% !important;
     background: #000 !important;
     opacity: .2 !important;
-}
-.span{
-    width: 60%;
-    color: #fff;
-    font-size: 14px;
-    display: -webkit-box !important;
-    -webkit-box-orient: vertical !important;
-    -webkit-line-clamp: 2 !important;// 限制快级元素的文本行数
-    overflow: hidden !important;
-    margin-left: -65px;
 }
 .bg_img {
   width: 100%;
@@ -457,13 +440,6 @@ export default {
                 }
                 .el-rate{
                     margin-top: 1px;
-                    color: #fff !important;
-                }
-                .el-rate__icon{
-                    color: #fff !important;
-                }
-                .el-rate__icon.hover{
-                    color: #fff !important;
                 }
             }
             .carousel-detals{
@@ -883,13 +859,6 @@ export default {
                         display: flex;
                         .el-rate{
                             margin-top: 1px;
-                            color: #58B708 !important;
-                        }
-                        .el-rate__icon{
-                            color: #58B708 !important;
-                        }
-                        .el-rate__icon.hover{
-                            color: #58B708 !important;
                         }
                     }
                      .text-p4{
