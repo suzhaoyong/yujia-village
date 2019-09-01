@@ -34,10 +34,7 @@
               <div class="delete" @click="operate('deleteGoods', item)">删除</div>
             </div>
           </div>
-          <div
-            v-if="goods.length === 0"
-            style="text-align:center;height:100px;line-height:100px;"
-          >收藏夹空空如也~</div>
+          <not-found v-if="goods.length === 0" type="not-fond_2" msg="我寻寻觅觅却找不见您收藏的踪迹"></not-found>
         </div>
       </div>
       <div class="footer" v-if="goods.length > 0">

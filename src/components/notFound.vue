@@ -1,36 +1,28 @@
 <template>
-  <div>
-    <div class="type_1" v-show="false">
+  <div style="padding:0rem 0;">
+    <div class="type_1" v-show="type=='not-fond_2'">
       <div class="icon">
         <img :src="icon.icon_1" alt />
       </div>
-      <div class="tips">我寻寻觅觅却找不见您收藏的踪迹</div>
+      <div class="tips">{{msg}}</div>
     </div>
-    <div class="type_2" v-show="false">
-      <div class="tips">
-        虽然您没有券，但至少您还拥有一盆花
-        请温笑面对生活^-^
-      </div>
+    <div class="type_2" v-show="type=='not-fond_3'">
+      <div class="tips">{{msg}}</div>
       <div class="icon">
         <img :src="icon.icon_2" alt />
       </div>
     </div>
-    <div class="type_3" v-show="false">
+    <div class="type_3" v-show="type=='not-fond_4'">
       <div class="icon">
         <img :src="icon.icon_3" alt />
       </div>
-      <div class="tips">
-        我们的优惠券一般为限时发放，
-        请您注意时间哟(＾Ｕ＾)ノ~ＹＯ
-      </div>
+      <div class="tips">{{msg}}</div>
     </div>
     <div class="type_4" v-show="type=='not-fond'">
       <div class="icon">
         <img :src="icon.icon_4" alt />
       </div>
-      <div class="tips" :style="`background-image:url(${icon.icon_5});`">
-        {{msg}}
-      </div>
+      <div class="tips" :style="`background-image:url(${icon.icon_5});`">{{msg}}</div>
     </div>
   </div>
 </template>

@@ -34,10 +34,7 @@
               <div class="delete" @click="goodsOpFor('detele', item)">删除</div>
             </div>
           </div>
-          <div
-            v-if="goods.length === 0"
-            style="text-align:center;height:100px;line-height:100px;"
-          >购物车空空如也~</div>
+          <not-found v-if="goods.length === 0" type="not-fond_2" msg="我寻寻觅觅却找不见您的购物车"></not-found>
         </div>
       </div>
       <div class="footer" v-if="goods.length > 0">
@@ -46,7 +43,6 @@
           <div class="all" @click="footerOpFor('selectAll')">全选</div>
           <div class="delete" @click="footerOpFor('detele')">删除</div>
           <div class="add" @click="footerOpFor('moveToCollect')">移入收藏夹</div>
-          <!-- <div class="share">分享</div> -->
         </div>
         <div class="count">
           <span class="num">

@@ -7,7 +7,6 @@ import {
 let loadingInstance = ""
 // 处理非 get data 传参
 function handleRequest(config) {
-  console.log(config);
   if (config.url.startsWith('/api/getAlipayOrder') && config.url.startsWith('/api/getWechatOrder')) {
 
   } else {
@@ -51,6 +50,12 @@ function handleResponeseErr(err) {
   } = response;
 
   let message = '未知异常';
+  if (typeof status === 'undefined') {
+    message = "请先登录"
+    Bus.$emit('login', true)
+    sessionStorage.removeItem('user')
+    sessionStorage.removeItem('access')
+  }
   if (status === 401) {
     message = '请先登录'
     if (sessionStorage.getItem('access')) {

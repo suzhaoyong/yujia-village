@@ -66,11 +66,7 @@
             </div>
           </div>
         </div>
-        <div
-          v-if="info.cart&&info.cart.length === 0"
-          class="no_list"
-          style="text-align:center;width:100%;"
-        >空空如也～</div>
+        <not-found v-if="info.cart.length === 0" type="not-fond" msg="我寻寻觅觅却找不见您购买的踪迹"></not-found>
       </div>
       <session-title name="已收藏商品"></session-title>
       <div class="my-class">
@@ -95,11 +91,7 @@
             </div>
           </div>
         </div>
-        <div
-          v-if="info.collect&&info.collect.length === 0"
-          class="no_list"
-          style="text-align:center;width:100%;"
-        >空空如也～</div>
+        <not-found v-if="info.collect.length === 0" type="not-fond_2" msg="我寻寻觅觅却找不见您收藏的踪迹"></not-found>
       </div>
       <div class="cash-voucher">
         <session-title name="现金券">
@@ -130,6 +122,8 @@
                 </div>
               </div>
             </div>
+
+            <not-found v-if="info.cash.length === 0" type="not-fond_3" msg="虽然您没有券，但至少您还拥有一盆花请温笑面对生活^-^"></not-found>
           </div>
         </div>
       </div>
@@ -159,6 +153,7 @@
                 </div>
               </div>
             </div>
+            <not-found v-if="info.coupon.length === 0" type="not-fond_4" msg="我们的优惠券一般为限时发放，请您注意时间哟(＾Ｕ＾)ノ~ＹＯ"></not-found>
           </div>
         </div>
       </div>

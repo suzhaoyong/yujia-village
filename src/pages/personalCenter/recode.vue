@@ -22,7 +22,7 @@
                 <div class="goods" v-for="(good, g_index) in item.data" :key="g_index">
                   <div class="info">
                     <div class="img">
-                      <img :src="item.url" alt="">
+                      <img :src="item.url" alt />
                     </div>
                     <div class="g_title">{{good.name}}</div>
                     <div class="number">{{good.num}}</div>
@@ -45,6 +45,7 @@
               </div>
             </div>
           </div>
+          <not-found v-if="showOrder.length === 0" type="not-fond" msg="我寻寻觅觅却找不见您订单的踪迹"></not-found>
         </div>
       </div>
     </div>
@@ -109,7 +110,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-img{
+img {
   width: 100%;
   height: 100%;
 }

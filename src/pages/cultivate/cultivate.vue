@@ -181,6 +181,7 @@
                 <div class="fruit-price">￥{{item.price}}</div>
                 <div class="fruit-detail">{{item.address}}</div>
               </div>
+              <not-found v-if="fruitclasslist.length === 0" type="not-fond" msg="暂无相关信息"></not-found>
             </div>
             <session-title name="最新发布" brief="Sometimes beauty is so simple"></session-title>
             <div
@@ -208,6 +209,7 @@
                 <img class="border-img" src="../../assets/image47.png" />
               </div>
             </div>
+            <not-found v-if="newList.length === 0" type="not-fond" msg="暂无相关信息"></not-found>
           </div>
         </div>
       </el-col>

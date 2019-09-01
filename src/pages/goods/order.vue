@@ -146,7 +146,7 @@
                 </div>
               </div>
             </div>
-            <div v-else style="text-align:center;height:100px;line-height:100px;">购物车空空如也</div>
+            <not-found v-if="goods.length === 0" type="not-fond_2" msg="我寻寻觅觅却找不见您购物车的踪迹"></not-found>
           </div>
         </div>
         <div class="sum">

@@ -270,7 +270,7 @@
             </div>
           </div>
           <div class="no_result" style="width:100%;" v-if="result.list.length === 0">
-            <div style="text-align:center;height:100px;line-height:100px;">暂未搜到结果</div>
+            <not-found v-if="result.list.length === 0" type="not-fond" msg="暂无相关信息"></not-found>
           </div>
         </div>
         <div class="pages">
@@ -313,6 +313,7 @@
             </div>
           </div>
         </div>
+        <not-found v-if="resenView.data.length === 0" type="not-fond" msg="暂无相关信息"></not-found>
         <div class="change">
           <div class="change-btn" @click="changeGoodsFor('last_view')">换一批</div>
         </div>
