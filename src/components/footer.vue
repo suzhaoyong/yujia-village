@@ -38,7 +38,7 @@ export default {
 <style lang="scss" scoped>
 .footer-main{
     width: 100%;
-    height: 100%;
+    height: auto;
     padding: 0;
     background: #CAE6AB;
     .footer-center{
@@ -49,7 +49,6 @@ export default {
     .foot-count{
         width: 1200px;
         margin: 0 auto;
-        margin-bottom: 50px;
     .footer-foot{
         text-align: center;
         line-height: 50px;
@@ -75,6 +74,7 @@ export default {
     .footer-foot2{
         text-align: center;
         color: #2c2c2c;
+        padding-bottom: 45px;
         .span3{
             padding-left: 60px;
         }

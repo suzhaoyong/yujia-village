@@ -16,6 +16,7 @@
                     </template>
                     <div class="knowledge-count" v-if="this.listdatas.length > 0">
                         <div class="knowledge-count-div1" v-for="(item,index) in listdatas.slice((currentPage-1)*pagesize,currentPage*pagesize)" :key="index">
+                            <div class="knowledge-auto">
                             <div class="count-img">
                                 <img :src="item.icon_url"/>
                                 <div class="box-content"></div>
@@ -36,6 +37,7 @@
                                         <span class="img3">{{item.views}}</span>
                                     </div>
                                 </div>
+                            </div>
                             </div>
                         </div>
                         <div class="block">
@@ -195,17 +197,23 @@ export default {
         height: 100%;
         display: inline-block;
         .knowledge-count-div1{
-            width: 90%;
+            width: 93%;
             height: 500px;
             float: right;
             margin-top: 40px;
             display: flex;
             cursor:pointer;
             box-shadow: 0px 1px 14px 1px rgba(36, 36, 36, 0.2);
+            .knowledge-auto{
+                width: 1200px;
+                margin: 0 auto;
+                height: 100%;
+                display: flex;
            .count-img{
                 width: 38%;
                 height: 84%;
-                margin: 38px;
+                margin: 20px;
+                margin-top: 37px;
                 perspective: 800px;
                 overflow: hidden;
                 position: relative;
@@ -248,7 +256,6 @@ export default {
                 transform: translateX(-50%) translateY(-50%) scale(0) rotate(360deg);
                 transition: all 0.3s ease 0s;
             }
-
             .count-img:hover:before{
                 opacity: 0.3;
                 transform: translateX(-50%) translateY(-50%) scale(1.5) rotate(0);
@@ -264,7 +271,7 @@ export default {
                 opacity: 0;
             }
             .count-desc{
-                width: 50%;
+                width: 55%;
                 height: 84%;
                 margin-top: 38px;
                 background-color: #eeeeee;
@@ -371,9 +378,10 @@ export default {
                     }
                 }
             }
+          }
         }
         .knowledge-count-div1:nth-child(3){
-            width: 90%;
+            width: 93%;
             height: 500px;
             float: left;
             margin-top: 40px;
@@ -381,25 +389,32 @@ export default {
             position: relative;
             cursor:pointer;
             box-shadow: 0px 1px 14px 1px rgba(36, 36, 36, 0.2);
-           .count-img{
+             .knowledge-auto{
+                width: 1200px;
+                margin: 0 auto;
+                height: 100%;
+                display: flex;
+                position: relative;
+               .count-img{
                 width: 38%;
                 height: 84%;
-                margin: 38px;
+                margin: 20px;
                 position: absolute;
                 right: 0%;
+                top: 17px;
                 img{
                     width: 100%;
                     height: 100%;
                 }
             }
             .count-desc{
-                width: 56%;
+                width: 58%;
                 height: 84%;
                 margin-top: 38px;
                 position: absolute;
                 left: 0%;
                 background-color: #eeeeee;
-                position: relative;
+                // position: relative;
                 .circle{
                     width: 55px;
                     height: 55px;
@@ -437,7 +452,6 @@ export default {
                     width: 70%;
                     margin-right: 10%;
                     text-align: right;
-                    margin: 0 auto;
                     font-size: 14px;
                     color: #2c2c2c;
                 }
@@ -500,6 +514,7 @@ export default {
                     }
                 }
             }
+        }
         }
         .block{
             text-align: center;
