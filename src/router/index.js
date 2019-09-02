@@ -16,7 +16,7 @@ Vue.use(Router)
 
 const router = new Router({
   mode: 'history',
-  scrollBehavior: (to, from, savedPosition) => {
+  scrollBehavior(to, from, savedPosition) {
     return {
       x: 0,
       y: 0
@@ -238,9 +238,19 @@ const router = new Router({
   ]
 })
 router.beforeEach((to, from, next) => {
-  // document.body.scrollTop = 0
-  // document.documentElement.scrollTop = 0
+  document.body.scrollTop = 0
+  document.documentElement.scrollTop = 0
   window.scrollTo(0, 0)
   next();
+})
+router.afterEach((to, from) => {
+
+  let scrollContent = document.querySelector('.scroll-content');
+
+  if (scrollContent) {
+
+    scrollContent.scrollTop = 0;
+    scrollContent.scrollLeft = 0;
+  }
 })
 export default router;
