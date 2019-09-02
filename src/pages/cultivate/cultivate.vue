@@ -586,9 +586,9 @@ export default {
   height: 30px;
 }
 .cultivate-main >>> .distpicker-address-wrapper select {
-  height: 2em;
+  /* height: 2em; */
   margin-right: 10px;
-  font-size: 0.7rem;
+  /* font-size: 0.7rem; */
 }
 .cultivate-main >>> .el-rate__icon {
   font-size: 0.7rem !important;
@@ -645,7 +645,7 @@ img {
   .cultivate-count {
     width: 60rem;
     margin: 0 auto;
-    margin-top: -150px;
+    margin-top: -17.8rem;
     height: 100%;
     padding-bottom: 3rem;
     // display: inline-block;

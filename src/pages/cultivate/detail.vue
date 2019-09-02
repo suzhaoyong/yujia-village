@@ -94,7 +94,7 @@ export default {
   },
   methods: {
     callTel() {
-      this.$alert(`会馆电话: 021-621146321`, "会馆电话", {});
+      this.$alert(`客服电话: 021-621146321`, "客服电话", {});
     }
   }
 };
@@ -237,6 +237,7 @@ export default {
         text-align: center;
         .button {
           color: #ffffff;
+          cursor: pointer;
         }
       }
       .imgpic1 {

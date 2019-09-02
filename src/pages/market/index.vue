@@ -1,13 +1,15 @@
 <template>
   <div>
     <div class="sub-menu">
-      <div class="select">
-        <div class="item" @click="goto('marketDetail')">商品详细分类</div>
-        <div class="item" @click="goto('shopCar')">购物车</div>
-        <div class="item" @click="goto('collect')">收藏中心</div>
-      </div>
-      <div class="input-box">
-        <!-- <input type="text" class="form-control input" placeholder="商品名称" /> -->
+      <div style="width:60rem; margin:0 auto;">
+        <div class="select">
+          <div class="item" @click="goto('marketDetail')">商品详细分类</div>
+          <div class="item" @click="goto('shopCar')">购物车</div>
+          <div class="item" @click="goto('collect')">收藏中心</div>
+        </div>
+        <!-- <div class="input-box">
+          <input type="text" class="form-control input" placeholder="商品名称" />
+        </div> -->
       </div>
     </div>
     <div class="market">
@@ -168,7 +170,7 @@
 import SessionTitle from "./SessionTitle";
 import { getGoodRecomment } from "@/api/market";
 import Bus from "@/utils/Bus";
-import alipayActiveIcon from '@/assets/order/alipay_active.png';
+import alipayActiveIcon from "@/assets/order/alipay_active.png";
 export default {
   components: {
     SessionTitle
@@ -297,7 +299,7 @@ img {
   padding: 0;
 }
 .sub-menu {
-  width: 80vw;
+  // width: 80vw;
   height: 5rem;
   padding: 0 1rem;
   background: #fff;
@@ -364,7 +366,7 @@ img {
         margin: 0 auto;
         display: flex;
         // border: 1px solid #ccc;
-        padding-top: 1rem;
+        padding-top: 0.3rem;
         padding-bottom: 1rem;
         &-lf {
           position: relative;
@@ -374,11 +376,43 @@ img {
             width: 19rem;
             height: 100%;
             // border: 1px solid #ccc;
+            position: relative;
+            z-index: 1;
+            &::before {
+              content: "SEX";
+              display: block;
+              position: absolute;
+              left: 22rem;
+              bottom: 16rem;
+              color: #dfdfdf;
+              z-index: 11;
+              line-height: 8rem;
+              font-size: 12rem;
+              font-family: -webkit-pictograph;
+              font-weight: 800;
+              transform: rotate(90deg);
+            }
+            &::after {
+              content: "SEX";
+              display: block;
+              position: absolute;
+              color: #dfdfdf;
+              z-index: -1;
+              bottom: 0;
+              left: 12rem;
+              padding: 0;
+              margin: 0;
+              line-height: 8rem;
+              font-size: 12rem;
+              font-family: -webkit-pictograph;
+              font-weight: 800;
+            }
           }
           .goods_info {
             position: absolute;
+            z-index: 4;
             top: 4rem;
-            right: 0;
+            right: 4rem;
             width: 20rem;
             height: 23rem;
             display: flex;
@@ -665,7 +699,7 @@ img {
           .img {
             width: 20rem;
             height: 20rem;
-            background: #ccc;
+            // background: #ccc;
           }
           .info {
             .title {
@@ -719,7 +753,7 @@ img {
               width: 9rem;
               height: 9rem;
               border-radius: 4px;
-              background: #ccc;
+              // background: #ccc;
               box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
             }
             .info {

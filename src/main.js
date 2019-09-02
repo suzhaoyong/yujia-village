@@ -13,6 +13,7 @@ import VueAwesomeSwiper from 'vue-awesome-swiper'
 import 'swiper/dist/css/swiper.css'
 import Share from 'vue-social-share'
 import 'vue-social-share/dist/client.css';
+import '../static/style/theme/index.css';
 
 Vue.use(NotFound)
 Vue.use(Share)

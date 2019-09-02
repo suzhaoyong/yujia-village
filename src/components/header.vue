@@ -4,7 +4,7 @@
       <div class="header-main">
         <div class="head-quan">
           <div class="head-right">
-            <el-button type="text" class="span2">已购课程</el-button>
+            <el-button type="text" class="span2"></el-button>
             <div style="display:inline-block;" v-if="username || info.name">
               <span class="span1">{{username || info.name}}</span>
             </div>
@@ -46,7 +46,7 @@
                 </div>
                 <div v-show="username || info.name">
                   <el-menu-item index="personal">现金券与优惠券</el-menu-item>
-                  <el-menu-item index="identity">个人信息</el-menu-item>
+                  <!-- <el-menu-item index="identity">个人信息</el-menu-item> -->
                   <el-menu-item index="recode">订单中心</el-menu-item>
                   <el-menu-item v-show="parseInt(info.identity_auth) === 7 || parseInt(info.identity_auth) === 2" index="hell">会馆信息</el-menu-item>
                   <el-menu-item index="safety-center">信息与安全中心</el-menu-item>

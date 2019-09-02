@@ -493,7 +493,7 @@ export default {
       const { tel } = this.info && this.info.user;
       tel &&
         this.$request
-          .post("/getCode", { tel })
+          .post("/getVerificationCode", { tel })
           .then(data => {
             this.$message({ message: "发送成功", type: "success" });
             this.ruleForm.verification_key = data.key;
@@ -630,9 +630,9 @@ export default {
   display: none;
 }
 .edit-personage >>> .distpicker-address-wrapper select {
-  height: 2em;
+  /* height: 2em; */
   margin-right: 10px;
-  font-size: 0.7rem;
+  /* font-size: 0.7rem; */
 }
 .edit-personage >>> .disabled .el-upload--picture-card {
   display: none;
@@ -642,9 +642,9 @@ export default {
 }
 
 .edit-hall >>> .distpicker-address-wrapper select {
-  height: 2em;
+  /* height: 2em; */
   margin-right: 10px;
-  font-size: 0.7rem;
+  /* font-size: 0.7rem; */
 }
 .edit-hall >>> .disabled .el-upload--picture-card {
   display: none;

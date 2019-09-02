@@ -46,6 +46,9 @@ body {
   /* overflow-x: hidden; */
   min-width: 1200px;
 }
+.el-button:focus ,.el-icon-close:focus, .el-message-box__headerbtn:focus {
+  outline: none;
+}
 /* *{
   margin: 0;
   border: 0;
