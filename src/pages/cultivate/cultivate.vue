@@ -127,6 +127,7 @@
               <div class="fruit-list">
                 <div
                   class="fruit-list-li"
+                  style="cursor: pointer;"
                   v-for="(item,index) in fruit.data"
                   @click="selectItem(item)"
                   :key="index"
@@ -163,6 +164,7 @@
             <div class="cultivate-count-div3">
               <div
                 class="fruit-list-li"
+                style="cursor: pointer;"
                 v-for="(item,index) in fruitclasslist"
                 :key="index"
                 @click="selectItem(item)"
@@ -186,6 +188,7 @@
             <session-title name="最新发布" brief="Sometimes beauty is so simple"></session-title>
             <div
               :class="['cultivate-count-div5',{left: index%2 == 1}]"
+              style="cursor: pointer;"
               v-for="(item, index) in newList"
               @click="selectItem(item)"
               :key="index"
@@ -586,12 +589,14 @@ export default {
   height: 30px;
 }
 .cultivate-main >>> .distpicker-address-wrapper select {
-  /* height: 2em; */
+  height: 2em;
   margin-right: 10px;
-  /* font-size: 0.7rem; */
+  font-size: 0.7rem;
+  padding:0;
 }
 .cultivate-main >>> .el-rate__icon {
   font-size: 0.7rem !important;
+  -webkit-text-stroke: 1px #22cc22;
 }
 .cultivate-main >>> .el-button:hover {
   border-color: #22cc22;
@@ -852,6 +857,10 @@ img {
           min-height: 4.1rem;
           line-height: 4.1rem;
           padding-left: 3rem;
+          padding-bottom: 2em;
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
           .span {
             width: 4em;
             flex-shrink: 0;
@@ -1110,8 +1119,8 @@ img {
           to right,
           #ffffff 0%,
           #ffffff 50%,
-          #cce198 50%,
-          #cce198 100%
+          #EEF5DD 50%,
+          #EEF5DD 100%
         );
         &::after {
           left: 0;
@@ -1149,8 +1158,8 @@ img {
         // background-color: #cce198;
         background: linear-gradient(
           to right,
-          #cce198 0%,
-          #cce198 50%,
+          #EEF5DD 0%,
+          #EEF5DD 50%,
           #ffffff 50%,
           #ffffff 100%
         );
@@ -1173,7 +1182,7 @@ img {
         // position: absolute;
         // left: 51%;
         // top: 24%;
-        margin: 3rem 4rem;
+        margin: 2rem 4rem;
         width: 20em;
         .li-text {
           display: flex;

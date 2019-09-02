@@ -365,9 +365,10 @@ export default {
   height: 30px !important;
 }
 .order-box >>> .distpicker-address-wrapper select {
-  /* height: 2em; */
+  height: 2em;
   margin-right: 10px;
-  /* font-size: 0.7rem; */
+  font-size: 0.7rem;
+  padding:0;
 }
 </style>
 <style lang="scss" scoped>

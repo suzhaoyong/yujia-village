@@ -630,9 +630,10 @@ export default {
   display: none;
 }
 .edit-personage >>> .distpicker-address-wrapper select {
-  /* height: 2em; */
+  height: 2em;
   margin-right: 10px;
-  /* font-size: 0.7rem; */
+  font-size: 0.7rem;
+  padding:0;
 }
 .edit-personage >>> .disabled .el-upload--picture-card {
   display: none;
@@ -642,9 +643,10 @@ export default {
 }
 
 .edit-hall >>> .distpicker-address-wrapper select {
-  /* height: 2em; */
+  height: 2em;
   margin-right: 10px;
-  /* font-size: 0.7rem; */
+  font-size: 0.7rem;
+  padding:0;
 }
 .edit-hall >>> .disabled .el-upload--picture-card {
   display: none;

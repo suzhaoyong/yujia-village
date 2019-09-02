@@ -21,6 +21,7 @@
             <div class="sm-imgs">
               <div
                 class="sm-img"
+                style="cursor: pointer;"
                 v-for="(item, index) in goods.imgs"
                 :key="index"
                 @click="chooseActiveImg(item)"

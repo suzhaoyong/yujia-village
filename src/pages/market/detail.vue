@@ -250,6 +250,7 @@
         <div class="column">
           <div
             class="goods-box"
+            style="cursor: pointer;"
             @click="viewGoodsDetail(item)"
             v-for="(item, index) in result.list"
             :key="index"
@@ -293,6 +294,7 @@
         <div class="goods">
           <div
             class="goods-box"
+            style="cursor: pointer;"
             @click="viewGoodsDetail(item)"
             v-for="(item, index) in resenView.data"
             :key="index"
@@ -688,6 +690,7 @@ img {
         // height: 19.35rem;
         background: #fff;
         margin-right: 1.6rem;
+        margin-bottom: 1rem;
         &:nth-child(4n) {
           margin-right: 0rem;
         }

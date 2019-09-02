@@ -51,7 +51,7 @@ function handleResponeseErr(err) {
 
   let message = '未知异常';
   if (typeof status === 'undefined') {
-    message = "请先登录"
+    message = "登录已失效，请再次登录"
     Bus.$emit('login', true)
     sessionStorage.removeItem('user')
     sessionStorage.removeItem('access')
@@ -83,17 +83,20 @@ function handleResponeseErr(err) {
     message = '接口不存在';
   } else if (status >= 400 && status < 500) {
     message = data.msg
+    if(data.msg == 'Too Many Attempts.') {
+      message = '您的操作频率过多，请稍后重试'
+    }
   } else if (status >= 500) {
     message = '服务器错误';
-    if (data.url == 'api/auth/refresh') {
+    if (data.url == '/api/auth/refresh') {
       Bus.$emit('login', true)
       sessionStorage.removeItem('user')
       sessionStorage.removeItem('access')
     }
   }
-  if (data.msg) {
-    message = data.msg;
-  }
+  // if (data.msg) {
+  //   message = data.msg;
+  // }
 
   // 手动阻止（未配置接口域名）
   if (err.message !== 'cancel') {

@@ -126,6 +126,12 @@ export default {
         pagesize: 12,
     };
   },
+  computed: {
+    info() {
+      const user = sessionStorage.getItem("user");
+      return user && JSON.parse(user);
+    },
+  },
   created(){
       this.joindata();
   },
@@ -166,7 +172,11 @@ export default {
         });
       },
     goto() {
-      Bus.$emit("login", true);
+      if(this.info){
+        this.$router.push("/personal/identity");
+      }else{
+        Bus.$emit("login", true);
+      }
     },
       onMouseOver(index){
           this.ishow = index;

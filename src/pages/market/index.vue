@@ -37,7 +37,7 @@
               <div class="goods_subimg">
                 <img :src="good_recomment.new[0].new_url_three" alt />
               </div>
-              <div class="goods_buy-btn" @click="viewGoodsDetail(good_recomment.new[0])">立即购买</div>
+              <div class="goods_buy-btn" style="cursor: pointer;" @click="viewGoodsDetail(good_recomment.new[0])">立即购买</div>
             </div>
           </div>
         </div>
@@ -53,6 +53,7 @@
               <div class="goods_list">
                 <div
                   class="goods"
+                  style="cursor: pointer;"
                   @click="viewGoodsDetail(item)"
                   v-for="(item,index) in good_recomment.discounts.re"
                   :key="index"
@@ -86,6 +87,7 @@
               <div class="goods_list">
                 <div
                   class="goods"
+                  style="cursor: pointer;"
                   @click="viewGoodsDetail(item)"
                   v-for="(item,index) in good_recomment.discounts.de"
                   :key="index"
@@ -116,6 +118,7 @@
             <div class="menu">
               <div
                 :class="['menu-item', recommend_menu.select.sort_id == item.sort_id ? 'active' : '']"
+                style="cursor: pointer;"
                 v-for="(item, index) in good_recomment.comment"
                 :key="index"
                 @click="selectRecommendMenuType(item)"
@@ -124,7 +127,7 @@
                 <div class="menu-title-zh">{{item.name}}</div>
               </div>
             </div>
-            <div class="bg-img" @click="viewGoodsDetail(recommend_main)">
+            <div class="bg-img" style="cursor: pointer;" @click="viewGoodsDetail(recommend_main)">
               <div class="img">
                 <img :src="recommend_main.cover_url" alt />
               </div>
@@ -140,6 +143,7 @@
             <div class="sm-img">
               <div
                 class="item"
+                style="cursor: pointer;"
                 @click="viewGoodsDetail(item)"
                 v-for="(item, index) in recommend_list"
                 :key="index"

@@ -264,7 +264,7 @@ export default {
       //   return;
       // }
       this.step.type = "certification";
-      this.certificate.identity = identity
+      this.certificate.identity = identity;
       // const obj = {
       //   1: "用户",
       //   2: identity_1,
@@ -386,9 +386,9 @@ img {
   position: relative;
 }
 .back {
-  position: absolute;
-  left: 4rem;
-  top: 1rem;
+  width: 60rem;
+  margin: 0 auto;
+  padding-top: 1rem;
   &-btn {
     cursor: pointer;
     padding: 0.2rem 0.3rem;

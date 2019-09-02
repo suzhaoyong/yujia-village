@@ -5,7 +5,7 @@
         <div class="detail-main">
           <session-title name="课程介绍" brief="Sometimes beauty is so simple"></session-title>
           <div class="detail-count-div2">
-            <div class="count-div2-img">
+            <div class="count-div2-img" style="cursor: pointer;">
               <img
                 @click="train.teacher_img = item.path"
                 v-for="(item, index) in train.train_image"
@@ -102,6 +102,7 @@ export default {
 <style scoped>
 .detail-main >>> .el-rate__icon {
   font-size: 0.7rem !important;
+  -webkit-text-stroke: 1px #22cc22;
 }
 </style>
 <style lang="scss" scoped>
@@ -328,6 +329,7 @@ export default {
           margin: 0 auto;
         }
         p {
+          width: 100%;
           font-family: MicrosoftYaHei;
           font-weight: 400;
           color: #2c2c2c;
