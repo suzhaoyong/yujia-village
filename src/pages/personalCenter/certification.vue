@@ -181,7 +181,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.certificate)
   },
   methods: {
     changeExemptionFile(file, fileList) {
