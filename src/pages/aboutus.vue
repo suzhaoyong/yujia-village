@@ -191,7 +191,7 @@ export default {
             }
             h2{
                 color: #2c2c2c;
-                font-size: 1.6rem;
+                font-size: 1.4rem;
                 margin-top: 20px;
                 font-family:Microsoft YaHei;
                 font-weight:bold;
@@ -311,7 +311,7 @@ export default {
             }
             h2{
                 color: #2c2c2c;
-                font-size: 1.6rem;
+                font-size: 1.4rem;
                 margin-top: 40px;
                 padding-top:24px;
                 font-family:Microsoft YaHei;
@@ -367,7 +367,7 @@ export default {
             }
             h2{
                 color: #2c2c2c;
-                font-size: 1.6rem;
+                font-size: 1.4rem;
                 font-family:Microsoft YaHei;
                 font-weight:bold;
                 padding-top: 24px;
@@ -422,7 +422,7 @@ export default {
             }
             h2{
                 color: #2c2c2c;
-                font-size: 1.6rem;
+                font-size: 1.4rem;
                 margin-top: 40px;
                 font-family:Microsoft YaHei;
                 font-weight:bold;
@@ -631,7 +631,7 @@ export default {
             }
             h2{
                 color: #2c2c2c;
-                font-size: 1.6rem;
+                font-size: 1.4rem;
                 margin-top: 40px;
                 padding-top: 24px;
                 font-family:Microsoft YaHei;

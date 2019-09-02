@@ -15,7 +15,7 @@
                         </div>
                     </template>
                     <div class="knowledge-count" v-if="this.listdatas.length > 0">
-                        <div class="knowledge-count-div1" v-for="(item,index) in listdatas.slice((currentPage-1)*pagesize,currentPage*pagesize)" :key="index">
+                        <div class="knowledge-count-div1" v-for="(item,index) in listdatas.slice((currentPage-1)*pagesize,currentPage*pagesize)" :key="index" @click="selectItem(item)">
                             <div class="knowledge-count-auto">
                             <div class="knowledge-auto">
                             <div class="count-img">

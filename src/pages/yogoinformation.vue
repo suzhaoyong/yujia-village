@@ -15,7 +15,7 @@
                         </div>
                     </template>
                     <div class="formation-count" v-if="this.listdatas.length > 0">
-                        <div class="formation-count-div1" v-for="(item,index) in listdatas.slice((currentPage-1)*pagesize,currentPage*pagesize)" :key="index">
+                        <div class="formation-count-div1" v-for="(item,index) in listdatas.slice((currentPage-1)*pagesize,currentPage*pagesize)" :key="index" @click="selectItem(item)">
                             <img class="bg-img3" src="../assets/image26.png"/>
                             <div class="formation-auto">
                             <div class="count-img">

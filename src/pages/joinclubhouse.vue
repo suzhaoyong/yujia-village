@@ -248,11 +248,11 @@ export default {
     width: 11%;
     background-color: #9AB1C1;
     height: 7%;
-    border-radius: 4vh;
+    border-radius: 15px;
     right: 44%;
     text-align: center;
     .butt{
-      font-size:1.2rem;
+      font-size:1rem;
       font-family:Microsoft YaHei;
       font-weight:bold;
       color: #FFFFFF;
@@ -404,7 +404,7 @@ export default {
                         width: 90%;
                         margin: 0 auto;
                         margin-bottom: 15px;
-                        font-size: 0.9rem;
+                        font-size: 0.8rem;
                         color: #999999;
                     }
                     .kong{
@@ -510,7 +510,7 @@ export default {
             }
             h2{
                 color: #2c2c2c;
-                font-size: 1.6rem;
+                font-size: 1.4rem;
                 margin-top: 40px;
                 font-family:Microsoft YaHei;
                 font-weight:bold;

@@ -57,7 +57,7 @@
                                         <div class="yogoswiper-text">
                                             <h3>{{namelist.headline}}</h3>
                                             <div class="yogoswiper-butt">
-                                            <el-button type="text" @click="ViewAll(namelist)">查看全部</el-button>
+                                            <el-button type="text" @click="ViewAll(namelist)">查看详情</el-button>
                                             </div>
                                         </div>
                                         <p class="p1">{{namelist.summary}}</p>
@@ -289,7 +289,7 @@ export default {
       },
       ViewAll(namelist){
           this.$router.push({
-            path: "/yogoinformation",
+            path: "/yogoinformation/yogoinformationdetails",
             query: {
             id: namelist.lid
             }
@@ -366,7 +366,7 @@ export default {
             }
             h2{
                 color: #2c2c2c;
-                font-size: 1.6rem;
+                font-size: 1.4rem;
                 margin-top: 40px;
                 font-family:Microsoft YaHei;
                 font-weight:bold;
@@ -504,7 +504,7 @@ export default {
             }
             h2{
                 color: #2c2c2c;
-                font-size: 1.6rem;
+                font-size: 1.4rem;
                 padding-top: 24px;
                 margin-top: 40px;
                 font-family:Microsoft YaHei;
@@ -974,7 +974,7 @@ export default {
             }
             h2{
                 color: #2c2c2c;
-                font-size: 1.6rem;
+                font-size: 1.4rem;
                 margin-top: 40px;
                 font-family:Microsoft YaHei;
                 font-weight:bold;
@@ -1094,7 +1094,7 @@ export default {
                 }
                 h2{
                     color: #2c2c2c;
-                    font-size: 1.6rem;
+                    font-size: 1.4rem;
                     margin-top: 40px;
                     padding-top: 19px;
                     font-family:Microsoft YaHei;
