@@ -4,21 +4,17 @@
       <div class="header">
         <div class="user">
           <!-- <div class="photo"></div> -->
-          <div class="name">{{info.name|| user.name}}</div>
+          <div class="name">{{info.user.name}}</div>
         </div>
         <div class="info">
           <div class="balance">
             您的账户可金币用
-            <span class="number">{{info.money||user.money}}</span>
+            <span class="number">{{info.user.money}}</span>
           </div>
-          <div class="recharge" v-if="info.reason !== '未认证'">充值</div>
+          <div class="recharge" @click="changMoney">充值</div>
           <div class="withdraw" @click="withdraw">
             <!-- 提现 -->
-            <span
-              class="identity"
-              v-if="info.reason === '未认证'"
-              
-            >未认证</span>
+            <span class="identity" v-if="info.user.reason === '未认证'">未认证</span>
             <span class="identity" v-else @click.stop="goPage('identity')">(馆主、教练)</span>
           </div>
         </div>
@@ -27,6 +23,8 @@
   </div>
 </template>
 <script>
+import store from "@/store";
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -34,25 +32,36 @@ export default {
     };
   },
   computed: {
-    info() {
-      const user = sessionStorage.getItem("user");
-      return user && JSON.parse(user).user || {};
-    }
+    ...mapGetters(["info"]),
   },
   mounted() {
-    this.getPersonal();
+    // this.getPersonal();
   },
   methods: {
     getPersonal() {
       this.$request("/personal/home").then(data => {
         this.user = data.user;
+        store.dispatch("INFO", data);
       });
     },
     goPage(name) {
       this.$router.push(`/personal/${name}`);
     },
+    changMoney() {
+      this.$router.push({
+        name: "identity",
+        query: {
+          type: "my-card"
+        }
+      });
+    },
     withdraw() {
-      this.$router.push("/personal/identity");
+      this.$router.push({
+        name: "identity",
+        query: {
+          type: "identity"
+        }
+      });
     }
   }
 };

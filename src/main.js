@@ -14,6 +14,7 @@ import 'swiper/dist/css/swiper.css'
 import Share from 'vue-social-share'
 import 'vue-social-share/dist/client.css';
 import '../static/style/theme/index.css';
+import store from '@/store'
 
 Vue.use(NotFound)
 Vue.use(Share)
@@ -24,9 +25,6 @@ Vue.use(CarouselItem)
 Vue.use(Vuex)
 Object.defineProperty(Vue.prototype, '$request', { value: request });
 Vue.config.productionTip = false
-
-const store = new Vuex.Store({
-})
 
 /* eslint-disable no-new */
 new Vue({

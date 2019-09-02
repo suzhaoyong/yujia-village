@@ -250,10 +250,10 @@ export default {
 
       let allPrice = allGoods.reduce((pre, cur) => {
         return (
-          parseInt(pre) + parseInt(cur.num) * (cur.sell_price - cur.discount)
+          parseFloat(pre) + parseInt(cur.num) * (cur.sell_price - cur.discount)
         );
       }, 0);
-      return { allPrice, allGoodsNumber: allGoods.length };
+      return { allPrice: allPrice.toFixed(2), allGoodsNumber: allGoods.length };
     },
     statusActive() {
       return type => {
@@ -669,7 +669,7 @@ img {
             .img {
               width: 7rem;
               height: 8rem;
-              background: #ccc;
+              // background: #ccc;
             }
             .title-say {
               padding-left: 2.25rem;

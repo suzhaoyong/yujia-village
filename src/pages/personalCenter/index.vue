@@ -118,17 +118,21 @@
                     <br />
                     {{item.endDate}}
                   </div>
-                  <div class="btn">使用</div>
+                  <div class="btn">使用记录</div>
                 </div>
               </div>
             </div>
 
-            <not-found v-if="info.cash.length === 0" type="not-fond_3" msg="虽然您没有券，但至少您还拥有一盆花请温笑面对生活^-^"></not-found>
+            <not-found
+              v-if="info.cash.length === 0"
+              type="not-fond_3"
+              msg="虽然您没有券，但至少您还拥有一盆花请温笑面对生活^-^"
+            ></not-found>
           </div>
         </div>
       </div>
       <div class="useable-voucher">
-        <session-title name="可领取优惠券"></session-title>
+        <session-title name="已领取优惠券"></session-title>
         <div class="body">
           <div class="vouchers">
             <div
@@ -153,7 +157,11 @@
                 </div>
               </div>
             </div>
-            <not-found v-if="info.coupon.length === 0" type="not-fond_4" msg="我们的优惠券一般为限时发放，请您注意时间哟(＾Ｕ＾)ノ~ＹＯ"></not-found>
+            <not-found
+              v-if="info.coupon.length === 0"
+              type="not-fond_4"
+              msg="我们的优惠券一般为限时发放，请您注意时间哟(＾Ｕ＾)ノ~ＹＯ"
+            ></not-found>
           </div>
         </div>
       </div>
@@ -163,6 +171,7 @@
 <script>
 import SessionTitle from "./SessionTitle";
 import { getUserOrder } from "@/api/market";
+import { mapGetters } from "vuex";
 import quan_orgin from "@/assets/order/quan_orgin.png";
 import quan_pike from "@/assets/order/quan_pike.png";
 import quan_red from "@/assets/order/quan_red.png";
@@ -192,20 +201,10 @@ export default {
           quan_zhi
         }
       },
-      info: {
-        user: {},
-        coupon: [],
-        collect: [],
-        cash: [],
-        cart: []
-      }
     };
   },
   computed: {
-    // info() {
-    //   const user = sessionStorage.getItem("user");
-    //   return (user && JSON.parse(user)) || {};
-    // },
+    ...mapGetters(["info"]),
     voucherMoneyImg() {
       return index => {
         const obj = {
@@ -227,15 +226,14 @@ export default {
     }
   },
   mounted() {
-    this.getPersonal();
-    
+    // this.getPersonal();
   },
   methods: {
     /** 个人信息 */
     getPersonal() {
       this.$request("/personal/home").then(data => {
         sessionStorage.setItem("user", JSON.stringify(data));
-        this.info = data
+        // this.info = data;
       });
     },
     viewGoodsDetail(goods) {
@@ -337,7 +335,12 @@ img {
     width: 13.5rem;
     // height: 19.35rem;
     background: #fff;
-    // margin-right: 1.6rem;
+    padding-bottom: 1rem;
+    // border:1px solid rgba(164, 164, 164, 0.39);
+    border-radius: 6px;
+    &:hover {
+      box-shadow: 0.1rem 0.2rem 1.3rem 0.1rem rgba(164, 164, 164, 0.39);
+    }
     &:nth-child(4n) {
       margin-right: 0rem;
     }

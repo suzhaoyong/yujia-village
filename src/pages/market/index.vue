@@ -9,7 +9,7 @@
         </div>
         <!-- <div class="input-box">
           <input type="text" class="form-control input" placeholder="商品名称" />
-        </div> -->
+        </div>-->
       </div>
     </div>
     <div class="market">
@@ -37,54 +37,67 @@
               <div class="goods_subimg">
                 <img :src="good_recomment.new[0].new_url_three" alt />
               </div>
-              <div class="goods_buy-btn" style="cursor: pointer;" @click="viewGoodsDetail(good_recomment.new[0])">立即购买</div>
+              <div
+                class="goods_buy-btn"
+                style="cursor: pointer;"
+                @click="viewGoodsDetail(good_recomment.new[0])"
+              >立即购买</div>
             </div>
           </div>
         </div>
       </div>
 
-        <div class="market-main">
-          <div class="market-main-div1">
-            <img src="../../assets/market/prev.png" class="img-market-prev"/>
-            <div class="market-div1-li">
-              <img src="../../assets/hhh.png" class="img"/>
-              <div class="market-div1-text">
-                <p class="p1">暴走的萝莉 中强度运动内衣女聚拢瑜伽背心 美背防震跑步健身bra</p>
-                <p class="p2"><span class="through">￥210</span><span class="through2">￥110</span></p>
-              </div>
-              <div class="market-div1-butt">
-                <el-button type="text" class="button-text">加入购物车</el-button>
-              </div>
-              <div class="market-kong"></div>
-              <div class="market-kong2"></div>
+      <div class="market-main">
+        <div class="market-main-div1">
+          <img src="../../assets/market/prev.png" class="img-market-prev" />
+          <div class="market-div1-li">
+            <img src="../../assets/hhh.png" class="img" />
+            <div class="market-div1-text">
+              <p class="p1">暴走的萝莉 中强度运动内衣女聚拢瑜伽背心 美背防震跑步健身bra</p>
+              <p class="p2">
+                <span class="through">￥210</span>
+                <span class="through2">￥110</span>
+              </p>
             </div>
-            <div class="market-div1-li">
-              <img src="../../assets/hhh.png" class="img"/>
-              <div class="market-div1-text">
-                <p class="p1">暴走的萝莉 中强度运动内衣女聚拢瑜伽背心 美背防震跑步健身bra</p>
-                <p class="p2"><span class="through">￥452</span><span class="through2">￥342</span></p>
-              </div>
-              <div class="market-div1-butt">
-                <el-button type="text" class="button-text">加入购物车</el-button>
-              </div>
-              <div class="market-kong"></div>
-              <div class="market-kong2"></div>
+            <div class="market-div1-butt">
+              <el-button type="text" class="button-text">加入购物车</el-button>
             </div>
-            <div class="market-div1-li">
-              <img src="../../assets/hhh.png" class="img"/>
-              <div class="market-div1-text">
-                <p class="p1">暴走的萝莉 中强度运动内衣女聚拢瑜伽背心 美背防震跑步健身bra</p>
-                <p class="p2"><span class="through">￥234</span><span class="through2">￥142</span></p>
-              </div>
-              <div class="market-div1-butt">
-                <el-button type="text" class="button-text">加入购物车</el-button>
-              </div>
-              <div class="market-kong"></div>
-              <div class="market-kong2"></div>
-            </div>
-            <img src="../../assets/market/next.png" class="img-market-next"/>
+            <div class="market-kong"></div>
+            <div class="market-kong2"></div>
           </div>
+          <div class="market-div1-li">
+            <img src="../../assets/hhh.png" class="img" />
+            <div class="market-div1-text">
+              <p class="p1">暴走的萝莉 中强度运动内衣女聚拢瑜伽背心 美背防震跑步健身bra</p>
+              <p class="p2">
+                <span class="through">￥452</span>
+                <span class="through2">￥342</span>
+              </p>
+            </div>
+            <div class="market-div1-butt">
+              <el-button type="text" class="button-text">加入购物车</el-button>
+            </div>
+            <div class="market-kong"></div>
+            <div class="market-kong2"></div>
+          </div>
+          <div class="market-div1-li">
+            <img src="../../assets/hhh.png" class="img" />
+            <div class="market-div1-text">
+              <p class="p1">暴走的萝莉 中强度运动内衣女聚拢瑜伽背心 美背防震跑步健身bra</p>
+              <p class="p2">
+                <span class="through">￥234</span>
+                <span class="through2">￥142</span>
+              </p>
+            </div>
+            <div class="market-div1-butt">
+              <el-button type="text" class="button-text">加入购物车</el-button>
+            </div>
+            <div class="market-kong"></div>
+            <div class="market-kong2"></div>
+          </div>
+          <img src="../../assets/market/next.png" class="img-market-next" />
         </div>
+      </div>
 
       <div class="market_time">
         <session-title name="限时优惠" brief="Sometimes beauty is so simple"></session-title>
@@ -218,6 +231,7 @@
 import SessionTitle from "./SessionTitle";
 import { getGoodRecomment } from "@/api/market";
 import Bus from "@/utils/Bus";
+import { mapGetters } from "vuex";
 import alipayActiveIcon from "@/assets/order/alipay_active.png";
 export default {
   components: {
@@ -244,10 +258,7 @@ export default {
     };
   },
   computed: {
-    info() {
-      const user = sessionStorage.getItem("user");
-      return user && JSON.parse(user).user;
-    }
+    ...mapGetters(["info"])
   },
   mounted() {
     getGoodRecomment().then(data => {
@@ -294,7 +305,7 @@ export default {
     },
     goto(name, item) {
       let id = item || "all";
-      if (name !== "marketDetail" && !this.info) {
+      if (name !== "marketDetail" && !this.info.user.name) {
         Bus.$emit("login", true);
         return;
       }
@@ -309,133 +320,131 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.market-main{
-    width: 100%;
-    height: 25rem;
-    margin-top: 2rem;
-    background-color: #fff;
-    .market-main-div1{
-      width: 60rem;
+.market-main {
+  width: 100%;
+  height: 25rem;
+  margin-top: 2rem;
+  background-color: #fff;
+  .market-main-div1 {
+    width: 60rem;
+    height: 100%;
+    margin: 0 auto;
+    position: relative;
+    .img-market-prev {
+      width: 5.3rem;
+      height: 1.7rem;
+      position: absolute;
+      right: 91%;
+      bottom: 8%;
+    }
+    .img-market-next {
+      width: 5.3rem;
+      height: 1.7rem;
+      position: absolute;
+      right: 0%;
+      top: 8%;
+    }
+    .market-div1-li {
+      width: 19rem;
       height: 100%;
-      margin: 0 auto;
       position: relative;
-      .img-market-prev{
-          width: 5.3rem;
-          height: 1.7rem;
-          position: absolute;
-          right: 91%;
-          bottom: 8%;
-      }
-      .img-market-next{
-           width: 5.3rem;
-          height: 1.7rem;
-          position: absolute;
-          right: 0%;
-          top: 8%;
-      }
-      .market-div1-li{
-        width: 19rem;
+      float: left;
+      margin-left: 0.8rem;
+      .img {
+        width: 100%;
         height: 100%;
-        position: relative;
-        float: left;
-        margin-left: 0.8rem;
-        .img{
-          width: 100%;
-          height: 100%;
+      }
+      .market-div1-text {
+        position: absolute;
+        top: 2rem;
+        width: 9rem;
+        right: 38%;
+        .p1 {
+          font-size: 0.8rem;
+          font-family: Microsoft YaHei;
+          font-weight: bold;
+          color: #000;
         }
-        .market-div1-text{
-          position: absolute;
-          top: 2rem;
-          width: 9rem;
-          right: 38%;
-          .p1{
-            font-size:0.8rem;
-            font-family:Microsoft YaHei;
-            font-weight:bold;
-            color: #000;
+        .p2 {
+          font-size: 0.9rem;
+          padding-top: 0.7rem;
+          .through {
+            font-family: Microsoft YaHei;
+            font-weight: 400;
+            font-style: italic;
+            color: #999;
+            text-decoration: line-through;
           }
-          .p2{
-            font-size:0.9rem;
-            padding-top: 0.7rem;
-            .through{
-              font-family:Microsoft YaHei;
-              font-weight:400;
-              font-style:italic;
-              color: #999;
-              text-decoration: line-through;
-            }
-            .through2{
-              font-family:Microsoft YaHei;
-              font-weight:400;
-              font-style:italic;
-              color: #2c2c2c;
-              padding-left: 0.5rem;
-            }
+          .through2 {
+            font-family: Microsoft YaHei;
+            font-weight: 400;
+            font-style: italic;
+            color: #2c2c2c;
+            padding-left: 0.5rem;
           }
         }
-        .market-div1-butt{
-          background-color: #313131;
-          opacity: 0.8;
-          width: 6.2rem;
-          height: 2rem;
-          position: absolute;
-          top: 9rem;
-          line-height: 2rem;
-          right: 50%;
+      }
+      .market-div1-butt {
+        background-color: #313131;
+        opacity: 0.8;
+        width: 6.2rem;
+        height: 2rem;
+        position: absolute;
+        top: 9rem;
+        line-height: 2rem;
+        right: 50%;
+        text-align: center;
+        transform: skew(20deg);
+        -webkit-transform: skew(20deg);
+        -moz-transform: skew(20deg);
+        -o-transform: skew(20deg);
+        -ms-transform: skew(20deg);
+        .button-text {
+          font-size: 0.8rem;
+          font-family: Microsoft YaHei;
+          font-weight: 400;
+          color: #fff;
+          display: inline-block;
+          transform: skew(-20deg);
+          -webkit-transform: skew(-20deg);
+          -moz-transform: skew(-20deg);
+          -o-transform: skew(-20deg);
+          -ms-transform: skew(-20deg);
           text-align: center;
-          transform:skew(20deg);   
-          -webkit-transform: skew(20deg);   
-          -moz-transform: skew(20deg);   
-          -o-transform:skew(20deg);   
-          -ms-transform:skew(20deg);
-          .button-text{
-            font-size:0.8rem;
-            font-family:Microsoft YaHei;
-            font-weight:400;
-            color: #fff;
-            display: inline-block;
-            transform:skew(-20deg);   
-            -webkit-transform: skew(-20deg);   
-            -moz-transform: skew(-20deg);   
-            -o-transform:skew(-20deg);   
-            -ms-transform:skew(-20deg); 
-            text-align: center;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-          }
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
-        .market-kong{
-            width: 2rem;
-            position: absolute;
-            top: 0%;
-            left: 11%;
-            height: 100%;
-            background-color: #eee;
-            transform:skew(18deg);   
-            -webkit-transform: skew(18deg);   
-            -moz-transform: skew(18deg);   
-            -o-transform:skew(18deg);   
-            -ms-transform:skew(18deg);
-        }
-        .market-kong2{
-            width: 2rem;
-            position: absolute;
-            top: 0%;
-            left: 79%;
-            height: 100%;
-            background-color: #eee;
-            transform:skew(18deg);   
-            -webkit-transform: skew(18deg);   
-            -moz-transform: skew(18deg);   
-            -o-transform:skew(18deg);   
-            -ms-transform:skew(18deg);
-        }
+      }
+      .market-kong {
+        width: 2rem;
+        position: absolute;
+        top: 0%;
+        left: 11%;
+        height: 100%;
+        background-color: #eee;
+        transform: skew(18deg);
+        -webkit-transform: skew(18deg);
+        -moz-transform: skew(18deg);
+        -o-transform: skew(18deg);
+        -ms-transform: skew(18deg);
+      }
+      .market-kong2 {
+        width: 2rem;
+        position: absolute;
+        top: 0%;
+        left: 79%;
+        height: 100%;
+        background-color: #eee;
+        transform: skew(18deg);
+        -webkit-transform: skew(18deg);
+        -moz-transform: skew(18deg);
+        -o-transform: skew(18deg);
+        -ms-transform: skew(18deg);
       }
     }
+  }
 }
-
-
 
 @mixin spare() {
   display: -webkit-box;

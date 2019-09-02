@@ -16,8 +16,12 @@
       </div>
       <div class="content" v-show="step.cur_index === 1">
         <!-- <pdf src="../../../static/doc/瑜伽村平台认证服务协议.pdf"></pdf> -->
-        <iframe src='../../../static/doc/瑜伽村平台认证服务协议.pdf' width='100%' height='100%' frameborder='1'>
-			</iframe>
+        <iframe
+          src="../../../static/doc/瑜伽村平台认证服务协议.pdf"
+          width="100%"
+          height="100%"
+          frameborder="1"
+        ></iframe>
       </div>
       <div class="form" v-show="step.cur_index === 2">
         <div class="name-address-phone">
@@ -45,7 +49,13 @@
         <div class="card">
           <div class="title-tips">
             <div class="title">免责声明</div>
-            <div class="download"><a style="color:#2c2c2c;" href="http://api.aomengyujia.com/api/personal/download/template" download>下载模版</a></div>
+            <div class="download">
+              <a
+                style="color:#2c2c2c;"
+                href="http://api.aomengyujia.com/api/personal/download/template"
+                download
+              >下载模版</a>
+            </div>
           </div>
           <div class="upload-box">
             <el-upload
@@ -58,7 +68,7 @@
               :auto-upload="false"
             >
               <i class="el-icon-plus"></i>
-              <div class="el-upload__tip" slot="tip">支持jpg.jpeg.bmp.gif.png格式</div>
+              <div class="el-upload__tip" slot="tip">支持jpg,jpeg,png格式</div>
             </el-upload>
             <el-dialog :visible.sync="dialogVisible">
               <img width="100%" :src="dialogImageUrl" alt />
@@ -67,7 +77,7 @@
         </div>
         <div class="card" v-show="isShow('7') || isShow('4')">
           <div class="title-tips">
-            <div class="title">工作证明</div>
+            <div class="title">工作证明/教练证书</div>
             <div class="tips">请上传最新的工作证明(仅教练需要提交)</div>
           </div>
           <div class="upload-box">
@@ -81,7 +91,7 @@
               :auto-upload="false"
             >
               <i class="el-icon-plus"></i>
-              <div class="el-upload__tip" slot="tip">支持jpg.jpeg.bmp.gif.png格式</div>
+              <div class="el-upload__tip" slot="tip">支持jpg,jpeg,png格式</div>
             </el-upload>
             <el-dialog :visible.sync="dialogVisible">
               <img width="100%" :src="dialogImageUrl" alt />
@@ -104,7 +114,7 @@
               :auto-upload="false"
             >
               <i class="el-icon-plus"></i>
-              <div class="el-upload__tip" slot="tip">支持jpg.jpeg.bmp.gif.png格式</div>
+              <div class="el-upload__tip" slot="tip">支持jpg,jpeg,png格式</div>
             </el-upload>
             <el-dialog :visible.sync="dialogVisible">
               <img width="100%" :src="dialogImageUrl" alt />
@@ -130,9 +140,8 @@
 import TopTitle from "./topTItle";
 import VDistpicker from "v-distpicker";
 import { postUserInfo } from "@/api/personal";
-import pdf from 'vue-pdf'
 export default {
-  props: ['certificate'],
+  props: ["certificate"],
   components: {
     TopTitle,
     VDistpicker,
@@ -172,16 +181,11 @@ export default {
     uploadLicenseDisabled: function() {
       return this.ruleForm.img_license;
     },
-    info() {
-      const user = sessionStorage.getItem("user");
-      return user && JSON.parse(user).user;
-    },
     isShow() {
-      return id => this.certificate.identity == id
+      return id => this.certificate.identity == id;
     }
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     changeExemptionFile(file, fileList) {
       this.changeFile(file, fileList, "img_exemption");
@@ -241,7 +245,7 @@ export default {
             this.$message({
               type: "warning",
               message: "请上传符合自身角色的图片"
-            })
+            });
             return;
           }
           this.ruleForm.identity_auth = identity_auth;
@@ -272,7 +276,7 @@ export default {
   height: 2em;
   margin-right: 10px;
   font-size: 0.7rem;
-  padding:0;
+  padding: 0;
 }
 .form >>> .disabled .el-upload--picture-card {
   display: none;
@@ -377,6 +381,7 @@ export default {
       }
       .address {
         display: flex;
+        align-items: center;
         padding: 0.6rem 0 1.3rem;
         padding-left: 2rem;
         .title {
@@ -397,16 +402,18 @@ export default {
         display: flex;
         padding-top: 1.45rem;
         padding-bottom: 0.55rem;
-        padding-left: 3rem;
+        // padding-left: 3rem;
         border-bottom: 1px solid #eee;
         .title {
+          width: 10em;
+          text-align: right;
         }
         .tips {
-          padding-left: 2.5rem;
+          padding-left: 1rem;
           color: #999;
         }
         .download {
-          padding-left: 2.5rem;
+          padding-left: 1rem;
           text-decoration: underline;
           cursor: pointer;
         }

@@ -592,7 +592,7 @@ export default {
   height: 2em;
   margin-right: 10px;
   font-size: 0.7rem;
-  padding:0;
+  padding: 0;
 }
 .cultivate-main >>> .el-rate__icon {
   font-size: 0.7rem !important;
@@ -896,12 +896,15 @@ img {
           height: 28.6rem;
           // padding-bottom: 1rem;
           background-color: #ffffff;
-          box-shadow: 0.1rem 0.2rem 1.3rem 0.1rem rgba(164, 164, 164, 0.39);
+          border: 1px solid rgba(164, 164, 164, 0.39);
           border-radius: 0.3rem;
           float: left;
           margin-left: 1.4rem;
           margin-top: 1rem;
           font-size: 0.7rem;
+          &:hover {
+            box-shadow: 0.1rem 0.2rem 1.3rem 0.1rem rgba(164, 164, 164, 0.39);
+          }
           .fruit-list-li-img {
             width: 100%;
             height: 17.7rem;
@@ -1019,12 +1022,15 @@ img {
         height: 28.6rem;
         // padding-bottom: 1rem;
         background-color: #ffffff;
-        box-shadow: 0.1rem 0.2rem 1.3rem 0.1rem rgba(164, 164, 164, 0.39);
+        border:1px solid rgba(164, 164, 164, 0.39);
         border-radius: 0.3rem;
         float: left;
         margin-left: 1.4rem;
         margin-top: 1rem;
         font-size: 0.7rem;
+        &:hover {
+            box-shadow: 0.1rem 0.2rem 1.3rem 0.1rem rgba(164, 164, 164, 0.39);
+          }
         .fruit-list-li-img {
           width: 100%;
           height: 17.7rem;
@@ -1119,8 +1125,8 @@ img {
           to right,
           #ffffff 0%,
           #ffffff 50%,
-          #EEF5DD 50%,
-          #EEF5DD 100%
+          #eef5dd 50%,
+          #eef5dd 100%
         );
         &::after {
           left: 0;
@@ -1158,8 +1164,8 @@ img {
         // background-color: #cce198;
         background: linear-gradient(
           to right,
-          #EEF5DD 0%,
-          #EEF5DD 50%,
+          #eef5dd 0%,
+          #eef5dd 50%,
           #ffffff 50%,
           #ffffff 100%
         );

@@ -116,6 +116,7 @@
 import { Exp } from "@/utils/bee.js";
 import Bus from "@/utils/Bus";
 import logo from "@/assets/market/logo_max.png";
+import store from "@/store";
 export default {
   data() {
     return {
@@ -163,7 +164,7 @@ export default {
     }
   },
   mounted() {
-    this.getVerificationCode()
+    this.getVerificationCode();
   },
   methods: {
     submitForm(name) {
@@ -209,9 +210,11 @@ export default {
           this.isPostting = false;
           this.$message({ message: "登录成功", type: "success" });
           this.$emit("close", "");
+          
         })
         .then(_ => {
-          this.getPersonal();
+          // this.getPersonal();
+          window.location.reload();
         })
         .catch(() => {
           this.isPostting = false;
@@ -302,7 +305,7 @@ export default {
       let _check_item = {
         tel: PhoneUtils.isPhoneNum,
         password: StringUtils.isSpecialCharacterAlphanumeric,
-        captcha: (item) => true
+        captcha: item => true
       };
       let _input_value = this[`${this.loginWay}RuleForm`][item];
       let _is_pass = _check_item[item] && _check_item[item](_input_value);
@@ -315,7 +318,7 @@ export default {
 * {
   box-sizing: border-box !important;
 }
-img{
+img {
   width: 100%;
   height: 100%;
 }
@@ -434,7 +437,7 @@ input:focus {
                   width: 10em;
                   cursor: default;
                 }
-                input{
+                input {
                   width: auto;
                 }
               }

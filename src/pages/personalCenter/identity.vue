@@ -51,7 +51,7 @@
               >显示金币</span>
             </div>
             <div class="money">
-              <span>{{hiddenMoney || info.money}}</span>
+              <span>{{hiddenMoney || info.user.money}}</span>
               <div class="recharge" @click="step.type = 'recharge'">充值</div>
               <!-- <div class="cash">提现</div> -->
             </div>
@@ -80,7 +80,7 @@
         <div class="card">
           <div class="title">
             尊贵的
-            <span>{{getIdentityAuth(info.identity_auth)}}</span> 未查询到您的银行卡信息，请完整信息：
+            <span>{{getIdentityAuth(info.user.identity_auth)}}</span> 未查询到您的银行卡信息，请完整信息：
           </div>
           <div style="padding-bottom:1em;">请填写银行卡号码</div>
           <div class="input-box">
@@ -110,7 +110,7 @@
               <span style="color:#4093A5;margin-left:10px;">显示金币</span>
             </div>
             <div class="money">
-              <span>{{info.money}}</span>
+              <span>{{info.user.money}}</span>
               <div class="recharge">充值</div>
               <!-- <div class="cash">提现</div> -->
             </div>
@@ -160,6 +160,8 @@ import identity_1 from "@/assets/personal/identity_1.png";
 import identity_2 from "@/assets/personal/identity_2.png";
 import identity_3 from "@/assets/personal/identity_3.png";
 import certification from "./certification";
+import store from "@/store";
+import { mapGetters } from "vuex";
 import {
   postChangeBankCard,
   getBankCardInfo,
@@ -207,13 +209,14 @@ export default {
   watch: {
     money(newvalue, oldvalue) {
       this.rechargeForm.num = "";
+    },
+    $route() {
+      const { type = "identity" } = this.$route.query;
+      this.step.type = type;
     }
   },
   computed: {
-    info() {
-      const user = sessionStorage.getItem("user");
-      return user && JSON.parse(user).user;
-    },
+    ...mapGetters(["info"]),
     getIdentityAuth() {
       return item => {
         const obj = {
@@ -239,6 +242,11 @@ export default {
   },
   mounted() {
     // this.getBankCardInfo();
+    const { type = "identity" } = this.$route.query;
+    this.step.type = type;
+  },
+  updated() {
+    this.$nextTick(function() {});
   },
   methods: {
     back() {
@@ -246,32 +254,18 @@ export default {
       const obj = {
         identity: "identity",
         certification: "identity",
-        "my-card": "identity",
+        "my-card": "my-card",
         "input-card": "my-card",
         recharge: "my-card"
       };
-      if (type === "identity") {
+      if (type === "identity" || type === "my-card") {
         this.$router.go(-1);
       }
       this.step.type = obj[type];
     },
     myIdentity(identity) {
-      // if (this.info.identity_auth !== identity) {
-      //   this.$message({
-      //     type: "warning",
-      //     message: "请确认自己的身份"
-      //   });
-      //   return;
-      // }
       this.step.type = "certification";
       this.certificate.identity = identity;
-      // const obj = {
-      //   1: "用户",
-      //   2: identity_1,
-      //   4: identity_3,
-      //   7: identity_2
-      // };
-      // this.icon.active = obj[identity];
     },
     rechargeChange(name, num) {
       this.rechargeForm[name] = num;

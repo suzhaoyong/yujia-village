@@ -88,18 +88,11 @@
                       type="password"
                       v-model="ruleForm.password"
                       class="form-control input"
-                      placeholder="请输入旧密码"
+                      placeholder="请输入新密码"
                     />
                     <div class="form_input-tips"></div>
                   </div>
                 </div>
-                <!-- <div class="item">
-                <span class="title">二次确认</span>
-                <div class="form_input">
-                  <input type="password" class="form-control input" placeholder="请输入旧密码" />
-                  <div class="form_input-tips">密码错误</div>
-                </div>
-                </div>-->
                 <div class="submit">
                   <div
                     class="btn"
@@ -309,6 +302,8 @@
 <script>
 import SessionTitle from "./SessionTitle";
 import VDistpicker from "v-distpicker";
+import store from "@/store";
+import { mapGetters } from "vuex";
 import Cloud from "./cloud";
 import {
   postUpdateTeacherInfo,
@@ -376,17 +371,11 @@ export default {
         city: "",
         province: "",
         area: ""
-      },
-      info: {
-        user: {}
       }
     };
   },
   computed: {
-    // info() {
-    //   const user = sessionStorage.getItem("user");
-    //   return user && JSON.parse(user);
-    // },
+    ...mapGetters(["info"]),
     isTagActive() {
       return index => ({
         active: this.tagList[index].active
@@ -416,8 +405,8 @@ export default {
     /** 个人信息 */
     getPersonal() {
       this.$request("/personal/home").then(data => {
+        store.dispatch("INFO", data);
         sessionStorage.setItem("user", JSON.stringify(data));
-        this.info = data;
         const {
           area,
           province,
@@ -428,7 +417,7 @@ export default {
           identity_auth,
           name,
           real_name
-        } = this.info.user;
+        } = data.user;
         this.userForm = Object.assign(
           {},
           {
@@ -541,8 +530,9 @@ export default {
       this.$request.post("/personal/updatePassword", params).then(data => {
         this.$message({
           type: "success",
-          message: "修改成功"
+          message: "修改成功，请重新登录"
         });
+        store.dispatch("INFO", { user: {} });
       });
     },
     /** 切换选项 */
@@ -633,7 +623,7 @@ export default {
   height: 2em;
   margin-right: 10px;
   font-size: 0.7rem;
-  padding:0;
+  padding: 0;
 }
 .edit-personage >>> .disabled .el-upload--picture-card {
   display: none;
@@ -646,7 +636,7 @@ export default {
   height: 2em;
   margin-right: 10px;
   font-size: 0.7rem;
-  padding:0;
+  padding: 0;
 }
 .edit-hall >>> .disabled .el-upload--picture-card {
   display: none;

@@ -25,6 +25,7 @@
 </template>
 <script>
 import SessionTitle from "./SessionTitle";
+import { mapGetters } from "vuex";
 import Cloud from "./cloud";
 // import socialShare from 'social-share.js'
 export default {
@@ -47,10 +48,7 @@ export default {
     };
   },
   computed: {
-    info() {
-      const user = sessionStorage.getItem("user");
-      return user && JSON.parse(user);
-    }
+    ...mapGetters(["info"])
   },
   created() {
     this.initSocialConfig();
@@ -58,7 +56,7 @@ export default {
   mounted() {},
   methods: {
     initSocialConfig() {
-      if (this.info) {
+      if (this.info.user.name) {
         const params = {
           url: `https://sutaojie.github.io/mobile-village/public/frontend/#/login`,
           title: `瑜伽村`,

@@ -1,5 +1,6 @@
 import axios from 'axios'
 import Bus from './Bus'
+import store from "@/store";
 import {
   Message,
   Loading
@@ -7,7 +8,7 @@ import {
 let loadingInstance = ""
 // 处理非 get data 传参
 function handleRequest(config) {
-  if (config.url.startsWith('/api/getAlipayOrder') && config.url.startsWith('/api/getWechatOrder')) {
+  if (config.url.search("getAlipayOrder") != -1 || config.url.search("getWechatOrder") != -1) {
 
   } else {
     loadingInstance = Loading.service({
@@ -55,6 +56,9 @@ function handleResponeseErr(err) {
     Bus.$emit('login', true)
     sessionStorage.removeItem('user')
     sessionStorage.removeItem('access')
+    store.dispatch("INFO", {
+      user: {}
+    });
   }
   if (status === 401) {
     message = '请先登录'
@@ -77,13 +81,16 @@ function handleResponeseErr(err) {
       Bus.$emit('login', true)
       sessionStorage.removeItem('user')
       sessionStorage.removeItem('access')
+      store.dispatch("INFO", {
+        user: {}
+      });
     }
 
   } else if (status === 404) {
     message = '接口不存在';
   } else if (status >= 400 && status < 500) {
     message = data.msg
-    if(data.msg == 'Too Many Attempts.') {
+    if (data.msg == 'Too Many Attempts.') {
       message = '您的操作频率过多，请稍后重试'
     }
   } else if (status >= 500) {
@@ -92,6 +99,9 @@ function handleResponeseErr(err) {
       Bus.$emit('login', true)
       sessionStorage.removeItem('user')
       sessionStorage.removeItem('access')
+      store.dispatch("INFO", {
+        user: {}
+      });
     }
   }
   // if (data.msg) {
