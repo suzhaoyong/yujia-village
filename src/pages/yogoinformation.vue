@@ -125,7 +125,7 @@
                     <div class="Default-page2" v-else>
                         <div class="Default-main2">
                         <img src="../assets/default.png"/>
-                        <span class="page-span2">暂无数据~~请选择其他类别</span>
+                        <span class="page-span2">我寻寻觅觅却找不到您的踪迹~</span>
                         </div>
                     </div>
                 </div>
@@ -223,12 +223,13 @@ export default {
     .desc-img1{ margin-bottom: 30px; }
 }
 .formationitem{
-    position: relative;
+    width: 1200px;
+    margin: 0 auto;
 .select-bg{
-        width: 75%;
+        width: 1200px;
         margin: 0 auto;
         position: absolute;
-        left: 190px;
+        // left: 190px;
         opacity: 0.7;
         height: auto;
         background-color: #fff;
@@ -493,7 +494,7 @@ export default {
                     -webkit-clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
                     clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
                     transform: translateX(-50%) translateY(-50%) scale(0) rotate(360deg);
-                    transition: all 0.3s ease 0s;
+                    transition: all 0.7s ease 0s;
                 }
                 .desc-img1:after{
                     content: "";

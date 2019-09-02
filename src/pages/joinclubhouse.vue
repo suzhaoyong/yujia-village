@@ -92,7 +92,7 @@
                        <div class="Default-page4" v-else>
                             <div class="Default-main4">
                             <img src="../assets/default.png"/>
-                            <span class="page-span4">暂无会馆数据</span>
+                            <span class="page-span4">我寻寻觅觅却找不到您的踪迹~</span>
                             </div>
                         </div>
                     </div>
@@ -212,8 +212,6 @@ export default {
     height:224px;
     background-color: #8fc31f;
     opacity: 1;
-    transition: transform 0.5s ease-in;
-    transition: all 1s ease;
 }
 .test6:hover figcaption .telimg{
     width: 100%;
@@ -221,7 +219,6 @@ export default {
     top: 30%;
     opacity: .9;
     background-color: #8fc31f;
-    transition: transform 0.5s ease-in;
     transition: all 1s ease;
 }
 .test6:hover figcaption .telimg .telpp{
@@ -231,13 +228,11 @@ export default {
     font-weight:400;
     color: #fff;
     margin-left: 7px;
-    transition: transform 0.5s ease-in;
-    transition: all 1s ease;
+    transition: transform 1s ease-in;
+    
 }
 .test6:hover img{
     opacity: 0.1;
-    transition: transform 0.5s ease-in;
-    transition: all 1s ease;
     }
 .bg_img {
   width: 100%;
@@ -257,7 +252,7 @@ export default {
     right: 44%;
     text-align: center;
     .butt{
-      font-size:4vh;
+      font-size:1.2rem;
       font-family:Microsoft YaHei;
       font-weight:bold;
       color: #FFFFFF;

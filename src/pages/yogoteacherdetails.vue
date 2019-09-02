@@ -48,7 +48,7 @@
                 <div class="Default-page8" v-else>
                     <div class="Default-main8">
                     <img src="../assets/default.png"/>
-                    <span class="page-span8">暂无名师个人数据</span>
+                    <span class="page-span8">我寻寻觅觅却找不到您的踪迹~</span>
                     </div>
                 </div>
                 <!-- <img src="../assets/image85.png" class="count-name-img5"/> -->
