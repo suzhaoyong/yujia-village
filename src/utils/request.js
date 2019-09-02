@@ -61,7 +61,11 @@ function handleResponeseErr(err) {
     });
   }
   if (status === 401) {
-    message = '请先登录'
+    if (config.url.search("login") != -1) {
+      message = data.msg
+    } else {
+      message = '请先登录'
+    }
     if (sessionStorage.getItem('access')) {
       // sessionStorage.removeItem('access')
       request.post('/auth/refresh')

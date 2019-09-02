@@ -396,14 +396,20 @@ img {
 }
 .identity {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  margin: 0 auto;
+  width: 60rem;
   padding-top: 4rem;
   min-height: 30rem;
   .box {
     width: 17rem;
     height: 22rem;
     background: #e6f9f1;
-    margin-right: 2.5rem;
+    // margin-right: 2.5rem;
+    border-radius: 6px;
+    &:hover {
+      box-shadow: 0.1rem 0.2rem 1.3rem 0.1rem rgba(164, 164, 164, 0.39);
+    }
     &.id1 {
       background: #e6f9f1;
     }
@@ -433,7 +439,7 @@ img {
   // min-height: 30rem;
   display: flex;
   min-height: 20rem;
-  width: 70rem;
+  width: 60rem;
   margin: 0 auto;
   margin-top: 4rem;
   margin-bottom: 10rem;
@@ -523,7 +529,7 @@ img {
   display: flex;
   min-height: 20rem;
   border: 1px solid #ccc;
-  width: 70rem;
+  width: 60rem;
   margin: 0 auto;
   margin-top: 4rem;
   margin-bottom: 10rem;
@@ -572,7 +578,7 @@ img {
   display: flex;
   min-height: 20rem;
   border: 1px solid #ccc;
-  width: 70rem;
+  width: 60rem;
   margin: 0 auto;
   margin-top: 4rem;
   margin-bottom: 10rem;

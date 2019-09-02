@@ -15,7 +15,6 @@
         </div>
       </div>
       <div class="content" v-show="step.cur_index === 1">
-        <!-- <pdf src="../../../static/doc/瑜伽村平台认证服务协议.pdf"></pdf> -->
         <iframe
           src="../../../static/doc/瑜伽村平台认证服务协议.pdf"
           width="100%"
@@ -144,8 +143,7 @@ export default {
   props: ["certificate"],
   components: {
     TopTitle,
-    VDistpicker,
-    pdf
+    VDistpicker
   },
   data() {
     return {

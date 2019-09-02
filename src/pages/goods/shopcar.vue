@@ -95,13 +95,7 @@ export default {
     }
   },
   mounted() {
-    // const goods = sessionStorage.getItem("goods");
-    // if (goods) {
-    //   this.goods =
-    //     (goods && JSON.parse(goods).map(item => item.select)) || [];
-    // } else {
     this.getShopCar();
-    // }
   },
   methods: {
     goodsOpFor(option, goods) {
@@ -173,7 +167,6 @@ export default {
       this.goods = [...this.goods];
     },
     payment() {
-      sessionStorage.setItem("goods", JSON.stringify(this.goods));
       const select = this.goods.filter(item => item.select);
       const id = select.map(item => item.id);
       const num = select.map(item => item.num);

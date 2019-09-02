@@ -303,6 +303,7 @@
 import SessionTitle from "./SessionTitle";
 import VDistpicker from "v-distpicker";
 import store from "@/store";
+import Bus from "@/utils/Bus";
 import { mapGetters } from "vuex";
 import Cloud from "./cloud";
 import {
@@ -532,6 +533,7 @@ export default {
           type: "success",
           message: "修改成功，请重新登录"
         });
+        Bus.$emit("login", true);
         store.dispatch("INFO", { user: {} });
       });
     },

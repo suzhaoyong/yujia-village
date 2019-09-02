@@ -272,8 +272,6 @@ export default {
     }
   },
   mounted() {
-    // const goods = sessionStorage.getItem("goods");
-    // this.goods = goods && JSON.parse(goods).filter(item => item.select);
     getUserAddress().then(data => {
       this.address = data.address;
       if (data.address.length === 0) {

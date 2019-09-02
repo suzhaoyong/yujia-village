@@ -163,6 +163,11 @@ export default {
       };
     }
   },
+  created() {
+    store.dispatch("INFO", { user: {} });
+    sessionStorage.removeItem("user");
+    sessionStorage.removeItem("access");
+  },
   mounted() {
     this.getVerificationCode();
   },
@@ -210,7 +215,6 @@ export default {
           this.isPostting = false;
           this.$message({ message: "登录成功", type: "success" });
           this.$emit("close", "");
-          
         })
         .then(_ => {
           // this.getPersonal();

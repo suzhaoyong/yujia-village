@@ -32,7 +32,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["info"]),
+    ...mapGetters(["info"])
   },
   mounted() {
     // this.getPersonal();
@@ -73,7 +73,7 @@ export default {
   box-sizing: border-box;
 }
 .top {
-  box-shadow: 0rem 0.05rem 0.1rem #ccc;
+  box-shadow: 0.1rem 0.3rem 1rem #ccc;
 }
 .header {
   width: 60rem;
