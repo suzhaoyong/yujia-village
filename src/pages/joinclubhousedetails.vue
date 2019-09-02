@@ -61,7 +61,6 @@
                     <span class="page-span6">我寻寻觅觅却找不到您的踪迹~</span>
                     </div>
                 </div>
-
                 <div class="joinclubdetails-cont-div1">
                     <h2><img src="../assets/yujia.png"/>会馆课程</h2>
                     <p class="nav-text">Sometimes beauty is so simple</p>
@@ -242,7 +241,7 @@ export default {
             }
             h2{
                 color: #2c2c2c;
-                font-size: 1.6rem;
+                font-size: 1.4rem;
                 margin-top: 40px;
                 padding-top: 24px;
                 font-family:Microsoft YaHei;
@@ -545,7 +544,7 @@ export default {
             }
             h2{
                 color: #2c2c2c;
-                font-size: 1.6rem;
+                font-size: 1.4rem;
                 margin-top: 40px;
                 padding-top: 24px;
                 font-family:Microsoft YaHei;

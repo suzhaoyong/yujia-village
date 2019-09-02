@@ -56,6 +56,7 @@ export default {
         display: flex;
         justify-content: center;
         margin-top: 3%;
+        font-size: 14px;
         .button{
             font-size: 14px;
             color: #2c2c2c;
@@ -75,6 +76,7 @@ export default {
         text-align: center;
         color: #2c2c2c;
         padding-bottom: 45px;
+        font-size: 14px;
         .span3{
             padding-left: 60px;
         }

@@ -527,7 +527,7 @@ export default {
             }
             h2{
                 color: #2c2c2c;
-                font-size: 1.6rem;
+                font-size: 1.4rem;
                 padding-top: 24px;
                 margin-top: 40px;
                 font-family:Microsoft YaHei;
@@ -917,7 +917,7 @@ export default {
             }
             h2{
                 color: #2c2c2c;
-                font-size: 1.6rem;
+                font-size: 1.4rem;
                 margin-top: 40px;
                 font-family:Microsoft YaHei;
                 font-weight:bold;
