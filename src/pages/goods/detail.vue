@@ -31,13 +31,16 @@
             </div>
           </div>
           <div class="details">
+            <div class="price" style="font-weight:800;">
+              {{goods.describe}}
+            </div>
             <div class="price">
               吊牌价：
               <span>￥{{goods.sell_price}}</span>
             </div>
             <div class="preferential">
-              优惠折扣：
-              <span>￥{{goods.discount}}</span>
+              折扣价：
+              <span>￥{{goods.sell_price - goods.discount}}</span>
             </div>
             <div class="colors">
               <span>颜色:</span>
@@ -372,11 +375,12 @@ img {
         }
         .price {
           margin-bottom: 1.2rem;
+          
+        }
+        .preferential {
           span {
             font-weight: 800;
           }
-        }
-        .preferential {
         }
         .colors {
           margin-top: 2rem;

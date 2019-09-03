@@ -104,16 +104,26 @@
           </div>
         </div>
         <div class="info">
-          <div class="balance" v-show="false">
+          <div class="balance">
             <div class="title">
               <span>账户金币</span>
-              <span style="color:#4093A5;margin-left:10px;">显示金币</span>
+              <span
+                v-if="hiddenMoney"
+                style="color:#4093A5;margin-left:10px;"
+                @click="hiddenMoney = ''"
+              >显示金币</span>
+              <span
+                v-else
+                style="color:#4093A5;margin-left:10px;"
+                @click="hiddenMoney = '**.**'"
+              >隐藏金币</span>
             </div>
             <div class="money">
-              <span>{{info.user.money}}</span>
-              <div class="recharge">充值</div>
+              <span style="min-width: 4em;display: inline-block;">{{hiddenMoney || info.user.money}}</span>
+              <div class="recharge" @click="step.type = 'recharge'">充值</div>
               <!-- <div class="cash">提现</div> -->
             </div>
+            <span class="all-card" v-show="false">我的全部银行卡</span>
           </div>
           <div class="card-wrap">
             <div class="title">
@@ -133,7 +143,7 @@
           </div>
         </div>
         <div class="pay-way" v-show="rechargeForm.num || money">
-          <div>支付方式</div>
+          <div style="padding-left: 1.5rem;">支付方式</div>
           <div class="way">
             <span :class="[isPayActive(3)]" @click="rechargeChange('payment', '3')">微信</span>
             <span :class="[isPayActive(2)]" @click="rechargeChange('payment', '2')">支付宝</span>
@@ -260,9 +270,9 @@ export default {
         certification: "identity",
         "my-card": "my-card",
         "input-card": "my-card",
-        recharge: "my-card"
+        recharge: "recharge"
       };
-      if (type === "identity" || type === "my-card") {
+      if (type === "identity" || type === "recharge") {
         this.$router.go(-1);
       }
       this.step.type = obj[type];
@@ -275,11 +285,13 @@ export default {
       this.rechargeForm[name] = num;
       if (name === "payment") {
         timer && clearInterval(timer);
-        (this.rechargeForm.num || this.money) && this.reCharge();
+        this.playcode = { show: false, src: "", count: 0, success: false };
+        // (this.rechargeForm.num || this.money) && this.reCharge();
       }
     },
     /** 充值 */
     reCharge() {
+      timer && clearInterval(timer);
       if (this.rechargeForm.payment == "") {
         this.$message({
           type: "warning",
@@ -442,6 +454,7 @@ img {
     border-radius: 6px;
     &:hover {
       box-shadow: 0.1rem 0.2rem 1.3rem 0.1rem rgba(164, 164, 164, 0.39);
+      transition: box-shadow 0.75s;
     }
     &.id1 {
       background: #e6f9f1;
@@ -697,8 +710,9 @@ img {
     width: 15rem;
     border-left: 1px solid #ccc;
     padding-top: 2rem;
-    padding-left: 1rem;
+    position: relative;
     .way {
+      padding-left: 1.5rem;
       padding-top: 0.5rem;
       span {
         padding: 0 1em;
@@ -731,6 +745,10 @@ img {
         background: #000;
         color: #fff;
         padding: 0.3em 1em;
+        bottom: 1rem;
+        left: 50%;
+        transform: translateX(-50%);
+        position: absolute;
       }
     }
   }

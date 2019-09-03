@@ -163,9 +163,26 @@ export default {
       width: 5.8rem;
       margin-left: 4rem;
       // height: 6.3rem;
-      overflow: scroll;
+      overflow-y: scroll;
       height: 14rem;
       margin-top: 3rem;
+      /* 设置滚动条的样式 */
+      &::-webkit-scrollbar {
+        width: 0.1rem;
+      }
+      /* 滚动槽 */
+      &::-webkit-scrollbar-track {
+        background: #dcdcdc;
+        border-radius: 0.15rem;
+      }
+      /* 滚动条滑块 */
+      &::-webkit-scrollbar-thumb {
+        background: #88bc37;
+        border-radius: 0.15rem;
+      }
+      &::-webkit-scrollbar-thumb {
+        background: #88bc37;
+      }
       .img1 {
         width: 100%;
         // height: 100%;

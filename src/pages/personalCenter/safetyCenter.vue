@@ -40,7 +40,7 @@
                       type="password"
                       v-model="ruleForm.password"
                       class="form-control input"
-                      placeholder="请输入旧密码"
+                      placeholder="请输入新密码"
                     />
                     <div class="form_input-tips"></div>
                   </div>

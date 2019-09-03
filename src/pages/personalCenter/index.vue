@@ -340,6 +340,7 @@ img {
     border-radius: 6px;
     &:hover {
       box-shadow: 0.1rem 0.2rem 1.3rem 0.1rem rgba(164, 164, 164, 0.39);
+      transition: box-shadow 0.75s;
     }
     &:nth-child(4n) {
       margin-right: 0rem;

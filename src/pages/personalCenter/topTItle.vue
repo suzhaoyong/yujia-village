@@ -8,7 +8,7 @@
         </div>
         <div class="info">
           <div class="balance">
-            您的账户可金币用
+            可金币用
             <span class="number">{{info.user.money}}</span>
           </div>
           <div class="recharge" @click="changMoney">充值</div>
@@ -51,7 +51,7 @@ export default {
       this.$router.push({
         name: "identity",
         query: {
-          type: "my-card"
+          type: "recharge"
         }
       });
     },

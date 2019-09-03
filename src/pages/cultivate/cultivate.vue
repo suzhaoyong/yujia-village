@@ -136,7 +136,7 @@
                     <img :src="item.teacher_img" />
                   </div>
                   <div class="fruit-list-li-text">
-                    <h4>{{item.name}}</h4>
+                    <h4>{{item.theme}}</h4>
                     <div class="list-eye">
                       <!-- <img src /> -->
                       <span class="span">{{item.views||100}}</span>
@@ -173,7 +173,7 @@
                   <img :src="item.teacher_img" />
                 </div>
                 <div class="fruit-list-li-text">
-                  <h4>{{item.name}}</h4>
+                  <h4>{{item.theme}}</h4>
                   <div class="list-eye">
                     <img src="../../assets/eye.png" />
                     <span class="span">{{item.views || 100}}</span>
@@ -222,7 +222,6 @@
 <script>
 import Banner from "@/components/banner";
 import VDistpicker from "v-distpicker";
-import SessionTitle from "./SessionTitle";
 import {
   getTrains,
   postTrainsList,
@@ -234,7 +233,6 @@ export default {
   components: {
     Banner,
     VDistpicker,
-    SessionTitle
   },
   data() {
     return {
@@ -669,6 +667,7 @@ img {
         box-shadow: 2px 3px 20px 1px #a4a4a4;
         border-radius: 0.3rem;
         margin-top: 1.3rem;
+        
         .cultivate1-one {
           width: 100%;
           height: 4.1rem;
@@ -904,6 +903,7 @@ img {
           font-size: 0.7rem;
           &:hover {
             box-shadow: 0.1rem 0.2rem 1.3rem 0.1rem rgba(164, 164, 164, 0.39);
+            transition: box-shadow 0.75s;
           }
           .fruit-list-li-img {
             width: 100%;
@@ -1030,6 +1030,7 @@ img {
         font-size: 0.7rem;
         &:hover {
             box-shadow: 0.1rem 0.2rem 1.3rem 0.1rem rgba(164, 164, 164, 0.39);
+            transition: box-shadow 0.75s;
           }
         .fruit-list-li-img {
           width: 100%;
