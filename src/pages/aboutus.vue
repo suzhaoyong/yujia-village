@@ -200,13 +200,14 @@ export default {
                     width: 28px;
                     height: 28px;
                     position: absolute;
-                    left: 42%;
+                    left: 41%;
+                    top: 18%;
                 }
             }
         }
         .aboutus-count-div2{
             width: 100%;
-            height: 540px;
+            height: 100%;
             margin: 0 auto;
             display: flex;
             justify-content: center;
@@ -320,7 +321,8 @@ export default {
                     width: 28px;
                     height: 28px;
                     position: absolute;
-                    left: 42%;
+                    left: 41%;
+                    top: 18%;
                 }
             }
         }
@@ -349,7 +351,7 @@ export default {
                 height: 1px;
                 background-color: #dcdcdc;
                 position: absolute;
-                left:16%;
+                left:15%;
                 top: 41%;
             }
             .border-right{
@@ -375,7 +377,8 @@ export default {
                     width: 28px;
                     height: 28px;
                     position: absolute;
-                    left: 38%;
+                    left: 37%;
+                    top: 18%;
                 }
             }
         }
@@ -432,6 +435,7 @@ export default {
                     height: 28px;
                     position: absolute;
                     left: 39%;
+                    top: 18%;
                 }
             }
         }
@@ -641,6 +645,7 @@ export default {
                     height: 28px;
                     position: absolute;
                     left: 42%;
+                    top: 18%;
                 }
             }
         }

@@ -251,6 +251,7 @@ export default {
                     height: 28px;
                     position: absolute;
                     left: 42%;
+                    top: 18%;
                 }
             }
         }
@@ -357,6 +358,9 @@ export default {
                     background-color: #fff;
                     background-image: url('../assets/left.png');
             }
+            .swiper-button-prev1:focus{
+                outline: 0;
+            }
             .swiper-button-next1{
                     position: absolute;
                     right: -4%;
@@ -384,6 +388,9 @@ export default {
                     background-size: 32px 35px;
                     background-color: #fff;
                     background-image: url('../assets/right.png');
+            }
+            .swiper-button-next1:focus{
+                outline: 0;
             }
         }
         .Default-page5{
@@ -526,7 +533,7 @@ export default {
                 height: 1px;
                 background-color: #dcdcdc;
                 position: absolute;
-                left:19%;
+                left:18%;
                 top: 41%;
             }
             .border-right{
@@ -534,7 +541,7 @@ export default {
                 height: 1px;
                 background-color: #dcdcdc;
                 position: absolute;
-                right: 19%;
+                right: 18%;
                 top: 41%;
             }
             .nav-text{
@@ -554,6 +561,7 @@ export default {
                     height: 28px;
                     position: absolute;
                     left: 40%;
+                    top: 17%;
                 }
             }
     }

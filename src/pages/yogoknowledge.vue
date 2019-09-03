@@ -16,6 +16,7 @@
                     </template>
                     <div class="knowledge-count" v-if="this.listdatas.length > 0">
                         <div class="knowledge-count-div1" v-for="(item,index) in listdatas.slice((currentPage-1)*pagesize,currentPage*pagesize)" :key="index" @click="selectItem(item)">
+                            <img src="../assets/zheright.png" class="zheright"/>
                             <div class="knowledge-count-auto">
                             <div class="knowledge-auto">
                             <div class="count-img">
@@ -200,15 +201,25 @@ export default {
         height: 100%;
         display: inline-block;
         .knowledge-count-div1{
-            width: 85%;
+            width: 100%;
             height: 500px;
             float: right;
             margin-top: 40px;
             display: flex;
+            background-color: #FAFCF8;
             cursor:pointer;
             box-shadow: 0px 1px 14px 1px rgba(36, 36, 36, 0.2);
+            position: relative;
+            .zheright{
+                width: 230px;
+                height: 227px;
+                position: absolute;
+                right: 0;
+                top: 22%;
+            }
             .knowledge-count-auto{
                 width: 1300px;
+                margin: 0 auto;
             .knowledge-auto{
                 width: 1200px;
                 margin: 0 auto;
@@ -291,38 +302,42 @@ export default {
                     top: 13%;
                 }
                 h4{
-                    width: 80%;
+                    width: 70%;
                     margin: 0 auto;
                     font-size: 18px;
                     color: #2c2c2c;
                     line-height: 80px;
                     font-family:Microsoft YaHei;
                     font-weight:bold;
+                    margin-left: 10%;
                     display: -webkit-box !important;
                     -webkit-box-orient: vertical !important;
                     -webkit-line-clamp:1 !important;// 限制快级元素的文本行数
                     overflow: hidden !important;
                 }
                 .span-title{
-                    width: 80%;
+                    width: 70%;
                     margin: 0 auto;
                     font-size: 14px;
                     color: #2c2c2c;
                     margin-top: 40px;
+                    margin-left: 10%;
                 }
                 .p-title{
-                    width: 80%;
+                    width: 70%;
                     margin: 0 auto;
                     font-size: 14px;
                     color: #2c2c2c;
+                    margin-left: 10%;
                 }
                 .p-desc{
-                    width: 80%;
+                    width: 70%;
                     margin: 0 auto;
                     font-size: 14px;
                     color: #2c2c2c;
                     line-height: 28px;
                     margin-top: 50px;
+                    margin-left: 10%;
                     display: -webkit-box !important;
                     -webkit-box-orient: vertical !important;
                     -webkit-line-clamp: 3 !important;// 限制快级元素的文本行数
@@ -389,14 +404,23 @@ export default {
           }
         }
         .knowledge-count-div1:nth-child(3){
-            width: 85%;
+            width: 100%;
             height: 500px;
             float: left;
             margin-top: 40px;
             display: flex;
             position: relative;
+            background-color: #FEFEF7;
             cursor:pointer;
             box-shadow: 0px 1px 14px 1px rgba(36, 36, 36, 0.2);
+            .zheright{
+                width: 230px;
+                height: 227px;
+                position: absolute;
+                left: 0;
+                top: 22%;
+                transform: rotate(180deg);
+            }
             .knowledge-count-auto{
                 width: 1300px;
                 margin: 0 auto;
@@ -461,7 +485,7 @@ export default {
                 }
                 .p-title{
                     width: 70%;
-                    margin-right: 10%;
+                    margin-left: 20%;
                     text-align: right;
                     font-size: 14px;
                     color: #2c2c2c;
@@ -488,9 +512,12 @@ export default {
                     text-align: right;
                     display: flex;
                     justify-content: space-between;
+                    position: relative;
                     .count-button-but{
                         width: 110px;
                         height: 40px;
+                        position: absolute;
+                        right: 0;
                         text-align: center;
                         line-height: 40px;
                         margin-top: 37px;
@@ -502,6 +529,7 @@ export default {
                     .count-button-right{
                         font-size: 18px;
                         margin-top: 40px;
+                        margin-left: 15%;
                         position: relative;
                         .img1{
                             width: 27px;

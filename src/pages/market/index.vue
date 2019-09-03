@@ -43,7 +43,7 @@
         </div>
       </div>
 
-        <div class="market-main">
+        <!-- <div class="market-main">
           <div class="market-main-div1">
             <img src="../../assets/market/prev.png" class="img-market-prev"/>
             <div class="market-div1-li">
@@ -84,7 +84,7 @@
             </div>
             <img src="../../assets/market/next.png" class="img-market-next"/>
           </div>
-        </div>
+        </div> -->
 
       <div class="market_time">
         <session-title name="限时优惠" brief="Sometimes beauty is so simple"></session-title>
@@ -305,131 +305,131 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.market-main{
-    width: 100%;
-    height: 25rem;
-    margin-top: 2rem;
-    background-color: #fff;
-    .market-main-div1{
-      width: 60rem;
-      height: 100%;
-      margin: 0 auto;
-      position: relative;
-      .img-market-prev{
-          width: 5.3rem;
-          height: 1.7rem;
-          position: absolute;
-          right: 91%;
-          bottom: 8%;
-      }
-      .img-market-next{
-           width: 5.3rem;
-          height: 1.7rem;
-          position: absolute;
-          right: 0%;
-          top: 8%;
-      }
-      .market-div1-li{
-        width: 19rem;
-        height: 100%;
-        position: relative;
-        float: left;
-        margin-left: 0.8rem;
-        .img{
-          width: 100%;
-          height: 100%;
-        }
-        .market-div1-text{
-          position: absolute;
-          top: 2rem;
-          width: 9rem;
-          right: 38%;
-          .p1{
-            font-size:0.8rem;
-            font-family:Microsoft YaHei;
-            font-weight:bold;
-            color: #000;
-          }
-          .p2{
-            font-size:0.9rem;
-            padding-top: 0.7rem;
-            .through{
-              font-family:Microsoft YaHei;
-              font-weight:400;
-              font-style:italic;
-              color: #999;
-              text-decoration: line-through;
-            }
-            .through2{
-              font-family:Microsoft YaHei;
-              font-weight:400;
-              font-style:italic;
-              color: #2c2c2c;
-              padding-left: 0.5rem;
-            }
-          }
-        }
-        .market-div1-butt{
-          background-color: #313131;
-          opacity: 0.8;
-          width: 6.2rem;
-          height: 2rem;
-          position: absolute;
-          top: 9rem;
-          line-height: 2rem;
-          right: 50%;
-          text-align: center;
-          transform:skew(20deg);   
-          -webkit-transform: skew(20deg);   
-          -moz-transform: skew(20deg);   
-          -o-transform:skew(20deg);   
-          -ms-transform:skew(20deg);
-          .button-text{
-            font-size:0.8rem;
-            font-family:Microsoft YaHei;
-            font-weight:400;
-            color: #fff;
-            display: inline-block;
-            transform:skew(-20deg);   
-            -webkit-transform: skew(-20deg);   
-            -moz-transform: skew(-20deg);   
-            -o-transform:skew(-20deg);   
-            -ms-transform:skew(-20deg); 
-            text-align: center;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-          }
-        }
-        .market-kong{
-            width: 2rem;
-            position: absolute;
-            top: 0%;
-            left: 11%;
-            height: 100%;
-            background-color: #eee;
-            transform:skew(18deg);   
-            -webkit-transform: skew(18deg);   
-            -moz-transform: skew(18deg);   
-            -o-transform:skew(18deg);   
-            -ms-transform:skew(18deg);
-        }
-        .market-kong2{
-            width: 2rem;
-            position: absolute;
-            top: 0%;
-            left: 79%;
-            height: 100%;
-            background-color: #eee;
-            transform:skew(18deg);   
-            -webkit-transform: skew(18deg);   
-            -moz-transform: skew(18deg);   
-            -o-transform:skew(18deg);   
-            -ms-transform:skew(18deg);
-        }
-      }
-    }
-}
+// .market-main{
+//     width: 100%;
+//     height: 25rem;
+//     margin-top: 2rem;
+//     background-color: #fff;
+//     .market-main-div1{
+//       width: 60rem;
+//       height: 100%;
+//       margin: 0 auto;
+//       position: relative;
+//       .img-market-prev{
+//           width: 5.3rem;
+//           height: 1.7rem;
+//           position: absolute;
+//           right: 91%;
+//           bottom: 8%;
+//       }
+//       .img-market-next{
+//            width: 5.3rem;
+//           height: 1.7rem;
+//           position: absolute;
+//           right: 0%;
+//           top: 8%;
+//       }
+//       .market-div1-li{
+//         width: 19rem;
+//         height: 100%;
+//         position: relative;
+//         float: left;
+//         margin-left: 0.8rem;
+//         .img{
+//           width: 100%;
+//           height: 100%;
+//         }
+//         .market-div1-text{
+//           position: absolute;
+//           top: 2rem;
+//           width: 9rem;
+//           right: 38%;
+//           .p1{
+//             font-size:0.8rem;
+//             font-family:Microsoft YaHei;
+//             font-weight:bold;
+//             color: #000;
+//           }
+//           .p2{
+//             font-size:0.9rem;
+//             padding-top: 0.7rem;
+//             .through{
+//               font-family:Microsoft YaHei;
+//               font-weight:400;
+//               font-style:italic;
+//               color: #999;
+//               text-decoration: line-through;
+//             }
+//             .through2{
+//               font-family:Microsoft YaHei;
+//               font-weight:400;
+//               font-style:italic;
+//               color: #2c2c2c;
+//               padding-left: 0.5rem;
+//             }
+//           }
+//         }
+//         .market-div1-butt{
+//           background-color: #313131;
+//           opacity: 0.8;
+//           width: 6.2rem;
+//           height: 2rem;
+//           position: absolute;
+//           top: 9rem;
+//           line-height: 2rem;
+//           right: 50%;
+//           text-align: center;
+//           transform:skew(20deg);   
+//           -webkit-transform: skew(20deg);   
+//           -moz-transform: skew(20deg);   
+//           -o-transform:skew(20deg);   
+//           -ms-transform:skew(20deg);
+//           .button-text{
+//             font-size:0.8rem;
+//             font-family:Microsoft YaHei;
+//             font-weight:400;
+//             color: #fff;
+//             display: inline-block;
+//             transform:skew(-20deg);   
+//             -webkit-transform: skew(-20deg);   
+//             -moz-transform: skew(-20deg);   
+//             -o-transform:skew(-20deg);   
+//             -ms-transform:skew(-20deg); 
+//             text-align: center;
+//             overflow: hidden;
+//             text-overflow: ellipsis;
+//             white-space: nowrap;
+//           }
+//         }
+//         .market-kong{
+//             width: 2rem;
+//             position: absolute;
+//             top: 0%;
+//             left: 11%;
+//             height: 100%;
+//             background-color: #eee;
+//             transform:skew(18deg);   
+//             -webkit-transform: skew(18deg);   
+//             -moz-transform: skew(18deg);   
+//             -o-transform:skew(18deg);   
+//             -ms-transform:skew(18deg);
+//         }
+//         .market-kong2{
+//             width: 2rem;
+//             position: absolute;
+//             top: 0%;
+//             left: 79%;
+//             height: 100%;
+//             background-color: #eee;
+//             transform:skew(18deg);   
+//             -webkit-transform: skew(18deg);   
+//             -moz-transform: skew(18deg);   
+//             -o-transform:skew(18deg);   
+//             -ms-transform:skew(18deg);
+//         }
+//       }
+//     }
+// }
 
 
 

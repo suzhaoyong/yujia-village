@@ -43,10 +43,10 @@
                                     <img :src="item.icon_url"/>
                                 </div>
                             </div>
-                            </div>
                             <div class="bg-border"></div>
                             <div class="bg-re">YOGA</div>
                             <img class="bg-img5" src="../assets/image31.png"/>
+                            </div>
                             <img class="bg-img4" src="../assets/image27.png"/>
                         </div>
                         <div class="block">
@@ -294,37 +294,6 @@ export default {
                 right: 7%;
                 top: 73%;
             }
-            .bg-img5{
-                position:absolute;
-                width: 31px;
-                height: 33px;
-                right: 11%;
-                top: 32%;
-            }
-            .bg-border{
-                position:absolute;
-                width: 1px;
-                height: 40px;
-                background-color: #7d7d7d;
-                width: 2px;
-                height: 75px;
-                background-color: #7d7d7d;
-                right: 12%;
-                top: 8%;
-            }
-            .bg-re{
-                position:absolute;
-                right: 11%;
-                top: 25%;
-                color: #2c2c2c;
-                font-size: 14px;
-                transform:rotate(90deg);
-                -ms-transform:rotate(90deg); /* Internet Explorer 9*/
-                -moz-transform:rotate(90deg); /* Firefox */
-                -webkit-transform:rotate(90deg); /* Safari 和 Chrome */
-                -o-transform:rotate(90deg); /* Opera */
-                filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
-            }
             .formation-auto{
                 width: 1200px;
                 height: auto;
@@ -515,6 +484,37 @@ export default {
                         height: 100%;
                     }
                 }
+            }
+            .bg-img5{
+                position:absolute;
+                width: 31px;
+                height: 33px;
+                right: 2%;
+                top: 32%;
+            }
+            .bg-border{
+                position:absolute;
+                width: 1px;
+                height: 40px;
+                background-color: #7d7d7d;
+                width: 2px;
+                height: 75px;
+                background-color: #7d7d7d;
+                right: 4%;
+                top: 8%;
+            }
+            .bg-re{
+                position:absolute;
+                right: 2%;
+                top: 25%;
+                color: #2c2c2c;
+                font-size: 14px;
+                transform:rotate(90deg);
+                -ms-transform:rotate(90deg); /* Internet Explorer 9*/
+                -moz-transform:rotate(90deg); /* Firefox */
+                -webkit-transform:rotate(90deg); /* Safari 和 Chrome */
+                -o-transform:rotate(90deg); /* Opera */
+                filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
             }
         }
         }
