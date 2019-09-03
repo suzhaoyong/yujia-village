@@ -254,12 +254,12 @@ export default {
   }
   .banner_button{
     position: absolute;
-    top: 77%;
-    width: 11%;
+    top: 76.8%;
+    width: 10.8%;
     background-color: #9AB1C1;
-    height: 7%;
-    border-radius: 15px;
-    right: 44%;
+    height: 7.4%;
+    border-radius: 14px;
+    right: 44.5%;
     text-align: center;
     .butt{
       font-size:1rem;
@@ -530,6 +530,7 @@ export default {
                     height: 28px;
                     position: absolute;
                     left: 42%;
+                    top: 18%;
                 }
             }
         }

@@ -376,6 +376,7 @@ export default {
                     height: 28px;
                     position: absolute;
                     left: 42%;
+                    top: 25%;
                 }
             }
         }
@@ -514,6 +515,7 @@ export default {
                     height: 28px;
                     position: absolute;
                     left: 42%;
+                    top: 18%;
                 }
             }
         }
@@ -658,6 +660,9 @@ export default {
                         background-color: #fff;
                         background-image: url('../assets/left.png');
                 }
+                .swiper-button-prev1:focus{
+                    outline: 0;
+                }
                 .swiper-button-next1{
                         position: absolute;
                         right: 3%;
@@ -685,6 +690,9 @@ export default {
                         background-size: 24px 24px;
                         background-color: #fff;
                         background-image: url('../assets/right.png');
+                }
+                .swiper-button-next1:focus{
+                    outline: 0;
                 }
         }
       }
@@ -984,6 +992,7 @@ export default {
                     height: 28px;
                     position: absolute;
                     left: 42%;
+                    top: 18%;
                 }
             }
         }
@@ -1012,21 +1021,22 @@ export default {
             .carousel33{
                 width: 1200px;
                 margin: 0 auto;
+                position: relative;
                 .border-left{
                     width: 16%;
                     height: 1px;
                     background-color: #ffffff;
                     position: absolute;
-                    left:25%;
-                    top: 45%;
+                    left:24%;
+                    top: 58%;
                 }
                 .border-right{
                     width: 16%;
                     height: 1px;
                     background-color: #ffffff;
                     position: absolute;
-                    right: 25%;
-                    top: 45%;
+                    right: 24%;
+                    top: 58%;
                 }
                 .nav-text{
                     color: #999999;
@@ -1035,7 +1045,7 @@ export default {
                 }
                 h2{
                     color: #2c2c2c;
-                    font-size: 24px;
+                    font-size: 1.4rem;
                     margin-top: 40px;
                     font-family:Microsoft YaHei;
                     font-weight:bold;
@@ -1043,7 +1053,8 @@ export default {
                         width: 28px;
                         height: 28px;
                         position: absolute;
-                        left: 44%;
+                        left: 42%;
+                        top: 4%;
                     }
                 }
             }
@@ -1104,6 +1115,7 @@ export default {
                         height: 28px;
                         position: absolute;
                         left: 42%;
+                        top: 14%;
                     }
                 }
             }

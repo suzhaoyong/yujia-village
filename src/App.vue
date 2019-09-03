@@ -52,6 +52,9 @@ body {
 .el-button:focus ,.el-icon-close:focus, .el-message-box__headerbtn:focus {
   outline: none;
 }
+.el-carousel__arrow:focus{
+  outline: 0 !important;
+}
 /* *{
   margin: 0;
   border: 0;

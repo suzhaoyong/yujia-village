@@ -424,7 +424,8 @@ export default {
 }
 .distpicker-address-wrapper select{
     width: 145px;
-    padding-top: 3px;
+    padding: 0px 4px;
+    font-size: 14px;
 }
 .bg_img {
   width: 100%;
@@ -537,6 +538,7 @@ export default {
                     height: 28px;
                     position: absolute;
                     left: 42%;
+                    top: 18%;
                 }
             }
         }
@@ -632,15 +634,17 @@ export default {
                             width: 220px;
                             height: 220px;
                             border: 7px solid #fff;
-                            background-color: #E2DBC8;
+                            background-color: #E3DCC9;
                             transform:rotate(45deg);
                             position: absolute;
                             right: 50%;
                             top: 16%;
+                            overflow: hidden;
                             img{
                                 width: 100%;
                                 height: 100%;
-                                transform:rotate(-90deg);
+                                max-width: 100%;
+                                transform:rotate(-45deg)scale(1.42);
                             }
                         }
                         .rhomb2{
@@ -783,6 +787,9 @@ export default {
                         background-image: url('../assets/left.png');
                         background-position: center;
                 }
+                .swiper-button-prev1:focus{
+                        outline: 0;
+                }
                 .swiper-button-next1{
                         position: absolute;
                         right: 3%;
@@ -812,6 +819,9 @@ export default {
                         background-color: #e2dbc8;
                         background-image: url('../assets/right.png');
                         background-position: center;
+                }
+                .swiper-button-next1:focus{
+                        outline: 0;
                 }
             }
         }
@@ -926,7 +936,8 @@ export default {
                     width: 28px;
                     height: 28px;
                     position: absolute;
-                    left: 42%;
+                    left: 41%;
+                    top: 18%;
                 }
             }
         }
