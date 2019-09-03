@@ -139,6 +139,14 @@ export default {
           type: "success",
           message: "支付成功"
         });
+        this.$alert("前往订单中心", "成功", {
+          confirmButtonText: "立即前往",
+          callback: action => {
+            this.$router.push({
+              name: "recode"
+            });
+          }
+        });
       });
     },
     async changePayWay(payment) {
@@ -184,6 +192,14 @@ export default {
                       type: "success",
                       message: "支付成功"
                     });
+                    this.$alert("前往订单中心", "成功", {
+                      confirmButtonText: "立即前往",
+                      callback: action => {
+                        this.$router.push({
+                          name: "recode"
+                        });
+                      }
+                    });
                   }
                 });
               }, 1000);
@@ -223,6 +239,14 @@ export default {
                     this.$message({
                       type: "success",
                       message: "支付成功"
+                    });
+                    this.$alert("前往订单中心", "成功", {
+                      confirmButtonText: "立即前往",
+                      callback: action => {
+                        this.$router.push({
+                          name: "recode"
+                        });
+                      }
                     });
                   }
                 });

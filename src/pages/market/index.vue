@@ -48,7 +48,7 @@
       </div>
 
       <div class="market-main">
-        <div class="market-main-div1">
+        <div class="market-main-div1" v-show="false">
           <img src="../../assets/market/prev.png" class="img-market-prev" />
           <div class="market-div1-li">
             <img src="../../assets/hhh.png" class="img" />
@@ -270,6 +270,7 @@ export default {
       this.recommend_menu.select = data.comment[0];
       this.recommend_list = data.comment[0].data;
     });
+    
   },
   methods: {
     viewGoodsDetail(goods) {

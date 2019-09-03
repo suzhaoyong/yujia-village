@@ -43,12 +43,12 @@
                 v-if="hiddenMoney"
                 style="color:#4093A5;margin-left:10px;"
                 @click="hiddenMoney = ''"
-              >隐藏金币</span>
+              >显示金币</span>
               <span
                 v-else
                 style="color:#4093A5;margin-left:10px;"
                 @click="hiddenMoney = '**.**'"
-              >显示金币</span>
+              >隐藏金币</span>
             </div>
             <div class="money">
               <span>{{hiddenMoney || info.user.money}}</span>
@@ -148,7 +148,7 @@
               <img :src="playcode.src" alt />
             </div>
             <!-- <div class="tips">刷新二维码</div> -->
-            <div class="tips">{{playcode.count}}s后关闭</div>
+            <div class="tips">{{playcode.count}}s后重新获取</div>
           </div>
         </div>
       </div>
@@ -173,6 +173,7 @@ import {
   postGetAlipayOrder,
   postGetWechatOrder
 } from "@/api/market";
+let timer = null;
 export default {
   components: {
     certification
@@ -187,7 +188,7 @@ export default {
       certificate: {
         identity: ""
       },
-      playcode: { show: false, src: "", count: 0 },
+      playcode: { show: false, src: "", count: 0, success: false },
       hiddenMoney: "",
       money: "",
       step: {
@@ -248,6 +249,9 @@ export default {
   updated() {
     this.$nextTick(function() {});
   },
+  beforeDestroy() {
+    timer && clearInterval(timer);
+  },
   methods: {
     back() {
       const { type } = this.step;
@@ -270,7 +274,8 @@ export default {
     rechargeChange(name, num) {
       this.rechargeForm[name] = num;
       if (name === "payment") {
-        // (this.rechargeForm.num || this.money) && this.reCharge();
+        timer && clearInterval(timer);
+        (this.rechargeForm.num || this.money) && this.reCharge();
       }
     },
     /** 充值 */
@@ -291,24 +296,38 @@ export default {
           postGetAlipayCode({ out_trade_no, total_fee: totalPrice, body })
             .then(data => {
               this.playcode.show = true;
-              this.playcode.count = 30;
+              this.playcode.success = false;
+              this.playcode.count = 59;
               this.playcode.src = data;
             })
             .then(_ => {
               if (this.playcode.show) {
-                const timer = setInterval(() => {
-                  if (this.playcode.count < 0 || !this.playcode.show) {
-                    this.playcode.show = false;
+                timer = setInterval(() => {
+                  if (this.playcode.success) {
                     clearInterval(timer);
                   }
-
+                  if (this.playcode.count <= 1 || !this.playcode.show) {
+                    this.rechargeChange("payment", "2");
+                    // this.playcode.show = false;
+                    clearInterval(timer);
+                  }
+                  this.playcode.count -= 1;
+                  if (this.playcode.count % 5 !== 0) return;
                   postGetAlipayOrder({ out_trade_no }).then(data => {
-                    this.playcode.count -= 1;
                     if (data.msg === "支付成功") {
-                      this.playcode.show = false;
+                      // this.playcode.show = false;
+                      this.playcode.success = true;
                       this.$message({
                         type: "success",
                         message: "支付成功"
+                      });
+                      this.$alert("前往个人中心", "成功", {
+                        confirmButtonText: "立即前往",
+                        callback: action => {
+                          this.$router.push({
+                            name: "personal"
+                          });
+                        }
                       });
                     }
                   });
@@ -324,24 +343,38 @@ export default {
           })
             .then(data => {
               this.playcode.show = true;
-              this.playcode.count = 30;
+              this.playcode.success = false;
+              this.playcode.count = 59;
               this.playcode.src = data;
             })
             .then(_ => {
               if (this.playcode.show) {
-                const timer = setInterval(() => {
-                  if (this.playcode.count <= 0 || !this.playcode.show) {
-                    this.playcode.show = false;
+                timer = setInterval(() => {
+                  if (this.playcode.success) {
                     clearInterval(timer);
                   }
-
+                  if (this.playcode.count <= 1 || !this.playcode.show) {
+                    this.rechargeChange("payment", "3");
+                    // this.playcode.show = false;
+                    clearInterval(timer);
+                  }
+                  this.playcode.count -= 1;
+                  if (this.playcode.count % 5 !== 0) return;
                   postGetWechatOrder({ out_trade_no }).then(data => {
-                    this.playcode.count -= 1;
                     if (data.msg === "支付成功") {
-                      this.playcode.show = false;
+                      // this.playcode.show = false;
+                      this.playcode.success = true;
                       this.$message({
                         type: "success",
                         message: "支付成功"
+                      });
+                      this.$alert("前往个人中心", "成功", {
+                        confirmButtonText: "立即前往",
+                        callback: action => {
+                          this.$router.push({
+                            name: "personal"
+                          });
+                        }
                       });
                     }
                   });
@@ -577,7 +610,7 @@ img {
 .pay-card {
   display: flex;
   min-height: 20rem;
-  border: 1px solid #ccc;
+  // border: 1px solid #ccc;
   width: 60rem;
   margin: 0 auto;
   margin-top: 4rem;

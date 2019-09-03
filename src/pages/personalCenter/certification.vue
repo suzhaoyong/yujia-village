@@ -258,6 +258,14 @@ export default {
               type: "success",
               message: "提交成功"
             });
+            this.$alert("前往个人中心", "成功", {
+              confirmButtonText: "立即前往",
+              callback: action => {
+                this.$router.push({
+                  name: "personal"
+                });
+              }
+            });
           });
         }
       };
