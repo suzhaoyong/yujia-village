@@ -16,8 +16,6 @@
                     </template>
                     <div class="knowledge-count" v-if="this.listdatas.length > 0">
                         <div class="knowledge-count-div1" v-for="(item,index) in listdatas.slice((currentPage-1)*pagesize,currentPage*pagesize)" :key="index" @click="selectItem(item)">
-                            <img src="../assets/zheright.png" class="zheright"/>
-                            <div class="knowledge-count-auto">
                             <div class="knowledge-auto">
                             <div class="count-img">
                                 <img :src="item.icon_url"/>
@@ -39,7 +37,6 @@
                                         <span class="img3">{{item.views}}</span>
                                     </div>
                                 </div>
-                            </div>
                             </div>
                             </div>
                         </div>
@@ -161,27 +158,26 @@ export default {
     width: 1200px;
     margin: 0 auto;
 .select-bg{
-        width: 1200px;
-        margin: 0 auto;
-        position: absolute;
-        // left: 190px;
-        opacity: 0.7;
-        height: auto;
-        background-color: #fff;
-        .nav{
-            line-height: 50px;
-            display: inline-block;
-            margin-left: 40px;
-            cursor: pointer;
-            font-size:14px;
-        }
-        .red{
-            color: #2c2c2c;
-            font-size:18px;
-            font-family:Microsoft YaHei;
-            font-weight:bold;
-        }
+    width: 1200px;
+    margin: 0 auto;
+    position: absolute;
+    opacity: 0.7;
+    height: auto;
+    background-color: #fff;
+    .nav{
+        line-height: 50px;
+        display: inline-block;
+        margin-left: 40px;
+        cursor: pointer;
+        font-size:14px;
     }
+    .red{
+        color: #2c2c2c;
+        font-size:18px;
+        font-family:Microsoft YaHei;
+        font-weight:bold;
+    }
+}
 }
 .el-pagination.is-background .el-pager li:not(.disabled).active{
     background-color: #CCE198;
@@ -201,27 +197,15 @@ export default {
         height: 100%;
         display: inline-block;
         .knowledge-count-div1{
-            width: 100%;
+            width: 1200px;
             height: 500px;
-            float: right;
+            margin: 0 auto;
             margin-top: 40px;
             display: flex;
-            background-color: #FAFCF8;
             cursor:pointer;
             box-shadow: 0px 1px 14px 1px rgba(36, 36, 36, 0.2);
-            position: relative;
-            .zheright{
-                width: 230px;
-                height: 227px;
-                position: absolute;
-                right: 0;
-                top: 22%;
-            }
-            .knowledge-count-auto{
-                width: 1300px;
-                margin: 0 auto;
             .knowledge-auto{
-                width: 1200px;
+                width: 100%;
                 margin: 0 auto;
                 height: 100%;
                 display: flex;
@@ -401,29 +385,16 @@ export default {
                 }
             }
           }
-          }
         }
         .knowledge-count-div1:nth-child(3){
-            width: 100%;
+            width: 1200px;
             height: 500px;
-            float: left;
+            margin: 0 auto;
             margin-top: 40px;
             display: flex;
             position: relative;
-            background-color: #FEFEF7;
             cursor:pointer;
             box-shadow: 0px 1px 14px 1px rgba(36, 36, 36, 0.2);
-            .zheright{
-                width: 230px;
-                height: 227px;
-                position: absolute;
-                left: 0;
-                top: 22%;
-                transform: rotate(180deg);
-            }
-            .knowledge-count-auto{
-                width: 1300px;
-                margin: 0 auto;
              .knowledge-auto{
                 width: 1200px;
                 margin: 0 auto;
@@ -443,13 +414,11 @@ export default {
                 }
             }
             .count-desc{
-                width: 58%;
+                width: 55%;
                 height: 84%;
                 margin-top: 38px;
-                position: absolute;
-                left: 0%;
+                margin-left: 40px;
                 background-color: #eeeeee;
-                // position: relative;
                 .circle{
                     width: 55px;
                     height: 55px;
@@ -553,7 +522,6 @@ export default {
                     }
                 }
             }
-        }
         }
         }
         .block{

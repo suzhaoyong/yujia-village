@@ -44,7 +44,7 @@ body {
   margin: 0;
   padding: 0;
   /* overflow-x: hidden; */
-  min-width: 1200px;
+  min-width: 100%;
 }
 .el-button:focus ,.el-icon-close:focus, .el-message-box__headerbtn:focus {
   outline: none;
