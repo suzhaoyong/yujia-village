@@ -34,15 +34,17 @@
         </div>
       </div>
       <session-title name="已购买商品"></session-title>
-
-      <div class="yun">
-        <img :src="icon.yun.yun_1" alt />
-      </div>
-      <div class="yun2">
-        <img :src="icon.yun.yun_2" alt />
-      </div>
-      <div class="yun3">
-        <img :src="icon.yun.yun_1" alt />
+      <cloud :arr="[1,2,3,4, 5]"></cloud>
+      <div v-show="false">
+        <div class="yun">
+          <img :src="icon.yun.yun_1" alt />
+        </div>
+        <div class="yun2">
+          <img :src="icon.yun.yun_2" alt />
+        </div>
+        <div class="yun3">
+          <img :src="icon.yun.yun_1" alt />
+        </div>
       </div>
       <div class="my-class">
         <div
@@ -66,6 +68,8 @@
             </div>
           </div>
         </div>
+      </div>
+      <div>
         <not-found v-if="info.cart.length === 0" type="not-fond" msg="我寻寻觅觅却找不见您购买的踪迹"></not-found>
       </div>
       <session-title name="已收藏商品"></session-title>
@@ -91,6 +95,8 @@
             </div>
           </div>
         </div>
+      </div>
+      <div>
         <not-found v-if="info.collect.length === 0" type="not-fond_2" msg="我寻寻觅觅却找不见您收藏的踪迹"></not-found>
       </div>
       <div class="cash-voucher">
@@ -122,13 +128,13 @@
                 </div>
               </div>
             </div>
-
-            <not-found
-              v-if="info.cash.length === 0"
-              type="not-fond_3"
-              msg="虽然您没有券，但至少您还拥有一盆花请温笑面对生活^-^"
-            ></not-found>
           </div>
+
+          <not-found
+            v-if="info.cash.length === 0"
+            type="not-fond_3"
+            msg="虽然您没有券，但至少您还拥有一盆花请温笑面对生活^-^"
+          ></not-found>
         </div>
       </div>
       <div class="useable-voucher">
@@ -157,21 +163,21 @@
                 </div>
               </div>
             </div>
-            <not-found
-              v-if="info.coupon.length === 0"
-              type="not-fond_4"
-              msg="我们的优惠券一般为限时发放，请您注意时间哟(＾Ｕ＾)ノ~ＹＯ"
-            ></not-found>
           </div>
+          <not-found
+            v-if="info.coupon.length === 0"
+            type="not-fond_4"
+            msg="我们的优惠券一般为限时发放，请您注意时间哟(＾Ｕ＾)ノ~ＹＯ"
+          ></not-found>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import SessionTitle from "./SessionTitle";
 import { getUserOrder } from "@/api/market";
 import { mapGetters } from "vuex";
+import Cloud from "./cloud";
 import quan_orgin from "@/assets/order/quan_orgin.png";
 import quan_pike from "@/assets/order/quan_pike.png";
 import quan_red from "@/assets/order/quan_red.png";
@@ -181,7 +187,7 @@ import yun_1 from "@/assets/order/yun.png";
 import yun_2 from "@/assets/order/yun_2.png";
 export default {
   components: {
-    SessionTitle
+    Cloud
   },
   data() {
     return {
@@ -200,7 +206,7 @@ export default {
           quan_red,
           quan_zhi
         }
-      },
+      }
     };
   },
   computed: {
@@ -303,6 +309,26 @@ export default {
 img {
   width: 100%;
   height: 100%;
+}
+@mixin full-width($support-type: margin, $min-width: null) {
+  @if $support-type == "margin" {
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+    // margin-left: calc(-100vw / 2 + #{$min-width} / 2);
+    // margin-right: calc(-100vw / 2 + #{$min-width} / 2);
+  }
+  @if $support-type == "position" {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+  }
+  @if $support-type == "translate" {
+    width: 100vw;
+    transform: translateX(calc((#{$min-width} - 100vw) / 2));
+  }
 }
 .my-class {
   padding-top: 1rem;
@@ -620,7 +646,13 @@ img {
   .useable-voucher {
     @include title();
     .body {
+      padding-top: 3rem;
+      padding-bottom: 4rem;
+      background: #f4f4f4;
+      @include full-width(margin, 960px);
       .vouchers {
+        width: 60rem;
+        margin: 0 auto;
         display: flex;
         flex-wrap: wrap;
         justify-content: space-around;

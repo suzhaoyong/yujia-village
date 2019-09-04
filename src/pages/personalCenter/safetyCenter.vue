@@ -316,7 +316,6 @@ import {
 
 export default {
   components: {
-    SessionTitle,
     VDistpicker,
     Cloud
   },

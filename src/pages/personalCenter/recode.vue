@@ -128,6 +128,7 @@ img {
   color: #2c2c2c;
   width: 60rem;
   margin: 0 auto;
+  padding-bottom: 1rem;
   position: relative;
   .o_title {
     background: rgba(255, 255, 255, 1);
@@ -144,6 +145,7 @@ img {
     box-shadow: 1px 1px 9px 1px rgba(92, 92, 92, 0.28);
     padding: 0 3rem;
     padding-top: 1rem;
+    overflow-x: hidden;
     .tags {
       display: flex;
       .tag {

@@ -177,8 +177,9 @@ export default {
   computed: {
     isError() {
       return function(item) {
-        if (this.accountErrorRule[item].show) {
-          return this.accountErrorRule[item].msg;
+        const rule = this[`${this.loginWay}ErrorRule`][item];
+        if (rule.show) {
+          return rule.msg;
         }
         return "";
       };
@@ -196,7 +197,12 @@ export default {
     submitForm(name) {
       let isPass = this.formVaildent(name);
       if (isPass) {
-        this.postAuthLogin();
+        if (name === "message") {
+          this.postTelLogin();
+        }
+        if (name === "account") {
+          this.postAuthLogin();
+        }
       } else {
       }
     },
@@ -229,7 +235,7 @@ export default {
     /** 手机登录 */
     postTelLogin() {
       this.isPostting = true;
-      const params = Object.assign({}, this.accountRuleForm);
+      const params = Object.assign({}, this.messageRuleForm);
       this.$request
         .post("/auth/telLogin", params)
         .then(data => {
@@ -367,7 +373,8 @@ export default {
       let _check_item = {
         tel: PhoneUtils.isPhoneNum,
         password: StringUtils.isSpecialCharacterAlphanumeric,
-        captcha: item => true
+        captcha: item => true,
+        verification_code: item => true
       };
       let _input_value = this[`${this.loginWay}RuleForm`][item];
       let _is_pass = _check_item[item] && _check_item[item](_input_value);

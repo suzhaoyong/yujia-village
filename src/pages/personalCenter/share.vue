@@ -30,7 +30,6 @@ import Cloud from "./cloud";
 // import socialShare from 'social-share.js'
 export default {
   components: {
-    SessionTitle,
     Cloud
   },
   data() {
@@ -58,7 +57,7 @@ export default {
     initSocialConfig() {
       if (this.info.user.name) {
         const params = {
-          url: `https://sutaojie.github.io/mobile-village/public/frontend/#/login`,
+          url: `https://sutaojie.github.io/mobile-village/public/frontend/#/login?invitation_id=${this.info.user.id}`,
           title: `瑜伽村`,
           description: `欢迎加盟`
         };

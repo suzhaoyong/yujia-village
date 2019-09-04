@@ -12,10 +12,14 @@
             <span class="number">{{info.user.money}}</span>
           </div>
           <div class="recharge" @click="changMoney">充值</div>
-          <div class="withdraw" @click="withdraw">
+          <div class="withdraw">
             <!-- 提现 -->
-            <span class="identity" v-if="info.user.reason === '未认证'">未认证</span>
-            <span class="identity" v-else @click.stop="goPage('identity')">(馆主、教练)</span>
+            <span class="identity"  @click="withdraw" v-if="info.user.identity_auth == 1">未认证</span>
+            <span class="identity" v-if="info.user.identity_auth == 3">（馆主）</span>
+            <span class="identity" v-if="info.user.identity_auth == 5">（教练）</span>
+            <span class="identity" v-if="info.user.identity_auth == 6">（未通过认证）</span>
+            <span class="identity" v-if="info.user.identity_auth == 8">（馆主、教练）</span>
+            <!-- <span class="identity" v-else @click.stop="goPage('identity')">(馆主、教练)</span> -->
           </div>
         </div>
       </div>

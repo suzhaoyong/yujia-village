@@ -232,7 +232,7 @@ import {
 export default {
   components: {
     Banner,
-    VDistpicker,
+    VDistpicker
   },
   data() {
     return {
@@ -358,6 +358,19 @@ export default {
       this.newList = data.new.data;
       this.fruitclasslist = data.hot.data;
     });
+  },
+  activated() {
+    // isUseCache 为false时才重新刷新获取数据
+    // 因为对 list 使用 keep-alive 来缓存组件，所以默认是会使用缓存数据的
+    // if (!this.$route.meta.isUseCache) {
+    //   this.getTrainsList();
+    //   getOrderByTrains().then(data => {
+    //     this.newList = data.new.data;
+    //     this.fruitclasslist = data.hot.data;
+    //   });
+    //   // 通过这个控制刷新
+    //   this.$route.meta.isUseCache = false;
+    // }
   },
   methods: {
     getFiltersParams(params = {}) {
@@ -667,7 +680,7 @@ img {
         box-shadow: 2px 3px 20px 1px #a4a4a4;
         border-radius: 0.3rem;
         margin-top: 1.3rem;
-        
+
         .cultivate1-one {
           width: 100%;
           height: 4.1rem;
@@ -1022,16 +1035,16 @@ img {
         height: 28.6rem;
         // padding-bottom: 1rem;
         background-color: #ffffff;
-        border:1px solid rgba(164, 164, 164, 0.39);
+        border: 1px solid rgba(164, 164, 164, 0.39);
         border-radius: 0.3rem;
         float: left;
         margin-left: 1.4rem;
         margin-top: 1rem;
         font-size: 0.7rem;
         &:hover {
-            box-shadow: 0.1rem 0.2rem 1.3rem 0.1rem rgba(164, 164, 164, 0.39);
-            transition: box-shadow 0.75s;
-          }
+          box-shadow: 0.1rem 0.2rem 1.3rem 0.1rem rgba(164, 164, 164, 0.39);
+          transition: box-shadow 0.75s;
+        }
         .fruit-list-li-img {
           width: 100%;
           height: 17.7rem;

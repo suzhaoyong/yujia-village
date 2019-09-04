@@ -100,7 +100,7 @@
       <div class="pay-card" v-show="step.type === 'recharge'">
         <div class="icon">
           <div class="img">
-            <img :src="icon.active" alt />
+            <img :src="getIdentityIcon(info.user.identity_auth)" alt />
           </div>
         </div>
         <div class="info">
@@ -238,6 +238,18 @@ export default {
         };
 
         return obj[item];
+      };
+    },
+
+    getIdentityIcon() {
+      return item => {
+        const obj = {
+          3: this.icon.identity_1,
+          5: this.icon.identity_3,
+          8: this.icon.identity_2
+        };
+
+        return obj[item] || "";
       };
     },
     isPayActive() {
@@ -679,10 +691,10 @@ img {
       .money-wrap {
         span {
           padding: 0 1em;
-          border: 1px solid #ccc;
+          border: 1px solid #efefef;
           &.active {
-            border: 1px solid #fbecd2;
-            background: #fbecd2;
+            border: 1px solid #e8f5db;
+            background: #e8f5db;
             // color:#fff;
           }
         }
@@ -701,6 +713,11 @@ img {
           }
           input {
             width: 100%;
+            border: 1px solid #efefef;
+            &:focus {
+              border: 1px solid #efefef;
+              outline: none;
+            }
           }
         }
       }

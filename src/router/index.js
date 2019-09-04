@@ -17,9 +17,16 @@ Vue.use(Router)
 const router = new Router({
   mode: 'history',
   scrollBehavior(to, from, savedPosition) {
-    return {
-      x: 0,
-      y: 0
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      if (from.meta.keepAlive) {
+        from.meta.savedPosition = document.body.scrollTop;
+      }
+      return {
+        x: 0,
+        y: to.meta.savedPosition || 0
+      }
     }
   },
   routes: [{
@@ -151,6 +158,10 @@ const router = new Router({
       children: [{
           path: '/cultivate/index',
           name: 'cultivate',
+          meta: {
+            isUseCache: false,
+            keepAlive: true // 通过此字段判断是否需要缓存当前组件 
+          },
           component: () => import('@/pages/cultivate/cultivate')
         }, //培训信息
         {
@@ -243,6 +254,14 @@ router.beforeEach((to, from, next) => {
   window.scrollTo(0, 0)
   next();
 })
+// 列表页面的 beforeRouteLeave 钩子函数
+router.beforeRouteLeave = (to, from, next) => {
+  if (to.name) {
+    from.meta.isUseCache = true;
+  }
+  next();
+}
+
 router.afterEach((to, from) => {
 
   let scrollContent = document.querySelector('.scroll-content');

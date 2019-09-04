@@ -1,5 +1,5 @@
 <template>
-  <div style="padding:0rem 0;">
+  <div class="not_found">
     <div class="type_1" v-show="type=='not-fond_2'">
       <div class="icon">
         <img :src="icon.icon_1" alt />
@@ -55,10 +55,38 @@ img {
   width: 100%;
   height: 100%;
 }
+@mixin full-width($support-type: margin, $min-width: null) {
+  @if $support-type == "margin" {
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+    // margin-left: calc(-100vw / 2 + #{$min-width} / 2);
+    // margin-right: calc(-100vw / 2 + #{$min-width} / 2);
+  }
+  @if $support-type == "position" {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+  }
+  @if $support-type == "translate" {
+    width: 100vw;
+    transform: translateX(calc((#{$min-width} - 100vw) / 2));
+  }
+}
+
+.not_found {
+  padding: 0rem 0;
+  background: #F1F1F1;
+  @include full-width(margin, 960px);
+}
 .type_1 {
   display: flex;
   justify-content: center;
   // align-items: center;
+  padding-top: 4rem;
+  padding-bottom: 5rem;
   .icon {
     width: 41rem;
     height: 18rem;
@@ -78,6 +106,7 @@ img {
   display: flex;
   justify-content: center;
   // align-items: center;
+  padding: 1rem 0;
   .icon {
     width: 10rem;
     height: 18rem;
@@ -98,6 +127,7 @@ img {
   display: flex;
   justify-content: center;
   // align-items: center;
+  padding: 3rem 0;
   .icon {
     width: 41rem;
     height: 18rem;
@@ -118,6 +148,7 @@ img {
   display: flex;
   justify-content: center;
   // align-items: center;
+  padding-top: 5rem;
   .icon {
     width: 41rem;
     height: 18rem;
