@@ -24,3 +24,33 @@
     <script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   </body>
 </html>
+<script>
+!(function(){
+    new function () {
+        var _self = this;
+        _self.width = 750;
+        var ClientUA = navigator.userAgent;
+        if (ClientUA.indexOf("Redmi 3") >= 0) {
+            _self.fontSize = 15
+        } else if (ClientUA.indexOf("MI NOTE Pro") >= 0) {
+            _self.fontSize = 25
+        } else {
+            _self.fontSize = 18
+        }
+        _self.widthProportion = function () {
+            var p = (document.body && document.body.clientWidth || document.getElementsByTagName("html")[0].offsetWidth) /
+                _self.width;
+            return p > 1 ? 1 : p < .3 ? .3 : p
+        };
+        _self.changePage = function () {
+            document.getElementsByTagName("html")[0].setAttribute("style", "font-size:" + _self.widthProportion() * _self
+                .fontSize + "px !important")
+        };
+        _self.changePage();
+        window.addEventListener("resize", function () {
+            _self.changePage()
+        }, false)
+    };
+
+}())
+</script>
