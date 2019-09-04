@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div :class="['title',{'line': line}]">
+    <div :class="['title',{'line': line, 'full': full}]">
       <div class="title-zh">
         <div class="icon">
           <img :src="titleIcon" alt srcset />
@@ -21,7 +21,8 @@ export default {
       type: String,
       default: `The customer's excellent experience is our goal from beginning`
     },
-    line: { type: Boolean, default: true }
+    line: { type: Boolean, default: true },
+    full: { type: Boolean, default: false }
   },
   data() {
     return {
@@ -35,6 +36,26 @@ export default {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+@mixin full-width($support-type: margin, $min-width: null) {
+  @if $support-type == "margin" {
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+    // margin-left: calc(-100vw / 2 + #{$min-width} / 2);
+    // margin-right: calc(-100vw / 2 + #{$min-width} / 2);
+  }
+  @if $support-type == "position" {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+  }
+  @if $support-type == "translate" {
+    width: 100vw;
+    transform: translateX(calc((#{$min-width} - 100vw) / 2));
+  }
 }
 
 @mixin title() {
@@ -95,5 +116,12 @@ export default {
 }
 
 @include title();
+.title.full {
+  background: #eee;
+  @include full-width(margin, 960px);
+  margin-top: 2rem;
+  margin-bottom: 0;
+  padding: 3rem 0;
+}
 </style>
 

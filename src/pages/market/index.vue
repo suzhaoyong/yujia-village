@@ -46,96 +46,8 @@
           </div>
         </div>
       </div>
-
-        <!-- <div class="market-main">
-          <div class="market-main-div1">
-            <img src="../../assets/market/prev.png" class="img-market-prev"/>
-            <div class="market-div1-li">
-              <img src="../../assets/hhh.png" class="img"/>
-              <div class="market-div1-text">
-                <p class="p1">暴走的萝莉 中强度运动内衣女聚拢瑜伽背心 美背防震跑步健身bra</p>
-                <p class="p2"><span class="through">￥210</span><span class="through2">￥110</span></p>
-              </div>
-              <div class="market-div1-butt">
-                <el-button type="text" class="button-text">加入购物车</el-button>
-              </div>
-              <div class="market-kong"></div>
-              <div class="market-kong2"></div>
-            </div>
-            <div class="market-div1-butt">
-              <el-button type="text" class="button-text">加入购物车</el-button>
-            </div>
-            <div class="market-kong"></div>
-            <div class="market-kong2"></div>
-          </div>
-          <div class="market-div1-li">
-            <img src="../../assets/hhh.png" class="img" />
-            <div class="market-div1-text">
-              <p class="p1">暴走的萝莉 中强度运动内衣女聚拢瑜伽背心 美背防震跑步健身bra</p>
-              <p class="p2">
-                <span class="through">￥452</span>
-                <span class="through2">￥342</span>
-              </p>
-            </div>
-            <div class="market-div1-butt">
-              <el-button type="text" class="button-text">加入购物车</el-button>
-            </div>
-            <div class="market-kong"></div>
-            <div class="market-kong2"></div>
-          </div>
-          <div class="market-div1-li">
-            <img src="../../assets/hhh.png" class="img" />
-            <div class="market-div1-text">
-              <p class="p1">暴走的萝莉 中强度运动内衣女聚拢瑜伽背心 美背防震跑步健身bra</p>
-              <p class="p2">
-                <span class="through">￥234</span>
-                <span class="through2">￥142</span>
-              </p>
-            </div>
-            <div class="market-div1-butt">
-              <el-button type="text" class="button-text">加入购物车</el-button>
-            </div>
-            <div class="market-kong"></div>
-            <div class="market-kong2"></div>
-          </div>
-        </div> -->
-
       <div class="market_time">
-        <session-title name="限时优惠" brief="Sometimes beauty is so simple"></session-title>
-        <div class="market_time-content">
-          <div class="market_time-content_box">
-            <div class="prev_btn-box">
-              <div class="prev_btn" @click="changeDiscountsForu('prev')"></div>
-            </div>
-            <transition name="list-complete">
-              <div class="goods_list">
-                <div
-                  class="goods"
-                  style="cursor: pointer;"
-                  @click="viewGoodsDetail(item)"
-                  v-for="(item,index) in good_recomment.discounts.re"
-                  :key="index"
-                >
-                  <div class="goods-title">{{item.describe}}</div>
-                  <div class="goods-price">
-                    <div class="goods-price-old">￥{{item.sell_price}}</div>
-                    <div class="goods-price-new">￥{{item.sell_price - item.discount}}</div>
-                  </div>
-
-                  <div class="goods-img">
-                    <img :src="item.discount_url" alt />
-                    <div class="add-shop-btn">加入购物车</div>
-                  </div>
-                </div>
-              </div>
-            </transition>
-            <div class="next_btn-box">
-              <div class="next_btn" @click="changeDiscountsForu('next')"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="market_time" style="margin-top: 10rem;">
+        <session-title name="限时优惠" :full="true" brief="Sometimes beauty is so simple"></session-title>
         <div class="market_time-content">
           <div class="market_time-content_box">
             <div class="prev_btn-box">
@@ -150,16 +62,16 @@
                   v-for="(item,index) in good_recomment.discounts.de"
                   :key="index"
                 >
+                  <div class="goods-img">
+                    <img :src="item.discount_url" alt />
+                  </div>
                   <div class="goods-title">{{item.describe}}</div>
                   <div class="goods-price">
                     <div class="goods-price-old">￥{{item.sell_price}}</div>
                     <div class="goods-price-new">￥{{item.sell_price - item.discount}}</div>
                   </div>
 
-                  <div class="goods-img">
-                    <img :src="item.discount_url" alt />
-                    <div class="add-shop-btn">加入购物车</div>
-                  </div>
+                  <div class="add-shop-btn">加入购物车</div>
                 </div>
               </div>
             </transition>
@@ -169,6 +81,42 @@
           </div>
         </div>
       </div>
+      <div class="line"></div>
+      <div class="market_time">
+        <div class="market_time-content">
+          <div class="market_time-content_box">
+            <div class="prev_btn-box">
+              <div class="prev_btn" @click="changeDiscountsForu('prev')"></div>
+            </div>
+            <transition name="list-complete">
+              <div class="goods_list">
+                <div
+                  class="goods bg"
+                  style="cursor: pointer;"
+                  @click="viewGoodsDetail(item)"
+                  v-for="(item,index) in good_recomment.discounts.re"
+                  :key="index"
+                >
+                  <div class="goods-img bg">
+                    <img :src="item.discount_url" alt />
+                  </div>
+                  <div class="goods-title">{{item.describe}}</div>
+                  <div class="goods-price">
+                    <div class="goods-price-old">￥{{item.sell_price}}</div>
+                    <div class="goods-price-new">￥{{item.sell_price - item.discount}}</div>
+                  </div>
+
+                  <div class="add-shop-btn">加入购物车</div>
+                </div>
+              </div>
+            </transition>
+            <div class="next_btn-box">
+              <div class="next_btn" @click="changeDiscountsForu('next')"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="market_often">
         <session-title name="常用推荐" brief="Sometimes beauty is so simple"></session-title>
         <div class="market_often-content">
@@ -229,15 +177,12 @@
   </div>
 </template>
 <script>
-import SessionTitle from "./SessionTitle";
 import { getGoodRecomment } from "@/api/market";
 import Bus from "@/utils/Bus";
 import { mapGetters } from "vuex";
 import alipayActiveIcon from "@/assets/order/alipay_active.png";
 export default {
-  components: {
-    SessionTitle
-  },
+  components: {},
   data() {
     return {
       good_recomment: {
@@ -265,13 +210,18 @@ export default {
     getGoodRecomment().then(data => {
       this.good_recomment = data;
       this.good_recomment.discounts = {};
-      this.good_recomment.discounts.de = data.discount.slice(0, 3);
-      this.good_recomment.discounts.re = data.discount.slice(3);
+      this.good_recomment.discounts.de = [
+        ...data.discount.slice(0, 2),
+        ...data.discount.slice(0, 1)
+      ];
+      this.good_recomment.discounts.re = [
+        ...data.discount.slice(3, 5),
+        ...data.discount.slice(3, 4)
+      ];
       this.recommend_main = data.comment[0].data[0];
       this.recommend_menu.select = data.comment[0];
       this.recommend_list = data.comment[0].data;
     });
-    
   },
   methods: {
     viewGoodsDetail(goods) {
@@ -322,132 +272,32 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-// .market-main{
-//     width: 100%;
-//     height: 25rem;
-//     margin-top: 2rem;
-//     background-color: #fff;
-//     .market-main-div1{
-//       width: 60rem;
-//       height: 100%;
-//       margin: 0 auto;
-//       position: relative;
-//       .img-market-prev{
-//           width: 5.3rem;
-//           height: 1.7rem;
-//           position: absolute;
-//           right: 91%;
-//           bottom: 8%;
-//       }
-//       .img-market-next{
-//            width: 5.3rem;
-//           height: 1.7rem;
-//           position: absolute;
-//           right: 0%;
-//           top: 8%;
-//       }
-//       .market-div1-li{
-//         width: 19rem;
-//         height: 100%;
-//         position: relative;
-//         float: left;
-//         margin-left: 0.8rem;
-//         .img{
-//           width: 100%;
-//           height: 100%;
-//         }
-//         .market-div1-text{
-//           position: absolute;
-//           top: 2rem;
-//           width: 9rem;
-//           right: 38%;
-//           .p1{
-//             font-size:0.8rem;
-//             font-family:Microsoft YaHei;
-//             font-weight:bold;
-//             color: #000;
-//           }
-//           .p2{
-//             font-size:0.9rem;
-//             padding-top: 0.7rem;
-//             .through{
-//               font-family:Microsoft YaHei;
-//               font-weight:400;
-//               font-style:italic;
-//               color: #999;
-//               text-decoration: line-through;
-//             }
-//             .through2{
-//               font-family:Microsoft YaHei;
-//               font-weight:400;
-//               font-style:italic;
-//               color: #2c2c2c;
-//               padding-left: 0.5rem;
-//             }
-//           }
-//         }
-//         .market-div1-butt{
-//           background-color: #313131;
-//           opacity: 0.8;
-//           width: 6.2rem;
-//           height: 2rem;
-//           position: absolute;
-//           top: 9rem;
-//           line-height: 2rem;
-//           right: 50%;
-//           text-align: center;
-//           transform:skew(20deg);   
-//           -webkit-transform: skew(20deg);   
-//           -moz-transform: skew(20deg);   
-//           -o-transform:skew(20deg);   
-//           -ms-transform:skew(20deg);
-//           .button-text{
-//             font-size:0.8rem;
-//             font-family:Microsoft YaHei;
-//             font-weight:400;
-//             color: #fff;
-//             display: inline-block;
-//             transform:skew(-20deg);   
-//             -webkit-transform: skew(-20deg);   
-//             -moz-transform: skew(-20deg);   
-//             -o-transform:skew(-20deg);   
-//             -ms-transform:skew(-20deg); 
-//             text-align: center;
-//             overflow: hidden;
-//             text-overflow: ellipsis;
-//             white-space: nowrap;
-//           }
-//         }
-//         .market-kong{
-//             width: 2rem;
-//             position: absolute;
-//             top: 0%;
-//             left: 11%;
-//             height: 100%;
-//             background-color: #eee;
-//             transform:skew(18deg);   
-//             -webkit-transform: skew(18deg);   
-//             -moz-transform: skew(18deg);   
-//             -o-transform:skew(18deg);   
-//             -ms-transform:skew(18deg);
-//         }
-//         .market-kong2{
-//             width: 2rem;
-//             position: absolute;
-//             top: 0%;
-//             left: 79%;
-//             height: 100%;
-//             background-color: #eee;
-//             transform:skew(18deg);   
-//             -webkit-transform: skew(18deg);   
-//             -moz-transform: skew(18deg);   
-//             -o-transform:skew(18deg);   
-//             -ms-transform:skew(18deg);
-//         }
-//       }
-//     }
-// }
-
+@mixin full-width($support-type: margin, $min-width: null) {
+  @if $support-type == "margin" {
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+    // margin-left: calc(-100vw / 2 + #{$min-width} / 2);
+    // margin-right: calc(-100vw / 2 + #{$min-width} / 2);
+  }
+  @if $support-type == "position" {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+  }
+  @if $support-type == "translate" {
+    width: 100vw;
+    transform: translateX(calc((#{$min-width} - 100vw) / 2));
+  }
+}
+.line {
+  height: 3rem;
+  margin-top: 1rem;
+  background: #eee;
+  @include full-width(margin, 960px);
+}
 @mixin spare() {
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -677,65 +527,53 @@ img {
     }
   }
   &_time {
-    width: 80vw;
+    background: #eee;
+    width: 60rem;
     margin: 0 auto;
-    &-title {
-      height: 13.5rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      &_main {
-        color: #2c2c2c;
-        font-weight: 800;
-        vertical-align: bottom;
-        .icon {
-          width: 1rem;
-          height: 1.5rem;
-          display: inline-block;
-          vertical-align: super;
-          margin-right: 0.8rem;
-          img {
-            width: 100%;
-            height: 100%;
-          }
-        }
-      }
-      &_tips {
-        padding-top: 1.85rem;
-      }
+    position: relative;
+    &::before {
+      content: "";
+      position: absolute;
+      right: 100%;
+      bottom: 0;
+      width: 100vh;
+      height: 3rem;
+      background: #eee;
     }
     &-content {
+      padding-bottom: 3rem;
       &_box {
         display: flex;
         justify-content: space-around;
         .prev_btn-box {
-          // border: 1px solid #ccc;
+          margin-left: -7rem;
           position: relative;
-          width: 10rem;
-          // margin-left: -10rem;
-          // transform: skewx(10deg) translatex(150px);
-          // transform-origin: bottom left;
+          width: 13rem;
+          background: #fff;
+          transform: skewX(15deg);
           .prev_btn {
             width: 4rem;
             height: 2rem;
+            transform: skewX(-15deg);
             background: url(../../assets/market/prev.png) no-repeat;
             background-size: 100% 100%;
             position: absolute;
             bottom: 2rem;
-            left: 1rem;
+            right: 1rem;
           }
         }
         .next_btn-box {
-          // border: 1px solid #ccc;
+          background: #fff;
+          transform: skewX(15deg);
           position: relative;
+          margin-right: -7rem;
           width: 10rem;
           // transform: skewx(10deg) translatex(150px);
           // transform-origin: bottom left;
           .next_btn {
             width: 4rem;
             height: 2rem;
+            transform: skewX(-15deg);
             background: url(../../assets/market/next.png) no-repeat;
             background-size: 100% 100%;
             position: absolute;
@@ -745,19 +583,33 @@ img {
         }
         .goods_list {
           display: flex;
-          // margin-left: -8rem;
-          height: 34.65rem;
-          width: 80vw;
-          overflow-x: auto;
+          height: 27.65rem;
           .goods {
-            width: 15rem;
+            width: 14rem;
             height: 100%;
-            // transform: skewx(10deg) translatex(150px);
-            // transform-origin: bottom left;
+            // background: #fff;
+            transform: skewX(15deg);
+            padding: 0 1rem;
             margin: 0 1rem;
-            // border: 1px solid #ccc;
             flex-shrink: 0;
-            overflow: hidden;
+            &.bg {
+              color: #fff;
+              .goods-price-old {
+                color: #999999;
+              }
+              .goods-price-new {
+                color: #fff;
+              }
+              .add-shop-btn {
+                color: #2c2c2c;
+                &::before {
+                  background: #fcfcfc;
+                }
+              }
+            }
+            div {
+              transform: skewX(-15deg);
+            }
             &-title {
               font-weight: 600;
               margin-top: 1rem;
@@ -776,23 +628,40 @@ img {
                 color: #2c2c2c;
               }
             }
-            &-img {
-              height: 26.55rem;
-              // border: 1px solid #ccc;
-              position: relative;
-              .add-shop-btn {
-                width: 9rem;
+            position: relative;
+            .add-shop-btn {
+              position: absolute;
+              top: 10rem;
+              left: -0.4rem;
+              color: #fff;
+              font-size: 0.7rem;
+              line-height: 2rem;
+              width: 5rem;
+              text-align: center;
+              &::before {
+                content: "";
+                transform: skewX(15deg);
+                width: 5rem;
                 height: 2rem;
-                background-color: #313131;
+                background-color: #5a5a5a;
                 color: #fff;
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 cursor: pointer;
                 position: absolute;
-                top: 2rem;
-                left: -0.3rem;
-                z-index: 4;
+                z-index: -1;
+              }
+            }
+            &-img {
+              position: absolute;
+              &.bg {
+                position: absolute;
+              }
+              img {
+                transform: skewX(-6deg);
+                margin-left: -6rem;
+                width: 24rem;
               }
             }
           }

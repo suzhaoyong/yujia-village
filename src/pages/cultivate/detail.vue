@@ -211,6 +211,7 @@ export default {
     .count-div2-imgpic {
       width: 18rem;
       margin-left: 1.5rem;
+      margin-top: 1rem;
       height: 20rem;
       .img1 {
         width: 100%;

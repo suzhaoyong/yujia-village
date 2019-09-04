@@ -6,15 +6,19 @@
           <div class="head-right">
             <el-button type="text" class="span2"></el-button>
             <div style="display:inline-block;" v-if="info.user.name">
-              <span class="span1">{{info.user.name}}</span>
+              <span class="span1" style="line-height: 40px;">{{info.user.name}}</span>
             </div>
             <div style="display:inline-block;" v-else>
               <el-button type="text" class="span1" @click="account.type='login'">登录</el-button>
               <el-button type="text" class="span1" @click="account.type='register'">注册</el-button>
             </div>
-            <span>
-              <img @click="goto('shopCar')" class="img" src="../assets/cart.png" />
-            </span>
+            <div style="display:inline-block;" v-if="info.user.name">
+              <div style="display: inline-block;">
+                <!-- <el-badge :value="0" style=" width:2rem;height: 2rem;"> -->
+                  <img @click="goto('shopCar')" class="img" src="../assets/cart.png" />
+                <!-- </el-badge> -->
+              </div>
+            </div>
           </div>
         </div>
         <div class="head">
@@ -126,7 +130,7 @@ export default {
     this.fetchData();
   },
   beforeUpdate() {
-    this.changenav();
+    // this.changenav();
   },
   beforeDestory() {
     Bus.$off("login");
@@ -155,6 +159,8 @@ export default {
       this.activeIndex = currNav;
     },
     fetchData() {
+      this.activeIndex = this.$route.meta.header_name || "main";
+      return;
       if (this.$route.name == "main") {
         this.activeIndex = "main";
       } else if (this.$route.name == "joinclubhouse") {
@@ -241,6 +247,10 @@ export default {
 };
 </script>
 <style>
+.header-main .el-badge__content.is-fixed {
+  top: 0.5rem;
+  right: 0.7rem;
+}
 .header-main .el-submenu__title {
   border: none !important;
   height: 100% !important;

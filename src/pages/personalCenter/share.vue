@@ -57,7 +57,7 @@ export default {
     initSocialConfig() {
       if (this.info.user.name) {
         const params = {
-          url: `https://sutaojie.github.io/mobile-village/public/frontend/#/login?invitation_id=${this.info.user.id}`,
+          url: `${window.location.origin}/wap/index.html?invitation_id=${this.info.user.id}`,
           title: `瑜伽村`,
           description: `欢迎加盟`
         };

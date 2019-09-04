@@ -104,6 +104,7 @@
 <script>
 import Banner from "../components/banner";
 import Bus from "@/utils/Bus";
+import { mapGetters } from "vuex"
 export default {
     inject: ["reload"],
     components:{
@@ -127,10 +128,7 @@ export default {
     };
   },
   computed: {
-    info() {
-      const user = sessionStorage.getItem("user");
-      return user && JSON.parse(user);
-    },
+    ...mapGetters(["info"]),
   },
   created(){
       this.joindata();
@@ -172,8 +170,22 @@ export default {
         });
       },
     goto() {
-      if(this.info){
-        this.$router.push("/personal/identity");
+      const { name, identity_auth } = this.info.user
+      if(name){
+        if(parseInt(identity_auth) === 1) {
+          this.$router.push("/personal/identity");
+          return;
+        }
+        const obj = {
+          2: {message:'您已在申请中，请耐心等待审核', type:'success'},
+          3: {message:'您已加盟成功',type:'success'},
+          4: {message:'您是教练认证中，暂时不能申请加盟，详情请联系馆主认证',type:'warning'},
+          5: {message:'您是教练，暂时不能申请加盟，详情请联系馆主认证',type:'warning'},
+          6: {message:'您的申请未通过，详情请联系客服',type:'error'},
+          7: {message:'您已加盟成功',type:'success'},
+          8: {message:'您已加盟成功',type:'success'},
+        }
+        obj[identity_auth] && this.$message(obj[identity_auth])
       }else{
         Bus.$emit("login", true);
       }

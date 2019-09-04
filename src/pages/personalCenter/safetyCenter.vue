@@ -9,7 +9,7 @@
           <div @click="tagsChange(1)" :class="['tab', isTagActive(1)]">修改绑定手机</div>
           <div @click="tagsChange(2)" :class="['tab', isTagActive(2)]">个人信息</div>
           <div
-            v-show="parseInt(info.user.identity_auth) == 2  || parseInt(info.user.identity_auth) == 7"
+            v-show="parseInt(info.user.identity_auth) == 3  || parseInt(info.user.identity_auth) == 8"
             @click="tagsChange(3)"
             :class="['tab', isTagActive(3)]"
           >会馆信息</div>
@@ -200,23 +200,23 @@
               </div>
               <div
                 class="teach"
-                v-show="userForm.identity_auth == 4 || userForm.identity_auth == 7"
+                v-show="userForm.identity_auth == 5 || userForm.identity_auth == 8"
               >
                 <div class="item">
                   <div class="lable">系统认证身份</div>
-                  <div class="value"></div>
+                  <div class="value">{{getIdentity(info.user.identity_auth).text}}</div>
                 </div>
                 <div class="item">
                   <div class="lable">教龄</div>
-                  <div class="value">{{teacherForm.num}}</div>
+                  <div class="value">{{teacherForm.num || '无'}}</div>
                 </div>
                 <div class="item">
                   <div class="lable">擅长领域</div>
-                  <div class="value">{{teacherForm.good_at}}</div>
+                  <div class="value">{{teacherForm.good_at || '无'}}</div>
                 </div>
                 <div class="item">
                   <div class="lable">个人简介</div>
-                  <div class="value">{{teacherForm.content}}</div>
+                  <div class="value">{{teacherForm.content || '无'}}</div>
                 </div>
                 <div class="item">
                   <div class="lable">荣誉/感悟</div>
@@ -248,7 +248,7 @@
                 </div>
               </div>
 
-              <div v-show="false">
+              <div v-show="clubForm.club_name">
                 <div class="item">
                   <div class="lable">会馆电话</div>
                   <div class="value">
@@ -376,6 +376,14 @@ export default {
   },
   computed: {
     ...mapGetters(["info"]),
+    getIdentity() {
+      return type => {
+        const obj = {
+          5: { text: "教练" }
+        };
+        return obj[type] || {};
+      };
+    },
     isTagActive() {
       return index => ({
         active: this.tagList[index].active
@@ -586,23 +594,37 @@ export default {
           real_name
         }
       );
-      if (identity_auth === 4 || identity_auth === 7) {
-        getTeacherInfo().then(data => (this.teacherForm = data));
+      if (identity_auth === 5 || identity_auth === 7) {
+        getTeacherInfo().then(data => (this.teacherForm = data[0]));
       }
     },
     getClub() {
       getClubInfo().then(data => (this.clubList = data));
     },
     updateTeachUser() {
-      // postUpdateTeacherInfo();
-      let params = Object.assign({}, this.userForm);
-      postUpdateInfo(params).then(data => {
-        this.getPersonal();
-        this.$message({
-          type: "success",
-          message: "修改成功"
+      const user = () => {
+        let params = Object.assign({}, this.userForm);
+        return postUpdateInfo(params).then(data => {});
+      };
+      const teacher = () => {
+        const { identity_auth } = this.info.user;
+        if (identity_auth === 5 || identity_auth === 8) {
+          const { id, info, city, province, area } = this.teacherForm;
+          return postUpdateTeacherInfo({ id, info, city, province, area });
+        }
+      };
+      Promise.all([user(), teacher()])
+        .then(data => {
+          this.$message({
+            type: "success",
+            message: "修改基础信息成功"
+          });
+          console.log(data);
+          this.getPersonal();
+        })
+        .catch(err => {
+          console.log(err);
         });
-      });
     },
     updateClub() {
       postUpdateClubInfo().then(data => {
