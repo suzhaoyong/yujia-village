@@ -18,7 +18,7 @@
                     <el-col :span="24" class="bg-pic">
                     <div class="nav-contunt-div2">
                         <div class="carousel">
-                        <el-carousel height="620px" :interval="5000" arrow="always" trigger="click" direction="vertical" :autoplay="false">
+                        <el-carousel height="620px" :interval="5000" arrow="always" trigger="click" direction="vertical" :autoplay="true">
                             <el-carousel-item v-for="item in dataimg" :key="item.id">
                                 <div class="contunt2">
                                 <div class="carousel-explain">
@@ -308,6 +308,16 @@ export default {
 .swiper-pagination-bullet-active {
     opacity: 1;
     background: #2c2c2c !important;
+}
+.el-carousel__arrow--right{
+    right: 28px !important;
+}
+.el-carousel__arrow--left{
+    left: 28px !important;
+}
+.el-carousel__arrow{
+    position: absolute;
+    right: 28px;
 }
 .swiper-pagination-bullet{
     width: 12px !important;
