@@ -18,7 +18,7 @@
                     <el-col :span="24" class="bg-pic">
                     <div class="nav-contunt-div2">
                         <div class="carousel">
-                        <el-carousel height="620px" :interval="5000" arrow="always" trigger="click" direction="vertical" :autoplay="true">
+                        <el-carousel height="620px" :interval="5000" arrow="always" trigger="click" direction="vertical" :autoplay="false">
                             <el-carousel-item v-for="item in dataimg" :key="item.id">
                                 <div class="contunt2">
                                 <div class="carousel-explain">
@@ -320,7 +320,7 @@ export default {
 }
 .bg_img {
   width: 100%;
-  height: 600px;
+  height: 100%;
   img{
       width: 100%;
       height: 100%;
@@ -389,7 +389,7 @@ export default {
             height: 640px;
             margin: 0 auto;
             .carousel{
-                width: 1350px;
+                width: 1257px;
                 margin: 0 auto;
                 height: 100%;
             .contunt2{
@@ -593,6 +593,7 @@ export default {
                                 background: 0 0;
                                 padding-left: 0;
                                 padding-right: 0;
+                                width: 100%;
                             }
                         }
                         .yogoswiper-butt:hover{
@@ -903,6 +904,7 @@ export default {
                         transition: all 1s;
                         .text-button{
                             color: #2c2c2c;
+                            width: 100%;
                         }
                     }
                     .text-butt:hover{
@@ -919,6 +921,7 @@ export default {
                         .text-button{
                             color: #2c2c2c;
                             font-size: 14px;
+                            width: 100%;
                         }
                     }
                 }
