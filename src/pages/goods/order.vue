@@ -250,10 +250,10 @@ export default {
 
       let allPrice = allGoods.reduce((pre, cur) => {
         return (
-          parseInt(pre) + parseInt(cur.num) * (cur.sell_price - cur.discount)
+          parseFloat(pre) + parseInt(cur.num) * (cur.sell_price - cur.discount)
         );
       }, 0);
-      return { allPrice, allGoodsNumber: allGoods.length };
+      return { allPrice: allPrice.toFixed(2), allGoodsNumber: allGoods.length };
     },
     statusActive() {
       return type => {
@@ -272,8 +272,6 @@ export default {
     }
   },
   mounted() {
-    // const goods = sessionStorage.getItem("goods");
-    // this.goods = goods && JSON.parse(goods).filter(item => item.select);
     getUserAddress().then(data => {
       this.address = data.address;
       if (data.address.length === 0) {
@@ -365,9 +363,10 @@ export default {
   height: 30px !important;
 }
 .order-box >>> .distpicker-address-wrapper select {
-  /* height: 2em; */
+  height: 2em;
   margin-right: 10px;
-  /* font-size: 0.7rem; */
+  font-size: 0.7rem;
+  padding:0;
 }
 </style>
 <style lang="scss" scoped>
@@ -668,7 +667,7 @@ img {
             .img {
               width: 7rem;
               height: 8rem;
-              background: #ccc;
+              // background: #ccc;
             }
             .title-say {
               padding-left: 2.25rem;

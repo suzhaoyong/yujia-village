@@ -250,6 +250,7 @@
         <div class="column">
           <div
             class="goods-box"
+            style="cursor: pointer;"
             @click="viewGoodsDetail(item)"
             v-for="(item, index) in result.list"
             :key="index"
@@ -274,7 +275,12 @@
           </div>
         </div>
         <div class="pages">
-          <el-pagination background layout="prev, pager, next, jumper" :page-size="12" :total="(result.page * 12)"></el-pagination>
+          <el-pagination
+            background
+            layout="prev, pager, next, jumper"
+            :page-size="12"
+            :total="(result.page * 12)"
+          ></el-pagination>
         </div>
         <!-- <div class="pages">
           <el-pagination
@@ -293,6 +299,7 @@
         <div class="goods">
           <div
             class="goods-box"
+            style="cursor: pointer;"
             @click="viewGoodsDetail(item)"
             v-for="(item, index) in resenView.data"
             :key="index"
@@ -421,7 +428,7 @@ export default {
     getMarketList() {
       postShowGoodList().then(data => {
         this.result.list = data.data;
-        this.result.page = data.count
+        this.result.page = data.count;
       });
     },
     getMarketTags() {
@@ -688,6 +695,14 @@ img {
         // height: 19.35rem;
         background: #fff;
         margin-right: 1.6rem;
+        margin-bottom: 1rem;
+        // border: 1px solid rgba(164, 164, 164, 0.39);
+        padding-bottom: 1rem;
+        border-radius: 4px;
+        &:hover {
+          box-shadow: 0.1rem 0.2rem 1.3rem 0.1rem rgba(164, 164, 164, 0.39);
+          transition: box-shadow 0.75s;
+        }
         &:nth-child(4n) {
           margin-right: 0rem;
         }
@@ -828,13 +843,19 @@ img {
         height: 19.35rem;
         background: #fff;
         margin-right: 1.6rem;
+        // border:1px solid rgba(164, 164, 164, 0.39); 
+        border-radius: 6px;
+        &:hover {
+          box-shadow: 0.1rem 0.2rem 1.3rem 0.1rem rgba(164, 164, 164, 0.39);
+          transition: box-shadow 0.75s;
+        }
         &:nth-child(4n) {
           margin-right: 0rem;
         }
         .pic {
           width: 100%;
           height: 12.75rem;
-          background: #000;
+          // background: #000;
         }
         .g-title {
           padding: 1rem;

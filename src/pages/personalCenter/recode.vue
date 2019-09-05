@@ -21,16 +21,16 @@
               <div>
                 <div class="goods" v-for="(good, g_index) in item.data" :key="g_index">
                   <div class="info">
-                    <div class="img">
-                      <img :src="item.url" alt />
+                    <div class="img" @click="viewGoodsDetail(good)">
+                      <img :src="good.url" alt />
                     </div>
-                    <div class="g_title">{{good.name}}</div>
+                    <div class="g_title" @click="viewGoodsDetail(good)">{{good.name}}</div>
                     <div class="number">{{good.num}}</div>
                   </div>
                   <div class="send">{{item.name}}</div>
                   <div class="g_money">
                     <div class="all">总额：¥{{good.num * good.sellPrice}}</div>
-                    <div style="color: #2c2c2c;">应付</div>
+                    <div style="color: #2c2c2c;">{{item.status === '待付款' ? '应付' : '实付'}}</div>
                     <div
                       style="padding-top:0.8rem;color: #2c2c2c;"
                     >¥{{good.num * (good.sellPrice - good.discount)}}</div>
@@ -97,6 +97,14 @@ export default {
     });
   },
   methods: {
+    viewGoodsDetail(goods) {
+      this.$router.push({
+        name: "detailGoods",
+        params: {
+          id: goods.id
+        }
+      });
+    },
     pay(item) {
       const { totalPrice, out_trade_no } = item;
       this.playcode.show = true;
@@ -120,6 +128,7 @@ img {
   color: #2c2c2c;
   width: 60rem;
   margin: 0 auto;
+  padding-bottom: 1rem;
   position: relative;
   .o_title {
     background: rgba(255, 255, 255, 1);
@@ -136,6 +145,7 @@ img {
     box-shadow: 1px 1px 9px 1px rgba(92, 92, 92, 0.28);
     padding: 0 3rem;
     padding-top: 1rem;
+    overflow-x: hidden;
     .tags {
       display: flex;
       .tag {
@@ -195,11 +205,13 @@ img {
             .img {
               width: 3.5rem;
               height: 3.5rem;
+              cursor: pointer;
               flex-shrink: 0;
-              background: #ccc;
+              // background: #ccc;
             }
             .g_title {
               color: #2c2c2c;
+              cursor: pointer;
               width: 18em;
               font-size: 0.8rem;
               font-weight: bolder;

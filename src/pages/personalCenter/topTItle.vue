@@ -4,22 +4,22 @@
       <div class="header">
         <div class="user">
           <!-- <div class="photo"></div> -->
-          <div class="name">{{info.name|| user.name}}</div>
+          <div class="name">{{info.user.name}}</div>
         </div>
         <div class="info">
           <div class="balance">
-            您的账户可金币用
-            <span class="number">{{info.money||user.money}}</span>
+            可金币用
+            <span class="number">{{info.user.money}}</span>
           </div>
-          <div class="recharge" v-if="info.reason !== '未认证'">充值</div>
-          <div class="withdraw" @click="withdraw">
+          <div class="recharge" @click="changMoney">充值</div>
+          <div class="withdraw">
             <!-- 提现 -->
-            <span
-              class="identity"
-              v-if="info.reason === '未认证'"
-              
-            >未认证</span>
-            <span class="identity" v-else @click.stop="goPage('identity')">(馆主、教练)</span>
+            <span class="identity"  @click="withdraw" v-if="info.user.identity_auth == 1">未认证</span>
+            <span class="identity" v-if="info.user.identity_auth == 3">（馆主）</span>
+            <span class="identity" v-if="info.user.identity_auth == 5">（教练）</span>
+            <span class="identity" v-if="info.user.identity_auth == 6">（未通过认证）</span>
+            <span class="identity" v-if="info.user.identity_auth == 8">（馆主、教练）</span>
+            <!-- <span class="identity" v-else @click.stop="goPage('identity')">(馆主、教练)</span> -->
           </div>
         </div>
       </div>
@@ -27,6 +27,8 @@
   </div>
 </template>
 <script>
+import store from "@/store";
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -34,25 +36,36 @@ export default {
     };
   },
   computed: {
-    info() {
-      const user = sessionStorage.getItem("user");
-      return user && JSON.parse(user).user || {};
-    }
+    ...mapGetters(["info"])
   },
   mounted() {
-    this.getPersonal();
+    // this.getPersonal();
   },
   methods: {
     getPersonal() {
       this.$request("/personal/home").then(data => {
         this.user = data.user;
+        store.dispatch("INFO", data);
       });
     },
     goPage(name) {
       this.$router.push(`/personal/${name}`);
     },
+    changMoney() {
+      this.$router.push({
+        name: "identity",
+        query: {
+          type: "recharge"
+        }
+      });
+    },
     withdraw() {
-      this.$router.push("/personal/identity");
+      this.$router.push({
+        name: "identity",
+        query: {
+          type: "identity"
+        }
+      });
     }
   }
 };
@@ -64,7 +77,7 @@ export default {
   box-sizing: border-box;
 }
 .top {
-  box-shadow: 0rem 0.05rem 0.1rem #ccc;
+  box-shadow: 0.1rem 0.3rem 1rem #ccc;
 }
 .header {
   width: 60rem;

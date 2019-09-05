@@ -42,6 +42,7 @@ export default {
 }
 .el-main {
   padding: 0;
+  overflow-x: hidden;
 }
 .el-container {
   padding: 0;

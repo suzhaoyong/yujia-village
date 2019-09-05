@@ -1262,7 +1262,6 @@ function Exp() {
 		}
 	};
   //暴露给window
-  console.log(Bee)
   return Bee;
 }
 

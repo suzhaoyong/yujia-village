@@ -21,6 +21,7 @@
             <div class="sm-imgs">
               <div
                 class="sm-img"
+                style="cursor: pointer;"
                 v-for="(item, index) in goods.imgs"
                 :key="index"
                 @click="chooseActiveImg(item)"
@@ -30,13 +31,16 @@
             </div>
           </div>
           <div class="details">
+            <div class="price" style="font-weight:800;">
+              {{goods.describe}}
+            </div>
             <div class="price">
               吊牌价：
               <span>￥{{goods.sell_price}}</span>
             </div>
             <div class="preferential">
-              优惠折扣：
-              <span>￥{{goods.discount}}</span>
+              折扣价：
+              <span>￥{{(goods.sell_price - goods.discount).toFixed(2)}}</span>
             </div>
             <div class="colors">
               <span>颜色:</span>
@@ -172,9 +176,6 @@ export default {
   mounted() {
     const { id } = this.$route.params;
     this.getGoodsDetail(id);
-    setTimeout(() => {
-      window.scrollTo(0, 0);
-    }, 2000);
   },
   methods: {
     initSocialConfig() {
@@ -371,11 +372,12 @@ img {
         }
         .price {
           margin-bottom: 1.2rem;
+          
+        }
+        .preferential {
           span {
             font-weight: 800;
           }
-        }
-        .preferential {
         }
         .colors {
           margin-top: 2rem;

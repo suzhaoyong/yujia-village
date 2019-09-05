@@ -5,20 +5,24 @@
         <div class="head-quan">
           <div class="head-right">
             <el-button type="text" class="span2"></el-button>
-            <div style="display:inline-block;" v-if="username || info.name">
-              <span class="span1">{{username || info.name}}</span>
+            <div style="display:inline-block;" v-if="info.user.name">
+              <span class="span1" style="line-height: 40px;">{{info.user.name}}</span>
             </div>
             <div style="display:inline-block;" v-else>
               <el-button type="text" class="span1" @click="account.type='login'">登录</el-button>
               <el-button type="text" class="span1" @click="account.type='register'">注册</el-button>
             </div>
-            <span>
-              <img @click="goto('shopCar')" class="img" src="../assets/cart.png" />
-            </span>
+            <div style="display:inline-block;" v-if="info.user.name">
+              <div style="display: inline-block;">
+                <!-- <el-badge :value="0" style=" width:2rem;height: 2rem;"> -->
+                  <img @click="goto('shopCar')" class="img" src="../assets/cart.png" />
+                <!-- </el-badge> -->
+              </div>
+            </div>
           </div>
         </div>
         <div class="head">
-            <div class="head-mu">
+          <div class="head-mu">
             <div class="head-left">
               <img src="../assets/logo.png" />
             </div>
@@ -41,21 +45,24 @@
                   <div class="submenu">个人中心</div>
                 </template>
                 <!-- <el-menu-item index="personal">收藏的课程</el-menu-item> -->
-                <div v-show="!info.name">
+                <div v-show="!info.user.name">
                   <el-menu-item index="login">请先登录</el-menu-item>
                 </div>
-                <div v-show="username || info.name">
+                <div v-show="info.user.name">
                   <el-menu-item index="personal">现金券与优惠券</el-menu-item>
                   <!-- <el-menu-item index="identity">个人信息</el-menu-item> -->
                   <el-menu-item index="recode">订单中心</el-menu-item>
-                  <el-menu-item v-show="parseInt(info.identity_auth) === 7 || parseInt(info.identity_auth) === 2" index="hell">会馆信息</el-menu-item>
+                  <el-menu-item
+                    v-show="parseInt(info.user.identity_auth) === 7 || parseInt(info.user.identity_auth) === 2"
+                    index="hell"
+                  >会馆信息</el-menu-item>
                   <el-menu-item index="safety-center">信息与安全中心</el-menu-item>
                   <el-menu-item index="share">分享邀请好友</el-menu-item>
                   <el-menu-item index="out" @click="logout">退出</el-menu-item>
                 </div>
               </el-submenu>
             </el-menu>
-            </div>
+          </div>
         </div>
       </div>
     </el-col>
@@ -83,6 +90,8 @@ import Register from "@/pages/Login/register";
 import Reset from "@/pages/Login/reset";
 import TopTitle from "@/pages/personalCenter/topTItle";
 import Bus from "@/utils/Bus";
+import store from "@/store";
+import { mapGetters } from "vuex";
 export default {
   components: {
     Login,
@@ -100,10 +109,7 @@ export default {
     };
   },
   computed: {
-    info() {
-      const user = sessionStorage.getItem("user");
-      return (user && JSON.parse(user).user) || {};
-    },
+    ...mapGetters(["info"]),
     showTopTitle() {
       const show = this.$route.fullPath.startsWith("/personal");
       return show;
@@ -118,12 +124,13 @@ export default {
       this.account.type = "login";
     });
     this.activeIndex = this.$route.name || this.$route.path || "main";
+    this.getPersonal();
   },
   created() {
     this.fetchData();
   },
   beforeUpdate() {
-    this.changenav();
+    // this.changenav();
   },
   beforeDestory() {
     Bus.$off("login");
@@ -134,6 +141,16 @@ export default {
         this.username = name;
       });
     },
+    /** 个人信息 */
+    getPersonal() {
+      sessionStorage.getItem("access") &&
+        this.$request("/personal/home").then(data => {
+          sessionStorage.setItem("user", JSON.stringify(data));
+          store.dispatch("INFO", data);
+          // window.location.reload();
+          this.$emit("suc", data.user.name);
+        });
+    },
     //路由改变时的导航对应高亮
     changenav() {
       let path = this.$route.path;
@@ -142,6 +159,8 @@ export default {
       this.activeIndex = currNav;
     },
     fetchData() {
+      this.activeIndex = this.$route.meta.header_name || "main";
+      return;
       if (this.$route.name == "main") {
         this.activeIndex = "main";
       } else if (this.$route.name == "joinclubhouse") {
@@ -204,6 +223,7 @@ export default {
     logout() {
       this.$request.post("/auth/logout").then(data => {
         this.$message({ type: "success", message: "退出成功" });
+        store.dispatch("INFO", { user: {} });
         this.$router.push("/main");
         this.username = "";
         sessionStorage.removeItem("access");
@@ -227,6 +247,10 @@ export default {
 };
 </script>
 <style>
+.header-main .el-badge__content.is-fixed {
+  top: 0.5rem;
+  right: 0.7rem;
+}
 .header-main .el-submenu__title {
   border: none !important;
   height: 100% !important;
@@ -330,22 +354,22 @@ export default {
   .head {
     height: 65px;
     background: #e8f5db;
-    .head-mu{
+    .head-mu {
       height: 100%;
       width: 1200px;
       margin: 0 auto;
-    .head-left {
-      width: 15%;
-      text-align: center;
-      margin-left: 5%;
-      height: 44px;
-      line-height: 44px;
-      img {
-        width: 170px;
-        position: relative;
-        top: 8px;
+      .head-left {
+        width: 15%;
+        text-align: center;
+        margin-left: 5%;
+        height: 44px;
+        line-height: 44px;
+        img {
+          width: 170px;
+          position: relative;
+          top: 8px;
+        }
       }
-    }
     }
   }
 }

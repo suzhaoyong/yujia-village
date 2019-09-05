@@ -7,8 +7,8 @@
       <div class="body">
         <div class="goods-box" style="min-height: 80vh;">
           <div class="goods" v-for="(item,index) in goods" :key="index">
-            <div class="info">
-              <div :class="['select', {'active': item.select}]" @click="chooseGoods(item, index)"></div>
+            <div class="info" @click="chooseGoods(item, index)">
+              <div :class="['select', {'active': item.select}]"></div>
               <div class="img">
                 <img :src="item.url" alt />
               </div>
@@ -89,19 +89,13 @@ export default {
       let allGoods = this.goods.filter(item => item.select);
 
       let allPrice = allGoods.reduce((pre, cur) => {
-        return parseInt(pre) + parseInt(cur.num) * (cur.sell_price - cur.discount);
+        return parseFloat(pre) + parseInt(cur.num) * (cur.sell_price - cur.discount);
       }, 0);
-      return { allPrice, allGoodsNumber: allGoods.length };
+      return { allPrice: allPrice.toFixed(2), allGoodsNumber: allGoods.length };
     }
   },
   mounted() {
-    // const goods = sessionStorage.getItem("goods");
-    // if (goods) {
-    //   this.goods =
-    //     (goods && JSON.parse(goods).map(item => item.select)) || [];
-    // } else {
     this.getShopCar();
-    // }
   },
   methods: {
     goodsOpFor(option, goods) {
@@ -173,7 +167,6 @@ export default {
       this.goods = [...this.goods];
     },
     payment() {
-      sessionStorage.setItem("goods", JSON.stringify(this.goods));
       const select = this.goods.filter(item => item.select);
       const id = select.map(item => item.id);
       const num = select.map(item => item.num);
@@ -260,7 +253,7 @@ img {
             width: 7rem;
             height: 8.3rem;
             flex-shrink: 0;
-            background: #ccc;
+            // background: #ccc;
             margin-right: 1.8rem;
           }
           .name-size {

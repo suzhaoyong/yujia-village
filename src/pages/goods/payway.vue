@@ -17,7 +17,7 @@
           </div>
           <span class="text">账号金币</span>
           <span style="padding-left:5rem;" v-if="isDisable">金币不足</span>
-          <span style="padding-left:5rem;" v-else>可用{{info.fraction}}金币</span>
+          <span style="padding-left:5rem;" v-else>可用{{info.user.fraction}}金币</span>
         </div>
         <div class="pay_password" v-if="goldpay.allow">
           <div class="tips">请输入密码支付</div>
@@ -68,6 +68,8 @@ import qianbaoIcon from "@/assets/order/qianbao.png";
 import success from "@/assets/order/pay_success.png";
 import alipayIcon from "@/assets/order/alipay_img.png";
 import wechatIcon from "@/assets/order/wechat_img.png";
+import store from "@/store";
+import { mapGetters } from "vuex";
 import {
   postGoldPay,
   postGetAlipayCode,
@@ -103,12 +105,9 @@ export default {
     };
   },
   computed: {
-    info() {
-      const user = sessionStorage.getItem("user");
-      return user && JSON.parse(user).user;
-    },
+    ...mapGetters(["info"]),
     isDisable() {
-      if (this.order.totalPrice > this.info.fraction) {
+      if (this.order.totalPrice > this.info.user.fraction) {
         return true;
       }
       return false;
@@ -139,6 +138,14 @@ export default {
         this.$message({
           type: "success",
           message: "支付成功"
+        });
+        this.$alert("前往订单中心", "成功", {
+          confirmButtonText: "立即前往",
+          callback: action => {
+            this.$router.push({
+              name: "recode"
+            });
+          }
         });
       });
     },
@@ -185,6 +192,14 @@ export default {
                       type: "success",
                       message: "支付成功"
                     });
+                    this.$alert("前往订单中心", "成功", {
+                      confirmButtonText: "立即前往",
+                      callback: action => {
+                        this.$router.push({
+                          name: "recode"
+                        });
+                      }
+                    });
                   }
                 });
               }, 1000);
@@ -224,6 +239,14 @@ export default {
                     this.$message({
                       type: "success",
                       message: "支付成功"
+                    });
+                    this.$alert("前往订单中心", "成功", {
+                      confirmButtonText: "立即前往",
+                      callback: action => {
+                        this.$router.push({
+                          name: "recode"
+                        });
+                      }
                     });
                   }
                 });

@@ -17,9 +17,16 @@ Vue.use(Router)
 const router = new Router({
   mode: 'history',
   scrollBehavior(to, from, savedPosition) {
-    return {
-      x: 0,
-      y: 0
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      if (from.meta.keepAlive) {
+        from.meta.savedPosition = document.body.scrollTop;
+      }
+      return {
+        x: 0,
+        y: to.meta.savedPosition || 0
+      }
     }
   },
   routes: [{
@@ -53,12 +60,18 @@ const router = new Router({
       component: Home, //首页
       children: [{
           path: '/market/index',
+          meta: {
+            header_name: 'market'
+          },
           name: 'market',
           component: () => import('@/pages/market/index')
         },
         {
           path: '/market/detail',
           name: 'marketDetail',
+          meta: {
+            header_name: 'market'
+          },
           component: () => import('@/pages/market/detail')
         },
       ]
@@ -69,10 +82,16 @@ const router = new Router({
       component: Home, //首页
       children: [{
           path: 'index',
+          meta: {
+            header_name: 'train'
+          },
           component: () => import('@/pages/train/index')
         },
         {
           path: 'detail/:id',
+          meta: {
+            header_name: 'train'
+          },
           component: () => import('@/pages/train/detail')
         },
       ]
@@ -84,31 +103,49 @@ const router = new Router({
       children: [{
           path: 'index',
           name: 'personal',
+          meta: {
+            header_name: 'personal'
+          },
           component: () => import('@/pages/personalCenter/index')
         },
         {
           path: 'recode',
           name: 'recode',
+          meta: {
+            header_name: 'personal'
+          },
           component: () => import('@/pages/personalCenter/recode')
         },
         {
           path: 'identity',
           name: 'identity',
+          meta: {
+            header_name: 'personal'
+          },
           component: () => import('@/pages/personalCenter/identity')
         },
         {
           path: 'certification',
           name: 'certification',
+          meta: {
+            header_name: 'personal'
+          },
           component: () => import('@/pages/personalCenter/certification')
         },
         {
           path: 'safety-center',
           name: 'safety-center',
+          meta: {
+            header_name: 'personal'
+          },
           component: () => import('@/pages/personalCenter/safetyCenter')
         },
         {
           path: 'share',
           name: 'share',
+          meta: {
+            header_name: 'personal'
+          },
           component: () => import('@/pages/personalCenter/share')
         },
       ]
@@ -120,26 +157,41 @@ const router = new Router({
       children: [{
           path: '/goods/detail/:id',
           name: 'detailGoods',
+          meta: {
+            header_name: 'market'
+          },
           component: () => import('@/pages/goods/detail')
         },
         {
           path: 'order',
           name: 'order',
+          meta: {
+            header_name: 'market'
+          },
           component: () => import('@/pages/goods/order')
         },
         {
           path: 'payway',
           name: 'payway',
+          meta: {
+            header_name: 'market'
+          },
           component: () => import('@/pages/goods/payway')
         },
         {
           path: 'shop-car/:id',
           name: 'shopCar',
+          meta: {
+            header_name: 'market'
+          },
           component: () => import('@/pages/goods/shopcar')
         },
         {
           path: 'collect/:id',
           name: 'collect',
+          meta: {
+            header_name: 'market'
+          },
           component: () => import('@/pages/goods/collect')
         },
       ]
@@ -151,10 +203,16 @@ const router = new Router({
       children: [{
           path: '/cultivate/index',
           name: 'cultivate',
+          meta: {
+            header_name: 'cultivate'
+          },
           component: () => import('@/pages/cultivate/cultivate')
         }, //培训信息
         {
           path: '/cultivate/detail',
+          meta: {
+            header_name: 'cultivate'
+          },
           component: () => import('@/pages/cultivate/detail')
         }, //培训信息-----详情
       ]
@@ -165,6 +223,9 @@ const router = new Router({
       component: Home, //首页
       children: [{
           path: '/main',
+          meta: {
+            header_name: 'main'
+          },
           component: Main
         } //首页
       ]
@@ -175,6 +236,9 @@ const router = new Router({
       component: Home,
       children: [{
           path: '/joinclubhouse',
+          meta: {
+            header_name: 'joinclubhouse'
+          },
           component: Joinclubhouse
         }, //加盟会馆
         {
@@ -189,10 +253,16 @@ const router = new Router({
       component: Home,
       children: [{
           path: '/yogoteacher',
+          meta: {
+            header_name: 'yogoteacher'
+          },
           component: Yogoteacher
         }, //瑜伽名师
         {
           path: '/yogoteacher/yogoteacherdetails',
+          meta: {
+            header_name: 'yogoteacher'
+          },
           component: Yogoteacherdetails
         } //瑜伽名师----详情
       ]
@@ -203,10 +273,16 @@ const router = new Router({
       component: Home,
       children: [{
           path: '/yogoknowledge',
+          meta: {
+            header_name: 'yogoknowledge'
+          },
           component: Yogoknowledge
         }, //瑜伽知识
         {
           path: '/yogoknowledge/yogoknowledgedetails',
+          meta: {
+            header_name: 'yogoknowledge'
+          },
           component: Yogoknowledgedetails
         } //瑜伽知识----详情
       ]
@@ -217,9 +293,15 @@ const router = new Router({
       component: Home,
       children: [{
           path: '/yogoinformation',
+          meta: {
+            header_name: 'yogoinformation'
+          },
           component: Yogoinformation
         }, //瑜伽资讯
         {
+          meta: {
+            header_name: 'yogoinformation'
+          },
           path: '/yogoinformation/yogoinformationdetails',
           component: Yogoinformationdetails
         } //瑜伽资讯----详情
@@ -231,6 +313,9 @@ const router = new Router({
       component: Home,
       children: [{
           path: '/aboutus',
+          meta: {
+            header_name: 'aboutus'
+          },
           component: Aboutus
         } //关于我们
       ]
@@ -243,6 +328,14 @@ router.beforeEach((to, from, next) => {
   window.scrollTo(0, 0)
   next();
 })
+// 列表页面的 beforeRouteLeave 钩子函数
+router.beforeRouteLeave = (to, from, next) => {
+  if (to.name) {
+    from.meta.isUseCache = true;
+  }
+  next();
+}
+
 router.afterEach((to, from) => {
 
   let scrollContent = document.querySelector('.scroll-content');

@@ -1,12 +1,14 @@
 <template>
   <div id="app" class="scroll-content">
-    <router-view v-if="isRouterAlive"/>
+    <keep-alive>
+      <router-view v-if="$route.meta.keepAlive" />
+    </keep-alive>
+    <router-view v-if="!$route.meta.keepAlive" />
   </div>
 </template>
-
 <script>
 export default {
-  name: 'App',
+  name: "App",
   provide() {
     return {
       reload: this.reload
@@ -25,12 +27,15 @@ export default {
       });
     }
   }
-}
+};
 </script>
 
 <style>
+[v-cloak] {
+  display: none;
+}
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   width: 100%;
@@ -46,18 +51,20 @@ body {
   /* overflow-x: hidden; */
   min-width: 100%;
 }
-.el-button:focus ,.el-icon-close:focus, .el-message-box__headerbtn:focus {
+.el-button:focus,
+.el-icon-close:focus,
+.el-message-box__headerbtn:focus {
   outline: none;
 }
-.el-carousel__arrow:focus{
+.el-carousel__arrow:focus {
   outline: 0 !important;
 }
 /* *{
   margin: 0;
   border: 0;
 } */
-.title{
-  font-size: inherit!important;
-  font-weight: inherit!important;
+.title {
+  font-size: inherit !important;
+  font-weight: inherit !important;
 }
 </style>

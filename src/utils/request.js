@@ -1,5 +1,6 @@
 import axios from 'axios'
 import Bus from './Bus'
+import store from "@/store";
 import {
   Message,
   Loading
@@ -7,7 +8,7 @@ import {
 let loadingInstance = ""
 // 处理非 get data 传参
 function handleRequest(config) {
-  if (config.url.startsWith('/api/getAlipayOrder') && config.url.startsWith('/api/getWechatOrder')) {
+  if (config.url.search("getAlipayOrder") != -1 || config.url.search("getWechatOrder") != -1) {
 
   } else {
     loadingInstance = Loading.service({
@@ -51,13 +52,20 @@ function handleResponeseErr(err) {
 
   let message = '未知异常';
   if (typeof status === 'undefined') {
-    message = "请先登录"
+    message = "登录已失效，请再次登录"
     Bus.$emit('login', true)
     sessionStorage.removeItem('user')
     sessionStorage.removeItem('access')
+    store.dispatch("INFO", {
+      user: {}
+    });
   }
   if (status === 401) {
-    message = '请先登录'
+    if (config.url.search("login") != -1) {
+      message = data.msg
+    } else {
+      message = '请先登录'
+    }
     if (sessionStorage.getItem('access')) {
       // sessionStorage.removeItem('access')
       request.post('/auth/refresh')
@@ -77,23 +85,32 @@ function handleResponeseErr(err) {
       Bus.$emit('login', true)
       sessionStorage.removeItem('user')
       sessionStorage.removeItem('access')
+      store.dispatch("INFO", {
+        user: {}
+      });
     }
 
   } else if (status === 404) {
     message = '接口不存在';
   } else if (status >= 400 && status < 500) {
     message = data.msg
+    if (data.msg == 'Too Many Attempts.') {
+      message = '您的操作频率过多，请稍后重试'
+    }
   } else if (status >= 500) {
     message = '服务器错误';
-    if (data.url == 'api/auth/refresh') {
+    if (data.url == '/api/auth/refresh') {
       Bus.$emit('login', true)
       sessionStorage.removeItem('user')
       sessionStorage.removeItem('access')
+      store.dispatch("INFO", {
+        user: {}
+      });
     }
   }
-  if (data.msg) {
-    message = data.msg;
-  }
+  // if (data.msg) {
+  //   message = data.msg;
+  // }
 
   // 手动阻止（未配置接口域名）
   if (err.message !== 'cancel') {

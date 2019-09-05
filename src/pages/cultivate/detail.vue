@@ -5,7 +5,7 @@
         <div class="detail-main">
           <session-title name="课程介绍" brief="Sometimes beauty is so simple"></session-title>
           <div class="detail-count-div2">
-            <div class="count-div2-img">
+            <div class="count-div2-img" style="cursor: pointer;">
               <img
                 @click="train.teacher_img = item.path"
                 v-for="(item, index) in train.train_image"
@@ -42,7 +42,9 @@
             <div class="div3-crowd">
               <div class="div3-crowd-li" v-for="(item, index) in train.crowd">
                 <h5>Easy to navigate</h5>
-                <img src="../../assets/image71.png" />
+                <img v-if="index%3 == 1" :src="icon.crowd_img_1" />
+                <img v-if="index%3 == 2" :src="icon.crowd_img_2" />
+                <img v-if="index%3 == 0" :src="icon.crowd_img_3" />
                 <p>{{item}}</p>
               </div>
             </div>
@@ -71,13 +73,20 @@
 <script>
 import { getTrains, postTrains, getTrainsById } from "@/api/trains";
 import SessionTitle from "./SessionTitle";
-
+import crowd_img_1 from '@/assets/image71.png';
+import crowd_img_2 from '@/assets/image72.png';
+import crowd_img_3 from '@/assets/image73.png';
 export default {
   components: {
     SessionTitle
   },
   data() {
     return {
+      icon: {
+        crowd_img_1,
+        crowd_img_2,
+        crowd_img_3,
+      },
       value2: 4,
       train: {}
     };
@@ -102,6 +111,7 @@ export default {
 <style scoped>
 .detail-main >>> .el-rate__icon {
   font-size: 0.7rem !important;
+  -webkit-text-stroke: 1px #22cc22;
 }
 </style>
 <style lang="scss" scoped>
@@ -162,9 +172,26 @@ export default {
       width: 5.8rem;
       margin-left: 4rem;
       // height: 6.3rem;
-      overflow: scroll;
+      overflow-y: scroll;
       height: 14rem;
       margin-top: 3rem;
+      /* 设置滚动条的样式 */
+      &::-webkit-scrollbar {
+        width: 0.1rem;
+      }
+      /* 滚动槽 */
+      &::-webkit-scrollbar-track {
+        background: #dcdcdc;
+        border-radius: 0.15rem;
+      }
+      /* 滚动条滑块 */
+      &::-webkit-scrollbar-thumb {
+        background: #88bc37;
+        border-radius: 0.15rem;
+      }
+      &::-webkit-scrollbar-thumb {
+        background: #88bc37;
+      }
       .img1 {
         width: 100%;
         // height: 100%;
@@ -184,6 +211,7 @@ export default {
     .count-div2-imgpic {
       width: 18rem;
       margin-left: 1.5rem;
+      margin-top: 1rem;
       height: 20rem;
       .img1 {
         width: 100%;
@@ -308,10 +336,31 @@ export default {
       // width: 70%;
       margin: 0 auto;
       // height: 18rem;
+      flex-wrap: wrap;
+      max-height: 40rem;
+      overflow-x: auto;
       display: flex;
       justify-content: space-around;
+      /* 设置滚动条的样式 */
+      &::-webkit-scrollbar {
+        width: 0.1rem;
+      }
+      /* 滚动槽 */
+      &::-webkit-scrollbar-track {
+        background: #dcdcdc;
+        border-radius: 0.15rem;
+      }
+      /* 滚动条滑块 */
+      &::-webkit-scrollbar-thumb {
+        background: #88bc37;
+        border-radius: 0.15rem;
+      }
+      &::-webkit-scrollbar-thumb {
+        background: #88bc37;
+      }
       .div3-crowd-li {
-        width: 20em;
+        flex-shrink: 0;
+        flex-basis: 30%;
         height: 100%;
         display: flex;
         flex-wrap: wrap;
@@ -328,6 +377,7 @@ export default {
           margin: 0 auto;
         }
         p {
+          width: 100%;
           font-family: MicrosoftYaHei;
           font-weight: 400;
           color: #2c2c2c;

@@ -43,15 +43,15 @@
                 v-if="hiddenMoney"
                 style="color:#4093A5;margin-left:10px;"
                 @click="hiddenMoney = ''"
-              >隐藏金币</span>
+              >显示金币</span>
               <span
                 v-else
                 style="color:#4093A5;margin-left:10px;"
                 @click="hiddenMoney = '**.**'"
-              >显示金币</span>
+              >隐藏金币</span>
             </div>
             <div class="money">
-              <span>{{hiddenMoney || info.money}}</span>
+              <span>{{hiddenMoney || info.user.money}}</span>
               <div class="recharge" @click="step.type = 'recharge'">充值</div>
               <!-- <div class="cash">提现</div> -->
             </div>
@@ -80,7 +80,7 @@
         <div class="card">
           <div class="title">
             尊贵的
-            <span>{{getIdentityAuth(info.identity_auth)}}</span> 未查询到您的银行卡信息，请完整信息：
+            <span>{{getIdentityAuth(info.user.identity_auth)}}</span> 未查询到您的银行卡信息，请完整信息：
           </div>
           <div style="padding-bottom:1em;">请填写银行卡号码</div>
           <div class="input-box">
@@ -100,20 +100,30 @@
       <div class="pay-card" v-show="step.type === 'recharge'">
         <div class="icon">
           <div class="img">
-            <img :src="icon.active" alt />
+            <img :src="getIdentityIcon(info.user.identity_auth)" alt />
           </div>
         </div>
         <div class="info">
-          <div class="balance" v-show="false">
+          <div class="balance">
             <div class="title">
               <span>账户金币</span>
-              <span style="color:#4093A5;margin-left:10px;">显示金币</span>
+              <span
+                v-if="hiddenMoney"
+                style="color:#4093A5;margin-left:10px;"
+                @click="hiddenMoney = ''"
+              >显示金币</span>
+              <span
+                v-else
+                style="color:#4093A5;margin-left:10px;"
+                @click="hiddenMoney = '**.**'"
+              >隐藏金币</span>
             </div>
             <div class="money">
-              <span>{{info.money}}</span>
-              <div class="recharge">充值</div>
+              <span style="min-width: 4em;display: inline-block;">{{hiddenMoney || info.user.money}}</span>
+              <div class="recharge" @click="step.type = 'recharge'">充值</div>
               <!-- <div class="cash">提现</div> -->
             </div>
+            <span class="all-card" v-show="false">我的全部银行卡</span>
           </div>
           <div class="card-wrap">
             <div class="title">
@@ -133,7 +143,7 @@
           </div>
         </div>
         <div class="pay-way" v-show="rechargeForm.num || money">
-          <div>支付方式</div>
+          <div style="padding-left: 1.5rem;">支付方式</div>
           <div class="way">
             <span :class="[isPayActive(3)]" @click="rechargeChange('payment', '3')">微信</span>
             <span :class="[isPayActive(2)]" @click="rechargeChange('payment', '2')">支付宝</span>
@@ -148,7 +158,7 @@
               <img :src="playcode.src" alt />
             </div>
             <!-- <div class="tips">刷新二维码</div> -->
-            <div class="tips">{{playcode.count}}s后关闭</div>
+            <div class="tips">{{playcode.count}}s后重新获取</div>
           </div>
         </div>
       </div>
@@ -160,6 +170,8 @@ import identity_1 from "@/assets/personal/identity_1.png";
 import identity_2 from "@/assets/personal/identity_2.png";
 import identity_3 from "@/assets/personal/identity_3.png";
 import certification from "./certification";
+import store from "@/store";
+import { mapGetters } from "vuex";
 import {
   postChangeBankCard,
   getBankCardInfo,
@@ -171,6 +183,7 @@ import {
   postGetAlipayOrder,
   postGetWechatOrder
 } from "@/api/market";
+let timer = null;
 export default {
   components: {
     certification
@@ -185,7 +198,7 @@ export default {
       certificate: {
         identity: ""
       },
-      playcode: { show: false, src: "", count: 0 },
+      playcode: { show: false, src: "", count: 0, success: false },
       hiddenMoney: "",
       money: "",
       step: {
@@ -207,13 +220,14 @@ export default {
   watch: {
     money(newvalue, oldvalue) {
       this.rechargeForm.num = "";
+    },
+    $route() {
+      const { type = "identity" } = this.$route.query;
+      this.step.type = type;
     }
   },
   computed: {
-    info() {
-      const user = sessionStorage.getItem("user");
-      return user && JSON.parse(user).user;
-    },
+    ...mapGetters(["info"]),
     getIdentityAuth() {
       return item => {
         const obj = {
@@ -224,6 +238,18 @@ export default {
         };
 
         return obj[item];
+      };
+    },
+
+    getIdentityIcon() {
+      return item => {
+        const obj = {
+          3: this.icon.identity_1,
+          5: this.icon.identity_3,
+          8: this.icon.identity_2
+        };
+
+        return obj[item] || "";
       };
     },
     isPayActive() {
@@ -239,6 +265,14 @@ export default {
   },
   mounted() {
     // this.getBankCardInfo();
+    const { type = "identity" } = this.$route.query;
+    this.step.type = type;
+  },
+  updated() {
+    this.$nextTick(function() {});
+  },
+  beforeDestroy() {
+    timer && clearInterval(timer);
   },
   methods: {
     back() {
@@ -246,41 +280,30 @@ export default {
       const obj = {
         identity: "identity",
         certification: "identity",
-        "my-card": "identity",
+        "my-card": "my-card",
         "input-card": "my-card",
-        recharge: "my-card"
+        recharge: "recharge"
       };
-      if (type === "identity") {
+      if (type === "identity" || type === "recharge") {
         this.$router.go(-1);
       }
       this.step.type = obj[type];
     },
     myIdentity(identity) {
-      // if (this.info.identity_auth !== identity) {
-      //   this.$message({
-      //     type: "warning",
-      //     message: "请确认自己的身份"
-      //   });
-      //   return;
-      // }
       this.step.type = "certification";
-      this.certificate.identity = identity
-      // const obj = {
-      //   1: "用户",
-      //   2: identity_1,
-      //   4: identity_3,
-      //   7: identity_2
-      // };
-      // this.icon.active = obj[identity];
+      this.certificate.identity = identity;
     },
     rechargeChange(name, num) {
       this.rechargeForm[name] = num;
       if (name === "payment") {
+        timer && clearInterval(timer);
+        this.playcode = { show: false, src: "", count: 0, success: false };
         // (this.rechargeForm.num || this.money) && this.reCharge();
       }
     },
     /** 充值 */
     reCharge() {
+      timer && clearInterval(timer);
       if (this.rechargeForm.payment == "") {
         this.$message({
           type: "warning",
@@ -297,24 +320,38 @@ export default {
           postGetAlipayCode({ out_trade_no, total_fee: totalPrice, body })
             .then(data => {
               this.playcode.show = true;
-              this.playcode.count = 30;
+              this.playcode.success = false;
+              this.playcode.count = 59;
               this.playcode.src = data;
             })
             .then(_ => {
               if (this.playcode.show) {
-                const timer = setInterval(() => {
-                  if (this.playcode.count < 0 || !this.playcode.show) {
-                    this.playcode.show = false;
+                timer = setInterval(() => {
+                  if (this.playcode.success) {
                     clearInterval(timer);
                   }
-
+                  if (this.playcode.count <= 1 || !this.playcode.show) {
+                    this.rechargeChange("payment", "2");
+                    // this.playcode.show = false;
+                    clearInterval(timer);
+                  }
+                  this.playcode.count -= 1;
+                  if (this.playcode.count % 5 !== 0) return;
                   postGetAlipayOrder({ out_trade_no }).then(data => {
-                    this.playcode.count -= 1;
                     if (data.msg === "支付成功") {
-                      this.playcode.show = false;
+                      // this.playcode.show = false;
+                      this.playcode.success = true;
                       this.$message({
                         type: "success",
                         message: "支付成功"
+                      });
+                      this.$alert("前往个人中心", "成功", {
+                        confirmButtonText: "立即前往",
+                        callback: action => {
+                          this.$router.push({
+                            name: "personal"
+                          });
+                        }
                       });
                     }
                   });
@@ -330,24 +367,38 @@ export default {
           })
             .then(data => {
               this.playcode.show = true;
-              this.playcode.count = 30;
+              this.playcode.success = false;
+              this.playcode.count = 59;
               this.playcode.src = data;
             })
             .then(_ => {
               if (this.playcode.show) {
-                const timer = setInterval(() => {
-                  if (this.playcode.count <= 0 || !this.playcode.show) {
-                    this.playcode.show = false;
+                timer = setInterval(() => {
+                  if (this.playcode.success) {
                     clearInterval(timer);
                   }
-
+                  if (this.playcode.count <= 1 || !this.playcode.show) {
+                    this.rechargeChange("payment", "3");
+                    // this.playcode.show = false;
+                    clearInterval(timer);
+                  }
+                  this.playcode.count -= 1;
+                  if (this.playcode.count % 5 !== 0) return;
                   postGetWechatOrder({ out_trade_no }).then(data => {
-                    this.playcode.count -= 1;
                     if (data.msg === "支付成功") {
-                      this.playcode.show = false;
+                      // this.playcode.show = false;
+                      this.playcode.success = true;
                       this.$message({
                         type: "success",
                         message: "支付成功"
+                      });
+                      this.$alert("前往个人中心", "成功", {
+                        confirmButtonText: "立即前往",
+                        callback: action => {
+                          this.$router.push({
+                            name: "personal"
+                          });
+                        }
                       });
                     }
                   });
@@ -386,9 +437,9 @@ img {
   position: relative;
 }
 .back {
-  position: absolute;
-  left: 4rem;
-  top: 1rem;
+  width: 60rem;
+  margin: 0 auto;
+  padding-top: 1rem;
   &-btn {
     cursor: pointer;
     padding: 0.2rem 0.3rem;
@@ -402,14 +453,21 @@ img {
 }
 .identity {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  margin: 0 auto;
+  width: 60rem;
   padding-top: 4rem;
   min-height: 30rem;
   .box {
     width: 17rem;
     height: 22rem;
     background: #e6f9f1;
-    margin-right: 2.5rem;
+    // margin-right: 2.5rem;
+    border-radius: 6px;
+    &:hover {
+      box-shadow: 0.1rem 0.2rem 1.3rem 0.1rem rgba(164, 164, 164, 0.39);
+      transition: box-shadow 0.75s;
+    }
     &.id1 {
       background: #e6f9f1;
     }
@@ -439,7 +497,7 @@ img {
   // min-height: 30rem;
   display: flex;
   min-height: 20rem;
-  width: 70rem;
+  width: 60rem;
   margin: 0 auto;
   margin-top: 4rem;
   margin-bottom: 10rem;
@@ -529,7 +587,7 @@ img {
   display: flex;
   min-height: 20rem;
   border: 1px solid #ccc;
-  width: 70rem;
+  width: 60rem;
   margin: 0 auto;
   margin-top: 4rem;
   margin-bottom: 10rem;
@@ -577,8 +635,8 @@ img {
 .pay-card {
   display: flex;
   min-height: 20rem;
-  border: 1px solid #ccc;
-  width: 70rem;
+  // border: 1px solid #ccc;
+  width: 60rem;
   margin: 0 auto;
   margin-top: 4rem;
   margin-bottom: 10rem;
@@ -633,10 +691,10 @@ img {
       .money-wrap {
         span {
           padding: 0 1em;
-          border: 1px solid #ccc;
+          border: 1px solid #efefef;
           &.active {
-            border: 1px solid #fbecd2;
-            background: #fbecd2;
+            border: 1px solid #e8f5db;
+            background: #e8f5db;
             // color:#fff;
           }
         }
@@ -655,6 +713,11 @@ img {
           }
           input {
             width: 100%;
+            border: 1px solid #efefef;
+            &:focus {
+              border: 1px solid #efefef;
+              outline: none;
+            }
           }
         }
       }
@@ -664,8 +727,9 @@ img {
     width: 15rem;
     border-left: 1px solid #ccc;
     padding-top: 2rem;
-    padding-left: 1rem;
+    position: relative;
     .way {
+      padding-left: 1.5rem;
       padding-top: 0.5rem;
       span {
         padding: 0 1em;
@@ -698,6 +762,10 @@ img {
         background: #000;
         color: #fff;
         padding: 0.3em 1em;
+        bottom: 1rem;
+        left: 50%;
+        transform: translateX(-50%);
+        position: absolute;
       }
     }
   }

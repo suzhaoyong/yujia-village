@@ -12,6 +12,9 @@
     <div v-show="show(4)" class="yun4">
       <img :src="icon.yun.yun_1" alt />
     </div>
+    <div v-show="show(5)" class="yun5">
+      <img :src="icon.yun.yun_1" alt />
+    </div>
   </div>
 </template>
 <script>
@@ -20,8 +23,9 @@ import yun_2 from "@/assets/order/yun_2.png";
 export default {
   props: {
     arr: {
-      type: Array
-    } 
+      type: Array,
+      default: () => []
+    }
   },
   data() {
     return {
@@ -35,7 +39,7 @@ export default {
   },
   computed: {
     show() {
-      return index => this.arr.indexOf(index) >= 0
+      return index => this.arr.indexOf(index) >= 0;
     }
   }
 };
@@ -47,7 +51,7 @@ img {
 }
 .yun {
   position: absolute;
-  top: 10rem;
+  top: 5rem;
   left: 5rem;
   z-index: -1;
   width: 25rem;
@@ -75,6 +79,15 @@ img {
   position: absolute;
   top: 34rem;
   left: -16rem;
+  z-index: -1;
+  width: 25rem;
+  margin-top: -5rem;
+  margin-bottom: 1rem;
+}
+.yun5 {
+  position: absolute;
+  top: 38rem;
+  left: 16rem;
   z-index: -1;
   width: 25rem;
   margin-top: -5rem;

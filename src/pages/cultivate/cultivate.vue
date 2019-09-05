@@ -127,6 +127,7 @@
               <div class="fruit-list">
                 <div
                   class="fruit-list-li"
+                  style="cursor: pointer;"
                   v-for="(item,index) in fruit.data"
                   @click="selectItem(item)"
                   :key="index"
@@ -135,7 +136,7 @@
                     <img :src="item.teacher_img" />
                   </div>
                   <div class="fruit-list-li-text">
-                    <h4>{{item.name}}</h4>
+                    <h4>{{item.theme}}</h4>
                     <div class="list-eye">
                       <!-- <img src /> -->
                       <span class="span">{{item.views||100}}</span>
@@ -163,6 +164,7 @@
             <div class="cultivate-count-div3">
               <div
                 class="fruit-list-li"
+                style="cursor: pointer;"
                 v-for="(item,index) in fruitclasslist"
                 :key="index"
                 @click="selectItem(item)"
@@ -171,7 +173,7 @@
                   <img :src="item.teacher_img" />
                 </div>
                 <div class="fruit-list-li-text">
-                  <h4>{{item.name}}</h4>
+                  <h4>{{item.theme}}</h4>
                   <div class="list-eye">
                     <img src="../../assets/eye.png" />
                     <span class="span">{{item.views || 100}}</span>
@@ -186,6 +188,7 @@
             <session-title name="最新发布" brief="Sometimes beauty is so simple"></session-title>
             <div
               :class="['cultivate-count-div5',{left: index%2 == 1}]"
+              style="cursor: pointer;"
               v-for="(item, index) in newList"
               @click="selectItem(item)"
               :key="index"
@@ -219,7 +222,6 @@
 <script>
 import Banner from "@/components/banner";
 import VDistpicker from "v-distpicker";
-import SessionTitle from "./SessionTitle";
 import {
   getTrains,
   postTrainsList,
@@ -230,8 +232,7 @@ import {
 export default {
   components: {
     Banner,
-    VDistpicker,
-    SessionTitle
+    VDistpicker
   },
   data() {
     return {
@@ -357,6 +358,19 @@ export default {
       this.newList = data.new.data;
       this.fruitclasslist = data.hot.data;
     });
+  },
+  activated() {
+    // isUseCache 为false时才重新刷新获取数据
+    // 因为对 list 使用 keep-alive 来缓存组件，所以默认是会使用缓存数据的
+    // if (!this.$route.meta.isUseCache) {
+    //   this.getTrainsList();
+    //   getOrderByTrains().then(data => {
+    //     this.newList = data.new.data;
+    //     this.fruitclasslist = data.hot.data;
+    //   });
+    //   // 通过这个控制刷新
+    //   this.$route.meta.isUseCache = false;
+    // }
   },
   methods: {
     getFiltersParams(params = {}) {
@@ -586,12 +600,14 @@ export default {
   height: 30px;
 }
 .cultivate-main >>> .distpicker-address-wrapper select {
-  /* height: 2em; */
+  height: 2em;
   margin-right: 10px;
-  /* font-size: 0.7rem; */
+  font-size: 0.7rem;
+  padding: 0;
 }
 .cultivate-main >>> .el-rate__icon {
   font-size: 0.7rem !important;
+  -webkit-text-stroke: 1px #22cc22;
 }
 .cultivate-main >>> .el-button:hover {
   border-color: #22cc22;
@@ -664,6 +680,7 @@ img {
         box-shadow: 2px 3px 20px 1px #a4a4a4;
         border-radius: 0.3rem;
         margin-top: 1.3rem;
+
         .cultivate1-one {
           width: 100%;
           height: 4.1rem;
@@ -852,6 +869,10 @@ img {
           min-height: 4.1rem;
           line-height: 4.1rem;
           padding-left: 3rem;
+          padding-bottom: 2em;
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
           .span {
             width: 4em;
             flex-shrink: 0;
@@ -887,12 +908,16 @@ img {
           height: 28.6rem;
           // padding-bottom: 1rem;
           background-color: #ffffff;
-          box-shadow: 0.1rem 0.2rem 1.3rem 0.1rem rgba(164, 164, 164, 0.39);
+          border: 1px solid rgba(164, 164, 164, 0.39);
           border-radius: 0.3rem;
           float: left;
           margin-left: 1.4rem;
           margin-top: 1rem;
           font-size: 0.7rem;
+          &:hover {
+            box-shadow: 0.1rem 0.2rem 1.3rem 0.1rem rgba(164, 164, 164, 0.39);
+            transition: box-shadow 0.75s;
+          }
           .fruit-list-li-img {
             width: 100%;
             height: 17.7rem;
@@ -1010,12 +1035,16 @@ img {
         height: 28.6rem;
         // padding-bottom: 1rem;
         background-color: #ffffff;
-        box-shadow: 0.1rem 0.2rem 1.3rem 0.1rem rgba(164, 164, 164, 0.39);
+        border: 1px solid rgba(164, 164, 164, 0.39);
         border-radius: 0.3rem;
         float: left;
         margin-left: 1.4rem;
         margin-top: 1rem;
         font-size: 0.7rem;
+        &:hover {
+          box-shadow: 0.1rem 0.2rem 1.3rem 0.1rem rgba(164, 164, 164, 0.39);
+          transition: box-shadow 0.75s;
+        }
         .fruit-list-li-img {
           width: 100%;
           height: 17.7rem;
@@ -1110,8 +1139,8 @@ img {
           to right,
           #ffffff 0%,
           #ffffff 50%,
-          #cce198 50%,
-          #cce198 100%
+          #eef5dd 50%,
+          #eef5dd 100%
         );
         &::after {
           left: 0;
@@ -1149,8 +1178,8 @@ img {
         // background-color: #cce198;
         background: linear-gradient(
           to right,
-          #cce198 0%,
-          #cce198 50%,
+          #eef5dd 0%,
+          #eef5dd 50%,
           #ffffff 50%,
           #ffffff 100%
         );
@@ -1173,7 +1202,7 @@ img {
         // position: absolute;
         // left: 51%;
         // top: 24%;
-        margin: 3rem 4rem;
+        margin: 2rem 4rem;
         width: 20em;
         .li-text {
           display: flex;
