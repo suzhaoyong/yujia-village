@@ -51,12 +51,12 @@
         <div class="market_time-content">
           <div class="market_time-content_box">
             <div class="prev_btn-box">
-              <div class="prev_btn" @click="changeDiscountsForu('prev')"></div>
+              <div class="prev_btn hvr-float-shadow" @click="changeDiscountsForu('prev')"></div>
             </div>
             <transition name="list-complete">
               <div class="goods_list">
                 <div
-                  class="goods"
+                  class="goods hvr-underline-from-left"
                   style="cursor: pointer;"
                   @click="viewGoodsDetail(item)"
                   v-for="(item,index) in good_recomment.discounts.de"
@@ -76,7 +76,7 @@
               </div>
             </transition>
             <div class="next_btn-box">
-              <div class="next_btn" @click="changeDiscountsForu('next')"></div>
+              <div class="next_btn hvr-float-shadow" @click="changeDiscountsForu('next')"></div>
             </div>
           </div>
         </div>
@@ -86,12 +86,12 @@
         <div class="market_time-content">
           <div class="market_time-content_box">
             <div class="prev_btn-box">
-              <div class="prev_btn" @click="changeDiscountsForu('prev')"></div>
+              <div class="prev_btn hvr-float-shadow" @click="changeDiscountsForu('prev')"></div>
             </div>
             <transition name="list-complete">
               <div class="goods_list">
                 <div
-                  class="goods bg"
+                  class="goods bg hvr-underline-from-left"
                   style="cursor: pointer;"
                   @click="viewGoodsDetail(item)"
                   v-for="(item,index) in good_recomment.discounts.re"
@@ -111,7 +111,7 @@
               </div>
             </transition>
             <div class="next_btn-box">
-              <div class="next_btn" @click="changeDiscountsForu('next')"></div>
+              <div class="next_btn hvr-float-shadow" @click="changeDiscountsForu('next')"></div>
             </div>
           </div>
         </div>
@@ -271,6 +271,12 @@ export default {
   }
 };
 </script>
+<style scoped>
+.hvr-underline-from-left:before {
+  background: #2c2c2c;
+  overflow: visible;
+}
+</style>
 <style lang="scss" scoped>
 @mixin full-width($support-type: margin, $min-width: null) {
   @if $support-type == "margin" {
@@ -547,6 +553,7 @@ img {
         justify-content: space-around;
         .prev_btn-box {
           margin-left: -7rem;
+          z-index: 20;
           position: relative;
           width: 13rem;
           background: #fff;
@@ -593,7 +600,9 @@ img {
             margin: 0 1rem;
             flex-shrink: 0;
             &.bg {
-              color: #fff;
+              .goods-title {
+                color: #fff;
+              }
               .goods-price-old {
                 color: #999999;
               }
@@ -613,6 +622,7 @@ img {
             &-title {
               font-weight: 600;
               margin-top: 1rem;
+              color: #2c2c2c;
               padding: 0 0.3rem;
             }
             &-price {

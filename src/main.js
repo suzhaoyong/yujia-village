@@ -15,6 +15,7 @@ import 'swiper/dist/css/swiper.css'
 import Share from 'vue-social-share'
 import 'vue-social-share/dist/client.css';
 import '../static/style/theme/index.css';
+import '../static/style/hover.css';
 import store from '@/store'
 
 Vue.use(NotFound)
