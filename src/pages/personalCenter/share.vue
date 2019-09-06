@@ -53,7 +53,7 @@ export default {
   data() {
     return {
       config: {
-        url: "",
+        url: "http://vue.aomengyujia.com/wap/index.html",
         source: "",
         title: "",
         description: "",

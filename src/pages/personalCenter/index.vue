@@ -245,23 +245,20 @@ export default {
     }
   },
   mounted() {
-    // this.getPersonal();
+    this.getPersonal();
   },
   methods: {
     putUsed(item) {
       let coupon = this.usedCoupon.list.filter(coupon => coupon.id == item.id)[0]
-      console.log(coupon)
       if(coupon){
       }else{
         this.usedCoupon.list.push({id: item.id})
       }
-      console.log(this.usedCoupon.list);
     },
     /** 个人信息 */
     getPersonal() {
       this.$request("/personal/home").then(data => {
-        sessionStorage.setItem("user", JSON.stringify(data));
-        // this.info = data;
+        store.dispatch("INFO", data);
       });
     },
     viewGoodsDetail(goods) {

@@ -19,7 +19,7 @@
           <div class="market_news-content_box">
             <div class="market_news-content_box-lf">
               <div class="goods_img">
-                <img :src="good_recomment.new.new_url_one" alt="商品" />
+                <img :src="good_recomment.new.url_one" alt="商品" />
               </div>
               <div class="goods_info">
                 <div class="goods_info-title">{{good_recomment.new.desc}}</div>
@@ -32,10 +32,10 @@
             </div>
             <div class="market_news-content_box-rh">
               <div class="goods_subimg">
-                <img :src="good_recomment.new.new_url_two" alt="商品" />
+                <img :src="good_recomment.new.url_two" alt="商品" />
               </div>
               <div class="goods_subimg">
-                <img :src="good_recomment.new.new_url_three" alt="商品" />
+                <img :src="good_recomment.new.url_three" alt="商品" />
               </div>
               <div
                 class="goods_buy-btn"
@@ -219,6 +219,7 @@ export default {
   mounted() {
     getGoodRecomment().then(data => {
       this.good_recomment.new = data.new;
+      this.good_recomment.comment = data.comment;
       this.good_recomment.discount = data.discount;
       this.discount.double.list = data.discount.double[0];
       this.discount.single.list = data.discount.single[0];
