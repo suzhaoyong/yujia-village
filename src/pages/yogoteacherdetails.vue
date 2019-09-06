@@ -104,14 +104,17 @@ export default {
             .count-name{
                 width: 43%;
                 margin: 0 auto;
-                border: 2px solid #43516A;
+                border: 3px solid #43516A;
                 height: 100px;
                 position: absolute;
                 bottom: 20%;
                 left: 2%;
-                transition: all 1s;
+                transition: all .9s;
                 line-height: 85px;
                 text-align: center;
+                border-image: -webkit-linear-gradient(left, #AE8D66, #43516A) 30 30;
+                border-image: -moz-linear-gradient(left, #AE8D66, #43516A) 30 30;
+                border-image: linear-gradient( left,#AE8D66, #43516A) 30 30;
                 .span1{
                     font-size:2rem;
                     font-family:Gulim;
@@ -144,32 +147,35 @@ export default {
                     left: 11%;
                 }
             }
-            .count-name:hover{
-                width: 43%;
-                margin: 0 auto;
-                border: 2px solid #43516A;
-                height: 100px;
-                position: absolute;
-                bottom: 20%;
-                left: 2%;
-                transform: scale(.98);
-                text-align: center;
-                line-height: 85px;
-                .span1{
-                    font-size:2rem;
-                    font-family:Gulim;
-                    font-weight:400;
-                    font-style:italic;
-                    color: #43516A;
-                    .span2{
-                        font-size:2rem;
-                        font-family:Gulim;
-                        font-weight:400;
-                        font-style:italic;
-                        color: #43516A;
-                    }
-                }
-            }
+            // .count-name:hover{
+            //     width: 43%;
+            //     margin: 0 auto;
+            //     border: 3px solid #43516A;
+            //     height: 100px;
+            //     position: absolute;
+            //     bottom: 20%;
+            //     left: 2%;
+            //     transform: scale(.98);
+            //     text-align: center;
+            //     line-height: 85px;
+            //     border-image: -webkit-linear-gradient(left, #AE8D66, #43516A) 30 30;
+            //     border-image: -moz-linear-gradient(left, #AE8D66, #43516A) 30 30;
+            //     border-image: linear-gradient( left,#AE8D66, #43516A) 30 30;
+            //     .span1{
+            //         font-size:2rem;
+            //         font-family:Gulim;
+            //         font-weight:400;
+            //         font-style:italic;
+            //         color: #43516A;
+            //         .span2{
+            //             font-size:2rem;
+            //             font-family:Gulim;
+            //             font-weight:400;
+            //             font-style:italic;
+            //             color: #43516A;
+            //         }
+            //     }
+            // }
         }
     }
     .yogoteacher-count-div3{
