@@ -233,16 +233,12 @@
               <div class="item">
                 <div class="lable">会馆名称</div>
                 <div class="value">
-                  <el-select
-                    v-model="clubForm.club_name"
-                    @change="changeClub"
-                    placeholder="请选择会馆名称"
-                  >
+                  <el-select v-model="club.select_id" @change="changeClub" placeholder="请选择会馆名称">
                     <el-option
-                      v-for="item in clubList"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
+                      v-for="item in club.list"
+                      :key="item.id"
+                      :label="item.club_name"
+                      :value="item.id"
                     ></el-option>
                   </el-select>
                 </div>
@@ -252,7 +248,7 @@
                 <div class="item">
                   <div class="lable">会馆电话</div>
                   <div class="value">
-                    <el-input v-model="clubForm.name"></el-input>
+                    <el-input v-model="clubForm.club_tel"></el-input>
                   </div>
                 </div>
                 <div class="item">
@@ -268,7 +264,7 @@
                 </div>
                 <div class="item">
                   <div class="lable">会馆地址</div>
-                  <div class="value">
+                  <div class="value" style="flex-grow:1;">
                     <el-input v-model="clubForm.club_address"></el-input>
                   </div>
                 </div>
@@ -322,7 +318,7 @@ export default {
   data() {
     return {
       success: false,
-      clubList: [],
+      club: { list: [], select_id: "" },
       codeTips: {
         msg: "发送验证码",
         count: 0
@@ -403,7 +399,7 @@ export default {
     }
   },
   created() {
-    this.getPersonal();
+    // this.getPersonal();
   },
   mounted() {
     const { type } = this.$route.query;
@@ -444,14 +440,27 @@ export default {
     },
     onDistpickerSelected(data) {
       const { area, city, province } = data;
-      if (this)
-        this.userForm = Object.assign({}, this.userForm, {
-          area: area.value,
-          city: city.value,
-          province: province.value
-        });
+      this.userForm = Object.assign({}, this.userForm, {
+        area: area.value,
+        city: city.value,
+        province: province.value
+      });
+      this.teacherForm = Object.assign({}, this.teacherForm, {
+        area: area.value,
+        city: city.value,
+        province: province.value
+      });
+      this.clubForm = Object.assign({}, this.clubForm, {
+        area: area.value,
+        city: city.value,
+        province: province.value
+      });
     },
-    changeClub() {},
+    changeClub(club_id) {
+      const club = this.club.list.filter(item => item.id == club_id)[0];
+      console.log(club)
+      this.clubForm = Object.assign({}, this.clubForm, club);
+    },
     resetForm(name) {
       const form = {
         ruleForm: {
@@ -594,12 +603,12 @@ export default {
           real_name
         }
       );
-      if (identity_auth === 5 || identity_auth === 7) {
+      if (identity_auth === 5 || identity_auth === 8) {
         getTeacherInfo().then(data => (this.teacherForm = data[0]));
       }
     },
     getClub() {
-      getClubInfo().then(data => (this.clubList = data));
+      getClubInfo().then(data => (this.club.list = data));
     },
     updateTeachUser() {
       const user = () => {
@@ -619,7 +628,6 @@ export default {
             type: "success",
             message: "修改基础信息成功"
           });
-          console.log(data);
           this.getPersonal();
         })
         .catch(err => {
@@ -627,7 +635,9 @@ export default {
         });
     },
     updateClub() {
-      postUpdateClubInfo().then(data => {
+      const params = Object.assign({},this.clubForm)
+      console.log(params);
+      postUpdateClubInfo(params).then(data => {
         this.getPersonal();
         this.$message({
           type: "success",
@@ -671,7 +681,7 @@ export default {
 <style lang="scss" scoped>
 * {
   margin: 0;
-  padding: 0;
+  // padding: 0;
   box-sizing: border-box;
 }
 

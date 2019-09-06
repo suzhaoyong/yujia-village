@@ -6,6 +6,9 @@
           <div class="head-right">
             <el-button type="text" class="span2"></el-button>
             <div style="display:inline-block;" v-if="info.user.name">
+              <div class="identity">
+                <img :src="identity" alt="头像" />
+              </div>
               <span class="span1" style="line-height: 40px;">{{info.user.name}}</span>
             </div>
             <div style="display:inline-block;" v-else>
@@ -15,7 +18,7 @@
             <div style="display:inline-block;" v-if="info.user.name">
               <div style="display: inline-block;">
                 <!-- <el-badge :value="0" style=" width:2rem;height: 2rem;"> -->
-                  <img @click="goto('shopCar')" class="img" src="../assets/cart.png" />
+                <img @click="goto('shopCar')" class="img" src="../assets/cart.png" />
                 <!-- </el-badge> -->
               </div>
             </div>
@@ -92,6 +95,10 @@ import TopTitle from "@/pages/personalCenter/topTItle";
 import Bus from "@/utils/Bus";
 import store from "@/store";
 import { mapGetters } from "vuex";
+import identity_g from "@/assets/order/identity_g.png";
+import identity_j from "@/assets/order/identity_j.png";
+import identity_gj from "@/assets/order/identity_gj.png";
+import identity_y from "@/assets/order/identity_y.png";
 export default {
   components: {
     Login,
@@ -105,6 +112,12 @@ export default {
       username: "",
       account: {
         type: ""
+      },
+      icon: {
+        identity_g,
+        identity_j,
+        identity_gj,
+        identity_y
       }
     };
   },
@@ -113,6 +126,15 @@ export default {
     showTopTitle() {
       const show = this.$route.fullPath.startsWith("/personal");
       return show;
+    },
+    identity() {
+      const obj = {
+        1: identity_y,
+        3: identity_g,
+        5: identity_j,
+        8: identity_gj
+      };
+      return obj[this.info.user.identity_auth];
     }
   },
   watch: {
@@ -257,6 +279,15 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.identity {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}
 .el-menu {
   width: 80%;
   margin: 0 auto;

@@ -74,6 +74,10 @@ export function postUpdateInfo(args) {
 export function getClubInfo() {
   return request(`/personal/clubInfo`)
 }
+/** 会馆资料 */
+export function getMyShare() {
+return request(`/personal/myShare`)
+}
 /** 认证馆主修改会馆资料 */
 
 export function postUpdateClubInfo(args) {

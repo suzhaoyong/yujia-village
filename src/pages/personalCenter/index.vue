@@ -106,7 +106,7 @@
         <div class="body">
           <div class="vouchers">
             <div
-              class="voucher"
+              class="voucher hvr-curl-bottom-right"
               :style="`background-image:url(${voucherMoneyImg(index)}); background-size: 100% 100%;`"
               v-for="(item, index) in info.cash"
               :key="index"
@@ -117,8 +117,8 @@
               </div>
               <div class="name-time-used">
                 <div class="name">{{item.name}}</div>
-                <div class="used" v-show="false">详细使用记录</div>
-                <div class="time-btn" v-show="true">
+                <div class="used" @click="putUsed(item)" v-if="!showUsed(item)">详细使用记录</div>
+                <div class="time-btn" v-if="showUsed(item)">
                   <div class="time">
                     有效期至
                     <br />
@@ -142,7 +142,7 @@
         <div class="body">
           <div class="vouchers">
             <div
-              class="voucher"
+              class="voucher hvr-float"
               :style="`background-image:url(${voucherImg(index)}); background-size: 100% 100%;`"
               v-for="(item,index) in info.coupon"
               :key="index"
@@ -206,6 +206,9 @@ export default {
           quan_red,
           quan_zhi
         }
+      },
+      usedCoupon: {
+        list: []
       }
     };
   },
@@ -218,6 +221,18 @@ export default {
         };
         return obj[index % 1];
       };
+    },
+    showUsed() {
+      return item => {
+        console.log(item);
+        let coupon = this.usedCoupon.list.filter(id => id == item.id)[0]
+        console.log(coupon);
+        if(coupon){
+          return true 
+        }else{
+          return false 
+        }
+      }
     },
     voucherImg() {
       return index => {
@@ -235,6 +250,15 @@ export default {
     // this.getPersonal();
   },
   methods: {
+    putUsed(item) {
+      let coupon = this.usedCoupon.list.filter(coupon => coupon.id == item.id)[0]
+      console.log(coupon)
+      if(coupon){
+      }else{
+        this.usedCoupon.list.push({id: item.id})
+      }
+      console.log(this.usedCoupon.list);
+    },
     /** 个人信息 */
     getPersonal() {
       this.$request("/personal/home").then(data => {
@@ -596,12 +620,14 @@ img {
           color: #fff;
           display: flex;
           justify-content: space-between;
+          cursor: pointer;
           .price {
             padding-top: 2.3rem;
             padding-left: 1.65rem;
             font-size: 2.55rem;
             font-weight: 800;
             display: flex;
+            cursor: pointer;
             .sign {
               transform: translate(0rem, 0rem);
             }
@@ -680,6 +706,7 @@ img {
           margin: 1rem;
           width: 10rem;
           height: 12rem;
+          cursor: pointer;
           // background: #ccc;
           color: #fff;
           display: flex;
