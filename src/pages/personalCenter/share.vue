@@ -19,7 +19,7 @@
             </div>
             <div class="send">
               当前已成功邀请
-              <span style="color:#5EB131;">0 位</span>
+              <span style="color:#5EB131;">{{listData.length}} 位</span>
             </div>
             <div class="member">
               <vue-seamless :data="listData" :class-option="optionSingleHeight" class="warp">
@@ -62,7 +62,8 @@ export default {
         wechatQrcodeHelper:
           "<p>微信里点“发现”，扫一下</p><p>二维码便可将本文分享至朋友圈。</p>"
       },
-      listData: []
+      listData: [
+      ]
     };
   },
   computed: {

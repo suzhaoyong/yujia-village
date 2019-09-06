@@ -224,9 +224,7 @@ export default {
     },
     showUsed() {
       return item => {
-        console.log(item);
         let coupon = this.usedCoupon.list.filter(id => id == item.id)[0]
-        console.log(coupon);
         if(coupon){
           return true 
         }else{
