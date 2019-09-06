@@ -309,6 +309,16 @@ export default {
     opacity: 1;
     background: #2c2c2c !important;
 }
+.el-carousel__arrow--right{
+    right: 28px !important;
+}
+.el-carousel__arrow--left{
+    left: 28px !important;
+}
+.el-carousel__arrow{
+    position: absolute;
+    right: 28px;
+}
 .swiper-pagination-bullet{
     width: 12px !important;
     height: 12px!important;
@@ -320,7 +330,7 @@ export default {
 }
 .bg_img {
   width: 100%;
-  height: 600px;
+  height: 100%;
   img{
       width: 100%;
       height: 100%;
@@ -389,7 +399,7 @@ export default {
             height: 640px;
             margin: 0 auto;
             .carousel{
-                width: 1350px;
+                width: 1257px;
                 margin: 0 auto;
                 height: 100%;
             .contunt2{
@@ -593,6 +603,7 @@ export default {
                                 background: 0 0;
                                 padding-left: 0;
                                 padding-right: 0;
+                                width: 100%;
                             }
                         }
                         .yogoswiper-butt:hover{
@@ -903,6 +914,7 @@ export default {
                         transition: all 1s;
                         .text-button{
                             color: #2c2c2c;
+                            width: 100%;
                         }
                     }
                     .text-butt:hover{
@@ -919,6 +931,7 @@ export default {
                         .text-button{
                             color: #2c2c2c;
                             font-size: 14px;
+                            width: 100%;
                         }
                     }
                 }

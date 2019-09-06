@@ -57,7 +57,7 @@
                                             <div class="rhomb3"></div>
                                             <div class="rhomb4"></div>
                                         </div>
-                                        <div class="yogoswiper-text">
+                                        <div class="yogoswiper-text" @click="namelistItem(namelist)">
                                             <h3>{{namelist.name}}</h3>
                                             <p class="p1">{{namelist.info}}</p>
                                             <p class="p3">从业时间: {{namelist.num}}年</p>
@@ -561,7 +561,7 @@ export default {
                 margin: 0 auto;
                 margin-bottom: 50px;
                 position: relative;
-                cursor:pointer;
+                cursor: pointer;
                 .margin-auto{
                     width: 100%;
                     margin:0 auto;
@@ -701,6 +701,7 @@ export default {
                         width: 30%;
                         height: 100%;
                         margin-left: 35px;
+                        cursor: pointer;
                         .yogoswiper-butt{
                             width: 120px;
                             border: 1px solid #e2dbc8;
@@ -713,6 +714,7 @@ export default {
                                 background: 0 0;
                                 padding-left: 0;
                                 padding-right: 0;
+                                width: 100%;
                             }
                         }
                         .yogoswiper-butt:hover{

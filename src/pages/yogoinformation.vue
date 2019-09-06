@@ -337,6 +337,7 @@ export default {
                     transition: all 1s;
                     .el-button--text{
                         color: #fff;
+                        width: 100%;
                     }
                 }
                 .count-button-but:hover{
@@ -350,6 +351,7 @@ export default {
                     background-color:#313131; 
                     .el-button--text{
                         color: #fff;
+                        width: 100%;
                     }
                 }
                 .count-button-right{
@@ -612,6 +614,7 @@ export default {
                     transition: all 1s;
                     .el-button--text{
                         color: #fff;
+                        width: 100%;
                     }
                 }
                 .count-button-but:hover{
@@ -625,6 +628,7 @@ export default {
                     background-color:#313131; 
                     .el-button--text{
                         color: #fff;
+                        width: 100%;
                     }
                 }
                 .count-button-right{
@@ -885,6 +889,7 @@ export default {
                     transition: all 1s;
                     .el-button--text{
                         color: #fff;
+                        width: 100%;
                     }
                 }
                 .count-button-but:hover{
@@ -898,6 +903,7 @@ export default {
                     background-color:#313131; 
                     .el-button--text{
                         color: #fff;
+                        width: 100%;
                     }
                 }
                 .count-button-right{
