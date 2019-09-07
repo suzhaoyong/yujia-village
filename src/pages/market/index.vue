@@ -19,28 +19,28 @@
           <div class="market_news-content_box">
             <div class="market_news-content_box-lf">
               <div class="goods_img">
-                <img :src="good_recomment.new[0].new_url_one" alt />
+                <img :src="good_recomment.new.url_one" alt="商品" />
               </div>
               <div class="goods_info">
-                <div class="goods_info-title">{{good_recomment.new[0].desc}}</div>
-                <div class="goods_info-tips">{{good_recomment.new[0].describe}}</div>
-                <div class="goods_info-price">￥{{good_recomment.new[0].sell_price}}</div>
+                <div class="goods_info-title">{{good_recomment.new.desc}}</div>
+                <div class="goods_info-tips">{{good_recomment.new.describe}}</div>
+                <div class="goods_info-price">￥{{good_recomment.new.sell_price}}</div>
                 <div class="goods_info-tags">新款来袭</div>
-                <div class="goods_info-time">{{good_recomment.new[0].new_date}}发售</div>
+                <div class="goods_info-time">{{good_recomment.new.new_date}}发售</div>
                 <div class="goods_info-logo">yoga</div>
               </div>
             </div>
             <div class="market_news-content_box-rh">
               <div class="goods_subimg">
-                <img :src="good_recomment.new[0].new_url_two" alt />
+                <img :src="good_recomment.new.url_two" alt="商品" />
               </div>
               <div class="goods_subimg">
-                <img :src="good_recomment.new[0].new_url_three" alt />
+                <img :src="good_recomment.new.url_three" alt="商品" />
               </div>
               <div
                 class="goods_buy-btn"
                 style="cursor: pointer;"
-                @click="viewGoodsDetail(good_recomment.new[0])"
+                @click="viewGoodsDetail(good_recomment.new)"
               >立即购买</div>
             </div>
           </div>
@@ -51,16 +51,16 @@
         <div class="market_time-content">
           <div class="market_time-content_box">
             <div class="prev_btn-box">
-              <div class="prev_btn hvr-float-shadow" @click="changeDiscountsForu('prev')"></div>
+              <div class="prev_btn hvr-float-shadow" @click="changeDiscountsForu('double','prev')"></div>
             </div>
-            <transition name="list-complete">
-              <div class="goods_list">
+            <div class="goods_list">
+              <transition-group name="fade" tag="div"  style="display: flex;">
                 <div
                   class="goods hvr-underline-from-left"
                   style="cursor: pointer;"
                   @click="viewGoodsDetail(item)"
-                  v-for="(item,index) in good_recomment.discounts.de"
-                  :key="index"
+                  v-for="(item,index) in discount.double.list"
+                  :key="item.id"
                 >
                   <div class="goods-img">
                     <img :src="item.discount_url" alt />
@@ -71,12 +71,12 @@
                     <div class="goods-price-new">￥{{item.sell_price - item.discount}}</div>
                   </div>
 
-                  <div class="add-shop-btn">加入购物车</div>
+                  <div class="add-shop-btn">查看详情</div>
                 </div>
-              </div>
-            </transition>
+              </transition-group>
+            </div>
             <div class="next_btn-box">
-              <div class="next_btn hvr-float-shadow" @click="changeDiscountsForu('next')"></div>
+              <div class="next_btn hvr-float-shadow" @click="changeDiscountsForu('double','next')"></div>
             </div>
           </div>
         </div>
@@ -86,16 +86,16 @@
         <div class="market_time-content">
           <div class="market_time-content_box">
             <div class="prev_btn-box">
-              <div class="prev_btn hvr-float-shadow" @click="changeDiscountsForu('prev')"></div>
+              <div class="prev_btn hvr-float-shadow" @click="changeDiscountsForu('single','prev')"></div>
             </div>
-            <transition name="list-complete">
-              <div class="goods_list">
+            <div class="goods_list">
+              <transition-group name="fade" tag="div" style="display: flex;">
                 <div
                   class="goods bg hvr-underline-from-left"
                   style="cursor: pointer;"
                   @click="viewGoodsDetail(item)"
-                  v-for="(item,index) in good_recomment.discounts.re"
-                  :key="index"
+                  v-for="(item,index) in discount.single.list"
+                  :key="item.id"
                 >
                   <div class="goods-img bg">
                     <img :src="item.discount_url" alt />
@@ -106,12 +106,12 @@
                     <div class="goods-price-new">￥{{item.sell_price - item.discount}}</div>
                   </div>
 
-                  <div class="add-shop-btn">加入购物车</div>
+                  <div class="add-shop-btn">查看详情</div>
                 </div>
-              </div>
-            </transition>
+              </transition-group>
+            </div>
             <div class="next_btn-box">
-              <div class="next_btn hvr-float-shadow" @click="changeDiscountsForu('next')"></div>
+              <div class="next_btn hvr-float-shadow" @click="changeDiscountsForu('single','next')"></div>
             </div>
           </div>
         </div>
@@ -186,10 +186,20 @@ export default {
   data() {
     return {
       good_recomment: {
-        new: [{ new_url_one: "" }],
+        new: { new_url_one: "" },
         comment: [],
-        discount: [],
+        discount: {},
         discounts: {}
+      },
+      discount: {
+        single: {
+          list: [],
+          cur_pointer: 0
+        },
+        double: {
+          list: [],
+          cur_pointer: 0
+        }
       },
       market: {
         news_good: {}
@@ -208,16 +218,11 @@ export default {
   },
   mounted() {
     getGoodRecomment().then(data => {
-      this.good_recomment = data;
-      this.good_recomment.discounts = {};
-      this.good_recomment.discounts.de = [
-        ...data.discount.slice(0, 2),
-        ...data.discount.slice(0, 1)
-      ];
-      this.good_recomment.discounts.re = [
-        ...data.discount.slice(3, 5),
-        ...data.discount.slice(3, 4)
-      ];
+      this.good_recomment.new = data.new;
+      this.good_recomment.comment = data.comment;
+      this.good_recomment.discount = data.discount;
+      this.discount.double.list = data.discount.double[0];
+      this.discount.single.list = data.discount.single[0];
       this.recommend_main = data.comment[0].data[0];
       this.recommend_menu.select = data.comment[0];
       this.recommend_list = data.comment[0].data;
@@ -232,26 +237,48 @@ export default {
         }
       });
     },
-    changeDiscountsForu(option) {
+    changeDiscountsForu(type, option) {
       const obj_temp = {
         prev: this.getPrevDiscounts,
         next: this.getNextDiscounts
       };
-      obj_temp[option]();
+      obj_temp[option](type);
     },
     selectRecommendMenuType(item) {
       this.recommend_menu.select = item;
       this.recommend_list = item.data;
       this.recommend_main = item.data[0];
     },
-    getPrevDiscounts() {
-      this.getMarketDiscounts();
+    getNextDiscounts(type) {
+      if (
+        this.discount[type].cur_pointer >=
+        this.good_recomment.discount[type].length - 1
+      ) {
+        this.discount[type].cur_pointer = 0;
+        this.discount[type].list = this.good_recomment.discount[type][
+          this.discount[type].cur_pointer
+        ];
+        return;
+      }
+      this.discount[type].cur_pointer += 1;
+      this.discount[type].list = this.good_recomment.discount[type][
+        this.discount[type].cur_pointer
+      ];
     },
-    getNextDiscounts() {
-      this.getMarketDiscounts();
+    getPrevDiscounts(type) {
+      if (this.discount[type].cur_pointer <= 0) {
+        this.discount[type].cur_pointer =
+          this.good_recomment.discount[type].length - 1;
+        this.discount[type].list = this.good_recomment.discount[type][
+          this.discount[type].cur_pointer
+        ];
+        return;
+      }
+      this.discount[type].cur_pointer -= 1;
+      this.discount[type].list = this.good_recomment.discount[type][
+        this.discount[type].cur_pointer
+      ];
     },
-    getMarketNews() {},
-    getUserInfo() {},
     goMarketDetail() {
       this.$router.push("/market/detail");
     },
@@ -319,14 +346,23 @@ export default {
   -ms-user-select: none;
   user-select: none;
 }
-.list-complete-item {
+
+.fade-enter-active, .fade-leave-active {
   transition: all 1s;
+}
+.fade-enter, .fade-leave-to
+/* .fade-leave-active for below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(30px);
+}
+.fade-complete-item {
+  transition: all 0.6s;
   display: inline-block;
-  margin-right: 10px;
+  // margin-right: 10px;
 }
 .list-complete-enter, .list-complete-leave-to
 /* .list-complete-leave-active for below version 2.1.8 */ {
-  opacity: 0;
+  opacity: 0.4;
   transform: translateY(30px);
 }
 .list-complete-leave-active {
@@ -542,12 +578,13 @@ img {
       position: absolute;
       right: 100%;
       bottom: 0;
-      width: 100vh;
+      width: 100vw;
       height: 3rem;
       background: #eee;
     }
     &-content {
       padding-bottom: 3rem;
+      overflow: hidden;
       &_box {
         display: flex;
         justify-content: space-around;
@@ -590,10 +627,13 @@ img {
         }
         .goods_list {
           display: flex;
+          width: 48rem;
+          justify-content: center;
           height: 27.65rem;
           .goods {
             width: 14rem;
             height: 100%;
+            overflow: visible;
             // background: #fff;
             transform: skewX(15deg);
             padding: 0 1rem;

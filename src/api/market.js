@@ -221,3 +221,14 @@ export function postGetWechatOrder(args = {}) {
   params = Object.assign({}, params, args)
   return request.post(`/getWechatOrder`, params)
 }
+
+
+/** 订单物流详情  */
+export function postUserExpressage(args = {}) {
+  let params = {
+    id: "", // 统一订单编号,
+    num: ""
+  }
+  params = Object.assign({}, params, args)
+  return request.post(`/userExpressage`, params)
+}

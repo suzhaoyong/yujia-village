@@ -38,7 +38,10 @@
                   <div class="operate">
                     <!-- <div class="time">剩余23小时57分钟</div> -->
                     <div class="pay" v-if="item.status === '待付款'" @click="pay(item)">{{item.status}}</div>
-                    <div class="pay" v-else>{{item.status}}</div>
+                    <div class="pay" v-else>
+                      <div class>{{item.status}}</div>
+                      <div @click="viewExpressage(item)">查看物流信息</div>
+                    </div>
                     <div class="cancel" v-if="item.status === '待付款'">取消订单</div>
                   </div>
                 </div>
@@ -52,10 +55,28 @@
     <div class="payway" v-if="playcode.show">
       <payway v-if="playcode.show" :order="playcode.order"></payway>
     </div>
+    <el-dialog title="物流信息" :visible.sync="express.show">
+      <div class="block">
+        <el-timeline>
+          <el-timeline-item
+            v-for="(activity, index) in express.info"
+            :key="index"
+            :icon="activity.icon"
+            :type="activity.type"
+            :color="activity.color"
+            :size="activity.size"
+            :timestamp="activity.timestamp"
+          >{{activity.content}}</el-timeline-item>
+        </el-timeline>
+      </div>
+      <span slot="footer">
+        <el-button type="primary" @click="express.show=false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
-import { getUserOrder } from "@/api/market";
+import { getUserOrder, postUserExpressage } from "@/api/market";
 import Payway from "../goods/payway";
 export default {
   components: {
@@ -63,6 +84,18 @@ export default {
   },
   data() {
     return {
+      express: {
+        show: false,
+        info: [
+          {
+            content: "物流订单创建中",
+            timestamp: "2019-09-5 20:46",
+            size: "large",
+            type: "primary",
+            icon: "el-icon-more"
+          }
+        ]
+      },
       playcode: {
         show: false,
         order: {
@@ -97,6 +130,14 @@ export default {
     });
   },
   methods: {
+    viewExpressage(goods) {
+      console.log(goods);
+      this.express.show = true
+      const { out_trade_no, paymentNum } = goods;
+      postUserExpressage({ id: out_trade_no, num: paymentNum }).then(data => {
+        console.log(data);
+      });
+    },
     viewGoodsDetail(goods) {
       this.$router.push({
         name: "detailGoods",
