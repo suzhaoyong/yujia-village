@@ -193,7 +193,9 @@
               @click="selectItem(item)"
               :key="index"
             >
-              <img :src="item.teacher_img" />
+              <div class="news_bg_img" :style="`backgroundImage: url(${item.teacher_img})`">
+                <!-- <img :src="item.teacher_img" /> -->
+              </div>
               <div class="bian">
                 <div class="div5-list">
                   <div class="li-text">
@@ -1131,7 +1133,7 @@ img {
     }
     .cultivate-count-div5.left {
       justify-content: flex-end;
-      img {
+      .news_bg_img {
         order: 3;
       }
       .bian {
@@ -1167,9 +1169,18 @@ img {
       display: flex;
       align-items: flex-end;
       position: relative;
-      img {
+      .news_bg_img {
         width: 25rem;
         height: 18rem;
+        background-size: cover;
+
+        background-repeat: no-repeat;
+        background-position: top center;
+        img {
+          object-fit: cover;
+          height: 100%;
+          width: 100%;
+        }
       }
       .bian {
         width: 22rem;

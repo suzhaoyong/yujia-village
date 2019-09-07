@@ -6,7 +6,9 @@
         <div class="tags">
           <div @click="activeType = 'all'" :class="['tag', isActive('all')]">全部订单</div>
           <div @click="activeType = 'pay'" :class="['tag', isActive('pay')]">待付款</div>
-          <div @click="activeType = 'send'" :class="['tag', isActive('send')]">待收货</div>
+          <div @click="activeType = 'send'" :class="['tag', isActive('send')]">待发货</div>
+          <div @click="activeType = 'receive'" :class="['tag', isActive('receive')]">待收货</div>
+          <div @click="activeType = 'success'" :class="['tag', isActive('success')]">已完成</div>
         </div>
         <div class="table">
           <div v-for="(item, index) in showOrder" :key="index">
@@ -39,10 +41,18 @@
                     <!-- <div class="time">剩余23小时57分钟</div> -->
                     <div class="pay" v-if="item.status === '待付款'" @click="pay(item)">{{item.status}}</div>
                     <div class="pay" v-else>
-                      <div class>{{item.status}}</div>
-                      <div @click="viewExpressage(item)">查看物流信息</div>
+                      <div style="cursor: initial;" class>{{item.status}}</div>
+                      <div
+                        style="padding-top:0.8rem;"
+                        @click.stop="expressage(item, g_index, 'view')"
+                      >查看物流信息</div>
                     </div>
-                    <div class="cancel" v-if="item.status === '待付款'">取消订单</div>
+                    <div
+                      @click="expressage(item, g_index, 'sure')"
+                      style="padding-top:0.4rem;cursor: pointer;"
+                      v-if="item.status === '待收货'"
+                    >确认收货</div>
+                    <!-- <div class="cancel" v-if="item.status === '待付款'">取消订单</div> -->
                   </div>
                 </div>
               </div>
@@ -53,20 +63,20 @@
       </div>
     </div>
     <div class="payway" v-if="playcode.show">
-      <payway v-if="playcode.show" :order="playcode.order"></payway>
+      <payway @close="payResult" v-if="playcode.show" :order="playcode.order"></payway>
     </div>
-    <el-dialog title="物流信息" :visible.sync="express.show">
+    <el-dialog title="物流信息" :visible.sync="express.show" v-if="express.show">
       <div class="block">
         <el-timeline>
+          <!-- :icon="activity.icon"
+            :type="activity.type"
+            :color="activity.color"
+          :size="activity.size"-->
           <el-timeline-item
             v-for="(activity, index) in express.info"
             :key="index"
-            :icon="activity.icon"
-            :type="activity.type"
-            :color="activity.color"
-            :size="activity.size"
-            :timestamp="activity.timestamp"
-          >{{activity.content}}</el-timeline-item>
+            :timestamp="activity.accept_time"
+          >{{activity.accept_station}}</el-timeline-item>
         </el-timeline>
       </div>
       <span slot="footer">
@@ -76,7 +86,11 @@
   </div>
 </template>
 <script>
-import { getUserOrder, postUserExpressage } from "@/api/market";
+import {
+  getUserOrder,
+  postUserExpressage,
+  postConfirmOrder
+} from "@/api/market";
 import Payway from "../goods/payway";
 export default {
   components: {
@@ -89,7 +103,6 @@ export default {
         info: [
           {
             content: "物流订单创建中",
-            timestamp: "2019-09-5 20:46",
             size: "large",
             type: "primary",
             icon: "el-icon-more"
@@ -130,13 +143,46 @@ export default {
     });
   },
   methods: {
-    viewExpressage(goods) {
-      console.log(goods);
-      this.express.show = true
-      const { out_trade_no, paymentNum } = goods;
-      postUserExpressage({ id: out_trade_no, num: paymentNum }).then(data => {
-        console.log(data);
+    payResult() {
+      this.playcode.show = false;
+      // this.getPersonal()
+      getUserOrder().then(data => {
+        this.orders = data;
       });
+    },
+    /** 个人信息 */
+    getPersonal() {
+      this.$request("/personal/home").then(data => {
+        store.dispatch("INFO", data);
+      });
+    },
+    expressage(goods, index, type) {
+      const { oid, num } = goods.data[index];
+      const obj = {
+        view: () => {
+          this.express.show = true;
+          postUserExpressage({ id: oid }).then(({ data }) => {
+            if (data) {
+              this.express.info = data;
+            } else {
+              this.express.info = [
+                {
+                  accept_station: "物流订单创建中",
+                  size: "large",
+                  type: "primary",
+                  icon: "el-icon-more"
+                }
+              ];
+            }
+          });
+        },
+        sure: () => {
+          postConfirmOrder({ id: oid }).then(data => {
+            this.$message({ type: "success", message: "确认收货成功" });
+          });
+        }
+      };
+      obj[type]();
     },
     viewGoodsDetail(goods) {
       this.$router.push({

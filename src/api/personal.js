@@ -113,3 +113,13 @@ export function postUpdateTeacherInfo(args) {
   params = Object.assign({}, params, args)
   return request.post(`/personal/updateTeacherInfo`, params)
 }
+
+/** 充值记录 */
+export function getRechargeRecord() {
+  return request(`/personal/rechargeRecord`)
+}
+
+/** 积分记录 */
+export function getFractioRecord() {
+  return request(`/personal/fractioRecord`)
+}

@@ -143,6 +143,7 @@ export default {
         this.$alert("前往订单中心", "成功", {
           confirmButtonText: "立即前往",
           callback: action => {
+            this.$emit('close')
             this.$router.push({
               name: "recode"
             });
@@ -197,6 +198,7 @@ export default {
                     this.$alert("前往订单中心", "成功", {
                       confirmButtonText: "立即前往",
                       callback: action => {
+                        this.$emit('close')
                         this.$router.push({
                           name: "recode"
                         });
@@ -247,6 +249,7 @@ export default {
                     this.$alert("前往订单中心", "成功", {
                       confirmButtonText: "立即前往",
                       callback: action => {
+                        this.$emit('close')
                         this.$router.push({
                           name: "recode"
                         });
