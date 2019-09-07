@@ -423,9 +423,9 @@ export default {
     border-color: #E2DBC8;
 }
 .distpicker-address-wrapper select{
-    width: 145px;
-    padding: 0px 4px;
-    font-size: 14px;
+    width: 145px !important;
+    padding: 0px 4px !important;
+    font-size: 14px !important;
 }
 .bg_img {
   width: 100%;
