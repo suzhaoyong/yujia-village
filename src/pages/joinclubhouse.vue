@@ -185,7 +185,10 @@ export default {
           7: {message:'您已加盟成功',type:'success'},
           8: {message:'您已加盟成功',type:'success'},
         }
-        obj[identity_auth] && this.$message(obj[identity_auth])
+        obj[identity_auth] && this.$alert(`${obj[identity_auth].message}`, '温馨提示', {
+          confirmButtonText: '确定',
+        })
+        // obj[identity_auth] && this.$message(obj[identity_auth])
       }else{
         Bus.$emit("login", true);
       }
