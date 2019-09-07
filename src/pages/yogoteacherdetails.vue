@@ -2,18 +2,14 @@
     <el-col :span="24">
         <div class="yogoteacher-main">
             <div class="yogoteacher-count-div1">
-                <div class="count-img" :style="{ 'background-image': 'url(' + teacher.path + ')','background-repeat':'no-repeat','background-size':'100% 100%' }">
-                    <!-- <img :src="teacher.path" class="img1"/> -->
-                    <div class="count-div">
+                <div class="count-img">
                     <div class="count-name">
-                        <span class="span1">瑜伽名师<span class="span2"> — {{teacher.name}}</span></span>
+                        <span class="span1">瑜伽名师<span class="span2"> —{{teacher.name}}</span></span>
                     </div>
-                    <img :src="teacher.cover" class="count-name-img"/>
+                    <div class="count-imgpic">
+                      <img :src="teacher.cover" class="count-name-img"/>
                     </div>
                 </div>
-            </div>
-            <div class="yogoteacher-count-div2">
-                <img src="../assets/image83.png" class="count-name-img2"/>
             </div>
             <div class="yogoteacher-count-div3">
                 <div class="yogofigcaption">
@@ -39,9 +35,6 @@
                         <div class="showimg">
                            <img :src="item.cover" class="showimg1"/>
                         </div>
-                        <!-- <div class="showtext">
-                            <span class="show-span">{{item.theme}}</span>
-                        </div> -->
                         </div>
                     </div>
                 </div>
@@ -51,7 +44,6 @@
                     <span class="page-span8">我寻寻觅觅却找不到您的踪迹~</span>
                     </div>
                 </div>
-                <!-- <img src="../assets/image85.png" class="count-name-img5"/> -->
             </div>
         </div>
     </el-col>
@@ -97,98 +89,103 @@ export default {
     overflow: hidden;
     .yogoteacher-count-div1{
         width: 100%;
-        height: 100%;
+        height: 730px;
         margin: 0 auto;
         background-color: #3E3E3E;
+        background-image: url('../assets/bgteacher.png');
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
         .count-img{
-            width: 100%;
-            height: 1334px;
+            width: 1200px;
+            height: 100%;
             position: relative;
+            margin: 0 auto;
             cursor: pointer;
-            .img1{
-                width: 100%;
-                height: 100%;
-                position: absolute;
-            }
-            .count-div{
-                width: 1200px;
-                margin: 0 auto;
-                height: 100%;
-                position: relative;
             .count-name{
-                width: 80%;
+                width: 43%;
                 margin: 0 auto;
-                border: 2px solid #AD8C66;
-                height: 192px;
+                border: 3px solid #43516A;
+                height: 100px;
                 position: absolute;
-                bottom: 14%;
-                right: 120px;
-                transition: all 1s;
-                line-height: 192px;
+                bottom: 20%;
+                left: 2%;
+                transition: all .9s;
+                line-height: 85px;
                 text-align: center;
+                border-image: -webkit-linear-gradient(left, #AE8D66, #43516A) 30 30;
+                border-image: -moz-linear-gradient(left, #AE8D66, #43516A) 30 30;
+                border-image: linear-gradient( left,#AE8D66, #43516A) 30 30;
                 .span1{
-                    font-size:4rem;
+                    font-size:2rem;
                     font-family:Gulim;
                     font-weight:400;
                     font-style:italic;
-                    color: #C19765;
+                    color: #43516A;
                     .span2{
-                        font-size:4rem;
+                        font-size:2rem;
                         font-family:Gulim;
                         font-weight:400;
                         font-style:italic;
-                        color: #ffffff;
+                        color: #43516A;
                     }
                 }
             }
-            .count-name:hover{
-                width: 80%;
-                margin: 0 auto;
-                border: 2px solid #AD8C66;
-                height: 192px;
-                position: absolute;
-                bottom: 14%;
-                right: 120px;
-                transform: scale(.98);
-                text-align: center;
-                line-height: 192px;
-                .span1{
-                    font-size:4rem;
-                    font-family:Gulim;
-                    font-weight:400;
-                    font-style:italic;
-                    color: #C19765;
-                    .span2{
-                        font-size:4rem;
-                        font-family:Gulim;
-                        font-weight:400;
-                        font-style:italic;
-                        color: #ffffff;
-                    }
-                }
-            }
-            .count-name-img{
-                width: 500px;
-                height: 670px;
+            .count-imgpic{
+                width: 340px;
+                height: 370px;
                 position: absolute;
                 top: 10%;
+                left: 19%;
+                background-image: url('../assets/bgimg22.png');
+                background-repeat: no-repeat;
+                background-size: 100% 100%;
+                .count-name-img{
+                    width: 255px;
+                    height: 270px;
+                    position: absolute;
+                    top: 8%;
+                    left: 11%;
+                }
             }
-         }
-        }
-    }
-    .yogoteacher-count-div2{
-        width: 100%;
-        height: 210px;
-        .count-name-img2{
-            width: 100%;
-            height: 100%;
+            // .count-name:hover{
+            //     width: 43%;
+            //     margin: 0 auto;
+            //     border: 3px solid #43516A;
+            //     height: 100px;
+            //     position: absolute;
+            //     bottom: 20%;
+            //     left: 2%;
+            //     transform: scale(.98);
+            //     text-align: center;
+            //     line-height: 85px;
+            //     border-image: -webkit-linear-gradient(left, #AE8D66, #43516A) 30 30;
+            //     border-image: -moz-linear-gradient(left, #AE8D66, #43516A) 30 30;
+            //     border-image: linear-gradient( left,#AE8D66, #43516A) 30 30;
+            //     .span1{
+            //         font-size:2rem;
+            //         font-family:Gulim;
+            //         font-weight:400;
+            //         font-style:italic;
+            //         color: #43516A;
+            //         .span2{
+            //             font-size:2rem;
+            //             font-family:Gulim;
+            //             font-weight:400;
+            //             font-style:italic;
+            //             color: #43516A;
+            //         }
+            //     }
+            // }
         }
     }
     .yogoteacher-count-div3{
         width: 100%;
-        height: 754px;
+        height: 550px;
         cursor: pointer;
         background-color: #282828;
+        background-image: url('../assets/bgimg20.png');
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
         .yogofigcaption{
             width: 1200px;
             height: 100%;
@@ -196,39 +193,43 @@ export default {
             display: flex;
             position: relative;
             .count-name-img3{
-                width: 566px;
-                height: 782px;
+                width: 400px;
+                height: 470px;
                 position: absolute;
-                bottom: 14%;
+                bottom: 27%;
+                left: 2%;
            }
            .yogofigcaption-title{
-               width: 45%;
-               height: 600px;
+               width: 57%;
+               height: 100%;
                position: absolute;
                right: 0;
                h2{
-                    font-size:2.5rem;
+                    font-size:1.7rem;
                     font-family:Microsoft YaHei;
                     font-weight:bold;
                     color: #fff;
-                    margin-top: 15%;
+                    margin-top: 10%;
                }
                .p1{
                    color: #fff;
-                   font-size: 1.5rem;
-                   font-family:Microsoft YaHei;
+                   font-size: 1.1rem;
+                   font-family:Myriad Pro;
+                   font-weight:400;
                }
                .p2{
                    color: #fff;
-                   font-size: 20px;
+                   font-size: 18px;
                    font-family:Microsoft YaHei;
-                   margin-top: 10%;
+                   margin-top: 7%;
+                   font-weight:400;
                }
                .p3{
                    color: #fff;
-                   font-size: 20px;
+                   font-size: 18px;
                    display: flex;
                    font-family:Microsoft YaHei;
+                   font-weight:400;
                }
            }
         }
@@ -236,7 +237,7 @@ export default {
     .yogoteacher-count-div4{
         width: 100%;
         height: 100%;
-        background-image: url('../assets/image84.png');
+        background-image: url('../assets/bgimg21.png');
         background-repeat: no-repeat;
         background-size: 100% 100%;
         position: relative;
@@ -248,14 +249,14 @@ export default {
             text-align: center;
             margin: 0 auto;
             position: relative;
-            padding-top: 40px;
+            padding-top: 3%;
             .border-left{
                 width:10%;
                 height: 2px;
                 background-color: #65627D;
                 position: absolute;
                 left:28%;
-                bottom: 25%;
+                bottom: 12%;
             }
             .border-right{
                 width: 10%;
@@ -263,7 +264,7 @@ export default {
                 background-color: #65627D;
                 position: absolute;
                 right: 28%;
-                bottom: 25%;
+                bottom: 12%;
             }
             .nav-text{
                 color: #474858;
@@ -274,10 +275,10 @@ export default {
             }
             h2{
                 color: #65627D;
-                font-size: 3rem;
+                font-size: 2.5rem;
                 font-family:Microsoft YaHei;
                 font-weight:bold;
-                padding-top: 24px;
+                padding-top: 4%;
             }
         }
         .yogo-cont-show{
@@ -371,7 +372,7 @@ export default {
             margin: 0 auto;
             text-align: center;
             line-height: 600px;
-            background-color: #D2CEE4;
+            // background-color: #D2CEE4;
             .Default-main8{
                 width: 1200px;
                 height: 100%;

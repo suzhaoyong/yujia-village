@@ -7,7 +7,7 @@
             </el-row>
             </el-carousel-item>
         </el-carousel> -->
-        <el-carousel height="600px" indicator-position="none" :autoplay="false">
+        <!-- <el-carousel height="600px" indicator-position="none" :autoplay="false">
         <el-carousel-item>
             <el-row>
                 <el-col :span="24">
@@ -60,7 +60,7 @@
                 </el-col>
             </el-row>
         </el-carousel-item>
-        </el-carousel>
+        </el-carousel> -->
     </el-col>
 </template>
 <script>
@@ -81,28 +81,28 @@ export default {
 };
 </script>
 <style lang="scss" scope>
-.el-carousel__item .banner_img {
-    width: 100%;
-    height: 600px;
-    margin: 0;
-  }
-  .banner_button{
-    position: absolute;
-    top: 77%;
-    width: 172px;
-    background-color: #9AB1C1;
-    height: 45px;
-    border-radius: 18px;
-    right: 44%;
-    text-align: center;
-    line-height: 45px;
-    .butt{
-      font-size:18px;
-      font-family:Microsoft YaHei;
-      font-weight:bold;
-      color: #FFFFFF;
-    }
-  }
+// .el-carousel__item .banner_img {
+//     width: 100%;
+//     height: 600px;
+//     margin: 0;
+//   }
+//   .banner_button{
+//     position: absolute;
+//     top: 77%;
+//     width: 172px;
+//     background-color: #9AB1C1;
+//     height: 45px;
+//     border-radius: 18px;
+//     right: 44%;
+//     text-align: center;
+//     line-height: 45px;
+//     .butt{
+//       font-size:18px;
+//       font-family:Microsoft YaHei;
+//       font-weight:bold;
+//       color: #FFFFFF;
+//     }
+//   }
   // .el-carousel__item:nth-child(2n) {
   //   background-color: #99a9bf;
   // }
