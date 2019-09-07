@@ -133,6 +133,14 @@ const router = new Router({
           component: () => import('@/pages/personalCenter/certification')
         },
         {
+          path: 'useHistory/:type',
+          name: 'useHistory',
+          meta: {
+            header_name: 'personal'
+          },
+          component: () => import('@/pages/personalCenter/useHistory')
+        },
+        {
           path: 'safety-center',
           name: 'safety-center',
           meta: {

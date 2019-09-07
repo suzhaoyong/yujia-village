@@ -14,11 +14,12 @@
           <span class="identity" v-if="info.user.identity_auth == 8">已认证（馆主、教练）</span>
         </div>
         <div class="info">
-          <div class="balance">
-            可金币用
+          <div class="balance" @click="viewHistory('glod')">
+            金币可用
             <span class="number">{{info.user.money}}</span>
           </div>
           <div class="recharge" @click="changMoney">充值</div>
+          <div class="recharge" @click="viewHistory('score')">积分</div>
           <div class="withdraw">
             <!-- 提现 -->
           </div>
@@ -68,6 +69,14 @@ export default {
     },
     goPage(name) {
       this.$router.push(`/personal/${name}`);
+    },
+    viewHistory(type) {
+      this.$router.push({
+        name: "useHistory",
+        params: {
+          type: type
+        }
+      });
     },
     changMoney() {
       this.$router.push({
@@ -128,6 +137,7 @@ img {
     display: flex;
     color: #2c2c2c;
     .balance {
+      cursor: pointer;
       .number {
         font-weight: 800;
       }

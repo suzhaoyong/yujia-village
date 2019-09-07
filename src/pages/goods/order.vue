@@ -629,6 +629,7 @@ img {
       box-shadow: 0rem 0.05rem 0.1rem #ccc;
       border-bottom: 1px solid #ccc;
       border-top: none;
+      overflow: hidden;
       .header {
         display: flex;
         align-items: center;

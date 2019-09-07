@@ -105,7 +105,7 @@
         </div>
         <div class="info">
           <div class="balance">
-            <div class="title">
+            <div class="titles">
               <span>账户金币</span>
               <span
                 v-if="hiddenMoney"
@@ -120,7 +120,7 @@
             </div>
             <div class="money">
               <span style="min-width: 4em;display: inline-block;">{{hiddenMoney || info.user.money}}</span>
-              <div class="recharge" @click="step.type = 'recharge'">充值</div>
+              <!-- <div class="recharge" @click="step.type = 'recharge'">充值</div> -->
               <!-- <div class="cash">提现</div> -->
             </div>
             <span class="all-card" v-show="false">我的全部银行卡</span>
@@ -142,15 +142,16 @@
             </div>
           </div>
         </div>
-        <div class="pay-way" v-show="rechargeForm.num || money">
-          <div style="padding-left: 1.5rem;">支付方式</div>
+        <!-- <div class="pay-way" v-show="rechargeForm.num || money"> -->
+        <div class="pay-way">
+          <div style="padding-left: 1.5rem;font-size: 0.8rem;">支付方式</div>
           <div class="way">
             <span :class="[isPayActive(3)]" @click="rechargeChange('payment', '3')">微信</span>
             <span :class="[isPayActive(2)]" @click="rechargeChange('payment', '2')">支付宝</span>
             <!-- <span>银行卡</span> -->
           </div>
           <div class="sure" style="padding-top:2em;">
-            <span @click="reCharge">确定</span>
+            <!-- <span @click="reCharge">确定</span> -->
           </div>
 
           <div class="pay-code" v-show="playcode.show">
@@ -295,20 +296,20 @@ export default {
     },
     rechargeChange(name, num) {
       this.rechargeForm[name] = num;
-      if (name === "payment") {
-        timer && clearInterval(timer);
-        this.playcode = { show: false, src: "", count: 0, success: false };
-        // (this.rechargeForm.num || this.money) && this.reCharge();
-      }
+      // if (name === "payment") {
+      timer && clearInterval(timer);
+      this.playcode = { show: false, src: "", count: 0, success: false };
+      (this.rechargeForm.num || this.money) && this.reCharge();
+      // }
     },
     /** 充值 */
     reCharge() {
       timer && clearInterval(timer);
       if (this.rechargeForm.payment == "") {
-        this.$message({
-          type: "warning",
-          message: "请选择支付方式"
-        });
+        // this.$message({
+        //   type: "warning",
+        //   message: "请选择支付方式"
+        // });
         return;
       }
       const params = Object.assign({}, this.rechargeForm);
@@ -519,7 +520,8 @@ img {
     cursor: pointer;
     padding: 30px 40px 30px 40px;
     .balance {
-      .title {
+      .titles {
+        font-size: 1.1rem;
         padding-bottom: 0.4rem;
       }
 
@@ -658,12 +660,18 @@ img {
     cursor: pointer;
     padding: 30px 40px 30px 40px;
     .balance {
-      .title {
+      .titles {
+        span {
+          font-size: 0.8rem;
+        }
         padding-bottom: 0.4rem;
       }
 
       .money {
         padding-bottom: 0.4rem;
+        span {
+          font-size: 0.8rem;
+        }
         .recharge {
           display: inline-block;
           padding: 2px 20px;
@@ -687,19 +695,33 @@ img {
       padding-top: 2rem;
       .title {
         padding-bottom: 0.4rem;
+        span {
+          font-size: 0.8rem;
+        }
       }
       .money-wrap {
         span {
-          padding: 0 1em;
-          border: 1px solid #efefef;
+          border: 1px solid #d6d6d6;
+          width: 3rem;
+          text-align: center;
+          margin-right: 1rem;
+          margin-bottom: 1rem;
+          height: 2.5rem;
+          line-height: 2.5rem;
+          display: inline-block;
+          font-size: 0.9rem;
+          font-weight: 200;
+          transition: border-color 0.3s linear;
+          &:hover {
+            border-color: #3cb015;
+          }
           &.active {
-            border: 1px solid #e8f5db;
-            background: #e8f5db;
-            // color:#fff;
+            // background: #e8f5db;
+            border-color: #3cb015;
           }
         }
         .input-money {
-          width: 5em;
+          width: 8em;
           margin-top: 1em;
           position: relative;
           &::after {
@@ -710,12 +732,16 @@ img {
             content: "元";
             display: inline-block;
             padding-left: 1em;
+            font-size: 1rem;
           }
           input {
             width: 100%;
             border: 1px solid #efefef;
+            height: 2.5rem;
+            padding: 0 1rem;
+            transition: border-color 0.3s linear;
             &:focus {
-              border: 1px solid #efefef;
+              border: 1px solid #aed164;
               outline: none;
             }
           }
@@ -732,11 +758,23 @@ img {
       padding-left: 1.5rem;
       padding-top: 0.5rem;
       span {
+        font-size: 0.8rem;
         padding: 0 1em;
         margin-right: 0.5em;
+        width: 6em;
+        height: 40px;
+        line-height: 38px;
+        text-align: center;
+        border: 1px solid #d6d6d6;
         cursor: pointer;
+        display: inline-block;
+        transition: border-color 0.3s linear;
+        &:hover {
+          border-color: #3cb015;
+        }
         &.active {
-          color: #4093a5;
+          // background: #e8f5db;
+          border-color: #3cb015;
         }
       }
     }
@@ -747,11 +785,12 @@ img {
       justify-content: center;
       flex-direction: column;
       .code {
-        width: 5rem;
-        height: 5rem;
+        width: 10rem;
+        height: 10rem;
         border: 1px solid #ccc;
       }
       .tips {
+        text-align: right;
       }
     }
     .sure {

@@ -13,7 +13,7 @@
     "axios": "^0.18.1",
     "axios-mock-adapter": "^1.15.0",
     "echarts": "^4.1.0",
-    "element-ui": "^2.4.11",
+    "element-ui": "^2.9.2",
     "es6-promise": "^4.2.5",
     "file-saver": "^2.0.0-rc.4",
     "font-awesome": "^4.7.0",

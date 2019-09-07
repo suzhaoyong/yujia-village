@@ -106,25 +106,44 @@
         <div class="body">
           <div class="vouchers">
             <div
-              class="voucher hvr-curl-bottom-right"
-              :style="`background-image:url(${voucherMoneyImg(index)}); background-size: 100% 100%;`"
+              class="flip-container"
+              ontouchstart="this.classList.toggle('hover');"
               v-for="(item, index) in info.cash"
               :key="index"
             >
-              <div class="price">
-                <div class="sign">¥</div>
-                <div class="number">{{item.money}}</div>
-              </div>
-              <div class="name-time-used">
-                <div class="name">{{item.name}}</div>
-                <div class="used" @click="putUsed(item)" v-if="!showUsed(item)">详细使用记录</div>
-                <div class="time-btn" v-if="showUsed(item)">
-                  <div class="time">
-                    有效期至
-                    <br />
-                    {{item.endDate}}
+              <div class="flipper">
+                <div
+                  class="voucher front"
+                  :style="`background-image:url(${voucherMoneyImg(index)}); background-size: 100% 100%;`"
+                >
+                  <div class="price">
+                    <div class="sign">¥</div>
+                    <div class="number">{{item.money}}</div>
                   </div>
-                  <div class="btn">使用记录</div>
+                  <div class="name-time-used">
+                    <div class="name">{{item.name}}</div>
+                    <div class="used" @click="putUsed(item)" v-if="!showUsed(item)">详细使用记录</div>
+                  </div>
+                </div>
+                <div
+                  class="voucher back"
+                  :style="`background-image:url(${voucherMoneyImg(index)}); background-size: 100% 100%;`"
+                >
+                  <div class="price">
+                    <div class="sign">¥</div>
+                    <div class="number">{{item.money}}</div>
+                  </div>
+                  <div class="name-time-used">
+                    <div class="name">{{item.name}}</div>
+                    <div class="time-btn">
+                      <div class="time">
+                        有效期至
+                        <br />
+                        {{item.endDate}}
+                      </div>
+                      <div class="btn" @click="viewUsed(item)">使用记录</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -172,11 +191,18 @@
         </div>
       </div>
     </div>
+    <el-dialog title="使用记录" :visible.sync="used.show">
+      使用记录
+      <div slot="footer">
+        <el-button style="padding:0.5rem 1rem;" type="primary" @click="used.show=false">确 定</el-button>
+      </div >
+    </el-dialog>
   </div>
 </template>
 <script>
 import { getUserOrder } from "@/api/market";
 import { mapGetters } from "vuex";
+import store from "@/store";
 import Cloud from "./cloud";
 import quan_orgin from "@/assets/order/quan_orgin.png";
 import quan_pike from "@/assets/order/quan_pike.png";
@@ -192,6 +218,7 @@ export default {
   data() {
     return {
       star: 3,
+      used: { show: false },
       icon: {
         yun: {
           yun_1,
@@ -224,13 +251,13 @@ export default {
     },
     showUsed() {
       return item => {
-        let coupon = this.usedCoupon.list.filter(id => id == item.id)[0]
-        if(coupon){
-          return true 
-        }else{
-          return false 
+        let coupon = this.usedCoupon.list.filter(id => id == item.id)[0];
+        if (coupon) {
+          return true;
+        } else {
+          return false;
         }
-      }
+      };
     },
     voucherImg() {
       return index => {
@@ -248,11 +275,16 @@ export default {
     this.getPersonal();
   },
   methods: {
+    viewUsed(item) {
+      this.used.show = true;
+    },
     putUsed(item) {
-      let coupon = this.usedCoupon.list.filter(coupon => coupon.id == item.id)[0]
-      if(coupon){
-      }else{
-        this.usedCoupon.list.push({id: item.id})
+      let coupon = this.usedCoupon.list.filter(
+        coupon => coupon.id == item.id
+      )[0];
+      if (coupon) {
+      } else {
+        this.usedCoupon.list.push({ id: item.id });
       }
     },
     /** 个人信息 */
@@ -277,6 +309,55 @@ export default {
 };
 </script>
 <style scoped>
+/* 整个容器，包括透视 */
+.flip-container {
+  perspective: 1000;
+}
+
+/* 鼠标放上去的时候翻转 */
+.flip-container:hover .flipper,
+.flip-container.hover .flipper {
+  transform: rotateY(180deg);
+}
+
+.flip-container,
+.front,
+.back {
+  width: 320px;
+  margin: 0 2rem;
+  height: 8rem;
+}
+
+/* 翻转速度设置 */
+.flipper {
+  transition: 1.5s;
+  transform-style: preserve-3d;
+
+  position: relative;
+}
+
+/* 翻转页的时候隐藏背面 */
+.front,
+.back {
+  backface-visibility: hidden;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* 前面板放在上面 */
+.front {
+  z-index: 2;
+  /* for firefox 31 */
+  transform: rotateY(0deg);
+}
+
+/* 背面初始的时候隐藏 */
+.back {
+  transform: rotateY(180deg);
+}
+
 .void-icon {
   border: 1px solid #58b708;
   height: 100%;
@@ -584,6 +665,8 @@ img {
     @include title();
     .body {
       .vouchers {
+        min-height: 20rem;
+        padding-top: 3rem;
         max-height: 22rem;
         overflow: auto;
         // border: 1px solid #ccc;

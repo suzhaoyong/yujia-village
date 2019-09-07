@@ -271,7 +271,7 @@
                 <div class="item">
                   <div class="lable">会馆联系人</div>
                   <div class="value">
-                    <el-input v-model="clubForm.club_name"></el-input>
+                    <el-input v-model="clubForm.name"></el-input>
                   </div>
                 </div>
                 <div class="item">
@@ -458,7 +458,6 @@ export default {
     },
     changeClub(club_id) {
       const club = this.club.list.filter(item => item.id == club_id)[0];
-      console.log(club)
       this.clubForm = Object.assign({}, this.clubForm, club);
     },
     resetForm(name) {
@@ -636,7 +635,6 @@ export default {
     },
     updateClub() {
       const params = Object.assign({},this.clubForm)
-      console.log(params);
       postUpdateClubInfo(params).then(data => {
         this.getPersonal();
         this.$message({

@@ -17,7 +17,7 @@
           </div>
           <span class="text">账号金币</span>
           <span style="padding-left:5rem;" v-if="isDisable">金币不足</span>
-          <span style="padding-left:5rem;" v-else>可用{{info.user.fraction}}金币</span>
+          <span style="padding-left:5rem;" v-else>可用{{info.user.money}}金币</span>
         </div>
         <div class="pay_password" v-if="goldpay.allow">
           <div class="tips">请输入密码支付</div>
@@ -139,6 +139,7 @@ export default {
           type: "success",
           message: "支付成功"
         });
+        timer && clearInterval(timer);
         this.$alert("前往订单中心", "成功", {
           confirmButtonText: "立即前往",
           callback: action => {
@@ -192,6 +193,7 @@ export default {
                       type: "success",
                       message: "支付成功"
                     });
+                    timer && clearInterval(timer);
                     this.$alert("前往订单中心", "成功", {
                       confirmButtonText: "立即前往",
                       callback: action => {
@@ -225,6 +227,7 @@ export default {
                 if (this.payway.success) {
                   clearInterval(timer);
                 }
+                
                 if (this.payway.count <= 1 || !this.payway.show) {
                   this.changePayWay("3");
                   // this.payway.show = false;
@@ -240,6 +243,7 @@ export default {
                       type: "success",
                       message: "支付成功"
                     });
+                    timer && clearInterval(timer);
                     this.$alert("前往订单中心", "成功", {
                       confirmButtonText: "立即前往",
                       callback: action => {
