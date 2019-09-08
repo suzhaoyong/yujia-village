@@ -65,7 +65,7 @@
             <div class="item" style="padding:0 0.5rem;" v-for="(item, index) in glod.list">
               <div v-if="item.id">
                 <span>{{item.out_trade_no}}</span>
-                <span style="width: 5em;flex-shrink: 0;">+{{(item.new_money-item.money).toFixed(2)}}</span>
+                <span style="width: 5em;flex-shrink: 0;">+{{(+item.money).toFixed(2)}}</span>
                 <span :style="`width: 5em;flex-shrink: 0;color:${isStatus(item.status).color}`">{{isStatus(item.status).text}}</span>
                 <span>{{item.created_at}}</span>
               </div>

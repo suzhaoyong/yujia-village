@@ -33,6 +33,9 @@
               <div class="cultivate-button">
                 <div class="button" @click="callTel">电话咨询</div>
               </div>
+              <div style="display: flex;justify-content: flex-end;" v-if="config.url">
+                <share :config="config"></share>
+              </div>
               <!-- <img class="imgpic1" src="../../assets/image69.png" /> -->
               <img class="imgpic2" src="../../assets/image70.png" />
             </div>
@@ -73,35 +76,59 @@
 <script>
 import { getTrains, postTrains, getTrainsById } from "@/api/trains";
 import SessionTitle from "./SessionTitle";
-import crowd_img_1 from '@/assets/image71.png';
-import crowd_img_2 from '@/assets/image72.png';
-import crowd_img_3 from '@/assets/image73.png';
+import crowd_img_1 from "@/assets/image71.png";
+import crowd_img_2 from "@/assets/image72.png";
+import crowd_img_3 from "@/assets/image73.png";
 export default {
   components: {
     SessionTitle
   },
   data() {
     return {
+      config: {
+        url: "",
+        source: "",
+        title: "",
+        description: "",
+        sites: ["qzone", "qq", "weibo", "wechat", "douban"],
+        wechatQrcodeTitle: "微信扫一扫：分享", // 微信二维码提示文字
+        wechatQrcodeHelper:
+          "<p>微信里点“发现”，扫一下</p><p>二维码便可将本文分享至朋友圈。</p>"
+      },
       icon: {
         crowd_img_1,
         crowd_img_2,
-        crowd_img_3,
+        crowd_img_3
       },
       value2: 4,
       train: {}
     };
   },
   mounted() {
-    const { id } = this.$route.query;
-    getTrainsById(id).then(data => {
-      this.train = data;
-      const content = data.content.split("\n").filter(item => item);
-      const crowd = data.crowd.split(/；/).filter(item => item);
-      this.train.content = content;
-      this.train.crowd = crowd;
-    });
+    const { id } = this.$route.params;
+    getTrainsById(id)
+      .then(data => {
+        this.train = data;
+        const content = data.content.split("\n").filter(item => item);
+        const crowd = data.crowd.split(/；/).filter(item => item);
+        this.train.content = content;
+        this.train.crowd = crowd;
+      })
+      .then(_ => {
+        this.initSocialConfig();
+      });
   },
   methods: {
+    initSocialConfig() {
+      const { theme, intro, content, teacher_img } = this.train;
+      const params = {
+        url: `http://vue.aomengyujia.com/cultivate/detail/${this.$route.params.id}`,
+        title: theme,
+        description: `${intro}`,
+        image: teacher_img
+      };
+      this.config = Object.assign({}, this.config, params);
+    },
     callTel() {
       this.$alert(`客服电话: 021-621146321`, "客服电话", {});
     }

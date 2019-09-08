@@ -7,8 +7,8 @@
       <div class="body">
         <div class="goods-box" style="min-height:80vh;">
           <div class="goods" v-for="(item,index) in goods" :key="index">
-            <div class="info">
-              <div :class="['select', {'active': item.select}]" @click="chooseGoods(item, index)"></div>
+            <div class="info" @click="chooseGoods(item, index)">
+              <div :class="['select', {'active': item.select}]"></div>
               <div class="img">
                 <img :src="item.url" alt />
               </div>

@@ -178,6 +178,9 @@ export default {
         },
         sure: () => {
           postConfirmOrder({ id: oid }).then(data => {
+            getUserOrder().then(data => {
+              this.orders = data;
+            });
             this.$message({ type: "success", message: "确认收货成功" });
           });
         }

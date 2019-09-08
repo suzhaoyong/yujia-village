@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div class="reg">
     <div class="login-box">
       <div class="login-mask" @click="() => this.$emit('close', '')"></div>
       <div class="login">
         <div class="login-icon">
           <div class="login-icon-pic">
-            <img :src="icon.logo" alt="">
+            <img :src="icon.logo" alt />
           </div>
         </div>
         <div class="form">
@@ -80,7 +80,11 @@
           <div class="form-footer">
             <div class="auto_login">
               <div class="shuoming">
-                <p>注册即等于同意<a href="../../../static/doc/瑜伽村隐私政策.DOCX" class="file">《瑜伽村隐私政策》</a>和<a href="../../../static/doc/瑜伽村使用协议.DOCX" class="file">《瑜伽村使用协议》</a></p>
+                <p>
+                  注册即等于同意
+                  <span href="../../../static/doc/瑜伽村隐私政策.DOCX" @click="open.ys = true" class="file">《瑜伽村隐私政策》</span>和
+                  <span href="../../../static/doc/瑜伽村使用协议.DOCX" @click="open.sy = true" class="file">《瑜伽村使用协议》</span>
+                </p>
               </div>
               <!-- <div class="auto_login-tips">第三方登录：</div>
               <div class="auto_login-icon"></div>
@@ -91,13 +95,43 @@
         </div>
       </div>
     </div>
+    <el-dialog style="margin-top:1rem;" width="50rem" title="查看瑜伽村使用协议" :visible.sync="open.sy">
+      <div style="height:60vh;">
+        <iframe
+          src="../../../static/doc/瑜伽村使用协议.pdf"
+          width="100%"
+          height="100%"
+          frameborder="1"
+        ></iframe>
+      </div>
+      <span slot="footer">
+        <el-button type="primary" @click="open.sy = false">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog style="margin-top:1rem;" width="50rem" title="查看瑜伽村隐私政策" :visible.sync="open.ys">
+      <div style="height:60vh;">
+        <iframe
+          src="../../../static/doc/瑜伽村隐私政策.pdf"
+          width="100%"
+          height="100%"
+          frameborder="1"
+        ></iframe>
+      </div>
+      <span slot="footer">
+        <el-button type="primary"  @click="open.ys = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
-import logo from "@/assets/market/logo_max.png"
+import logo from "@/assets/market/logo_max.png";
 export default {
   data() {
     return {
+      open: {
+        sy: false,
+        ys: false,
+      },
       icon: {
         logo
       },
@@ -232,6 +266,11 @@ export default {
   }
 };
 </script>
+<style scoped>
+  .reg >>> .el-dialog {
+    margin-top: 0 !important;
+  }
+</style>
 <style lang="scss" scoped>
 * {
   box-sizing: border-box !important;
@@ -408,11 +447,12 @@ input:focus {
         .auto_login {
           display: flex;
           align-items: center;
-          p{
+          p {
             font-size: 0.4rem;
             margin: 0;
-            .file{
-              color:#6bc839;
+            .file {
+              color: #6bc839;
+              cursor: pointer;
               margin-right: 0.3rem;
             }
           }

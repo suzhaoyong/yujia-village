@@ -217,7 +217,7 @@ const router = new Router({
           component: () => import('@/pages/cultivate/cultivate')
         }, //培训信息
         {
-          path: '/cultivate/detail',
+          path: '/cultivate/detail/:id',
           meta: {
             header_name: 'cultivate'
           },

@@ -566,10 +566,7 @@ export default {
     },
     selectItem(item) {
       this.$router.push({
-        path: "/cultivate/detail",
-        query: {
-          id: item.id
-        }
+        path: `/cultivate/detail/${item.id}`,
       });
     },
     goMarketDetail() {
