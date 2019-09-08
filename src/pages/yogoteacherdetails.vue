@@ -194,9 +194,9 @@ export default {
             position: relative;
             .count-name-img3{
                 width: 400px;
-                height: 470px;
+                height: 520px;
                 position: absolute;
-                bottom: 27%;
+                bottom: 18%;
                 left: 2%;
            }
            .yogofigcaption-title{
