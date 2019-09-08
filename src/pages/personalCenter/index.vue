@@ -127,11 +127,11 @@
                 </div>
                 <div
                   class="voucher back"
-                  :style="`background-image:url(${voucherMoneyImg(index)}); background-size: 100% 100%;`"
+                  :style="`background-image:url(${icon.money.money_qin_right}); filter: grayscale(100%); background-size: 100% 100%;`"
                 >
                   <div class="price">
                     <div class="sign">¥</div>
-                    <div class="number">{{item.money}}</div>
+                    <div class="number">{{item.num}}</div>
                   </div>
                   <div class="name-time-used">
                     <div class="name">{{item.name}}</div>
@@ -191,16 +191,34 @@
         </div>
       </div>
     </div>
-    <el-dialog title="使用记录" :visible.sync="used.show">
-      使用记录
+    <el-dialog title="使用记录" width="50rem" :visible.sync="used.show" v-if="used.show">
+      <div class="table">
+        <div class="header">
+          <span style="width:4rem;">总额度</span>
+          <span style="width:4rem;">使用额度</span>
+          <span style="width:4rem;">剩余额度</span>
+          <span style="width:8rem;">使用时间</span>
+          <span style="width:10rem;">购买商品</span>
+          <span style="width:7rem;">订单号</span>
+        </div>
+        <div class="content">
+          <span style="width:4rem;">{{quan_used.money.toFixed(2)}}</span>
+          <span style="width:4rem;">-{{(quan_used.money - quan_used.surplus).toFixed(2)}}</span>
+          <span style="width:4rem;">{{quan_used.surplus.toFixed(2)}}</span>
+          <span style="width:8rem;">{{quan_used.good_order.created_at}}</span>
+          <span style="width:10rem;">{{quan_used.remake}}</span>
+          <span style="width:7rem;">{{quan_used.good_order.out_trade_no}}</span>
+        </div>
+      </div>
       <div slot="footer">
         <el-button style="padding:0.5rem 1rem;" type="primary" @click="used.show=false">确 定</el-button>
-      </div >
+      </div>
     </el-dialog>
   </div>
 </template>
 <script>
 import { getUserOrder } from "@/api/market";
+import { getUsedRecord } from "@/api/personal";
 import { mapGetters } from "vuex";
 import store from "@/store";
 import Cloud from "./cloud";
@@ -209,6 +227,7 @@ import quan_pike from "@/assets/order/quan_pike.png";
 import quan_red from "@/assets/order/quan_red.png";
 import quan_zhi from "@/assets/order/quan_zhi.png";
 import money_qin from "@/assets/order/money_qin.png";
+import money_qin_right from "@/assets/order/money_qin_right.png";
 import yun_1 from "@/assets/order/yun.png";
 import yun_2 from "@/assets/order/yun_2.png";
 export default {
@@ -218,6 +237,13 @@ export default {
   data() {
     return {
       star: 3,
+      quan_used: {
+        good_order: {
+          out_trade_no: ""
+        },
+        money: 0,
+        surplus: 0
+      },
       used: { show: false },
       icon: {
         yun: {
@@ -225,7 +251,8 @@ export default {
           yun_2
         },
         money: {
-          money_qin
+          money_qin,
+          money_qin_right,
         },
         quan: {
           quan_orgin,
@@ -275,8 +302,21 @@ export default {
     this.getPersonal();
   },
   methods: {
+    getUseRecord(item) {
+      this.quan_used = {
+        good_order: {
+          out_trade_no: ""
+        },
+        money: 0,
+        surplus: 0
+      };
+      getUsedRecord(item.id).then(data => {
+        this.quan_used = data;
+      });
+    },
     viewUsed(item) {
       this.used.show = true;
+      this.getUseRecord(item);
     },
     putUsed(item) {
       let coupon = this.usedCoupon.list.filter(
@@ -379,6 +419,53 @@ export default {
 </style>
 
 <style lang="scss" scoped>
+.table {
+  .header {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #ddd;
+    span {
+      width: 7rem;
+      display: inline-block;
+      &:nth-child(2) {
+        width: 9rem;
+      }
+      &:nth-child(3) {
+        width: 13rem;
+      }
+      &:nth-child(4) {
+        width: 4rem;
+      }
+      &:nth-child(5) {
+        width: 4rem;
+      }
+      &:last-child {
+        width: 4rem;
+      }
+    }
+  }
+  .content {
+    padding: 0.5rem 0;
+    span {
+      width: 7rem;
+      display: inline-block;
+      &:nth-child(2) {
+        width: 9rem;
+      }
+      &:nth-child(3) {
+        width: 13rem;
+      }
+      &:nth-child(4) {
+        width: 4rem;
+      }
+      &:nth-child(5) {
+        width: 4rem;
+      }
+      &:last-child {
+        width: 4rem;
+      }
+    }
+  }
+}
 .yun {
   position: absolute;
   top: 10rem;

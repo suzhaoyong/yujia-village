@@ -6,6 +6,8 @@ import {
   Loading
 } from 'element-ui'
 let loadingInstance = ""
+const CancelToken = axios.CancelToken;
+let  source 
 // 处理非 get data 传参
 function handleRequest(config) {
   if (config.url.search("getAlipayOrder") != -1 || config.url.search("getWechatOrder") != -1) {
@@ -25,10 +27,19 @@ function handleRequest(config) {
     contentType
   } = config;
   // 请求头添加token
-  const access = sessionStorage.getItem('access')
+  const access = sessionStorage.getItem('access') || ''
   config.headers['Authorization'] = access && `${JSON.parse(access).token_type}${JSON.parse(access).access_token}` || '';
   // config.headers['Access-Control-Allow-Headers'] = 'Content-Type'
   // config.baseURL = '/api';
+  // 
+  // config.cancelToken = source && source.token
+  // if (config.url.search("personal") != -1  || config.url.search("login") != -1 || config.url.search("telLogin") != -1) {
+  //   if(access === '') {
+  //     source && source.cancel('Operation canceled by the user.');
+  //     console.log(config);
+  //   }
+  // }
+
   config.baseURL = 'http://api.aomengyujia.com/api';
   if (contentType === 'json') {
     config.headers['Content-Type'] = 'application/json';
@@ -61,7 +72,7 @@ function handleResponeseErr(err) {
     });
   }
   if (status === 401) {
-    if (config.url.search("login") != -1) {
+    if (config.url.search("login") != -1 || config.url.search("telLogin") != -1) {
       message = data.msg
     } else {
       message = '请先登录'
