@@ -14,6 +14,9 @@
                     </div>
                 </div>
                 <div class="yogoknowledgedetails-cont-div2">
+                    <div class="share2" v-if="config.url">
+                        <share :config="config"></share>
+                    </div>
                     <div class="yogoknow2">
                         <p class="p1">{{knowinfo.summary}}</p>
                     </div>
@@ -26,11 +29,22 @@
     </div>
 </template>
 <script>
+import { getTrains, postTrains, getTrainsById } from "@/api/trains";
 export default {
     inject: ["reload"],
   data() {
     return {
-        knowinfo:''
+        knowinfo:{},
+        config: {
+        url: "",
+        source: "",
+        title: "",
+        description: "",
+        sites: ["qzone", "qq", "weibo", "wechat", "douban"],
+        wechatQrcodeTitle: "微信扫一扫：分享", // 微信二维码提示文字
+        wechatQrcodeHelper:
+          "<p>微信里点“发现”，扫一下</p><p>二维码便可将本文分享至朋友圈。</p>"
+      },
     };
   },
   created(){
@@ -41,18 +55,26 @@ export default {
         let _this = this;
         this.$request(`/informationInfo/${_this.$route.query.id}`).then(res => {
             _this.knowinfo = res;
+            const content = res.content.split("\n").filter(item => item);
+            _this.knowinfo.content = content;
         })
-        .catch(error => {
-            let { response: { data: { errorCode, msg } } } = error;
-            if (errorCode != 0) {
-            this.$message({
-                message: msg,
-                type: "error"
-            });
-            return;
-            }
+        .then(_ => {
+          this.initSocialConfig();
         });
       },
+      initSocialConfig() {
+        const { headline, summary, content, icon_url } = this.knowinfo;
+        const params = {
+            url: `http://vue.aomengyujia.com/yogoinformation/yogoinformationdetails?id=${this.$route.query.id}`,
+            title: headline,
+            description: `${summary}`,
+            image: icon_url
+        };
+        this.config = Object.assign({}, this.config, params);
+        },
+    callTel() {
+        this.$alert(`客服电话: 021-621146321`, "客服电话", {});
+    }
   }
 };
 </script>
@@ -112,6 +134,12 @@ export default {
         margin: 0 auto;
         margin-bottom: 40px;
         background-color: #ffffff;
+        .share2{
+            width: 22%;
+            float: left;
+            text-align: center;
+            margin-top: 20px;
+        }
         .yogoknow2{
             width: 95%;
             height: auto;

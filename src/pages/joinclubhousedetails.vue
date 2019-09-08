@@ -2,7 +2,6 @@
     <div>
         <el-col :span="24">
             <div class="joinclubdetails-main">
-                
                 <div class="joinclubdetails-cont-div3">
                     <div class="joinclubdetails-div3-main">
                     <div class="joinclubdetails-left">
@@ -18,6 +17,9 @@
                         <div class="left4">
                             地址：{{club.club_address}}
                         </div>
+                        <div class="share4" v-if="config.url">
+                          <share :config="config"></share>
+                       </div>
                     </div>
                     <div class="joinclubdetails-right">
                         <div class="imgpic">
@@ -101,11 +103,12 @@
     </div>
 </template>
 <script>
+import { getTrains, postTrains, getTrainsById } from "@/api/trains";
 export default {
     inject: ["reload"],
   data() {
     return {
-        club:"",
+        club:{},
         club_img:"",
         swiperOption: {
           slidesPerView: 3,
@@ -128,6 +131,16 @@ export default {
         },
         swiperList:[],
         famousteach:[],
+        config: {
+        url: "",
+        source: "",
+        title: "",
+        description: "",
+        sites: ["qzone", "qq", "weibo", "wechat", "douban"],
+        wechatQrcodeTitle: "微信扫一扫：分享", // 微信二维码提示文字
+        wechatQrcodeHelper:
+          "<p>微信里点“发现”，扫一下</p><p>二维码便可将本文分享至朋友圈。</p>"
+      },
     };
   },
   computed: {
@@ -166,17 +179,23 @@ export default {
             _this.famousteach = res.teacher;
             _this.swiperList= res.trains;
         })
-        .catch(error => {
-            let { response: { data: { errorCode, msg } } } = error;
-            if (errorCode != 0) {
-            this.$message({
-                message: msg,
-                type: "error"
-            });
-            return;
-            }
+        .then(_ => {
+          this.initSocialConfig();
         });
       },
+      initSocialConfig() {
+        const { club_name, club_address, content, path1 } = this.club;
+        const params = {
+            url: `http://vue.aomengyujia.com/joinclubhouse/joinclubhousedetails?id=${this.$route.query.id}`,
+            title: club_name,
+            description: `${club_address}`,
+            image: path1
+        };
+        this.config = Object.assign({}, this.config, params);
+        },
+        callTel() {
+            this.$alert(`客服电话: 021-621146321`, "客服电话", {});
+        },
       clubhouseItem(item){
           this.$router.push({
             path: "/cultivate/detail",

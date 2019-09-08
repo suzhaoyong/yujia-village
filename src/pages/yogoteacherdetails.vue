@@ -9,6 +9,9 @@
                     <div class="count-imgpic">
                       <img :src="teacher.cover" class="count-name-img"/>
                     </div>
+                    <div class="share3" v-if="config.url">
+                        <share :config="config"></share>
+                    </div>
                 </div>
             </div>
             <div class="yogoteacher-count-div3">
@@ -49,11 +52,22 @@
     </el-col>
 </template>
 <script>
+import { getTrains, postTrains, getTrainsById } from "@/api/trains";
 export default {
   data() {
     return {
-        teacher:'',
-        showList:[]
+        teacher:{},
+        showList:[],
+        config: {
+        url: "",
+        source: "",
+        title: "",
+        description: "",
+        sites: ["qzone", "qq", "weibo", "wechat", "douban"],
+        wechatQrcodeTitle: "微信扫一扫：分享", // 微信二维码提示文字
+        wechatQrcodeHelper:
+          "<p>微信里点“发现”，扫一下</p><p>二维码便可将本文分享至朋友圈。</p>"
+      },
     };
   },
   created () {
@@ -67,17 +81,23 @@ export default {
             _this.showList = res.course;
             _this.teacher = res.teacher;
         })
-        .catch(error => {
-            let { response: { data: { errorCode, msg } } } = error;
-            if (errorCode != 0) {
-            this.$message({
-                message: msg,
-                type: "error"
-            });
-            return;
-            }
+        .then(_ => {
+          this.initSocialConfig();
         });
       },
+      initSocialConfig() {
+        const { name, good_at, content, cover } = this.teacher;
+        const params = {
+            url: `http://vue.aomengyujia.com/yogoteacher/yogoteacherdetails?id=${this.$route.query.id}`,
+            title: name,
+            description: `${good_at}`,
+            image: cover
+        };
+        this.config = Object.assign({}, this.config, params);
+        },
+    callTel() {
+        this.$alert(`客服电话: 021-621146321`, "客服电话", {});
+    }
   }
 };
 </script>
@@ -147,35 +167,13 @@ export default {
                     left: 11%;
                 }
             }
-            // .count-name:hover{
-            //     width: 43%;
-            //     margin: 0 auto;
-            //     border: 3px solid #43516A;
-            //     height: 100px;
-            //     position: absolute;
-            //     bottom: 20%;
-            //     left: 2%;
-            //     transform: scale(.98);
-            //     text-align: center;
-            //     line-height: 85px;
-            //     border-image: -webkit-linear-gradient(left, #AE8D66, #43516A) 30 30;
-            //     border-image: -moz-linear-gradient(left, #AE8D66, #43516A) 30 30;
-            //     border-image: linear-gradient( left,#AE8D66, #43516A) 30 30;
-            //     .span1{
-            //         font-size:2rem;
-            //         font-family:Gulim;
-            //         font-weight:400;
-            //         font-style:italic;
-            //         color: #43516A;
-            //         .span2{
-            //             font-size:2rem;
-            //             font-family:Gulim;
-            //             font-weight:400;
-            //             font-style:italic;
-            //             color: #43516A;
-            //         }
-            //     }
-            // }
+            .share3{
+                width: 22%;
+                text-align: center;
+                position: absolute;
+                bottom: 20%;
+                left: 45%;
+           }
         }
     }
     .yogoteacher-count-div3{
