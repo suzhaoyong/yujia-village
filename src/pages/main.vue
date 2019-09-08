@@ -18,7 +18,7 @@
                     <el-col :span="24" class="bg-pic">
                     <div class="nav-contunt-div2">
                         <div class="carousel">
-                        <el-carousel height="620px" :interval="5000" arrow="always" trigger="click" direction="vertical" :autoplay="true">
+                        <el-carousel height="620px" :interval="5000" arrow="always" trigger="click" direction="horizontal" :autoplay="true">
                             <el-carousel-item v-for="item in dataimg" :key="item.id">
                                 <div class="contunt2">
                                 <div class="carousel-explain">
@@ -110,7 +110,7 @@
                     <el-col :span="24" class="bg-pic7">
                     <div class="nav-contunt-div6">
                         <div class="navcount">
-                        <el-carousel height="560px" :interval="5000" arrow="hover" trigger="click" direction="vertical" :autoplay="true">
+                        <el-carousel height="560px" :interval="5000" arrow="hover" trigger="click" direction="horizontal" :autoplay="true">
                         <el-carousel-item v-for="item in newtrains" :key="item.id">
                             <div class="explain3">
                             <div class="explain3-border">
