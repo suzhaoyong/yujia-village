@@ -55,8 +55,8 @@ export default {
         let _this = this;
         this.$request(`/knowledgeInfo/${_this.$route.query.id}`).then(res => {
             _this.knowinfo = res;
-            const content = res.content.split("\n").filter(item => item);
-            _this.knowinfo.content = content;
+            // const content = res.content.split("\n").filter(item => item);
+            // _this.knowinfo.content = content;
         })
         .then(_ => {
           this.initSocialConfig();
