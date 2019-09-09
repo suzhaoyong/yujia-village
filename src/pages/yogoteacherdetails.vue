@@ -88,7 +88,7 @@ export default {
       initSocialConfig() {
         const { name, good_at, content, cover } = this.teacher;
         const params = {
-            url: `http://vue.aomengyujia.com/yogoteacher/yogoteacherdetails?id=${this.$route.query.id}`,
+            url: `http://www.yujiacun.net/yogoteacher/yogoteacherdetails?id=${this.$route.query.id}`,
             title: name,
             description: `${good_at}`,
             image: cover
