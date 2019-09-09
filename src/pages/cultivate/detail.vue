@@ -122,7 +122,7 @@ export default {
     initSocialConfig() {
       const { theme, intro, content, teacher_img, crowd } = this.train;
       const params = {
-        url: `http://vue.aomengyujia.com/cultivate/detail/${this.$route.params.id}`,
+        url: `http://www.yujiacun.net/cultivate/detail/${this.$route.params.id}`,
         title: theme,
         description: `适合人群：${crowd}`,
         image: teacher_img

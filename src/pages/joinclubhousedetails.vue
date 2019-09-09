@@ -186,7 +186,7 @@ export default {
       initSocialConfig() {
         const { club_name, club_address, content, path1 } = this.club;
         const params = {
-            url: `http://vue.aomengyujia.com/joinclubhouse/joinclubhousedetails?id=${this.$route.query.id}`,
+            url: `http://www.yujiacun.net/joinclubhouse/joinclubhousedetails?id=${this.$route.query.id}`,
             title: club_name,
             description: `${club_address}`,
             image: path1

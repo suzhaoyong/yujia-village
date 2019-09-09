@@ -181,7 +181,7 @@ export default {
     initSocialConfig() {
       const { describe, material, painter, kinds, season } = this.goods;
       const params = {
-        url: `http://vue.aomengyujia.com/goods/detail/${this.$route.params.id}`,
+        url: `http://www.yujiacun.net/goods/detail/${this.$route.params.id}`,
         title: describe,
         description: `材质: ${material}, 适合${painter}使用`
       };

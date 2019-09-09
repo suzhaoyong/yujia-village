@@ -65,7 +65,7 @@ export default {
       initSocialConfig() {
         const { headline, summary, content, icon_url } = this.knowinfo;
         const params = {
-            url: `http://vue.aomengyujia.com/yogoinformation/yogoinformationdetails?id=${this.$route.query.id}`,
+            url: `http://www.yujiacun.net/yogoinformation/yogoinformationdetails?id=${this.$route.query.id}`,
             title: headline,
             description: `${summary}`,
             image: icon_url
