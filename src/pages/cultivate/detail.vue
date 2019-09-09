@@ -120,11 +120,11 @@ export default {
   },
   methods: {
     initSocialConfig() {
-      const { theme, intro, content, teacher_img } = this.train;
+      const { theme, intro, content, teacher_img, crowd } = this.train;
       const params = {
         url: `http://vue.aomengyujia.com/cultivate/detail/${this.$route.params.id}`,
         title: theme,
-        description: `${intro}`,
+        description: `适合人群：${crowd}`,
         image: teacher_img
       };
       this.config = Object.assign({}, this.config, params);
