@@ -73,6 +73,7 @@
       <login
         @suc="name => this.username = name"
         @go-register="type=>this.account.type = type"
+        @go-reset="type=>this.account.type = type"
         @close="type=>this.account.type = type"
       ></login>
     </div>
@@ -80,7 +81,7 @@
       <register @go-login="type=>this.account.type = type" @close="type=>this.account.type = type" />
     </div>
     <div v-if="account.type==='reset'">
-      <reset />
+      <reset @go-reset="type=>this.account.type = type" @go-login="type=>this.account.type = type" @close="type=>this.account.type = type"/>
     </div>
     <div v-if="showTopTitle">
       <top-title />

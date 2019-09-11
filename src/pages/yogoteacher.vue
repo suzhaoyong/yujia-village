@@ -316,7 +316,12 @@ export default {
     margin: 0 auto;
     text-align: center;
     margin-top: 38px;
+    width: 86%;
     line-height: 40px;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 1 !important;
+    overflow: hidden !important;
     }
 .test5 figcaption .p1{
     text-align: center;
@@ -333,6 +338,12 @@ export default {
     font-family:Microsoft YaHei;
     font-weight:400;
     color: #2c2c2c;
+    width: 83%;
+    margin:0 auto;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 3 !important;
+    overflow: hidden !important;
     }
 .test5 figcaption .telimg{
     width: 100%;
@@ -588,10 +599,17 @@ export default {
                     h3{
                         text-align: center;
                         color: #2c2c2c;
-                        margin-top: 20px;
+                        margin: 0 auto;
+                        margin-top: 15px;
+                        margin-bottom: 10px;
+                        width: 92%;
                         font-size:18px;
                         font-family:Microsoft YaHei;
                         font-weight:bold;
+                        display: -webkit-box !important;
+                        -webkit-box-orient: vertical !important;
+                        -webkit-line-clamp: 1 !important;// 限制快级元素的文本行数
+                        overflow: hidden !important;
                     }
                     .icon-desc{
                         text-align: center;
@@ -604,6 +622,10 @@ export default {
                         margin: 0 auto;
                         color: #2c2c2c;
                         font-size: 14px;
+                        display: -webkit-box !important;
+                        -webkit-box-orient: vertical !important;
+                        -webkit-line-clamp: 2 !important;// 限制快级元素的文本行数
+                        overflow: hidden !important;
                     }
                 }
                 .icon:hover{
@@ -698,7 +720,7 @@ export default {
                         }
                     }
                     .yogoswiper-text{
-                        width: 30%;
+                        width: 46%;
                         height: 100%;
                         margin-left: 35px;
                         cursor: pointer;
@@ -707,7 +729,7 @@ export default {
                             border: 1px solid #e2dbc8;
                             background: #e2dbc8;
                             text-align: center;
-                            margin-top:17%;
+                            margin-top:9%;
                             transition: all 1s;
                             .el-button--text{
                                 color: #2c2c2c;
@@ -722,7 +744,7 @@ export default {
                             border: 1px solid #e2dbc8;
                             background: #e2dbc8;
                             text-align: center;
-                            margin-top:17%;
+                            margin-top:9%;
                             border-radius: 5px;
                             transform: scale(.95);
                             .el-button--text{
@@ -739,10 +761,18 @@ export default {
                             font-weight:bold;
                             font-size: 18px;
                             color: #2c2c2c;
+                            display: -webkit-box !important;
+                            -webkit-box-orient: vertical !important;
+                            -webkit-line-clamp: 1 !important;// 限制快级元素的文本行数
+                            overflow: hidden !important;
                         }
                         .p1{
                             color: #2c2c2c;
                             font-size: 14px;
+                            display: -webkit-box !important;
+                            -webkit-box-orient: vertical !important;
+                            -webkit-line-clamp: 1 !important;// 限制快级元素的文本行数
+                            overflow: hidden !important;
                         }
                         .p2{
                             color: #999999;
