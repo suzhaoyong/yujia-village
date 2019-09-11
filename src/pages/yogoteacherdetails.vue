@@ -21,7 +21,7 @@
                         <h2>个人简介</h2>
                         <p class="p1">Good at courses</p>
                         <p class="p2">擅长课程：<span>{{teacher.good_at}}</span></p>
-                        <div class="p3">课程特色：<span v-html="teacher.content">{{teacher.content}}</span></div>
+                        <div class="p3">课程特色：<div v-html="teacher.content" style="width: 88%;line-height: 20px;">{{teacher.content}}</div></div>
                     </div>
                 </div>
             </div>
@@ -96,7 +96,7 @@ export default {
         this.config = Object.assign({}, this.config, params);
         },
     callTel() {
-        this.$alert(`客服电话: 021-621146321`, "客服电话", {});
+        this.$alert(`客服电话: 4001007191`, "客服电话", {});
     }
   }
 };
@@ -125,12 +125,12 @@ export default {
                 width: 43%;
                 margin: 0 auto;
                 border: 3px solid #43516A;
-                height: 100px;
+                height: auto;
                 position: absolute;
                 bottom: 20%;
                 left: 2%;
                 transition: all .9s;
-                line-height: 85px;
+                line-height: 50px;
                 text-align: center;
                 border-image: -webkit-linear-gradient(left, #AE8D66, #43516A) 30 30;
                 border-image: -moz-linear-gradient(left, #AE8D66, #43516A) 30 30;
@@ -178,8 +178,7 @@ export default {
     }
     .yogoteacher-count-div3{
         width: 100%;
-        height: 550px;
-        cursor: pointer;
+        height: 650px;
         background-color: #282828;
         background-image: url('../assets/bgimg20.png');
         background-repeat: no-repeat;
@@ -192,13 +191,13 @@ export default {
             position: relative;
             .count-name-img3{
                 width: 400px;
-                height: 520px;
+                height: 540px;
                 position: absolute;
-                bottom: 18%;
+                bottom: 28%;
                 left: 2%;
            }
            .yogofigcaption-title{
-               width: 57%;
+               width: 58%;
                height: 100%;
                position: absolute;
                right: 0;
@@ -217,17 +216,18 @@ export default {
                }
                .p2{
                    color: #fff;
-                   font-size: 18px;
+                   font-size: 14px;
                    font-family:Microsoft YaHei;
-                   margin-top: 7%;
+                   margin-top: 6%;
                    font-weight:400;
+                   margin-bottom: 7px;
                }
                .p3{
                    color: #fff;
-                   font-size: 18px;
-                   display: flex;
+                   font-size: 14px;
                    font-family:Microsoft YaHei;
                    font-weight:400;
+                   display: flex;
                }
            }
         }

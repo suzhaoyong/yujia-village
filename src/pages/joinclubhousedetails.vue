@@ -194,7 +194,7 @@ export default {
         this.config = Object.assign({}, this.config, params);
         },
         callTel() {
-            this.$alert(`客服电话: 021-621146321`, "客服电话", {});
+            this.$alert(`客服电话: 4001007191`, "客服电话", {});
         },
       clubhouseItem(item){
           this.$router.push({

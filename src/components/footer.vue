@@ -9,7 +9,7 @@
                       <el-button type="text" @click="goto">关于我们</el-button>
                     </div>
                     <span class="span1">商务合作</span>
-                    <span class="span2">客服电话：021-621146321(周一至周六 9:30-18:00)</span>
+                    <span class="span2">客服电话：4001007191(周一至周六 9:30-18:00)</span>
                 </div>
                 <div class="footer-foot2">
                     <span>Copyright © 2017-2022 上海一伽健身服务有限公司 All rights reserved</span>

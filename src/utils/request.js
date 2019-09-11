@@ -41,6 +41,7 @@ function handleRequest(config) {
   // }
 
   config.baseURL = 'http://api.aomengyujia.com/api';
+  // config.baseURL = 'http://testapi.aomengyujia.com/api';
   if (contentType === 'json') {
     config.headers['Content-Type'] = 'application/json';
   }
