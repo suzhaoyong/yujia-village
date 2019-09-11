@@ -73,7 +73,7 @@ export default {
         this.config = Object.assign({}, this.config, params);
         },
     callTel() {
-        this.$alert(`客服电话: 021-621146321`, "客服电话", {});
+        this.$alert(`客服电话: 400-100-7191`, "客服电话", {});
     }
   }
 };
