@@ -96,14 +96,17 @@
                                <div class="yogocontunt2-list" v-for="(item, index) in yogolist.slice((currentPage-1)*pagesize,currentPage*pagesize)" :key="index" @mouseenter="onMouseOver(index)" @click="yogolink(item)">
                                     <figure class="test5">
                                         <img :src="item.path" class="yogocontunt2-img"/>
-                                        <figcaption>
+                                        <div class="test5-title">
                                             <h4>{{item.name}}</h4>
-                                            <p class="p1">从业时间{{item.num}}年</p>
-                                            <p class="p2">{{item.info}}</p>
-                                            <div class="telimg">
+                                            <p class="p1">教龄：{{item.num}}年</p>
+                                        </div>
+                                        <figcaption>
+                                            <p class="pgood">私教擅长：{{item.good_at}}</p>
+                                            <p class="p2">瑜伽历程：{{item.info}}</p>
+                                            <!-- <div class="telimg">
                                                 <img src="../assets/market/like.png" class="tel-img"/>
                                                 <span class="telpp">{{item.tel}}</span>
-                                            </div>
+                                            </div> -->
                                             <div class="div01"></div>
                                             <div class="div02"></div>
                                         </figcaption>
@@ -302,14 +305,12 @@ export default {
         width: 100%;
         height: 100%;
     }
-.test5 figcaption{
-    width: 100%;
-    height: 100%; 
-    position: absolute;
-    top: 0%;
-    }
-.test5 figcaption h4{
-    opacity: 0;
+.test5 .test5-title{
+    background: #E2DBC8;
+    margin-top: -38px;
+}
+.test5 .test5-title h4{
+    opacity: 1;
     font-size: 18px;
     font-family: Microsoft YaHei; 
     font-weight: bold;
@@ -322,27 +323,49 @@ export default {
     -webkit-box-orient: vertical !important;
     -webkit-line-clamp: 1 !important;
     overflow: hidden !important;
-    }
-.test5 figcaption .p1{
+    padding-top: 10px;
+}
+.test5 .test5-title .p1{
     text-align: center;
     font-size:14px;
     font-family:Microsoft YaHei;
     font-weight:400;
-    opacity: 0;
+    opacity: 1;
     color: #2c2c2c;
+    padding-bottom: 15px;
+}
+.test5 figcaption{
+    width: 100%;
+    height: 100%; 
+    position: absolute;
+    top: 0%;
     }
-.test5 figcaption .p2{
-    text-align: center;
+.test5 figcaption .pgood{
+    text-align: left;
     opacity: 0;
     font-size:13px;
     font-family:Microsoft YaHei;
     font-weight:400;
-    color: #2c2c2c;
+    color: #ffffff;
     width: 83%;
     margin:0 auto;
     display: -webkit-box !important;
     -webkit-box-orient: vertical !important;
     -webkit-line-clamp: 3 !important;
+    overflow: hidden !important;
+}
+.test5 figcaption .p2{
+    text-align: left;
+    opacity: 0;
+    font-size:13px;
+    font-family:Microsoft YaHei;
+    font-weight:400;
+    color: #ffffff;
+    width: 83%;
+    margin:0 auto;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 4 !important;
     overflow: hidden !important;
     }
 .test5 figcaption .telimg{
@@ -390,13 +413,14 @@ export default {
     }
 .test5:hover{
     width:100%;
-    height: 340px;
-    background-color: #E2DBC8;
+    height: 279px;
+    background-color: #000;
     transition: transform 0.5s ease-in;
     transition: all 1s ease;
 }
 .test5:hover figcaption .p1{opacity: 1;transition: transform 0.5s ease-in; transition: all 1s ease;}
-.test5:hover figcaption .p2{opacity: 1;margin-top: 15%;transition: transform 0.5s ease-in;transition: all 1s ease;}
+.test5:hover figcaption .p2{opacity: 1;margin-top: 3%;transition: transform 0.5s ease-in;transition: all 1s ease;}
+.test5:hover figcaption .pgood{opacity: 1;margin-top: 25%;transition: transform 0.5s ease-in;transition: all 1s ease;}
 .test5:hover figcaption h4{opacity: 1;transition: transform 0.5s ease-in;transition: all 1s ease;}
 .test5:hover figcaption .telimg{
     width: 100%;
@@ -422,7 +446,7 @@ export default {
     transition: all 1s ease;
 }
 .test5:hover img{
-    opacity: 0.1;
+    opacity: 0.6;
     transition: transform 0.5s ease-in;
     transition: all 1s ease;
     }
@@ -879,7 +903,7 @@ export default {
                     margin: 14px;
                     float: left;
                     position: relative;
-                    margin-bottom: 88px;
+                    margin-bottom: 9%;
                     h4{
                         text-align: center;
                     }
