@@ -74,7 +74,7 @@
                     >{{item.name}}</div>
                   </div>
                 </div>
-                <div class="cultivate1-five">
+                <div class="cultivate1-five" style="padding-top: 0.6rem;">
                   <span class="span">类别：</span>
                   <div type="text" class="butt" @click="removeTag('classfiy')">全部</div>
                   <div class="button-classfiy">
@@ -132,17 +132,18 @@
                   @click="selectItem(item)"
                   :key="index"
                 >
-                  <div class="fruit-list-li-img">
-                    <img :src="item.teacher_img" />
+                  <div class="fruit-list-li-img" :style="`backgroundImage: url(${item.teacher_img})`">
+                    <!-- <img :src="item.teacher_img" /> -->
                   </div>
                   <div class="fruit-list-li-text">
                     <h4>{{item.theme}}</h4>
+                  </div>
+                  <div class="fruit-list-li-text">
+                    <el-rate :colors="['#58B708','#58B708','#58B708']" disabled :value="item.diff"></el-rate>
                     <div class="list-eye">
-                      <!-- <img src /> -->
                       <span class="span">{{item.views||100}}</span>
                     </div>
                   </div>
-                  <el-rate :colors="['#58B708','#58B708','#58B708']" disabled :value="item.diff"></el-rate>
                   <div class="fruit-price">￥{{item.price}}</div>
                   <div class="fruit-detail">{{item.address}}</div>
                 </div>
@@ -169,17 +170,19 @@
                 :key="index"
                 @click="selectItem(item)"
               >
-                <div class="fruit-list-li-img">
-                  <img :src="item.teacher_img" />
+                <div class="fruit-list-li-img" :style="`backgroundImage: url(${item.teacher_img})`">
+                  <!-- <img :src="item.teacher_img" /> -->
                 </div>
                 <div class="fruit-list-li-text">
                   <h4>{{item.theme}}</h4>
+                </div>
+                <div class="fruit-list-li-text">
+                  <el-rate :colors="['#58B708','#58B708','#58B708']" disabled :value="item.diff"></el-rate>
                   <div class="list-eye">
                     <img src="../../assets/eye.png" />
                     <span class="span">{{item.views || 100}}</span>
                   </div>
                 </div>
-                <el-rate :colors="['#58B708','#58B708','#58B708']" disabled :value="item.diff"></el-rate>
                 <div class="fruit-price">￥{{item.price}}</div>
                 <div class="fruit-detail">{{item.address}}</div>
               </div>
@@ -822,8 +825,8 @@ img {
         }
         .cultivate1-five {
           width: 100%;
-          min-height: 4.1rem;
-          line-height: 4.1rem;
+          min-height: 3.1rem;
+          line-height: 3.1rem;
           padding-left: 3rem;
           display: flex;
           border-bottom: 1px solid #dcdcdc;
@@ -920,6 +923,9 @@ img {
           .fruit-list-li-img {
             width: 100%;
             height: 17.7rem;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: top center;
             img {
               width: 100%;
               height: 100%;
@@ -928,6 +934,7 @@ img {
           .fruit-list-li-text {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             width: 90%;
             margin: 0 auto;
             margin-top: 1rem;
@@ -959,7 +966,7 @@ img {
             }
           }
           .el-rate {
-            padding-left: 1rem;
+            // padding-left: 1rem;
           }
           .fruit-price {
             width: 90%;
@@ -1047,6 +1054,9 @@ img {
         .fruit-list-li-img {
           width: 100%;
           height: 17.7rem;
+          background-size: cover;
+          background-repeat: no-repeat;
+          background-position: top center;
           img {
             width: 100%;
             height: 100%;
@@ -1055,6 +1065,7 @@ img {
         .fruit-list-li-text {
           display: flex;
           justify-content: space-between;
+          align-items: center;
           width: 90%;
           margin: 0 auto;
           margin-top: 1rem;
@@ -1075,7 +1086,7 @@ img {
           }
         }
         .el-rate {
-          padding-left: 1rem;
+          // padding-left: 1rem;
         }
         .fruit-price {
           width: 90%;

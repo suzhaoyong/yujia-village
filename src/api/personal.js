@@ -76,7 +76,7 @@ export function getClubInfo() {
 }
 /** 会馆资料 */
 export function getMyShare() {
-return request(`/personal/myShare`)
+  return request(`/personal/myShare`)
 }
 /** 认证馆主修改会馆资料 */
 
@@ -122,4 +122,50 @@ export function getRechargeRecord() {
 /** 积分记录 */
 export function getFractioRecord() {
   return request(`/personal/fractioRecord`)
+}
+
+/** 我的发布 */
+export function getMyTrain() {
+  return request(`/personal/myTrain`)
+}
+
+/** 发布未通过 */
+export function getMyTrainFailed() {
+  return request(`/personal/myTrainFailed`)
+}
+
+/** 提交课程信息 */
+export function postMytrainInfoPut(args) {
+  let params = {
+    content: "", // 内容介绍
+    crowd: "", // 	适用人群
+    outline: "", // 课程大纲
+    tel: "", // 报名联系人电话
+    linkman: "", // 报名联系人
+    endTime: "",
+    startTime: "",
+    teacher_img: "",
+    name: "",
+    address: "",
+    area: "",
+    city: "",
+    province: "",
+    price: "",
+    diff: "",
+    theme: "",
+    img_train_three: "",
+    img_train_two: "",
+    img_train_first: "",
+  }
+  params = Object.assign({}, params, args)
+  return request.post(`/personal/mytrainInfoPut`, params)
+}
+
+/** 教师模糊查询 */
+export function postShowTeacherPic(args) {
+  let params = {
+    name: "", // 
+  }
+  params = Object.assign({}, params, args)
+  return request.post(`/personal/showTeacherPic`, params)
 }

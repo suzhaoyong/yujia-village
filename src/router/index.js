@@ -117,6 +117,14 @@ const router = new Router({
           component: () => import('@/pages/personalCenter/recode')
         },
         {
+          path: 'release',
+          name: 'release',
+          meta: {
+            header_name: 'personal'
+          },
+          component: () => import('@/pages/personalCenter/release')
+        },
+        {
           path: 'identity',
           name: 'identity',
           meta: {
