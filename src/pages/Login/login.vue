@@ -3,18 +3,12 @@
     <div class="login-box">
       <div class="login-mask" @click="() => this.$emit('close', '')"></div>
       <div class="login">
-        <div class="login-icon">
-          <div class="login-icon-pic">
-            <img :src="icon.logo" alt />
-          </div>
-        </div>
         <div class="form">
           <div class="form_title" @click="changeLoginWay">
             <div
               :class="['form_title-item', (loginWay==='account'?'active':'')]"
               data-way="account"
             >密码登录</div>
-            <i class="border"></i>
             <div
               :class="['form_title-item', (loginWay==='message'?'active':'')]"
               data-way="message"
@@ -26,43 +20,43 @@
                 class="input"
                 v-model.trim="accountRuleForm.tel"
                 type="text"
-                placeholder="手机号"
+                placeholder="请输入手机号"
                 @blur="checkEmtypeInputBox('tel')"
                 style="outline:none;"
               />
               <div class="form_input-tips">{{accountErrorRule.tel.show?accountErrorRule.tel.msg:''}}</div>
             </div>
             <div class="form_input">
+              <div class="item" style="align-items: flex-end;">
+                <div class="item-box left">
+                  <div class="item-box-code-img">
+                    <img :src="verification.code_img" alt />
+                    <div class="change-code" @click="getVerificationCode"><span style="color:#999">看不清？</span>换一张</div>
+                  </div>
+                  <div class="item-box-input">
+                    <input
+                      type="text"
+                      @blur="checkEmtypeInputBox('captcha')"
+                      placeholder="请输入图形验证码"
+                      v-model.trim="accountRuleForm.captcha"
+                    />
+                  </div>
+                  <div class="item-box-tips">{{isError('captcha')}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="form_input">
               <input
                 class="input"
                 v-model.trim="accountRuleForm.password"
                 type="password"
-                placeholder="输入密码"
+                placeholder="请输入密码"
                 @blur="checkEmtypeInputBox('password')"
                 style="outline:none;"
               />
               <div
                 class="form_input-tips"
               >{{accountErrorRule.password.show?accountErrorRule.password.msg:''}}</div>
-            </div>
-            <div class="form_input">
-              <div class="item" style="align-items: flex-end;">
-                <div class="item-box left">
-                  <div class="item-box-title">请在下方填写图形验证码</div>
-                  <div class="item-box-code-img">
-                    <img :src="verification.code_img" alt />
-                    <div class="change-code" @click="getVerificationCode">看不清？摇一摇</div>
-                  </div>
-                  <div class="item-box-input">
-                    <input
-                      type="text"
-                      @blur="checkEmtypeInputBox('captcha')"
-                      v-model="accountRuleForm.captcha"
-                    />
-                  </div>
-                  <div class="item-box-tips">{{isError('captcha')}}</div>
-                </div>
-              </div>
             </div>
             <div class="form_btn">
               <button @click.stop="submitForm('account')" :disabled="isPostting">登录</button>
@@ -75,7 +69,7 @@
                 type="text"
                 v-model.trim="messageRuleForm.tel"
                 @blur="checkEmtypeInputBox('tel')"
-                placeholder="输入手机号"
+                placeholder="请输入手机号"
               />
               <div class="form_input-tips">{{messageErrorRule.tel.show?messageErrorRule.tel.msg:''}}</div>
             </div>
@@ -85,31 +79,12 @@
                 type="text"
                 v-model.trim="messageRuleForm.verification_code"
                 @blur="checkEmtypeInputBox('verification_code')"
-                placeholder="输入验证码"
+                placeholder="请输入验证码"
               />
-              <div class="get_code" @click="getCode">{{codeTips.msg}}</div>
+              <div class="get_code" @click="getCodeMessage">{{codeTips.msg}}</div>
               <div
                 class="form_input-tips"
               >{{messageErrorRule.verification_code.show?messageErrorRule.verification_code.msg:''}}</div>
-            </div>
-            <div class="form_input">
-              <div class="item" style="align-items: flex-end;">
-                <div class="item-box left">
-                  <div class="item-box-title">请在下方填写图形验证码</div>
-                  <div class="item-box-code-img">
-                    <img :src="verification.code_img" alt />
-                    <div class="change-code" @click="getVerificationCode">看不清？摇一摇</div>
-                  </div>
-                  <div class="item-box-input">
-                    <input
-                      type="text"
-                      @blur="checkEmtypeInputBox('captcha')"
-                      v-model="messageRuleForm.captcha"
-                    />
-                  </div>
-                  <div class="item-box-tips">{{isError('captcha')}}</div>
-                </div>
-              </div>
             </div>
             <div class="form_btn">
               <button @click.stop="submitForm('message')" :disabled="isPostting">登录</button>
@@ -120,12 +95,37 @@
               <!-- <div class="auto_login-tips">第三方登录：</div>
               <div class="auto_login-icon"></div>
               <div class="auto_login-icon"></div>-->
+              <el-checkbox v-model="checked">记住密码</el-checkbox>
             </div>
-            <div class="register" @click="goRegister">注册</div>
+            <div class="register">
+              <div class="register" @click="goRegister">注册</div>
+              <!-- <div class="Forget" @click="goForget">忘记密码</div> -->
+              </div>
           </div>
         </div>
       </div>
     </div>
+      <el-dialog style="margin-top:1rem;" width="35rem" title="图形验证码" :visible.sync="getCodepass">
+      <div class="item-box left">
+        <div class="code-title">请在下方填写图形验证码</div>
+        <div class="code-img">
+          <img :src="verification.code_img" alt />
+          <div class="change-code" @click="getVerificationCode"><span style="color:#999">看不清？</span>换一张</div>
+        </div>
+        <div class="box-input">
+          <input
+            type="text"
+            @blur="checkEmtypeInputBox('captcha')"
+            v-model="messageRuleForm.captcha"
+            placeholder="请输入图形验证码"
+          />
+        </div>
+        <div class="box-tips">{{isError('captcha')}}</div>
+      </div>
+      <span slot="footer">
+        <el-button type="primary" @click="getCodeMessage2">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -136,6 +136,8 @@ import store from "@/store";
 export default {
   data() {
     return {
+      getCodepass:false,
+      checked: false,
       icon: {
         logo
       },
@@ -192,6 +194,7 @@ export default {
   },
   mounted() {
     this.getVerificationCode();
+    this.getCookie();
   },
   methods: {
     submitForm(name) {
@@ -259,6 +262,11 @@ export default {
       this.$request
         .post("/auth/login", params)
         .then(data => {
+          if(this.checked == true){
+            this.setCookie(this.accountRuleForm.tel, this.accountRuleForm.password, 7);
+          }else{
+            this.clearCookie();
+          }
           sessionStorage.setItem("access", JSON.stringify(data));
           this.isPostting = false;
           this.$message({ message: "登录成功", type: "success" });
@@ -271,6 +279,35 @@ export default {
         .catch(() => {
           this.isPostting = false;
         });
+    },
+     //设置cookie
+    setCookie(c_name, c_pwd, exdays) {
+      var exdate = new Date(); //获取时间
+      exdate.setTime(exdate.getTime() + 24 * 60 * 60 * 1000 * exdays); //保存的天数
+      //字符串拼接cookie
+      window.document.cookie =
+        "tel" + "=" + c_name + ";path=/;expires=" + exdate.toGMTString();
+      window.document.cookie =
+        "password" + "=" + c_pwd + ";path=/;expires=" + exdate.toGMTString();
+    },
+    //读取cookie
+    getCookie: function() {
+      if (document.cookie.length > 0) {
+        var arr = document.cookie.split("; "); //这里显示的格式需要切割一下自己可输出看下
+        for (var i = 0; i < arr.length; i++) {
+          var arr2 = arr[i].split("="); //再次切割
+          //判断查找相对应的值
+          if (arr2[0] == "tel") {
+            this.accountRuleForm.tel = arr2[1]; //保存到保存数据的地方
+          } else if (arr2[0] == "password") {
+            this.accountRuleForm.password = arr2[1];
+          }
+        }
+      }
+    },
+    //清除cookie
+    clearCookie: function() {
+      this.setCookie("", "", -1); //修改2值都为空，天数为负1天就好了
     },
     formVaildent(name) {
       // 提交按钮校验输入框
@@ -292,6 +329,37 @@ export default {
       }
       return is_pass;
     },
+    getCodeMessage(){
+      if (this.messageRuleForm.tel === "") {
+        this.messageErrorRule.tel.show = true;
+        this.getCodepass = false;
+      }else{
+        this.getCodepass = true;
+      }
+    },
+    getCodeMessage2(){
+      const { captcha, key } = this.messageRuleForm;
+      captcha &&
+        key &&
+        this.$request
+          .post("/verificationCode", { captcha, key })
+          .then(data => {
+            this.msg = data.msg;
+            if(this.msg == "OK"){
+              this.getCodepass = false;
+              this.getCode();
+            }else{
+              this.getCodepass = true;
+              this.postVerificationCode();
+              this.getVerificationCode();
+              this.messageRuleForm.captcha = "";
+              this.messageErrorRule.captcha.show = true;
+              this.messageErrorRule.captcha.msg;
+            }
+          })
+          .catch(() => {
+        });
+    },
     getCode() {
       //获取验证码
       if (this.messageRuleForm.tel === "") {
@@ -311,10 +379,12 @@ export default {
     },
     getSMSCode() {
       this.checkEmtypeInputBox("tel");
-
-      const { tel } = this.messageRuleForm;
+      this.checkEmtypeInputBox("captcha");
+      const { tel ,captcha ,key} = this.messageRuleForm;
       tel &&
-        this.$request.post("/getVerificationCode", { tel }).then(data => {
+      captcha &&
+      key &&
+        this.$request.post("/getVerificationCode", { tel,captcha,key }).then(data => {
           this.$message({ message: "发送成功", type: "success" });
           this.messageRuleForm.verification_key = data.key;
         });
@@ -324,6 +394,12 @@ export default {
       //   name: 'Register'
       // })
       this.$emit("go-register", "register");
+    },
+    goForget(){
+      this.$emit("go-reset", "reset");
+      // this.$router.push({
+      //   name: 'Reset'
+      // })
     },
     resetCode() {
       // 重置获取验证码
@@ -397,6 +473,45 @@ input {
 input:focus {
   outline: none;
 }
+.code-title{
+  height: 37px;
+  margin-left: 30px;
+}
+.code-img{
+    // width: 300px;
+    height: 60px;
+    display: flex;
+    margin: 0 auto;
+    margin-left: 30px;
+    img{
+      width: 100%;
+      height: 100%;
+    }
+}
+.box-input{
+    width: 47%;
+    height: 3rem;
+    padding-top: 15px;
+    margin-left: 30px;
+    input{
+      width: 100%;
+      height: 100%;
+    }
+}
+.box-tips{
+  color: #ce551a;
+  padding-top: 10px;
+  font-size: 0.6rem;
+  margin-left: 30px;
+  font-family: MicrosoftYaHei;
+  font-weight: 400;;
+  height: 1.2rem;
+}
+.change-code{
+  width: 100%;
+  padding-top: 20px;
+  cursor: pointer;
+}
 .login-box {
   .login-mask {
     position: fixed;
@@ -428,30 +543,42 @@ input:focus {
       }
     }
     .form {
-      width: 26rem;
-      padding: 3rem 2rem 2rem;
-      background-color: #d9ebc5;
+      width: 27rem;
+      padding: 3rem 1.5rem 3rem;
+      background-color: #F6FCF3;
       position: relative;
       &_title {
         display: flex;
         font-family: MicrosoftYaHei;
-        font-size: 0.7vw;
+        font-size: 0.9vw;
         font-weight: normal;
         font-stretch: normal;
         // line-height: 0.2vw;
         letter-spacing: 0vw;
         color: #2c2c2c;
+        cursor: pointer;
         &-item {
           border: 1px solid transparent;
+          width: 50%;
+          font-family:Microsoft YaHei;
+          font-weight:bold;
+          color: #2c2c2c;
           &.active {
-            border-bottom: 1px solid #000;
+            border-bottom: 1.5px solid #7FB36B;
+            width: 50%;
+            color: #7FB36B;
+            padding-bottom: 15px;
           }
           &:hover {
-            cursor: default;
-            border-bottom: 1px solid #000;
+            cursor: pointer;
+            // border-bottom: 1px solid #7FB36B;
+            width: 50%;
+            // color: #7FB36B;
           }
         }
         margin-bottom: 1.2vw;
+        border-bottom: 1px solid #ccc;
+        text-align: center;
         .border {
           width: 2px;
           margin: 3px 8px;
@@ -491,10 +618,12 @@ input:focus {
               }
               &-code-img {
                 height: 2.35rem;
-                background: #fff;
+                background: #B2D6A4;
                 width: 9.45rem;
                 // margin: 0 auto;
                 position: relative;
+                margin-top: 20px;
+                border-radius: 4px;
                 .change-code {
                   position: absolute;
                   padding-left: 10px;
@@ -502,26 +631,27 @@ input:focus {
                   left: 100%;
                   top: 50%;
                   transform: translateY(-50%);
-                  text-decoration: underline;
+                  // text-decoration: underline;
                   width: 10em;
-                  cursor: default;
+                  cursor: pointer;
                 }
                 input {
                   width: auto;
                 }
               }
               &-input {
-                width: 10rem;
-                padding: 5px 10px;
+                width: 100%;
+                padding: 10px 0px;
                 position: relative;
                 input {
                   width: 100%;
-                  height: 2rem;
-                  background: #e7f0da;
+                  height: 3rem;
                   opacity: 1;
-                  border: 1px solid #ffffff;
+                  border: none;
+                  background-color: #F6FCF3;
+                  border-bottom: 1px solid #ccc;
                   border-radius: 0.3rem;
-                  padding-left: 5px;
+                  // padding-left: 5px;
                 }
                 .get_code {
                   cursor: pointer;
@@ -545,7 +675,7 @@ input:focus {
                 }
               }
               &-tips {
-                padding-left: 15px;
+                // padding-left: 15px;
                 font-size: 0.6rem;
                 font-family: MicrosoftYaHei;
                 font-weight: 400;
@@ -592,12 +722,14 @@ input:focus {
           .input {
             height: 3rem;
             width: 100%;
-            padding-left: 20px;
-            background: #e6f1d9;
+            padding-top: 13px;
+            // background: #e6f1d9;
             border-radius: 0.5vw;
-            border: 2px solid #fff;
+            border: none;
+            background-color: #F6FCF3;
+            border-bottom: 1px solid #ccc;
             font-family: MicrosoftYaHei;
-            font-size: 0.6vw;
+            font-size: 0.8vw;
             font-weight: normal;
             font-stretch: normal;
             // line-height: 0.2vw;
@@ -606,25 +738,25 @@ input:focus {
           }
         }
         .form_btn {
-          margin-top: 1rem;
+          margin-top: 2rem;
           button {
             &:hover {
               border: none;
-              background: #efefef;
+              background: #D4E8BD;
             }
             outline: none;
             border: none;
             width: 100%;
-            height: 2rem;
+            height: 2.5rem;
             font-family: MicrosoftYaHei;
-            font-size: 0.4rem;
+            font-size: 0.7rem;
             font-weight: normal;
             font-stretch: normal;
-            // line-height: 0.2rem;
             letter-spacing: 0rem;
             color: #2c2c2c;
-            background: #fff;
-            border-radius: 1.3rem;
+            background: #D4E8BD;
+            border-radius: 0.3rem;
+            cursor: pointer;
           }
         }
       }
@@ -662,9 +794,11 @@ input:focus {
               }
               &-code-img {
                 height: 2.35rem;
-                background: #fff;
+                background: #B2D6A4;
                 width: 9.45rem;
                 // margin: 0 auto;
+                margin-top:20px;
+                border-radius: 4px;
                 position: relative;
                 .change-code {
                   position: absolute;
@@ -673,26 +807,27 @@ input:focus {
                   left: 100%;
                   top: 50%;
                   transform: translateY(-50%);
-                  text-decoration: underline;
+                  // text-decoration: underline;
                   width: 10em;
-                  cursor: default;
+                  cursor: pointer;
                 }
                 input {
                   width: auto;
                 }
               }
               &-input {
-                width: 10rem;
-                padding: 5px 10px;
+                width: 100%;
+                padding: 10px 0px;
                 position: relative;
                 input {
                   width: 100%;
-                  height: 2rem;
-                  background: #e7f0da;
+                  height: 3rem;
                   opacity: 1;
-                  border: 1px solid #ffffff;
+                  border: none;
+                  background-color: #F6FCF3;
+                  border-bottom: 1px solid #ccc;
                   border-radius: 0.3rem;
-                  padding-left: 5px;
+                  // padding-left: 5px;
                 }
                 .get_code {
                   cursor: pointer;
@@ -770,12 +905,12 @@ input:focus {
             display: flex;
             justify-content: center;
             align-items: center;
-            background: #fff;
+            background: #7FB36B;
             position: absolute;
             font-size: 0.7rem;
             font-family: MicrosoftYaHei;
             font-weight: 400;
-            color: rgba(44, 44, 44, 1);
+            color: #fff;
             right: 0;
             top: 20%;
             transform: translateY(-20%);
@@ -783,12 +918,13 @@ input:focus {
           .input {
             width: 100%;
             height: 3rem;
-            padding-left: 20px;
-            background: #e6f1d9;
+            padding-top: 13px;
+            background-color: #F6FCF3;
             border-radius: 0.5vw;
-            border: 2px solid #fff;
+            border: none;
+            border-bottom: 1px solid #ccc;
             font-family: MicrosoftYaHei;
-            font-size: 0.6vw;
+            font-size: 0.8vw;
             font-weight: normal;
             font-stretch: normal;
             // line-height: 0.2vw;
@@ -797,25 +933,25 @@ input:focus {
           }
         }
         .form_btn {
-          margin-top: 1rem;
+          margin-top: 2rem;
           button {
             &:hover {
               border: none;
-              background: #efefef;
+              background: #D4E8BD;
             }
             outline: none;
             border: none;
             width: 100%;
-            height: 2rem;
+            height: 2.5rem;
             font-family: MicrosoftYaHei;
-            font-size: 0.4rem;
+            font-size: 0.7rem;
             font-weight: normal;
             font-stretch: normal;
-            // line-height: 0.2rem;
             letter-spacing: 0rem;
             color: #2c2c2c;
-            background: #fff;
-            border-radius: 1.3rem;
+            background: #D4E8BD;
+            border-radius: 0.3rem;
+            cursor: pointer;
           }
         }
       }
@@ -824,7 +960,7 @@ input:focus {
         display: flex;
         justify-content: space-between;
         font-family: MicrosoftYaHei;
-        font-size: 0.7vw;
+        font-size: 0.8vw;
         font-weight: normal;
         font-stretch: normal;
         // line-height: 0.2vw;
@@ -833,6 +969,8 @@ input:focus {
         .auto_login {
           display: flex;
           align-items: center;
+          cursor: pointer;
+          color: #999;
           &-tips {
           }
           &-icon {
@@ -847,6 +985,10 @@ input:focus {
           cursor: pointer;
           display: flex;
           align-items: center;
+          .Forget{
+            cursor: pointer;
+            padding-left: 15px;
+          }
         }
       }
     }
