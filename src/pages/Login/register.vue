@@ -79,7 +79,7 @@
             <div class="auto_login">
               <div class="shuoming">
                 <p>
-                  <el-checkbox v-model="checked" @change="rememberlook" style="margin-right:6px;"></el-checkbox>我已阅读并接受
+                  注册即代表您已接受
                   <span href="../../../static/doc/瑜伽村隐私政策.DOCX" @click="open.ys = true" class="file">《瑜伽村隐私政策》</span>和
                   <span href="../../../static/doc/瑜伽村使用协议.DOCX" @click="open.sy = true" class="file">《瑜伽村使用协议》</span>
                 </p>
@@ -88,7 +88,7 @@
             <div class="register" @click="goLogin">已有账号?登录</div>
           </div>
           <div class="form-button" :style="`${isPostting?'pointer-events:none;':''}`" @click="register">
-            <el-button class="butt" type="text" :disabled="querenxiazai">注册</el-button>
+            <el-button class="butt" type="text">注册</el-button>
           </div>
         </div>
       </div>
@@ -148,7 +148,7 @@ import logo from "@/assets/market/logo_max.png";
 export default {
   data() {
     return {
-      checked: false,
+      // checked: false,
       querenxiazai:true,
       getCodepass:false,
       open: {
@@ -211,13 +211,13 @@ export default {
     this.getVerificationCode();
   },
   methods: {
-    rememberlook(){
-      if(this.checked == false){
-        this.querenxiazai = true;
-      }else{
-        this.querenxiazai = false;
-      }
-    },
+    // rememberlook(){
+    //   if(this.checked == false){
+    //     this.querenxiazai = true;
+    //   }else{
+    //     this.querenxiazai = false;
+    //   }
+    // },
     /* 图形验证码 */
     getVerificationCode() {
       this.$request("/verificationCode").then(data => {
