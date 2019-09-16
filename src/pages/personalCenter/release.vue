@@ -98,9 +98,9 @@
                 <div class="upload-box">
                   <el-upload
                     action="#"
-                    :class="{disabled:uploadExemptionDisabled('img_train_first')}"
+                    :class="{disabled:uploadExemptionDisabled('img_train_two')}"
                     :on-change="changeExemptionFile"
-                    :on-remove="() => this.ruleForm['img_train_first'] = ''"
+                    :on-remove="() => this.ruleForm['img_train_two'] = ''"
                     list-type="picture-card"
                     :limit="1"
                     :auto-upload="false"
@@ -115,9 +115,9 @@
                 <div class="upload-box">
                   <el-upload
                     action="#"
-                    :class="{disabled:uploadExemptionDisabled('img_train_first')}"
+                    :class="{disabled:uploadExemptionDisabled('img_train_three')}"
                     :on-change="changeExemptionFile"
-                    :on-remove="() => this.ruleForm['img_train_first'] = ''"
+                    :on-remove="() => this.ruleForm['img_train_three'] = ''"
                     list-type="picture-card"
                     :limit="1"
                     :auto-upload="false"
@@ -138,14 +138,14 @@
               <div class="tips"></div>
             </div>
             <div class="input-box">
-              <el-input placeholder="请输入课程名称"></el-input>
+              <el-input v-model="ruleForm.theme" placeholder="请输入课程名称"></el-input>
             </div>
             <div class="title_tips">
               <div class="title">难度选择</div>
               <div class="tips"></div>
             </div>
             <div class="rate-box">
-              <el-rate :colors="['#58B708','#58B708','#58B708']" :value="3"></el-rate>
+              <el-rate v-model="ruleForm.diff" :colors="['#58B708','#58B708','#58B708']" ></el-rate>
             </div>
           </div>
           <div class="class_price_address_detail">
@@ -154,10 +154,10 @@
               <div class="tips">*严禁虚标价格</div>
             </div>
             <div class="input-box">
-              <el-input placeholder="请输入课程价格"></el-input>
+              <el-input v-model="ruleForm.price" placeholder="请输入课程价格"></el-input>
             </div>
             <div class="title_tips">
-              <div class="title">课程价格</div>
+              <div class="title">发布地址</div>
               <div class="tips"></div>
             </div>
             <div class="select-box">
@@ -168,7 +168,7 @@
               <div class="tips"></div>
             </div>
             <div class="input-box">
-              <el-input placeholder="请输入详细地址"></el-input>
+              <el-input v-model="ruleForm.address" placeholder="请输入详细地址"></el-input>
             </div>
           </div>
           <div class="class_teacher_photo_time">
@@ -177,18 +177,18 @@
               <div class="tips"></div>
             </div>
             <div class="input-box">
-              <el-input placeholder="请输入授课老师姓名"></el-input>
+              <el-input v-model="ruleForm.name" placeholder="请输入授课老师姓名"></el-input>
             </div>
             <div class="title_tips">
               <div class="title">授课教师图片</div>
-              <div class="tips teacher">从名师库中搜索</div>
+              <div class="tips teacher" @click="teacher_list.show = true">从名师库中搜索</div>
             </div>
             <div class="upload-box">
               <el-upload
                 action="#"
-                :class="{disabled:(uploadExemptionDisabled('img_train_first'))}"
+                :class="{disabled:(uploadExemptionDisabled('teacher_img'))}"
                 :on-change="changeExemptionFile"
-                :on-remove="() => this.ruleForm['img_train_first'] = ''"
+                :on-remove="() => this.ruleForm['teacher_img'] = ''"
                 list-type="picture-card"
                 :limit="1"
                 :auto-upload="false"
@@ -197,7 +197,7 @@
                 <div class="el-upload__tip" slot="tip">支持jpg,jpeg,png格式</div>
               </el-upload>
               <el-dialog :visible.sync="dialogVisible">
-                <img width="100%" :src="dialogImageUrl" alt />
+                <img width="100%" :src="ruleForm.teacher_img" alt />
               </el-dialog>
             </div>
             <div class="title_tips">
@@ -223,14 +223,14 @@
               <div class="tips"></div>
             </div>
             <div class="input-box">
-              <el-input placeholder="请输入报名联系人"></el-input>
+              <el-input v-model="ruleForm.linkman" placeholder="请输入报名联系人"></el-input>
             </div>
             <div class="title_tips">
               <div class="title">联系电话</div>
               <div class="tips"></div>
             </div>
             <div class="input-box">
-              <el-input placeholder="请输入联系电话"></el-input>
+              <el-input v-model="ruleForm.tel" placeholder="请输入联系电话"></el-input>
             </div>
           </div>
           <div class="class_biref_group_detai">
@@ -239,21 +239,21 @@
               <div class="tips"></div>
             </div>
             <div class="input-box">
-              <el-input type="textarea" placeholder="请输入课程大纲"></el-input>
+              <el-input v-model="ruleForm.outline" type="textarea" placeholder="请输入课程大纲"></el-input>
             </div>
             <div class="title_tips">
               <div class="title">适宜人群</div>
               <div class="tips"></div>
             </div>
             <div class="input-box">
-              <el-input placeholder="请输入适宜人群"></el-input>
+              <el-input v-model="ruleForm.crowd" placeholder="请输入适宜人群"></el-input>
             </div>
             <div class="title_tips">
               <div class="title">课程详细内容</div>
               <div class="tips"></div>
             </div>
             <div class="input-box">
-              <el-input type="textarea" placeholder="请输入课程详细内容"></el-input>
+              <el-input v-model="ruleForm.content" type="textarea" placeholder="请输入课程详细内容"></el-input>
             </div>
           </div>
           <div class="agreen-next">
@@ -265,9 +265,10 @@
     </div>
     <el-dialog title="名师列表" :visible.sync="teacher_list.show">
       <div class="serach-wrap">
-        <div class="header">授课教师名字</div>
+        <!-- <div class="header">授课教师名字</div> -->
         <div class="input-box">
           <el-autocomplete
+            style="width:100%;"
             v-model.lazy="teacher_list.keyword"
             :trigger-on-focus="false"
             :fetch-suggestions="querySearchAsync"
@@ -275,16 +276,25 @@
             placeholder="请输入授课教师名字"
           ></el-autocomplete>
         </div>
+        <div class="photo" v-if="teacher_list.select.path">
+          <img :src="teacher_list.select.path" alt />
+        </div>
       </div>
       <span slot="footer">
-        <el-button @click=" teacher_list.show = false ">取 消</el-button>
-        <el-button type="primary" @click=" teacher_list.show = false ">确 定</el-button>
+        <el-button @click="resetTeacher">取 消</el-button>
+        <el-button type="primary" @click="selectTeacher">确 定</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 <script>
 import VDistpicker from "v-distpicker";
+import {
+  getMyTrain,
+  getMyTrainFailed,
+  postMytrainInfoPut,
+  postShowTeacherPic
+} from "@/api/personal";
 export default {
   components: {
     VDistpicker
@@ -294,7 +304,8 @@ export default {
       teacher_list: {
         show: false,
         keyword: "",
-        list: []
+        list: [],
+        select: {}
       },
       dialogVisible: false,
       dialogImageUrl: "",
@@ -348,10 +359,21 @@ export default {
       return type => this.ruleForm[type];
     }
   },
+  mounted() {
+    getMyTrain().then(res => {});
+    getMyTrainFailed().then(res => {});
+  },
   methods: {
+    selectTeacher() {
+
+    },
+    resetTeacher() {
+      teacher_list.select = {};
+      teacher_list.keyword = "";
+      teacher_list.show = false;
+    },
     handleSelect(item) {
-      // this.clubInfo = item;
-      // this.getStaffListByClubId(item.Hsxx_Hsid);
+      this.teacher_list.select = item;
     },
 
     async querySearchAsync(queryString, cb) {
@@ -359,7 +381,7 @@ export default {
       var results = queryString
         ? clubLists.filter(this.createStateFilter(queryString))
         : clubLists;
-      results = results.map(item => ({ ...item, value: item.Hsxx_Name_jch }));
+      results = results.map(item => ({ ...item, value: item.name }));
       clearTimeout(this.timeout);
       this.timeout = setTimeout(() => {
         cb(results);
@@ -368,10 +390,11 @@ export default {
     },
     searchClub() {
       // this.$request()
+      return postShowTeacherPic({ name: this.teacher_list.keyword });
     },
     createStateFilter(queryString) {
       return state => {
-        return state.Hsxx_Name;
+        return state.name;
       };
     },
     changeExemptionFile(file, fileList) {
@@ -445,20 +468,39 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+img {
+  width: 100%;
+  height: 100%;
+}
+.serach-wrap {
+  position: relative;
+  min-height: 8rem;
+  .input-box {
+    width: 20em;
+  }
+  .photo {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 6rem;
+    height: 6rem;
+  }
+}
 .agreen-next {
   display: flex;
   padding-top: 0.8rem;
-  .next, .back {
+  .next,
+  .back {
     margin-right: 1rem;
     cursor: pointer;
     font-size: 0.7rem;
     padding: 0.5rem 1.18rem;
     border-radius: 0.25rem;
   }
-  .next{
+  .next {
     background: #cde9b4;
   }
-  .back{
+  .back {
     background: #fff;
   }
 }

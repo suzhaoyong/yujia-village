@@ -59,7 +59,7 @@
               </div>
               <div class="tips">
                 <span
-                  @click="tagList[0].methods = 'phone';ruleForm = resetForm('ruleForm');"
+                  @click="tagList[0].methods = 'phone';ruleForm = resetForm('ruleForm'); getVerificationCode();"
                 >忘记密码？更换验证方式</span>
               </div>
             </div>
@@ -77,7 +77,8 @@
                       class="form-control input"
                       placeholder="请输入验证码"
                     />
-                    <div class="getcode" @click="getCode">{{codeTips.msg}}</div>
+                    <!-- <div class="getcode" @click="getCodeMessage">{{codeTips.msg}}</div> -->
+                    <div class="getcode" @click="getCodeMessage">发送验证码</div>
                     <div class="form_input-tips"></div>
                   </div>
                 </div>
@@ -122,7 +123,8 @@
                       class="form-control input"
                       placeholder="请输入验证码"
                     />
-                    <div class="getcode" @click="getCode">{{codeTips.msg}}</div>
+                    <!-- <div class="getcode" @click="getCode">{{codeTips.msg}}</div> -->
+                    <div class="getcode" @click="getCodeMessage">发送验证码</div>
                     <div class="form_input-tips"></div>
                   </div>
                 </div>
@@ -149,6 +151,30 @@
                 <span>{{tel}}</span>
               </div>
             </div>
+            <el-dialog
+              style="margin-top:1rem;"
+              width="35rem"
+              title="图形验证码"
+              :visible.sync="getCodepass"
+            >
+              <div class="item-box left">
+                <div class="code-title">请在下方填写图形验证码</div>
+                <div class="code-img">
+                  <img :src="verification.code_img" alt />
+                  <div class="change-code" @click="getVerificationCode">看不清？换一张</div>
+                </div>
+                <div class="box-input">
+                  <input
+                    type="text"
+                    v-model="ruleForm.captcha"
+                  />
+                </div>
+                <!-- <div class="box-tips">{{isError('captcha')}}</div> -->
+              </div>
+              <span slot="footer">
+                <el-button type="primary" @click="getCodeMessage2">确 定</el-button>
+              </span>
+            </el-dialog>
             <div class="edit-personage" v-show="tagList[2].active && info.user.name">
               <div class="item">
                 <div class="lable">用户名</div>
@@ -318,6 +344,7 @@ export default {
   data() {
     return {
       success: false,
+      getCodepass:false,
       club: { list: [], select_id: "" },
       codeTips: {
         msg: "发送验证码",
@@ -329,17 +356,25 @@ export default {
         { type: "personage", active: false },
         { type: "hall", active: false }
       ],
+      verification: {
+        code_img: "",
+        code_key: ""
+      },
       ruleForm: {
         old_password: "",
         password: "",
         verification_key: "",
-        verification_code: ""
+        verification_code: "",
+        key: "",
+        captcha: ""
       },
       telForm: {
         old_tel: "",
         tel: "",
         verification_key: "",
-        verification_code: ""
+        verification_code: "",
+        key: "",
+        captcha: ""
       },
       clubForm: {
         id: "", // 会馆id
@@ -404,8 +439,41 @@ export default {
   mounted() {
     const { type } = this.$route.query;
     type && this.tagsChange(type);
+    
   },
   methods: {
+    getCodeMessage() {
+      if (this.ruleForm.tel === "") {
+        this.getCodepass = false;
+      } else {
+        this.getCodepass = true;
+      }
+    },
+    getCodeMessage2() {
+      const { captcha, key } = this.ruleForm;
+      captcha &&
+        key &&
+        this.$request
+          .post("/verificationCode", { captcha, key })
+          .then(data => {
+            this.msg = data.msg;
+            if (this.msg == "OK") {
+              this.getCodepass = false;
+              this.getCode();
+            } else {
+              this.getCodepass = true;
+              this.ruleForm.captcha = "";
+            }
+          })
+          .catch(() => {});
+    },
+    getVerificationCode() {
+      this.$request("/verificationCode").then(data => {
+        const { img, key } = data;
+        this.verification.code_img = img;
+        this.ruleForm.key = key;
+      });
+    },
     /** 个人信息 */
     getPersonal() {
       this.$request("/personal/home").then(data => {
@@ -496,9 +564,10 @@ export default {
       }, 1000);
 
       const { tel } = this.info && this.info.user;
+      const { captcha, key } = this.ruleForm;
       tel &&
         this.$request
-          .post("/getVerificationCode", { tel })
+          .post("/getVerificationCode", { tel, key, captcha })
           .then(data => {
             this.$message({ message: "发送成功", type: "success" });
             this.ruleForm.verification_key = data.key;
@@ -516,7 +585,7 @@ export default {
         old_tel: this.info.user.tel
       });
       if (this.checkoutEmpty(params)) return;
-      this.$request.post("/personal/updatePassword", params).then(data => {
+      this.$request.post("/personal/updateTel", params).then(data => {
         this.$message({
           type: "success",
           message: "修改成功"
@@ -558,6 +627,7 @@ export default {
       this.resetCode();
       if (cur_index == 1) {
         this.ruleForm = this.resetForm("ruleForm");
+        this.getVerificationCode()
       } else {
         this.telForm = this.resetForm("telForm");
       }
@@ -603,7 +673,9 @@ export default {
         }
       );
       if (identity_auth === 5 || identity_auth === 8) {
-        getTeacherInfo().then(data => (this.teacherForm = data[0]));
+        getTeacherInfo().then(data => {
+          data[0] && (this.teacherForm = data[0]);
+        });
       }
     },
     getClub() {
@@ -634,7 +706,7 @@ export default {
         });
     },
     updateClub() {
-      const params = Object.assign({},this.clubForm)
+      const params = Object.assign({}, this.clubForm);
       postUpdateClubInfo(params).then(data => {
         this.getPersonal();
         this.$message({
@@ -677,6 +749,45 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.code-title{
+  height: 37px;
+  margin-left: 30px;
+}
+.code-img{
+    // width: 300px;
+    height: 60px;
+    display: flex;
+    margin: 0 auto;
+    margin-left: 30px;
+    img{
+      width: 100%;
+      height: 100%;
+    }
+}
+.box-input{
+    width: 47%;
+    height: 3rem;
+    padding-top: 15px;
+    margin-left: 30px;
+    input{
+      width: 100%;
+      height: 100%;
+    }
+}
+.box-tips{
+  color: #ce551a;
+  padding-top: 10px;
+  margin-left: 30px;
+  font-size: 0.6rem;
+  font-family: MicrosoftYaHei;
+  font-weight: 400;;
+  height: 1.2rem;
+}
+.change-code{
+  width: 100%;
+  padding-top: 20px;
+  cursor: pointer;
+}
 * {
   margin: 0;
   // padding: 0;

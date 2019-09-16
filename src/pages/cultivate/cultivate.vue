@@ -663,7 +663,7 @@ img {
   .cultivate-count {
     width: 60rem;
     margin: 0 auto;
-    margin-top: -17.8rem;
+    margin-top: -24.4rem;
     height: 100%;
     padding-bottom: 3rem;
     // display: inline-block;
