@@ -347,7 +347,7 @@ export default {
     font-family:Microsoft YaHei;
     font-weight:400;
     color: #ffffff;
-    width: 83%;
+    width: 75%;
     margin:0 auto;
     display: -webkit-box !important;
     -webkit-box-orient: vertical !important;
@@ -361,7 +361,7 @@ export default {
     font-family:Microsoft YaHei;
     font-weight:400;
     color: #ffffff;
-    width: 83%;
+    width: 75%;
     margin:0 auto;
     display: -webkit-box !important;
     -webkit-box-orient: vertical !important;

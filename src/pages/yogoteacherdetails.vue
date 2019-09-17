@@ -15,14 +15,17 @@
                 </div>
             </div>
             <div class="yogoteacher-count-div3">
+                <div class="yogofigcaption-mian">
+                <img src="../assets/bgimg20.png" class="count-name-imgpic"/>
                 <div class="yogofigcaption">
                     <img src="../assets/image82.png" class="count-name-img3"/>
                     <div class="yogofigcaption-title">
                         <h2>个人简介</h2>
                         <p class="p1">Good at courses</p>
                         <p class="p2">擅长课程：<span>{{teacher.good_at}}</span></p>
-                        <div class="p3">课程特色：<div v-html="teacher.content" style="width: 88%;line-height: 20px;">{{teacher.content}}</div></div>
+                        <div class="p3">老师介绍：<div v-html="teacher.content" style="width: 88%;line-height: 20px;">{{teacher.content}}</div></div>
                     </div>
+                </div>
                 </div>
             </div>
             <div class="yogoteacher-count-div4">
@@ -178,29 +181,36 @@ export default {
     }
     .yogoteacher-count-div3{
         width: 100%;
-        height: 650px;
+        height: auto;
         background-color: #282828;
-        background-image: url('../assets/bgimg20.png');
-        background-repeat: no-repeat;
-        background-size: 100% 100%;
+        position: relative;
+        .yogofigcaption-mian{
+            width: 100%;
+            margin: 0 auto;
+            height: 100%;
+            background-color: #282828;
+            display: inline-block;
+            .count-name-imgpic{
+                width: 100%;
+                height: 100%;
+                position: absolute;
+            }
         .yogofigcaption{
             width: 1200px;
             height: 100%;
             margin:0 auto;
             display: flex;
-            position: relative;
+            margin-bottom: 2%;
             .count-name-img3{
                 width: 400px;
-                height: 540px;
-                position: absolute;
-                bottom: 28%;
-                left: 2%;
+                height: 520px;
+                margin-top: -5%;
+                margin-left: 26px;
            }
            .yogofigcaption-title{
                width: 58%;
                height: 100%;
-               position: absolute;
-               right: 0;
+               margin-left: 6%;
                h2{
                     font-size:1.7rem;
                     font-family:Microsoft YaHei;
@@ -230,6 +240,7 @@ export default {
                    display: flex;
                }
            }
+        }
         }
     }
     .yogoteacher-count-div4{

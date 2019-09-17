@@ -27,6 +27,19 @@
               <div class="form_input-tips">{{accountErrorRule.tel.show?accountErrorRule.tel.msg:''}}</div>
             </div>
             <div class="form_input">
+              <input
+                class="input"
+                v-model.trim="accountRuleForm.password"
+                type="password"
+                placeholder="请输入密码"
+                @blur="checkEmtypeInputBox('password')"
+                style="outline:none;"
+              />
+              <div
+                class="form_input-tips"
+              >{{accountErrorRule.password.show?accountErrorRule.password.msg:''}}</div>
+            </div>
+            <div class="form_input">
               <div class="item" style="align-items: flex-end;">
                 <div class="item-box left">
                   <div class="item-box-code-img">
@@ -44,19 +57,6 @@
                   <div class="item-box-tips">{{isError('captcha')}}</div>
                 </div>
               </div>
-            </div>
-            <div class="form_input">
-              <input
-                class="input"
-                v-model.trim="accountRuleForm.password"
-                type="password"
-                placeholder="请输入密码"
-                @blur="checkEmtypeInputBox('password')"
-                style="outline:none;"
-              />
-              <div
-                class="form_input-tips"
-              >{{accountErrorRule.password.show?accountErrorRule.password.msg:''}}</div>
             </div>
             <div class="form_btn">
               <button @click.stop="submitForm('account')" :disabled="isPostting">登录</button>
