@@ -1,9 +1,6 @@
 <template>
   <div class="body-wrap">
     <div class="body">
-      <!-- <div class="logo">
-        <img :src="icon.logo" alt />
-      </div>-->
       <div class="tips" v-show="false">
         <span :class="isActive('register')" @click="changeType('register')">注册</span>
         <span :class="isActive('login')" @click="changeType('login')">登录</span>
@@ -14,21 +11,18 @@
           <img :src="icon.welcome" alt />
         </div>
         <div class="input-box flex line">
-          <!-- <van-field v-model="ruleForm.tel" placeholder="请输入手机号码" /> -->
           <div class="icon">
             <img :src="icon.tel" alt />
           </div>
           <input class="input tel" v-model="ruleForm.tel" placeholder="请输入手机号码" />
         </div>
         <div class="input-box flex line">
-          <!-- <van-field v-model="ruleForm.password" type="password" placeholder="请输入密码" /> -->
           <div class="icon key">
             <img :src="icon.key" alt />
           </div>
           <input class="input key" type="password" v-model="ruleForm.password" placeholder="请输入密码" />
         </div>
         <div class="input-box flex">
-          <!-- <van-field style="width:40%;" v-model="ruleForm.captcha" placeholder="请输入验证码" /> -->
           <input class="input captcha" v-model="ruleForm.captcha" placeholder="请输入验证码" />
           <div class="code">
             <div class="img">
@@ -259,7 +253,6 @@ export default {
     this.getVerificationCode();
     this.loadFile("sy");
     this.loadFile("ys");
-    console.log(this.getUrlParams());
   },
   methods: {
     openFile(type) {
