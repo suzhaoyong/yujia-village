@@ -6,8 +6,8 @@
           <div class="header">
             <span>我的发布/My release</span>
           </div>
-          <div class="result">
-            <div class="club" v-for="item in release.data">
+          <div class="result" v-if="release.data.length>0">
+            <div class="club" @click="selectItem(item)" v-for="item in release.data">
               <div class="club_img">
                 <img :src="item.paht" alt />
               </div>
@@ -33,13 +33,14 @@
               ></el-pagination>
             </div>
           </div>
+          <div class="no_list" v-if="release.data.length === 0">暂无数据</div>
         </div>
         <div class="falied">
           <div class="header">
             <span>审核未通过课程/The audit failed</span>
           </div>
-          <div class="result">
-            <div class="club" v-for="item in release_failed.data">
+          <div v-if="release_failed.data.length>0" class="result">
+            <div class="club" @click="selectItem(item)" v-for="item in release_failed.data">
               <div class="club_img">
                 <img :src="item.paht" alt />
               </div>
@@ -59,12 +60,13 @@
                 :hide-on-single-page="true"
                 layout="prev, pager, next, jumper"
                 :page-size="release_failed.per_page"
-                @current-change="changePage"
+                @current-change="changePageFailed"
                 :current-page="release_failed.current_page"
                 :total="release_failed.total"
               ></el-pagination>
             </div>
           </div>
+          <div class="no_list" v-if="release_failed.data.length === 0">暂无数据</div>
         </div>
       </div>
       <div class="my rh">
@@ -188,7 +190,13 @@
               <div class="tips teacher" @click="teacher_list.show = true">从名师库中搜索</div>
             </div>
             <div class="upload-box" style="padding-bottom:1rem;">
+              <div class="upload-img" v-if="select.path">
+                <img :src="select.path" alt />
+                <span class="item-actions"></span>
+                <i @click="select.path = ''" class="el-icon-delete"></i>
+              </div>
               <el-upload
+                v-else
                 action="#"
                 :class="{disabled:(uploadDisabled('teacher_img'))}"
                 :on-change="changeTeacherFile"
@@ -257,7 +265,7 @@
               <div class="tips"></div>
             </div>
             <div class="input-box">
-              <el-input v-model="ruleForm.content" type="textarea" placeholder="请输入课程详细内容"></el-input>
+              <el-input v-model="ruleForm.main" type="textarea" placeholder="请输入课程详细内容"></el-input>
             </div>
           </div>
           <div class="agreen-next">
@@ -305,6 +313,9 @@ export default {
   },
   data() {
     return {
+      select: {
+        path: ""
+      },
       teacher_list: {
         show: false,
         keyword: "",
@@ -336,7 +347,7 @@ export default {
         total: 0
       },
       ruleForm: {
-        content: "", // 内容介绍
+        main: "", // 内容介绍
         crowd: "", // 	适用人群
         outline: "", // 课程大纲
         tel: "", // 报名联系人电话
@@ -372,6 +383,11 @@ export default {
     this.getTrainFailed();
   },
   methods: {
+    selectItem(item) {
+      this.$router.push({
+        path: `/cultivate/detail/${item.id}`
+      });
+    },
     getTrain(page) {
       getMyTrain(page).then(res => {
         this.release = res;
@@ -396,13 +412,17 @@ export default {
       if (img_train_three || img_train_two || img_train_first) {
         for (let p of Object.keys(params)) {
           if (
-            ["img_train_three", "img_train_two", "img_train_first"].indexOf(
-              p
-            ) >= 0
+            [
+              "img_train_three",
+              "img_train_two",
+              "img_train_first",
+              "teacher_img"
+            ].indexOf(p) >= 0
           )
             continue;
           if (params[p] === "") {
             this.$message({ message: "请不要留空白", type: "warning" });
+            return;
             break;
           }
         }
@@ -411,9 +431,67 @@ export default {
         return;
       }
       console.log(JSON.stringify(this.ruleForm, null, 4));
+      let { path } = this.select;
+      path && (params.teacher_img = path);
+      // let params = {
+      //   address: "详细地址",
+      //   area: "河东区",
+      //   city: "天津城区",
+      //   main: "课程详细内容",
+      //   crowd: "适宜人群",
+      //   diff: 3,
+      //   endTime: "2019-09-14",
+      //   img_train_first:
+      //     "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAQAAAC0NkA6AAAAAmJLR0QA/4ePzL8AAAG3SURBVFjD7dcxbMxhGMfxT0vRmIimgxiwmJobGRB0MEmJ24zCIq2NTSNNWqYmVpGQGByJgcFEE1ZhlKMh2tRwSf2bhpQ6j8G5/FtF7n93jWvu99ue//v8v8nzvM+b96WtttaUuuUa4O6/Q3KiAc79R5Ako2uAJJl7mrQhaY1KJEabCxkXwngLQo55ucQlIZRSkTv1Q46aWOJpIUynItdbqCdXFaouCqGo4Lkp7/U1CvLQZNWzFi2aNemzELY2cxg3mBemGlOujU64ZMyIIXm7q/F+IdxsBOSImWWHeMkNh3UqCGGgfshBX5U9csU1D0z6XkW9Uxamra8Xsk5RYn/qW69T7lkQQlmYMWxXfZADwuAKK7Z4kipf2TNDerJCzgk7V1iR900om0ihFtx30qbaIYMitZt+aaBSrhHs83TJpkjc8qk2yCHh4rLZGFYWwm2doEPe66wXiQRdXllwVhfocdrbyi/uVmI/1eWMD1kh7DUnfPTCVDV93nkdv2VtdsFcNgh9HqdS37is94+Z24z5Upmlms+uHY7L67fdv7Wn1sZnU/ve1SzIqly418L7ZFWec2211WL6Ac2uSUavpEE4AAAAAElFTkSuQmCC",
+      //   img_train_three:
+      //     "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAQAAAC0NkA6AAAAAmJLR0QA/4ePzL8AAAG3SURBVFjD7dcxbMxhGMfxT0vRmIimgxiwmJobGRB0MEmJ24zCIq2NTSNNWqYmVpGQGByJgcFEE1ZhlKMh2tRwSf2bhpQ6j8G5/FtF7n93jWvu99ue//v8v8nzvM+b96WtttaUuuUa4O6/Q3KiAc79R5Ako2uAJJl7mrQhaY1KJEabCxkXwngLQo55ucQlIZRSkTv1Q46aWOJpIUynItdbqCdXFaouCqGo4Lkp7/U1CvLQZNWzFi2aNemzELY2cxg3mBemGlOujU64ZMyIIXm7q/F+IdxsBOSImWWHeMkNh3UqCGGgfshBX5U9csU1D0z6XkW9Uxamra8Xsk5RYn/qW69T7lkQQlmYMWxXfZADwuAKK7Z4kipf2TNDerJCzgk7V1iR900om0ihFtx30qbaIYMitZt+aaBSrhHs83TJpkjc8qk2yCHh4rLZGFYWwm2doEPe66wXiQRdXllwVhfocdrbyi/uVmI/1eWMD1kh7DUnfPTCVDV93nkdv2VtdsFcNgh9HqdS37is94+Z24z5Upmlms+uHY7L67fdv7Wn1sZnU/ve1SzIqly418L7ZFWec2211WL6Ac2uSUavpEE4AAAAAElFTkSuQmCC",
+      //   img_train_two: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAnkA",
+      //   linkman: "报名联系人",
+      //   name: "授课老师姓名",
+      //   outline: "课程大纲",
+      //   price: "123",
+      //   province: "天津市",
+      //   startTime: "2019-09-02",
+      //   teacher_img:
+      //     "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAQAAAC0NkA6AAAAAmJLR0QA/4ePzL8AAAG3SURBVFjD7dcxbMxhGMfxT0vRmIimgxiwmJobGRB0MEmJ24zCIq2NTSNNWqYmVpGQGByJgcFEE1ZhlKMh2tRwSf2bhpQ6j8G5/FtF7n93jWvu99ue//v8v8nzvM+b96WtttaUuuUa4O6/Q3KiAc79R5Ako2uAJJl7mrQhaY1KJEabCxkXwngLQo55ucQlIZRSkTv1Q46aWOJpIUynItdbqCdXFaouCqGo4Lkp7/U1CvLQZNWzFi2aNemzELY2cxg3mBemGlOujU64ZMyIIXm7q/F+IdxsBOSImWWHeMkNh3UqCGGgfshBX5U9csU1D0z6XkW9Uxamra8Xsk5RYn/qW69T7lkQQlmYMWxXfZADwuAKK7Z4kipf2TNDerJCzgk7V1iR900om0ihFtx30qbaIYMitZt+aaBSrhHs83TJpkjc8qk2yCHh4rLZGFYWwm2doEPe66wXiQRdXllwVhfocdrbyi/uVmI/1eWMD1kh7DUnfPTCVDV93nkdv2VtdsFcNgh9HqdS37is94+Z24z5Upmlms+uHY7L67fdv7Wn1sZnU/ve1SzIqly418L7ZFWec2211WL6Ac2uSUavpEE4AAAAAElFTkSuQmCC",
+      //   tel: "17682488600",
+      //   theme: "课程名称"
+      // };
+      postMytrainInfoPut(params).then(res => {
+        this.$message({ message: "发布成功", type: "success" });
+        this.getTrain();
+        this.successResetData()
+      });
+    },
+    successResetData() {
+      this.select = {
+        path: ""
+      }
+      this.ruleForm = {
+        main: "", // 内容介绍
+        crowd: "", // 	适用人群
+        outline: "", // 课程大纲
+        tel: "", // 报名联系人电话
+        linkman: "", // 报名联系人
+        endTime: "",
+        startTime: "",
+        teacher_img: "",
+        name: "",
+        address: "",
+        area: "",
+        city: "",
+        province: "",
+        price: "",
+        diff: 0,
+        theme: "",
+        img_train_three: "",
+        img_train_two: "",
+        img_train_first: ""
+      }
     },
     selectTeacher() {
-      this.ruleForm.teacher_img = this.teacher_list.select.path
+      // this.ruleForm.teacher_img = this.teacher_list.select.path;
+      this.select.path = this.teacher_list.select.path;
       this.resetTeacher();
     },
     resetTeacher() {
@@ -481,7 +559,7 @@ export default {
       this.getTrain(val);
     },
     changePageFailed(val) {
-      this.getTrainFailed(val)
+      this.getTrainFailed(val);
     },
     changeReleasePage(val) {
       this.release.meta.currentPage = val - 1;
@@ -529,6 +607,9 @@ export default {
 }
 .pages {
   padding-top: 1rem;
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
 }
 </style>
 <style lang="scss" scoped>
@@ -544,7 +625,7 @@ img {
   }
   .photo {
     position: absolute;
-    right: 0;
+    left: 22em;
     top: 0;
     width: 6rem;
     height: 6rem;
@@ -581,8 +662,8 @@ img {
       width: 21rem;
       .apply,
       .falied {
-        background: #fff;
         .header {
+          background: #fff;
           height: 3.65rem;
           box-shadow: -1px 2px 15px 1px rgba(36, 36, 36, 0.2);
           border-radius: 5px;
@@ -598,12 +679,24 @@ img {
             padding: 0.4rem 0 0.2rem 1rem;
           }
         }
-        .result {
+        .no_list {
+          background: #fff;
           box-shadow: -1px 2px 15px 1px rgba(36, 36, 36, 0.2);
           border-radius: 5px;
           padding-top: 0.8rem;
           padding-bottom: 1.4rem;
           margin-bottom: 1.25rem;
+          text-align: center;
+        }
+        .result {
+          background: #fff;
+          box-shadow: -1px 2px 15px 1px rgba(36, 36, 36, 0.2);
+          border-radius: 5px;
+          padding-top: 0.8rem;
+          padding-bottom: 1.4rem;
+          margin-bottom: 1.25rem;
+          min-height: 52rem;
+          position: relative;
           .club {
             display: flex;
             padding: 0.7rem 1.4rem 0.7rem 1rem;
@@ -714,6 +807,42 @@ img {
                 color: #759e64;
                 cursor: pointer;
               }
+            }
+          }
+          .upload-img {
+            width: 148px;
+            height: 148px;
+            position: relative;
+            .el-icon-delete {
+              display: none;
+            }
+            &:hover .item-actions {
+              display: block;
+            }
+            .item-actions {
+              display: none;
+              position: absolute;
+              width: 100%;
+              height: 100%;
+              left: 0;
+              top: 0;
+              cursor: default;
+              text-align: center;
+              color: #fff;
+              opacity: 1;
+              font-size: 20px;
+              background-color: rgba(0, 0, 0, 0.5);
+              -webkit-transition: opacity 0.3s;
+              transition: opacity 0.3s;
+            }
+            &:hover .el-icon-delete {
+              color: #fff;
+              display: block;
+              position: absolute;
+              font-size: 30px;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
             }
           }
           .input-box {

@@ -164,10 +164,7 @@
                   <div class="change-code" @click="getVerificationCode">看不清？换一张</div>
                 </div>
                 <div class="box-input">
-                  <input
-                    type="text"
-                    v-model="ruleForm.captcha"
-                  />
+                  <input type="text" v-model="ruleForm.captcha" />
                 </div>
                 <!-- <div class="box-tips">{{isError('captcha')}}</div> -->
               </div>
@@ -344,7 +341,7 @@ export default {
   data() {
     return {
       success: false,
-      getCodepass:false,
+      getCodepass: false,
       club: { list: [], select_id: "" },
       codeTips: {
         msg: "发送验证码",
@@ -439,7 +436,6 @@ export default {
   mounted() {
     const { type } = this.$route.query;
     type && this.tagsChange(type);
-    
   },
   methods: {
     getCodeMessage() {
@@ -457,9 +453,9 @@ export default {
           .post("/verificationCode", { captcha, key })
           .then(data => {
             this.msg = data.msg;
+            this.getCode();
             if (this.msg == "OK") {
               this.getCodepass = false;
-              this.getCode();
             } else {
               this.getCodepass = true;
               this.ruleForm.captcha = "";
@@ -588,7 +584,7 @@ export default {
       this.$request.post("/personal/updateTel", params).then(data => {
         this.$message({
           type: "success",
-          message: "修改成功"
+          message: "修改成功, 请重新登录"
         });
       });
     },
@@ -627,7 +623,7 @@ export default {
       this.resetCode();
       if (cur_index == 1) {
         this.ruleForm = this.resetForm("ruleForm");
-        this.getVerificationCode()
+        this.getVerificationCode();
       } else {
         this.telForm = this.resetForm("telForm");
       }
@@ -749,41 +745,41 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
-.code-title{
+.code-title {
   height: 37px;
   margin-left: 30px;
 }
-.code-img{
-    // width: 300px;
-    height: 60px;
-    display: flex;
-    margin: 0 auto;
-    margin-left: 30px;
-    img{
-      width: 100%;
-      height: 100%;
-    }
+.code-img {
+  // width: 300px;
+  height: 60px;
+  display: flex;
+  margin: 0 auto;
+  margin-left: 30px;
+  img {
+    width: 100%;
+    height: 100%;
+  }
 }
-.box-input{
-    width: 47%;
-    height: 3rem;
-    padding-top: 15px;
-    margin-left: 30px;
-    input{
-      width: 100%;
-      height: 100%;
-    }
+.box-input {
+  width: 47%;
+  height: 3rem;
+  padding-top: 15px;
+  margin-left: 30px;
+  input {
+    width: 100%;
+    height: 100%;
+  }
 }
-.box-tips{
+.box-tips {
   color: #ce551a;
   padding-top: 10px;
   margin-left: 30px;
   font-size: 0.6rem;
   font-family: MicrosoftYaHei;
-  font-weight: 400;;
+  font-weight: 400;
   height: 1.2rem;
 }
-.change-code{
+.change-code {
   width: 100%;
   padding-top: 20px;
   cursor: pointer;

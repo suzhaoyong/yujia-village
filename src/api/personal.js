@@ -137,7 +137,7 @@ export function getMyTrainFailed(page_num = 1) {
 /** 提交课程信息 */
 export function postMytrainInfoPut(args) {
   let params = {
-    content: "", // 内容介绍
+    main: "", // 内容介绍
     crowd: "", // 	适用人群
     outline: "", // 课程大纲
     tel: "", // 报名联系人电话

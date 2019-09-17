@@ -12,6 +12,7 @@
           <span class="identity" v-if="info.user.identity_auth == 5">已认证（教练）</span>
           <span class="identity" v-if="info.user.identity_auth == 6">未通过认证</span>
           <span class="identity" v-if="info.user.identity_auth == 8">已认证（馆主、教练）</span>
+          <span class="class_release" @click="goPage('release')" v-if="info.user.identity_auth > 1">课程发布</span>
         </div>
         <div class="info">
           <div class="balance" @click="viewHistory('glod')">
@@ -131,6 +132,10 @@ img {
     }
     span{
       color: #aaa;
+    }
+    .class_release{
+      color: #5B905E;
+      cursor: pointer;
     }
   }
   .info {
