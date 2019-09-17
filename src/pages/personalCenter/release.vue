@@ -81,8 +81,8 @@
                 <div class="upload-box">
                   <el-upload
                     action="#"
-                    :class="{disabled:uploadExemptionDisabled('img_train_first')}"
-                    :on-change="changeExemptionFile"
+                    :class="{disabled:uploadDisabled('img_train_first')}"
+                    :on-change="changeTrainFirstFile"
                     :on-remove="() => this.ruleForm['img_train_first'] = ''"
                     list-type="picture-card"
                     :limit="1"
@@ -98,8 +98,8 @@
                 <div class="upload-box">
                   <el-upload
                     action="#"
-                    :class="{disabled:uploadExemptionDisabled('img_train_two')}"
-                    :on-change="changeExemptionFile"
+                    :class="{disabled:uploadDisabled('img_train_two')}"
+                    :on-change="changeTrainTwoFile"
                     :on-remove="() => this.ruleForm['img_train_two'] = ''"
                     list-type="picture-card"
                     :limit="1"
@@ -115,8 +115,8 @@
                 <div class="upload-box">
                   <el-upload
                     action="#"
-                    :class="{disabled:uploadExemptionDisabled('img_train_three')}"
-                    :on-change="changeExemptionFile"
+                    :class="{disabled:uploadDisabled('img_train_three')}"
+                    :on-change="changeTrainThreeFile"
                     :on-remove="() => this.ruleForm['img_train_three'] = ''"
                     list-type="picture-card"
                     :limit="1"
@@ -145,7 +145,7 @@
               <div class="tips"></div>
             </div>
             <div class="rate-box">
-              <el-rate v-model="ruleForm.diff" :colors="['#58B708','#58B708','#58B708']" ></el-rate>
+              <el-rate v-model="ruleForm.diff" :colors="['#58B708','#58B708','#58B708']"></el-rate>
             </div>
           </div>
           <div class="class_price_address_detail">
@@ -161,7 +161,7 @@
               <div class="tips"></div>
             </div>
             <div class="select-box">
-              <v-distpicker></v-distpicker>
+              <v-distpicker @selected="onSelected"></v-distpicker>
             </div>
             <div class="title_tips">
               <div class="title">详细地址</div>
@@ -183,11 +183,11 @@
               <div class="title">授课教师图片</div>
               <div class="tips teacher" @click="teacher_list.show = true">从名师库中搜索</div>
             </div>
-            <div class="upload-box">
+            <div class="upload-box" style="padding-bottom:1rem;">
               <el-upload
                 action="#"
-                :class="{disabled:(uploadExemptionDisabled('teacher_img'))}"
-                :on-change="changeExemptionFile"
+                :class="{disabled:(uploadDisabled('teacher_img'))}"
+                :on-change="changeTeacherFile"
                 :on-remove="() => this.ruleForm['teacher_img'] = ''"
                 list-type="picture-card"
                 :limit="1"
@@ -258,7 +258,7 @@
           </div>
           <div class="agreen-next">
             <div class="back">返回</div>
-            <div class="next">完成</div>
+            <div class="next" @click="sure">完成</div>
           </div>
         </div>
       </div>
@@ -342,7 +342,7 @@ export default {
         city: "",
         province: "",
         price: "",
-        diff: "",
+        diff: 0,
         theme: "",
         img_train_three: "",
         img_train_two: "",
@@ -355,18 +355,46 @@ export default {
     };
   },
   computed: {
-    uploadExemptionDisabled() {
+    uploadDisabled() {
       return type => this.ruleForm[type];
     }
   },
   mounted() {
-    getMyTrain().then(res => {});
-    getMyTrainFailed().then(res => {});
+    // getMyTrain().then(res => {});
+    // getMyTrainFailed().then(res => {});
   },
   methods: {
-    selectTeacher() {
-
+    onSelected(data) {
+      const { province, city, area } = data;
+      this.ruleForm = Object.assign({}, this.ruleForm, {
+        province: province.value,
+        city: city.value,
+        area: area.value
+      });
     },
+    sure() {
+      let params = Object.assign({}, this.ruleForm, { ...this.time.value });
+      const { img_train_three, img_train_two, img_train_first } = this.ruleForm;
+      if (img_train_three || img_train_two || img_train_first) {
+        for (let p of Object.keys(params)) {
+          if (
+            ["img_train_three", "img_train_two", "img_train_first"].indexOf(
+              p
+            ) >= 0
+          )
+            continue;
+          if (params[p] === "") {
+            this.$message({ message: "请不要留空白", type: "warning" });
+            break;
+          }
+        }
+      } else {
+        this.$message({ message: "请上传课程图片", type: "warning" });
+        return;
+      }
+      console.log(JSON.stringify(this.ruleForm, null, 4));
+    },
+    selectTeacher() {},
     resetTeacher() {
       teacher_list.select = {};
       teacher_list.keyword = "";
@@ -397,8 +425,17 @@ export default {
         return state.name;
       };
     },
-    changeExemptionFile(file, fileList) {
+    changeTeacherFile(file, fileList) {
+      this.changeFile(file, fileList, "teacher_img");
+    },
+    changeTrainFirstFile(file, fileList) {
       this.changeFile(file, fileList, "img_train_first");
+    },
+    changeTrainTwoFile(file, fileList) {
+      this.changeFile(file, fileList, "img_train_two");
+    },
+    changeTrainThreeFile(file, fileList) {
+      this.changeFile(file, fileList, "img_train_three");
     },
     changeFile(file, fileList, name) {
       // this.ruleForm[name] = file;
