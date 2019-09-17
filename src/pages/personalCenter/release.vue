@@ -7,16 +7,18 @@
             <span>我的发布/My release</span>
           </div>
           <div class="result">
-            <div class="club" v-for="item in 3">
-              <div class="club_img"></div>
+            <div class="club" v-for="item in release.data">
+              <div class="club_img">
+                <img :src="item.paht" alt />
+              </div>
               <div class="club_info">
-                <div class="club_name">艾扬格</div>
-                <div class="club_price">￥480</div>
+                <div class="club_name">{{item.theme}}</div>
+                <div class="club_price">￥{{item.price}}</div>
                 <div class="club_rate">
-                  <el-rate :colors="['#58B708','#58B708','#58B708']" disabled :value="3"></el-rate>
+                  <el-rate :colors="['#58B708','#58B708','#58B708']" disabled :value="item.diff"></el-rate>
                 </div>
-                <div class="club_address">成都市锦江区泰合国际财富中心 7 栋 302</div>
-                <div class="time">发布于 2019.05.20</div>
+                <div class="club_address">{{item.address}}</div>
+                <div class="time">发布于 {{item.updated_at}}</div>
               </div>
             </div>
             <div class="pages">
@@ -24,10 +26,10 @@
                 background
                 :hide-on-single-page="true"
                 layout="prev, pager, next, jumper"
-                :page-size="release.meta.limit"
-                @current-change="changeReleasePage"
-                :current-page="1"
-                :total="release.meta.total"
+                :page-size="release.per_page"
+                @current-change="changePage"
+                :current-page="release.current_page"
+                :total="release.total"
               ></el-pagination>
             </div>
           </div>
@@ -37,16 +39,18 @@
             <span>审核未通过课程/The audit failed</span>
           </div>
           <div class="result">
-            <div class="club" v-for="item in 3">
-              <div class="club_img"></div>
+            <div class="club" v-for="item in release_failed.data">
+              <div class="club_img">
+                <img :src="item.paht" alt />
+              </div>
               <div class="club_info">
-                <div class="club_name">艾扬格</div>
-                <div class="club_price">￥480</div>
+                <div class="club_name">{{item.theme}}</div>
+                <div class="club_price">￥{{item.price}}</div>
                 <div class="club_rate">
-                  <el-rate :colors="['#58B708','#58B708','#58B708']" disabled :value="3"></el-rate>
+                  <el-rate :colors="['#58B708','#58B708','#58B708']" disabled :value="item.diff"></el-rate>
                 </div>
-                <div class="club_address">成都市锦江区泰合国际财富中心 7 栋 302</div>
-                <div class="time">发布于 2019.05.20</div>
+                <div class="club_address">{{item.address}}</div>
+                <div class="time">发布于 {{item.updated_at}}</div>
               </div>
             </div>
             <div class="pages">
@@ -54,10 +58,10 @@
                 background
                 :hide-on-single-page="true"
                 layout="prev, pager, next, jumper"
-                :page-size="release.meta.limit"
-                @current-change="changeReleasePage"
-                :current-page="1"
-                :total="release.meta.total"
+                :page-size="release_failed.per_page"
+                @current-change="changePage"
+                :current-page="release_failed.current_page"
+                :total="release_failed.total"
               ></el-pagination>
             </div>
           </div>
@@ -318,14 +322,18 @@ export default {
         range: []
       },
       release: {
-        list: [],
-        count: 0,
-        meta: {
-          limit: 10, // 每页显示行数
-          totalPage: 0, // 总页数
-          currentPage: 0, // 当前页,
-          total: 100
-        }
+        data: [],
+        per_page: 6, // 每页显示行数
+        totalPage: 0, // 总页数
+        current_page: 0, // 当前页,
+        total: 0
+      },
+      release_failed: {
+        data: [],
+        per_page: 6, // 每页显示行数
+        totalPage: 0, // 总页数
+        current_page: 0, // 当前页,
+        total: 0
       },
       ruleForm: {
         content: "", // 内容介绍
@@ -360,10 +368,20 @@ export default {
     }
   },
   mounted() {
-    // getMyTrain().then(res => {});
-    // getMyTrainFailed().then(res => {});
+    this.getTrain();
+    this.getTrainFailed();
   },
   methods: {
+    getTrain(page) {
+      getMyTrain(page).then(res => {
+        this.release = res;
+      });
+    },
+    getTrainFailed(page) {
+      getMyTrainFailed(page).then(res => {
+        this.release_failed = res;
+      });
+    },
     onSelected(data) {
       const { province, city, area } = data;
       this.ruleForm = Object.assign({}, this.ruleForm, {
@@ -394,11 +412,14 @@ export default {
       }
       console.log(JSON.stringify(this.ruleForm, null, 4));
     },
-    selectTeacher() {},
+    selectTeacher() {
+      this.ruleForm.teacher_img = this.teacher_list.select.path
+      this.resetTeacher();
+    },
     resetTeacher() {
-      teacher_list.select = {};
-      teacher_list.keyword = "";
-      teacher_list.show = false;
+      this.teacher_list.select = {};
+      this.teacher_list.keyword = "";
+      this.teacher_list.show = false;
     },
     handleSelect(item) {
       this.teacher_list.select = item;
@@ -455,6 +476,12 @@ export default {
         this.time.value.endTime = e[1];
       } else {
       }
+    },
+    changePage(val) {
+      this.getTrain(val);
+    },
+    changePageFailed(val) {
+      this.getTrainFailed(val)
     },
     changeReleasePage(val) {
       this.release.meta.currentPage = val - 1;

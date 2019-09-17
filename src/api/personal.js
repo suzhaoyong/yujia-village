@@ -125,13 +125,13 @@ export function getFractioRecord() {
 }
 
 /** 我的发布 */
-export function getMyTrain() {
-  return request(`/personal/myTrain`)
+export function getMyTrain(page_num = 1) {
+  return request(`/personal/myTrain?page=${page_num}`)
 }
 
 /** 发布未通过 */
-export function getMyTrainFailed() {
-  return request(`/personal/myTrainFailed`)
+export function getMyTrainFailed(page_num = 1) {
+  return request(`/personal/myTrainFailed?page=${page_num}`)
 }
 
 /** 提交课程信息 */
