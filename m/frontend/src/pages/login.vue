@@ -128,7 +128,7 @@
 
         <div class="input-btn">
           <van-button type="default" @click="resetPwd">更改</van-button>
-          <div class="reg-tips">
+          <div class="reg-tips" v-show="false">
             <span :class="isActive('login')" @click="changeType('login')">立即登录</span>
           </div>
         </div>
@@ -156,6 +156,12 @@
         </span>
       </van-dialog>
     </div>
+    <div class="back-wrap" v-show="form.type === 'reset'" @click="changeType('login')">
+      <div class="back">
+        <img :src="icon.back" alt />
+      </div>
+      <span>返回</span>
+    </div>
     <div class="shuoming" v-show="form.type === 'register'">
       <p>
         注册即等于同意
@@ -179,6 +185,7 @@ import bg from "@/assets/img/logo.png";
 import logo from "@/assets/img/logo.png";
 import welcome from "@/assets/img/welcome.png";
 import tel from "@/assets/img/tel.png";
+import back from "@/assets/img/back.png";
 import key from "@/assets/img/key.png";
 import refresh from "@/assets/img/refresh.png";
 import Pdfh5 from "pdfh5";
@@ -207,13 +214,14 @@ export default {
         bg,
         logo,
         refresh,
+        back,
         welcome
       },
       codeTips: {
         msg: "发送验证码",
         count: 0
       },
-      form: { type: "reset" },
+      form: { type: "register" },
       ruleForm: {
         tel: "",
         password: "",
@@ -229,7 +237,7 @@ export default {
         key: "",
         invitation_id: ""
       },
-      
+
       reset: {
         tel: "",
         verification_key: "",
@@ -517,6 +525,27 @@ export default {
 }
 </style>
 <style lang="scss" scope>
+.back-wrap {
+  width: 100%;
+  padding-bottom: 30px;
+  color: #fff;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  font-size: 11px;
+  .back {
+    width: 12px;
+    height: 12px;
+  }
+  span {
+    text-decoration: underline;
+    color: #fff;
+    padding-left: 5px;
+  }
+}
 .input {
   display: block;
   box-sizing: border-box;
