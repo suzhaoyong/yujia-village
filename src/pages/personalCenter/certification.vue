@@ -30,24 +30,27 @@
               <el-input v-model="ruleForm.real_name" placeholder="请填写真实姓名"></el-input>
             </div>
             <div class="phone">
-              <span class="title">馆内联系电话</span>
-              <el-input v-model="ruleForm.club_tel" placeholder="请填写馆内联系电话"></el-input>
+              <span class="title">负责人电话</span>
+              <el-input v-model="ruleForm.club_tel" placeholder="请填写负责人电话"></el-input>
             </div>
             <div class="shop">
-              <span class="title">加盟馆馆名</span>
-              <el-input v-model="ruleForm.club_name" placeholder="请填写加盟馆馆名"></el-input>
+              <span class="title">联盟馆馆名</span>
+              <el-input v-model="ruleForm.club_name" placeholder="请填写联盟馆馆名"></el-input>
             </div>
           </div>
           <div class="address">
-            <span class="title">加盟馆地址</span>
+            <span class="title">联盟馆地址</span>
             <!-- <v-distpicker :province="province" :city="city" :area="area" @selected="selectAddress"></v-distpicker> -->
             <v-distpicker @selected="selectAddress"></v-distpicker>
-            <el-input style="margin-right:20px;" v-model="ruleForm.address" placeholder="请填写加盟馆地址"></el-input>
+          </div>
+          <div class="detail_address">
+            <span class="title">详细地址</span>
+            <el-input style="margin-right:20px;" v-model="ruleForm.address" placeholder="请填写详细地址"></el-input>
           </div>
         </div>
         <div class="card">
           <div class="title-tips">
-            <div class="title">免责声明</div>
+            <div class="title" style="left: 1em;">免责声明</div>
             <div class="download">
               <a
                 style="color:#2c2c2c;"
@@ -76,7 +79,7 @@
         </div>
         <div class="card" v-show="isShow('7') || isShow('4')">
           <div class="title-tips">
-            <div class="title">工作证明/教练证书</div>
+            <div class="title" style="left: 1em;">工作证明/教练证书</div>
             <div class="tips">请上传最新的工作证明(仅教练需要提交)</div>
           </div>
           <div class="upload-box">
@@ -99,7 +102,7 @@
         </div>
         <div class="card" v-show="isShow('7') || isShow('2')">
           <div class="title-tips">
-            <div class="title">营业执照</div>
+            <div class="title" style="left: 1em;">营业执照</div>
             <div class="tips">请上传最新的营业执照(仅馆主需要提交)</div>
           </div>
           <div class="upload-box">
@@ -119,6 +122,10 @@
               <img width="100%" :src="dialogImageUrl" alt />
             </el-dialog>
           </div>
+          <div class="form_tips">
+            注：带
+            <span style="color:#8CD15A;font-size:1.2rem;">*</span>为必填项，其余为选填
+          </div>
         </div>
       </div>
       <div class="agreen-next" v-show="step.cur_index === 1">
@@ -126,10 +133,14 @@
           <div :class="['select', { active: step.agree }]" @click="step.agree = !step.agree"></div>
           <div class="text" @click="step.agree = !step.agree">我同意本协议所有内容</div>
         </div>
-        <div class="next" @click="stepOpFor('next')">下一步</div>
+        <div
+          class="next"
+          :style="`${step.agree?'':'cursor: not-allowed;'}`"
+          @click="stepOpFor('next')"
+        >下一步</div>
       </div>
       <div class="agreen-next" v-show="step.cur_index === 2">
-        <div class="next" @click="stepOpFor('prev')">上一步</div>
+        <div class="next" style="background:#fff;" @click="stepOpFor('prev')">上一步</div>
         <div class="next" @click="stepOpFor('finish')">完成</div>
       </div>
     </div>
@@ -222,11 +233,11 @@ export default {
         },
         next: () => {
           if (!this.step.agree) {
+            return;
             this.$message({
               type: "warning",
               message: "请先同意协议内容"
             });
-            return;
           }
           this.step.cur_index += 1;
         },
@@ -301,6 +312,7 @@ export default {
   box-sizing: border-box;
 }
 .body {
+  background: #fff;
   width: 60rem;
   margin: 0 auto;
   padding-bottom: 5.75rem;
@@ -317,7 +329,7 @@ export default {
         color: #2c2c2c;
         font-size: 0.7rem;
         &.active {
-          color: #538940;
+          color: #8cd15a;
         }
         .number {
           padding-right: 0.55rem;
@@ -360,9 +372,9 @@ export default {
     .name-address-phone {
       background: #fff;
       border-radius: 0.25rem;
-      border: 1px solid #ccc;
       font-size: 0.7rem;
       color: #2c2c2c;
+      box-shadow: -1px 2px 15px 1px rgba(36, 36, 36, 0.2);
       .name-phone {
         display: flex;
         border-bottom: 1px solid #eee;
@@ -377,6 +389,17 @@ export default {
           .title {
             padding-right: 0.75rem;
             flex-shrink: 0;
+            position: relative;
+            &::after {
+              content: "*";
+              color: #8cd15a;
+              display: block;
+              position: absolute;
+              top: 50%;
+              left: -0.7em;
+              font-size: 1.2rem;
+              transform: translateY(-40%);
+            }
           }
           .input {
             width: 7rem;
@@ -385,14 +408,50 @@ export default {
           }
         }
       }
+      .detail_address {
+        display: flex;
+        align-items: center;
+        padding: 0rem 0 1.3rem;
+        padding-left: 2rem;
+        .title {
+          width: 5em;
+          text-align: right;
+          margin-right: 1.6rem;
+          flex-shrink: 0;
+          position: relative;
+          // &::after{
+          //   content: '*';
+          //   color:#8CD15A;
+          //   display: block;
+          //   position: absolute;
+          //   left: 0.3em;
+          //   top: 50%;
+          //   transform: translateY(-50%);
+          // }
+        }
+      }
       .address {
         display: flex;
         align-items: center;
-        padding: 0.6rem 0 1.3rem;
+        padding: 0.6rem 0;
         padding-left: 2rem;
         .title {
+          width: 5em;
+          text-align: right;
           margin-right: 1.6rem;
           flex-shrink: 0;
+          position: relative;
+          &::after {
+            content: "*";
+            color: #8cd15a;
+            display: block;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: -0.7em;
+            font-size: 1.2rem;
+            transform: translateY(-40%);
+          }
         }
         .input {
           width: 32rem;
@@ -404,6 +463,7 @@ export default {
       font-size: 0.7rem;
       color: #2c2c2c;
       margin-top: 0.4rem;
+      box-shadow: -1px 2px 15px 1px rgba(36, 36, 36, 0.2);
       .title-tips {
         display: flex;
         padding-top: 1.45rem;
@@ -412,7 +472,21 @@ export default {
         border-bottom: 1px solid #eee;
         .title {
           width: 10em;
-          text-align: right;
+          text-align: left;
+          padding-left: 1em;
+          position: relative;
+          &::after {
+            content: "*";
+            color: #8cd15a;
+            display: block;
+            position: absolute;
+            left: 0;
+            top: 50%;
+            z-index: 2;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            transform: translateY(-40%);
+          }
         }
         .tips {
           padding-left: 1rem;
@@ -427,6 +501,11 @@ export default {
       .upload-box {
         padding: 1.35rem 0 1.35rem 7.5rem;
       }
+      .form_tips {
+        color: #999;
+        padding: 1em 1em;
+        border-top: 1px solid #eee;
+      }
     }
   }
   .agreen-next {
@@ -436,6 +515,7 @@ export default {
     .agreen {
       display: flex;
       align-items: center;
+      cursor: pointer;
       .select {
         height: 1rem;
         width: 1rem;

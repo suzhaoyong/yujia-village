@@ -7,20 +7,40 @@
             <span>我的发布/My release</span>
           </div>
           <div class="result" v-if="release.data.length>0">
-            <div class="club" @click="selectItem(item)" v-for="item in release.data">
-              <div class="club_img">
-                <img :src="item.paht" alt />
-              </div>
-              <div class="club_info">
-                <div class="club_name">{{item.theme}}</div>
-                <div class="club_price">￥{{item.price}}</div>
-                <div class="club_rate">
-                  <el-rate :colors="['#58B708','#58B708','#58B708']" disabled :value="item.diff"></el-rate>
+            <div class="club-wrap" v-for="item in release.data">
+              <div class="club">
+                <div class="club_img">
+                  <img :src="item.paht" alt />
+                  <span class="item-actions"></span>
+                  <span class="club_view" @click="selectItem(item)">查看</span>
+                  <!-- <span class="club_edit" @click="reasonItem(item)">理由</span> -->
+                  <!-- <span class="club_edit" @click="editItem(item)">编辑</span> -->
                 </div>
-                <div class="club_address">{{item.address}}</div>
-                <div class="time">发布于 {{item.updated_at}}</div>
+                <div class="club_info">
+                  <div class="club_name">{{item.theme}}</div>
+                  <div class="club_price">￥{{item.price}}</div>
+                  <div class="club_rate">
+                    <el-rate :colors="['#58B708','#58B708','#58B708']" disabled :value="item.diff"></el-rate>
+                  </div>
+                  <div class="club_address">{{item.address}}</div>
+                  <div class="time">发布于 {{item.updated_at}}</div>
+                </div>
+              </div>
+              <div class="reason-wrap" v-show="false">
+                <div class="reason">
+                  <div class="reason-input" v-show="true">
+                    <el-input type="textarea" placeholder></el-input>
+                  </div>
+                  <div class="reason-text" v-show="false">
+                    <p>未通过原因如下：</p>
+                    <p>1.图片涉嫌抄袭网络图片 2.信息真实性不高…… ……</p>
+                  </div>
+                </div>
+                <div class="reason-op" v-show="false">重新编辑</div>
+                <div class="reason-op">确认修改</div>
               </div>
             </div>
+
             <div class="pages">
               <el-pagination
                 background
@@ -97,9 +117,6 @@
                     <i class="el-icon-plus"></i>
                     <div class="el-upload__tip" slot="tip">支持jpg,jpeg,png格式</div>
                   </el-upload>
-                  <el-dialog :visible.sync="dialogVisible">
-                    <img width="100%" :src="dialogImageUrl" alt />
-                  </el-dialog>
                 </div>
                 <div class="upload-box">
                   <el-upload
@@ -114,9 +131,6 @@
                     <i class="el-icon-plus"></i>
                     <div class="el-upload__tip" slot="tip">支持jpg,jpeg,png格式</div>
                   </el-upload>
-                  <el-dialog :visible.sync="dialogVisible">
-                    <img width="100%" :src="dialogImageUrl" alt />
-                  </el-dialog>
                 </div>
                 <div class="upload-box">
                   <el-upload
@@ -131,9 +145,6 @@
                     <i class="el-icon-plus"></i>
                     <div class="el-upload__tip" slot="tip">支持jpg,jpeg,png格式</div>
                   </el-upload>
-                  <el-dialog :visible.sync="dialogVisible">
-                    <img width="100%" :src="dialogImageUrl" alt />
-                  </el-dialog>
                 </div>
               </div>
             </div>
@@ -208,9 +219,6 @@
                 <i class="el-icon-plus"></i>
                 <div class="el-upload__tip" slot="tip">支持jpg,jpeg,png格式</div>
               </el-upload>
-              <el-dialog :visible.sync="dialogVisible">
-                <img width="100%" :src="ruleForm.teacher_img" alt />
-              </el-dialog>
             </div>
             <div class="title_tips">
               <div class="title">课程起止日期</div>
@@ -267,6 +275,10 @@
             <div class="input-box">
               <el-input v-model="ruleForm.main" type="textarea" placeholder="请输入课程详细内容"></el-input>
             </div>
+            <div class="form_tips">
+              注：带
+              <span style="color:#8CD15A;font-size:1.2rem;">*</span>为必填项，其余为选填
+            </div>
           </div>
           <div class="agreen-next">
             <div class="back">返回</div>
@@ -305,7 +317,9 @@ import {
   getMyTrain,
   getMyTrainFailed,
   postMytrainInfoPut,
-  postShowTeacherPic
+  postShowTeacherPic,
+  getShowMyTrain,
+  postTrainInfoUpdate
 } from "@/api/personal";
 export default {
   components: {
@@ -383,6 +397,12 @@ export default {
     this.getTrainFailed();
   },
   methods: {
+    reasonItem(item) {},
+    editItem(item) {
+      getShowMyTrain(item.id).then(data => {
+        const {} = data;
+      });
+    },
     selectItem(item) {
       this.$router.push({
         path: `/cultivate/detail/${item.id}`
@@ -460,13 +480,13 @@ export default {
       postMytrainInfoPut(params).then(res => {
         this.$message({ message: "发布成功", type: "success" });
         this.getTrain();
-        this.successResetData()
+        this.successResetData();
       });
     },
     successResetData() {
       this.select = {
         path: ""
-      }
+      };
       this.ruleForm = {
         main: "", // 内容介绍
         crowd: "", // 	适用人群
@@ -487,7 +507,7 @@ export default {
         img_train_three: "",
         img_train_two: "",
         img_train_first: ""
-      }
+      };
     },
     selectTeacher() {
       // this.ruleForm.teacher_img = this.teacher_list.select.path;
@@ -697,8 +717,13 @@ img {
           margin-bottom: 1.25rem;
           min-height: 52rem;
           position: relative;
+          .club-wrap {
+            padding-bottom: 0rem;
+            // border-bottom: 1px solid #e5e5e5;
+          }
           .club {
             display: flex;
+            flex-wrap: wrap;
             padding: 0.7rem 1.4rem 0.7rem 1rem;
             position: relative;
             border-bottom: 1px solid #e5e5e5;
@@ -710,9 +735,56 @@ img {
               width: 4.15rem;
               height: 4.3rem;
               border-radius: 5px;
+              position: relative;
+              &:hover .item-actions {
+                display: block;
+              }
+              &:hover .club_edit {
+                display: block;
+              }
+              &:hover .club_view {
+                display: block;
+              }
+              .club_view,
+              .club_edit {
+                color: rgb(88, 183, 8);
+                display: none;
+                position: absolute;
+                top: 0;
+                left: 0;
+                background: #fff;
+                width: 3em;
+                font-size: 0.7rem;
+                text-align: center;
+                border-radius: 5px;
+                top: 30%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                cursor: pointer;
+              }
+              .club_edit {
+                margin-top: 2em;
+              }
+              .item-actions {
+                display: none;
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                left: 0;
+                top: 0;
+                cursor: default;
+                text-align: center;
+                color: #fff;
+                opacity: 1;
+                font-size: 20px;
+                background-color: rgba(0, 0, 0, 0.5);
+                -webkit-transition: opacity 0.3s;
+                transition: opacity 0.3s;
+              }
             }
             .club_info {
               padding-left: 1rem;
+              width: 14rem;
               .club_name {
                 font-weight: bold;
                 padding-bottom: 0.65rem;
@@ -729,6 +801,29 @@ img {
                 right: 1.4rem;
                 top: 0.7rem;
               }
+            }
+          }
+          .reason-wrap {
+            margin: 0.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 1rem;
+            background: #d3daae;
+            .reason {
+              padding-right: 1rem;
+              flex-grow: 1;
+              .reason-input {
+                width: 100%;
+              }
+              .reason-text {
+              }
+            }
+            .reason-op {
+              cursor: pointer;
+              width: 5em;
+              flex-shrink: 0;
+              text-decoration: underline;
             }
           }
         }
@@ -766,6 +861,17 @@ img {
               padding: 0.4rem 0;
               padding-bottom: 1rem;
               .title {
+                position: relative;
+                &::after {
+                  content: "*";
+                  color: #8cd15a;
+                  display: block;
+                  position: absolute;
+                  top: 50%;
+                  left: -0.7em;
+                  font-size: 1.2rem;
+                  transform: translateY(-40%);
+                }
               }
               .tips {
                 padding-left: 0.6rem;
@@ -798,6 +904,17 @@ img {
             align-items: center;
             padding: 0.4rem 0;
             .title {
+              position: relative;
+              &::after {
+                content: "*";
+                color: #8cd15a;
+                display: block;
+                position: absolute;
+                top: 50%;
+                left: -0.7em;
+                font-size: 1.2rem;
+                transform: translateY(-40%);
+              }
             }
             .tips {
               padding-left: 0.6rem;
@@ -848,6 +965,9 @@ img {
           .input-box {
             padding-bottom: 1rem;
           }
+        }
+        .form_tips {
+          color: #999;
         }
       }
     }

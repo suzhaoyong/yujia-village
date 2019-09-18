@@ -161,6 +161,34 @@ export function postMytrainInfoPut(args) {
   return request.post(`/personal/mytrainInfoPut`, params)
 }
 
+/** 课程信息更新 */
+export function postTrainInfoUpdate(args) {
+  let params = {
+    id: "",
+    main: "", // 内容介绍
+    crowd: "", // 	适用人群
+    outline: "", // 课程大纲
+    tel: "", // 报名联系人电话
+    linkman: "", // 报名联系人
+    endTime: "",
+    startTime: "",
+    teacher_img: "",
+    name: "",
+    address: "",
+    area: "",
+    city: "",
+    province: "",
+    price: "",
+    diff: "",
+    theme: "",
+    img_train_three: "",
+    img_train_two: "",
+    img_train_first: "",
+  }
+  params = Object.assign({}, params, args)
+  return request.post(`/personal/trainInfoUpdate`, params)
+}
+
 /** 教师模糊查询 */
 export function postShowTeacherPic(args) {
   let params = {
@@ -168,4 +196,8 @@ export function postShowTeacherPic(args) {
   }
   params = Object.assign({}, params, args)
   return request.post(`/personal/showTeacherPic`, params)
+}
+/** 我的培训信息详情 */
+export function getShowMyTrain(id) {
+  return request.get(`/personal/showMyTrain/${id}`)
 }
