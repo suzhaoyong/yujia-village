@@ -84,7 +84,7 @@
                     </div>
                     <div class="nav-contunt-div5">
                         <img src="../assets/image52.png" class="bg-pic4">
-                        <swiper class="carousel5" :options="swiperOption" style="height:660px;width:1200px;">
+                        <swiper class="carousel5" :options="swiperOption" style="height:707px;width:1200px;">
                             <swiper-slide class="carousel5-item" v-for="(page,index) of pages" :key="index">
                             <div class="carousel-explain2" v-for="item of page" :key="item.id" @click="carouselswiper(item)">
                                 <img :src="item.path"/>
@@ -134,7 +134,7 @@
                         </div>
                     </div>
                     <div class="nav-contunt-div10">
-                        <h2><img src="../assets/yujia.png"/>加盟会馆</h2>
+                        <h2><img src="../assets/yujia.png"/>联盟会馆</h2>
                         <p class="nav-text">Sometimes beauty is so simple</p>
                         <div class="border-left"></div>
                         <div class="border-right"></div>
@@ -142,6 +142,16 @@
                     <div class="nav-contunt-div7">
                         <div class="explain4">
                             <img class="nav-div7-img" v-for="(item,index) in clubInfo" :key="index" :src="item.path" @click="ImgItem(item)"/>
+                            <div class="block2">
+                                <el-pagination
+                                    @current-change="handleCurrentChange"
+                                    :current-page="currentPage"
+                                    :page-size="pagesize"
+                                    background
+                                    layout="total, prev, pager, next, jumper"
+                                    :total="total">
+                                </el-pagination>
+                            </div>
                         </div>
                     </div>
                     </el-col>
@@ -173,6 +183,9 @@ export default {
         banner:'',
         activeClass: 0,
         i:0,
+        currentPage:1,
+        pagesize: 0,
+        total:0,
         swiperOption: {
           spaceBetween: 30,
           pagination: {
@@ -227,7 +240,7 @@ export default {
       },
         listhomedata(){
         let _this = this;
-        this.$request("/home").then(res => {
+        this.$request(`/home?page=${_this.currentPage}`).then(res => {
             _this.famousteach = res.teachers;
             _this.dataimg = res.hot_trains;
             _this.clubInfo = res.clubInfo;
@@ -235,6 +248,9 @@ export default {
             _this.info = res.info;
             _this.namelist=res.info[0];
             _this.banner = res.banner;
+            _this.total = res.total;
+            _this.currentPage = res.current_page;
+            _this.pagesize = res.per_page;
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -254,6 +270,10 @@ export default {
       buttonnext(m){
         this.namelist=m[this.i+1][0];
         this.i++;
+      },
+      handleCurrentChange(val) {
+          this.currentPage = val;
+          this.listhomedata();
       },
       explaindetail(item){
           this.$router.push({
@@ -320,8 +340,8 @@ export default {
     right: 28px;
 }
 .swiper-pagination-bullet{
-    width: 12px !important;
-    height: 12px!important;
+    width: 10px !important;
+    height: 10px!important;
     border-radius: 50% !important;
     display: inline-block !important;
     border-radius: 100% !important;
@@ -638,69 +658,69 @@ export default {
                             -webkit-line-clamp:2 !important;// 限制快级元素的文本行数
                             overflow: hidden !important;
                             position: absolute;
-                            width: 44%;
-                            right: 0%;
+                            width: 39%;
+                            right: 5%;
                             top: 43%;
                         }
                 }
                 .swiper-button-prev1{
                         position: absolute;
-                        left: 88%;
+                        left: 89%;
                         top: 57%;
                         width: 27px;
                         height: 27px;
-                        border: 1px solid #e2dbc8;
+                        border: 1px solid #EDEFF1;
                         border-radius: 50%;
                         z-index: 10;
-                        background-size: 24px 24px;
-                        background-color: #fff;
-                        transition: all .8s;
-                        background-image: url('../assets/left.png');
+                        background-size: 26px 24px;
+                        background-color: #EDEFF1;
+                        transition: all 1s;
+                        background-image: url('../assets/prev.png');
                 }
                 .swiper-button-prev1:hover{
                         position: absolute;
-                        left: 88%;
+                        left: 89%;
                         top: 57%;
                         width: 27px;
                         height: 27px;
-                        border: 1px solid #e2dbc8;
+                        border: 1px solid #E3E4DE;
                         border-radius: 50%;
                         z-index: 10;
-                        background-size: 28px 24px;
-                        transform: scale(.9);
-                        background-color: #fff;
-                        background-image: url('../assets/left.png');
+                        background-size: 26px 24px;
+                        transform: scale(.95);
+                        background-color: #E3E4DE;
+                        background-image: url('../assets/prev.png');
                 }
                 .swiper-button-prev1:focus{
                     outline: 0;
                 }
                 .swiper-button-next1{
                         position: absolute;
-                        right: 3%;
+                        right: 2%;
                         top: 57%;
                         width: 27px;
                         height: 27px;
-                        border: 1px solid #e2dbc8;
+                        border: 1px solid #EDEFF1;
                         border-radius: 50%;
                         z-index: 10;
-                        transition: all .8s;
-                        background-size: 24px 24px;
-                        background-color: #fff;
-                        background-image: url('../assets/right.png');
+                        transition: all 1s;
+                        background-size: 26px 24px;
+                        background-color: #EDEFF1;
+                        background-image: url('../assets/next.png');
                 }
                 .swiper-button-next1:hover{
                         position: absolute;
-                        right: 3%;
+                        right: 2%;
                         top: 57%;
                         width: 27px;
                         height: 27px;
-                        border: 1px solid #e2dbc8;
+                        border: 1px solid #E3E4DE;
                         border-radius: 50%;
                         z-index: 10;
-                        transform: scale(.9);
-                        background-size: 24px 24px;
-                        background-color: #fff;
-                        background-image: url('../assets/right.png');
+                        transform: scale(.95);
+                        background-size: 26px 24px;
+                        background-color: #E3E4DE;
+                        background-image: url('../assets/next.png');
                 }
                 .swiper-button-next1:focus{
                     outline: 0;
@@ -720,14 +740,14 @@ export default {
             position: relative;
             .bg-pic4{
                 position: absolute;
-                width: 70%;
-                right: 9%;
-                top: 11%;
+                width: 65%;
+                right: 15%;
+                top: 10%;
                 height: 100%;
             }
             .carousel5{
                width: 1200px !important;
-                height: 660px;
+                height:707px;
                 margin: 0 auto;
                 cursor:pointer;
                 .carousel-explain2{
@@ -940,13 +960,13 @@ export default {
         }
         .nav-contunt-div7{
             width: 100%;
-            height: 660px;
+            height: 100%;
             margin: 0 auto;
             margin-top: 10px;
             .explain4{
                 width: 1200px;
                 margin:0 auto;
-                height: 602px;
+                height: 100%;
                 cursor:pointer;
                 .nav-div7-img{
                     width: 235px;
@@ -963,6 +983,24 @@ export default {
                     margin-right: 5px;
                     margin-top: 5px;
                     transform: scale(.9);
+                }
+                .block2{
+                    text-align: center;
+                    margin: 0 auto;
+                    width: 100%;
+                    display: inline-block;
+                    margin-top: 20px;
+                    .el-pagination {
+                        white-space: nowrap;
+                        padding: 30px 5px;
+                        color: #303133;
+                        font-weight: 700;
+                    }
+                    .el-pagination.is-background .el-pager li:not(.disabled).active {
+                        background-color: #CCE198;
+                        color: #fff;
+                    }
+                    
                 }
             }
         }
@@ -1074,6 +1112,7 @@ export default {
         }
         .carousel44{
             position: relative;
+            margin-top: 20px;
             .bg-pic5{
                 position: absolute;
                 width: 560px;
