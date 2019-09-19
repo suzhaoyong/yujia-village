@@ -15,9 +15,9 @@ module.exports = {
         target: 'http://api.aomengyujia.com',
         // target: 'http://testapi.aomengyujia.com',
         changeOrigin: true,
-        pathRewrite: {
-          '^/api': '/api'
-        }
+        // pathRewrite: {
+        //   '^/api': '/api'
+        // }
       }
     },
 
