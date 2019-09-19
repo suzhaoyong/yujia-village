@@ -5,7 +5,7 @@
                 <div class="formation-main">
                     <div class="formationitem">
                         <div class="select-bg">
-                            <div v-for="(list,index) in navLists" :key="index" class="nav" :class="{ red:changeRed == index}" @click="reds(index)">{{list.classify}}</div>
+                            <div v-for="(list,index) in navLists" :key="index" class="nav" :class="{ red:changeRed == index}" @click="reds(index,list)">{{list.classify}}</div>
                         </div>
                     </div>
                     <template>
@@ -15,7 +15,7 @@
                         </div>
                     </template>
                     <div class="formation-count" v-if="this.listdatas.length > 0">
-                        <div class="formation-count-div1" v-for="(item,index) in listdatas.slice((currentPage-1)*pagesize,currentPage*pagesize)" :key="index" @click="selectItem(item)">
+                        <div class="formation-count-div1" v-for="(item,index) in listdatas" :key="index" @click="selectItem(item)">
                             <img class="bg-img3" src="../assets/image26.png"/>
                             <img class="bg-img8" src="../assets/image30.png"/>
                             <div class="formation-auto">
@@ -54,14 +54,12 @@
                         </div>
                         <div class="block">
                             <el-pagination
-                                @size-change="handleSizeChange"
                                 @current-change="handleCurrentChange"
                                 :current-page="currentPage"
-                                :page-sizes="[3, 6, 9, 12, 15, 18]"
                                 :page-size="pagesize"
                                 background
-                                layout="total, sizes, prev, pager, next, jumper"
-                                :total="listdatas.length">
+                                layout="total, prev, pager, next, jumper"
+                                :total="total">
                             </el-pagination>
                         </div>
                         <div class="kongbai"></div>
@@ -87,12 +85,13 @@ export default {
   data() {
     return {
         currentPage:1,
-        pagesize: 3,
-        formationList:[],
+        pagesize: 0,
+        total:0,
         listdatas:[],
         banner:'',
         navLists:[],
-        changeRed:0
+        changeRed:0,
+        listid:0
     };
   },
   created(){
@@ -101,18 +100,13 @@ export default {
   methods:{
      mationdata(){
         let _this = this;
-        this.$request("/informationList").then(res => {
-            _this.formationList = res.data;
+        this.$request(`/informationList/${_this.listid}?page=${_this.currentPage}`).then(res => {
             _this.banner = res.banner;
-            _this.navLists = res.data;
-            // _this.formationList.map(item =>{ 
-            //     if(item.data != null){
-            //         for(var i=0;i<item.data.length;i++){
-            //         _this.listdatas.push(item.data[i]);
-            //       } 
-            //     }
-            // })
-            _this.listdatas = res.data[0].data;
+            _this.navLists = res.classify;
+            _this.listdatas = res.data;
+            _this.total = res.total;
+            _this.currentPage = res.current_page;
+            _this.pagesize = res.per_page;
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -125,23 +119,27 @@ export default {
             }
         });
       },
-      handleSizeChange(size) {
-          this.pagesize = size;
+      handleCurrentChange(val) {
+          this.currentPage = val;
+          this.mationdata();
       },
-      handleCurrentChange(currentPage) {
-          this.currentPage = currentPage;
-      },
-      reds:function(index){
+      reds:function(index,list){
        this.changeRed = index;
-       for(var i=0;i<this.formationList.length;i++){
-           if(index==i){
-               if(this.formationList[i].data==undefined){
-                  this.listdatas=[];
-               }else{
-                  this.listdatas=this.formationList[i].data;
-               }
-           }
-       }
+       this.listid = list.id;
+       this.currentPage = 1;
+       this.mationdata();
+    //    for(var i=0;i<this.formationList.length;i++){
+    //        if(index==i){
+    //            if(this.formationList[i].data==undefined){
+    //               this.listdatas=[];
+    //            }else{
+    //               this.listdatas=this.formationList[i].data;
+    //               this.total = this.knowledgeList[i].total;
+    //               this.currentPage = this.knowledgeList[i].current_page;
+    //               this.pagesize = this.knowledgeList[i].per_page;
+    //            }
+    //        }
+    //    }
     },
        selectItem(item){
            this.$router.push({

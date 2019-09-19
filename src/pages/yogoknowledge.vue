@@ -5,7 +5,7 @@
                 <div class="knowledge-main">
                     <div class="knowledge-list">
                         <div class="select-bg">
-                            <div v-for="(list,index) in navLists" :key="index" class="nav" :class="{ red:changeRed == index}" @click="reds(index)">{{list.classify}}</div>
+                            <div v-for="(list,index) in navLists" :key="index" class="nav" :class="{ red:changeRed == index}" @click="reds(index,list)">{{list.classify}}</div>
                         </div>
                     </div>
                     <template>
@@ -15,7 +15,7 @@
                         </div>
                     </template>
                     <div class="knowledge-count" v-if="this.listdatas.length > 0">
-                        <div class="knowledge-count-div1" v-for="(item,index) in listdatas.slice((currentPage-1)*pagesize,currentPage*pagesize)" :key="index" @click="selectItem(item)">
+                        <div class="knowledge-count-div1" v-for="(item,index) in listdatas" :key="index" @click="selectItem(item)">
                             <div class="knowledge-auto">
                             <div class="count-img">
                                 <img :src="item.icon_url"/>
@@ -42,14 +42,12 @@
                         </div>
                         <div class="block">
                             <el-pagination
-                                @size-change="handleSizeChange"
                                 @current-change="handleCurrentChange"
                                 :current-page="currentPage"
-                                :page-sizes="[5, 10, 15, 20, 25, 30]"
                                 :page-size="pagesize"
                                 background
-                                layout="total, sizes, prev, pager, next, jumper"
-                                :total="listdatas.length">
+                                layout="total, prev, pager, next, jumper"
+                                :total="total">
                             </el-pagination>
                         </div>
                     </div>
@@ -74,12 +72,13 @@ export default {
   data() {
     return {
         currentPage:1,
-        pagesize: 5,
-        knowledgeList:[],
+        pagesize: 0,
+        total:0,
         listdatas:[],
         banner:'',
         navLists:[],
-        changeRed:0
+        changeRed:0,
+        listids:0
     };
   },
   created(){
@@ -88,19 +87,13 @@ export default {
   methods:{
       listdata(){
         let _this = this;
-        this.$request("/knowledgeList").then(res => {
-            _this.knowledgeList = res.data;
+        this.$request(`/knowledgeList/${_this.listids}?page=${_this.currentPage}`).then(res => {
             _this.banner = res.banner;
-            _this.navLists = res.data;
-            // _this.knowledgeList.map(item =>{ 
-            //     if(item.data != null){
-            //         for(var i=0;i<item.data.length;i++){
-            //         _this.listdatas.push(item.data[i]);
-            //       } 
-            //     // _this.listdatas = res.data[0];
-            //     }
-            // });
-            _this.listdatas = res.data[0].data;
+            _this.navLists = res.classify;
+            _this.listdatas = res.data;
+            _this.total = res.total;
+            _this.currentPage = res.current_page;
+            _this.pagesize = res.per_page;
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -113,23 +106,27 @@ export default {
             }
         });
       },
-    handleSizeChange(size) {
-        this.pagesize = size;
+    handleCurrentChange(val) {
+        this.currentPage = val;
+        this.listdata();
     },
-    handleCurrentChange(currentPage) {
-        this.currentPage = currentPage;
-    },
-    reds:function(index){
+    reds:function(index,list){
        this.changeRed = index;
-       for(var i=0;i<this.knowledgeList.length;i++){
-           if(index==i){
-               if(this.knowledgeList[i].data==undefined){
-                  this.listdatas=[];
-               }else{
-                  this.listdatas=this.knowledgeList[i].data;
-               }
-           }
-       }
+       this.currentPage = 1;
+       this.listids = list.id;
+       this.listdata();
+    //    for(var i=0;i<this.knowledgeList.length;i++){
+    //        if(index==i){
+    //            if(this.knowledgeList[i].data==undefined){
+    //               this.listdatas=[];
+    //            }else{
+    //               this.listdatas=this.knowledgeList[i].data;
+    //               this.total = this.knowledgeList[i].total;
+    //               this.currentPage = this.knowledgeList[i].current_page;
+    //               this.pagesize = this.knowledgeList[i].per_page;
+    //            }
+    //        }
+    //    }
     },
     selectItem(item){
         this.$router.push({

@@ -7,7 +7,7 @@
                     <div class="bg_img">
                         <img :src="banner" alt />
                         <div class="banner_button">
-                            <el-button type="text" class="butt" @click="goto()">申请加盟</el-button>
+                            <el-button type="text" class="butt" @click="goto()">申请联盟</el-button>
                         </div>
                     </div>
                 </template>
@@ -59,7 +59,7 @@
                     </div>
                     <div class="joinclub-cont-div3">
                        <div class="clubhouse2" v-if="this.joinlist.length > 0">
-                            <div class="clubhouse2-list" v-for="(item, index) in joinlist.slice((currentPage-1)*pagesize,currentPage*pagesize)" :key="index" @mouseenter="onMouseOver(index)" @click="selectItem(item)">
+                            <div class="clubhouse2-list" v-for="(item, index) in joinlist" :key="index" @mouseenter="onMouseOver(index)" @click="selectItem(item)">
                                 <!-- <img class="image" :src="item.path"> -->
                                 <!-- <p class="p1">{{item.club_name}}</p> -->
                                  <!-- <p class="p2">{{item.club_address}}</p> -->
@@ -78,14 +78,12 @@
                             </div>
                             <div class="block">
                                 <el-pagination
-                                    @size-change="handleSizeChange"
                                     @current-change="handleCurrentChange"
                                     :current-page="currentPage"
-                                    :page-sizes="[12, 20, 30, 40, 50, 100]"
                                     :page-size="pagesize"
                                     background
-                                    layout="total, sizes, prev, pager, next, jumper"
-                                    :total="joinlist.length">
+                                    layout="total, prev, pager, next, jumper"
+                                    :total="total">
                                 </el-pagination>
                             </div>
                        </div>
@@ -124,7 +122,8 @@ export default {
           desc: ''
         },
         currentPage:1,
-        pagesize: 12,
+        pagesize: 0,
+        total:0
     };
   },
   computed: {
@@ -139,16 +138,19 @@ export default {
           if (valid) {
             alert('submit!');
           } else {
-            console.log('error submit!!');
+            alert('error submit!!');
             return false;
           }
         });
       },
        joindata(){
         let _this = this;
-        this.$request("/clubs").then(res => {
+        this.$request(`/clubs?page=${_this.currentPage}`).then(res => {
             _this.joinlist = res.data;
             _this.banner = res.banner;
+            _this.total = res.total;
+            _this.currentPage = res.current_page;
+            _this.pagesize = res.per_page;
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -196,11 +198,9 @@ export default {
       onMouseOver(index){
           this.ishow = index;
       },
-      handleSizeChange(size) {
-          this.pagesize = size;
-      },
-      handleCurrentChange(currentPage) {
-          this.currentPage = currentPage;
+      handleCurrentChange(val) {
+          this.currentPage = val;
+          this.joindata();
       }
   }
 };

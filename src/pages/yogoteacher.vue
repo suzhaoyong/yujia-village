@@ -93,7 +93,7 @@
                        </div>
                        <div class="yogo-cont-div3">
                            <div class="yogocontunt2" v-if="this.yogolist.length > 0">
-                               <div class="yogocontunt2-list" v-for="(item, index) in yogolist.slice((currentPage-1)*pagesize,currentPage*pagesize)" :key="index" @mouseenter="onMouseOver(index)" @click="yogolink(item)">
+                               <div class="yogocontunt2-list" v-for="(item, index) in yogolist" :key="index" @mouseenter="onMouseOver(index)" @click="yogolink(item)">
                                     <figure class="test5">
                                         <img :src="item.path" class="yogocontunt2-img"/>
                                         <div class="test5-title">
@@ -114,14 +114,12 @@
                                </div>
                                <div class="block">
                                 <el-pagination
-                                    @size-change="handleSizeChange"
                                     @current-change="handleCurrentChange"
                                     :current-page="currentPage"
-                                    :page-sizes="[12, 20, 30, 40, 50, 100]"
                                     :page-size="pagesize"
                                     background
-                                    layout="total, sizes, prev, pager, next, jumper"
-                                    :total="yogolist.length">
+                                    layout="total, prev, pager, next, jumper"
+                                    :total="total">
                                 </el-pagination>
                             </div>
                            </div>
@@ -156,7 +154,8 @@ export default {
         coursetypes: [],
         yearlist:[],
         currentPage:1,
-        pagesize: 12,
+        pagesize: 0,
+        total:0,
         value: '',
         province:'',
         i:0,
@@ -200,13 +199,16 @@ export default {
   methods:{
       listyogodata(){
         let _this = this;
-        this.$request("/teachers").then(res => {
+        this.$request(`/teachers?page=${_this.currentPage}`).then(res => {
             _this.yogolist = res.teachers;
             _this.iconList = res.elites;
             _this.coursetypes = res.course_types;
             _this.yearlist = res.year;
             _this.namelist = res.elites[0];
             _this.banner = res.banner;
+            _this.total = res.total;
+            _this.currentPage = res.current_page;
+            _this.pagesize = res.per_page;
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -285,11 +287,10 @@ export default {
       },
     onMouseOver(index){
     },
-    handleSizeChange(size) {
-        this.pagesize = size;
-    },
-    handleCurrentChange(currentPage) {
-        this.currentPage = currentPage;
+    handleCurrentChange(val) {
+        this.currentPage = val;
+        this.listyogodata();
+
     },
   }
 };

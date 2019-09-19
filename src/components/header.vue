@@ -36,7 +36,7 @@
               @select="handleSelect"
             >
               <el-menu-item index="main">首页</el-menu-item>
-              <el-menu-item index="joinclubhouse">加盟会馆</el-menu-item>
+              <el-menu-item index="joinclubhouse">联盟会馆</el-menu-item>
               <el-menu-item index="yogoteacher">瑜伽名师</el-menu-item>
               <el-menu-item index="cultivate">培训信息</el-menu-item>
               <el-menu-item index="yogoknowledge">瑜伽知识</el-menu-item>
