@@ -10,7 +10,7 @@
             <div class="link">
               <span>
                 瑜伽村官网
-                <a>http://vue.aomengyujia.com</a>
+                <a>http://www.yujiacun.net</a>
               </span>
               <span>分享到</span>
             </div>
@@ -53,7 +53,7 @@ export default {
   data() {
     return {
       config: {
-        url: "http://vue.aomengyujia.com/wap/index.html",
+        url: "http://www.yujiacun.net/wap/index.html",
         source: "",
         title: "",
         description: "",
@@ -89,11 +89,11 @@ export default {
     initSocialConfig() {
       if (this.info.user.name) {
         const params = {
-          url: `http://vue.aomengyujia.com/wap/index.html?invitation_id=${this.info.user.id}`,
+          url: `http://www.yujiacun.net/wap/index.html?invitation_id=${this.info.user.id}`,
           title: `瑜伽村`,
           description: `欢迎加盟`,
-          source: "http://vue.aomengyujia.com",
-          image: "http://vue.aomengyujia.com/static/favicon.ico"
+          source: "http://www.yujiacun.net",
+          image: "http://www.yujiacun.net/static/favicon.ico"
         };
         this.config = Object.assign({}, this.config, params);
       }

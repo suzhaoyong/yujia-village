@@ -37,7 +37,7 @@
                 <share :config="config"></share>
               </div>
               <!-- <img class="imgpic1" src="../../assets/image69.png" /> -->
-              <img class="imgpic2" src="../../assets/image70.png" />
+              <!-- <img class="imgpic2" src="../../assets/image70.png" /> -->
             </div>
           </div>
           <div class="detail-count-div3">
@@ -60,7 +60,12 @@
               <p class="nav-text">Sometimes beauty is so simple</p>
             </div>
             <div class="cumtrl2-text">
-              <p v-for="(item, index) in train.content" :key="index">{{item}}</p>
+              <!-- <div v-for="(item, index) in train.content" :key="index">
+                {{item}}
+              </div> -->
+              <div v-html="train.content">
+
+              </div>
             </div>
             <img class="bg-picimg1" src="../../assets/image75.png" />
             <img class="bg-picimg2" src="../../assets/image76.png" />
@@ -109,9 +114,9 @@ export default {
     getTrainsById(id)
       .then(data => {
         this.train = data;
-        const content = data.content.split("\n").filter(item => item);
+        // const content = data.content.split("\n").filter(item => item);
         const crowd = data.crowd.split(/；/).filter(item => item);
-        this.train.content = content;
+        // this.train.content = content;
         this.train.crowd = crowd;
       })
       .then(_ => {
@@ -120,17 +125,17 @@ export default {
   },
   methods: {
     initSocialConfig() {
-      const { theme, intro, content, teacher_img } = this.train;
+      const { theme, intro, content, teacher_img, crowd } = this.train;
       const params = {
-        url: `http://vue.aomengyujia.com/cultivate/detail/${this.$route.params.id}`,
+        url: `http://www.yujiacun.net/cultivate/detail/${this.$route.params.id}`,
         title: theme,
-        description: `${intro}`,
+        description: `适合人群：${crowd}`,
         image: teacher_img
       };
       this.config = Object.assign({}, this.config, params);
     },
     callTel() {
-      this.$alert(`客服电话: 4001007191`, "客服电话", {});
+      this.$alert(`客服电话: 400-100-7191`, "客服电话", {});
     }
   }
 };
