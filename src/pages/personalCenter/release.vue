@@ -14,7 +14,7 @@
                   <span class="item-actions"></span>
                   <span class="club_view" @click="selectItem(item)">查看</span>
                   <!-- <span class="club_edit" @click="reasonItem(item)">理由</span> -->
-                  <!-- <span class="club_edit" @click="editItem(item)">编辑</span> -->
+                  <span class="club_edit" @click="editItem(item)">编辑</span>
                 </div>
                 <div class="club_info">
                   <div class="club_name">{{item.theme}}</div>
@@ -60,7 +60,40 @@
             <span>审核未通过课程/The audit failed</span>
           </div>
           <div v-if="release_failed.data.length>0" class="result">
-            <div class="club" @click="selectItem(item)" v-for="item in release_failed.data">
+            <div class="club-wrap" v-for="(item, index) in release_failed.data" :key="index">
+              <div class="club">
+                <div class="club_img">
+                  <img :src="item.paht" alt />
+                  <span class="item-actions"></span>
+                  <span class="club_view" @click="selectItem(item)">查看</span>
+                  <span class="club_edit" @click="reasonItem(item, index)">理由</span>
+                  <!-- <span class="club_edit" @click="editItem(item)">编辑</span> -->
+                </div>
+                <div class="club_info">
+                  <div class="club_name">{{item.theme}}</div>
+                  <div class="club_price">￥{{item.price}}</div>
+                  <div class="club_rate">
+                    <el-rate :colors="['#58B708','#58B708','#58B708']" disabled :value="item.diff"></el-rate>
+                  </div>
+                  <div class="club_address">{{item.address}}</div>
+                  <div class="time">发布于 {{item.updated_at}}</div>
+                </div>
+              </div>
+              <div class="reason-wrap" v-show="item.show">
+                <div class="reason">
+                  <div class="reason-input" v-show="false">
+                    <el-input type="textarea" placeholder></el-input>
+                  </div>
+                  <div class="reason-text" v-show="true">
+                    <p>未通过原因如下：</p>
+                    <p>{{item.reason}}</p>
+                  </div>
+                </div>
+                <div class="reason-op" v-show="false">重新编辑</div>
+                <div class="reason-op" v-show="false">确认修改</div>
+              </div>
+            </div>
+            <!-- <div class="club" @click="selectItem(item)" v-for="item in release_failed.data">
               <div class="club_img">
                 <img :src="item.paht" alt />
               </div>
@@ -73,7 +106,7 @@
                 <div class="club_address">{{item.address}}</div>
                 <div class="time">发布于 {{item.updated_at}}</div>
               </div>
-            </div>
+            </div> -->
             <div class="pages">
               <el-pagination
                 background
@@ -397,7 +430,16 @@ export default {
     this.getTrainFailed();
   },
   methods: {
-    reasonItem(item) {},
+    reasonItem(item, index) {
+      this.release_failed.data = this.release_failed.data.map((item, r_index) => {
+        item.show = false
+        if(r_index == index) {
+          item.show = true
+        }
+        return item
+      })
+      this.$set(this.release_failed.data, index, Object.assign({}, this.release_failed.data[index], {show: true})) 
+    },
     editItem(item) {
       getShowMyTrain(item.id).then(data => {
         const {} = data;

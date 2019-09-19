@@ -379,7 +379,7 @@ export default {
 /* 翻转页的时候隐藏背面 */
 .front,
 .back {
-  backface-visibility: hidden;
+  /* backface-visibility: hidden; */
 
   position: absolute;
   top: 0;
