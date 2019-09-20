@@ -34,6 +34,9 @@ export default {
 };
 </script>
 <style scoped>
+.el-container {
+  padding: 0;
+}
 .el-header{
   padding: 0;
 }
@@ -43,8 +46,5 @@ export default {
 .el-main {
   padding: 0;
   overflow-x: hidden;
-}
-.el-container {
-  padding: 0;
 }
 </style>

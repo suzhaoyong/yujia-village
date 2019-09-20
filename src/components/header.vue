@@ -399,7 +399,7 @@ export default {
         img {
           width: 170px;
           position: relative;
-          top: 8px;
+          top: 3px;
         }
       }
     }

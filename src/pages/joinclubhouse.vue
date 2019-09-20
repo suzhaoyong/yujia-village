@@ -228,7 +228,9 @@ export default {
     bottom: 0;
     opacity: 0;
     height: auto;
-    margin-top: -20px;
+    margin-top: -10px;
+    padding-bottom: 10px;
+    padding-top: 10px;
 }
 .test6 figcaption .telimg .telpp{
     opacity: 0;

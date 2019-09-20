@@ -99,7 +99,7 @@
             </div>
             <div class="register">
               <div class="register" @click="goRegister">注册</div>
-              <!-- <div class="Forget" @click="goForget">忘记密码</div> -->
+              <div class="Forget" @click="goForget">忘记密码</div>
               </div>
           </div>
         </div>
