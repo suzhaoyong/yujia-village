@@ -816,7 +816,7 @@ export default {
                 }
                 .swiper-button-prev1{
                         position: absolute;
-                        left: 86%;
+                        left: 88%;
                         top: 36%;
                         width: 32px;
                         height: 32px;
@@ -831,7 +831,7 @@ export default {
                 }
                 .swiper-button-prev1:hover{
                         position: absolute;
-                        left: 86%;
+                        left: 88%;
                         top: 36%;
                         width: 32px;
                         height: 32px;
@@ -849,7 +849,7 @@ export default {
                 }
                 .swiper-button-next1{
                         position: absolute;
-                        right: 3%;
+                        right: 2%;
                         top: 36%;
                         width: 32px;
                         height: 32px;
@@ -864,7 +864,7 @@ export default {
                 }
                 .swiper-button-next1:hover{
                         position: absolute;
-                        right: 3%;
+                        right: 2%;
                         top: 36%;
                         width: 32px;
                         height: 32px;

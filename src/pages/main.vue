@@ -142,7 +142,7 @@
                     <div class="nav-contunt-div7">
                         <div class="explain4">
                             <img class="nav-div7-img" v-for="(item,index) in clubInfo" :key="index" :src="item.path" @click="ImgItem(item)"/>
-                            <div class="block2">
+                            <div class="block2" v-if="this.clubInfo.length > 0">
                                 <el-pagination
                                     @current-change="handleCurrentChange"
                                     :current-page="currentPage"
@@ -478,14 +478,14 @@ export default {
                 justify-content: space-around;
                 margin-top: 25px;
                 .span{
-                    width: 60%;
+                    width:50%;
                     color: #fff;
                     font-size: 14px;
                     display: -webkit-box !important;
                     -webkit-box-orient: vertical !important;
                     -webkit-line-clamp: 2 !important;// 限制快级元素的文本行数
                     overflow: hidden !important;
-                    margin-left: -65px;
+                    margin-left: -10%;
                 }
                 .carousel-btn{
                     width: 130px;
@@ -493,6 +493,7 @@ export default {
                     border: solid 1px #ffffff;
                     color: #fff;
                     transition: all 1s;
+                    margin-right: -5%;
                 }
                 .carousel-btn:hover{
                     width: 130px;
@@ -772,10 +773,10 @@ export default {
                         transform: scale(.9);
                     }
                     .explain2-div{
-                        height: auto;
+                        height: 100%;
                         padding-top: 35px;
                         padding-left: 13px;
-                        width: 69%;
+                        width: 55%;
                         text-align: left;
                         h3{
                             font-size: 14px;
@@ -808,10 +809,13 @@ export default {
                         background-color: #DCD9CC;
                     }
                     .explain2-div{
-                        height: auto;
+                        height: 100%;
                         padding-top: 35px;
                         text-align: right;
-                        width: 69%;
+                        width: 55%;
+                        padding-right: 13px;
+                        margin-left: 18%;
+                        padding-left: 0px;
                         h3{
                             font-size: 14px;
                             color: #000;

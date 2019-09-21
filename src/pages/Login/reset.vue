@@ -3,9 +3,6 @@
     <div class="login-box">
       <div class="login-mask" @click="() => this.$emit('close', '')"></div>
       <div class="login">
-        <!-- <div class="login-icon">
-          <div class="login-icon-pic"></div>
-        </div> -->
         <div class="form">
           <div class="form-head">
             <h4>找回密码</h4>
@@ -13,31 +10,39 @@
           </div>
           <div class="form-box">
             <div class="item">
-              <div class="item-title" style="width:100%;line-height:1.2rem;color:#999;padding-bottom:10px;">验证码将会发送到您绑定的手机上</div>
+              <div class="item-title" style="width:100%;line-height:1.2rem;color:#999;padding-bottom:10px;">验证码将会发送到您的手机上</div>
             </div>
             <div class="item">
-              <div class="item-title" style="width:7em;line-height:1.2rem">您当前手机号:</div>
-              <div class="item-content" style="color:#2C2C2C;font-weight:bold;">152*****093</div>
-            </div>
-            <div class="item">
-              <!-- <div class="item-title">验证码</div> -->
               <div class="item-content">
-                <div class="item-content-input"><input type="text" placeholder="请输入短信验证码"/><div class="get_code">发送验证码</div></div>
-                <div class="item-content-tips">{{true?'验证码错误':''}}</div>
+                <div class="item-content-input">
+                  <input type="password" @blur="checkEmtypeInputBox('tel')" v-model.trim="ruleForm.tel" placeholder="请输入电话"/>
+                </div>
+                <div class="item-content-tips">{{isError('tel')}}</div>
               </div>
             </div>
             <div class="item">
-              <!-- <div class="item-title">新密码</div> -->
               <div class="item-content">
-                <div class="item-content-input"><input type="password" name="" id="" placeholder="新密码"/></div>
-                <div class="item-content-tips">{{true?'密码存在异常字符':''}}</div>
+                <div class="item-content-input">
+                  <input type="text" @blur="checkEmtypeInputBox('verification_code')" v-model.trim="ruleForm.verification_code" placeholder="请输入短信验证码"/>
+                  <div class="get_code" @click="getCodeMessage">发送验证码</div>
+                </div>
+                <div class="item-content-tips">{{isError('verification_code')}}</div>
               </div>
             </div>
             <div class="item">
-              <!-- <div class="item-title">再次确认</div> -->
               <div class="item-content">
-                <div class="item-content-input"><input type="password" name="" id="" placeholder="再次确认"/></div>
-                <div class="item-content-tips">{{true?'二次密码不一致，请仔细确认':''}}</div>
+                <div class="item-content-input">
+                  <input type="password" @blur="checkEmtypeInputBox('password')" v-model.trim="ruleForm.password" placeholder="新密码"/>
+                </div>
+                <div class="item-content-tips">{{isError('password')}}</div>
+              </div>
+            </div>
+            <div class="item">
+              <div class="item-content">
+                <div class="item-content-input">
+                  <input type="password" @blur="checkEmtypeInputBox('password2')" v-model.trim="ruleForm.password2" placeholder="再次确认"/>
+                </div>
+                <div class="item-content-tips">{{isError('password2')}}</div>
               </div>
             </div>
             <div class="item">
@@ -48,37 +53,201 @@
             </div>
           </div>
           <div class="form-footer">
-            <div class="auto_login">
-              <!-- <div class="auto_login-tips">第三方登录：</div>
-              <div class="auto_login-icon"></div>
-              <div class="auto_login-icon"></div> -->
-              提交
-            </div>
+            <div class="auto_login" :style="`${isPostting?'pointer-events:none;':''}`" @click="submit">提交</div>
             <div class="register" @click="goLogin">返回</div>
           </div>
         </div>
       </div>
     </div>
+      <el-dialog style="margin-top:1rem;" width="35rem" title="图形验证码" :visible.sync="getCodepass">
+        <div class="item-box left">
+          <div class="code-title">请在下方填写图形验证码</div>
+          <div class="code-img">
+            <img :src="verification.code_img" alt />
+            <div class="change-code" @click="getVerificationCode">看不清？换一张</div>
+          </div>
+          <div class="box-input">
+            <input
+              type="text"
+              @blur="checkEmtypeInputBox('captcha')"
+              v-model="ruleForm.captcha"
+            />
+          </div>
+          <div class="box-tips">{{isError('captcha')}}</div>
+        </div>
+        <span slot="footer">
+          <el-button type="primary" @click="getCodeMessage2">确 定</el-button>
+        </span>
+      </el-dialog>
   </div>
 </template>
 <script>
 import Bus from "@/utils/Bus"
+import { Exp } from "@/utils/bee.js";
+import store from "@/store";
 export default {
   data() {
     return {
-      loginWay: 'account'
+      msg:"",
+      isPostting: false,
+      getCodepass:false,
+      ruleForm: {
+        tel:"",//电话
+        password: "",//设置密码
+        password2: "",//确认密码
+        verification_key: "", // 短信验证码的key
+        verification_code: "", // 短信验证码
+        key: "", // 图形验证码的key
+        captcha: "", // 图形验证码
+      },
+       ruleFormErrorRule: {
+        tel: { show: false, msg: "请输入电话" },
+        captcha: { show: false, msg: "请输入验证码" },
+        verification_code: { show: false, msg: "请输入验证码" },
+        password: { show: false, msg: "请输入密码" },
+        password2: { show: false, msg: "请输入密码" }
+      },
+      ruleFormCheckErrorRule: {
+        tel: { show: false, msg: "请输入正确的手机号" },
+        captcha: { show: false, msg: "验证码有误，请重新输入" },
+        verification_code: { show: false, msg: "验证码有误，请重新输入" },
+        password: { show: false, msg: "两次密码不一致" },
+        password2: { show: false, msg: "两次密码不一致" }
+      },
+      verification: {
+        code_img: "",
+        code_key: ""
+      },
     }
   },
+  computed: {
+    isError() {
+      return function(item) {
+        if (this.ruleFormErrorRule[item].show) {
+          return this.ruleFormErrorRule[item].msg;
+        }
+        if (this.ruleFormCheckErrorRule[item].show) {
+          return this.ruleFormCheckErrorRule[item].msg;
+        }
+        return "";
+      };
+    }
+  },
+  mounted() {
+    this.getVerificationCode();
+  },
   methods: {
-    goRegister() {
-      // this.$router.push({
-      //   name: 'Register'
-      // })
+    /* 图形验证码 */
+    getVerificationCode() {
+      this.$request("/verificationCode").then(data => {
+        const { img, key } = data;
+        this.verification.code_img = img;
+        this.ruleForm.key = key;
+      });
+    },
+    /* 图形验证码校验 */
+    postVerificationCode() {
+      const { captcha, key } = this.ruleForm;
+      captcha &&
+        key &&
+        this.$request
+          .post("/verificationCode", { captcha, key })
+          .then(data => {});
+    },
+    //发送验证码
+    getCodeMessage(){
+        if (this.ruleForm.tel === "") {
+        this.ruleFormErrorRule.tel.show = true;
+        this.getCodepass = false;
+        }else{
+          this.getCodepass = true;
+        }
+    },
+    //验证图形码
+    getCodeMessage2(){
+      const { captcha, key } = this.ruleForm;
+      captcha &&
+        key &&
+        this.$request
+          .post("/verificationCode", { captcha, key })
+          .then(data => {
+            this.msg = data.msg;
+            if(this.msg == "OK"){
+              this.getCodepass = false;
+              this.getCode();
+            }else{
+              this.getCodepass = true;
+              this.postVerificationCode();
+              this.getVerificationCode();
+              this.ruleForm.captcha = "";
+              this.ruleFormCheckErrorRule.captcha.show = true;
+              this.ruleFormCheckErrorRule.captcha.msg;
+            }
+          })
+          .catch(() => {
+        });
+    },
+    //短信验证码
+    getCode() {
+      this.checkEmtypeInputBox("tel");
+      this.checkEmtypeInputBox("captcha");
+      const { tel, captcha, key} = this.ruleForm;
+      tel &&
+      captcha &&
+      key &&
+        this.$request.post("/getVerificationCode", { tel, captcha, key}).then(data => {
+          this.$message({ message: "发送成功", type: "success" });
+          this.ruleForm.verification_key = data.key;
+        });
+    },
+    /** 提交 */
+    submit() {
+      if(this.ruleForm.password != this.ruleForm.password2){
+        this.$message({ message: "请检查密码是否一致", type: "error" });
+      }else{
+      let isPass = this.formVaildent("ruleForm");
+      if (!isPass) return;
+      this.isPostting = true;
+      const params = Object.assign({}, this.ruleForm);
+      this.$request
+        .post("/personal/forgetPassword", params)
+        .then(data => {
+          this.$message({ message: "提交成功", type: "success" });
+          this.isPostting = false;
+          this.$emit("close", "");
+        })
+        .catch(() => {
+          this.isPostting = false;
+        });
+      }
+    },
+    formVaildent(name) {
+      // 提交按钮校验输入框
+      let _error = this[`${name}ErrorRule`];
+      let _form = this[`${name}`];
+      let is_pass = true;
+      for (let key of Object.keys(_form)) {
+        if (_form[key] === "" && _error[key]) {
+          _error[key].show = true;
+          is_pass = false;
+        }
+      }
+      return is_pass;
+    },
+    checkEmtypeInputBox(item) {
+      // 输入框失去焦点适合有值，空则显示错误提示
+      let _input_value = this.ruleForm[item];
+      if (_input_value) {
+        this.ruleFormErrorRule[item].show = false;
+        let obj = {
+          captcha: this.postVerificationCode
+        };
+        obj[item] && obj[item]();
+      } else {
+        this.ruleFormErrorRule[item].show = true;
+      }
     },
      goLogin() {
-      // this.$router.push({
-      //   name: 'Login'
-      // })
       this.$emit("go-login", "login");
     }
   }
@@ -90,6 +259,45 @@ export default {
 }
 input{outline:none!important;}
 input:focus {outline: none;}
+.code-title{
+  height: 37px;
+  margin-left: 30px;
+}
+.code-img{
+    // width: 300px;
+    height: 60px;
+    display: flex;
+    margin: 0 auto;
+    margin-left: 30px;
+    img{
+      width: 100%;
+      height: 100%;
+    }
+}
+.box-input{
+    width: 47%;
+    height: 3rem;
+    padding-top: 15px;
+    margin-left: 30px;
+    input{
+      width: 100%;
+      height: 100%;
+    }
+}
+.box-tips{
+  color: #ce551a;
+  padding-top: 10px;
+  margin-left: 30px;
+  font-size: 0.6rem;
+  font-family: MicrosoftYaHei;
+  font-weight: 400;;
+  height: 1.2rem;
+}
+.change-code{
+  width: 100%;
+  padding-top: 20px;
+  cursor: pointer;
+}
 .login-box{
   .login-mask{
     position: fixed;

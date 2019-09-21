@@ -119,7 +119,6 @@
         <el-button type="primary"  @click="open.ys = false">确 定</el-button>
       </span>
     </el-dialog>
-    <template>
     <el-dialog style="margin-top:1rem;" width="35rem" title="图形验证码" :visible.sync="getCodepass">
       <div class="item-box left">
         <div class="code-title">请在下方填写图形验证码</div>
@@ -140,7 +139,6 @@
         <el-button type="primary" @click="getCodeMessage2">确 定</el-button>
       </span>
     </el-dialog>
-    </template>
   </div>
 </template>
 <script>
