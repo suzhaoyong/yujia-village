@@ -77,26 +77,6 @@ const router = new Router({
       ]
     },
     {
-      path: '/train',
-      name: 'train',
-      component: Home, //首页
-      children: [{
-          path: 'index',
-          meta: {
-            header_name: 'train'
-          },
-          component: () => import('@/pages/train/index')
-        },
-        {
-          path: 'detail/:id',
-          meta: {
-            header_name: 'train'
-          },
-          component: () => import('@/pages/train/detail')
-        },
-      ]
-    },
-    {
       path: '/personal',
       name: 'personal',
       component: Home,

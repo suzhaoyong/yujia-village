@@ -98,6 +98,10 @@ src
 
 ```
 
+
+## 注意项
+* pc项目，有的地方是使用 rem。若要使用 rem 单位，请按设计图的 自定义> CSS Rem 20 px 置换成 rem。 *
+
 ## Build Setup
 
 ``` bash
