@@ -48,35 +48,6 @@
             <el-input style="margin-right:20px;" v-model="ruleForm.address" placeholder="请填写详细地址"></el-input>
           </div>
         </div>
-        <div class="card">
-          <div class="title-tips">
-            <div class="title" style="left: 1em;">免责声明</div>
-            <div class="download">
-              <a
-                style="color:#2c2c2c;"
-                href="http://api.aomengyujia.com/api/personal/download/template"
-                download
-              >下载模版</a>
-            </div>
-          </div>
-          <div class="upload-box">
-            <el-upload
-              action="#"
-              :class="{disabled:uploadExemptionDisabled}"
-              :on-change="changeExemptionFile"
-              :on-remove="() => this.ruleForm['img_exemption'] = ''"
-              list-type="picture-card"
-              :limit="1"
-              :auto-upload="false"
-            >
-              <i class="el-icon-plus"></i>
-              <div class="el-upload__tip" slot="tip">支持jpg,jpeg,png格式</div>
-            </el-upload>
-            <el-dialog :visible.sync="dialogVisible">
-              <img width="100%" :src="dialogImageUrl" alt />
-            </el-dialog>
-          </div>
-        </div>
         <div class="card" v-show="isShow('7') || isShow('4')">
           <div class="title-tips">
             <div class="title" style="left: 1em;">工作证明/教练证书</div>
@@ -135,7 +106,7 @@
         </div>
         <div
           class="next"
-          :style="`${step.agree?'':'cursor: not-allowed;'}`"
+          :style="`${step.agree?'':'cursor: not-allowed;background:#ccc;'}`"
           @click="stepOpFor('next')"
         >下一步</div>
       </div>
@@ -174,7 +145,7 @@ export default {
         province: "",
         area: "",
         address: "",
-        img_exemption: "",
+        // img_exemption: "",
         img_work: "",
         img_license: ""
       }
@@ -242,7 +213,7 @@ export default {
           this.step.cur_index += 1;
         },
         finish: () => {
-          const { img_license, img_work, img_exemption } = this.ruleForm;
+          const { img_license, img_work} = this.ruleForm;
           let identity_auth = 1;
           if (img_license && img_work) {
             identity_auth = 7;
