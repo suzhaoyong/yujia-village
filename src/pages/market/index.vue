@@ -54,7 +54,7 @@
               <div class="prev_btn hvr-float-shadow" @click="changeDiscountsForu('double','prev')"></div>
             </div>
             <div class="goods_list">
-              <transition-group name="fade" tag="div"  style="display: flex;">
+              <transition-group name="fade" tag="div" style="display: flex;">
                 <div
                   class="goods hvr-underline-from-left"
                   style="cursor: pointer;"
@@ -347,7 +347,8 @@ export default {
   user-select: none;
 }
 
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: all 1s;
 }
 .fade-enter, .fade-leave-to

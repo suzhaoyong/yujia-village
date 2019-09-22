@@ -63,7 +63,10 @@ function handleResponeseErr(err) {
   } = response;
 
   let message = '未知异常';
-  if (typeof status === 'undefined') {
+  // console.log(status)
+  if (status === 404) {
+    message = '接口不存在';
+  } else if (typeof status === 'undefined') {
     message = "登录已失效，请再次登录"
     Bus.$emit('login', true)
     sessionStorage.removeItem('user')
@@ -142,6 +145,7 @@ function handleResponse(response) {
     status,
     data
   } = response
+  // console.log(status, response);
   if (status >= 400 && status < 500) {
     return Promise.reject(response);
   }

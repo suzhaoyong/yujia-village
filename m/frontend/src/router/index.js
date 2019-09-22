@@ -15,6 +15,11 @@ export default new Router({
       component: () => import('@/pages/index')
     },
     {
+      path: '/share',
+      name: 'share',
+      component: () => import('@/pages/share')
+    },
+    {
       path: '/login',
       name: 'login',
       component: () => import('@/pages/login')

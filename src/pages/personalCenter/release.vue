@@ -7,14 +7,14 @@
             <span>我的发布/My release</span>
           </div>
           <div class="result" v-if="release.data.length>0">
-            <div class="club-wrap" v-for="item in release.data">
+            <div class="club-wrap" v-for="(item, index) in release.data" :key="index">
               <div class="club">
                 <div class="club_img">
                   <img :src="item.paht" alt />
                   <span class="item-actions"></span>
                   <span class="club_view" @click="selectItem(item)">查看</span>
-                  <!-- <span class="club_edit" @click="reasonItem(item)">理由</span> -->
-                  <!-- <span class="club_edit" @click="editItem(item)">编辑</span> -->
+                  <!-- <span class="club_edit" @click="reasonItem(item, index)">理由</span> -->
+                  <span class="club_edit" @click="editItem(item)">编辑</span>
                 </div>
                 <div class="club_info">
                   <div class="club_name">{{item.theme}}</div>
@@ -26,18 +26,18 @@
                   <div class="time">发布于 {{item.updated_at}}</div>
                 </div>
               </div>
-              <div class="reason-wrap" v-show="false">
+              <div class="reason-wrap" v-show="item.show">
                 <div class="reason">
-                  <div class="reason-input" v-show="true">
+                  <div class="reason-input" v-show="false">
                     <el-input type="textarea" placeholder></el-input>
                   </div>
-                  <div class="reason-text" v-show="false">
+                  <div class="reason-text" v-show="true">
                     <p>未通过原因如下：</p>
-                    <p>1.图片涉嫌抄袭网络图片 2.信息真实性不高…… ……</p>
+                    <p>{{item.reason}}</p>
                   </div>
                 </div>
                 <div class="reason-op" v-show="false">重新编辑</div>
-                <div class="reason-op">确认修改</div>
+                <div class="reason-op" v-show="false">确认修改</div>
               </div>
             </div>
 
@@ -60,7 +60,40 @@
             <span>审核未通过课程/The audit failed</span>
           </div>
           <div v-if="release_failed.data.length>0" class="result">
-            <div class="club" @click="selectItem(item)" v-for="item in release_failed.data">
+            <div class="club-wrap" v-for="(item, index) in release_failed.data" :key="index">
+              <div class="club">
+                <div class="club_img">
+                  <img :src="item.paht" alt />
+                  <span class="item-actions"></span>
+                  <!-- <span class="club_view" @click="selectItem(item)">查看</span> -->
+                  <span class="club_view" @click="reasonItem(item, index)">理由</span>
+                  <span class="club_edit" @click="editItem(item)">编辑</span>
+                </div>
+                <div class="club_info">
+                  <div class="club_name">{{item.theme}}</div>
+                  <div class="club_price">￥{{item.price}}</div>
+                  <div class="club_rate">
+                    <el-rate :colors="['#58B708','#58B708','#58B708']" disabled :value="item.diff"></el-rate>
+                  </div>
+                  <div class="club_address">{{item.address}}</div>
+                  <div class="time">发布于 {{item.updated_at}}</div>
+                </div>
+              </div>
+              <div class="reason-wrap" v-show="item.show">
+                <div class="reason">
+                  <div class="reason-input" v-show="false">
+                    <el-input type="textarea" placeholder></el-input>
+                  </div>
+                  <div class="reason-text" v-show="true">
+                    <p>未通过原因如下：</p>
+                    <p>{{item.reason}}</p>
+                  </div>
+                </div>
+                <div class="reason-op" v-show="false">重新编辑</div>
+                <div class="reason-op" v-show="false">确认修改</div>
+              </div>
+            </div>
+            <!-- <div class="club" @click="selectItem(item)" v-for="item in release_failed.data">
               <div class="club_img">
                 <img :src="item.paht" alt />
               </div>
@@ -73,7 +106,7 @@
                 <div class="club_address">{{item.address}}</div>
                 <div class="time">发布于 {{item.updated_at}}</div>
               </div>
-            </div>
+            </div>-->
             <div class="pages">
               <el-pagination
                 background
@@ -90,7 +123,7 @@
         </div>
       </div>
       <div class="my rh">
-        <div class="fill">
+        <div class="fill" v-if="!isSucc">
           <div class="class_img">
             <div class="header">
               <span>课程信息填写</span>
@@ -105,7 +138,13 @@
               </div>
               <div class="upload-imgs">
                 <div class="upload-box">
+                  <div class="upload-img" v-if="select.first">
+                    <img :src="select.first" alt />
+                    <span class="item-actions"></span>
+                    <i @click="select.first = ''" class="el-icon-delete"></i>
+                  </div>
                   <el-upload
+                    v-else
                     action="#"
                     :class="{disabled:uploadDisabled('img_train_first')}"
                     :on-change="changeTrainFirstFile"
@@ -119,7 +158,13 @@
                   </el-upload>
                 </div>
                 <div class="upload-box">
+                  <div class="upload-img" v-if="select.two">
+                    <img :src="select.two" alt />
+                    <span class="item-actions"></span>
+                    <i @click="select.two = ''" class="el-icon-delete"></i>
+                  </div>
                   <el-upload
+                    v-else
                     action="#"
                     :class="{disabled:uploadDisabled('img_train_two')}"
                     :on-change="changeTrainTwoFile"
@@ -133,7 +178,13 @@
                   </el-upload>
                 </div>
                 <div class="upload-box">
+                  <div class="upload-img" v-if="select.three">
+                    <img :src="select.three" alt />
+                    <span class="item-actions"></span>
+                    <i @click="select.three = ''" class="el-icon-delete"></i>
+                  </div>
                   <el-upload
+                    v-else
                     action="#"
                     :class="{disabled:uploadDisabled('img_train_three')}"
                     :on-change="changeTrainThreeFile"
@@ -178,7 +229,12 @@
               <div class="tips"></div>
             </div>
             <div class="select-box">
-              <v-distpicker @selected="onSelected"></v-distpicker>
+              <v-distpicker
+                :province="ruleForm.province"
+                :city="ruleForm.city"
+                :area="ruleForm.area"
+                @selected="onSelected"
+              ></v-distpicker>
             </div>
             <div class="title_tips">
               <div class="title">详细地址</div>
@@ -328,8 +384,12 @@ export default {
   data() {
     return {
       select: {
-        path: ""
+        path: "",
+        first: "",
+        two: "",
+        three: ""
       },
+      isSucc: false,
       teacher_list: {
         show: false,
         keyword: "",
@@ -397,10 +457,82 @@ export default {
     this.getTrainFailed();
   },
   methods: {
-    reasonItem(item) {},
+    reasonItem(item, index) {
+      let type = "release_failed";
+      // type = "release";
+      this[type].data = this[type].data.map((item, r_index) => {
+        item.show = false;
+        if (r_index == index) {
+          item.show = true;
+        }
+        return item;
+      });
+      // this.$set(
+      //   this[type].data,
+      //   index,
+      //   Object.assign({}, this[type].data[index], { show: true })
+      // );
+    },
     editItem(item) {
       getShowMyTrain(item.id).then(data => {
-        const {} = data;
+        const {
+          content,
+          crowd,
+          outline,
+          tel,
+          linkman,
+          endTime,
+          startTime,
+          teacher_img,
+          name,
+          address,
+          province,
+          area,
+          city,
+          price,
+          theme,
+          diff,
+          id,
+          three,
+          two,
+          first
+        } = data;
+        this.ruleForm = {
+          id: id || "",
+          main: content || "", // 内容介绍
+          crowd: crowd || "", // 	适用人群
+          outline: outline || "", // 课程大纲
+          tel: tel || "", // 报名联系人电话
+          linkman: linkman || "", // 报名联系人
+          endTime: endTime || "",
+          startTime: startTime || "",
+          teacher_img: "",
+          name: name || "",
+          address: address || "",
+          area:  area || "" || '山海关区',
+          city:  city || "" || '秦皇岛市',
+          province: province || "" || '河北省',
+          price: price || "",
+          diff: diff || 0,
+          theme: theme || "",
+          img_train_three: "",
+          img_train_two: "",
+          img_train_first: ""
+        };
+        this.select = {
+          path: teacher_img || "",
+          first: first || "",
+          two: two || "",
+          three: three || ""
+        };
+        this.time = {
+          value: {
+            startTime: startTime || "",
+            endTime: endTime || ""
+          },
+          type: "time",
+          range: [startTime, endTime]
+        };
       });
     },
     selectItem(item) {
@@ -428,7 +560,14 @@ export default {
     },
     sure() {
       let params = Object.assign({}, this.ruleForm, { ...this.time.value });
-      const { img_train_three, img_train_two, img_train_first } = this.ruleForm;
+      let { path, first, two, three } = this.select;
+      path && (params.teacher_img = path);
+      first && (params.img_train_first = first);
+      two && (params.img_train_two = two);
+      three && (params.img_train_three = three);
+
+      const { img_train_three, img_train_two, img_train_first } = params;
+
       if (img_train_three || img_train_two || img_train_first) {
         for (let p of Object.keys(params)) {
           if (
@@ -451,41 +590,43 @@ export default {
         return;
       }
       console.log(JSON.stringify(this.ruleForm, null, 4));
-      let { path } = this.select;
-      path && (params.teacher_img = path);
-      // let params = {
-      //   address: "详细地址",
-      //   area: "河东区",
-      //   city: "天津城区",
-      //   main: "课程详细内容",
-      //   crowd: "适宜人群",
-      //   diff: 3,
-      //   endTime: "2019-09-14",
-      //   img_train_first:
-      //     "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAQAAAC0NkA6AAAAAmJLR0QA/4ePzL8AAAG3SURBVFjD7dcxbMxhGMfxT0vRmIimgxiwmJobGRB0MEmJ24zCIq2NTSNNWqYmVpGQGByJgcFEE1ZhlKMh2tRwSf2bhpQ6j8G5/FtF7n93jWvu99ue//v8v8nzvM+b96WtttaUuuUa4O6/Q3KiAc79R5Ako2uAJJl7mrQhaY1KJEabCxkXwngLQo55ucQlIZRSkTv1Q46aWOJpIUynItdbqCdXFaouCqGo4Lkp7/U1CvLQZNWzFi2aNemzELY2cxg3mBemGlOujU64ZMyIIXm7q/F+IdxsBOSImWWHeMkNh3UqCGGgfshBX5U9csU1D0z6XkW9Uxamra8Xsk5RYn/qW69T7lkQQlmYMWxXfZADwuAKK7Z4kipf2TNDerJCzgk7V1iR900om0ihFtx30qbaIYMitZt+aaBSrhHs83TJpkjc8qk2yCHh4rLZGFYWwm2doEPe66wXiQRdXllwVhfocdrbyi/uVmI/1eWMD1kh7DUnfPTCVDV93nkdv2VtdsFcNgh9HqdS37is94+Z24z5Upmlms+uHY7L67fdv7Wn1sZnU/ve1SzIqly418L7ZFWec2211WL6Ac2uSUavpEE4AAAAAElFTkSuQmCC",
-      //   img_train_three:
-      //     "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAQAAAC0NkA6AAAAAmJLR0QA/4ePzL8AAAG3SURBVFjD7dcxbMxhGMfxT0vRmIimgxiwmJobGRB0MEmJ24zCIq2NTSNNWqYmVpGQGByJgcFEE1ZhlKMh2tRwSf2bhpQ6j8G5/FtF7n93jWvu99ue//v8v8nzvM+b96WtttaUuuUa4O6/Q3KiAc79R5Ako2uAJJl7mrQhaY1KJEabCxkXwngLQo55ucQlIZRSkTv1Q46aWOJpIUynItdbqCdXFaouCqGo4Lkp7/U1CvLQZNWzFi2aNemzELY2cxg3mBemGlOujU64ZMyIIXm7q/F+IdxsBOSImWWHeMkNh3UqCGGgfshBX5U9csU1D0z6XkW9Uxamra8Xsk5RYn/qW69T7lkQQlmYMWxXfZADwuAKK7Z4kipf2TNDerJCzgk7V1iR900om0ihFtx30qbaIYMitZt+aaBSrhHs83TJpkjc8qk2yCHh4rLZGFYWwm2doEPe66wXiQRdXllwVhfocdrbyi/uVmI/1eWMD1kh7DUnfPTCVDV93nkdv2VtdsFcNgh9HqdS37is94+Z24z5Upmlms+uHY7L67fdv7Wn1sZnU/ve1SzIqly418L7ZFWec2211WL6Ac2uSUavpEE4AAAAAElFTkSuQmCC",
-      //   img_train_two: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAnkA",
-      //   linkman: "报名联系人",
-      //   name: "授课老师姓名",
-      //   outline: "课程大纲",
-      //   price: "123",
-      //   province: "天津市",
-      //   startTime: "2019-09-02",
-      //   teacher_img:
-      //     "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAQAAAC0NkA6AAAAAmJLR0QA/4ePzL8AAAG3SURBVFjD7dcxbMxhGMfxT0vRmIimgxiwmJobGRB0MEmJ24zCIq2NTSNNWqYmVpGQGByJgcFEE1ZhlKMh2tRwSf2bhpQ6j8G5/FtF7n93jWvu99ue//v8v8nzvM+b96WtttaUuuUa4O6/Q3KiAc79R5Ako2uAJJl7mrQhaY1KJEabCxkXwngLQo55ucQlIZRSkTv1Q46aWOJpIUynItdbqCdXFaouCqGo4Lkp7/U1CvLQZNWzFi2aNemzELY2cxg3mBemGlOujU64ZMyIIXm7q/F+IdxsBOSImWWHeMkNh3UqCGGgfshBX5U9csU1D0z6XkW9Uxamra8Xsk5RYn/qW69T7lkQQlmYMWxXfZADwuAKK7Z4kipf2TNDerJCzgk7V1iR900om0ihFtx30qbaIYMitZt+aaBSrhHs83TJpkjc8qk2yCHh4rLZGFYWwm2doEPe66wXiQRdXllwVhfocdrbyi/uVmI/1eWMD1kh7DUnfPTCVDV93nkdv2VtdsFcNgh9HqdS37is94+Z24z5Upmlms+uHY7L67fdv7Wn1sZnU/ve1SzIqly418L7ZFWec2211WL6Ac2uSUavpEE4AAAAAElFTkSuQmCC",
-      //   tel: "17682488600",
-      //   theme: "课程名称"
-      // };
-      postMytrainInfoPut(params).then(res => {
-        this.$message({ message: "发布成功", type: "success" });
-        this.getTrain();
-        this.successResetData();
-      });
+
+      if (params.id) {
+        postTrainInfoUpdate(params).then(res => {
+          this.$message({ message: "发布成功", type: "success" });
+          this.getTrain();
+          this.isSucc = true;
+          this.successResetData();
+          setTimeout(() => {
+            this.isSucc = false;
+          }, 300);
+        });
+      } else {
+        postMytrainInfoPut(params).then(res => {
+          this.$message({ message: "发布成功", type: "success" });
+          this.getTrain();
+          this.isSucc = true;
+          this.successResetData();
+          setTimeout(() => {
+            this.isSucc = false;
+          }, 300);
+        });
+      }
     },
     successResetData() {
       this.select = {
-        path: ""
+        path: "",
+        first: "",
+        two: "",
+        three: ""
+      };
+      this.time = {
+        value: {
+          startTime: "",
+          endTime: ""
+        },
+        type: "time",
+        range: []
       };
       this.ruleForm = {
         main: "", // 内容介绍
@@ -882,6 +1023,42 @@ img {
             .upload-imgs {
               display: flex;
               justify-content: space-between;
+              .upload-img {
+                width: 148px;
+                height: 148px;
+                position: relative;
+                .el-icon-delete {
+                  display: none;
+                }
+                &:hover .item-actions {
+                  display: block;
+                }
+                .item-actions {
+                  display: none;
+                  position: absolute;
+                  width: 100%;
+                  height: 100%;
+                  left: 0;
+                  top: 0;
+                  cursor: default;
+                  text-align: center;
+                  color: #fff;
+                  opacity: 1;
+                  font-size: 20px;
+                  background-color: rgba(0, 0, 0, 0.5);
+                  -webkit-transition: opacity 0.3s;
+                  transition: opacity 0.3s;
+                }
+                &:hover .el-icon-delete {
+                  color: #fff;
+                  display: block;
+                  position: absolute;
+                  font-size: 30px;
+                  top: 50%;
+                  left: 50%;
+                  transform: translate(-50%, -50%);
+                }
+              }
               .upload-box {
               }
             }
