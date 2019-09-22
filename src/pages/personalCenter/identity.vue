@@ -436,6 +436,7 @@ img {
 }
 .body {
   position: relative;
+  margin-bottom: 3rem;
 }
 .back {
   width: 60rem;

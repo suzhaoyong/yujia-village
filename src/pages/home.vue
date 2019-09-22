@@ -1,6 +1,6 @@
 <template>
   <div style="width:100%;height:100%;">
-    <el-container>
+    <el-container id="wrapper">
       <!--头部-->
         <el-header style="height:100%;">
           <Header></Header>
@@ -10,7 +10,7 @@
             <router-view exact></router-view>
         </el-main>
         <!--底部-->
-        <el-footer style="height:100%;">
+        <el-footer>
           <Footer></Footer>
         </el-footer>
     </el-container>
@@ -34,6 +34,11 @@ export default {
 };
 </script>
 <style scoped>
+#wrapper {
+  min-height: 100%;
+  height: auto !important;
+  position: relative;
+}
 .el-container {
   padding: 0;
 }
@@ -42,6 +47,12 @@ export default {
 }
 .el-footer{
   padding: 0;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  /* margin-bottom: -75px; */
 }
 .el-main {
   padding: 0;

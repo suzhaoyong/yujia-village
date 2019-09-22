@@ -218,7 +218,7 @@ img {
   color: #2c2c2c;
   width: 60rem;
   margin: 0 auto;
-  padding-bottom: 1rem;
+  padding-bottom: 4rem;
   position: relative;
   .o_title {
     background: rgba(255, 255, 255, 1);

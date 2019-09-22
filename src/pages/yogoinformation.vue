@@ -209,7 +209,7 @@ export default {
         display: inline-block;
         .kongbai{
             width: 100%;
-            height: 25px;
+            height: 60px;
         }
         .formation-count-div1{
             width: 100%;

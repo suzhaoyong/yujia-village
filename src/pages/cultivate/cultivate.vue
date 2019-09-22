@@ -660,6 +660,7 @@ img {
   margin: 0 auto;
   overflow: hidden;
   font-size: 0.7rem;
+  margin-bottom: 3rem;
   .cultivate-count {
     width: 60rem;
     margin: 0 auto;
