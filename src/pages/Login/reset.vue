@@ -310,9 +310,9 @@ input:focus {outline: none;}
   }
   .login{
     position: absolute;
-    top: 30%;
+    top: 5%;
     left: 50%;
-    transform: translate(-50%, -30%);
+    transform: translate(-50%, -5%);
     background: #fff;
     z-index: 101;
     display: flex;
