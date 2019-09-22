@@ -279,6 +279,7 @@ export default {
         height: 600px;
         margin: 0 auto;
         margin-top: 40px;
+        margin-bottom: 50px;
         .clubhouse{
             width: 1200px;
             height: 530px;

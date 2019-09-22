@@ -215,6 +215,7 @@ export default {
 .test6 .yogocontunt2-img{
     width: 100%;
     height: 224px;
+    object-fit: cover;
     }
 .test6 figcaption{
     width: 100%;
@@ -228,7 +229,7 @@ export default {
     bottom: 0;
     opacity: 0;
     height: auto;
-    margin-top: -10px;
+    margin-top: -5px;
     padding-bottom: 10px;
     padding-top: 10px;
 }
@@ -405,6 +406,7 @@ export default {
             width: 100%;
             height: 100%;
             margin: 0 auto;
+            margin-bottom: 50px;
             .clubhouse2{
                 width: 1200px;
                 height: 100%;

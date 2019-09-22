@@ -251,7 +251,7 @@ export default {
         background-size: 100% 100%;
         position: relative;
         display: inline-block;
-        padding-bottom: 20px;
+        padding-bottom: 70px;
         .yogo-cont-div4{
             width: 1200px;
             height: 200px;
