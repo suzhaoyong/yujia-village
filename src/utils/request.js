@@ -63,7 +63,10 @@ function handleResponeseErr(err) {
   } = response;
 
   let message = '未知异常';
-  // console.log(status)
+  console.log('请求失败')
+  console.log('response', response)
+  console.log('status', status)
+  console.log('data', data)
   if (status === 404) {
     message = '接口不存在';
   } else if (typeof status === 'undefined') {
@@ -75,18 +78,14 @@ function handleResponeseErr(err) {
       user: {}
     });
   }
-  if (status === 401) {
-    if (config.url.search("login") != -1 || config.url.search("telLogin") != -1) {
-      message = data.msg
-    } else {
-      message = '请先登录'
-    }
+  if (data.code === '0001') {
     if (sessionStorage.getItem('access')) {
       // sessionStorage.removeItem('access')
       request.post('/auth/refresh')
         .then(data => {
           sessionStorage.setItem('access', JSON.stringify(data))
-          window.location.reload();
+          store.dispatch("INFO", data);
+          // window.location.reload();
         })
         .catch(() => {
           Message({
@@ -95,7 +94,7 @@ function handleResponeseErr(err) {
             duration: 5 * 1000
           });
         })
-
+        return Promise.resolve(); 
     } else {
       Bus.$emit('login', true)
       sessionStorage.removeItem('user')
@@ -104,6 +103,14 @@ function handleResponeseErr(err) {
         user: {}
       });
     }
+  }
+  if (status === 401) {
+    if (config.url.search("login") != -1 || config.url.search("telLogin") != -1) { // 显示图形码报错信息
+      message = data.msg
+    } else {
+      message = '请先登录'
+    }
+    
 
   } else if (status === 404) {
     message = '接口不存在';

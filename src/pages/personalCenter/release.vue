@@ -337,7 +337,7 @@
             </div>
           </div>
           <div class="agreen-next">
-            <div class="back">返回</div>
+            <div class="back" @click="() => { this.$router.go(-1); }">返回</div>
             <div class="next" @click="sure">完成</div>
           </div>
         </div>
