@@ -87,7 +87,9 @@ export default {
   methods:{
       listdata(){
         let _this = this;
+        // this.$request(`/knowledgeList/${_this.listids}?page=${_this.currentPage}`).then(res => {
         this.$request(`/knowledgeList/${_this.listids}?page=${_this.currentPage}`).then(res => {
+            console.log(res)
             _this.banner = res.banner;
             _this.navLists = res.classify;
             _this.listdatas = res.data;
