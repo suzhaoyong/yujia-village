@@ -397,9 +397,9 @@ export default {
         height: 44px;
         line-height: 44px;
         img {
-          width: 170px;
+          width: 140px;
           position: relative;
-          top: 3px;
+          top: 8px;
         }
       }
     }
