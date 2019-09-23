@@ -1,0 +1,14 @@
+{
+  "error":0,
+  "data":{
+      "items": [
+        {
+          "id": "@id()",
+          "name": "@ctitle()",
+          "used": "@cword('01')",
+          "price": "@natural(10, 1000)",
+          "money": "@natural(10, 1000)"
+        }
+      ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "error":0,
+  "data":{
+      "id": "@id()",
+      "name": "@cname()",
+      "big_img": "@image('400x780','red','#fff','avatar')",
+      "mid_img": "@image('420x380','red','#fff','avatar')",
+      "min_img": "@image('320x300','red','#fff','avatar')",
+      "description": "@paragraph(1)",
+      "price": "@natural( 10, 10000)",
+      "date": "@date('yyyy.MM.dd')"
+  }
+}
