@@ -40,11 +40,11 @@ function handleRequest(config) {
   //   }
   // }
   if (process.env.NODE_ENV === 'development') {
-    config.baseURL = 'http://api.aomengyujia.com/api';
+    // config.baseURL = 'http://api.aomengyujia.com/api';
+    config.baseURL = 'http://testapi.aomengyujia.com/api';
   } else {
     config.baseURL = 'https://api.yujiacun.net/api';
   }
-  // config.baseURL = 'http://testapi.aomengyujia.com/api';
   if (contentType === 'json') {
     config.headers['Content-Type'] = 'application/json';
   }
