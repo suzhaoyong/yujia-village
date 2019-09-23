@@ -1178,7 +1178,7 @@ export default {
         }
         .bai{
             width: 100%;
-            height: 60px;
+            height: 70px;
             background-color: #FCFBF1;
             display: inline-block;
             position: relative;

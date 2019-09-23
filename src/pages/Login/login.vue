@@ -524,9 +524,9 @@ input:focus {
   }
   .login {
     position: absolute;
-    top: 30%;
+    top: 2rem;
     left: 50%;
-    transform: translate(-50%, -30%);
+    transform: translate(-50%,  0);
     background: #fff;
     z-index: 101;
     display: flex;

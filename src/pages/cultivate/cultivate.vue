@@ -155,7 +155,7 @@
                   <div class="list-eye">
                       <span class="span">{{item.views||100}}</span>
                       <span class="hand">
-                        <span>100</span>
+                        <span>{{item.follow||100}}</span>
                       </span>
                       <span class="study">我想学</span>
                   </div>

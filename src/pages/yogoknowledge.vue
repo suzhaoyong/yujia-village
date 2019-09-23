@@ -193,6 +193,7 @@ export default {
         margin: 0 auto;
         height: 100%;
         display: inline-block;
+        margin-bottom: 50px;
         .knowledge-count-div1{
             width: 1200px;
             height: 500px;

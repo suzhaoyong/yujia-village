@@ -1,51 +1,8 @@
 <template>
   <div>
     <div class="personal">
-      <div class="buy" v-show="false">
-        <session-title name="已购买的课程"></session-title>
-        <div class="body">
-          <el-carousel indicator-position="none" arrow="always">
-            <el-carousel-item v-for="item in 4" :key="item">
-              <div class="course">
-                <div class="card" v-for="card in 3" :key="card">
-                  <div class="img"></div>
-                  <div class="info">
-                    <div class="item">
-                      <div class="name">
-                        <div class="name-zh">普拉提</div>
-                        <div class="name-en">Plute</div>
-                      </div>
-                      <div class="price">¥4000</div>
-                    </div>
-                    <div class="item">
-                      <div class="score">
-                        <el-rate disabled :colors="['#58B708','#58B708','#58B708']" :value="star"></el-rate>
-                      </div>
-                    </div>
-                    <div class="item">
-                      <div class="shop-name">成都瑜伽</div>
-                      <div class="time">2019.05.02-2019.07.04</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </el-carousel-item>
-          </el-carousel>
-        </div>
-      </div>
-      <session-title name="已购买商品"></session-title>
+      <session-title name="我想学的课程"></session-title>
       <cloud :arr="[1,2,3,4, 5]"></cloud>
-      <div v-show="false">
-        <div class="yun">
-          <img :src="icon.yun.yun_1" alt />
-        </div>
-        <div class="yun2">
-          <img :src="icon.yun.yun_2" alt />
-        </div>
-        <div class="yun3">
-          <img :src="icon.yun.yun_1" alt />
-        </div>
-      </div>
       <div class="my-class">
         <div
           class="goods-box"
@@ -67,6 +24,17 @@
               <div class="collenct" @click="addCollect">收藏</div>-->
             </div>
           </div>
+        </div>
+        <div class="pages">
+          <el-pagination
+            background
+            :hide-on-single-page="true"
+            layout="prev, pager, next, jumper"
+            :page-size="12"
+            @current-change="changePage"
+            :current-page="want.current_page"
+            :total="want.total"
+          ></el-pagination>
         </div>
       </div>
       <div>
@@ -94,6 +62,55 @@
               <div class="collenct" @click="addCollect">收藏</div>-->
             </div>
           </div>
+        </div>
+        <div class="pages">
+          <el-pagination
+            background
+            :hide-on-single-page="true"
+            layout="prev, pager, next, jumper"
+            :page-size="12"
+            @current-change="changePage"
+            :current-page="collect.current_page"
+            :total="collect.total"
+          ></el-pagination>
+        </div>
+      </div>
+      <div>
+        <not-found v-if="info.collect.length === 0" type="not-fond_2" msg="我寻寻觅觅却找不见您收藏的踪迹"></not-found>
+      </div>
+      <session-title name="我点赞的老师"></session-title>
+      <div class="my-class">
+        <div
+          class="goods-box"
+          @click="viewGoodsDetail(item)"
+          v-for="(item, index) in info.collect"
+          :key="index"
+        >
+          <div class="pic">
+            <img :src="item.url" alt />
+          </div>
+          <div class="gtitle">{{item.describe}}</div>
+          <div class="price-views-collenct">
+            <div class="price">
+              <div class="old-price">￥{{item.sell_price}}</div>
+              <div class="new-price">￥{{item.sell_price - item.discount}}</div>
+            </div>
+            <div class="views-collenct">
+              <!-- <div class="views">{{item.views}}</div>
+              <div class="collenct" @click="addCollect">收藏</div>-->
+            </div>
+          </div>
+        </div>
+        <div class="pages">
+          <el-pagination
+            background
+            :hide-on-single-page="true"
+            layout="prev, pager, next, jumper"
+            :page-size="12"
+            @current-change="changePage"
+            :current-page="like.current_page"
+            :total="like.total"
+          ></el-pagination>
         </div>
       </div>
       <div>
@@ -236,13 +253,33 @@ export default {
   },
   data() {
     return {
-      star: 3,
       quan_used: {
         good_order: {
           out_trade_no: ""
         },
         money: 0,
         surplus: 0
+      },
+      want: {
+        data: [],
+        per_page: 12, // 每页显示行数
+        totalPage: 0, // 总页数
+        current_page: 0, // 当前页,
+        total: 100
+      },
+      collect: {
+        data: [],
+        per_page: 12, // 每页显示行数
+        totalPage: 0, // 总页数
+        current_page: 0, // 当前页,
+        total: 100
+      },
+      like: {
+        data: [],
+        per_page: 12, // 每页显示行数
+        totalPage: 0, // 总页数
+        current_page: 0, // 当前页,
+        total: 100
       },
       used: { show: false },
       icon: {
@@ -302,6 +339,7 @@ export default {
     this.getPersonal();
   },
   methods: {
+    changePage(val) {},
     getUseRecord(item) {
       this.quan_used = {
         good_order: {
@@ -522,8 +560,8 @@ img {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  max-height: 400px;
-  overflow-y: auto;
+  // max-height: 400px;
+  // overflow-y: auto;
   /* 设置滚动条的样式 */
   &::-webkit-scrollbar {
     width: 0.3rem;
@@ -540,6 +578,13 @@ img {
   }
   &::-webkit-scrollbar-thumb {
     background: #88bc37;
+  }
+  position: relative;
+  .pages{
+    position: absolute;
+    bottom: -2rem;
+    left: 50%;
+    transform: translateX(-50%);
   }
 
   .goods-box {

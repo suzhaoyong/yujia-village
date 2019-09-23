@@ -305,6 +305,7 @@ export default {
 .test5 .yogocontunt2-img{
         width: 100%;
         height: 100%;
+        object-fit: cover;
     }
 .test5 .test5-title{
     background: #E2DBC8;
@@ -619,6 +620,7 @@ export default {
                         .icon-img-content{
                             width: 100%;
                             height: 100%;
+                            object-fit: cover;
                         }
                     }
                     h3{
@@ -692,6 +694,7 @@ export default {
                                 height: 100%;
                                 max-width: 100%;
                                 transform:rotate(-45deg)scale(1.42);
+                                object-fit: cover;
                             }
                         }
                         .rhomb2{
@@ -891,6 +894,7 @@ export default {
             height: 100%;
             margin: 0 auto;
             margin-top: 10px;
+            margin-bottom: 50px;
             .yogocontunt2{
                 width: 1200px;
                 height: 100%;

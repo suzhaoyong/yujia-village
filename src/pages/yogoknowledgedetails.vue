@@ -84,7 +84,7 @@ export default {
     height: 100%;
     margin: 0 auto;
     overflow: hidden;
-    min-height: 1400px;
+    min-height: 1200px;
     background-color: #ECECEC;
     .yogoknowledgedetails-cont-div1{
         width: 1200px;
@@ -134,7 +134,7 @@ export default {
         height: 100%;
         margin: 0 auto;
         margin-bottom: 40px;
-        padding-bottom: 20px;
+        padding-bottom: 50px;
         background-color: #ffffff;
         .share{
             width: 22%;
