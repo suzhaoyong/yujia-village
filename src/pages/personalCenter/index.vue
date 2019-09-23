@@ -265,21 +265,21 @@ export default {
         per_page: 12, // 每页显示行数
         totalPage: 0, // 总页数
         current_page: 0, // 当前页,
-        total: 100
+        total: 0
       },
       collect: {
         data: [],
         per_page: 12, // 每页显示行数
         totalPage: 0, // 总页数
         current_page: 0, // 当前页,
-        total: 100
+        total: 0
       },
       like: {
         data: [],
         per_page: 12, // 每页显示行数
         totalPage: 0, // 总页数
         current_page: 0, // 当前页,
-        total: 100
+        total: 0
       },
       used: { show: false },
       icon: {
