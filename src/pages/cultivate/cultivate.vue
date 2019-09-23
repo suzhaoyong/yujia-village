@@ -123,7 +123,16 @@
                   <el-button v-show="selectTags.length>0" @click="searchResult" class="search">搜索</el-button>
                 </div>
               </div>
-              <div class="fruit">找到下列结果</div>
+              <div class="fruit">
+                <span>找到下列结果</span>
+                <span class="fruit-item default-rank">默认排序</span>
+                <span class="fruit-item">热度</span>
+                <span class="fruit-item">价格</span>
+                <span>
+                  <span class="trigon-top el-icon-caret-top"></span>
+                  <span class="trigon-bottom el-icon-caret-bottom"></span>
+                </span>
+              </div>
               <div class="fruit-list">
                 <div
                   class="fruit-list-li"
@@ -140,12 +149,16 @@
                   </div>
                   <div class="fruit-list-li-text">
                     <el-rate :colors="['#58B708','#58B708','#58B708']" disabled :value="item.diff"></el-rate>
-                    <div class="list-eye">
-                      <span class="span">{{item.views||100}}</span>
-                    </div>
+                    <div class="fruit-price">￥{{item.price}}</div>
                   </div>
-                  <div class="fruit-price">￥{{item.price}}</div>
                   <div class="fruit-detail">{{item.address}}</div>
+                  <div class="list-eye">
+                      <span class="span">{{item.views||100}}</span>
+                      <span class="hand">
+                        <span>100</span>
+                      </span>
+                      <span class="study">我想学</span>
+                  </div>
                 </div>
                 <not-found v-if="fruit.data.length === 0" type="not-fond" msg="暂无相关信息"></not-found>
               </div>
@@ -418,6 +431,8 @@ export default {
             item.isArray = true;
             return item;
           });
+          console.log(data);
+          
         const { all, hot, course_types, banner } = data;
         this.fruit = all;
         if (page > 1) return;
@@ -660,6 +675,7 @@ img {
   margin: 0 auto;
   overflow: hidden;
   font-size: 0.7rem;
+  background:rgba(244,244,244,1);
   .cultivate-count {
     width: 60rem;
     margin: 0 auto;
@@ -891,29 +907,40 @@ img {
         }
       }
       .fruit {
+        position: relative;
         width: 100%;
         margin: 0 auto;
         margin-top: 2rem;
         font-family: MicrosoftYaHei;
-        font-weight: bold;
-
         color: #2c2c2c;
+        .fruit-item {
+          margin-left: 0.5rem;
+        }
+        .default-rank {
+          font-weight: 700;
+        }
+        .trigon-top,
+        .trigon-bottom {
+          position: absolute;
+        }
+        .trigon-bottom {
+          top: 6px;
+        }
       }
       .fruit-list {
-        width: 100%;
+        width: 62.22rem;
         // height: 77rem;
         padding-bottom: 2rem;
         overflow: hidden;
         margin: 0 auto;
         .fruit-list-li {
-          width: 18rem;
+          width: 19.2rem;
           height: 28.6rem;
           // padding-bottom: 1rem;
           background-color: #ffffff;
-          border: 1px solid rgba(164, 164, 164, 0.39);
           border-radius: 0.3rem;
           float: left;
-          margin-left: 1.4rem;
+          margin-right: 1.11rem;
           margin-top: 1rem;
           font-size: 0.7rem;
           &:hover {
@@ -942,8 +969,26 @@ img {
               font-size: 1.3rem;
               color: #2c2c2c;
             }
-            .list-eye {
+          }
+          .el-rate {
+            // padding-left: 1rem;
+          }
+          .fruit-price {
+            
+          }
+          .fruit-detail {
+            width: 90%;
+            height: 40px;
+            margin: 0 auto;
+            margin-top: 1rem;
+          }
+          .list-eye {
               position: relative;
+              width: 90%;
+              height: 2.7rem;
+              padding: 10px 5px;
+              margin: 0 auto;
+              border-top: 1px solid rgba(229,229,229,1);
               &::before {
                 background-image: url("../../assets/trains/eye.png");
                 background-size: 100% 100%;
@@ -951,8 +996,8 @@ img {
                 width: 20px;
                 height: 20px;
                 position: absolute;
-                top: 4px;
-                left: -30px;
+                top: 10px;
+                left: 0;
               }
               img {
                 width: 1.6rem;
@@ -960,24 +1005,35 @@ img {
                 margin-top: -3px;
               }
               .span {
-                font-size: 1.1rem;
+                padding-left: 20px;
+                font-size: 0.77rem;
                 color: #2c2c2c;
               }
+              .hand {
+                position: relative;
+                
+                height: 2.7rem;
+                &::before {
+                  background-image: url("../../assets/trains/hand.png");
+                  // background-size: 100% 100%;
+                  background-repeat:no-repeat;
+                  content: "";
+                  width: 20px;
+                  height: 20px;
+                  position: absolute;
+                  left: 15px;
+                }
+                span {
+                  padding-left: 30px;
+                  font-size: 0.77rem;
+                  color: #2c2c2c;
+                } 
+              }
+              .study {
+                float: right;
+                color: #567A2F;
+              }
             }
-          }
-          .el-rate {
-            // padding-left: 1rem;
-          }
-          .fruit-price {
-            width: 90%;
-            margin: 0 auto;
-            margin-top: 1rem;
-          }
-          .fruit-detail {
-            width: 90%;
-            margin: 0 auto;
-            margin-top: 1rem;
-          }
         }
       }
       .market_often-btn {
@@ -1033,18 +1089,17 @@ img {
       }
     }
     .cultivate-count-div3 {
-      width: 100%;
+      width: 62.22rem;
       height: 37rem;
       margin: 0 auto;
       .fruit-list-li {
-        width: 18rem;
+        width: 19.2rem;
         height: 28.6rem;
         // padding-bottom: 1rem;
         background-color: #ffffff;
-        border: 1px solid rgba(164, 164, 164, 0.39);
         border-radius: 0.3rem;
         float: left;
-        margin-left: 1.4rem;
+        margin-right: 1.11rem;
         margin-top: 1rem;
         font-size: 0.7rem;
         &:hover {
