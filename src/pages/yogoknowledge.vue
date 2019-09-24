@@ -83,13 +83,29 @@ export default {
   },
   created(){
       this.listdata();
+      this.yujialore();
   },
   methods:{
+      yujialore(){
+        let _this = this;
+        this.$request(`/KnowledgeClassify`).then(res => {
+             _this.banner = res.banner;
+             _this.navLists = res.classify;
+        })
+        .catch(error => {
+            let { response: { data: { errorCode, msg } } } = error;
+            if (errorCode != 0) {
+            this.$message({
+                message: msg,
+                type: "error"
+            });
+            return;
+            }
+        });
+      },
       listdata(){
         let _this = this;
         this.$request(`/knowledgeList/${_this.listids}?page=${_this.currentPage}`).then(res => {
-            _this.banner = res.banner;
-            _this.navLists = res.classify;
             _this.listdatas = res.data;
             _this.total = res.total;
             _this.currentPage = res.current_page;
@@ -132,7 +148,7 @@ export default {
         this.$router.push({
         path: "/yogoknowledge/yogoknowledgedetails",
         query: {
-        id: item.lid
+        id: item.id
         }
     });
     },

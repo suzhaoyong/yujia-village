@@ -9,7 +9,7 @@
                         <img class="img2" src="../assets/eye.png"/>
                         <span class="span2">{{knowinfo.views}}</span>
                         <img class="img3" src="../assets/market/like.png"/>
-                        <span class="span3">{{knowinfo.classify}}</span>
+                        <span class="span3">{{knowinfo.type}}</span>
                         <span class="span4">关键字：{{knowinfo.keyword}}</span>
                     </div>
                 </div>
