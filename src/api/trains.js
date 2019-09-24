@@ -21,8 +21,8 @@ export function postTrainsList(page = 1, args) {
   return request.post(`/trains?page=${page}`, params)
 }
 /* 最新最热 */
-export function getOrderByTrains(page = 1) {
-  return request(`/orderByTrains?page=${page}`)
+export function getOrderByTrains() {
+  return request('/orderByTrains')
 }
 
 /** 培训信息筛选 */
@@ -40,6 +40,14 @@ export function postTrains(args) {
   }
   params = Object.assign({}, params, args)
   return request.post('/trains', params)
+}
+
+export function postTrainsRank(page=2, args) {
+  let params = {
+
+  }
+  params = Object.assign({}, params, args)
+  return request.post(`/trains?page=${page}`, params)
 }
 
 /* 培训信息详情 */
