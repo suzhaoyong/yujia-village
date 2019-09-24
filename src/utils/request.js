@@ -40,8 +40,9 @@ function handleRequest(config) {
   //   }
   // }
   if (process.env.NODE_ENV === 'development') {
+    config.baseURL = '/api'; // 
     // config.baseURL = 'http://api.aomengyujia.com/api';
-    config.baseURL = 'http://testapi.aomengyujia.com/api';
+    // config.baseURL = 'http://testapi.aomengyujia.com/api';
   } else {
     config.baseURL = 'https://api.yujiacun.net/api';
   }
@@ -81,6 +82,7 @@ function handleResponeseErr(err) {
       user: {}
     });
   }
+  /*
   if (data.code === '0001') {
     if (sessionStorage.getItem('access')) {
       // sessionStorage.removeItem('access')
@@ -107,6 +109,7 @@ function handleResponeseErr(err) {
       });
     }
   }
+*/
   if (status === 401) {
     if (config.url.search("login") != -1 || config.url.search("telLogin") != -1) { // 显示图形码报错信息
       message = data.msg
