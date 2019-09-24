@@ -160,7 +160,7 @@
                     <span class="hand">
                       <span>{{item.follow||100}}</span>
                     </span>
-                    <span class="study">我想学</span>
+                    <span @click.stop="wantStudy(item)" class="study">我想学</span>
                   </div>
                 </div>
                 <not-found v-if="fruit.data.length === 0" type="not-fond" msg="暂无相关信息"></not-found>
@@ -203,7 +203,7 @@
                     <span class="hand">
                       <span>{{item.follow||100}}</span>
                     </span>
-                    <span class="study">我想学</span>
+                    <span @click.stop="wantStudy(item)" class="study">我想学</span>
                   </div>
               </div>
               <not-found v-if="fruitclasslist.length === 0" type="not-fond" msg="暂无相关信息"></not-found>
@@ -256,6 +256,10 @@ import {
   getTrainsById,
   postTrainsRank
 } from "@/api/trains";
+import {
+  getFollowTrain
+} from "@/api/personal";
+import { mapGetters } from "vuex";
 export default {
   components: {
     Banner,
@@ -376,6 +380,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["info"]),
     crowdList() {
       return item => item.split("●");
     },
@@ -407,6 +412,16 @@ export default {
     // }
   },
   methods: {
+    wantStudy(course) {
+      if(!this.info.user.name){
+        this.$message({type:'warning', message: '请先登录'})
+        return;
+      }
+      getFollowTrain(course.id)
+        .then(data => {
+          this.$message({type:'success', message: '成功'})
+        })
+    },
     getFiltersParams(params = {}) {
       this.selectTags.map(item => {
         if (

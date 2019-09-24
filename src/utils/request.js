@@ -82,6 +82,15 @@ function handleResponeseErr(err) {
       user: {}
     });
   }
+  if (data.code === '0001') {
+    message = "登录已失效，请再次登录"
+    Bus.$emit('login', true)
+    sessionStorage.removeItem('user')
+    sessionStorage.removeItem('access')
+    store.dispatch("INFO", {
+      user: {}
+    });
+  }
   /*
   if (data.code === '0001') {
     if (sessionStorage.getItem('access')) {
