@@ -39,9 +39,12 @@ function handleRequest(config) {
   //     console.log(config);
   //   }
   // }
-
-  // config.baseURL = 'http://api.aomengyujia.com/api';
-  config.baseURL = 'http://testapi.aomengyujia.com/api';
+  if (process.env.NODE_ENV === 'development') {
+    // config.baseURL = 'http://api.aomengyujia.com/api';
+    config.baseURL = 'http://testapi.aomengyujia.com/api';
+  } else {
+    config.baseURL = 'https://api.yujiacun.net/api';
+  }
   if (contentType === 'json') {
     config.headers['Content-Type'] = 'application/json';
   }

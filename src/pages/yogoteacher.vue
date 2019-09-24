@@ -70,8 +70,9 @@
                                     </div>
                                     <div class="margin-auto">
                                     <div class="icon" v-for="(item,idx) of page" :key="item.id" :class="activeClass == idx ? 'active':''" @click="selectItem(item,idx)">
-                                    <div class="icon-img">
-                                        <img class="icon-img-content" :src="item.first_img">
+                                    <!-- <div class="icon-img"> -->
+                                    <div class="icon-img" :style="{ 'background-image': 'url(' + item.first_img + ')','background-repeat':'no-repeat','background-size':'cover', 'background-position': 'center center' }">
+                                        <!-- <img class="icon-img-content" :src="item.path"> -->
                                     </div>
                                     <h3>{{item.name}}</h3>
                                     <p class="icon-desc">从业时间：{{item.num}}年</p>
@@ -292,9 +293,7 @@ export default {
         this.area = data.area.value;
      },
      changecoure(val){},
-     yearchange(val){
-         console.log(val);
-     },
+     yearchange(val){},
     selectItem(item,idx){
         this.namelist = item;
         this.activeClass = idx;
@@ -312,7 +311,6 @@ export default {
     handleCurrentChange(val) {
         this.currentPage = val;
         this.listyogodata();
-
     },
   }
 };
@@ -639,11 +637,9 @@ export default {
                     .icon-img{
                         width: 100%;
                         height: 270px;
-                        .icon-img-content{
-                            width: 100%;
-                            height: 100%;
-                            object-fit: cover;
-                        }
+                        overflow: hidden;
+                        // .icon-img-content{
+                        // }
                     }
                     h3{
                         text-align: center;
