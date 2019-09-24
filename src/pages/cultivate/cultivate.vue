@@ -124,10 +124,10 @@
                 </div>
               </div>
               <div class="fruit">
-                <span>找到下列结果</span>
-                <span class="fruit-item default-rank">默认排序</span>
-                <span class="fruit-item">热度</span>
-                <span class="fruit-item">价格</span>
+                <span :class="resultFw ? 'fw':'' ">找到下列结果</span>
+                <span class="fruit-item" :class="defaultFw ? '':'fw' " @click="defaultRank('default')">默认排序</span>
+                <span class="fruit-item" :class="hostFw ? 'fw':'' " @click="hostRank('host')">热度</span>
+                <span class="fruit-item" :class="priceFW ? 'fw':'' " @click="priceRank('price')">价格</span>
                 <span>
                   <span class="trigon-top el-icon-caret-top"></span>
                   <span class="trigon-bottom el-icon-caret-bottom"></span>
@@ -141,7 +141,10 @@
                   @click="selectItem(item)"
                   :key="index"
                 >
-                  <div class="fruit-list-li-img" :style="`backgroundImage: url(${item.teacher_img})`">
+                  <div
+                    class="fruit-list-li-img"
+                    :style="`backgroundImage: url(${item.teacher_img})`"
+                  >
                     <!-- <img :src="item.teacher_img" /> -->
                   </div>
                   <div class="fruit-list-li-text">
@@ -153,11 +156,11 @@
                   </div>
                   <div class="fruit-detail">{{item.address}}</div>
                   <div class="list-eye">
-                      <span class="span">{{item.views||100}}</span>
-                      <span class="hand">
-                        <span>{{item.follow||100}}</span>
-                      </span>
-                      <span class="study">我想学</span>
+                    <span class="span">{{item.views||100}}</span>
+                    <span class="hand">
+                      <span>{{item.follow||100}}</span>
+                    </span>
+                    <span class="study">我想学</span>
                   </div>
                 </div>
                 <not-found v-if="fruit.data.length === 0" type="not-fond" msg="暂无相关信息"></not-found>
@@ -191,13 +194,17 @@
                 </div>
                 <div class="fruit-list-li-text">
                   <el-rate :colors="['#58B708','#58B708','#58B708']" disabled :value="item.diff"></el-rate>
-                  <div class="list-eye">
-                    <img src="../../assets/eye.png" />
-                    <span class="span">{{item.views || 100}}</span>
-                  </div>
+                  <div class="fruit-price">￥{{item.price}}</div>
+                  
                 </div>
-                <div class="fruit-price">￥{{item.price}}</div>
                 <div class="fruit-detail">{{item.address}}</div>
+                <div class="list-eye">
+                    <span class="span">{{item.views||100}}</span>
+                    <span class="hand">
+                      <span>{{item.follow||100}}</span>
+                    </span>
+                    <span class="study">我想学</span>
+                  </div>
               </div>
               <not-found v-if="fruitclasslist.length === 0" type="not-fond" msg="暂无相关信息"></not-found>
             </div>
@@ -229,6 +236,7 @@
                 </div>
                 <img class="border-img" src="../../assets/image47.png" />
               </div>
+              <div class="color-box"></div>
             </div>
             <not-found v-if="newList.length === 0" type="not-fond" msg="暂无相关信息"></not-found>
           </div>
@@ -245,7 +253,8 @@ import {
   postTrainsList,
   getOrderByTrains,
   postTrains,
-  getTrainsById
+  getTrainsById,
+  postTrainsRank
 } from "@/api/trains";
 export default {
   components: {
@@ -356,7 +365,14 @@ export default {
         data: []
       },
       fruitclasslist: [],
-      newList: []
+      newList: [],
+      // 添加 fw 类 的判定状态
+      resultFw: false,
+      defaultFw: false,
+      hostFw: false,
+      priceFW: false,
+      // 排序关键字
+      keyWord: ''
     };
   },
   computed: {
@@ -373,8 +389,8 @@ export default {
   mounted() {
     this.getTrainsList();
     getOrderByTrains().then(data => {
-      this.newList = data.new.data;
-      this.fruitclasslist = data.hot.data;
+      this.newList = data.new;
+      this.fruitclasslist = data.hot;
     });
   },
   activated() {
@@ -416,6 +432,10 @@ export default {
         this.fruit = data;
         // this.getTrainsList();
       });
+      this.resultFw = true;
+      this.defaultFw = true;
+      this.hostFw = false;
+      this.priceFW = false;
     },
     postGetTrainsList(page = 1, params) {
       postTrainsList(page, params).then(data => {
@@ -431,10 +451,10 @@ export default {
             item.isArray = true;
             return item;
           });
-          console.log(data);
-          
-        const { all, hot, course_types, banner } = data;
+        // console.log(data);
+        const { all, banner ,course_types} = data;
         this.fruit = all;
+        // console.log(this.fruit);
         if (page > 1) return;
         this.classfiy = mapClassfiy(course_types);
         // if (course_types.length > 8) {
@@ -444,7 +464,65 @@ export default {
         this.banner = banner;
       });
     },
+    getRankParams(keyWord, params = {}) {
+      if(keyWord === 'default') {
+        params = Object.assign({}, params, { time: false });
+      } else if(keyWord === 'host') {
+        params = Object.assign({}, params, { follow: false });
+      } else {
+        params = Object.assign({}, params, { money: true });
+      }
+      return params;
+    },
+    // 排序请求
+    getRank(params) {
+      postTrains(params).then(data => {
+        this.fruit = data       
+      })
+    },
+    postGetRank(page=1, params) {
+      postTrainsRank(page, params).then(data => {
+        this.fruit = data       
+      })
+    },
+    // 默认排序
+    defaultRank(keyWord) {
+      this.defaultFw = false;
+      this.hostFw = false;
+      this.priceFW = false;
+      this.resultFw = false;
+      this.keyWord = keyWord;
+      this.getTrainsList();
+    },
+    // 热度排序
+    hostRank(keyWord) {
+      this.hostFw = true
+      this.defaultFw = true;
+      this.priceFW = false;
+      this.resultFw = false;
+      this.keyWord = keyWord;
+      this.getRank(this.getRankParams(keyWord))
+    },
+    // 价格排序
+    priceRank(keyWord) {
+      this.priceFW = true;
+      this.defaultFw = true;
+      this.hostFw = false;
+      this.resultFw = false;
+      this.keyWord = keyWord;
+      this.getRank(this.getRankParams(keyWord))
+    },
     changePage(val) {
+      if(this.keyWord === 'default') {
+        this.getTrainsList(val);    
+        return    
+      } else if(this.keyWord === 'host') {
+        this.postGetRank(val,this.getRankParams(this.keyWord))
+        return
+      } else if(this.keyWord === 'price') {
+        this.postGetRank(val,this.getRankParams(this.keyWord))
+        return
+      }
       if (this.selectTags.length > 0) {
         this.postGetTrainsList(val, this.getFiltersParams());
         return;
@@ -675,7 +753,7 @@ img {
   margin: 0 auto;
   overflow: hidden;
   font-size: 0.7rem;
-  background:rgba(244,244,244,1);
+  background: rgba(244, 244, 244, 1);
   .cultivate-count {
     width: 60rem;
     margin: 0 auto;
@@ -917,7 +995,7 @@ img {
           margin-left: 0.5rem;
           cursor: pointer;
         }
-        .default-rank {
+        .fw {
           font-weight: 700;
           cursor: pointer;
         }
@@ -975,9 +1053,7 @@ img {
           .el-rate {
             // padding-left: 1rem;
           }
-          .fruit-price {
-            
-          }
+          
           .fruit-detail {
             width: 90%;
             height: 40px;
@@ -985,57 +1061,57 @@ img {
             margin-top: 1rem;
           }
           .list-eye {
+            position: relative;
+            width: 90%;
+            height: 2.7rem;
+            padding: 10px 5px;
+            margin: 0 auto;
+            border-top: 1px solid rgba(229, 229, 229, 1);
+            &::before {
+              background-image: url("../../assets/trains/eye.png");
+              background-size: 100% 100%;
+              content: "";
+              width: 20px;
+              height: 20px;
+              position: absolute;
+              top: 10px;
+              left: 0;
+            }
+            img {
+              width: 1.6rem;
+              height: 1.5rem;
+              margin-top: -3px;
+            }
+            .span {
+              padding-left: 20px;
+              font-size: 0.77rem;
+              color: #2c2c2c;
+            }
+            .hand {
               position: relative;
-              width: 90%;
+
               height: 2.7rem;
-              padding: 10px 5px;
-              margin: 0 auto;
-              border-top: 1px solid rgba(229,229,229,1);
               &::before {
-                background-image: url("../../assets/trains/eye.png");
-                background-size: 100% 100%;
+                background-image: url("../../assets/trains/hand.png");
+                // background-size: 100% 100%;
+                background-repeat: no-repeat;
                 content: "";
                 width: 20px;
                 height: 20px;
                 position: absolute;
-                top: 10px;
-                left: 0;
+                left: 15px;
               }
-              img {
-                width: 1.6rem;
-                height: 1.5rem;
-                margin-top: -3px;
-              }
-              .span {
-                padding-left: 20px;
+              span {
+                padding-left: 30px;
                 font-size: 0.77rem;
                 color: #2c2c2c;
               }
-              .hand {
-                position: relative;
-                
-                height: 2.7rem;
-                &::before {
-                  background-image: url("../../assets/trains/hand.png");
-                  // background-size: 100% 100%;
-                  background-repeat:no-repeat;
-                  content: "";
-                  width: 20px;
-                  height: 20px;
-                  position: absolute;
-                  left: 15px;
-                }
-                span {
-                  padding-left: 30px;
-                  font-size: 0.77rem;
-                  color: #2c2c2c;
-                } 
-              }
-              .study {
-                float: right;
-                color: #567A2F;
-              }
             }
+            .study {
+              float: right;
+              color: #567a2f;
+            }
+          }
         }
       }
       .market_often-btn {
@@ -1142,19 +1218,64 @@ img {
             }
           }
         }
-        .el-rate {
-          // padding-left: 1rem;
-        }
-        .fruit-price {
-          width: 90%;
-          margin: 0 auto;
-          margin-top: 1rem;
-        }
         .fruit-detail {
           width: 90%;
+          height: 40px;
           margin: 0 auto;
           margin-top: 1rem;
         }
+        .list-eye {
+            position: relative;
+            width: 90%;
+            height: 2.7rem;
+            padding: 10px 5px;
+            margin: 0 auto;
+            border-top: 1px solid rgba(229, 229, 229, 1);
+            &::before {
+              background-image: url("../../assets/trains/eye.png");
+              background-size: 100% 100%;
+              content: "";
+              width: 20px;
+              height: 20px;
+              position: absolute;
+              top: 10px;
+              left: 0;
+            }
+            img {
+              width: 1.6rem;
+              height: 1.5rem;
+              margin-top: -3px;
+            }
+            .span {
+              padding-left: 20px;
+              font-size: 0.77rem;
+              color: #2c2c2c;
+            }
+            .hand {
+              position: relative;
+
+              height: 2.7rem;
+              &::before {
+                background-image: url("../../assets/trains/hand.png");
+                // background-size: 100% 100%;
+                background-repeat: no-repeat;
+                content: "";
+                width: 20px;
+                height: 20px;
+                position: absolute;
+                left: 15px;
+              }
+              span {
+                padding-left: 30px;
+                font-size: 0.77rem;
+                color: #2c2c2c;
+              }
+            }
+            .study {
+              float: right;
+              color: #567a2f;
+            }
+          }
       }
     }
     .cultivate-count-div4 {
@@ -1204,8 +1325,8 @@ img {
       .bian {
         background: linear-gradient(
           to right,
-          #ffffff 0%,
-          #ffffff 50%,
+          #F4F4F4 0%,
+          #F4F4F4 50%,
           #eef5dd 50%,
           #eef5dd 100%
         );
@@ -1214,10 +1335,17 @@ img {
           right: 100%;
         }
         .border-img {
-          // left: 0;
           margin-left: 0;
-          left: -50%;
+          left: -7.6rem;
         }
+      }
+      .color-box {
+        width: 8.4rem;
+        height: 15.47rem;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        background-color: #EEF5DD;
       }
       .li-text4 {
         &::after {
@@ -1238,7 +1366,6 @@ img {
         width: 25rem;
         height: 18rem;
         background-size: cover;
-
         background-repeat: no-repeat;
         background-position: top center;
         img {
@@ -1256,8 +1383,8 @@ img {
           to right,
           #eef5dd 0%,
           #eef5dd 50%,
-          #ffffff 50%,
-          #ffffff 100%
+          #F4F4F4 50%,
+          #F4F4F4 100%
         );
         z-index: 1;
         position: relative;
@@ -1273,6 +1400,14 @@ img {
           height: 11rem;
           background: #bfbfbf;
         }
+      }
+      .color-box {
+        width: 8.4rem;
+        height: 15.47rem;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        background-color: #EEF5DD;
       }
       .div5-list {
         // position: absolute;
@@ -1362,7 +1497,7 @@ img {
         background-color: #eef5dd;
         // opacity: 0.33;
         margin-top: 4.7rem;
-      }
+      }  
       .div5-list {
         // position: absolute;
         // left: 51%;

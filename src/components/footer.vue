@@ -69,6 +69,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .footer-main{
+    position: absolute;
     width: 100%;
     height: 100%;
     min-height: 400px;
@@ -77,6 +78,7 @@ export default {
     background-size: 100% 100%;
     background-repeat: no-repeat;
     display: grid;
+    z-index: 99;
 .foot-count{
     width: 1200px;
     margin: 0 auto;
