@@ -9,7 +9,7 @@
                         <img class="img2" src="../assets/eye.png"/>
                         <span class="span2">{{knowinfo.views}}</span>
                         <img class="img3" src="../assets/market/like.png"/>
-                        <span class="span3">{{knowinfo.classify}}</span>
+                        <span class="span3">{{knowinfo.type}}</span>
                         <span class="span4">关键字：{{knowinfo.keyword}}</span>
                     </div>
                 </div>
@@ -21,7 +21,7 @@
                         <p class="p1">{{knowinfo.summary}}</p>
                     </div>
                     <div class="yogoknow3">
-                        <p class="p2" v-html="knowinfo.content">{{knowinfo.content}}</p>
+                        <p class="p2" v-html="knowinfo.main_body">{{knowinfo.main_body}}</p>
                     </div>
                 </div>
             </div>
@@ -63,7 +63,7 @@ export default {
         });
       },
       initSocialConfig() {
-        const { headline, summary, content, icon_url } = this.knowinfo;
+        const { headline, summary, main_body, icon_url } = this.knowinfo;
         const params = {
             url: `http://www.yujiacun.net/yogoknowledge/yogoknowledgedetails?id=${this.$route.query.id}`,
             title: headline,

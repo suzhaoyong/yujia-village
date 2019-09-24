@@ -915,9 +915,11 @@ img {
         color: #2c2c2c;
         .fruit-item {
           margin-left: 0.5rem;
+          cursor: pointer;
         }
         .default-rank {
           font-weight: 700;
+          cursor: pointer;
         }
         .trigon-top,
         .trigon-bottom {
