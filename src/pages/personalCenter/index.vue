@@ -6,22 +6,24 @@
       <div class="my-class">
         <div
           class="goods-box"
-          @click="viewGoodsDetail(item)"
-          v-for="(item, index) in info.cart"
+          @click="viewWantDetail(item)"
+          v-for="(item, index) in want.data"
           :key="index"
         >
           <div class="pic">
-            <img :src="item.url" alt />
+            <img :src="item.teacher_img" alt />
           </div>
-          <div class="gtitle">{{item.describe}}</div>
-          <div class="price-views-collenct">
-            <div class="price">
-              <div class="old-price">￥{{item.sell_price}}</div>
-              <div class="new-price">￥{{item.sell_price - item.discount}}</div>
-            </div>
-            <div class="views-collenct">
-              <!-- <div class="views">{{item.views}}</div>
-              <div class="collenct" @click="addCollect">收藏</div>-->
+          <div class="teacher-content">
+            <div class="teacher_theme">{{item.theme}}</div>
+            <div class="teacher_theme" style="font-size:14px;">￥{{item.price}}</div>
+            <div class="teacher_name">培训老师：<span style="color:#22ac38;">{{item.name}}</span></div>
+            <div class="teacher_name">培训时间：{{item.startTime}}/{{item.endTime}}</div>
+            <div class="price-views-collenct">
+              <div class="price"></div>
+              <div class="views-collenct">
+                <!-- <div class="views">{{item.views}}</div>
+                <div class="collenct" @click="addCollect">收藏</div>-->
+              </div>
             </div>
           </div>
         </div>
@@ -38,7 +40,7 @@
         </div>
       </div>
       <div>
-        <not-found v-if="info.cart.length === 0" type="not-fond" msg="我寻寻觅觅却找不见您购买的踪迹"></not-found>
+        <not-found v-if="want.data.length === 0" type="not-fond" msg="我寻寻觅觅却找不见您想学的课程"></not-found>
       </div>
       <session-title name="已收藏商品"></session-title>
       <div class="my-class">
@@ -235,7 +237,13 @@
 </template>
 <script>
 import { getUserOrder } from "@/api/market";
-import { getUsedRecord } from "@/api/personal";
+import {
+  getUsedRecord,
+  getMyFollowTrain,
+  getTeacherThumbsUp,
+  postThumbsUp,
+  getFollowTrain
+} from "@/api/personal";
 import { mapGetters } from "vuex";
 import store from "@/store";
 import Cloud from "./cloud";
@@ -289,7 +297,7 @@ export default {
         },
         money: {
           money_qin,
-          money_qin_right,
+          money_qin_right
         },
         quan: {
           quan_orgin,
@@ -337,6 +345,12 @@ export default {
   },
   mounted() {
     this.getPersonal();
+    getMyFollowTrain().then(data => {
+      this.want = data;
+    });
+    // getTeacherThumbsUp()
+    // getFollowTrain(424)
+    // postThumbsUp(23)
   },
   methods: {
     changePage(val) {},
@@ -377,6 +391,11 @@ export default {
         params: {
           id: goods.id
         }
+      });
+    },
+    viewWantDetail(item) {
+      this.$router.push({
+        path: `/cultivate/detail/${item.id}`
       });
     },
     /** 现金券使用记录 */
@@ -457,6 +476,21 @@ export default {
 </style>
 
 <style lang="scss" scoped>
+.teacher-content{
+  padding: 0.3rem;
+  cursor: pointer;
+}
+.teacher_theme {
+  font-size: 16px;
+  font-family: MicrosoftYaHei-Bold;
+  font-weight: bold;
+  margin-bottom: 0.1rem;
+}
+.teacher_name {
+  color: #2c2c2c;
+  font-size: 0.7rem;
+  margin-bottom: 0.2rem;
+}
 .table {
   .header {
     padding: 0.5rem 0;
@@ -580,7 +614,7 @@ img {
     background: #88bc37;
   }
   position: relative;
-  .pages{
+  .pages {
     position: absolute;
     bottom: -2rem;
     left: 50%;

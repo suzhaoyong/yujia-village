@@ -201,3 +201,19 @@ export function postShowTeacherPic(args) {
 export function getShowMyTrain(id) {
   return request.get(`/personal/showMyTrain/${id}`)
 }
+/** 我的点赞 */
+export function getTeacherThumbsUp() {
+  return request.get(`/personal/teacherThumbsUp`)
+}
+/** 我的培训信息关注 */
+export function getMyFollowTrain() {
+  return request.get(`/personal/myFollowTrain`)
+}
+/** 关注培训信息(我想学) */
+export function getFollowTrain(id = '') {
+  return request.get(`/personal/followTrain?id=${id}`)
+}
+/** 给老师点赞 */
+export function postThumbsUp(id = '') {
+  return request.post(`/teachers/thumbsUp`, { id })
+}
