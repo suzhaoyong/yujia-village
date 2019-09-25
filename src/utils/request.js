@@ -40,6 +40,7 @@ function handleRequest(config) {
   //   }
   // }
   if (process.env.NODE_ENV === 'development') {
+    // config.baseURL = '/api'; // 
     // config.baseURL = 'http://api.aomengyujia.com/api';
     config.baseURL = 'http://testapi.aomengyujia.com/api';
   } else {
@@ -82,6 +83,16 @@ function handleResponeseErr(err) {
     });
   }
   if (data.code === '0001') {
+    message = "登录已失效，请再次登录"
+    Bus.$emit('login', true)
+    sessionStorage.removeItem('user')
+    sessionStorage.removeItem('access')
+    store.dispatch("INFO", {
+      user: {}
+    });
+  }
+  /*
+  if (data.code === '0001') {
     if (sessionStorage.getItem('access')) {
       // sessionStorage.removeItem('access')
       request.post('/auth/refresh')
@@ -107,6 +118,7 @@ function handleResponeseErr(err) {
       });
     }
   }
+*/
   if (status === 401) {
     if (config.url.search("login") != -1 || config.url.search("telLogin") != -1) { // 显示图形码报错信息
       message = data.msg
