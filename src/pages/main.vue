@@ -418,6 +418,7 @@ export default {
                     position: inherit;
                     left: 0px;
                     top: -24px;
+                    object-fit: cover;
                     }
                 .img2{
                        width: 376px;
@@ -546,6 +547,7 @@ export default {
                         width: 100%;
                         height: 100%;
                         transition: all 1s;
+                        object-fit: cover;
                     }
                     .icon-img-content:hover{
                             width: 100%;
@@ -573,6 +575,7 @@ export default {
                             img{
                                 width: 100%;
                                 height: 100%;
+                                object-fit: cover;
                                 }
                         }
                     }
@@ -737,6 +740,7 @@ export default {
                         margin-top: 18px;
                         background-color: #DCD9CC;
                         transition: All 1s;
+                        object-fit: cover;
                     }
                     img:hover{
                         width: 160px;
@@ -953,6 +957,7 @@ export default {
                     margin-right: 5px;
                     margin-top: 5px;
                     transition: all 1s;
+                    object-fit: cover;
                 }
                 .nav-div7-img:hover{
                     width: 235px;
