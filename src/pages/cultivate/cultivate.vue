@@ -156,8 +156,10 @@
                   </div>
                   <div class="fruit-detail">{{item.address}}</div>
                   <div class="list-eye">
+                    <a class="eye" href="javascript:;" :title="'点击率:'+(item.views||100)"></a>
                     <span class="span">{{item.views||100}}</span>
                     <span class="hand">
+                      <a class="hd" href="javascript:;" :title="'想学:'+(item.follow||100)"></a>
                       <span>{{item.follow||100}}</span>
                     </span>
                     <span @click.stop="wantStudy(item)" class="study">我想学</span>
@@ -376,7 +378,10 @@ export default {
       hostFw: false,
       priceFW: false,
       // 排序关键字
-      keyWord: ''
+      keyWord: '',
+      // 控制价格排序的 flag
+      priceFlag: true,
+      aa: 100
     };
   },
   computed: {
@@ -485,10 +490,15 @@ export default {
       } else if(keyWord === 'host') {
         params = Object.assign({}, params, { follow: false });
       } else {
-        params = Object.assign({}, params, { money: true });
+        if(this.priceFlag) {
+          params = Object.assign({}, params, { money: true });
+        } else {
+          params = Object.assign({}, params, { money: false });
+        }
       }
       return params;
     },
+    
     // 排序请求
     getRank(params) {
       postTrains(params).then(data => {
@@ -526,6 +536,7 @@ export default {
       this.resultFw = false;
       this.keyWord = keyWord;
       this.getRank(this.getRankParams(keyWord))
+      this.priceFlag = !this.priceFlag
     },
     changePage(val) {
       if(this.keyWord === 'default') {
@@ -535,7 +546,9 @@ export default {
         this.postGetRank(val,this.getRankParams(this.keyWord))
         return
       } else if(this.keyWord === 'price') {
+        this.priceFlag = !this.priceFlag
         this.postGetRank(val,this.getRankParams(this.keyWord))
+        this.priceFlag = !this.priceFlag
         return
       }
       if (this.selectTags.length > 0) {
@@ -670,6 +683,10 @@ export default {
       this.selectTags.splice(this.selectTags.indexOf(tag), 1);
       if (this.selectTags.length === 0) {
         this.getTrainsList();
+        this.priceFW = false;
+        this.defaultFw = false;
+        this.hostFw = false;
+        this.resultFw = false;
       }
     },
     selected3(name) {
@@ -755,12 +772,6 @@ export default {
 img {
   width: 100%;
   height: 100%;
-}
-.el-rate__icon {
-  // color: #58b708 !important;
-}
-.el-rate__icon.hover {
-  // color: #58b708 !important;
 }
 .cultivate-main {
   width: 100%;
@@ -1065,9 +1076,7 @@ img {
               color: #2c2c2c;
             }
           }
-          .el-rate {
-            // padding-left: 1rem;
-          }
+          
           
           .fruit-detail {
             width: 90%;
@@ -1082,10 +1091,9 @@ img {
             padding: 10px 5px;
             margin: 0 auto;
             border-top: 1px solid rgba(229, 229, 229, 1);
-            &::before {
+            .eye {
               background-image: url("../../assets/trains/eye.png");
               background-size: 100% 100%;
-              content: "";
               width: 20px;
               height: 20px;
               position: absolute;
@@ -1104,13 +1112,11 @@ img {
             }
             .hand {
               position: relative;
-
               height: 2.7rem;
-              &::before {
+              .hd {
                 background-image: url("../../assets/trains/hand.png");
                 // background-size: 100% 100%;
                 background-repeat: no-repeat;
-                content: "";
                 width: 20px;
                 height: 20px;
                 position: absolute;
@@ -1246,10 +1252,9 @@ img {
             padding: 10px 5px;
             margin: 0 auto;
             border-top: 1px solid rgba(229, 229, 229, 1);
-            &::before {
+            .eye {
               background-image: url("../../assets/trains/eye.png");
               background-size: 100% 100%;
-              content: "";
               width: 20px;
               height: 20px;
               position: absolute;
@@ -1268,13 +1273,11 @@ img {
             }
             .hand {
               position: relative;
-
               height: 2.7rem;
-              &::before {
+              .hd {
                 background-image: url("../../assets/trains/hand.png");
                 // background-size: 100% 100%;
                 background-repeat: no-repeat;
-                content: "";
                 width: 20px;
                 height: 20px;
                 position: absolute;
