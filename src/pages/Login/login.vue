@@ -105,7 +105,7 @@
         </div>
       </div>
     </div>
-      <el-dialog style="margin-top:1rem;" width="35rem" title="图形验证码" :visible.sync="getCodepass">
+    <el-dialog style="margin-top:1rem;" width="35rem" title="图形验证码" :visible.sync="getCodepass">
       <div class="item-box left">
         <div class="code-title">请在下方填写图形验证码</div>
         <div class="code-img">
@@ -523,7 +523,7 @@ input:focus {
     z-index: 100;
   }
   .login {
-    position: absolute;
+    position: fixed;
     top: 2rem;
     left: 50%;
     transform: translate(-50%,  0);

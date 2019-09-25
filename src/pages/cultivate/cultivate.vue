@@ -138,23 +138,21 @@
                   class="fruit-list-li"
                   style="cursor: pointer;"
                   v-for="(item,index) in fruit.data"
-                  @click="selectItem(item)"
                   :key="index"
                 >
-                  <div
-                    class="fruit-list-li-img"
-                    :style="`backgroundImage: url(${item.teacher_img})`"
-                  >
-                    <!-- <img :src="item.teacher_img" /> -->
+                  <div @click="selectItem(item)">
+                    <div class="fruit-list-li-img" :style="`backgroundImage: url(${item.teacher_img})`" >
+                      <!-- <img :src="item.teacher_img" /> -->
+                    </div>
+                    <div class="fruit-list-li-text">
+                      <h4>{{item.theme}}</h4>
+                    </div>
+                    <div class="fruit-list-li-text">
+                      <el-rate :colors="['#58B708','#58B708','#58B708']" disabled :value="item.diff"></el-rate>
+                      <div class="fruit-price">￥{{item.price}}</div>
+                    </div>
+                    <div class="fruit-detail">{{item.address}}</div>
                   </div>
-                  <div class="fruit-list-li-text">
-                    <h4>{{item.theme}}</h4>
-                  </div>
-                  <div class="fruit-list-li-text">
-                    <el-rate :colors="['#58B708','#58B708','#58B708']" disabled :value="item.diff"></el-rate>
-                    <div class="fruit-price">￥{{item.price}}</div>
-                  </div>
-                  <div class="fruit-detail">{{item.address}}</div>
                   <div class="list-eye">
                     <a class="eye" href="javascript:;" :title="'点击率:'+(item.views||100)"></a>
                     <span class="span">{{item.views||100}}</span>
@@ -162,7 +160,7 @@
                       <a class="hd" href="javascript:;" :title="'想学:'+(item.follow||100)"></a>
                       <span>{{item.follow||100}}</span>
                     </span>
-                    <span @click.stop="wantStudy(item)" class="study">我想学</span>
+                    <span class="study" @click="study(item.id)">我想学</span>
                   </div>
                 </div>
                 <not-found v-if="fruit.data.length === 0" type="not-fond" msg="暂无相关信息"></not-found>
@@ -185,28 +183,29 @@
                 class="fruit-list-li"
                 style="cursor: pointer;"
                 v-for="(item,index) in fruitclasslist"
-                :key="index"
-                @click="selectItem(item)"
-              >
-                <div class="fruit-list-li-img" :style="`backgroundImage: url(${item.teacher_img})`">
+                :key="index">
+                <div @click="selectItem(item)">
+                  <div class="fruit-list-li-img" :style="`backgroundImage: url(${item.teacher_img})`">
                   <!-- <img :src="item.teacher_img" /> -->
-                </div>
-                <div class="fruit-list-li-text">
-                  <h4>{{item.theme}}</h4>
-                </div>
-                <div class="fruit-list-li-text">
-                  <el-rate :colors="['#58B708','#58B708','#58B708']" disabled :value="item.diff"></el-rate>
-                  <div class="fruit-price">￥{{item.price}}</div>
-                  
-                </div>
-                <div class="fruit-detail">{{item.address}}</div>
-                <div class="list-eye">
-                    <span class="span">{{item.views||100}}</span>
-                    <span class="hand">
-                      <span>{{item.follow||100}}</span>
-                    </span>
-                    <span @click.stop="wantStudy(item)" class="study">我想学</span>
                   </div>
+                  <div class="fruit-list-li-text">
+                    <h4>{{item.theme}}</h4>
+                  </div>
+                  <div class="fruit-list-li-text">
+                    <el-rate :colors="['#58B708','#58B708','#58B708']" disabled :value="item.diff"></el-rate>
+                    <div class="fruit-price">￥{{item.price}}</div>
+                  </div>
+                  <div class="fruit-detail">{{item.address}}</div>
+                </div>
+                <div class="list-eye">
+                  <a class="eye" href="javascript:;" :title="'点击率:'+(item.views||100)"></a>
+                  <span class="span">{{item.views||100}}</span>
+                  <span class="hand">
+                    <a class="hd" href="javascript:;" :title="'想学:'+(item.follow||100)"></a>
+                    <span>{{item.follow||100}}</span>
+                  </span>
+                  <span class="study" @click="study(item.id)">我想学</span>
+                </div>
               </div>
               <not-found v-if="fruitclasslist.length === 0" type="not-fond" msg="暂无相关信息"></not-found>
             </div>
@@ -250,13 +249,15 @@
 <script>
 import Banner from "@/components/banner";
 import VDistpicker from "v-distpicker";
+import Bus from "@/utils/Bus";
 import {
   getTrains,
   postTrainsList,
   getOrderByTrains,
   postTrains,
   getTrainsById,
-  postTrainsRank
+  postTrainsRank,
+  followTrain
 } from "@/api/trains";
 import {
   getFollowTrain
@@ -394,7 +395,7 @@ export default {
         const select = this.selectTags.filter(tag => tag.name == item.name)[0];
         return { active: select };
       };
-    }
+    },
   },
   mounted() {
     this.getTrainsList();
@@ -417,12 +418,8 @@ export default {
     // }
   },
   methods: {
-    wantStudy(course) {
-      if(!this.info.user.name){
-        this.$message({type:'warning', message: '请先登录'})
-        return;
-      }
-      getFollowTrain(course.id)
+    wantStudy(id) {
+      getFollowTrain(id)
         .then(data => {
           this.$message({type:'success', message: '成功'})
         })
@@ -537,6 +534,14 @@ export default {
       this.keyWord = keyWord;
       this.getRank(this.getRankParams(keyWord))
       this.priceFlag = !this.priceFlag
+    },
+    study(id) {
+      // console.log(id);
+      if (!this.info.user.name) {
+        Bus.$emit("login", true);
+        return;
+      }
+      this.wantStudy(id)
     },
     changePage(val) {
       if(this.keyWord === 'default') {
