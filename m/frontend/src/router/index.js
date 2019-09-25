@@ -20,6 +20,11 @@ export default new Router({
       component: () => import('@/pages/share')
     },
     {
+      path: '/shareation',
+      name: 'shareation',
+      component: () => import('@/pages/shareation')
+    },
+    {
       path: '/login',
       name: 'login',
       component: () => import('@/pages/login')
