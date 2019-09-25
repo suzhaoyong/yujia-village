@@ -4,8 +4,13 @@ function handleRequest(config) {
   const {
     contentType
   } = config;
-  // config.baseURL = '/api';
-  config.baseURL = 'http://api.aomengyujia.com/api';
+  if (process.env.NODE_ENV === 'development') {
+    config.baseURL = '/api'; // 
+    // config.baseURL = 'http://api.aomengyujia.com/api';
+    // config.baseURL = 'http://testapi.aomengyujia.com/api';
+  } else {
+    config.baseURL = 'https://api.yujiacun.net/api';
+  }
   if (contentType === 'json') {
     config.headers['Content-Type'] = 'application/json';
   }
