@@ -1,13 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
+import Layout from '@/components/layout.vue'
 Vue.use(Router)
 
 export default new Router({
-  routes: [
-    {
+  routes: [{
       path: '/',
-      redirect: '/login'
+      redirect: { name: 'market' }
     },
     {
       path: '/index',
@@ -18,6 +17,20 @@ export default new Router({
       path: '/share',
       name: 'share',
       component: () => import('@/pages/share')
+    },
+    {
+      path: '/market',
+      name: 'market',
+      component: Layout,
+      redirect: { name: 'category' },
+      children: [{
+        path: 'category',
+        name: 'category',
+        meta: {
+          header_name: 'market'
+        },
+        component: () => import('@/pages/market/category')
+      }]
     },
     {
       path: '/shareation',

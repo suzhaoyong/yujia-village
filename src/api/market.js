@@ -4,7 +4,7 @@ import request from '@/utils/request';
 export function getGoodRecomment() {
   return request('/goods/goodRecomment')
 }
-/** 商品按条件查询  */
+/* 商品按条件查询  */
 export function postShowGoodList(args = {}) {
   let params = {
     type: "",
@@ -19,7 +19,7 @@ export function postShowGoodList(args = {}) {
   return request.post('/goods/showGoodList', params)
 }
 
-/** 最近浏览  */
+/* 最近浏览  */
 export function postRecentbrowse(args = {}) {
   let params = {
     page: ""
@@ -27,22 +27,22 @@ export function postRecentbrowse(args = {}) {
   params = Object.assign({}, params, args)
   return request.post('/goods/Recentbrowse', params)
 }
-/** 商品详细分类-筛选条件 */
+/* 商品详细分类-筛选条件 */
 export function getGoods() {
   return request('/goods')
 }
 
-/** 查询指定商品 */
+/* 查询指定商品 */
 export function getGoodsById(id) {
   return request(`/goods/${id}`)
 }
 
-/** 我的收藏 */
+/* 我的收藏 */
 export function getUserCollect() {
   return request(`/userCollect/create`)
 }
 
-/** 收藏商品 */
+/* 收藏商品 */
 export function postUserCollect(args = {}) {
   let params = {
     id: "",
@@ -54,7 +54,7 @@ export function postUserCollect(args = {}) {
   return request.post(`/userCollect`, params)
 }
 
-/** 收藏商品添加购物车 */
+/* 收藏商品添加购物车 */
 export function postAddUserCart(args = {}) {
   let params = {
     id: "",
@@ -64,14 +64,14 @@ export function postAddUserCart(args = {}) {
   return request.post(`/userCollect/addUserCart`, params)
 }
 
-/** 删除收藏商品
+/* 删除收藏商品
  * @param id 商品主列表 编号
  */
 export function deleteUserCollect(id) {
   return request.delete(`/userCollect/${id}`)
 }
 
-/** 删除收藏商品
+/* 删除收藏商品
  * @param id 商品主列表 编号
  */
 export function deleteUserCollectDelCollect(args) {
@@ -82,12 +82,12 @@ export function deleteUserCollectDelCollect(args) {
   return request.post(`/userCollect/delCollect`, args)
 }
 
-/** 我的购物车 */
+/* 我的购物车 */
 export function getUserCart() {
   return request(`/userCart/create`)
 }
 
-/** 添加购物车 */
+/* 添加购物车 */
 export function postUserCart(args = {}) {
   let params = {
     id: "",
@@ -99,7 +99,7 @@ export function postUserCart(args = {}) {
   return request.post(`/userCart`, params)
 }
 
-/** 购物车商品添加收藏 */
+/* 购物车商品添加收藏 */
 export function postAddUserCollect(args = {}) {
   let params = {
     id: [],
@@ -109,14 +109,14 @@ export function postAddUserCollect(args = {}) {
   return request.post(`/userCart/addUserCollect`, params)
 }
 
-/** 删除购物车
+/* 删除购物车
  * @param id 商品主列表 编号
  */
 export function deleteUserCart(id) {
   return request.delete(`/userCart/${id}`)
 }
 
-/**
+/*
   删除购物车
  * @param id 商品主列表 编号
  */
@@ -128,16 +128,16 @@ export function deleteUserCartDelCart(args) {
   return request.post(`/userCart/delCart`, params)
 }
 
-/** 用户订单 */
+/* 用户订单 */
 export function getUserOrder() {
   return request(`/goodOrder/userOrder`)
 }
-/** 用户地址 */
+/* 用户地址 */
 export function getUserAddress() {
   return request(`/goodOrder/create`)
 }
 
-/** 购物车提交订单 */
+/* 购物车提交订单 */
 export function postUserOrder(args = {}) {
   let params = {
     id: "", // 商品副列表 编号
@@ -147,7 +147,7 @@ export function postUserOrder(args = {}) {
   return request.post(`/userCart/submitOrder`, params)
 }
 
-/** 新增订单 */
+/* 新增订单 */
 export function postGoodOrder(args = {}) {
   let params = {
     id: "", // 购物车列表编号
@@ -170,7 +170,7 @@ export function postGoodOrder(args = {}) {
   params = Object.assign({}, params, args)
   return request.post(`/goodOrder`, params)
 }
-/** 订单金币支付 */
+/* 订单金币支付 */
 export function postGoldPay(args = {}) {
   let params = {
     out_trade_no: "", // 统一订单编号
@@ -181,7 +181,7 @@ export function postGoldPay(args = {}) {
   return request.post(`/goldPay`, params)
 }
 
-/** 支付宝二维码展示 */
+/* 支付宝二维码展示 */
 export function postGetAlipayCode(args = {}) {
   let params = {
     out_trade_no: "", // 统一订单编号
@@ -192,7 +192,7 @@ export function postGetAlipayCode(args = {}) {
   return request.post(`/alipay`, params)
 }
 
-/** 支付宝查询订单支付状态  */
+/* 支付宝查询订单支付状态  */
 export function postGetAlipayOrder(args = {}) {
   let params = {
     out_trade_no: "", // 统一订单编号
@@ -202,7 +202,7 @@ export function postGetAlipayOrder(args = {}) {
 }
 
 
-/** 微信二维码展示 */
+/* 微信二维码展示 */
 export function postGetWechatpayCode(args = {}) {
   let params = {
     out_trade_no: "", // 统一订单编号
@@ -213,7 +213,7 @@ export function postGetWechatpayCode(args = {}) {
   return request.post(`/wechatpay`, params)
 }
 
-/** 微信查询订单支付状态  */
+/* 微信查询订单支付状态  */
 export function postGetWechatOrder(args = {}) {
   let params = {
     out_trade_no: "", // 统一订单编号
@@ -223,7 +223,7 @@ export function postGetWechatOrder(args = {}) {
 }
 
 
-/** 订单物流详情  */
+/* 订单物流详情  */
 export function postUserExpressage(args = {}) {
   let params = {
     id: "", // 统一订单编号,
@@ -231,7 +231,7 @@ export function postUserExpressage(args = {}) {
   params = Object.assign({}, params, args)
   return request.post(`/userExpressage`, params)
 }
-/** 确认收货  */
+/* 确认收货  */
 export function postConfirmOrder(args = {}) {
   let params = {
     id: "", // 统一订单编号,
