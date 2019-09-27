@@ -35,11 +35,11 @@
                     <div class="border-left"></div>
                     <div class="border-right"></div>
                 </div>
-                <div class="yogo-cont-show" v-if="this.showList.length > 0">
-                    <div class="showlist" v-for="(item,index) in showList" :key="index">
+                <div class="yogo-cont-show" v-if="teacher.teacher_img.length > 0">
+                    <div class="showlist" v-for="(item,index) in teacher.teacher_img" :key="index">
                         <div class="showlist-auto">
                         <div class="showimg">
-                           <img :src="item.cover" class="showimg1"/>
+                           <img :src="item" class="showimg1"/>
                         </div>
                         </div>
                     </div>

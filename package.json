@@ -10,7 +10,6 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "ajv": "^6.0.0",
     "axios": "^0.18.1",
     "axios-mock-adapter": "^1.15.0",
     "echarts": "^4.1.0",
