@@ -5,7 +5,7 @@
         <div class="detail-main">
           <session-title name="课程介绍" brief="Sometimes beauty is so simple"></session-title>
           <div class="detail-count-div2">
-            <div class="count-div2-img" style="cursor: pointer;">
+            <div :class="`${train.train_image.length > 0 ? 'count-div2-img scorll' : 'count-div2-img'}`" style="cursor: pointer;">
               <img
                 @click="train.teacher_img = item.path"
                 v-for="(item, index) in train.train_image"
@@ -43,7 +43,7 @@
             </div>
             <div class="count-div2-fixdbg">
               <ul class="count-div2-fixdbg-ul">
-                <li><a href="javascript:;"><img src="/static/img/apply.png" title="我想学" @click="wantToStudy"></a></li>
+                <li><a href="javascript:;"><img src="/static/img/apply.png" title="我想学" @click="wantToStudy(train.id)"></a></li>
                 <li @click="callTel"><a href="javascript:;"><img src="/static/img/phone.png" title="咨询电话"></a></li>
               </ul>
             </div>
@@ -87,7 +87,7 @@
 </template>
 <script>
 import { getTrains, postTrains, getTrainsById } from "@/api/trains";
-// import { getFollowTrain } from '@/api/personal'
+import { getFollowTrain } from '@/api/personal'
 import { mapGetters } from 'vuex'
 import Bus from "@/utils/Bus"
 import SessionTitle from "./SessionTitle";
@@ -143,7 +143,7 @@ export default {
         return;
       } else {
         getFollowTrain(id).then((data) => {
-          this.$message({type: 'success', message: '成功'})
+          this.$message({type: 'success', message: '提交成功'})
         })
       }
     },
@@ -231,20 +231,20 @@ export default {
       height: 14rem;
       margin-top: 3rem;
       /* 设置滚动条的样式 */
-      &::-webkit-scrollbar {
+      &.scorll::-webkit-scrollbar {
         width: 0.1rem;
       }
       /* 滚动槽 */
-      &::-webkit-scrollbar-track {
+      &.scorll::-webkit-scrollbar-track {
         background: #dcdcdc;
         border-radius: 0.15rem;
       }
       /* 滚动条滑块 */
-      &::-webkit-scrollbar-thumb {
+      &.scorll::-webkit-scrollbar-thumb {
         background: #88bc37;
         border-radius: 0.15rem;
       }
-      &::-webkit-scrollbar-thumb {
+      &.scorll::-webkit-scrollbar-thumb {
         background: #88bc37;
       }
       .img1 {
@@ -347,8 +347,8 @@ export default {
     .count-div2-fixdbg {
       background: url('/static/img/rectangle.png') no-repeat;
       position: fixed;
-      z-index: 1;
-      right: 23.33rem;
+      z-index: 100;
+      right: 1rem;
       top: 345px;
       &-ul {
         width: 100%;

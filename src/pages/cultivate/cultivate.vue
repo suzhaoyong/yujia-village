@@ -421,7 +421,7 @@ export default {
     wantStudy(id) {
       getFollowTrain(id)
         .then(data => {
-          this.$message({type:'success', message: '成功'})
+          this.$message({type:'success', message: '提交成功'})
         })
     },
     getFiltersParams(params = {}) {
