@@ -87,7 +87,7 @@
 </template>
 <script>
 import { getTrains, postTrains, getTrainsById } from "@/api/trains";
-// import { getFollowTrain } from '@/api/personal'
+import { getFollowTrain } from '@/api/personal'
 import { mapGetters } from 'vuex'
 import Bus from "@/utils/Bus"
 import SessionTitle from "./SessionTitle";
@@ -137,7 +137,8 @@ export default {
     ...mapGetters(['info'])
   },
   methods: {
-    wantToStudy (id) {
+    wantToStudy () {
+      const { id } = this.$route.params;
       if (!this.info.user.name) {
         Bus.$emit("login", true);
         return;
