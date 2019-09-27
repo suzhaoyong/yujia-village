@@ -42,10 +42,9 @@
               <!-- <img class="imgpic2" src="../../assets/image70.png" /> -->
             </div>
             <div class="count-div2-fixdbg">
-              
               <ul class="count-div2-fixdbg-ul">
-                <li><a href="javascript:;"><img src="/static/img/报名.png" title="我想学" @click="IwantToStudy"></a></li>
-                <li @click="callTel"><a href="javascript:;"><img src="/static/img/电话 (2).png" title="咨询电话"></a></li>
+                <li><a href="javascript:;"><img src="/static/img/apply.png" title="我想学" @click="wantToStudy"></a></li>
+                <li @click="callTel"><a href="javascript:;"><img src="/static/img/phone.png" title="咨询电话"></a></li>
               </ul>
             </div>
           </div>
@@ -88,7 +87,7 @@
 </template>
 <script>
 import { getTrains, postTrains, getTrainsById } from "@/api/trains";
-import { getFollowTrain } from '/src/api/personal'
+// import { getFollowTrain } from '@/api/personal'
 import { mapGetters } from 'vuex'
 import Bus from "@/utils/Bus"
 import SessionTitle from "./SessionTitle";
@@ -138,8 +137,8 @@ export default {
     ...mapGetters(['info'])
   },
   methods: {
-    IwantToStudy (id) {
-      if (false) {
+    wantToStudy (id) {
+      if (!this.info.user.name) {
         Bus.$emit("login", true);
         return;
       } else {
@@ -346,7 +345,7 @@ export default {
       }
     }
     .count-div2-fixdbg {
-      background: url('/static/img/圆角矩形 1 拷贝.png') no-repeat;
+      background: url('/static/img/rectangle.png') no-repeat;
       position: fixed;
       z-index: 1;
       right: 23.33rem;
