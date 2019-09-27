@@ -1,7 +1,7 @@
 <template>
   <div style="width:100%;height:100%;">
     <el-container>
-<<<<<<< HEAD
+      
       <!--头部-->
         <el-header style="height:100%;">
           <Header></Header>
@@ -14,11 +14,7 @@
         <el-footer style="height:100%;">
           <Footer></Footer>
         </el-footer>
-=======
-        <el-header>Header</el-header>
-        <el-main>MainMain</el-main>
-        <el-footer>Footer</el-footer>
->>>>>>> 463e4501eeadd719dd60db65b3e5a56c2b40e0bb
+
     </el-container>
   </div>
 </template>

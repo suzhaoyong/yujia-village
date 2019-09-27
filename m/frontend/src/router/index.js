@@ -7,7 +7,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/login'
+      redirect: '/home'
     },
     {
       path: '/index',
@@ -23,6 +23,11 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: () => import('@/pages/login')
+    },
+    {
+      path: '/yagainformation',
+      name: 'yagainformation',
+      component: () => import('../components/yogaInForMation.vue')
     }
   ]
 })
