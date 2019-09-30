@@ -520,10 +520,12 @@ export default {
                     .img1{
                         width: 300px;
                         height: 226px;
+                        object-fit: cover;
                     }
                     .img2{
                         width: 300px;
                         height: 226px;
+                        object-fit: cover;
                     }
                 }
                 .imgpic1{
@@ -531,10 +533,12 @@ export default {
                     .img3{
                         width: 300px;
                         height: 226px;
+                        object-fit: cover;
                         }
                     .img4{
                         width: 300px;
                         height: 226px;
+                        object-fit: cover;
                     }
                 }
              }
@@ -640,6 +644,7 @@ export default {
                     margin-top: 18px;
                     transition: all 1s;
                     background-color: #DCD9CC;
+                    object-fit: cover;
                 }
                 img:hover{
                     width: 150px;
@@ -648,6 +653,7 @@ export default {
                     margin-top: 18px;
                     transform: scale(.9);
                     background-color: #DCD9CC;
+                    object-fit: cover;
                 }
                 .explain2-div{
                     height: 100%;

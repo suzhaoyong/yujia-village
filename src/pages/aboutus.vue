@@ -219,11 +219,13 @@ export default {
                         width: 51%;
                         height: 268px;
                         margin-right: 5px;
+                        object-fit: cover;
                     }
                     .img2{
                         width: 47%;
                         height: 268px;
                         margin-right: 7px;
+                        object-fit: cover;
                     }
                 }
                 .Photowall-img1-top{
@@ -233,12 +235,14 @@ export default {
                         height:268px;
                         margin-right: 7px;
                         margin-top: 5px;
+                        object-fit: cover;
                     }
                     .img2{
                         width:34%;
                         height:268px;
                         margin-top: 5px;
                         margin-right: 7px;
+                        object-fit: cover;
                     }
                 }
             }
@@ -247,6 +251,7 @@ export default {
                     width: 390px;
                     height: 100%;
                     margin-right: 7px;
+                    object-fit: cover;
                 }
             }
             .Photowall-img3{
@@ -256,10 +261,12 @@ export default {
                         width:64%;
                         height:268px;
                         margin-right: 5px;
+                        object-fit: cover;
                     }
                     .img2{
                         width:35%;
                         height:268px;
+                        object-fit: cover;
                     }
                 }
                 .Photowall-img3-top{
@@ -269,11 +276,13 @@ export default {
                         height:268px;
                         margin-right: 5px;
                         margin-top: 5px;
+                        object-fit: cover;
                     }
                     .img2{
                         width: 48%;
                         height: 268px;
                         margin-top: 5px;
+                        object-fit: cover;
                     }
                 }
             }
@@ -461,6 +470,7 @@ export default {
                         height: 155px;
                         border-radius: 50%;
                         margin: 10px 33px auto;
+                        object-fit: cover;
                     }
                     h3{
                         text-align: center;

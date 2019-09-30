@@ -7,7 +7,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/login'
+      redirect: '/teacherClub'
     },
     {
       path: '/index',
@@ -28,6 +28,16 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: () => import('@/pages/login')
+    },
+    {
+      path: '/teacherClub',
+      name: 'teacherClub',
+      component: () => import('@/pages/teacherClub/teacherClub')
+    },
+    {
+      path: '/teacherClub/teacherDetails',
+      name: 'teacherDetails',
+      component: () => import('@/pages/teacherClub/teacherDetails')
     }
   ]
 })

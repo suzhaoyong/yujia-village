@@ -698,20 +698,20 @@ export default {
                         height: 100%;
                         position: relative;
                         .rhomb1{
-                            width: 220px;
-                            height: 220px;
-                            border: 7px solid #fff;
-                            background-color: #E3DCC9;
-                            transform:rotate(45deg);
+                            width: 240px;
+                            height: 250px;
+                            // border: 7px solid #fff;
+                            background-color: #E2DBC8;
+                            transform:rotate(0deg);
                             position: absolute;
-                            right: 50%;
-                            top: 16%;
+                            right: 53%;
+                            top: 10%;
                             overflow: hidden;
                             img{
                                 width: 100%;
                                 height: 100%;
                                 max-width: 100%;
-                                transform:rotate(-45deg)scale(1.42);
+                                // transform:rotate(-45deg)scale(1.42);
                                 object-fit: cover;
                             }
                         }
@@ -721,7 +721,7 @@ export default {
                             border: 7px solid #E2DBC8;
                             transform:rotate(45deg);
                             position: absolute;
-                            right: 30%;
+                            right: 31%;
                             top: 14%;
                             border-left: #fff;
                             border-bottom: #fff;
@@ -729,9 +729,9 @@ export default {
                         .rhomb2:before{
                             content: "";
                             position: absolute;
-                            left: -19%;
-                            top: 17%;
-                            width: 42%;
+                            left: -7%;
+                            top: 4%;
+                            width: 18%;
                             height: 7px;
                             background-color: #E2DBC8;
                             transform: rotate(89deg);
@@ -739,9 +739,9 @@ export default {
                         .rhomb2:after{
                             content: "";
                             position: absolute;
-                            left: 66%;
+                            left: 83%;
                             top: 97%;
-                            width: 36%;
+                            width: 20%;
                             height: 7px;
                             background-color: #E2DBC8;
                             transform: rotate(0deg);
