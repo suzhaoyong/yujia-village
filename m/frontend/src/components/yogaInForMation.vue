@@ -13,7 +13,7 @@
     <main class="information-main">
       <div class="watefullbox">
 
-        <div class="information-main-count" v-for="list in informationLists" :key="list.id" ref="box1">
+        <div class="information-main-count" v-for="list in informationLists" :key="list.id" ref="box1" @click="viewdetail(list.id)">
           <div class="information-main-count-img"><img :src="list.icon_url"></div>
           <div class="information-main-count-text">
             <p>{{ list.headline }}</p>
@@ -55,13 +55,22 @@ export default {
     }
   },
   mounted () {
-    getWaterFall('watefullbox')
+   
   },
   created() {
     this.InformationClassify(),
     this.informationList()
   },
   methods: {
+    viewdetail (id) {
+      this.$router.push({
+        path: '/informationdetail',
+        name: 'informationdetail',
+        params: {
+          id: id
+        }
+      })
+    },
     InformationClassify () {
       console.log(this.$refs.box1)
       this.$request.get('InformationClassify').then((res) => {
@@ -120,8 +129,9 @@ export default {
       .information-main-count {
         width: 159px;
         border: 1px solid black;
+        margin: 4px;
         height: auto;
-        position: absolute;
+        float: left;
         &-img {
           width: 100%;
           height: auto;

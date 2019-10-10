@@ -46,7 +46,8 @@ export default {
       Toast('分享');
     },
     yujiamation () {
-      this.$request.get('informationList/1').then((res) => {
+      const id = this.$route.params.id
+      this.$request.get('informationList/' + id).then((res) => {
         console.log(res)
         this.titleLists = res.data
       })
