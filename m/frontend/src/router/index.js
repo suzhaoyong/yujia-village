@@ -7,7 +7,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/teacherClub'
+      redirect: '/login'
     },
     {
       path: '/index',
