@@ -117,10 +117,11 @@ export default new Router({
       name: 'share',
       component: () => import('@/pages/share')
     },
+    // 商场
     {
-      path: '/market',
-      name: 'market',
-      component: Layout,
+      path: '/store',
+      name: 'store',
+      component: Home, 
       redirect: { name: 'category' },
       children: [
         {
@@ -132,6 +133,7 @@ export default new Router({
         component: () => import('@/pages/market/category')
       }]
     },
+    // 商品
     {
       path: '/goods',
       name: 'goods',
@@ -160,7 +162,18 @@ export default new Router({
     {
       path: '/teacherClub',
       name: 'teacherClub',
-      component: () => import('@/pages/teacherClub/teacherClub')
+      component: Home,
+      redirect: { name: 'teacherClub list' },
+      children: [
+        {
+          path: 'list',
+          name: 'teacherClub list',
+          meta: {
+            header_name: 'market'
+          },
+          component: () => import('@/pages/teacherClub/teacherClub')
+        }
+      ]
     },
     {
       path: '/teacherClub/teacherDetails',
