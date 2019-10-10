@@ -30,7 +30,7 @@ export default {
                 },
                 {
                     title: '培训信息',
-                    name: 'trainingInfo',
+                    name: 'yogamessage',
                     normal: require('../assets/img/information-normal.png'),
                     active: require('../assets/img/information-active.png')
                 },
