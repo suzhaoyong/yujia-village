@@ -478,6 +478,7 @@ $main_bg_color: #89b264;
 .goods {
   display: flex;
   height: 100vh;
+  background: #fff;
   overflow: hidden;
   .goods_kinds {
     flex-basis: 84px;
