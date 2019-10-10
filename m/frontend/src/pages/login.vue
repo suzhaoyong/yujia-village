@@ -1,11 +1,11 @@
 <template>
   <div class="body-wrap">
     <div class="body">
-      <div class="tips" v-show="false">
+      <!-- <div class="tips" v-show="false">
         <span :class="isActive('register')" @click="changeType('register')">注册</span>
         <span :class="isActive('login')" @click="changeType('login')">登录</span>
         <span :class="isActive('reset')" @click="changeType('reset')">登录</span>
-      </div>
+      </div> -->
       <div class="form" v-show="form.type === 'login'">
         <div class="logo">
           <img :src="icon.welcome" alt />
@@ -221,7 +221,7 @@ export default {
         msg: "发送验证码",
         count: 0
       },
-      form: { type: "register" },
+      form: { type: "login" },
       ruleForm: {
         tel: "",
         password: "",
@@ -317,10 +317,7 @@ export default {
         .then(data => {
           Notify({ message: "登录成功", type: "success" });
           sessionStorage.setItem("access", JSON.stringify(data));
-          window.open(`${window.location.origin}`, "_self");
-          // this.$router.push({
-          //   name: "index"
-          // });
+          window.open('/personal','_self');
         })
         .catch(err => {
           Notify(err);
