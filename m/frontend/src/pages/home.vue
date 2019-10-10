@@ -32,5 +32,13 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-
+.content{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding-bottom: 50px;
+  overflow: hidden;
+}
 </style>
