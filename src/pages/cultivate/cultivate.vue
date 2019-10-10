@@ -1070,8 +1070,6 @@ img {
               color: #2c2c2c;
             }
           }
-          
-          
           .fruit-detail {
             width: 90%;
             height: 40px;
