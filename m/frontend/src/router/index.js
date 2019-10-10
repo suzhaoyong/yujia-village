@@ -32,27 +32,27 @@ export default new Router({
     {
       path: '/yagainformation',
       name: 'yagainformation',
-      component: () => import('../components/yogaInForMation.vue'),
+      component: () => import('../pages/homepage/yogaInForMation.vue'),
     },
     {
       path: '/informationdetail',
       name: 'informationdetail',
-      component: () => import('../components/inForMationDetail.vue')
+      component: () => import('../pages/homepage/inForMationDetail.vue')
     },
     {
       path: '/yogamessage',
       name: 'yogamessage',
-      component: () => import('../components/yogaMessage.vue')
+      component: () => import('../pages/informationpage/yogaMessage.vue')
     },
     {
       path: '/messagedetail',
       name: 'messagedetail',
-      component: () => import('../components/messageDetail.vue')
+      component: () => import('../pages/informationpage/messageDetail.vue')
     },
     {
       path: '/fillorder',
       name: 'fillorder',
-      component: () => import('../components/fillOrder.vue')
+      component: () => import('../pages/market/fillOrder.vue')
     }
   ]
 })

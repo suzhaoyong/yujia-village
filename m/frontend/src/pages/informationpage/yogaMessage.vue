@@ -36,8 +36,8 @@
               <p class="p2">￥ {{ list.price }}</p>
               <p class="p3">{{ list.city }}{{ list.area }}</p>
               <p class="p4">
-                <span class="p4-eye"><img src="../../static/img/eye.png">{{ list.views }}</span>
-                <span class="p4-hand"><img src="../../static/img/hand.png">{{ list.follow || 100 }}</span>
+                <span class="p4-eye"><img src="../../../static/img/eye.png">{{ list.views }}</span>
+                <span class="p4-hand"><img src="../../../static/img/hand.png">{{ list.follow || 100 }}</span>
               </p>
               <button class="wantbtn" @click.stop="study(list.id)">我想学</button>
             </div>
@@ -52,7 +52,7 @@
 import Vue from 'vue';
 import { Rate } from 'vant';
 import { mapGetters } from "vuex";
-import Bus from '../utils/Bus'
+import Bus from '../../utils/Bus'
 Vue.use(Rate);
 import {
   getTrains,
@@ -62,10 +62,10 @@ import {
   getTrainsById,
   postTrainsRank,
   followTrain
-} from "../../api/trains";
+} from "../../../api/trains";
 import {
   getFollowTrain
-} from "../../api/personal";
+} from "../../../api/personal";
 export default {
   data() {
     return {
@@ -114,7 +114,6 @@ export default {
     // 获取列表
     messageList () {
       this.$request.get('trains').then((res) => {
-        console.log(res)
         this.messageLists = res.all.data,
         this.sideLists = res.course_types
     })
@@ -141,7 +140,6 @@ export default {
     searchResult() {
       postTrains(this.getFiltersParams()).then((res) => {
         this.messageLists = res.data
-        console.log(this.messageLists)
       })
       this.resultFw = true
       this.defaultFw = true
@@ -171,13 +169,10 @@ export default {
 
     removeTag (type) {
       if(type == 'area') {
-        
       }
       if(type == 'time') {
-        
       }
       if(type == 'price') {
-        
       }
     },
     resetTime () {
@@ -196,7 +191,6 @@ export default {
     getRank (params) {
       postTrains(params).then((res => {
         this.messageLists = res.data
-        console.log(res)
       }))
     },
     getRankParams (keyWord, params = {}) {

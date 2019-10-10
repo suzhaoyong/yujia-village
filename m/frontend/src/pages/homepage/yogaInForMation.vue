@@ -29,7 +29,6 @@
   </div>
 </template>
 <script>
-import Vue from 'vue'
 export default {
   data() {
     return {
@@ -37,19 +36,19 @@ export default {
       informationLists: [],
       classifyImg: [
         {
-          img: require('../../static/img/mationclassfiy/recommend.png')
+          img: require('../../../static/img/mationclassfiy/recommend.png')
         },
         {
-          img: require('../../static/img/mationclassfiy/mation.png')
+          img: require('../../../static/img/mationclassfiy/mation.png')
         },
         {
-          img: require('../../static/img/mationclassfiy/news.png')
+          img: require('../../../static/img/mationclassfiy/news.png')
         },
         {
-          img: require('../../static/img/mationclassfiy/star.png')
+          img: require('../../../static/img/mationclassfiy/star.png')
         },
         {
-          img: require('../../static/img/mationclassfiy/hot.png')
+          img: require('../../../static/img/mationclassfiy/hot.png')
         },
       ]
     }
@@ -72,7 +71,6 @@ export default {
       })
     },
     InformationClassify () {
-      console.log(this.$refs.box1)
       this.$request.get('InformationClassify').then((res) => {
         this.classifyLists = res
         // 将本地图片加入到data数组中
@@ -85,7 +83,6 @@ export default {
       this.$request.get('informationList/'+ 1).then((res) => {
         console.log(res)
         this.informationLists = res.data
-        console.log(this.informationLists)
       })
     }
   }

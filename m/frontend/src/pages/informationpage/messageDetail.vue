@@ -8,7 +8,7 @@
       <ul  class="messagedetail-main-title">
         <li class="li1">
           <div class="li1-text">空中瑜伽</div>
-          <div><span><img src="../../static/img/eye.png">220</span><span><img src="../../static/img/hand.png" class="hand">550</span></div>
+          <div><span><img src="../../../static/img/eye.png">220</span><span><img src="../../../static/img/hand.png" class="hand">550</span></div>
         </li>
         <li class="li2">
           <div>空中瑜伽</div>
@@ -82,7 +82,7 @@
 
 <script>
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
-import '../dist/swiper.css'
+import '../../dist/swiper.css'
 export default {
   data () {
     return {
@@ -108,14 +108,9 @@ export default {
   },
   methods: {
     getmessageDetail() {
-      console.log(11)
       this.$request.get('trains').then((res) => {
-        console.log(res)
       })
     },
-    // // 实现滑动效果
-
-
   }
 }
 </script>
