@@ -26,3 +26,14 @@ export function postShowGoodList(args = {}) {
 export function getGoodsById(id) {
   return request(`/goods/${id}`)
 }
+/* 添加购物车 */
+export function postUserCart(args = {}) {
+  let params = {
+    id: "",
+    num: "",
+    size: "",
+    color: ""
+  }
+  params = Object.assign({}, params, args)
+  return request.post(`/userCart`, params)
+}

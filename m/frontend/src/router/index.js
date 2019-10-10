@@ -6,7 +6,7 @@ Vue.use(Router)
 export default new Router({
   routes: [{
       path: '/',
-      redirect: { name: 'market' }
+      redirect: { name: 'category' }
     },
     {
       path: '/index',
@@ -23,13 +23,29 @@ export default new Router({
       name: 'market',
       component: Layout,
       redirect: { name: 'category' },
-      children: [{
+      children: [
+        {
         path: 'category',
         name: 'category',
         meta: {
           header_name: 'market'
         },
         component: () => import('@/pages/market/category')
+      }]
+    },
+    {
+      path: '/goods',
+      name: 'goods',
+      component: Layout,
+      redirect: { name: 'detail' },
+      children: [
+        {
+        path: 'detail/:goods_id',
+        name: 'detail',
+        meta: {
+          header_name: 'goods'
+        },
+        component: () => import('@/pages/market/goods/detail')
       }]
     },
     {
