@@ -59,9 +59,19 @@ export default new Router({
       component: () => import('@/pages/login')
     },
     {
-      path: '/yagainformation',
-      name: 'yagainformation',
-      component: () => import('../components/yogaInForMation.vue')
+      path: '/teacherClub',
+      name: 'teacherClub',
+      component: () => import('@/pages/teacherClub/teacherClub')
+    },
+    {
+      path: '/teacherClub/teacherDetails',
+      name: 'teacherDetails',
+      component: () => import('@/pages/teacherClub/teacherDetails')
+    },
+    {
+      path: '/teacherClub/clubhouseDetails',
+      name: 'clubhouseDetails',
+      component: () => import('@/pages/teacherClub/clubhouseDetails')
     }
   ]
 })

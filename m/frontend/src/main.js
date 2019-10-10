@@ -8,7 +8,8 @@ import store from './store'
 import 'amfe-flexible'
 // import './common/rem'
 import 'vant/lib/button/style';
-import { Dialog } from 'vant';
+import { Dialog, Rate ,Picker } from 'vant';
+import { Swipe, SwipeItem } from 'vant';
 import VConsole from 'vconsole'
 
 // if (process.env.NODE_ENV === 'production') {
@@ -16,6 +17,9 @@ import VConsole from 'vconsole'
 // }
 // 全局注册
 Vue.use(Dialog);
+Vue.use(Rate);
+Vue.use(Picker);
+Vue.use(Swipe).use(SwipeItem);
 require('./mock')
 
 Object.defineProperty(Vue.prototype, '$request', { value: request })

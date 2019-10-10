@@ -18,7 +18,7 @@
                     <el-col :span="24" class="bg-pic">
                     <div class="nav-contunt-div2">
                         <div class="carousel">
-                        <el-carousel height="620px" :interval="5000" arrow="always" trigger="click" direction="horizontal" :autoplay="true">
+                        <el-carousel height="620px" :interval="5000" arrow="always" trigger="click" direction="horizontal" :autoplay="false">
                             <el-carousel-item v-for="item in dataimg" :key="item.id">
                                 <div class="contunt2">
                                 <div class="carousel-explain">
@@ -429,14 +429,18 @@ export default {
                 }
             }
             .carousel-text{
-                width: 60%;
-                margin-top: -3px;
+                width: 38%;
+                margin-top: 20px;
                 margin-left: 37px;
                 h4{
                     color: #fff;
                     font-size: 20px;
                     font-family:Source Han Sans CN;
                     font-weight:bold;
+                    display: -webkit-box !important;
+                    -webkit-box-orient: vertical !important;
+                    -webkit-line-clamp: 1 !important;// 限制快级元素的文本行数
+                    overflow: hidden !important;
                     span{
                     padding-left: 13px;
                     font-size: 14px;
@@ -845,6 +849,7 @@ export default {
                         position: absolute;
                         top: 7%;
                         left: -16%;
+                        object-fit: cover;
                     }
                     .bg-border-img2{
                         width: 134px;
@@ -864,6 +869,10 @@ export default {
                         position: absolute;
                         left: -53%;
                         top: 20%;
+                        display: -webkit-box !important;
+                        -webkit-box-orient: vertical !important;
+                        -webkit-line-clamp:1 !important;// 限制快级元素的文本行数
+                        overflow: hidden !important;
                     }
                     .text-p2{
                         font-size: 14px;
@@ -896,6 +905,10 @@ export default {
                         position: absolute;
                         left: -53%;
                         top: 30%;
+                        display: -webkit-box !important;
+                        -webkit-box-orient: vertical !important;
+                        -webkit-line-clamp:1 !important;// 限制快级元素的文本行数
+                        overflow: hidden !important;
                     }
                     .bg-border-img3{
                         width: 134px;
