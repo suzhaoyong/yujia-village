@@ -504,7 +504,7 @@ export default {
     },
     postGetRank(page=1, params) {
       postTrainsRank(page, params).then(data => {
-        this.fruit = data       
+        this.fruit = data
       })
     },
     // 默认排序
@@ -546,7 +546,7 @@ export default {
     changePage(val) {
       if(this.keyWord === 'default') {
         this.getTrainsList(val);    
-        return    
+        return
       } else if(this.keyWord === 'host') {
         this.postGetRank(val,this.getRankParams(this.keyWord))
         return

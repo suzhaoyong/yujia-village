@@ -21,8 +21,7 @@ export default new Router({
       }
     }
   },
-  routes: [
-    {
+  routes: [{
       path: '/',
       component: Home,
       redirect: '/main'
@@ -55,7 +54,7 @@ export default new Router({
     {
       path: '/personal',
       name: 'personal',
-      component: Home, 
+      component: Home,
       children: [{
         path: '/personal',
         component: () => import('@/pages/personal')
@@ -121,10 +120,11 @@ export default new Router({
     {
       path: '/store',
       name: 'store',
-      component: Home, 
-      redirect: { name: 'category' },
-      children: [
-        {
+      component: Home,
+      redirect: {
+        name: 'category'
+      },
+      children: [{
         path: 'category',
         name: 'category',
         meta: {
@@ -138,9 +138,10 @@ export default new Router({
       path: '/goods',
       name: 'goods',
       component: Layout,
-      redirect: { name: 'detail' },
-      children: [
-        {
+      redirect: {
+        name: 'detail'
+      },
+      children: [{
         path: 'detail/:goods_id',
         name: 'detail',
         meta: {
@@ -163,17 +164,17 @@ export default new Router({
       path: '/teacherClub',
       name: 'teacherClub',
       component: Home,
-      redirect: { name: 'teacherClub list' },
-      children: [
-        {
-          path: 'list',
-          name: 'teacherClub list',
-          meta: {
-            header_name: 'market'
-          },
-          component: () => import('@/pages/teacherClub/teacherClub')
-        }
-      ]
+      redirect: {
+        name: 'teacherClub list'
+      },
+      children: [{
+        path: 'list',
+        name: 'teacherClub list',
+        meta: {
+          header_name: 'market'
+        },
+        component: () => import('@/pages/teacherClub/teacherClub')
+      }]
     },
     {
       path: '/teacherClub/teacherDetails',
@@ -184,6 +185,39 @@ export default new Router({
       path: '/teacherClub/clubhouseDetails',
       name: 'clubhouseDetails',
       component: () => import('@/pages/teacherClub/clubhouseDetails')
+    },
+    {
+      path: '/yagainformation',
+      name: 'yagainformation',
+      component: () => import('@/pages/homepage/yogaInForMation.vue'),
+    },
+    {
+      path: '/informationdetail',
+      name: 'informationdetail',
+      component: () => import('@/pages/homepage/inForMationDetail.vue')
+    },
+    {
+      path: '/yogamessage',
+      component: Home,
+      redirect: {
+        name: 'yogamessage list'
+      },
+      children: [{
+        path: 'list',
+        name: 'yogamessage list',
+
+        component: () => import('@/pages/informationpage/yogaMessage.vue')
+      }]
+    },
+    {
+      path: '/messagedetail',
+      name: 'messagedetail',
+      component: () => import('@/pages/informationpage/messageDetail.vue')
+    },
+    {
+      path: '/fillorder',
+      name: 'fillorder',
+      component: () => import('@/pages/market/fillOrder.vue')
     }
   ]
 })

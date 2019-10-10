@@ -137,7 +137,8 @@ export default {
     ...mapGetters(['info'])
   },
   methods: {
-    wantToStudy (id) {
+    wantToStudy () {
+      const { id } = this.$route.params;
       if (!this.info.user.name) {
         Bus.$emit("login", true);
         return;
