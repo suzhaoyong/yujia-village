@@ -5,8 +5,8 @@ function handleRequest(config) {
     contentType
   } = config;
   if (process.env.NODE_ENV === 'development') {
-    config.baseURL = '/api'; // 
-    // config.baseURL = 'http://api.aomengyujia.com/api';
+    // config.baseURL = '/api'; //
+    config.baseURL = 'https://api.yujiacun.net/api';
     // config.baseURL = 'http://testapi.aomengyujia.com/api';
   } else {
     config.baseURL = 'https://api.yujiacun.net/api';

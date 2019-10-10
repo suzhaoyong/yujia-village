@@ -1,78 +1,109 @@
 <template>
   <div class="information">
     <div class="information-banner">
-      <img src="" />
+      <img :src="classifyLists.banner" />
     </div>
     <div class="information-nav">
       <ul class="information-nav-list">
-        <li><img src=""><p>1</p></li>
-        <li><img src=""><p>1</p></li>
-        <li><img src=""><p>1</p></li>
-        <li><img src=""><p>1</p></li>
-        <li><img src=""><p>1</p></li>
+        <li v-for="list in classifyLists.classify" :key="list.id">
+          <img :src="list.img"><p>{{ list.classify }}</p>
+        </li>
       </ul>
     </div>
     <main class="information-main">
-      <div class="main">
-        <div class="information-main-count">
-          <div class="information-main-count-img"><img src=""></div>
+      <div class="watefullbox">
+
+        <div class="information-main-count" v-for="list in informationLists" :key="list.id" ref="box1">
+          <div class="information-main-count-img"><img :src="list.icon_url"></div>
           <div class="information-main-count-text">
-            <p>瑜伽顶级人物的高难动作</p>
+            <p>{{ list.headline }}</p>
             <div>
-              <span>IVAV</span>
-              <span><span>tubiao</span><span>1998</span></span>
+              <span>{{ list.type }}</span>
+              <span><span>tubiao</span><span>{{ list.views }}</span></span>
             </div>
           </div>
         </div>
 
-        <div class="information-main-count">
-          <div class="information-main-count-img"><img src=""></div>
-          <div class="information-main-count-text">
-            <p>瑜伽顶级人物的高难动作</p>
-            <div>
-              <span>IVAV</span>
-              <span><span>tubiao</span><span>1998</span></span>
-            </div>
-          </div>
-        </div>
-
-        <div class="information-main-count">
-          <div class="information-main-count-img"><img src=""></div>
-          <div class="information-main-count-text">
-            <p>瑜伽顶级人物的高难动作</p>
-            <div>
-              <span>IVAV</span>
-              <span><span>tubiao</span><span>1998</span></span>
-            </div>
-          </div>
-        </div>
       </div>
-
     </main>
   </div>
 </template>
 <script>
-
+import Vue from 'vue'
 export default {
-
+  data() {
+    return {
+      classifyLists: [],
+      informationLists: [],
+      classifyImg: [
+        {
+          img: require('../../static/img/mationclassfiy/recommend.png')
+        },
+        {
+          img: require('../../static/img/mationclassfiy/mation.png')
+        },
+        {
+          img: require('../../static/img/mationclassfiy/news.png')
+        },
+        {
+          img: require('../../static/img/mationclassfiy/star.png')
+        },
+        {
+          img: require('../../static/img/mationclassfiy/hot.png')
+        },
+      ]
+    }
+  },
+  mounted () {
+    getWaterFall('watefullbox')
+  },
+  created() {
+    this.InformationClassify(),
+    this.informationList()
+  },
+  methods: {
+    InformationClassify () {
+      console.log(this.$refs.box1)
+      this.$request.get('InformationClassify').then((res) => {
+        this.classifyLists = res
+        // 将本地图片加入到data数组中
+        this.classifyLists.classify.map((list, index) => {
+          return list.img = this.classifyImg[index].img
+        })
+      })
+    },
+    informationList () {
+      this.$request.get('informationList/'+ 1).then((res) => {
+        console.log(res)
+        this.informationLists = res.data
+        console.log(this.informationLists)
+      })
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
 .information {
   &-banner {
-
+    width: 100%;
+    height: 170px;
+    img {
+      width: 100%;
+      height: 100%;
+    }
   }
   &-nav {
-
+    width: 100%;
+    height: 49px;
     &-list {
-      height: 50px;
+      height: 49px;
       display: flex;
       justify-content: space-around;
       align-items: center;
       li {
-        height: 50px;
+        height: 42px;
         text-align: center;
-        font-size: 14px;
+        font-size: 12px;
         img {
           width: 22px;
           height: 22px;
@@ -82,25 +113,22 @@ export default {
   }
   &-main {
     width: 100%;
-
-    .main {
+    .watefullbox {
       width: 335px;
-      margin: 0 auto;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      div:nth-of-type(2) {
-        height: 242px;
-      }
+      position: relative;
+      margin: 8px auto;
       .information-main-count {
         width: 159px;
-        height: 202px;
         border: 1px solid black;
-        margin-top: 8px;
-        margin-right: 5px;
+        height: auto;
+        position: absolute;
         &-img {
           width: 100%;
-          height: 140px;
+          height: auto;
+          box-shadow: 0 0 5px #ccc;
+          .bigimg {
+            height: 200px;
+          }
         }
         &-text {
           height: 62px;
