@@ -28,7 +28,11 @@
                     <div class="foot_exhibition_staff">PERSONAL DISPLAY</div>
                 </div>
                 <div class="details_foot_list">
-                    <img :src="item.path" class="list_foot_img" v-for="item in footlist" :key="item"/>
+                    <van-swipe :loop="false" :width="214" id="vanswipe" :show-indicators="false">
+                        <van-swipe-item class="vanswipeitem" v-for="(item,index) in footlist" :key="index">
+                            <img :src="item" class="list_foot_img"/>
+                        </van-swipe-item>
+                    </van-swipe>
                 </div>
             </div>
         </div>
@@ -38,10 +42,10 @@
 export default {
   data() {
     return {
-        footlist:[{
-            id:1,
-            path:require('../../assets/teacherclub/image35.png'),
-        }]
+        footlist:[
+        require('../../assets/teacherclub/image35.png'),
+        require('../../assets/teacherclub/image35.png'),
+        require('../../assets/teacherclub/image35.png'),]
     };
   },
   methods:{
@@ -196,13 +200,33 @@ export default {
             }
         }
         .details_foot_list{
-            width: 93%;
-            margin: 0 auto;
+            width: 96%;
+            // margin: 0 auto;
+            margin-left: auto;
             margin-bottom: 10px;
-            .list_foot_img{
+            #vanswipe{
+            position: relative;
+            overflow: hidden;
+            -webkit-user-select: none;
+            user-select: none;
+            .van-swipe__track{
+                height: 100%;
+                width: 100% !important;
+                display: -webkit-box;
+                justify-content: center;
+            .vanswipeitem{
+                float: left;
                 width: 214px;
                 height: 270px;
+                margin-right:8px;
+                .list_foot_img{
+                width: 214px;
+                height: 270px;
+                object-fit: cover;
+              }
             }
+            }
+        }
         }
     }
 }

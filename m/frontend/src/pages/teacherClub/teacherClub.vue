@@ -18,13 +18,13 @@
                 </div>
             </div>
             <div class="club_item">
-                <div class="club_item_box" v-for="(item,index) in clubBox" :key="index">
+                <div class="club_item_box" v-for="(item,index) in clubBox" :key="index" @click="clubBoxItem(item)">
                     <div class="club_item_img">
                         <img :src="item.path"/>
                     </div>
                     <div class="club_item_title">
-                        <h3>{{item.title}}</h3>
-                        <div class="text">{{item.text}}</div>
+                        <h3 class="van-ellipsis">{{item.title}}</h3>
+                        <div class="text van-ellipsis">{{item.text}}</div>
                     </div>
                 </div>
             </div>
@@ -36,7 +36,7 @@
             <div class="list_house">
                 <div class="list_house_title">
                     <div class="list_house_div">
-                        <span class="house_title_tips">成都</span>
+                        <span class="house_title_tips">选择城市</span>
                         <img src="../../assets/teacherclub/launch.png" class="house_title_img"/>
                     </div>
                     <div class="list_house_div">
@@ -48,9 +48,9 @@
                         <img src="../../assets/teacherclub/launch.png" class="house_title_img"/>
                     </div>
                 </div>
-                <div class="list_house_inquiry">
-                    <input type="text" class="list_house_inquiry_input" placeholder="搜索名字与类型"/>
-                    <img src="../../assets/teacherclub/seek.png" class="seek"/>
+                <div class="list_house_inquirys">
+                     <span class="house_title_tips">更多</span>
+                     <img src="../../assets/teacherclub/launch.png" class="house_title_img"/>
                 </div>
             </div>
             <div class="list_house_type">
@@ -61,22 +61,26 @@
                 </div>
             </div>
             <div class="Rotation_list">
-                <div class="Rotation_box" v-for="(item,index) in exhibitionBox2" :key="index">
-                    <div class="Rotation_img">
-                    <img :src="item.path"/>
-                    </div>
-                    <div class="Rotation_title">
-                        <h3>{{item.title}}</h3>
-                        <div class="texts">{{item.text}}</div>
-                        <div class="Rotation_zan">
-                        <div class="Rotation_zan_items">教龄：5年</div>
-                        <div class="Rotation_zan_tips">
-                            <img src="../../assets/teacherclub/yujia.png"/>
-                            <span class="span">234</span>
+                <!-- <van-swipe :loop="false" :width="131" id="vanswipe" :show-indicators="false"> -->
+                    <!-- <van-swipe-item class="van-swipe-item" v-for="(item,index) in exhibitionBox2" :key="index"> -->
+                        <div class="Rotation_box" v-for="(item,index) in exhibitionBox2" :key="index">
+                            <div class="Rotation_img">
+                            <img :src="item.path"/>
+                            </div>
+                            <div class="Rotation_title">
+                                <h3 class="van-ellipsis">{{item.title}}</h3>
+                                <div class="texts van-ellipsis">{{item.text}}</div>
+                                <div class="Rotation_zan">
+                                <div class="Rotation_zan_items">教龄：{{item.num}}年</div>
+                                <div class="Rotation_zan_tips">
+                                    <img src="../../assets/teacherclub/yujia.png"/>
+                                    <span class="span">{{item.eye}}</span>
+                                </div>
+                            </div>
+                            </div>
                         </div>
-                    </div>
-                    </div>
-                </div>
+                    <!-- </van-swipe-item> -->
+                <!-- </van-swipe> -->
             </div>
             <div class="list_exhibition">
                 <div class="list_exhibition_page">
@@ -92,13 +96,13 @@
                         <img :src="item.path"/>
                         </div>
                         <div class="exhibition_title">
-                            <h3>{{item.title}}</h3>
-                            <div class="texts">{{item.text}}</div>
+                            <h3 class="van-ellipsis">{{item.title}}</h3>
+                            <div class="texts van-ellipsis">{{item.text}}</div>
                             <div class="exhibition_zan">
-                            <div class="exhibition_zan_items">教龄：5年</div>
+                            <div class="exhibition_zan_items">教龄：{{item.num}}年</div>
                             <div class="exhibition_zan_tips">
                                 <img src="../../assets/teacherclub/yujia.png"/>
-                                <span class="span">234</span>
+                                <span class="span">{{item.eye}}</span>
                             </div>
                         </div>
                         </div>
@@ -164,37 +168,57 @@ export default {
             id:1,
             path:require('../../assets/teacherclub/image11.png'),
             title:'Ivan',
-            text:'流瑜伽'
+            text:'流瑜伽',
+            num:3,
+            eye:234
         },
         {
             id:2,
             path:require('../../assets/teacherclub/image11.png'),
             title:'Ivan',
-            text:'流瑜伽'
+            text:'流瑜伽',
+            num:3,
+            eye:234
         },
         {
             id:3,
             path:require('../../assets/teacherclub/image11.png'),
             title:'Ivan',
-            text:'流瑜伽'
+            text:'流瑜伽',
+            num:3,
+            eye:234
         },
         {
             id:4,
             path:require('../../assets/teacherclub/image11.png'),
             title:'Ivan',
-            text:'流瑜伽'
+            text:'流瑜伽',
+            num:3,
+            eye:234
         }],
         exhibitionBox2:[{
             id:1,
             path:require('../../assets/teacherclub/image11.png'),
             title:'Ivan',
-            text:'流瑜伽'
+            text:'流瑜伽',
+            num:3,
+            eye:234
         },
         {
             id:2,
             path:require('../../assets/teacherclub/image11.png'),
             title:'Ivan',
-            text:'流瑜伽'
+            text:'流瑜伽',
+            num:3,
+            eye:234
+        },
+        {
+            id:3,
+            path:require('../../assets/teacherclub/image11.png'),
+            title:'Ivan',
+            text:'流瑜伽',
+            num:3,
+            eye:234
         }],
     };
   },
@@ -204,6 +228,14 @@ export default {
     },
     clicktext:function(index){
         this.curritem = index;
+    },
+    clubBoxItem(item){
+        this.$router.push({
+            path: "/teacherClub/clubhouseDetails",
+            query: {
+            id: item.id
+            }
+        });
     },
     exhibition(item){
         this.$router.push({
@@ -344,6 +376,7 @@ input:-ms-input-placeholder{
                         width: 100%;
                         height: 100%;
                         display: block;
+                        object-fit: cover;
                     }
                 }
                 .club_item_title{
@@ -358,18 +391,16 @@ input:-ms-input-placeholder{
                         color:rgba(44,44,44,1);
                         margin-top: 20px;
                         text-indent: 10px;
+                        width: 93%;
                     }
                     .text{
                         font-size: 10px;
                         font-family:PingFang SC;
                         font-weight:400;
                         color: #999;
-                        display: -webkit-box !important;
-                        -webkit-box-orient: vertical !important;
-                        -webkit-line-clamp:1 !important;// 限制快级元素的文本行数
-                        overflow: hidden !important;
                         margin-top: 15px;
                         text-indent: 10px;
+                        width: 93%;
                     }
                 }
             }
@@ -385,6 +416,7 @@ input:-ms-input-placeholder{
                         width: 100%;
                         height: 100%;
                         display: block;
+                        object-fit: cover;
                     }
                 }
                 .club_item_title{
@@ -399,18 +431,16 @@ input:-ms-input-placeholder{
                         color:rgba(44,44,44,1);
                         margin-top: 20px;
                         text-indent: 10px;
+                        width: 93%;
                     }
                     .text{
                         font-size: 10px;
                         font-family:PingFang SC;
                         font-weight:400;
                         color: #999;
-                        display: -webkit-box !important;
-                        -webkit-box-orient: vertical !important;
-                        -webkit-line-clamp:1 !important;// 限制快级元素的文本行数
-                        overflow: hidden !important;
                         margin-top: 15px;
                         text-indent: 10px;
+                        width: 93%;
                     }
                 }
             }
@@ -433,12 +463,13 @@ input:-ms-input-placeholder{
             height: 100%;
             margin: 0 auto;
             display: flex;
+            justify-content: space-between;
             .list_house_title{
-                width: 53%;
+                width: 75%;
                 height: 55px;
                 line-height: 45px;
                 .list_house_div:nth-child(1){
-                    width: 46px;
+                    width: 80px;
                     float: left;
                     .house_title_tips{
                     font-size:12px;
@@ -454,7 +485,7 @@ input:-ms-input-placeholder{
                   }
                 }
                 .list_house_div:nth-child(2){
-                    width: 69px;
+                    width: 80px;
                     float: left;
                     .house_title_tips{
                     font-size:12px;
@@ -470,7 +501,7 @@ input:-ms-input-placeholder{
                   }
                 }
                 .list_house_div:nth-child(3){
-                    width: 69px;
+                    width: 80px;
                     float: left;
                     .house_title_tips{
                     font-size:12px;
@@ -486,28 +517,23 @@ input:-ms-input-placeholder{
                   }
                 }
             }
-            .list_house_inquiry{
-                width: 47%;
+            .list_house_inquirys{
+                width: 20%;
                 height: 55px;
-                position: relative;
-                .list_house_inquiry_input{
-                    background-color: #eeeeee;
-                    border-radius: 13px;
-                    height: 35px;
-                    width: 90%;
-                    float: right;
-                    font-size: 12px;
-                    color: #999;
-                    text-indent: 20px;
-                    margin-top: 10px;
-                }
-                .seek{
-                    position: absolute;
-                    width: 12px;
-                    height: 13px;
-                    right: 20px;
-                    top: 22px;
-                }
+                line-height: 45px;
+                text-align: end;
+                .house_title_tips{
+                    font-size:12px;
+                    font-family:Microsoft YaHei;
+                    font-weight:400;
+                    color:rgba(44,44,44,1);
+                    padding-right: 16px;
+                  }
+                  .house_title_img{
+                      width: 10px;
+                      height: 7px;
+                      margin-left: -12px;
+                  }
             }
         }
         .list_house_type{
@@ -543,20 +569,31 @@ input:-ms-input-placeholder{
             }
         }
         .Rotation_list{
-            width: 93%;
+            width: 96%;
             height: 100%;
-            display:flow-root;
-            margin: 0 auto;
-            .Rotation_box{
-                width: 36%;
+            display: -webkit-box;
+            margin-left: auto;
+            // #vanswipe{
+            // position: relative;
+            // overflow: hidden;
+            // -webkit-user-select: none;
+            // user-select: none;
+            // .van-swipe__track{
+            //     height: 100% ;
+            //     width: 100% !important;
+            //     display: -webkit-box;
+            //     display: flex !important;
+            //     justify-content: center;
+            // .van-swipe-item{
+            //     float: left !important;
+            //     margin-right:8px !important;
+                .Rotation_box{
+                width: 131px;
                 height: 100%;
-                float: left;
-                border-radius:3px;
-                margin-bottom: 8px;
-                background:rgba(255,255,255,1);
                 box-shadow:0px 1px 4px 0px rgba(22,27,27,0.18);
                 border-radius:3px;
                 margin-right: 10px;
+                margin-bottom: 10px;
                 .Rotation_img{
                     width: 100%;
                     height: 110px;
@@ -565,6 +602,7 @@ input:-ms-input-placeholder{
                         width: 100%;
                         height: 100%;
                         display: block;
+                        object-fit: cover;
                     }
                 }
                 .Rotation_title{
@@ -595,7 +633,8 @@ input:-ms-input-placeholder{
                         color:rgba(44,44,44,1);
                         display: flex;
                         justify-content: space-between;
-                        margin-top: 12px;
+                        margin-top: 10px;
+                        margin-bottom: 10px;
                         .Rotation_zan_items{
                             text-indent: 10px;
                         }
@@ -617,6 +656,9 @@ input:-ms-input-placeholder{
                     }
                 }
             }
+        //     }
+        // }
+        // }
         }
         .list_exhibition{
             width: 93%;
@@ -671,6 +713,7 @@ input:-ms-input-placeholder{
                             width: 100%;
                             height: 100%;
                             display: block;
+                            object-fit: cover;
                         }
                     }
                     .exhibition_title{
@@ -738,6 +781,7 @@ input:-ms-input-placeholder{
                             width: 100%;
                             height: 100%;
                             display: block;
+                            object-fit: cover;
                         }
                     }
                     .exhibition_title{
