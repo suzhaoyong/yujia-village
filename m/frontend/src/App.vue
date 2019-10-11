@@ -3,7 +3,10 @@
     <div class="loding_wrap" v-show="loading" >
       <van-loading color="#89b264" ref="appLoading"  />
     </div>
-    <router-view></router-view>
+    <keep-alive>
+      <router-view v-if="$route.meta.keepAlive"></router-view>
+  </keep-alive>
+  <router-view v-if="!$route.meta.keepAlive"></router-view>
   </div>
 </template>
 

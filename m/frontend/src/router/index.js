@@ -6,9 +6,9 @@ const Home = resolve => require(['@/pages/home'], resolve) //首页
 
 Vue.use(Router)
 
-export default new Router({
-  // mode: 'history',
-  mode: 'hash',
+const router = new Router({
+  mode: 'history',
+  // mode: 'hash',
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
       return savedPosition
@@ -129,7 +129,8 @@ export default new Router({
         path: 'category',
         name: 'category',
         meta: {
-          header_name: 'market'
+          header_name: 'market',
+          keepAlive: true
         },
         component: () => import('@/pages/market/category')
       }]
@@ -146,7 +147,8 @@ export default new Router({
         path: 'detail/:goods_id',
         name: 'detail',
         meta: {
-          header_name: 'goods'
+          header_name: 'goods',
+          keepAlive: true
         },
         component: () => import('@/pages/market/goods/detail')
       }]
@@ -222,3 +224,15 @@ export default new Router({
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  // 进入是详情，且从首页过来的，才缓存
+  if (to.path.match('detail') && from.path.match('store/category')) {
+    from.meta.keepAlive = true
+  } else {
+    from.meta.keepAlive = false
+  }
+  next()
+})
+
+export default router;
