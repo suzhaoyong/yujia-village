@@ -67,20 +67,40 @@
         <div class="goods_filters">
           <div class="filters_range">
             <div class="range_price_sell">
-              <span class="active"></span>
-              <span></span>
-              <span @click="aside.isOpen = true">筛选</span>
+              <div class="range_select_range">
+                <van-tag
+                  style="margin:2px;"
+                  @click="closeAsideTags(item)"
+                  plain
+                  round
+                  color="#89b264"
+                  v-for="(item, index) in selected.tags"
+                  :key="index"
+                >{{`${item.name} x`}}</van-tag>
+              </div>
+              <span class="filters_btn" style="flex-shrink: 0;" @click="aside.isOpen = true">筛选</span>
             </div>
             <div class="range_news_size">
-              <!-- <span class="active">新品</span> -->
-              <span @click="subAside.isOpen = true">尺码</span>
-              <span>材质</span>
+              <span
+                :class="{ active: isSubAsideActive('isPrice') }"
+                @click="handleSubAside('isPrice')"
+              >{{isSubAsideActive('isPrice') ? isSubAsideActive('isPrice') : `价格` }}</span>
+              <span
+                :class="{ active: isSubAsideActive('season') }"
+                @click="handleSubAside('season')"
+              >{{isSubAsideActive('season') ? isSubAsideActive('season') :`适用季节`}}</span>
+              <span
+                :class="{ active: isSubAsideActive('material') }"
+                @click="handleSubAside('material')"
+              >{{isSubAsideActive('material') ? isSubAsideActive('material') : `材质`}}</span>
             </div>
-            <div class="select_range" v-show="subAside.isOpen">
-              <span class="active">范围1</span>
-              <span>范围1</span>
-              <span>范围1</span>
-              <span>范围1</span>
+            <div class="select_range" v-if="subAside.isOpen">
+              <span
+                :class="{ active: isSelectSubAside(item.name) }"
+                v-for="(item, index) in subAside.list"
+                :key="index"
+                @click="handleChooseSubAsideMenu(item)"
+              >{{item.name}}</span>
               <div @click="changeSubAside" class="select_sure">确定</div>
             </div>
           </div>
@@ -136,12 +156,7 @@
           <div class="filters_right_title">理想价格</div>
           <div class="filters_right_content">
             <div class="min_price">
-              <!-- <input
-                type="text"
-                readonly
-                :value="min_price.value"
-                @touchstart.native.stop="min_price.show = true"
-              />-->
+      
               <van-field
                 readonly
                 clickable
@@ -244,7 +259,7 @@
   </div>
 </template>
 <script>
-import { Button, Popup, Overlay, NumberKeyboard, Skeleton } from "vant";
+import { Button, Popup, Tag, Overlay, NumberKeyboard, Skeleton, Toast } from "vant";
 import {
   getGoodsFilter,
   getGoodRecomment,
@@ -267,7 +282,13 @@ export default {
         curIndex: 0
       },
       subAside: {
-        isOpen: false
+        isOpen: false,
+        list: [],
+        selected: {
+          isPrice: {},
+          season: {},
+          material: {}
+        }
       },
       aside: {
         isOpen: false
@@ -328,6 +349,11 @@ export default {
           );
         }
       };
+    },
+    isSubAsideActive() {
+      return item => {
+        return this.subAside.selected[item].name;
+      };
     }
   },
   components: {
@@ -335,7 +361,8 @@ export default {
     [Popup.name]: Popup,
     [Overlay.name]: Overlay,
     [NumberKeyboard.name]: NumberKeyboard,
-    [Skeleton.name]: Skeleton
+    [Skeleton.name]: Skeleton,
+    [Tag.name]: Tag
   },
   mounted() {
     getGoodRecomment().then(response => {
@@ -358,17 +385,76 @@ export default {
     this.showGoodsList();
   },
   methods: {
-    asideSure() {
+    // 顶部筛选-确定关闭
+    changeSubAside() {
+      this.subAside.isOpen = false;
+      const { isPrice, season, material } = this.subAside.selected;
+
+      this.asideSure({
+        isPrice: isPrice.id,
+        season: season.id,
+        material: material.id
+      });
+    },
+    // 因为要显示出被选择的那一项
+    isSelectSubAside(item) {
+      const { isPrice, season, material } = this.subAside.selected;
+      if (item === isPrice.name || item === season.name || item === material.name) {
+        return true;
+      }
+    },
+    // 选择菜单项
+    handleChooseSubAsideMenu(item) {
+      this.subAside.selected[item.type] = item;
+      if (item.name === "不限") {
+        this.subAside.selected[item.type] = {};
+      }
+      // this.$nextTick(() => {
+      //   this.isSelectSubAside(item.name)
+      // });
+    },
+    // 顶部筛选-展开
+    handleSubAside(type) {
+      this.subAside.isOpen = true;
+      if (type === "isPrice") {
+        this.subAside.list = [
+          { name: "不限", id: "1", type: "isPrice" },
+          { name: "从高到低", id: true, type: "isPrice" },
+          { name: "从低到高", id: false, type: "isPrice" }
+        ];
+      } else {
+        this.subAside.list = this.goodsFilters[type];
+      }
+    },
+    // 筛选 - 确定
+    asideSure(args = {}) {
       const params = {};
       this.selected.tags.map(item => {
         params[item.type] = item.id;
       });
       params.sort = this.kinds.curIndex;
-      this.showGoodsList(params);
+      const {min_price, max_price } = this
+      if(min_price.value - max_price.value > 0) {
+        Toast('输入金额有误');
+        return;
+      }
+      if(min_price.value) {
+        params.minPrice = min_price.value
+      }
+      if(max_price.value) {
+        params.maxPrice = max_price.value
+      }
+
+      this.showGoodsList({ ...params, ...args });
       this.aside.isOpen = false;
     },
+    // 筛选 - 重置
     asideReset() {
       this.selected.tags = [];
+    },
+    // 移除筛选项
+    closeAsideTags(item) {
+      this.chooseTagsFor(item.name, { name: "不限", type: item.type });
     },
     chooseTagsFor(name, tag) {
       if (this.isTagActive(tag)) return;
@@ -404,9 +490,7 @@ export default {
     iconPullDown(name) {
       this.filters[name].isActive = !this.filters[name].isActive;
     },
-    changeSubAside() {
-      this.subAside.isOpen = false;
-    },
+
     viewGoods(goods) {
       this.$router.push({
         name: "detail",

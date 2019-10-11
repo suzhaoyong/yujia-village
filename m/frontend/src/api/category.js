@@ -20,7 +20,7 @@ export function postShowGoodList(args = {}) {
     material: ""
   }
   params = Object.assign({}, params, args)
-  return request.post('/goods/showGoodList', params)
+  return request.post('/goods/showGoodListMobile', params)
 }
 /* 查询指定商品 */
 export function getGoodsById(id) {
