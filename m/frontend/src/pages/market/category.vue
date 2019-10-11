@@ -4,12 +4,15 @@
       <aside class="goods_kinds">
         <ul class="kinds_range">
           <li :class="clsKindsActive(-1)" @click="changeKinds(-1)">每日推荐</li>
-          <li
-            :class="clsKindsActive(item.id)"
-            @click="changeKinds(item.id)"
-            v-for="(item, index) in kinds.list"
-            :key="index"
-          >{{item.name}}</li>
+
+          <van-skeleton title :row="3" :loading="kinds.list.length == 0">
+            <li
+              :class="clsKindsActive(item.id)"
+              @click="changeKinds(item.id)"
+              v-for="(item, index) in kinds.list"
+              :key="index"
+            >{{item.name}}</li>
+          </van-skeleton>
         </ul>
       </aside>
       <!-- 每日推荐 -->
@@ -88,6 +91,9 @@
             @click="subAside.isOpen = false"
             :custom-style="{ position: 'absolute'}"
           />-->
+          <div v-if="showGoods.list.lenght === 0">
+            <van-skeleton v-for="item in 4" :key="item" title title-width="100" :row="6" />
+          </div>
           <div
             class="goods-box"
             @click="viewGoods(item)"
@@ -103,7 +109,26 @@
         </div>
       </section>
     </div>
-    <van-popup v-model="aside.isOpen" round position="right" :style="{ width: '85%'}">
+    <van-popup
+      v-model="aside.isOpen"
+      round
+      position="right"
+      :style="{ width: '85%', height: '85%'}"
+    >
+      <van-number-keyboard
+        :show="min_price.show"
+        extra-key="."
+        v-model="min_price.value"
+        close-button-text="完成"
+        @blur="min_price.show = false"
+      />
+      <van-number-keyboard
+        :show="max_price.show"
+        extra-key="."
+        v-model="max_price.value"
+        close-button-text="完成"
+        @blur="max_price.show = false"
+      />
       <!-- 筛选条件 -->
       <!-- 理想价格 -->
       <aside class="filters_right">
@@ -111,10 +136,26 @@
           <div class="filters_right_title">理想价格</div>
           <div class="filters_right_content">
             <div class="min_price">
-              <input type="text" />
+              <!-- <input
+                type="text"
+                readonly
+                :value="min_price.value"
+                @touchstart.native.stop="min_price.show = true"
+              />-->
+              <van-field
+                readonly
+                clickable
+                :value="min_price.value"
+                @touchstart.native.stop="min_price.show = true"
+              />
             </div>-
             <div class="max_price">
-              <input type="text" />
+              <van-field
+                readonly
+                clickable
+                :value="max_price.value"
+                @touchstart.native.stop="max_price.show = true"
+              />
             </div>
             <div class="max_price" style="opacity:0"></div>
           </div>
@@ -203,7 +244,7 @@
   </div>
 </template>
 <script>
-import { Button, Popup, Overlay } from "vant";
+import { Button, Popup, Overlay, NumberKeyboard, Skeleton } from "vant";
 import {
   getGoodsFilter,
   getGoodRecomment,
@@ -212,6 +253,14 @@ import {
 export default {
   data() {
     return {
+      min_price: {
+        show: false,
+        value: ""
+      },
+      max_price: {
+        show: false,
+        value: ""
+      },
       isActive: false,
       kinds: {
         list: [],
@@ -284,7 +333,9 @@ export default {
   components: {
     [Button.name]: Button,
     [Popup.name]: Popup,
-    [Overlay.name]: Overlay
+    [Overlay.name]: Overlay,
+    [NumberKeyboard.name]: NumberKeyboard,
+    [Skeleton.name]: Skeleton
   },
   mounted() {
     getGoodRecomment().then(response => {
@@ -477,7 +528,7 @@ $main_bg_color: #89b264;
 }
 .goods {
   display: flex;
-  height: 100vh;
+  height: 100%;
   background: #fff;
   overflow: hidden;
   .goods_kinds {
@@ -582,7 +633,8 @@ $main_bg_color: #89b264;
       }
     }
     .goods_search_result {
-      position: relative;
+      position: absolute;
+      padding-bottom: 150px;
       display: flex;
       justify-content: space-between;
       flex-wrap: wrap;
@@ -618,8 +670,9 @@ $main_bg_color: #89b264;
   padding-left: 24px;
   padding-top: 12px;
   padding-bottom: 44px;
-  height: 100vh;
+  height: 100%;
   position: relative;
+  z-index: 90;
   width: 100%;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
@@ -651,23 +704,15 @@ $main_bg_color: #89b264;
 
       .min_price {
         flex-basis: 30%;
-        input {
-          width: 100%;
-          border: 1px solid #e5e5e5;
-          border-radius: 15px;
-          padding: 10px 0;
-          padding-left: 1em;
-        }
+        border: 1px solid #e5e5e5;
+        border-radius: 15px;
+        overflow: hidden;
       }
       .max_price {
         flex-basis: 30%;
-        input {
-          width: 100%;
-          border: 1px solid #e5e5e5;
-          border-radius: 15px;
-          padding: 10px 0;
-          padding-left: 1em;
-        }
+        border: 1px solid #e5e5e5;
+        border-radius: 15px;
+        overflow: hidden;
       }
       span {
         flex-basis: 30%;
@@ -686,7 +731,7 @@ $main_bg_color: #89b264;
   .filters_action {
     position: absolute;
     left: 0;
-    bottom: 40px;
+    bottom: 0;
     z-index: 10;
     width: 100%;
     height: 40px;

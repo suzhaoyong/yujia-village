@@ -1,6 +1,8 @@
 import axios from 'axios'
+import store from '@/store'
 // 处理非 get data 传参
 function handleRequest(config) {
+  store.commit('loadStatus', true)
   const {
     contentType
   } = config;
@@ -45,6 +47,7 @@ function handleResponeseErr(err) {
 
 // 处理分页接口中的 meta ,element 分页组件，需要 number 类型
 function handleResponse(response) {
+  store.commit('loadStatus', false)
   const {
     data,
     status

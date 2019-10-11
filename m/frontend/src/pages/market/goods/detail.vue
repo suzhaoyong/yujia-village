@@ -14,8 +14,11 @@
         </div>
       </div>
     </nav>
+    <van-skeleton v-if="goods_copy.picture === ''" avatar avatar-shape="square"  avatar-size="100" />
+    <van-skeleton v-if="goods_copy.describe === ''" title title-width="100" :row="6" />
     <!-- 商品 -->
     <div class="goods">
+      
       <!-- 商品轮播图 -->
       <div class="goods_carousel">
         <img :src="goods.picture" alt />
@@ -39,23 +42,7 @@
             <i class="iconfont icon-pull_right"></i>
           </div>
         </div>
-        <van-sku
-          v-if="this.sku.list.length > 0"
-          :show-soldout-sku="false"
-          v-model="goodsShow"
-          :sku="sku"
-          :goods="goods"
-          :goods-id="goodsId"
-          :close-on-click-overlay="true"
-          :hide-stock="sku.hide_stock"
-          @buy-clicked="onAddCartClicked"
-        >
-          <template slot="sku-actions" slot-scope="props">
-            <div class="van-sku-actions">
-              <div @click="props.skuEventBus.$emit('sku:buy')" class="buy_button">确定</div>
-            </div>
-          </template>
-        </van-sku>
+
         <!-- 选择地址 -->
         <div class="select_item" @click.stop="area.isOpen = true">
           <span class="select_tips">{{selectedArea}}</span>
@@ -63,9 +50,6 @@
             <i class="iconfont icon-pull_right"></i>
           </div>
         </div>
-        <van-popup v-model="area.isOpen" position="bottom">
-          <van-area @confirm="changeArea" @cancel="area.isOpen = false" :area-list="area.list" />
-        </van-popup>
       </div>
       <div class="goods_detail">
         <!-- 产品参数 -->
@@ -129,7 +113,28 @@
         </div>
       </div>
     </div>
-
+    <!-- 地区 -->
+    <van-popup v-model="area.isOpen" position="bottom">
+      <van-area @confirm="changeArea" @cancel="area.isOpen = false" :area-list="area.list" />
+    </van-popup>
+    <!-- SKU -->
+    <van-sku
+      v-if="this.sku.list.length > 0"
+      :show-soldout-sku="false"
+      v-model="goodsShow"
+      :sku="sku"
+      :goods="goods"
+      :goods-id="goodsId"
+      :close-on-click-overlay="true"
+      :hide-stock="sku.hide_stock"
+      @buy-clicked="onAddCartClicked"
+    >
+      <template slot="sku-actions" slot-scope="props">
+        <div class="van-sku-actions">
+          <div @click="props.skuEventBus.$emit('sku:buy')" class="buy_button">确定</div>
+        </div>
+      </template>
+    </van-sku>
     <!-- 加入购物车，立即购买 -->
     <footer class="car">
       <div class="car_lf">
@@ -145,14 +150,15 @@
 </template>
 <script>
 import logo from "@/assets/img/logo.png";
-import { Area, Popup, Sku } from "vant";
+import { Area, Popup, Sku, Skeleton } from "vant";
 import area_list from "./area_list.js";
 import { getGoodsById, postUserCart } from "@/api/category.js";
 export default {
   components: {
     [Area.name]: Area,
     [Popup.name]: Popup,
-    [Sku.name]: Sku
+    [Sku.name]: Sku,
+    [Skeleton.name]: Skeleton
   },
   data() {
     return {
@@ -339,8 +345,9 @@ img {
 }
 $main_color: #b4d565;
 .warp {
-  position: relative;
-  height: 100vh;
+  position: absolute;
+  height: 100%;
+  width: 100%;
   padding-top: 30px;
   padding-bottom: 40px;
   overflow-x: hidden;
@@ -464,14 +471,6 @@ $main_color: #b4d565;
     }
   }
 
-  .van-sku-actions {
-    background: $main_color;
-    .buy_button {
-      width: 100%;
-      text-align: center;
-      color: #fff;
-    }
-  }
   // 商品详情
   .goods_detail {
     .detail_item {
@@ -550,6 +549,14 @@ $main_color: #b4d565;
         }
       }
     }
+  }
+}
+.van-sku-actions {
+  background: $main_color;
+  .buy_button {
+    width: 100%;
+    text-align: center;
+    color: #fff;
   }
 }
 .car {

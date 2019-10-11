@@ -85,6 +85,8 @@ export default {
     bottom: 0;
     z-index: 99;
 }
-
+.fix-iphonex-bottom .footer{
+  padding-bottom: 34px;
+}
 
 </style>
