@@ -1,6 +1,7 @@
 <template>
     <div>
         <div class="clubhouse_main">
+            <van-nav-bar title="会馆详情" left-arrow @click-left="goback" fixed/>
             <div class="list_clubhouse">
                 <div class="list_clubhouse_page">
                     <img src="../../assets/teacherclub/yujia.png"/>
@@ -8,16 +9,16 @@
                 </div>
                 <div class="list_clubhouse_staff">Sometimes beauty is so simple</div>
             </div>
-            <div class="club_items">
+            <div class="club_items" v-if="clubItems.length > 0">
                 <van-swipe :loop="false" :width="131" id="vanswipe2" :show-indicators="false">
                     <van-swipe-item class="vanswipeitem2" v-for="(item,index) in clubItems" :key="index">
                         <div class="club_items_list">
                             <div class="club_items_img">
-                                <img :src="item.path"/>
+                                <img :src="item.teacher_img"/>
                             </div>
                             <div class="club_items_title">
-                                <h3 class="van-ellipsis">{{item.title}}</h3>
-                                <van-rate v-model="item.rate" readonly size="10px" gutter="2px" color="#58B708" void-color="#58B708"/>
+                                <h3 class="van-ellipsis">{{item.theme}}</h3>
+                                <van-rate v-model="item.diff" readonly size="10px" gutter="2px" color="#58B708" void-color="#58B708"/>
                                 <div class="club_items_title_its">
                                     <div class="club_price">￥{{item.price}}</div>
                                     <div class="club_prict">
@@ -29,6 +30,9 @@
                         </div>
                     </van-swipe-item>
                 </van-swipe>
+            </div>
+             <div class="Default-page3" v-else>
+                <span class="page-span3">我寻寻觅觅却找不到您的踪迹~</span>
             </div>
             <div class="border"></div>
             <div class="club_ambient">
@@ -47,17 +51,17 @@
                 </van-swipe>
             </div>
             <div class="club_picture_present">
-                <p class="present_text">
-                    观云瑜伽拥有1000平米场馆，瑜伽教练团队专业，分工明确。重金聘请印度瑜伽名师Deepak来馆内任教，无论你是新手还是专业人才，在这里都能有所收获。馆内拥有专业的保洁团队，准时清洁每一块场地，每一个死角，确保您始终处于健康安全舒适的环境中。
+                <p class="present_text" v-html="club.content">
+                    {{club.content}}
                 </p>
             </div>
             <div class="club_tel">
                 <img src="../../assets/teacherclub/tel.png" class="img_tel"/>
-                400-100-7191
+                {{club.club_tel}}
             </div>
             <div class="club_address">
                 <img src="../../assets/teacherclub/address.png" class="img_address"/>
-                成都市锦江区双桂路泰合财富中心7栋302
+                {{club.club_address}}
             </div>
             <div class="border2"></div>
             <div class="house_personnel">
@@ -67,18 +71,21 @@
                 </div>
                 <div class="house_personnel_staff">Guild staff profile</div>
             </div>
-            <div class="house_personnel_lists">
+            <div class="house_personnel_lists" v-if="personnelItem.length > 0">
                  <van-swipe :loop="false" :width="254" id="vanswipe3" :show-indicators="false">
                     <van-swipe-item class="vanswipeitem3" v-for="(item,index) in personnelItem" :key="index">
                         <div class="personnel_lists_items">
                             <div class="personnel_lists_img">
-                                <img :src="item.path"/>
+                                <img :src="item.first_img"/>
                             </div>
                             <div class="personnel_lists_name van-ellipsis">{{item.name}}</div>
-                            <div class="personnel_lists_name2 van-ellipsis">{{item.title}}</div>
+                            <div class="personnel_lists_name2 van-ellipsis">{{item.good_at}}</div>
                         </div>
                     </van-swipe-item>
                 </van-swipe>
+            </div>
+            <div class="Default-page2" v-else>
+                <span class="page-span2">我寻寻觅觅却找不到您的踪迹~</span>
             </div>
         </div>
     </div>
@@ -87,65 +94,65 @@
 export default {
   data() {
     return {
-        vanswipeItem:[
-        require('../../assets/teacherclub/image11.png'),
-        require('../../assets/teacherclub/image11.png'),
-        require('../../assets/teacherclub/image11.png'),
-        require('../../assets/teacherclub/image11.png')],
-        clubItems:[{
-            id:1,
-            path:require('../../assets/teacherclub/image35.png'),
-            title:'普拉提',
-            rate:3,
-            price:4353
-        },
-        {
-            id:2,
-            path:require('../../assets/teacherclub/image35.png'),
-            title:'普拉提',
-            rate:3,
-            price:4350
-        },
-        {
-            id:3,
-            path:require('../../assets/teacherclub/image35.png'),
-            title:'普拉提',
-            rate:3,
-            price:4350
-        }],
-        personnelItem:[{
-            id:1,
-            path:require('../../assets/teacherclub/image11.png'),
-            name:'Ivan',
-            title:'艾扬格、哈他、流瑜伽'
-        },
-        {
-            id:2,
-            path:require('../../assets/teacherclub/image11.png'),
-            name:'Ivan',
-            title:'艾扬格、哈他、流瑜伽'
-        },
-        {
-            id:3,
-            path:require('../../assets/teacherclub/image11.png'),
-            name:'Ivan',
-            title:'艾扬格、哈他、流瑜伽'
-        }]
+        club:{},
+        clubs:{},
+        vanswipeItem:[],
+        clubItems:[],
+        personnelItem:[]
     };
   },
+  created(){
+      this.joindatalist();
+  },
   methods:{
+      joindatalist(){
+        this.$request.get(`/clubs/${this.$route.query.id}`).then(res => {
+            let { club } = res;
+            this.club = club;
+            this.vanswipeItem = club.club_img;
+            this.personnelItem = res.teacher;
+            this.clubItems= res.trains;
+        })
+        .catch(error => {
+            let { response: { data: { errorCode, msg } } } = error;
+            if (errorCode != 0) {
+            this.$message({
+                message: msg,
+                type: "error"
+            });
+            return;
+            }
+        });
+      },
+      goback(){
+        this.$router.push({
+            path: "/teacherClub/list",
+        });
+      },
   }
 };
 </script>
 <style lang="scss" scope>
+.van-nav-bar .van-icon {
+    color: #2c2c2c !important;
+    vertical-align: middle;
+}
+.van-nav-bar--fixed{
+    position: fixed!important;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
 .clubhouse_main{
     width: 100%;
     height: 100%;
     display: inline-block;
+    background: #fff;
     .list_clubhouse{
         width: 93%;
         height: 60px;
         margin: 0 auto;
+        margin-top: 45px;
         .list_clubhouse_page{
             display: flex;
             margin-top: 15px;
@@ -248,6 +255,19 @@ export default {
                 }
             }
             }
+        }
+    }
+    .Default-page3{
+        width: 100%;
+        height: 100px;
+        margin: 0 auto;
+        text-align: center;
+        line-height: 60px;
+        .page-span3{
+            font-size:12px;
+            font-family:PingFang SC;
+            font-weight:500;
+            color: #999;
         }
     }
     .border{
@@ -457,6 +477,19 @@ export default {
                 }
             }
             }
+        }
+    }
+    .Default-page2{
+        width: 100%;
+        height: 100px;
+        margin: 0 auto;
+        text-align: center;
+        line-height: 60px;
+        .page-span2{
+            font-size:12px;
+            font-family:PingFang SC;
+            font-weight:500;
+            color: #999;
         }
     }
 }

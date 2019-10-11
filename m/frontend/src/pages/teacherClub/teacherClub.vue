@@ -1,12 +1,13 @@
 <template>
 <div>
     <div class="club_warp">
+        <div class="club_warp_head">名师&会馆</div>
         <div class="club_warp_list">
           <span class="liList" v-for="(item,index) in liList" :key="index" v-on:click="addClass(index)" :class="{ischeck:index==current}">{{item}}</span>
         </div>
         <div class="list_teacher" v-show="this.current === 0">
             <div class="list_banner">
-                <img src="../../assets/teacherclub/banner.png"/>
+                <img :src="banner" alt/>
             </div>
             <div class="club_house">
                 <div class="club_house_title">
@@ -17,21 +18,24 @@
                     <img src="../../assets/teacherclub/seek.png" class="seek"/>
                 </div>
             </div>
-            <div class="club_item">
+            <div class="club_item" v-if="clubBox.length > 0">
                 <div class="club_item_box" v-for="(item,index) in clubBox" :key="index" @click="clubBoxItem(item)">
                     <div class="club_item_img">
-                        <img :src="item.path"/>
+                        <img :src="item.first_img"/>
                     </div>
                     <div class="club_item_title">
-                        <h3 class="van-ellipsis">{{item.title}}</h3>
-                        <div class="text van-ellipsis">{{item.text}}</div>
+                        <h3 class="van-ellipsis">{{item.club_name}}</h3>
+                        <div class="text van-ellipsis">{{item.club_address}}</div>
                     </div>
                 </div>
+            </div>
+            <div class="Default-page4" v-else>
+                <span class="page-span4">我寻寻觅觅却找不到您的踪迹~</span>
             </div>
         </div>
         <div class="list_clubhouse" v-show="this.current === 1">
             <div class="list_banner">
-                <img src="../../assets/teacherclub/banner.png"/>
+                <img :src="banner2" alt/>
             </div>
             <div class="list_house">
                 <div class="list_house_title">
@@ -43,44 +47,49 @@
                         <span class="house_title_tips">工作资历</span>
                         <img src="../../assets/teacherclub/launch.png" class="house_title_img"/>
                     </div>
-                    <div class="list_house_div">
+                    <div class="list_house_div" @click="toggle">
                         <span class="house_title_tips">擅长类型</span>
                         <img src="../../assets/teacherclub/launch.png" class="house_title_img"/>
                     </div>
                 </div>
-                <div class="list_house_inquirys">
-                     <span class="house_title_tips">更多</span>
-                     <img src="../../assets/teacherclub/launch.png" class="house_title_img"/>
+                <div class="list_house_inquirys" @click="more">
+                    <span class="house_title_tips">更多</span>
+                    <img src="../../assets/teacherclub/launch.png" class="house_title_img"/>
                 </div>
             </div>
-            <div class="list_house_type">
+            <transition name="fade">
+            <div class="list_house_type" v-if="visible">
                 <div class="house_type">
-                    <div class="house_type_one" v-for="(item,index) in houseType" :key="index">
-                        <span class="house_type_name">{{item.name}}</span>
+                    <div class="house_type_one" @click="chooseClassify(item.id,index)" v-for="(item,index) in houseType" :key="index">
+                        <span class="house_type_name" :class="{selected: isActive == index}">{{item.name}}</span>
                     </div>
                 </div>
             </div>
-            <div class="Rotation_list">
-                <!-- <van-swipe :loop="false" :width="131" id="vanswipe" :show-indicators="false"> -->
-                    <!-- <van-swipe-item class="van-swipe-item" v-for="(item,index) in exhibitionBox2" :key="index"> -->
-                        <div class="Rotation_box" v-for="(item,index) in exhibitionBox2" :key="index">
+            </transition>
+            <div class="Rotation_list hot-swiper" v-if="exhibitionBox2.length > 0">
+                <div class="swiper-container swiper1">
+                    <div class="swiper-wrapper">
+                        <div class="Rotation_box swiper-slide" v-for="(item,index) in exhibitionBox2" :key="index" @click="exhibition(item)">
                             <div class="Rotation_img">
-                            <img :src="item.path"/>
+                             <img :src="item.first_img"/>
                             </div>
                             <div class="Rotation_title">
-                                <h3 class="van-ellipsis">{{item.title}}</h3>
-                                <div class="texts van-ellipsis">{{item.text}}</div>
+                                <h3 class="van-ellipsis">{{item.name}}</h3>
+                                <div class="texts van-ellipsis">{{item.good_at}}</div>
                                 <div class="Rotation_zan">
                                 <div class="Rotation_zan_items">教龄：{{item.num}}年</div>
                                 <div class="Rotation_zan_tips">
-                                    <img src="../../assets/teacherclub/yujia.png"/>
-                                    <span class="span">{{item.eye}}</span>
+                                    <img src="../../assets/teacherclub/Give.png"/>
+                                    <span class="span">{{item.praise}}</span>
+                                </div>
                                 </div>
                             </div>
-                            </div>
                         </div>
-                    <!-- </van-swipe-item> -->
-                <!-- </van-swipe> -->
+                    </div>
+                </div> 
+            </div>
+            <div class="Default-page6" v-else>
+                <span class="page-span6">我寻寻觅觅却找不到您的踪迹~</span>
             </div>
             <div class="list_exhibition">
                 <div class="list_exhibition_page">
@@ -89,145 +98,117 @@
                 </div>
                 <div class="list_exhibition_staff">Guild staff profile</div>
             </div>
-            <div class="exhibition_items">
+            <div class="exhibition_items" v-if="exhibitionBox.length > 0">
                 <div class="exhibition_content">
                     <div class="exhibition_box" v-for="(item,index) in exhibitionBox" :key="index" @click="exhibition(item)">
                         <div class="exhibition_img">
-                        <img :src="item.path"/>
+                        <img :src="item.first_img"/>
                         </div>
                         <div class="exhibition_title">
-                            <h3 class="van-ellipsis">{{item.title}}</h3>
-                            <div class="texts van-ellipsis">{{item.text}}</div>
+                            <h3 class="van-ellipsis">{{item.name}}</h3>
+                            <div class="texts van-ellipsis">{{item.good_at}}</div>
                             <div class="exhibition_zan">
                             <div class="exhibition_zan_items">教龄：{{item.num}}年</div>
                             <div class="exhibition_zan_tips">
-                                <img src="../../assets/teacherclub/yujia.png"/>
-                                <span class="span">{{item.eye}}</span>
+                                <img src="../../assets/teacherclub/Give.png"/>
+                                <span class="span">{{item.praise}}</span>
                             </div>
                         </div>
                         </div>
                     </div>
                 </div>
             </div>
+             <div class="Default-page5" v-else>
+                <span class="page-span5">我寻寻觅觅却找不到您的踪迹~</span>
+            </div>
         </div>
     </div>
 </div>
 </template>
 <script>
+import Swiper from 'swiper';
 export default {
     data() {
     return {
         current:0,
         curritem:0,
+        banner:'',
+        visible:false,
+        banner2:'',
+        isActive: 0,
         liList:["联盟会馆","瑜伽名师"],
         items:["全部","最新","距离最近"],
-        clubBox:[{
-            id:1,
-            path:require('../../assets/teacherclub/image11.png'),
-            title:'观云瑜伽',
-            text:'四川省成都市锦江区'
-        },
-        {
-            id:2,
-            path:require('../../assets/teacherclub/image11.png'),
-            title:'观云瑜伽',
-            text:'四川省成都市锦江区'
-        },
-        {
-            id:3,
-            path:require('../../assets/teacherclub/image11.png'),
-            title:'观云瑜伽',
-            text:'四川省成都市锦江区'
-        },
-        {
-            id:4,
-            path:require('../../assets/teacherclub/image11.png'),
-            title:'观云瑜伽',
-            text:'四川省成都市锦江区'
-        }],
-        houseType:[{
-            name:'普拉提'
-        },{
-            name:'流瑜伽'
-        },{
-            name:'阿斯汤加'
-        },{
-            name:'内冠流'
-        },{
-            name:'阴瑜伽'
-        },{
-            name:'阴瑜伽'
-        },{
-            name:'孕产瑜伽'
-        },{
-            name:'哈他'
-        },{
-            name:'寰宇'
-        }],
-        exhibitionBox:[{
-            id:1,
-            path:require('../../assets/teacherclub/image11.png'),
-            title:'Ivan',
-            text:'流瑜伽',
-            num:3,
-            eye:234
-        },
-        {
-            id:2,
-            path:require('../../assets/teacherclub/image11.png'),
-            title:'Ivan',
-            text:'流瑜伽',
-            num:3,
-            eye:234
-        },
-        {
-            id:3,
-            path:require('../../assets/teacherclub/image11.png'),
-            title:'Ivan',
-            text:'流瑜伽',
-            num:3,
-            eye:234
-        },
-        {
-            id:4,
-            path:require('../../assets/teacherclub/image11.png'),
-            title:'Ivan',
-            text:'流瑜伽',
-            num:3,
-            eye:234
-        }],
-        exhibitionBox2:[{
-            id:1,
-            path:require('../../assets/teacherclub/image11.png'),
-            title:'Ivan',
-            text:'流瑜伽',
-            num:3,
-            eye:234
-        },
-        {
-            id:2,
-            path:require('../../assets/teacherclub/image11.png'),
-            title:'Ivan',
-            text:'流瑜伽',
-            num:3,
-            eye:234
-        },
-        {
-            id:3,
-            path:require('../../assets/teacherclub/image11.png'),
-            title:'Ivan',
-            text:'流瑜伽',
-            num:3,
-            eye:234
-        }],
+        clubBox:[],
+        houseType:[],
+        exhibitionBox:[],
+        exhibitionBox2:[],
     };
   },
+  created(){
+      this.joindata();
+      this.exhibitionList();
+  },
   methods:{
+      joindata(){
+        this.$request.get(`/clubs`).then(res => {
+            this.clubBox = res.data.data;
+            this.banner = res.banner;
+        })
+        .catch(error => {
+            let { response: { data: { errorCode, msg } } } = error;
+            if (errorCode != 0) {
+            this.$message({
+                message: msg,
+                type: "error"
+            });
+            return;
+            }
+        });
+      },
+      exhibitionList(){
+        this.$request.get(`/teachers`).then(res => {
+            this.exhibitionBox = res.teachers.data;
+            this.exhibitionBox2 = res.teachers.data;
+            this.houseType = res.course_types;
+            this.actions = res.year;
+            this.banner2 = res.banner;
+            this.$nextTick(function() {
+                this.swiperInit();
+            })
+        })
+        .catch(error => {
+            let { response: { data: { errorCode, msg } } } = error;
+            if (errorCode != 0) {
+            this.$message({
+                message: msg,
+                type: "error"
+            });
+            return;
+            }
+        });
+      },
+      swiperInit(){
+        new Swiper('.swiper1', {
+            slidesPerView: 'auto',
+            freeMode: true,
+            observer: true,
+        });
+      },
     addClass:function(index){
         this.current=index;
     },
     clicktext:function(index){
         this.curritem = index;
+    },
+    toggle: function() {
+        this.visible = !this.visible //取反
+     },
+     more(){
+        this.visible = false;
+     },
+    // 选择分类
+    chooseClassify(id,index) {
+        this.isActive = index;
     },
     clubBoxItem(item){
         this.$router.push({
@@ -254,6 +235,21 @@ export default {
     padding: 0px 4px !important;
     font-size: 12px !important;
 }
+.slide-fade-enter-active {
+  transition: all .3s ease;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .3s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0.8;
+}
+.van-cell--large .van-cell__title{
+    font-size: 12px !important;
+}
+.van-cell--large{
+    padding-top: 15px !important;
+}
 input::-webkit-input-placeholder{
     color:#999;
 }
@@ -277,6 +273,21 @@ input:-ms-input-placeholder{
     width: 100%;
     height: 100%;
     display: inline-block;
+    .club_warp_head{
+        background-color: #fff;
+        color: #2c2c2c;
+        font-size: 16px;
+        font-family:PingFang SC;
+        font-weight:500;
+        width: 100%;
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+        position: fixed;
+        top: 0px;
+        left: 0;
+        z-index: 999;
+    }
     .club_warp_list{
         width: 100%;
         height: 44px;
@@ -286,6 +297,7 @@ input:-ms-input-placeholder{
         line-height: 44px;
         text-align: center;
         display: flex;
+        margin-top: 49px;
         .liList{
             height: 100%;
             width: 50%;
@@ -302,6 +314,7 @@ input:-ms-input-placeholder{
     .list_teacher{
         width: 100%;
         height: 100%;
+        background: #fff;
         .list_banner{
           width: 100%;
           height: 100%;
@@ -309,6 +322,7 @@ input:-ms-input-placeholder{
             width: 100%;
             height: 100%;
             display: block;
+            object-fit: cover;
           }
         }
         .club_house{
@@ -318,8 +332,8 @@ input:-ms-input-placeholder{
             display: flex;
             .club_house_title{
                 width: 50%;
-                height: 60px;
-                line-height: 45px;
+                height: 50px;
+                line-height: 40px;
                 .items{
                     font-size:12px;
                     font-family:Microsoft YaHei;
@@ -336,12 +350,12 @@ input:-ms-input-placeholder{
             }
             .club_house_inquiry{
                 width: 50%;
-                height: 60px;
+                height: 50px;
                 position: relative;
                 .club_house_inquiry_input{
                     background-color: #eeeeee;
                     border-radius: 13px;
-                    height: 35px;
+                    height: 30px;
                     width: 90%;
                     float: right;
                     font-size: 12px;
@@ -354,7 +368,7 @@ input:-ms-input-placeholder{
                     width: 10px;
                     height: 11px;
                     right: 20px;
-                    top: 23px;
+                    top: 19px;
                 }
             }
         }
@@ -363,6 +377,7 @@ input:-ms-input-placeholder{
             height: 100%;
             margin: 0 auto;
             display: flow-root;
+            margin-bottom: 49px;
             .club_item_box{
                 width: 48%;
                 height: 100%;
@@ -372,6 +387,7 @@ input:-ms-input-placeholder{
                 .club_item_img{
                     width: 100%;
                     height: 146px;
+                    background-color: #E5E5E5;
                     img{
                         width: 100%;
                         height: 100%;
@@ -445,10 +461,24 @@ input:-ms-input-placeholder{
                 }
             }
         }
+        .Default-page4{
+            width: 100%;
+            height: 100px;
+            margin: 0 auto;
+            text-align: center;
+            line-height: 60px;
+            .page-span4{
+                font-size:12px;
+                font-family:PingFang SC;
+                font-weight:500;
+                color: #999;
+            }
+        }
     }
     .list_clubhouse{
         width: 100%;
         height: 100%;
+        background: #fff;
         .list_banner{
           width: 100%;
           height: 100%;
@@ -456,18 +486,20 @@ input:-ms-input-placeholder{
             width: 100%;
             height: 100%;
             display: block;
+            object-fit: cover;
           }
         }
         .list_house{
-            width: 93%;
+            width: 100%;
             height: 100%;
             margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
+            display: -webkit-box;
             .list_house_title{
                 width: 75%;
                 height: 55px;
                 line-height: 45px;
+                display: flex;
+                justify-content: space-evenly;
                 .list_house_div:nth-child(1){
                     width: 80px;
                     float: left;
@@ -557,6 +589,8 @@ input:-ms-input-placeholder{
                     margin-top: 10px;
                     margin-right: 6px;
                     float: left;
+                    font-size: 10px;
+                    overflow: hidden;
                     .house_type_name{
                         font-size:10px;
                         font-family:PingFang SC;
@@ -565,28 +599,20 @@ input:-ms-input-placeholder{
                         padding-top: 15px;
                         color:rgba(44,44,44,1);
                     }
+                    .selected {
+                        color: #2c2c2c;
+                        font-size: 11px;
+                        font-weight: 700;
+                    }
                 }
             }
         }
         .Rotation_list{
-            width: 96%;
+            width: 100%;
             height: 100%;
+            padding: 5px 0 10px 16px;
             display: -webkit-box;
-            margin-left: auto;
-            // #vanswipe{
-            // position: relative;
-            // overflow: hidden;
-            // -webkit-user-select: none;
-            // user-select: none;
-            // .van-swipe__track{
-            //     height: 100% ;
-            //     width: 100% !important;
-            //     display: -webkit-box;
-            //     display: flex !important;
-            //     justify-content: center;
-            // .van-swipe-item{
-            //     float: left !important;
-            //     margin-right:8px !important;
+            // margin-left: auto;
                 .Rotation_box{
                 width: 131px;
                 height: 100%;
@@ -617,6 +643,7 @@ input:-ms-input-placeholder{
                         color:rgba(44,44,44,1);
                         text-indent: 10px;
                         margin-top: 8%;
+                        width: 95%;
                     }
                     .texts{
                         font-size:12px;
@@ -625,6 +652,7 @@ input:-ms-input-placeholder{
                         color:rgba(44,44,44,1);
                         padding-top: 2px;
                         text-indent: 10px;
+                        width: 95%;
                     }
                     .Rotation_zan{
                         font-size:12px;
@@ -651,14 +679,26 @@ input:-ms-input-placeholder{
                                 font-family:PingFang SC;
                                 font-weight:400;
                                 color:rgba(44,44,44,1);
+                                margin-left: 4px;
+                                margin-top: -2px;
                             }
                         }
                     }
                 }
             }
-        //     }
-        // }
-        // }
+        }
+        .Default-page6{
+            width: 100%;
+            height: 100px;
+            margin: 0 auto;
+            text-align: center;
+            line-height: 60px;
+            .page-span6{
+                font-size:12px;
+                font-family:PingFang SC;
+                font-weight:500;
+                color: #999;
+            }
         }
         .list_exhibition{
             width: 93%;
@@ -693,6 +733,7 @@ input:-ms-input-placeholder{
             background-color: #eeeeee;
             height: 100%;
             display: inline-block;
+            margin-bottom: 49px;
             .exhibition_content{
                 width: 93%;
                 height: 100%;
@@ -728,6 +769,7 @@ input:-ms-input-placeholder{
                             color:rgba(44,44,44,1);
                             text-indent: 10px;
                             margin-top: 8%;
+                            width: 95%;
                         }
                         .texts{
                             font-size:12px;
@@ -736,6 +778,7 @@ input:-ms-input-placeholder{
                             color:rgba(44,44,44,1);
                             padding-top: 2px;
                             text-indent: 10px;
+                            width: 95%;
                         }
                         .exhibition_zan{
                             font-size:12px;
@@ -761,6 +804,8 @@ input:-ms-input-placeholder{
                                     font-family:PingFang SC;
                                     font-weight:400;
                                     color:rgba(44,44,44,1);
+                                    margin-top: -2px;
+                                    margin-left: 4px;
                                 }
                             }
                         }
@@ -834,6 +879,19 @@ input:-ms-input-placeholder{
                         }
                     }
                 }
+            }
+        }
+        .Default-page5{
+            width: 100%;
+            height: 100px;
+            margin: 0 auto;
+            text-align: center;
+            line-height: 60px;
+            .page-span5{
+                font-size:12px;
+                font-family:PingFang SC;
+                font-weight:500;
+                color: #999;
             }
         }
     }

@@ -1,13 +1,14 @@
 <template>
     <div>
         <div class="details_main">
+            <van-nav-bar title="名师详情" left-arrow @click-left="goback" fixed/>
             <div class="details_head">
                 <div class="count-img">
                     <div class="count-name">
-                        <span class="span1">瑜伽名师<span class="span2">-vivi</span></span>
+                        <span class="span1">瑜伽名师<span class="span2">-{{teacher.name}}</span></span>
                     </div>
                     <div class="count-imgpic">
-                      <img src="../../assets/teacherclub/headimg.png" class="count-name-img"/>
+                      <img :src="teacher.cover" class="count-name-img"/>
                     </div>
                 </div>
             </div>
@@ -15,8 +16,8 @@
                 <div class="yogofigcaption-title">
                     <h2>个人简介</h2>
                     <p class="p1">Good at courses</p>
-                    <p class="p2">擅长课程：<span>理疗修复、传统瑜伽、体态调整</span></p>
-                    <div class="p3">课程特色：<div style="width: 83%;line-height: 20px;">将传统瑜伽、艾扬格、功能理疗结合成有特色的一对一私教课； 累计课时超过5000小时 多年的瑜伽练习带来身体和心理层面的巨大收获。在不断实践与学习中，更加笃定的去做瑜伽的传播者；信奉瑜伽即生活；</div></div>
+                    <div class="p2">擅长课程：<div style="width: 83%;line-height: 20px;">{{teacher.good_at}}</div></div>
+                    <div class="p3">课程特色：<div style="width: 83%;line-height: 20px;" v-html="teacher.content">{{teacher.content}}</div></div>
                 </div>
             </div>
             <div class="details_foot">
@@ -27,12 +28,15 @@
                     </div>
                     <div class="foot_exhibition_staff">PERSONAL DISPLAY</div>
                 </div>
-                <div class="details_foot_list">
+                <div class="details_foot_list" v-if="footlist.length > 0">
                     <van-swipe :loop="false" :width="214" id="vanswipe" :show-indicators="false">
                         <van-swipe-item class="vanswipeitem" v-for="(item,index) in footlist" :key="index">
                             <img :src="item" class="list_foot_img"/>
                         </van-swipe-item>
                     </van-swipe>
+                </div>
+                <div class="Default-page" v-else>
+                    <span class="page-span">我寻寻觅觅却找不到您的踪迹~</span>
                 </div>
             </div>
         </div>
@@ -42,28 +46,63 @@
 export default {
   data() {
     return {
-        footlist:[
-        require('../../assets/teacherclub/image35.png'),
-        require('../../assets/teacherclub/image35.png'),
-        require('../../assets/teacherclub/image35.png'),]
+        footlist:[],
+        teacher:{},
     };
   },
+  created(){
+      this.yogoteacherdata();
+  },
   methods:{
+       yogoteacherdata(){
+        this.$request.get(`/teachers/${this.$route.query.id}`).then(res => {
+            let { teacher,course} = res;
+            this.footlist = res.teacher.teacher_img;
+            this.teacher = res.teacher;
+        })
+        .catch(error => {
+            let { response: { data: { errorCode, msg } } } = error;
+            if (errorCode != 0) {
+            this.$message({
+                message: msg,
+                type: "error"
+            });
+            return;
+            }
+        });
+      },
+      goback(){
+        this.$router.push({
+            path: "/teacherClub/list",
+        });
+      },
   }
 };
 </script>
 <style lang="scss" scope>
+.van-nav-bar .van-icon {
+    color: #2c2c2c !important;
+    vertical-align: middle;
+}
+.van-nav-bar--fixed{
+    position: fixed!important;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
 .details_main{
     width: 100%;
     height: 100%;
     display: inline-block;
+    background: #fff;
     .details_head{
         width: 100%;
-        height: 185px;
+        height: 210px;
         background-color: #3E3E3E;
         background-image: url('../../assets/teacherclub/bg2.png');
         background-repeat: no-repeat;
         background-size: 100% 100%;
+        margin-top: 47px;
         .count-img{
             width: 93%;
             height: 100%;
@@ -83,13 +122,13 @@ export default {
                 text-align: center;
                 border-image:linear-gradient(to left,#43516A,#AE8D66) 1 10;
                 .span1{
-                    font-size:16px;
+                    font-size:12px;
                     font-family:Gulim;
                     font-weight:400;
                     font-style:italic;
                     color: #43516A;
                     .span2{
-                        font-size:16px;
+                        font-size:12px;
                         font-family:Gulim;
                         font-weight:400;
                         font-style:italic;
@@ -151,6 +190,7 @@ export default {
                    margin-top: 6%;
                    font-weight:400;
                    margin-bottom: 7px;
+                   display: flex;
                }
                .p3{
                    color: #fff;
@@ -227,6 +267,19 @@ export default {
             }
             }
         }
+        }
+        .Default-page{
+            width: 100%;
+            height: 100px;
+            margin: 0 auto;
+            text-align: center;
+            line-height: 60px;
+            .page-span{
+                font-size:12px;
+                font-family:PingFang SC;
+                font-weight:500;
+                color: #999;
+            }
         }
     }
 }

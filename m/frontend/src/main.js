@@ -13,7 +13,8 @@ import {
   Collapse, CollapseItem, 
   NavBar, Icon, Cell, Button, 
   AddressEdit, Dialog, Checkbox, CheckboxGroup,
-  Stepper, Rate, Field, Popup, Area ,Toast   } from 'vant';
+  Stepper, Rate, Field, Popup, Area ,Toast,
+  Swipe, SwipeItem, List,ActionSheet} from 'vant';
 
 import 'swiper/dist/css/swiper.min.css';
 
@@ -28,7 +29,10 @@ Vue.use(Tabs);
 Vue.use(Tabbar);
 Vue.use(TabbarItem);
 Vue.use(Collapse);
+Vue.use(ActionSheet);
 Vue.use(CollapseItem);
+Vue.use(Swipe).use(SwipeItem);
+Vue.use(List);
 Vue.use(NavBar);
 Vue.use(Icon);
 Vue.use(Cell);
