@@ -6,9 +6,7 @@
           <span class="liList" v-for="(item,index) in liList" :key="index" v-on:click="addClass(index)" :class="{ischeck:index==current}">{{item}}</span>
         </div>
         <div class="list_teacher" v-show="this.current === 0">
-            <div class="list_banner">
-                <img :src="banner" alt/>
-            </div>
+            <div class="list_banner" :style="{backgroundImage: 'url('+banner+')'}"></div>
             <div class="club_house">
                 <div class="club_house_title">
                     <span class="items" v-for="(item,index) in items" @click="clicktext(index)" :key="index" :class="{active:index==curritem}">{{item}}</span>
@@ -34,9 +32,7 @@
             </div>
         </div>
         <div class="list_clubhouse" v-show="this.current === 1">
-            <div class="list_banner">
-                <img :src="banner2" alt/>
-            </div>
+            <div class="list_banner" :style="{backgroundImage: 'url('+banner2+')'}"></div>
             <div class="list_house">
                 <div class="list_house_title">
                     <div class="list_house_div">
@@ -313,21 +309,16 @@ input:-ms-input-placeholder{
     }
     .list_teacher{
         width: 100%;
-        height: 100%;
-        background: #fff;
+        // height: 100%;
+        background: #fff !important;
         .list_banner{
-          width: 100%;
-          height: 100%;
-          img{
-            width: 100%;
-            height: 100%;
-            display: block;
-            object-fit: cover;
-          }
+          height: 170px;
+          background-size: cover;
+          background-position: center;
         }
         .club_house{
             width: 93%;
-            height: 100%;
+            // height: 100%;
             margin: 0 auto;
             display: flex;
             .club_house_title{
@@ -374,10 +365,10 @@ input:-ms-input-placeholder{
         }
         .club_item{
             width: 93%;
-            height: 100%;
+            // height: 100%;
             margin: 0 auto;
             display: flow-root;
-            margin-bottom: 49px;
+            // margin-bottom: 49px;
             .club_item_box{
                 width: 48%;
                 height: 100%;
@@ -477,21 +468,16 @@ input:-ms-input-placeholder{
     }
     .list_clubhouse{
         width: 100%;
-        height: 100%;
-        background: #fff;
+        // height: 100%;
+        background: #fff !important;
         .list_banner{
-          width: 100%;
-          height: 100%;
-          img{
-            width: 100%;
-            height: 100%;
-            display: block;
-            object-fit: cover;
-          }
+          height: 170px;
+          background-size: cover;
+          background-position: center;
         }
         .list_house{
             width: 100%;
-            height: 100%;
+            // height: 100%;
             margin: 0 auto;
             display: -webkit-box;
             .list_house_title{
@@ -609,9 +595,10 @@ input:-ms-input-placeholder{
         }
         .Rotation_list{
             width: 100%;
-            height: 100%;
+            // height: 100%;
             padding: 5px 0 10px 16px;
             display: -webkit-box;
+            background: #fff !important;
             // margin-left: auto;
                 .Rotation_box{
                 width: 131px;
@@ -733,7 +720,7 @@ input:-ms-input-placeholder{
             background-color: #eeeeee;
             height: 100%;
             display: inline-block;
-            margin-bottom: 49px;
+            // margin-bottom: 49px;
             .exhibition_content{
                 width: 93%;
                 height: 100%;
