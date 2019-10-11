@@ -113,7 +113,7 @@
       v-model="aside.isOpen"
       round
       position="right"
-      :style="{ width: '85%', height: '100%'}"
+      :style="{ width: '85%', height: '85%'}"
     >
       <van-number-keyboard
         :show="min_price.show"
@@ -672,6 +672,7 @@ $main_bg_color: #89b264;
   padding-bottom: 44px;
   height: 100%;
   position: relative;
+  z-index: 90;
   width: 100%;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;

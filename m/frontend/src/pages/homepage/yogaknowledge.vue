@@ -75,7 +75,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .knowledge {
-    margin-top: 88px;
+    padding-top: 88px;
     margin-bottom: 50px;
 }
 .banner {

@@ -521,7 +521,7 @@ export default {
   border-color: transparent;
 }
 </style>
-<style lang="scss" scope>
+<style lang="scss" scoped>
 .back-wrap {
   width: 100%;
   padding-bottom: 30px;
