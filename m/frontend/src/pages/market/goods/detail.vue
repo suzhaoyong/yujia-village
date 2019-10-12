@@ -1,24 +1,24 @@
 <template>
   <div class="warp" style>
-    <nav class="navigator">
+    <van-nav-bar title="商品" left-arrow @click-left="back" fixed />
+
+    <!-- <nav class="navigator">
       <div class="left_arrow" @click="back">
         <i class="iconfont icon-pull_right"></i>
       </div>
       <div class="title_tabs">
         <span class="tab_item">商品</span>
-        <!-- <span class="tab_item">sp</span> -->
       </div>
       <div class="right_icon">
         <div class="icon_item">
           <img :src="icon.logo" alt />
         </div>
       </div>
-    </nav>
-    <van-skeleton v-if="goods_copy.picture === ''" avatar avatar-shape="square"  avatar-size="100" />
+    </nav>-->
+    <van-skeleton v-if="goods_copy.picture === ''" avatar avatar-shape="square" avatar-size="100" />
     <van-skeleton v-if="goods_copy.describe === ''" title title-width="100" :row="6" />
     <!-- 商品 -->
     <div class="goods">
-      
       <!-- 商品轮播图 -->
       <div class="goods_carousel">
         <img :src="goods.picture" alt />
@@ -138,12 +138,12 @@
     <!-- 加入购物车，立即购买 -->
     <footer class="car">
       <div class="car_lf">
-        <div class="car_lf_icon"></div>
-        <div class="car_lf_icon"></div>
+        <!-- <div class="car_lf_icon"></div>
+        <div class="car_lf_icon"></div> -->
       </div>
       <div class="car_rh">
         <div class="car_rh_item">加入购物车</div>
-        <div class="car_rh_item">立即购买</div>
+        <div class="car_rh_item" @click="handleBuyGoods">立即购买</div>
       </div>
     </footer>
   </div>
@@ -307,6 +307,12 @@ export default {
     });
   },
   methods: {
+    // 点击立即购买
+    handleBuyGoods() {
+      this.$router.push({
+        name: 'fillorder'
+      })
+    },
     changeArea(val) {
       this.area.change = val;
       this.area.isOpen = false;
@@ -338,6 +344,7 @@ export default {
   box-sizing: border-box;
   font-size: 13px;
   color: #2c2c2c;
+  max-width: 100%;
 }
 img {
   width: 100%;
@@ -347,11 +354,14 @@ $main_color: #b4d565;
 .warp {
   position: absolute;
   height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
   width: 100%;
-  padding-top: 30px;
-  padding-bottom: 40px;
-  overflow-x: hidden;
-  overflow-y: scroll;
+  padding-bottom: 1.06667rem;
+  background: #fff;
   -webkit-overflow-scrolling: touch; /* 解决 ios 滑动不流畅问题 */
 }
 .navigator {
