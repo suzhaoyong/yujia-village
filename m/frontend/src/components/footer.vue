@@ -61,9 +61,11 @@ export default {
             // 切换 tabbar 路由跳转
             if(active === 'home' && window.sessionStorage.getItem('index')) {
                 this.$router.push('/'+ window.sessionStorage.getItem('index'));
-            } else if(active === 'personal' && !window.sessionStorage.getItem('access')) {
-                this.$router.push('/login');
-            } else {
+            } 
+            // else if(active === 'personal' && !window.sessionStorage.getItem('access')) {
+            //     this.$router.push('/login');
+            // } 
+            else {
                 this.$router.push('/'+ active);
             }
         },

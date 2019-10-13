@@ -40,4 +40,11 @@ export default {
   z-index: 10000;
   background: rgba(0, 0, 0, 0.3);
 }
+.empty {
+    width: 100%;
+    height: 193px;
+    margin-top: 90px;
+    background: url('~@/assets/img/Nothing_Order.png');
+    background-size: cover;
+}
 </style>

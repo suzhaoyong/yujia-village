@@ -111,9 +111,8 @@
             @click="subAside.isOpen = false"
             :custom-style="{ position: 'absolute'}"
           />-->
-          <div v-if="showGoods.list.lenght === 0">
-            <van-skeleton v-for="item in 4" :key="item" title title-width="100" :row="6" />
-          </div>
+            <!-- <van-skeleton v-for="item in 4" :key="item" title title-width="100" :row="6" /> -->
+          <div v-if="showGoods.list.length === 0" class="empty" style="background-size: 100% 100%;width: 7rem"></div>
           <div
             class="goods-box"
             @click="viewGoods(item)"

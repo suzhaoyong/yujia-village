@@ -82,6 +82,8 @@
     </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
+import store from "@/store";
 export default {
     data() {
         return {
@@ -91,11 +93,14 @@ export default {
     created() {
         this.getPersonalData()
     },
+    computed: {
+      ...mapGetters(['info'])
+    },
     methods: {
         getPersonalData() {
             const token = JSON.parse(window.sessionStorage.getItem('access')) 
             this.$request.get('/personal/home').then(data => {
-                console.log(data);
+                store.dispatch("INFO", data);
             })
         },
         showPopup() {
@@ -103,6 +108,7 @@ export default {
         },
         logout() {
             // console.log('退出');
+            store.dispatch("INFO", { user: {} });
             window.sessionStorage.removeItem('access');
             // 退出回到首页
             window.open(`${window.location.origin}`, "_self");
