@@ -23,68 +23,137 @@
         </div>
         <div class="rz-content">
             <div class="owner" v-if="slideIndex==0">
-                <van-field v-model="ownerDataList.username" clearable input-align="right" label="真实姓名" placeholder="姓名" />
-                <van-field v-model="ownerDataList.hall" clearable input-align="right" label="会馆名称" placeholder="会馆" />
-                <van-field v-model="ownerDataList.tel" clearable input-align="right" label="会馆电话" placeholder="电话" />
-                <van-field v-model="ownerDataList.provinces" clearable input-align="right" label="会馆地区" placeholder="选择省/市/区" @focus="focus"/>
+                <van-field v-model="ownerDataList.real_name" clearable input-align="right" label="真实姓名" placeholder="只能是中文或者英文" @blur="onBlur"/>
+                <van-field v-model="ownerDataList.club_name" clearable input-align="right" label="会馆名称" placeholder="由中文、字母、数字组成" @blur="onBlur"/>
+                <van-field v-model="ownerDataList.club_tel" type="tel" clearable input-align="right" label="会馆电话" placeholder="电话" @blur="onBlur"/>
+                <van-field v-model="region_a" readonly input-align="right" label="会馆地区" placeholder="选择省/市/区" @focus="focus"/>
                 <van-popup v-model="show" position="bottom" :style="{ height: '40%' }">
                     <van-area :area-list="areaList" @confirm="onConfirm" @cancel="onCancel"/>
                 </van-popup>
-                
                 <van-field v-model="ownerDataList.address" clearable input-align="right" label="详细地址" placeholder="街道门牌等" />
+                <div class="upload-license">
+                    <div class="license">请上传营业执照</div>
+                    <div class="upload">
+                        <van-uploader v-model="fileList1" :after-read="afterRead" :max-count="1"
+                        :max-size="4096000" accept="image/gif, image/jpeg ,image/png" @oversize="overSize" @delete="onDel"/>
+                    </div>
+                </div>
             </div>
             <div class="coach" v-if="slideIndex==1">
-                <van-field v-model="coachDataList.username" clearable input-align="right" label="真实姓名" placeholder="姓名" />
-                <van-field v-model="coachDataList.seniority" clearable input-align="right" label="教龄" placeholder="教龄" />
-                <van-field v-model="coachDataList.type" clearable input-align="right" label="擅长类型" placeholder="瑜伽流派" />
-                <van-field v-model="coachDataList.intro" type="textarea" autosize clearable placeholder="个人简介" />
+                <van-field v-model="coachDataList.real_name" clearable input-align="right" label="真实姓名" placeholder="只能是中文或者英文" @blur="onBlur"/>
+                <van-field v-model="coachDataList.club_name" clearable input-align="right" label="会馆名称" placeholder="由中文、字母、数字组成" @blur="onBlur"/>
+                <van-field v-model="coachDataList.club_tel" type="tel" clearable input-align="right" label="会馆电话" placeholder="电话" @blur="onBlur"/>
+                <van-field v-model="region_b" readonly input-align="right" label="会馆地区" placeholder="选择省/市/区" @focus="focus"/>
+                <van-popup v-model="show" position="bottom" :style="{ height: '40%' }">
+                    <van-area :area-list="areaList" @confirm="onConfirm" @cancel="onCancel"/>
+                </van-popup>
+                <van-field v-model="coachDataList.address" clearable input-align="right" label="详细地址" placeholder="街道门牌等" />
+                <div class="upload-license">
+                    <div class="license">请上传瑜伽毕业证书</div>
+                    <div class="upload">
+                        <van-uploader v-model="fileList2" :after-read="afterRead" :max-count="1"
+                        :max-size="4096000" accept="image/gif, image/jpeg ,image/png" @oversize="overSize" @delete="onDel"/>
+                    </div>
+                </div>
             </div>
             <div class="owner-coach" v-if="slideIndex==2">
-                <van-field v-model="ownerAndCoachList.username" clearable input-align="right" label="真实姓名" placeholder="姓名" />
-                <van-field v-model="ownerAndCoachList.hall" clearable input-align="right" label="会馆名称" placeholder="会馆" />
-                <van-field v-model="ownerAndCoachList.tel" clearable input-align="right" label="会馆电话" placeholder="电话" />
-                <van-field v-model="ownerAndCoachList.address" clearable input-align="right" label="会馆地址" placeholder="地址" />
-                <van-field v-model="ownerAndCoachList.seniority" clearable input-align="right" label="教龄" placeholder="教龄" />
-                <van-field v-model="ownerAndCoachList.type" clearable input-align="right" label="擅长类型" placeholder="瑜伽流派" />
-                <van-field v-model="ownerAndCoachList.intro" type="textarea" autosize clearable placeholder="个人简介" />
+                <van-field v-model="ownerAndCoachList.real_name" clearable input-align="right" label="真实姓名" placeholder="只能是中文或者英文" @blur="onBlur"/>
+                <van-field v-model="ownerAndCoachList.club_name" clearable input-align="right" label="会馆名称" placeholder="由中文、字母、数字组成" @blur="onBlur"/>
+                <van-field v-model="ownerAndCoachList.club_tel" type="tel" clearable input-align="right" label="会馆电话" placeholder="电话" @blur="onBlur"/>
+                <van-field v-model="region_c" readonly input-align="right" label="会馆地区" placeholder="选择省/市/区" @focus="focus"/>
+                <van-popup v-model="show" position="bottom" :style="{ height: '40%' }">
+                    <van-area :area-list="areaList" @confirm="onConfirm" @cancel="onCancel"/>
+                </van-popup>
+                <van-field v-model="ownerAndCoachList.address" clearable input-align="right" label="详细地址" placeholder="街道门牌等" />
+                <div class="upload-license">
+                    <div class="license">请上传营业执照以及瑜伽毕业证书</div>
+                    <div class="upload">
+                        <van-uploader v-model="fileList3" :after-read="afterRead" :max-count="2" multiple
+                        :max-size="4096000" accept="image/gif, image/jpeg ,image/png" @oversize="overSize" @delete="onDel"/>
+                    </div>
+                </div>
             </div>
         </div>
-        <van-button class="submit" type="primary" @click="submit">提交认证</van-button>
+        <van-dialog v-model="isshowFile" title="瑜伽村平台认证服务协议">
+            <div class="temp" style="height:400px;overflow: scroll;">
+                <div id="pdf"></div>
+            </div>
+        </van-dialog>
+        <div class="submit" @click="submit">提交认证</div>
+        <div class="agreement">
+            <van-checkbox v-model="checked" checked-color="#CCE198"></van-checkbox>
+            <div>
+                <span class="agreed">同意</span>
+                <span @click="showFile">《瑜伽村平台认证服务协议》</span>
+            </div>
+        </div>
     </div>
 </template>
 <script>
 import Swiper from 'swiper';
+import Pdfh5 from "pdfh5";
+import "pdfh5/css/pdfh5.css";
+
 import areaList from "../../assets/js/area.js";
 export default {
     data() {
         return {
             areaList,
             show: false,
+            fileList1: [],
+            fileList2: [],
+            fileList3: [],
+            checked: true,
+            // 是否显示 协议 pdf
+            isshowFile: false,
+            pdfh5: null,
+            // 认证馆主需要提交的 数据列表
             ownerDataList: {
-                username:'',
-                hall: '',
-                tel: '',
-                provinces: '',
-                address: ''
+                identity_auth: '',
+                real_name:'',
+                club_name: '',
+                club_tel: '',
+                province: '',
+                city: '',
+                area: '',
+                address: '',
+                img_work: '',
+                img_license: ''
             },
             coachDataList: {
-                username: '',
-                seniority: '',
-                type: '',
-                intro: ''
+                identity_auth: '',
+                real_name:'',
+                club_name: '',
+                club_tel: '',
+                province: '',
+                city: '',
+                area: '',
+                address: '',
+                img_work: '',
+                img_license: ''
             },
             ownerAndCoachList: {
-                username:'',
-                hall: '',
-                tel: '',
+                identity_auth: '',
+                real_name:'',
+                club_name: '',
+                club_tel: '',
+                province: '',
+                city: '',
+                area: '',
                 address: '',
-                seniority: '',
-                type: '',
-                intro: ''
+                img_work: '',
+                img_license: ''
             },
+            // 渲染地区数据
+            region_a: '',
+            region_b: '',
+            region_c: '',
             // slide的索引
             slideIndex: ''
         }
+    },
+    created() {
+        this.loadProtocolFile();
     },
     mounted() {
         const that = this;
@@ -100,32 +169,188 @@ export default {
                 },
             },
         });
-
     },
     methods: {
         onClickLeft() {
             this.$router.go(-1);
         },
+        // 输入款失去焦点时，校验
+        onBlur() {
+            const name = /^([\u4e00-\u9fa5]{2,16}|[\u4E00-\u9FA5\·]{2,16}|[a-zA-Z.·\s]{2,16})$/;
+            const hallName =  /^[\u4e00-\u9fa5a-zA-Z0-9]{2,16}$/;
+            const tel = /(^1[3|4|5|7|8|9]\d{9}$)|(^09\d{8}$)/;
+            if(this.slideIndex == 0) {
+                this.validationRules(this.ownerDataList, name, hallName, tel);
+            } else if(this.slideIndex == 1) {
+                this.validationRules(this.coachDataList, name, hallName, tel);
+            } else {
+                this.validationRules(this.ownerAndCoachList, name, hallName, tel);
+            }
+        },
+        // 验证规则
+        validationRules(identity,name,hallName,tel) {
+            if(identity.real_name) {
+                if(!name.test(identity.real_name)) {
+                    this.$toast({
+                        message: '姓名格式输入错误！，长度为2~16位',
+                    });
+                }
+            }
+            if(identity.club_name) {
+                if(!hallName.test(identity.club_name)) {
+                    this.$toast({
+                        message: '会馆名称格式错误！长度为2~16位',
+                    });
+                }
+            }
+            if(identity.club_tel) {
+                if(!tel.test(identity.club_tel)) {
+                    this.$toast({
+                        message: '电话号码输入错误！',
+                    });
+                }
+            }
+        },
         focus() {
             this.show = true;
         },
+        // 点解确认，处理地区的显示
         onConfirm(area) {
-            if(area[0].name === area[1].name) {
-                this.ownerDataList.provinces = area[0].name + '/' + area[2].name;
+            if(this.slideIndex == 0) {
+                this.region_a = this.showArea(this.region_a, this.ownerDataList, area);   
+            } else if(this.slideIndex == 1) {
+                this.region_b = this.showArea(this.region_b, this.coachDataList, area); 
             } else {
-                this.ownerDataList.provinces = area[0].name + '/' + area[1].name + '/' + area[2].name;
+                this.region_c = this.showArea(this.region_c, this.ownerAndCoachList, area);
             }
             this.show = false;
         },
+        // 渲染地区
+        showArea(provinces, identity, area) {
+            if(area[0].name === area[1].name) {
+                provinces = area[0].name + '/' + area[2].name;
+            } else {
+                provinces = area[0].name + '/' + area[1].name + '/' + area[2].name;
+            }
+            identity.province = area[0].name;
+            identity.city = area[1].name;
+            identity.area = area[2].name;
+            return provinces;  // 把地区数据 返回给 双向绑定的数据，不然双向绑定的数据为空
+        },
+        // 取消
         onCancel() {
             this.show = false;
         },
+        // 图片上传之后的 回掉函数
+        afterRead(fileInfo, name) {
+            console.log(fileInfo);
+            
+            let that = this;
+            if(fileInfo.length == 2) {
+                lrz(fileInfo[0].file).then(rst => {
+                    that.ownerAndCoachList.img_work = rst.base64;
+                })
+                .catch(function (err) {
+                    alert(err);
+                });
+                lrz(fileInfo[1].file).then(rst => {
+                    that.ownerAndCoachList.img_license = rst.base64;
+                })
+                .catch(function (err) {
+                    alert(err);
+                })
+            } else {
+                lrz(fileInfo.file).then(rst => {
+                // console.log(rst.file); 压缩之后的 文件信息
+                // console.log(rst.base64); 压缩之后的 base64
+                    if(that.slideIndex == 0) {
+                        that.ownerDataList.img_work = rst.base64
+                    } else if (that.slideIndex == 1) {
+                        that.coachDataList.img_license = rst.base64
+                    } 
+                })
+                .catch(function (err) {
+                    alert(err);
+                })
+            }
+            
+        },
+        onDel(file,detail) {
+            console.log(file, detail);
+            if(this.slideIndex == 0) {
+                this.ownerDataList.img_work = ''
+            } else if(this.slideIndex == 1) {
+                this.coachDataList.img_license = ''
+            } else {
+                if(detail.index == 0) {
+
+                }
+            }
+            
+        },
+        // 文件超过限制大小 
+        overSize(file) {
+            this.$toast({
+                message: '图片大小不能超过4M',
+            });
+        },
+        showFile() {
+            this.isshowFile = true;
+        },
+        // 展示 协议文件
+        loadProtocolFile() {
+            // this.pdfh5 = new Pdfh5('#pdf',{
+            //     pdfurl:  "./static/doc/瑜伽村平台认证服务协议.pdf"
+            // })
+            // this.pdfh5.on("complete", function(status, msg, time) {
+            //     console.log(
+            //     "状态：" +
+            //         status +
+            //         "，信息：" +
+            //         msg +
+            //         "，耗时：" +
+            //         time +
+            //         "毫秒，总页数：" +
+            //         this.totalNum
+            //     );
+            // });
+        },
         submit() {
-            console.log('提交成功');
+            
+            if(this.checked) {
+                if(this.slideIndex == 0) {
+                    this.ownerDataList.identity_auth = 2;
+                     console.log(this.ownerDataList);
+                } else if(this.slideIndex == 1) {
+                    this.coachDataList.identity_auth = 4;
+                } else if(this.slideIndex == 2) {
+                    this.ownerAndCoachList.identity_auth = 7;
+                    console.log(this.ownerAndCoachList);
+                } 
+                
+
+            } else {
+                this.$toast({
+                    message: '请阅读并勾选瑜伽村平台认证服务协议',
+                });
+            }
         }
     }
 }
 </script>
+<style lang="scss">
+.upload {
+    .van-uploader__preview {
+        margin-bottom: 0;
+        height: 80px;
+        .van-icon{
+            position: absolute;
+            font-size: 20px;
+            vertical-align: middle;
+        }
+    }
+}
+</style>
 <style lang="scss" scoped>
 .van-nav-bar {
     position: fixed;
@@ -182,9 +407,46 @@ export default {
 .rz-content {
     border-top: 1px solid #eee;
     background-color: #fff;
+    .upload-license {
+        .license {
+            padding-left: 16px;
+            margin-top: 9px;
+            height: 44px;
+            line-height: 44px;
+            background-color: #eee;
+            font-size: 12px;
+        }
+        .upload {
+            padding: 13px 16px;
+            /deep/ .van-uploader__upload {
+                margin-bottom: 0;
+            }
+        }
+    }
+    .temp {
+        height: 400px;
+        overflow: scroll;
+    }
 } 
+
 .submit {
-    width: 343px;
-    margin: 20px 16px;
+    height: 44px;
+    line-height: 44px;
+    background-color: #CCE198;
+    text-align: center;
+    font-size: 12px;
+}
+.agreement {
+    display: flex;
+    justify-content: center;
+    height: 44px;
+    line-height: 44px;
+    background-color: #fff;
+    font-size: 12px;
+    color: #619C39;
+    .agreed {
+        margin-left: 5px;
+        color: #2c2c2c;
+    }
 }
 </style>

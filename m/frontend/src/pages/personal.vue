@@ -1,25 +1,24 @@
 <template>
     <div class="personal">
-        <van-nav-bar title="个人中心" :border="false">
-            <!-- <i class="iconfont icon-xiaoxi xiaoxi" slot="right"></i>
-            <van-icon name="setting-o" slot="right"/>
-            <div class="dot" slot="right">4</div> -->
-        </van-nav-bar>
         <div class="banner-box">
-            <div class="head-portraits"></div>
+            <div class="head-portraits" @click="goInfoEditor" :style="{backgroundImage:'url('+personalData.icon+')'}"></div>
+            <div class="username">
+                <span class="uname">{{personalData.name}} | </span><span>{{personalData.identity_auth}}</span>
+            </div>
+            <div class="my-box">
+                <router-link to="/myorder">我的订单</router-link>
+                <router-link to="/shoppingbag">购物袋</router-link>
+                <router-link to="/address">收货地址</router-link>
+            </div>
         </div>
-        <div class="my-box">
-            <router-link to="/myorder">我的订单</router-link>
-            <router-link to="/shoppingbag">购物袋</router-link>
-            <router-link to="/address">收货地址</router-link>
-        </div>
+        
         <div class="asset">
             <div class="asset-item1">
                 <div class="img"></div>
                 <span class="my-asset">我的资产</span>
             </div>
             <div class="asset-item">
-                <div>1000</div>
+                <div>{{personalData.money}}</div>
                 <div>金币</div>
             </div>
             <div class="asset-item">
@@ -31,7 +30,7 @@
                 <div>优惠券</div>
             </div>
             <div class="asset-item">
-                <div>240</div>
+                <div>{{personalData.fraction}}</div>
                 <div>积分</div>
             </div>
         </div>
@@ -87,7 +86,9 @@ import store from "@/store";
 export default {
     data() {
         return {
-            show: false
+            show: false,
+            // 个人信息数据
+            personalData: {},
         }
     },
     created() {
@@ -101,7 +102,26 @@ export default {
             const token = JSON.parse(window.sessionStorage.getItem('access')) 
             this.$request.get('/personal/home').then(data => {
                 store.dispatch("INFO", data);
+                // console.log(data);
+                const { fraction, icon, name, identity_auth, reason } = data.user;
+                window.sessionStorage.setItem('user',JSON.stringify(data.user));
+                const index = data.user.money.indexOf(".");
+                const money = data.user.money.substring(index,0);
+                // 获取 金币和积分
+                const personal = {
+                    money,
+                    fraction,
+                    icon,
+                    name,
+                    identity_auth,
+                    reason
+                }
+                this.personalData = personal;
             })
+        },
+        // 
+        goInfoEditor() {
+            this.$router.push('/personaldata')
         },
         showPopup() {
             this.show = true;
@@ -122,55 +142,40 @@ export default {
     overflow: hidden;
     overflow-y: auto;
 }
-.van-nav-bar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    background-color: #eee;
-    .xiaoxi {
-        position: absolute;
-        top: 1px;
-        right: 30px;
-        font-weight: 700;
-        font-size: 22px;
-    }
-    .van-icon {
-        font-size: 25px;
-        color: #2c2c2c;
-    }
-    .dot {
-        position: absolute;
-        top: 0;
-        padding: 2px;
-        line-height: 12px;
-        border-radius: 6px;
-        background-color: #E60012;
-        font-size: 11px;
-        color: #fff;
-    }
-}
 .banner-box {
     position: relative;
-    height: 123px;
-    margin-top: 46px;
-    margin-bottom: 9px;
-    background-color: #fff;
+    height: 228px;
+    padding-top: 48px;
+    margin-bottom: 29px;
+    background: url('../assets/img/head-banner.png');
+    background-size: cover;
+    text-align: center;
     .head-portraits {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        bottom: -20px;
-        width: 64px;
-        height: 64px;
-        border-radius: 32px;
-        background-color: #eee;
+        width: 76px;
+        height: 76px;
+        margin: 0 auto;
+        border-radius: 38px;
+        background-size: cover;
+        background-position: center;
+    }
+    .username {
+        margin-top: 15px;
+        font-size: 11px;
+        color: #fff;
+        .uname {
+            font-size: 14px;
+        }
     }
 }
 .my-box {
+    position: absolute;
+    left: 16px;
+    bottom: -25px;
     display: flex;
     justify-content: space-between;
     padding: 0 16px;
     margin-bottom: 4px;
+    width: 343px;
     height: 64px;
     line-height: 64px;
     background-color: #fff;

@@ -11,12 +11,13 @@ import 'vant/lib/button/style';
 import {
   Tab, Tabs, Tabbar, TabbarItem, 
   Collapse, CollapseItem, 
-  NavBar, Icon, Cell, Button, 
+  NavBar, Icon, Cell, CellGroup, Button, 
   AddressEdit, Dialog, Checkbox, CheckboxGroup,
-  Stepper, Rate, Field, Popup, Area ,Toast,
-  Swipe, SwipeItem, List,ActionSheet} from 'vant';
+  Stepper, Rate, Field, Popup, Area ,Toast ,
+  Uploader ,Picker ,DatetimePicker, Swipe, SwipeItem, List,ActionSheet    } from 'vant';
 
 import 'swiper/dist/css/swiper.min.css';
+import lrz from 'lrz';
 
 import VConsole from 'vconsole';
 
@@ -36,6 +37,7 @@ Vue.use(List);
 Vue.use(NavBar);
 Vue.use(Icon);
 Vue.use(Cell);
+Vue.use(CellGroup);
 Vue.use(Button);
 Vue.use(AddressEdit);
 Vue.use(Dialog);
@@ -47,6 +49,10 @@ Vue.use(Field);
 Vue.use(Popup);
 Vue.use(Area);
 Vue.use(Toast);
+Vue.use(Uploader);
+Vue.use(Picker);
+Vue.use(DatetimePicker);
+
 
 require('./mock')
 
