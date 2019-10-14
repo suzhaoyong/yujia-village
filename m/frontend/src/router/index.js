@@ -158,6 +158,24 @@ const router = new Router({
         component: () => import('@/pages/market/goods/detail')
       }]
     },
+    // 订单
+    {
+      path: '/order',
+      name: 'order',
+      component: Layout,
+      redirect: {
+        name: 'success'
+      },
+      children: [{
+        path: 'success',
+        name: 'success',
+        meta: {
+          header_name: 'order',
+          keepAlive: false
+        },
+        component: () => import('@/pages/market/order/success')
+      }]
+    },
     {
       path: '/shareation',
       name: 'shareation',
