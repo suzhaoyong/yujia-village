@@ -16,7 +16,16 @@ export default {
             isShowDelete: true,
             areaList,
             // 初始地址信息
-            AddressInfo: {},
+            AddressInfo: {
+                userName: "",
+                userTel: "",
+                province: "",
+                county: "",
+                city: "",
+                userAddress: "",
+                areaCode: "",
+                isDefault: false
+            },
             // 用户信息
             userInfoForm: {
                 userName: "",
@@ -49,12 +58,14 @@ export default {
             this.userInfoForm.province = content.province;
             this.userInfoForm.city = content.city;
             this.userInfoForm.area = content.county;
+            this.userInfoForm.areaCode = content.areaCode;
             this.userInfoForm.userAddress = content.addressDetail;
             if(content.isDefault) {
                 this.userInfoForm.isDefault = 1
             } else {
                 this.userInfoForm.isDefault = 0
             }
+
             if(this.navTitle == '新增地址') {
                 this.addAddress();
             } else {
@@ -75,7 +86,6 @@ export default {
         // 编辑地址时，获取的原地址
         showAddress() {
             this.$request.get('/showAddress/'+ this.addressId).then(data => {
-                console.log(data);
                 var isDefault = false;
                 if(data.is_default == 1) {
                     isDefault = true
@@ -88,6 +98,7 @@ export default {
                     province: data.province,
                     city: data.city,
                     county: data.area,
+                    areaCode: data.areaCode,
                     addressDetail: data.address,
                     isDefault
                 }

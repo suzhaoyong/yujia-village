@@ -1,6 +1,7 @@
 <template>
   <div class="order">
-    <header>填写订单</header>
+    <!-- <header>填写订单</header> -->
+    <van-nav-bar title="填写订单" left-arrow @click-left="back" fixed />
     <main class="order-main">
       <div class="order-main-edit" v-show="false">
         <div class="order-main-edit-sonsignee">收货人</div>
@@ -9,22 +10,27 @@
         <span class="order-main-edit-icon"><van-icon name="arrow" /></span>
       </div>
       <div class="order-main-editdefalut" v-show="true">
-        <div class="order-main-editdefalut-p1">默认地址</div>
-        <div class="order-main-editdefalut-name">小李子<span>18941646416</span></div>
-        <div class="order-main-editdefalut-adress">成都市锦江区泰合国际财富中心<p>6栋2单元1008</p></div>
-        <span class="order-main-editdefalut-icon"><van-icon name="arrow" /></span>
+        <div class="order-main-editdefalut-p1" v-if="selectAddress.is_default == 1">默认地址</div>
+        <div class="order-main-editdefalut-name">{{selectAddress.name}}<span>{{selectAddress.tel}}</span></div>
+        <div class="order-main-editdefalut-adress">{{selectAddress.userAddress}}</div>
+        <span class="order-main-editdefalut-icon"><van-icon @click="changeAddress" name="arrow" /></span>
+      </div>
+      <div v-for="(item, index) in goods" :key="index" class="order-main-shop">
+        <!-- <div > -->
+          <div class="order-main-shop-img"><img :src="item.url"></div>
+          <div class="order-main-shop-message">
+            <div class="order-main-shop-message-num"><span class="num-span1">{{item.describe}}</span><span>x {{item.num}}</span></div>
+            <div class="color"><span>{{item.color}}</span><span class="color-span2">{{item.size}}</span></div>
+            <div class="price"><span>￥ {{item.price}}</span> <span v-if="item.discount > 0" style="margin-left:10px;text-decoration:line-through;">￥ {{item.sell_price}}</span></div>
+          </div>
+        <!-- </div> -->
+        
       </div>
       <div class="order-main-shop">
-        <div class="order-main-shop-img"><img src=""></div>
-        <div class="order-main-shop-message">
-          <div class="order-main-shop-message-num"><span class="num-span1">moumou2019纯棉时尚收腰型</span><span>x 1</span></div>
-          <div class="color"><span>灰蓝色</span><span class="color-span2">M</span></div>
-          <div class="price">￥ 550.00</div>
-        </div>
-        <input class="order-main-shop-leave" type="text" value="如果有需要，请给卖家留言" v-show="true"/>
+        <input class="order-main-shop-leave" style="margin-top: 0.3rem;" type="text" placeholder="如果有需要，请给卖家留言" v-show="true"/>
       </div>
       <div class="order-main-discounts">
-        <van-cell-group>
+        <van-cell-group v-show="false">
           <van-cell is-link>
             <template slot="title">
               <span class="custom-title">现金券：</span>
@@ -46,7 +52,7 @@
         </van-cell-group>
         <div class="freight">
           <van-cell-group>
-            <van-cell title="商品金额" value="￥ 550" size="large"/>
+            <van-cell title="商品总金额" :value="`￥ ${countPrice.toFixed(2)}`" size="large"/>
             <van-cell title="运费" value="￥ 0.00" size="large"/>
           </van-cell-group>
         </div>
@@ -54,8 +60,8 @@
     </main>
     <footer class="order-foot">
       <div class="order-foot-message">
-        <p class="order-foot-message-p1">实际支付：¥320</p>
-        <p>免减总额：¥230</p>
+        <p class="order-foot-message-p1">实际支付：¥{{(countPrice - countDiscount).toFixed(2)}}</p>
+        <p>免减总额：¥{{countDiscount.toFixed(2)}}</p>
       </div>
       <div class="order-foot-buybtn">去付款</div>
     </footer>
@@ -68,14 +74,86 @@ import { Cell, CellGroup, Icon, Tag } from 'vant';
 
 Vue.use(Cell).use(CellGroup).use(Icon).use(Tag);
 export default {
-  
+  data() {
+    return {
+      userAddress: [],
+      selectAddress: {},
+      goods: []
+    }
+  },
+  computed: {
+    countPrice(){
+      return this.goods.reduce((pre, next) => {                
+          return (pre) + (next.price * next.num)
+      }, 0)
+    },
+    countDiscount(){
+      return this.goods.reduce((pre, next) => {                
+          return (pre) + (next.discount * next.num)
+      }, 0)
+    },
+  },
+  created() {
+    
+  },
+  mounted() {
+    const address = sessionStorage.getItem('select address')
+    if(address) {
+      this.selectAddress = JSON.parse(address);
+      this.goods = JSON.parse(sessionStorage.getItem('roder good'))
+    } else {
+      this.getAddress(); 
+    }
+
+    const buyGoods = sessionStorage.getItem("buy goods")
+    const { type } = this.$route.query
+    if (buyGoods && type == 1) {
+      this.goods = [JSON.parse(buyGoods)]
+    }
+
+  },
+  beforeDestroy() {
+    sessionStorage.removeItem('select address')
+  },
+  methods: {
+    // 返回
+    back() {
+      this.$router.go(-1);
+      sessionStorage.removeItem('roder good')
+    },
+    // 修改地址
+    changeAddress() {
+      this.$router.push('/address?type=1')
+    },
+    getAddress() {
+      this.$request.get("/goodOrder/create").then(data => {
+        // console.table(data.address);
+        const { type } = this.$route.query
+        if(!type) {
+          sessionStorage.setItem('roder good', JSON.stringify(data.goods))
+          this.goods = data.goods;
+        }
+        
+
+        if( data.address.length === 0 ) {
+          return;
+        }
+        const default_address = data.address.filter(item => item.is_default == 1)[0]
+        this.selectAddress = default_address
+        if(!default_address) {
+          this.selectAddress = data.address[0]
+        }
+        // this.userAddress = data.address;
+      });
+    }
+  }
 }
 </script>
 
-<style lang="scss" scope>
+<style lang="scss" scoped>
   .order {
     width: 100%;
-    height: 100%;
+    // height: 100%;
     header {
       height: 35px;
       text-align: center;
@@ -84,10 +162,14 @@ export default {
       line-height: 35px;
     }
     &-main {
-      width: 100%;
-      height: 100%;
+      // width: 100%;
+      // height: 100%;
       background: #EEEEEE;
       font-size: 12px;
+      margin-top: 1px;
+      margin-bottom: 50px;
+      overflow: hidden;
+      overflow-y: scroll;
       &-edit {
         width: 100%;
         height: 106px;
@@ -113,10 +195,15 @@ export default {
       &-editdefalut {
         width: 100%;
         height: 106px;
+        padding-top: 30px;
         background: #F1F8E2;
         position: relative;
         overflow: hidden;
+        
         &-p1 {
+          position: absolute;
+          left: 0;
+          top: 0;
           width: 81px;
           height: 17px;
           background: #B3D465;

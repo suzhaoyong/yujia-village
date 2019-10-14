@@ -1,20 +1,10 @@
 <template>
   <div class="warp" style>
-    <van-nav-bar title="商品" left-arrow @click-left="back" fixed />
-
-    <!-- <nav class="navigator">
-      <div class="left_arrow" @click="back">
-        <i class="iconfont icon-pull_right"></i>
+    <van-nav-bar title="商品" left-arrow @click-left="back" fixed>
+      <div class="" slot="right" @click="handleShareGoods">
+        <img class="icon" src="../../../assets/img/share.png" />
       </div>
-      <div class="title_tabs">
-        <span class="tab_item">商品</span>
-      </div>
-      <div class="right_icon">
-        <div class="icon_item">
-          <img :src="icon.logo" alt />
-        </div>
-      </div>
-    </nav>-->
+    </van-nav-bar>
     <van-skeleton v-if="goods_copy.picture === ''" avatar avatar-shape="square" avatar-size="100" />
     <van-skeleton v-if="goods_copy.describe === ''" title title-width="100" :row="6" />
     <!-- 商品 -->
@@ -44,7 +34,7 @@
         </div>
 
         <!-- 选择地址 -->
-        <div class="select_item" @click.stop="area.isOpen = true">
+        <div class="select_item" v-show="false" @click.stop="area.isOpen = true">
           <span class="select_tips">{{selectedArea}}</span>
           <div class="arrow">
             <i class="iconfont icon-pull_right"></i>
@@ -139,10 +129,16 @@
     <footer class="car">
       <div class="car_lf">
         <!-- <div class="car_lf_icon"></div>
-        <div class="car_lf_icon"></div> -->
+        <div class="car_lf_icon"></div>-->
+        <div class="good_barige" @click="handleViewGoods">
+        <img class="icon" src="../../../assets/img/shopping.png" />
+        <div class="numbers" v-if="shoppingBagNumber > 0">
+          <span>{{shoppingBagNumber}}</span>
+        </div>
+      </div>
       </div>
       <div class="car_rh">
-        <div class="car_rh_item">加入购物车</div>
+        <div class="car_rh_item" @click="handleAddCart">加入购物车</div>
         <div class="car_rh_item" @click="handleBuyGoods">立即购买</div>
       </div>
     </footer>
@@ -150,7 +146,8 @@
 </template>
 <script>
 import logo from "@/assets/img/logo.png";
-import { Area, Popup, Sku, Skeleton } from "vant";
+import { mapGetters } from "vuex";
+import { Area, Popup, Sku, Skeleton, Toast } from "vant";
 import area_list from "./area_list.js";
 import { getGoodsById, postUserCart } from "@/api/category.js";
 export default {
@@ -162,6 +159,8 @@ export default {
   },
   data() {
     return {
+      clock: false,
+      shoppingBagNumber: 0,
       icon: {
         logo: logo
       },
@@ -207,6 +206,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["info", "isUserNeedLogin"]),
     selectedArea() {
       if (this.area.change.length === 0) {
         return "请选择地址";
@@ -222,6 +222,7 @@ export default {
     }
   },
   mounted() {
+    this.getShoppingBag();
     const { goods_id } = this.$route.params;
     getGoodsById(goods_id).then(response => {
       const {
@@ -307,11 +308,93 @@ export default {
     });
   },
   methods: {
+    // 分享商品
+    handleShareGoods() {
+      const { goods_id } = this.$route.params;
+      this.$router.push(`/share?type=goods&goodsId=${goods_id}`)
+    },
+    // 获取购物袋数据
+    getShoppingBag() {
+      if (this.isUserNeedLogin) {
+        // this.$router.push('/login');
+        return;
+      }
+      this.$request.get("/userCart/create").then(data => {
+        // console.log(data);
+        this.shoppingBagNumber = data.length;
+      });
+    },
+    // 点击加入购物车
+    handleAddCart() {
+      if (this.isUserNeedLogin) {
+        this.$router.push("/login");
+        return;
+      }
+      if (this.clock) {
+        Toast("正在加入购物车");
+        return;
+      }
+      if(this.getSelectParams() == '') return;
+      postUserCart(this.getSelectParams())
+        .then(response => {
+          this.clock = false;
+          this.shoppingBagNumber += 1;
+          Toast("添加成功");
+        })
+        .catch(err => {
+          this.clock = false;
+        });
+    },
+    getSelectParams(params = {}) {
+      const { selectedSkuComb, selectedNum } = this.changeGoods;
+      if (!(selectedSkuComb && selectedNum)) {
+        Toast("请选择规格");
+        this.clock = false;
+        return '';
+      }
+      this.clock = true;
+      const { tree } = this.sku;
+      const s1_spec = tree
+        .map(item => {
+          if (item.k === "颜色") {
+            return item.v;
+          }
+        })
+        .filter(item => item)[0]
+        .filter(item => item.id == selectedSkuComb.s1);
+
+      const { goods_id } = this.$route.params;
+      if (s1_spec[0]) {
+        params.color = s1_spec[0].name;
+      }
+
+      params.num = selectedNum;
+      params.size = selectedSkuComb.s2;
+      params.id = goods_id;
+      return params;
+    },
+    // 查看列表
+    handleViewGoods() {
+      this.$router.push("/shoppingbag");
+    },
     // 点击立即购买
     handleBuyGoods() {
-      this.$router.push({
-        name: 'fillorder'
-      })
+      if (this.isUserNeedLogin) {
+        // this.$router.push("/login");
+        // return;
+      }
+      if(this.getSelectParams() == '') return;
+      const { describe, discount, sell_price, cover } = this.goods_copy
+      const params = {
+        ...this.getSelectParams(),
+        describe,
+        discount,
+        sell_price,
+        url: cover,
+        price: sell_price - discount
+      }
+      sessionStorage.setItem("buy goods", JSON.stringify(params));
+      this.$router.push(`/fillorder?type=1`);
     },
     changeArea(val) {
       this.area.change = val;
@@ -349,6 +432,32 @@ export default {
 img {
   width: 100%;
   // height: 100%;
+}
+.good_barige {
+  position: relative;
+  display: inline-block;
+  img {
+    display: block;
+    width: 20px;
+    height: 20px;
+  }
+  .numbers {
+    position: absolute;
+    top: -60%;
+    right: -35%;
+    display: block;
+    span {
+      background: red;
+      color: #fff;
+      margin-top: 5px;
+      display: block;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      line-height: 20px;
+      text-align: center;
+    }
+  }
 }
 $main_color: #b4d565;
 .warp {
@@ -585,6 +694,9 @@ $main_color: #b4d565;
     flex-shrink: 0;
     flex-basis: 50%;
     padding: 0 20px;
+    height: 100%;
+    display: flex;
+    align-items: center;
     .car_lf_icon {
       display: inline-block;
       width: 20px;

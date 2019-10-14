@@ -33,6 +33,20 @@ function handleResponeseErr(err) {
   var response = err.response
   var data = response.data
   var status = response.status
+
+  if(data.code === '0001') {
+    request.post('/auth/refresh')
+        .then(data => {
+          sessionStorage.setItem('access', JSON.stringify(data))
+          store.dispatch("INFO", data);
+          window.location.reload();
+        })
+        .catch(() => {
+          store.dispatch("INFO", {});
+          Toast('请重新登录');
+        })
+        return Promise.resolve();
+  }
   if (status === 404) {
     message = '接口不存在';
   } else if (status >= 400 && status < 500) {
@@ -58,6 +72,7 @@ function handleResponse(response) {
     data,
     status
   } = response
+
   if (status >= 400 && status < 500) {
     return Promise.reject(response)
   }

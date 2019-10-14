@@ -18,7 +18,8 @@ export default new Vuex.Store({
     }
   },
   getters: {
-    info: state => state.info
+    info: state => state.info,
+    isUserNeedLogin: state => state.info.user.name === ''
   },
   mutations: {
     loadStatus(state, flag) {
@@ -32,7 +33,7 @@ export default new Vuex.Store({
       state.buyGoods.splice(cur_index, 1)
     },
     UPDATE_INFO(state, info) {
-      if (info.user.name) {
+      if (info.user && info.user.name) {
         state.info = {
           ...state.info,
           ...info

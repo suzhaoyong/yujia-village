@@ -19,17 +19,18 @@
             </div>
         </div>
         <div class="check-all" v-if="isCompile==false">
-            <van-checkbox v-model="checked" checked-color="#B3D465">全选</van-checkbox>
-            <div class="total">合计 <span>￥265</span></div>
-            <div class="place-order">去下单</div>
+            <van-checkbox :value="isAllChecked" @click="handleAllCheck" checked-color="#B3D465">全选</van-checkbox>
+            <div class="total">合计 <span>￥{{countCheckedPrice.toFixed(2)}}</span></div>
+            <div class="place-order" :style="`background:${ hasSomeChecked ?'':'#ccc'}`" @click="order">去下单</div>
         </div>
         <div class="check-all delete" v-if="isCompile==true">
-            <van-checkbox v-model="checked" checked-color="#B3D465">全选</van-checkbox>
+            <van-checkbox :value="isAllChecked" checked-color="#B3D465" @click="handleAllCheck">全选</van-checkbox>
             <div class="del" @click="delCommodity">删除</div>
         </div>
     </div>
 </template>
 <script>
+import { postUserOrder } from '@/api/goods.js'
 export default {
     data() {
         return {
@@ -46,7 +47,40 @@ export default {
     created() {
         this.getShoppingBag();
     },
+    computed: {
+        isAllChecked(){
+            return this.shoppingBagList.every( item => item.check )
+        },
+        hasSomeChecked(){
+            return this.shoppingBagList.some( item => item.check )
+        },
+        countCheckedPrice(){
+            return this.shoppingBagList.filter( item => item.check ).reduce((pre, next) => {                
+                return (pre) + (next.price * next.num)
+            }, 0)
+        }
+    },
     methods: {
+        // 选择全部
+        handleAllCheck() {
+            this.checked = !this.checked
+            const is_all_check = this.shoppingBagList.every( item => item.check )
+            this.shoppingBagList = this.shoppingBagList.map(item => {
+                item.check = !is_all_check;
+                return item
+            })
+        },
+        // 去下单
+        order() {
+            if(!this.hasSomeChecked) return;
+            
+            const id = this.shoppingBagList.filter(item => item.check).map(item => item.id);
+            const num = this.shoppingBagList.filter(item => item.check).map(item => item.num);
+            postUserOrder({ id, num }).then(data => {
+                this.$router.push('/fillorder')
+            });
+
+        },
         onClickLeft() {
             this.$router.go(-1);
         },
@@ -75,6 +109,7 @@ export default {
                 beforeClose: (action, done) => {
                     if(action === 'confirm') {
                         console.log('confirm');
+                        this.shoppingBagList = this.shoppingBagList.filter(item => !item.check)
                         done(); 
                     } else {
                         done(); 
@@ -95,12 +130,12 @@ export default {
                         price: item.sell_price,
                         pic: item.url,
                         num: data.num,
-                        check: false 
+                        check: true 
                     }
                     this.shoppingBagList.push(cart);
                 });
 
-                // console.log(this.shoppingBagList);
+                console.table(this.shoppingBagList);
                 
             }) 
         },
@@ -132,6 +167,7 @@ export default {
     margin-top: 46px;
     margin-bottom: 49px;
     overflow: hidden;
+    overflow-y: scroll;
 }
 .commodity {
     display: flex;

@@ -1,10 +1,10 @@
 <template>
     <div>
         <van-nav-bar title="地址管理" left-arrow @click-left="onClickLeft">
-            <img class="icon" src="../../assets/img/shopping.png" slot="right">
+            <!-- <img class="icon" src="../../assets/img/shopping.png" slot="right"> -->
         </van-nav-bar>
         <div class="content">
-            <div class="info" v-for="(item,index) in userAddress" :key="index">
+            <div class="info" @click="chooseAddress(item)" v-for="(item,index) in userAddress" :key="index">
                 <div class="name">{{item.name}}</div>
                 <div>
                     <div class="tel">{{item.tel}}</div>
@@ -31,6 +31,14 @@ export default {
         this.getAddress();
     },
     methods: {
+        // 选择地址
+        chooseAddress(item) {
+          const { type } = this.$route.query;
+          if( type == 1 ) {
+            sessionStorage.setItem('select address', JSON.stringify(item));
+            this.$router.go(-1);
+          }
+        },
         onClickLeft() {
             this.$router.go(-1)
         },

@@ -120,6 +120,7 @@ export default {
 .personal {
     margin-bottom: 50px;
     overflow: hidden;
+    overflow-y: auto;
 }
 .van-nav-bar {
     position: fixed;

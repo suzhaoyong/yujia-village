@@ -24,7 +24,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 #app {
   background-color: #eee;
 }
@@ -39,6 +39,23 @@ export default {
   justify-content: center;
   z-index: 10000;
   background: rgba(0, 0, 0, 0.3);
+}
+.van-nav-bar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: #eee;
+    font-size: 16px;
+    .van-icon {
+        font-size: 20px;
+        color: #2c2c2c;
+    }
+    .icon {
+        display: block;
+        width: 22px;
+        height: 22px;
+        margin-bottom: 12px;
+    }
 }
 .empty {
     width: 100%;
