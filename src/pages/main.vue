@@ -18,12 +18,12 @@
                     <el-col :span="24" class="bg-pic">
                     <div class="nav-contunt-div2">
                         <div class="carousel">
-                        <el-carousel height="620px" :interval="5000" arrow="always" trigger="click" direction="horizontal" :autoplay="true">
+                        <el-carousel height="620px" :interval="5000" arrow="always" trigger="click" direction="horizontal" :autoplay="false">
                             <el-carousel-item v-for="item in dataimg" :key="item.id">
                                 <div class="contunt2">
                                 <div class="carousel-explain">
-                                    <img :src="item.path1" class="img1"/>
-                                    <img :src="item.path2" class="img2"/>
+                                    <img :src="item.teacher_img" class="img1"/>
+                                    <img :src="item.cover" class="img2"/>
                                 </div>
                                 <div class="carousel-text">
                                     <h4>{{item.theme}}<span>{{item.name}}</span></h4>
@@ -87,7 +87,7 @@
                         <swiper class="carousel5" :options="swiperOption" style="height:707px;width:1200px;">
                             <swiper-slide class="carousel5-item" v-for="(page,index) of pages" :key="index">
                             <div class="carousel-explain2" v-for="item of page" :key="item.id" @click="carouselswiper(item)">
-                                <img :src="item.path"/>
+                                <img :src="item.first_img"/>
                                 <div class="explain2-div">
                                     <h3>{{item.name}}</h3>
                                     <span class="explain2-span2">{{item.good_at}}</span>
@@ -114,13 +114,13 @@
                         <el-carousel-item v-for="item in newtrains" :key="item.id">
                             <div class="explain3">
                             <div class="explain3-border">
-                                <img :src="item.path" class="bg-border-img">
+                                <img :src="item.teacher_img" class="bg-border-img">
                                 <img src="../assets/image62.png" class="bg-border-img2">
                             </div>
                             <div class="explain3-text">
                                 <p class="text-p">{{item.theme}}</p>
-                                <h4 class="text-h4">{{item.name}}</h4>
-                                <p class="text-p2">老师名字：{{item.teacherName}}</p>
+                                <h4 class="text-h4">{{item.type}}</h4>
+                                <p class="text-p2">老师名字：{{item.name}}</p>
                                 <div class="text-p3">课程难度：<el-rate :value="item.diff" disabled disabled-void-color="#fff" :colors="['#58B708']"></el-rate></div>
                                 <p class="text-p4">开课时间：{{item.startTime}}</p>
                                 <img src="../assets/image63.png" class="bg-border-img3">
@@ -141,17 +141,7 @@
                     </div>
                     <div class="nav-contunt-div7">
                         <div class="explain4">
-                            <img class="nav-div7-img" v-for="(item,index) in clubInfo" :key="index" :src="item.path" @click="ImgItem(item)"/>
-                            <div class="block2" v-if="this.clubInfo.length > 0">
-                                <el-pagination
-                                    @current-change="handleCurrentChange"
-                                    :current-page="currentPage"
-                                    :page-size="pagesize"
-                                    background
-                                    layout="total, prev, pager, next, jumper"
-                                    :total="total">
-                                </el-pagination>
-                            </div>
+                            <img class="nav-div7-img" v-for="(item,index) in clubInfo" :key="index" :src="item.first_img" @click="ImgItem(item)"/>
                         </div>
                     </div>
                     </el-col>
@@ -183,9 +173,6 @@ export default {
         banner:'',
         activeClass: 0,
         i:0,
-        currentPage:1,
-        pagesize: 0,
-        total:0,
         swiperOption: {
           spaceBetween: 30,
           pagination: {
@@ -238,19 +225,16 @@ export default {
           this.namelist = item;
           this.activeClass = idx;
       },
-        listhomedata(){
+      listhomedata(){
         let _this = this;
-        this.$request(`/home?page=${_this.currentPage}`).then(res => {
+        this.$request(`/home`).then(res => {
             _this.famousteach = res.teachers;
-            _this.dataimg = res.hot_trains;
-            _this.clubInfo = res.clubInfo;
-            _this.newtrains = res.new_trains;
-            _this.info = res.info;
-            _this.namelist=res.info[0];
+            _this.dataimg = res.hot;
+            _this.clubInfo = res.clubs;
+            _this.newtrains = res.new;
+            _this.info = res.information;
+            _this.namelist=res.information[0];
             _this.banner = res.banner;
-            _this.total = res.total;
-            _this.currentPage = res.current_page;
-            _this.pagesize = res.per_page;
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -271,24 +255,14 @@ export default {
         this.namelist=m[this.i+1][0];
         this.i++;
       },
-      handleCurrentChange(val) {
-          this.currentPage = val;
-          this.listhomedata();
-      },
       explaindetail(item){
           this.$router.push({
-            path: "/cultivate/detail",
-            query: {
-            id: item.id
-            }
+            path: `/cultivate/detail/${item.id}`,
         });
       },
       Learnmore(item){
           this.$router.push({
-            path: "/cultivate/detail",
-            query: {
-            id: item.id
-            }
+            path: `/cultivate/detail/${item.id}`,
         });
       },
       ImgItem(item){
@@ -311,7 +285,7 @@ export default {
           this.$router.push({
             path: "/yogoinformation/yogoinformationdetails",
             query: {
-            id: namelist.lid
+            id: namelist.id
             }
         });
       },
@@ -444,6 +418,7 @@ export default {
                     position: inherit;
                     left: 0px;
                     top: -24px;
+                    object-fit: cover;
                     }
                 .img2{
                        width: 376px;
@@ -454,14 +429,18 @@ export default {
                 }
             }
             .carousel-text{
-                width: 60%;
-                margin-top: -3px;
+                width: 38%;
+                margin-top: 20px;
                 margin-left: 37px;
                 h4{
                     color: #fff;
                     font-size: 20px;
                     font-family:Source Han Sans CN;
                     font-weight:bold;
+                    display: -webkit-box !important;
+                    -webkit-box-orient: vertical !important;
+                    -webkit-line-clamp: 1 !important;// 限制快级元素的文本行数
+                    overflow: hidden !important;
                     span{
                     padding-left: 13px;
                     font-size: 14px;
@@ -572,6 +551,7 @@ export default {
                         width: 100%;
                         height: 100%;
                         transition: all 1s;
+                        object-fit: cover;
                     }
                     .icon-img-content:hover{
                             width: 100%;
@@ -599,6 +579,7 @@ export default {
                             img{
                                 width: 100%;
                                 height: 100%;
+                                object-fit: cover;
                                 }
                         }
                     }
@@ -763,6 +744,7 @@ export default {
                         margin-top: 18px;
                         background-color: #DCD9CC;
                         transition: All 1s;
+                        object-fit: cover;
                     }
                     img:hover{
                         width: 160px;
@@ -867,6 +849,7 @@ export default {
                         position: absolute;
                         top: 7%;
                         left: -16%;
+                        object-fit: cover;
                     }
                     .bg-border-img2{
                         width: 134px;
@@ -886,6 +869,10 @@ export default {
                         position: absolute;
                         left: -53%;
                         top: 20%;
+                        display: -webkit-box !important;
+                        -webkit-box-orient: vertical !important;
+                        -webkit-line-clamp:1 !important;// 限制快级元素的文本行数
+                        overflow: hidden !important;
                     }
                     .text-p2{
                         font-size: 14px;
@@ -918,6 +905,10 @@ export default {
                         position: absolute;
                         left: -53%;
                         top: 30%;
+                        display: -webkit-box !important;
+                        -webkit-box-orient: vertical !important;
+                        -webkit-line-clamp:1 !important;// 限制快级元素的文本行数
+                        overflow: hidden !important;
                     }
                     .bg-border-img3{
                         width: 134px;
@@ -979,6 +970,7 @@ export default {
                     margin-right: 5px;
                     margin-top: 5px;
                     transition: all 1s;
+                    object-fit: cover;
                 }
                 .nav-div7-img:hover{
                     width: 235px;

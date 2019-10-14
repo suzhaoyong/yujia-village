@@ -23,12 +23,12 @@
                     </div>
                     <div class="joinclubdetails-right">
                         <div class="imgpic">
-                        <img :src="club.path1" class="img1"/>
-                        <img :src="club.path2"  class="img2"/>
+                        <img :src="clubs[0]" class="img1"/>
+                        <img :src="clubs[1]"  class="img2"/>
                         </div>
                         <div class="imgpic1">
-                        <img :src="club.path3"  class="img3"/>
-                        <img :src="club.path4"  class="img4"/>
+                        <img :src="clubs[2]"  class="img3"/>
+                        <img :src="clubs[3]"  class="img4"/>
                         </div>
                     </div>
                     </div>
@@ -46,10 +46,10 @@
                     <swiper class="carousel5" :options="swiperOption2" style="height:660px">
                         <swiper-slide class="carousel5-item" v-for="(page2,index) of pages2" :key="index">
                         <div class="carousel-explain2" v-for="item of page2" :key="item.id" @click="explain2swiper(item)">
-                            <img :src="item.path"/>
+                            <img :src="item.first_img"/>
                             <div class="explain2-div">
                                 <h3>{{item.name}}</h3>
-                                <span class="explain2-span2" v-html="item.content">{{item.content}}</span>
+                                <span class="explain2-span2" v-html="item.good_at">{{item.good_at}}</span>
                             </div>
                         </div>
                         </swiper-slide>
@@ -76,7 +76,7 @@
                             <swiper-slide v-for="(page,index) of pages" :key="index">
                                 <div class="clubhouse-swiper" v-for="item of page" :key="item.id" @click="clubhouseItem(item)">
                                     <div class="clubhouse-swiper-img">
-                                        <img :src="item.path"/>
+                                        <img :src="item.teacher_img"/>
                                     </div>
                                     <div class="clubhouse-swiper-name">
                                         <p class="name-p1">{{item.theme}}<span class="name-span">{{item.name}}</span></p>
@@ -109,7 +109,7 @@ export default {
   data() {
     return {
         club:{},
-        club_img:"",
+        clubs:{},
         swiperOption: {
           slidesPerView: 3,
           spaceBetween: 30,
@@ -176,6 +176,7 @@ export default {
         this.$request(`/clubs/${_this.$route.query.id}`).then(res => {
             let { club } = res;
             _this.club = club;
+            _this.clubs = club.club_img;
             _this.famousteach = res.teacher;
             _this.swiperList= res.trains;
         })
@@ -184,12 +185,12 @@ export default {
         });
       },
       initSocialConfig() {
-        const { club_name, club_address, content, path1 } = this.club;
+        const { club_name, club_address, content, first_img } = this.club;
         const params = {
             url: `http://www.yujiacun.net/joinclubhouse/joinclubhousedetails?id=${this.$route.query.id}`,
             title: club_name,
             description: `${club_address}`,
-            image: path1
+            image: first_img
         };
         this.config = Object.assign({}, this.config, params);
         },
@@ -198,10 +199,7 @@ export default {
         },
       clubhouseItem(item){
           this.$router.push({
-            path: "/cultivate/detail",
-            query: {
-            id: item.id
-            }
+            path: `/cultivate/detail/${item.id}`,
         });
       },
       explain2swiper(item){
@@ -301,6 +299,7 @@ export default {
                     img{
                         width: 100%;
                         height: 100%;
+                        object-fit: cover;
                     }
                 }
                 .clubhouse-swiper-name{
@@ -521,10 +520,12 @@ export default {
                     .img1{
                         width: 300px;
                         height: 226px;
+                        object-fit: cover;
                     }
                     .img2{
                         width: 300px;
                         height: 226px;
+                        object-fit: cover;
                     }
                 }
                 .imgpic1{
@@ -532,10 +533,12 @@ export default {
                     .img3{
                         width: 300px;
                         height: 226px;
+                        object-fit: cover;
                         }
                     .img4{
                         width: 300px;
                         height: 226px;
+                        object-fit: cover;
                     }
                 }
              }
@@ -596,10 +599,10 @@ export default {
         position: relative;
         .bg-image5{
             position: absolute;
-            width: 79%;
+            width: 62%;
             height: 710px;
             top: 3%;
-            right: 3%;
+            right: 12%;
         }
         .bg-image6{
             position: absolute;
@@ -641,6 +644,7 @@ export default {
                     margin-top: 18px;
                     transition: all 1s;
                     background-color: #DCD9CC;
+                    object-fit: cover;
                 }
                 img:hover{
                     width: 150px;
@@ -649,12 +653,13 @@ export default {
                     margin-top: 18px;
                     transform: scale(.9);
                     background-color: #DCD9CC;
+                    object-fit: cover;
                 }
                 .explain2-div{
-                    height: auto;
+                    height: 100%;
                     padding-top: 35px;
-                    padding-left: 20px;
-                    width: 69%;
+                    padding-left: 13px;
+                    width: 55%;
                     text-align: left;
                     h3{
                         font-size: 14px;
@@ -687,10 +692,12 @@ export default {
                     background-color: #DCD9CC;
                 }
                 .explain2-div{
-                    height: auto;
+                    height: 100%;
                     padding-top: 35px;
-                    padding-left: 13px;
-                    width: 69%;
+                    padding-left: 0px;
+                    padding-right: 13px;
+                    margin-left: 18%;
+                    width: 55%;
                     text-align: right;
                     h3{
                         font-size: 14px;

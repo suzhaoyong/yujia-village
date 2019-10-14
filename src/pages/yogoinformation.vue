@@ -96,13 +96,29 @@ export default {
   },
   created(){
       this.mationdata();
+      this.yujiarmation();
   },
   methods:{
+      yujiarmation(){
+          let _this = this;
+        this.$request(`/InformationClassify`).then(res => {
+             _this.banner = res.banner;
+            _this.navLists = res.classify;
+        })
+        .catch(error => {
+            let { response: { data: { errorCode, msg } } } = error;
+            if (errorCode != 0) {
+            this.$message({
+                message: msg,
+                type: "error"
+            });
+            return;
+            }
+        });
+      },
      mationdata(){
         let _this = this;
         this.$request(`/informationList/${_this.listid}?page=${_this.currentPage}`).then(res => {
-            _this.banner = res.banner;
-            _this.navLists = res.classify;
             _this.listdatas = res.data;
             _this.total = res.total;
             _this.currentPage = res.current_page;
@@ -145,7 +161,7 @@ export default {
            this.$router.push({
             path: "/yogoinformation/yogoinformationdetails",
             query: {
-            id: item.lid
+            id: item.id
             }
         });
       },
@@ -393,6 +409,7 @@ export default {
                     img{
                         width: 100%;
                         height: 100%;
+                        object-fit: cover;
                     }
                      .box-content{
                         width: 100%;
@@ -450,6 +467,7 @@ export default {
                     img{
                         width: 100%;
                         height: 100%;
+                        object-fit: cover;
                     }
                 }
             }

@@ -14,7 +14,7 @@ import {
   NavBar, Icon, Cell, CellGroup, Button, 
   AddressEdit, Dialog, Checkbox, CheckboxGroup,
   Stepper, Rate, Field, Popup, Area ,Toast ,
-  Uploader ,Picker ,DatetimePicker    } from 'vant';
+  Uploader ,Picker ,DatetimePicker, Swipe, SwipeItem, List,ActionSheet    } from 'vant';
 
 import 'swiper/dist/css/swiper.min.css';
 import lrz from 'lrz';
@@ -30,7 +30,10 @@ Vue.use(Tabs);
 Vue.use(Tabbar);
 Vue.use(TabbarItem);
 Vue.use(Collapse);
+Vue.use(ActionSheet);
 Vue.use(CollapseItem);
+Vue.use(Swipe).use(SwipeItem);
+Vue.use(List);
 Vue.use(NavBar);
 Vue.use(Icon);
 Vue.use(Cell);

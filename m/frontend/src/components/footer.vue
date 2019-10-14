@@ -24,13 +24,13 @@ export default {
                 },
                 {
                     title: '名师会馆',
-                    name: 'teacher',
+                    name: 'teacherClub',
                     normal: require('../assets/img/teacher-normal.png'),
                     active: require('../assets/img/teacher-active.png')
                 },
                 {
                     title: '培训信息',
-                    name: 'trainingInfo',
+                    name: 'yogamessage',
                     normal: require('../assets/img/information-normal.png'),
                     active: require('../assets/img/information-active.png')
                 },
@@ -85,6 +85,8 @@ export default {
     bottom: 0;
     z-index: 99;
 }
-
+.fix-iphonex-bottom .footer{
+  padding-bottom: 34px;
+}
 
 </style>

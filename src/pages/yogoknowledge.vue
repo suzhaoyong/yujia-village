@@ -15,7 +15,7 @@
                         </div>
                     </template>
                     <div class="knowledge-count" v-if="this.listdatas.length > 0">
-                        <div class="knowledge-count-div1" v-for="(item,index) in listdatas" :key="index" @click="selectItem(item)">
+                        <div class="knowledge-count-div1" v-for="(item, index) in listdatas" :key="index" @click="selectItem(item)">
                             <div class="knowledge-auto">
                             <div class="count-img">
                                 <img :src="item.icon_url"/>
@@ -83,13 +83,29 @@ export default {
   },
   created(){
       this.listdata();
+      this.yujialore();
   },
   methods:{
+      yujialore(){
+        let _this = this;
+        this.$request(`/KnowledgeClassify`).then(res => {
+             _this.banner = res.banner;
+             _this.navLists = res.classify;
+        })
+        .catch(error => {
+            let { response: { data: { errorCode, msg } } } = error;
+            if (errorCode != 0) {
+            this.$message({
+                message: msg,
+                type: "error"
+            });
+            return;
+            }
+        });
+      },
       listdata(){
         let _this = this;
         this.$request(`/knowledgeList/${_this.listids}?page=${_this.currentPage}`).then(res => {
-            _this.banner = res.banner;
-            _this.navLists = res.classify;
             _this.listdatas = res.data;
             _this.total = res.total;
             _this.currentPage = res.current_page;
@@ -132,7 +148,7 @@ export default {
         this.$router.push({
         path: "/yogoknowledge/yogoknowledgedetails",
         query: {
-        id: item.lid
+        id: item.id
         }
     });
     },
@@ -218,6 +234,7 @@ export default {
                 img{
                     width: 100%;
                     height: 100%;
+                    object-fit: cover;
                 }
                 .box-content{
                     width: 100%;

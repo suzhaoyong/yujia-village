@@ -17,10 +17,10 @@
                                     <el-option v-for="item in coursetypes" :key="item.id" :label="item.name" :value="item.id"></el-option>
                                 </el-select>
                                 <el-select v-model="value2" placeholder="最小资历" @change="yearchange" style="width:105px">
-                                    <el-option v-for="item in yearlist" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                                    <el-option v-for="item in yearlist" :key="item" :label="item" :value="item"></el-option>
                                 </el-select>
                                 <el-select v-model="value3" placeholder="最大资历" @change="yearchange" style="width:105px">
-                                    <el-option v-for="item in yearlist" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                                    <el-option v-for="item in yearlist" :key="item" :label="item" :value="item"></el-option>
                                 </el-select>
                                 <v-distpicker :province="province" :city="city" :area="area" @selected="onSelected"></v-distpicker>
                             </div>
@@ -51,7 +51,7 @@
                                     <div class="yogocontunt-swiper">
                                         <div class="yogoswiper-img">
                                             <div class="rhomb1">
-                                                <img :src="namelist.path"/>
+                                                <img :src="namelist.first_img"/>
                                             </div>
                                             <div class="rhomb2"></div>
                                             <div class="rhomb3"></div>
@@ -62,7 +62,7 @@
                                             <p class="p1">{{namelist.info}}</p>
                                             <p class="p3">从业时间: {{namelist.num}}年</p>
                                             <p class="p2">擅长：{{namelist.good_at}}</p>
-                                            <p class="p4">地址：{{namelist.address}}</p>
+                                            <p class="p4">地址：{{namelist.club_address}}</p>
                                             <div class="yogoswiper-butt">
                                             <el-button type="text" @click="namelistItem(namelist)">详情</el-button>
                                             </div>
@@ -70,8 +70,9 @@
                                     </div>
                                     <div class="margin-auto">
                                     <div class="icon" v-for="(item,idx) of page" :key="item.id" :class="activeClass == idx ? 'active':''" @click="selectItem(item,idx)">
-                                    <div class="icon-img">
-                                        <img class="icon-img-content" :src="item.path">
+                                    <!-- <div class="icon-img"> -->
+                                    <div class="icon-img" :style="{ 'background-image': 'url(' + item.first_img + ')','background-repeat':'no-repeat','background-size':'cover', 'background-position': 'center center' }">
+                                        <!-- <img class="icon-img-content" :src="item.path"> -->
                                     </div>
                                     <h3>{{item.name}}</h3>
                                     <p class="icon-desc">从业时间：{{item.num}}年</p>
@@ -95,7 +96,7 @@
                            <div class="yogocontunt2" v-if="this.yogolist.length > 0">
                                <div class="yogocontunt2-list" v-for="(item, index) in yogolist" :key="index" @mouseenter="onMouseOver(index)" @click="yogolink(item)">
                                     <figure class="test5">
-                                        <img :src="item.path" class="yogocontunt2-img"/>
+                                        <img :src="item.first_img" class="yogocontunt2-img"/>
                                         <div class="test5-title">
                                             <h4>{{item.name}}</h4>
                                             <p class="p1">教龄：{{item.num}}年</p>
@@ -195,20 +196,36 @@ export default {
   },
   created(){
       this.listyogodata();
+      this.choiceness();
   },
   methods:{
+      choiceness(){
+          let _this = this;
+        this.$request(`/teachers/elites`).then(res => {
+            _this.iconList = res;
+            _this.namelist = res[0];
+        })
+        .catch(error => {
+            let { response: { data: { errorCode, msg } } } = error;
+            if (errorCode != 0) {
+            this.$message({
+                message: msg,
+                type: "error"
+            });
+            return;
+            }
+        });
+      },
       listyogodata(){
         let _this = this;
         this.$request(`/teachers?page=${_this.currentPage}`).then(res => {
-            _this.yogolist = res.teachers;
-            _this.iconList = res.elites;
+            _this.yogolist = res.teachers.data;
             _this.coursetypes = res.course_types;
             _this.yearlist = res.year;
-            _this.namelist = res.elites[0];
             _this.banner = res.banner;
-            _this.total = res.total;
-            _this.currentPage = res.current_page;
-            _this.pagesize = res.per_page;
+            _this.total = res.teachers.total;
+            _this.currentPage = res.teachers.current_page;
+            _this.pagesize = res.teachers.per_page;
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -231,9 +248,13 @@ export default {
                 province:this.province,//省
                 area:this.area//区
             }
-        this.$request.post("/teachers", params)
+        this.$request.post(`/teachers?page=${this.currentPage}`, params)
         .then(res => {
-            this.yogolist = res;
+            this.yogolist = res.data;
+            this.currentPage = 1;
+            this.total = res.total;
+            this.currentPage = res.current_page;
+            this.pagesize = res.per_page;
             this.$message({
                 message: '查询成功',
                 type: "success"
@@ -290,7 +311,6 @@ export default {
     handleCurrentChange(val) {
         this.currentPage = val;
         this.listyogodata();
-
     },
   }
 };
@@ -617,11 +637,9 @@ export default {
                     .icon-img{
                         width: 100%;
                         height: 270px;
-                        .icon-img-content{
-                            width: 100%;
-                            height: 100%;
-                            object-fit: cover;
-                        }
+                        overflow: hidden;
+                        // .icon-img-content{
+                        // }
                     }
                     h3{
                         text-align: center;
@@ -680,20 +698,20 @@ export default {
                         height: 100%;
                         position: relative;
                         .rhomb1{
-                            width: 220px;
-                            height: 220px;
-                            border: 7px solid #fff;
-                            background-color: #E3DCC9;
-                            transform:rotate(45deg);
+                            width: 240px;
+                            height: 250px;
+                            // border: 7px solid #fff;
+                            background-color: #E2DBC8;
+                            transform:rotate(0deg);
                             position: absolute;
-                            right: 50%;
-                            top: 16%;
+                            right: 53%;
+                            top: 10%;
                             overflow: hidden;
                             img{
                                 width: 100%;
                                 height: 100%;
                                 max-width: 100%;
-                                transform:rotate(-45deg)scale(1.42);
+                                // transform:rotate(-45deg)scale(1.42);
                                 object-fit: cover;
                             }
                         }
@@ -703,7 +721,7 @@ export default {
                             border: 7px solid #E2DBC8;
                             transform:rotate(45deg);
                             position: absolute;
-                            right: 30%;
+                            right: 31%;
                             top: 14%;
                             border-left: #fff;
                             border-bottom: #fff;
@@ -711,9 +729,9 @@ export default {
                         .rhomb2:before{
                             content: "";
                             position: absolute;
-                            left: -19%;
-                            top: 17%;
-                            width: 42%;
+                            left: -7%;
+                            top: 4%;
+                            width: 18%;
                             height: 7px;
                             background-color: #E2DBC8;
                             transform: rotate(89deg);
@@ -721,9 +739,9 @@ export default {
                         .rhomb2:after{
                             content: "";
                             position: absolute;
-                            left: 66%;
+                            left: 83%;
                             top: 97%;
-                            width: 36%;
+                            width: 20%;
                             height: 7px;
                             background-color: #E2DBC8;
                             transform: rotate(0deg);

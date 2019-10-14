@@ -198,8 +198,8 @@ export default {
 <style lang="scss" scoped>
 .main {
     width: 100%;
-    margin-top: 88px;
-    margin-bottom: 50px;
+    padding-top: 88px;
+    // margin-bottom: 50px;
 }
 .top-course {
     display: flex;

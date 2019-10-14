@@ -1,11 +1,14 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Layout from '@/components/layout.vue'
+// eslint-disable-next-line no-undef
 const Home = resolve => require(['@/pages/home'], resolve) //首页
 
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',
+  // mode: 'history',
+  mode: 'hash',
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
       return savedPosition
@@ -19,8 +22,7 @@ export default new Router({
       }
     }
   },
-  routes: [
-    {
+  routes: [{
       path: '/',
       component: Home,
       redirect: '/main'
@@ -53,7 +55,7 @@ export default new Router({
     {
       path: '/personal',
       name: 'personal',
-      component: Home, 
+      component: Home,
       children: [{
         path: '/personal',
         component: () => import('@/pages/personal')
@@ -120,10 +122,108 @@ export default new Router({
       name: 'share',
       component: () => import('@/pages/share')
     },
+    // 商场
+    {
+      path: '/store',
+      name: 'store',
+      component: Home,
+      redirect: {
+        name: 'category'
+      },
+      children: [{
+        path: 'category',
+        name: 'category',
+        meta: {
+          header_name: 'market'
+        },
+        component: () => import('@/pages/market/category')
+      }]
+    },
+    // 商品
+    {
+      path: '/goods',
+      name: 'goods',
+      component: Layout,
+      redirect: {
+        name: 'detail'
+      },
+      children: [{
+        path: 'detail/:goods_id',
+        name: 'detail',
+        meta: {
+          header_name: 'goods'
+        },
+        component: () => import('@/pages/market/goods/detail')
+      }]
+    },
+    {
+      path: '/shareation',
+      name: 'shareation',
+      component: () => import('@/pages/shareation')
+    },
     {
       path: '/login',
       name: 'login',
       component: () => import('@/pages/login')
+    },
+    {
+      path: '/teacherClub',
+      name: 'teacherClub',
+      component: Home,
+      redirect: {
+        name: 'teacherClub list'
+      },
+      children: [{
+        path: 'list',
+        name: 'teacherClub list',
+        meta: {
+          header_name: 'market'
+        },
+        component: () => import('@/pages/teacherClub/teacherClub')
+      }]
+    },
+    {
+      path: '/teacherClub/teacherDetails',
+      name: 'teacherDetails',
+      component: () => import('@/pages/teacherClub/teacherDetails')
+    },
+    {
+      path: '/teacherClub/clubhouseDetails',
+      name: 'clubhouseDetails',
+      component: () => import('@/pages/teacherClub/clubhouseDetails')
+    },
+    {
+      path: '/yagainformation',
+      name: 'yagainformation',
+      component: () => import('@/pages/homepage/yogaInForMation.vue'),
+    },
+    {
+      path: '/informationdetail',
+      name: 'informationdetail',
+      component: () => import('@/pages/homepage/inForMationDetail.vue')
+    },
+    {
+      path: '/yogamessage',
+      component: Home,
+      redirect: {
+        name: 'yogamessage list'
+      },
+      children: [{
+        path: 'list',
+        name: 'yogamessage list',
+
+        component: () => import('@/pages/informationpage/yogaMessage.vue')
+      }]
+    },
+    {
+      path: '/messagedetail',
+      name: 'messagedetail',
+      component: () => import('@/pages/informationpage/messageDetail.vue')
+    },
+    {
+      path: '/fillorder',
+      name: 'fillorder',
+      component: () => import('@/pages/market/fillOrder.vue')
     }
   ]
 })

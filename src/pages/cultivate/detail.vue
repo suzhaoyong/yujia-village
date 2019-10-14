@@ -5,7 +5,7 @@
         <div class="detail-main">
           <session-title name="课程介绍" brief="Sometimes beauty is so simple"></session-title>
           <div class="detail-count-div2">
-            <div class="count-div2-img" style="cursor: pointer;">
+            <div :class="`${train.train_image.length > 0 ? 'count-div2-img scorll' : 'count-div2-img'}`" style="cursor: pointer;">
               <img
                 @click="train.teacher_img = item.path"
                 v-for="(item, index) in train.train_image"
@@ -30,20 +30,28 @@
               </div>
               <div class="cultivate-text1">培训时间：{{train.startTime}} / {{train.endTime}}</div>
               <div class="cultivate-text2">培训地址：{{train.address}}</div>
-              <div class="cultivate-button">
+              <!-- <div class="cultivate-button">
+
                 <div class="button" @click="callTel">电话咨询</div>
-              </div>
-              <div style="display: flex;justify-content: flex-end;" v-if="config.url">
+
+              </div> -->
+              <div style="display: flex;justify-content: flex-start;" v-if="config.url" class="count-div2-text-share">
                 <share :config="config"></share>
               </div>
               <!-- <img class="imgpic1" src="../../assets/image69.png" /> -->
               <!-- <img class="imgpic2" src="../../assets/image70.png" /> -->
             </div>
+            <div class="count-div2-fixdbg">
+              <ul class="count-div2-fixdbg-ul">
+                <li><a href="javascript:;"><img src="/static/img/apply.png" title="我想学" @click="wantToStudy(train.id)"></a></li>
+                <li @click="callTel"><a href="javascript:;"><img src="/static/img/phone.png" title="咨询电话"></a></li>
+              </ul>
+            </div>
           </div>
           <div class="detail-count-div3">
             <session-title name="适宜人群" brief="Sometimes beauty is so simple"></session-title>
             <div class="div3-crowd">
-              <div class="div3-crowd-li" v-for="(item, index) in train.crowd">
+              <div class="div3-crowd-li" v-for="(item, index) in train.crowd" :key="index">
                 <h5>Easy to navigate</h5>
                 <img v-if="index%3 == 1" :src="icon.crowd_img_1" />
                 <img v-if="index%3 == 2" :src="icon.crowd_img_2" />
@@ -64,7 +72,6 @@
                 {{item}}
               </div> -->
               <div v-html="train.content">
-
               </div>
             </div>
             <img class="bg-picimg1" src="../../assets/image75.png" />
@@ -80,6 +87,9 @@
 </template>
 <script>
 import { getTrains, postTrains, getTrainsById } from "@/api/trains";
+import { getFollowTrain } from '@/api/personal'
+import { mapGetters } from 'vuex'
+import Bus from "@/utils/Bus"
 import SessionTitle from "./SessionTitle";
 import crowd_img_1 from "@/assets/image71.png";
 import crowd_img_2 from "@/assets/image72.png";
@@ -123,7 +133,21 @@ export default {
         this.initSocialConfig();
       });
   },
+  computed: {
+    ...mapGetters(['info'])
+  },
   methods: {
+    wantToStudy () {
+      const { id } = this.$route.params;
+      if (!this.info.user.name) {
+        Bus.$emit("login", true);
+        return;
+      } else {
+        getFollowTrain(id).then((data) => {
+          this.$message({type: 'success', message: '提交成功'})
+        })
+      }
+    },
     initSocialConfig() {
       const { theme, intro, content, teacher_img, crowd } = this.train;
       const params = {
@@ -208,20 +232,20 @@ export default {
       height: 14rem;
       margin-top: 3rem;
       /* 设置滚动条的样式 */
-      &::-webkit-scrollbar {
+      &.scorll::-webkit-scrollbar {
         width: 0.1rem;
       }
       /* 滚动槽 */
-      &::-webkit-scrollbar-track {
+      &.scorll::-webkit-scrollbar-track {
         background: #dcdcdc;
         border-radius: 0.15rem;
       }
       /* 滚动条滑块 */
-      &::-webkit-scrollbar-thumb {
+      &.scorll::-webkit-scrollbar-thumb {
         background: #88bc37;
         border-radius: 0.15rem;
       }
-      &::-webkit-scrollbar-thumb {
+      &.scorll::-webkit-scrollbar-thumb {
         background: #88bc37;
       }
       .img1 {
@@ -272,7 +296,7 @@ export default {
       .cultivate {
         color: #2c2c2c;
 
-        margin-top: 0.4rem;
+        margin-top: 1.5rem;
         .cultivate-span {
           color: #22ac38;
         }
@@ -280,26 +304,26 @@ export default {
       .cultivate-text1 {
         color: #2c2c2c;
 
-        margin-top: 0.5rem;
+        margin-top: 1.5rem;
       }
       .cultivate-text2 {
         color: #2c2c2c;
 
-        margin-top: 0.5rem;
+        margin-top: 1.5rem;
       }
-      .cultivate-button {
-        width: 7.4rem;
-        height: 3rem;
-        background: rgba(49, 49, 49, 1);
-        border-radius: 5px;
-        line-height: 3rem;
-        margin-top: 1.4rem;
-        text-align: center;
-        .button {
-          color: #ffffff;
-          cursor: pointer;
-        }
-      }
+      // .cultivate-button {
+      //   width: 7.4rem;
+      //   height: 3rem;
+      //   background: rgba(49, 49, 49, 1);
+      //   border-radius: 5px;
+      //   line-height: 3rem;
+      //   margin-top: 1.4rem;
+      //   text-align: center;
+      //   .button {
+      //     color: #ffffff;
+      //     cursor: pointer;
+      //   }
+      // }
       .imgpic1 {
         position: absolute;
         width: 11.1rem;
@@ -313,6 +337,35 @@ export default {
         right: -13%;
         width: 3.1rem;
         height: 3.4rem;
+      }
+      &-share {
+        position: relative;
+        left: -6px;
+        bottom: -43px;
+
+      }
+    }
+    .count-div2-fixdbg {
+      background: url('/static/img/rectangle.png') no-repeat;
+      position: fixed;
+      z-index: 100;
+      right: 1rem;
+      top: 345px;
+      &-ul {
+        width: 100%;
+        height: 80px;
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        position: relative;
+        left: -33px;
+        top: 15px;
+        li {
+          width: 100%; 
+          height: 28px;
+        }
       }
     }
   }

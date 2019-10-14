@@ -250,7 +250,6 @@
 import Banner from "@/components/banner";
 import VDistpicker from "v-distpicker";
 import Bus from "@/utils/Bus";
-import { mapGetters } from "vuex";
 import {
   getTrains,
   postTrainsList,
@@ -260,6 +259,10 @@ import {
   postTrainsRank,
   followTrain
 } from "@/api/trains";
+import {
+  getFollowTrain
+} from "@/api/personal";
+import { mapGetters } from "vuex";
 export default {
   components: {
     Banner,
@@ -383,6 +386,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["info"]),
     crowdList() {
       return item => item.split("●");
     },
@@ -392,7 +396,6 @@ export default {
         return { active: select };
       };
     },
-    ...mapGetters(["info"])
   },
   mounted() {
     this.getTrainsList();
@@ -415,6 +418,12 @@ export default {
     // }
   },
   methods: {
+    wantStudy(id) {
+      getFollowTrain(id)
+        .then(data => {
+          this.$message({type:'success', message: '提交成功'})
+        })
+    },
     getFiltersParams(params = {}) {
       this.selectTags.map(item => {
         if (
@@ -495,7 +504,7 @@ export default {
     },
     postGetRank(page=1, params) {
       postTrainsRank(page, params).then(data => {
-        this.fruit = data       
+        this.fruit = data
       })
     },
     // 默认排序
@@ -532,11 +541,12 @@ export default {
         Bus.$emit("login", true);
         return;
       }
+      this.wantStudy(id)
     },
     changePage(val) {
       if(this.keyWord === 'default') {
         this.getTrainsList(val);    
-        return    
+        return
       } else if(this.keyWord === 'host') {
         this.postGetRank(val,this.getRankParams(this.keyWord))
         return
@@ -1018,6 +1028,7 @@ img {
         }
         .fw {
           font-weight: 700;
+          cursor: pointer;
         }
         .trigon-top,
         .trigon-bottom {

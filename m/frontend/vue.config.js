@@ -6,7 +6,7 @@ module.exports = {
   devServer: {
     proxy: {
       '/api': {
-        target: 'http://api.aomengyujia.com/api',
+        target: 'http://testapi.aomengyujia.com/api',
         ws: true,
         changeOrigin: true,
         pathRewrite: {
@@ -33,6 +33,6 @@ module.exports = {
   },
   // 打包输出目录
   outputDir: '../../dist/wap',
-  publicPath: './',
+  publicPath: '/',
   assetsDir: './',
 }

@@ -12,6 +12,11 @@
                     <div class="share3" v-if="config.url">
                         <share :config="config"></share>
                     </div>
+                    <div class="Giveup">
+                        <img src="../assets/Give.png" class="Giveup_img" v-if="Giveupimg" @click="Giveuppraise"/>
+                        <img src="../assets/Givecolor.png" class="Giveup_img" v-if="Giveupimg1" @click="Giveuppraise"/>
+                        <span class="Giveup_num">{{teacher.praise}}</span>
+                    </div>
                 </div>
             </div>
             <div class="yogoteacher-count-div3">
@@ -35,11 +40,11 @@
                     <div class="border-left"></div>
                     <div class="border-right"></div>
                 </div>
-                <div class="yogo-cont-show" v-if="this.showList.length > 0">
-                    <div class="showlist" v-for="(item,index) in showList" :key="index">
+                <div class="yogo-cont-show" v-if="teacher.teacher_img.length > 0">
+                    <div class="showlist" v-for="(item,index) in teacher.teacher_img" :key="index">
                         <div class="showlist-auto">
                         <div class="showimg">
-                           <img :src="item.cover" class="showimg1"/>
+                           <img :src="item" class="showimg1"/>
                         </div>
                         </div>
                     </div>
@@ -56,11 +61,16 @@
 </template>
 <script>
 import { getTrains, postTrains, getTrainsById } from "@/api/trains";
+import Bus from "@/utils/Bus";
+import { mapGetters } from "vuex"
 export default {
   data() {
     return {
         teacher:{},
         showList:[],
+        msg:"",
+        Giveupimg:true,
+        Giveupimg1:false,
         config: {
         url: "",
         source: "",
@@ -73,10 +83,43 @@ export default {
       },
     };
   },
+    computed: {
+    ...mapGetters(["info"]),
+  },
   created () {
-      this.yogoteacherdata();
+    this.yogoteacherdata();
   },
   methods:{
+      Giveuppraise(){
+        if(!this.info.user.name){
+        // Bus.$emit("login", true);
+        this.$message({type:'warning', message: '请先登录'})
+        return;
+       }
+        let _this = this;
+        let params ={
+            id:_this.$route.query.id
+        }
+        this.$request.post(`/teachers/thumbsUp`,params).then(data => {
+            _this.msg = data.msg;
+            if(_this.msg == "OK"){
+            this.$message({type:'success', message: '点赞成功'});
+            _this.Giveupimg1 = true;
+            _this.Giveupimg = false;
+            this.yogoteacherdata();
+            }
+        })
+        .catch(error => {
+            let { response: { data: { errorCode, msg } } } = error;
+            if (errorCode != 0) {
+            this.$message({
+                message: msg,
+                type: "error"
+            });
+            return;
+            }
+        });
+      },
       yogoteacherdata(){
         let _this = this;
         this.$request(`/teachers/${_this.$route.query.id}`).then(res => {
@@ -125,15 +168,15 @@ export default {
             margin: 0 auto;
             cursor: pointer;
             .count-name{
-                width: 43%;
+                width: 46%;
                 margin: 0 auto;
                 border: 3px solid #43516A;
                 height: auto;
                 position: absolute;
-                bottom: 20%;
+                bottom: 15%;
                 left: 2%;
                 transition: all .9s;
-                line-height: 50px;
+                line-height: 40px;
                 text-align: center;
                 border-image: -webkit-linear-gradient(left, #AE8D66, #43516A) 30 30;
                 border-image: -moz-linear-gradient(left, #AE8D66, #43516A) 30 30;
@@ -155,7 +198,7 @@ export default {
             }
             .count-imgpic{
                 width: 340px;
-                height: 370px;
+                height: 374px;
                 position: absolute;
                 top: 10%;
                 left: 19%;
@@ -163,19 +206,36 @@ export default {
                 background-repeat: no-repeat;
                 background-size: 100% 100%;
                 .count-name-img{
-                    width: 255px;
-                    height: 270px;
+                    width: 262px;
+                    height: 260px;
                     position: absolute;
-                    top: 8%;
-                    left: 11%;
+                    top: 7%;
+                    left: 10%;
+                    object-fit: cover;
                 }
             }
             .share3{
-                width: 22%;
+                width: 17%;
                 text-align: center;
                 position: absolute;
-                bottom: 20%;
-                left: 45%;
+                bottom: 40%;
+                left: 21%;
+           }
+           .Giveup{
+                position: absolute;
+                bottom: 41%;
+                left: 39%;
+                .Giveup_img{
+                    width: 22px;
+                    height: 22px;
+                    margin-bottom: 5px;
+                }
+                .Giveup_num{
+                    color: #fff;
+                   font-size: 14px;
+                   font-family:Microsoft YaHei;
+                   font-weight:400;
+                }
            }
         }
     }
@@ -314,6 +374,7 @@ export default {
                     .showimg1{
                         width: 100%;
                         height: 100%;
+                        object-fit: cover;
                     }
                 }
                 .showtext{
