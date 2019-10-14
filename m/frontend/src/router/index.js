@@ -60,6 +60,11 @@ export default new Router({
       }]
     },
     {
+      // 个人资料编辑
+      path: '/personaldata',
+      component: () => import('@/pages/personalCenter/personaldata')
+    },
+    {
       // 我的订单
       path: '/myorder',
       component: () => import('@/pages/personalCenter/myorder')
