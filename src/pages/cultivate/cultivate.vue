@@ -147,7 +147,7 @@
                     <div class="fruit-list-li-text">
                       <h4>{{item.theme}}</h4>
                     </div>
-                    <div class="fruit-list-li-text">
+                    <div class="fruit-list-li-text2">
                       <el-rate :colors="['#58B708','#58B708','#58B708']" disabled :value="item.diff"></el-rate>
                       <div class="fruit-price">￥{{item.price}}</div>
                     </div>
@@ -191,7 +191,7 @@
                   <div class="fruit-list-li-text">
                     <h4>{{item.theme}}</h4>
                   </div>
-                  <div class="fruit-list-li-text">
+                  <div class="fruit-list-li-text2">
                     <el-rate :colors="['#58B708','#58B708','#58B708']" disabled :value="item.diff"></el-rate>
                     <div class="fruit-price">￥{{item.price}}</div>
                   </div>
@@ -1046,7 +1046,8 @@ img {
         margin: 0 auto;
         .fruit-list-li {
           width: 19.2rem;
-          height: 28.6rem;
+          height: 30rem;
+          // height: 100%;
           // padding-bottom: 1rem;
           background-color: #ffffff;
           border-radius: 0.3rem;
@@ -1064,15 +1065,34 @@ img {
             background-size: cover;
             background-repeat: no-repeat;
             background-position: top center;
+            background: #eee;
             img {
               width: 100%;
               height: 100%;
             }
           }
           .fruit-list-li-text {
+            // display: flex;
+            // justify-content: space-between;
+            // align-items: center;
+            width: 90%;
+            margin: 0 auto;
+            margin-top: 1rem;
+            height: 3.1rem;
+            overflow: hidden !important;
+            -webkit-line-clamp: 2 !important;
+            text-overflow: ellipsis !important;
+            display: -webkit-box !important;
+            -webkit-box-orient: vertical;
+            h4 {
+              font-size: 1.3rem;
+              color: #2c2c2c;
+            }
+          }
+          .fruit-list-li-text2 {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            // align-items: center;
             width: 90%;
             margin: 0 auto;
             margin-top: 1rem;
@@ -1090,7 +1110,7 @@ img {
           .list-eye {
             position: relative;
             width: 90%;
-            height: 2.7rem;
+            height: 3rem;
             padding: 10px 5px;
             margin: 0 auto;
             border-top: 1px solid rgba(229, 229, 229, 1);
@@ -1196,7 +1216,8 @@ img {
       margin: 0 auto;
       .fruit-list-li {
         width: 19.2rem;
-        height: 28.6rem;
+        height: 30rem;
+        // height: 100%;
         // padding-bottom: 1rem;
         background-color: #ffffff;
         border-radius: 0.3rem;
@@ -1214,15 +1235,45 @@ img {
           background-size: cover;
           background-repeat: no-repeat;
           background-position: top center;
+          background: #eee;
           img {
             width: 100%;
             height: 100%;
           }
         }
         .fruit-list-li-text {
+          // display: flex;
+          // justify-content: space-between;
+          // align-items: center;
+          width: 90%;
+          margin: 0 auto;
+          margin-top: 1rem;
+          height: 3.1rem;
+          overflow: hidden !important;
+          -webkit-line-clamp: 2 !important;
+          text-overflow: ellipsis !important;
+          display: -webkit-box !important;
+          -webkit-box-orient: vertical;
+          h4 {
+            font-size: 1.3rem;
+            color: #2c2c2c;
+          }
+          .list-eye {
+            img {
+              width: 1.6rem;
+              height: 1.5rem;
+              margin-top: -3px;
+            }
+            .span {
+              font-size: 1.1rem;
+              color: #2c2c2c;
+            }
+          }
+        }
+        .fruit-list-li-text2 {
           display: flex;
           justify-content: space-between;
-          align-items: center;
+          // align-items: center;
           width: 90%;
           margin: 0 auto;
           margin-top: 1rem;
@@ -1251,7 +1302,7 @@ img {
         .list-eye {
             position: relative;
             width: 90%;
-            height: 2.7rem;
+            height: 3rem;
             padding: 10px 5px;
             margin: 0 auto;
             border-top: 1px solid rgba(229, 229, 229, 1);
@@ -1389,6 +1440,7 @@ img {
         background-size: cover;
         background-repeat: no-repeat;
         background-position: top center;
+        background: #eee;
         img {
           object-fit: cover;
           height: 100%;

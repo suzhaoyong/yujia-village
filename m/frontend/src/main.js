@@ -14,7 +14,7 @@ import {
   NavBar, Icon, Cell, Button, 
   AddressEdit, Dialog, Checkbox, CheckboxGroup,
   Stepper, Rate, Field, Popup, Area ,Toast,
-  Swipe, SwipeItem, List,ActionSheet} from 'vant';
+  Swipe, SwipeItem, List,ActionSheet,Picker} from 'vant';
 
 import 'swiper/dist/css/swiper.min.css';
 
@@ -47,6 +47,7 @@ Vue.use(Field);
 Vue.use(Popup);
 Vue.use(Area);
 Vue.use(Toast);
+Vue.use(Picker);
 
 require('./mock')
 

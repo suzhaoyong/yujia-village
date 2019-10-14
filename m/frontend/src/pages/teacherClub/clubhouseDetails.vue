@@ -73,7 +73,7 @@
             </div>
             <div class="house_personnel_lists" v-if="personnelItem.length > 0">
                  <van-swipe :loop="false" :width="254" id="vanswipe3" :show-indicators="false">
-                    <van-swipe-item class="vanswipeitem3" v-for="(item,index) in personnelItem" :key="index">
+                    <van-swipe-item class="vanswipeitem3" v-for="(item,index) in personnelItem" :key="index" @click="exhibition(item)">
                         <div class="personnel_lists_items">
                             <div class="personnel_lists_img">
                                 <img :src="item.first_img"/>
@@ -124,6 +124,14 @@ export default {
             }
         });
       },
+      exhibition(item){
+        this.$router.push({
+            path: "/teacherClub/teacherDetails",
+            query: {
+            id: item.id
+            }
+        });
+    },
       goback(){
         this.$router.push({
             path: "/teacherClub/list",

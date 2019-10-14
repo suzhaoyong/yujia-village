@@ -5,7 +5,7 @@
             <van-tab title="首页" name="home" to="/main" replace></van-tab>
             <van-tab title="瑜伽资讯" name="yogainfo" replace></van-tab>
             <van-tab title="瑜伽知识" name="yogaknowledge" to="/yogaknowledge" replace></van-tab>
-            <van-tab title="关于我们" name="about" replace></van-tab>
+            <van-tab title="关于我们" name="aboutUs" to="/aboutUs" replace></van-tab>
         </van-tabs>
     </div>
 </template>
