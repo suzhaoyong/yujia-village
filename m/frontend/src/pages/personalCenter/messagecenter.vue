@@ -2,7 +2,7 @@
   <div>
     <van-nav-bar title="消息中心" left-arrow @click-left="onClickLeft"></van-nav-bar>
     <div class="messagecenter">
-        <div class="messagecenter_warp" @click="nextstep">
+        <div class="messagecenter_warp" @click="nextstep(item)" v-for="(item,index) in Message" :key="index">
             <div class="messagecenter_title">
                 <div class="messagecenter_img">
                     <img src="../../assets/teacherclub/message1.png" class="message_img"/>
@@ -12,14 +12,13 @@
                     <div class="messagelist_img">
                         <img src="../../assets/teacherclub/headimg.png"/>
                     </div>
-                    <div class="notice">99</div>
-                    <!-- <div class="notices"></div> -->
+                    <div class="notice">{{item.object}}</div>
                     <div class="messagelist_name">
                         <div class="messagelist_title">
                             <div class="title1 van-ellipsis">瑜伽村</div>
-                            <div class="title2">09/27 12:30</div>
+                            <div class="title2">{{item.updated_at}}</div>
                         </div>
-                        <div class="messagelist_text van-ellipsis">恭喜您，您的认证审核已通过guogugougou</div>
+                        <div class="messagelist_text van-ellipsis">{{item.content}}</div>
                     </div>
                 </div>
             </div>
@@ -28,21 +27,44 @@
   </div>
 </template>
 <script>
+/* eslint-disable */
 export default {
   data() {
         return {
+            Message:[]
         }
     },
+    created(){
+        this.messagecenter();
+    },
     methods: {
+        messagecenter(){
+            this.$request.get(`/personal/getMessage`).then(res => {
+                this.Message = res;
+        })
+        .catch(error => {
+            let { response: { data: { errorCode, msg } } } = error;
+            if (errorCode != 0) {
+            this.$message({
+                message: msg,
+                type: "error"
+            });
+            return;
+            }
+        });
+        },
         onClickLeft() {
             this.$router.go(-1);
         },
-        nextstep(){
+        nextstep(item){
             this.$router.push({
             path: "/messagedetails",
-            // query: {
-            // id: item.id
-            // }
+            query: {
+            id: item.id,
+            object:item.object,
+            updated_at:item.updated_at,
+            content:item.content
+            }
          });
         }
     }
@@ -54,6 +76,7 @@ export default {
     top: 0;
     width: 100%;
     font-size: 16px;
+    background: #fff;
     .van-icon {
         font-size: 20px;
         color: #2c2c2c;
@@ -105,19 +128,6 @@ export default {
                     color:#fff;
                     text-align:center;
                     background-color:#E31414;
-                    border-radius:50%;
-                    position:absolute;
-                    left:32px;
-                    top:-2px;
-                }
-                .notice {
-                    width:19px;
-                    height:19px;
-                    line-height:20px;
-                    font-size:10px;
-                    // color:#fff;
-                    text-align:center;
-                    // background-color:#E31414;
                     border-radius:50%;
                     position:absolute;
                     left:32px;

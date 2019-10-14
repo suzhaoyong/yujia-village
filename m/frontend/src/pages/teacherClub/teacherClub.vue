@@ -66,8 +66,8 @@
             <div class="Rotation_list hot-swiper" v-if="Box2">
                 <div class="swiper-container swiper1">
                     <div class="swiper-wrapper">
-                        <div class="Rotation_box swiper-slide" v-for="(item,index) in exhibitionBox2" :key="index" @click="exhibition(item)">
-                            <div class="Rotation_img">
+                        <div class="Rotation_box swiper-slide" v-for="(item,index) in exhibitionBox2" :key="index">
+                            <div class="Rotation_img" @click="exhibition(item)">
                              <img :src="item.first_img"/>
                             </div>
                             <div class="Rotation_title">
@@ -95,8 +95,8 @@
             </div>
             <div class="exhibition_items" v-if="exhibitionBox.length > 0">
                 <div class="exhibition_content">
-                    <div class="exhibition_box" v-for="(item,index) in exhibitionBox" :key="index" @click="exhibition(item)">
-                        <div class="exhibition_img">
+                    <div class="exhibition_box" v-for="(item,index) in exhibitionBox" :key="index">
+                        <div class="exhibition_img" @click="exhibition(item)">
                         <img :src="item.first_img"/>
                         </div>
                         <div class="exhibition_title">
@@ -105,7 +105,8 @@
                             <div class="exhibition_zan">
                             <div class="exhibition_zan_items">教龄：{{item.num}}年</div>
                             <div class="exhibition_zan_tips">
-                                <img src="../../assets/teacherclub/Give.png"/>
+                                <img src="../../assets/teacherclub/Give.png" v-if="Giveupimg" @click="Giveuppraise(item)"/>
+                                <img src="../../assets/teacherclub/Give2.png" v-if="Giveupimg1" @click="Giveuppraise(item)"/>
                                 <span class="span">{{item.praise}}</span>
                             </div>
                         </div>
@@ -135,13 +136,15 @@ export default {
         current:0,
         curritem:0,
         banner:'',
-        visible:false,
+        visible:true,
         Box2:false,
         banner2:'',
         isActive: 0,
         name:"",
         num:"",
         num2:"",
+        Giveupimg:true,
+        Giveupimg1:false,
         liList:["联盟会馆","瑜伽名师"],
         items:["全部","最新","距离最近"],
         clubBox:[],
@@ -200,6 +203,31 @@ export default {
             }
         });
       },
+      //点赞
+      Giveuppraise(item){
+        let params ={
+            id:item.id
+        }
+        this.$request.post(`/teachers/thumbsUp`,params).then(data => {
+            this.msg = data.msg;
+            if(this.msg == "OK"){
+            alert("点赞成功");
+            this.Giveupimg1 = true;
+            this.Giveupimg = false;
+            this.exhibitionList();
+            }
+        })
+        .catch(error => {
+            let { response: { data: { errorCode, msg } } } = error;
+            if (errorCode != 0) {
+            this.$message({
+                message: msg,
+                type: "error"
+            });
+            return;
+            }
+        });
+      },
       swiperInit(){
         new Swiper('.swiper1', {
             slidesPerView: 'auto',
@@ -226,8 +254,8 @@ export default {
       let params = {
                 name:"",//老师名字
                 good_at:this.ids,//擅长
-                min_num:this.num,//最小资历
-                max_num:"",//最大资历
+                min_num:"0",//最小资历
+                max_num:this.num,//最大资历
                 city:"",//城市
                 province:"",//省
                 area:this.num2//区
@@ -680,14 +708,14 @@ input:-ms-input-placeholder{
                 display: flow-root;
                 margin-bottom: 10px;
                 .house_type_one{
-                    width: 52px;
-                    height: 52px;
+                    width: 60px;
+                    height: 60px;
                     border-radius: 50%;
                     // line-height: 42px;
                     text-align: center;
                     background-color: #ffffff;
                     margin-top: 10px;
-                    margin-right: 6px;
+                    margin-right: 9px;
                     float: left;
                     font-size: 10px;
                     overflow: hidden;
@@ -696,7 +724,8 @@ input:-ms-input-placeholder{
                         font-family:PingFang SC;
                         font-weight:400;
                         display: block;
-                        padding-top: 15px;
+                        padding-top: 13px;
+                        margin: 3px;
                         color:rgba(44,44,44,1);
                     }
                     .selected {

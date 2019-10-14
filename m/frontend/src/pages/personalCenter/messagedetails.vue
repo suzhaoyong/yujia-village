@@ -3,14 +3,14 @@
     <van-nav-bar title="系统消息" left-arrow @click-left="onClickLeft"></van-nav-bar>
     <div class="System">
         <div class="System_list">
-            <div class="text">2019-05-20 09:00</div>
+            <div class="text">{{this.$route.query.updated_at}}</div>
             <div class="System_list_item">
                 <div class="System_img">
                    <img src="../../assets/teacherclub/headimg.png"/>
                 </div>
                 <div class="send">
                    <div class="kailong"></div>
-                   <div class="send_text">恭喜您，您的认证审核已通过恭喜您，您的认证审核已通过恭喜您，您的认证审核已通过</div>
+                   <div class="send_text">{{this.$route.query.content}}</div>
                 </div>
             </div>
         </div>
@@ -18,10 +18,14 @@
   </div>
 </template>
 <script>
+/* eslint-disable */
 export default {
   data() {
         return {
         }
+    },
+    created(){
+        let query = this.$route.query;
     },
     methods: {
         onClickLeft() {
@@ -36,6 +40,7 @@ export default {
     top: 0;
     width: 100%;
     font-size: 16px;
+    background: #fff;
     .van-icon {
         font-size: 20px;
         color: #2c2c2c;

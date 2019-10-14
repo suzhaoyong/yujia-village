@@ -49,14 +49,9 @@ Vue.use(Field);
 Vue.use(Popup);
 Vue.use(Area);
 Vue.use(Toast);
-<<<<<<< HEAD
+Vue.use(Picker);
 Vue.use(Uploader);
-Vue.use(Picker);
 Vue.use(DatetimePicker);
-
-=======
-Vue.use(Picker);
->>>>>>> 672b8839b3d789ff92f81be1e5882a87e8ad9a2b
 
 require('./mock')
 

@@ -5,6 +5,10 @@
             <div class="username">
                 <span class="uname">{{personalData.name}} | </span><span>{{personalData.identity_auth}}</span>
             </div>
+            <div class="bell" @click="message">
+                <img src="../assets/teacherclub/bell.png" class="bell_img"/>
+                <div class="bell_circle">4</div>
+            </div>
             <div class="my-box">
                 <router-link to="/myorder">我的订单</router-link>
                 <router-link to="/shoppingbag">购物袋</router-link>
@@ -15,7 +19,7 @@
         <div class="asset">
             <div class="asset-item1">
                 <div class="img"></div>
-                <span class="my-asset"><router-link to="/messagecenter">我的资产</router-link></span>
+                <span class="my-asset">我的资产</span>
             </div>
             <div class="asset-item">
                 <div>{{personalData.money}}</div>
@@ -123,6 +127,9 @@ export default {
         goInfoEditor() {
             this.$router.push('/personaldata')
         },
+        message(){
+            this.$router.push('/messagecenter')
+        },
         showPopup() {
             this.show = true;
         },
@@ -164,6 +171,27 @@ export default {
         color: #fff;
         .uname {
             font-size: 14px;
+        }
+    }
+    .bell{
+        position: absolute;
+        right: 25px;
+        top: 15px;
+        .bell_img{
+            width: 17px;
+            height: 21px;
+        }
+        .bell_circle{
+            width: 15px;
+            height: 15px;
+            background-color: #E60012;
+            font-size: 10px;
+            color: #fff;
+            border-radius: 50%;
+            text-align: center;
+            position: absolute;
+            top: 4px;
+            right: -9px;
         }
     }
 }
