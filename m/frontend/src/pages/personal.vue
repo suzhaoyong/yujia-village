@@ -15,7 +15,7 @@
         <div class="asset">
             <div class="asset-item1">
                 <div class="img"></div>
-                <span class="my-asset">我的资产</span>
+                <span class="my-asset"><router-link to="/messagecenter">我的资产</router-link></span>
             </div>
             <div class="asset-item">
                 <div>{{personalData.money}}</div>
@@ -23,11 +23,11 @@
             </div>
             <div class="asset-item">
                 <div>1</div>
-                <div>现金券</div>
+                <div><router-link to="/cashvoucher">现金券</router-link></div>
             </div>
             <div class="asset-item">
                 <div>1</div>
-                <div>优惠券</div>
+                <div><router-link to="/coupon">优惠券</router-link></div>
             </div>
             <div class="asset-item">
                 <div>{{personalData.fraction}}</div>
@@ -132,7 +132,7 @@ export default {
             window.sessionStorage.removeItem('access');
             // 退出回到首页
             window.open(`${window.location.origin}`, "_self");
-        }
+        },
     }
 }
 </script>

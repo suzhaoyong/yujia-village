@@ -43,6 +43,10 @@ const router = new Router({
       children: [{
         path: '/yogaknowledge',
         component: () => import('@/pages/homepage/yogaknowledge')
+      },
+      {
+        path: '/aboutUs',
+        component: () => import('@/pages/homepage/aboutUs')
       }]
     },
     // 首页
@@ -70,6 +74,26 @@ const router = new Router({
       // 我的订单
       path: '/myorder',
       component: () => import('@/pages/personalCenter/myorder')
+    },
+    {
+      // 现金券
+      path: '/cashvoucher',
+      component: () => import('@/pages/personalCenter/cashvoucher')
+    },
+    {
+      // 优惠券
+      path: '/coupon',
+      component: () => import('@/pages/personalCenter/coupon')
+    },
+    {
+      // 消息中心
+      path: '/messagecenter',
+      component: () => import('@/pages/personalCenter/messagecenter')
+    },
+    {
+      // 消息中心详情
+      path: '/messagedetails',
+      component: () => import('@/pages/personalCenter/messagedetails')
     },
     {
       // 购物袋
@@ -244,7 +268,7 @@ const router = new Router({
       path: '/fillorder',
       name: 'fillorder',
       component: () => import('@/pages/market/fillOrder.vue')
-    }
+    },
   ]
 })
 
