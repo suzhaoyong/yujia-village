@@ -5,7 +5,7 @@
         <span :class="isActive('register')" @click="changeType('register')">注册</span>
         <span :class="isActive('login')" @click="changeType('login')">登录</span>
         <span :class="isActive('reset')" @click="changeType('reset')">登录</span>
-      </div> -->
+      </div>-->
       <div class="form" v-show="form.type === 'login'">
         <div class="logo">
           <img :src="icon.welcome" alt />
@@ -14,7 +14,7 @@
           <div class="icon">
             <img :src="icon.tel" alt />
           </div>
-          <input class="input tel" v-model="ruleForm.tel" placeholder="请输入手机号码" />
+          <input class="input tel" type="tel" v-model="ruleForm.tel" placeholder="请输入手机号码" />
         </div>
         <div class="input-box flex line">
           <div class="icon key">
@@ -23,7 +23,7 @@
           <input class="input key" type="password" v-model="ruleForm.password" placeholder="请输入密码" />
         </div>
         <div class="input-box flex">
-          <input class="input captcha" v-model="ruleForm.captcha" placeholder="请输入验证码" />
+          <input class="input captcha" type="tel" v-model="ruleForm.captcha" placeholder="请输入验证码" />
           <div class="code">
             <div class="img">
               <img :src="verification.code_img" alt />
@@ -48,11 +48,11 @@
       </div>
       <div class="form" style="margin-top:68px;" v-show="form.type === 'register'">
         <div class="input-box reg tel">
-          <van-field v-model="registerForm.tel" placeholder />
+          <van-field type="tel" v-model="registerForm.tel" placeholder />
         </div>
         <div class="input-box flex">
           <div class="reg-captch">
-            <van-field v-model="registerForm.captcha" placeholder />
+            <van-field type="tel" v-model="registerForm.captcha" placeholder />
           </div>
 
           <div class="code">
@@ -70,7 +70,7 @@
           </div>
         </div>
         <div class="input-box reg ver_code">
-          <van-field v-model="registerForm.verification_code" center clearable placeholder></van-field>
+          <van-field type="tel" v-model="registerForm.verification_code" center clearable placeholder></van-field>
           <van-button
             class="sms"
             size="small"
@@ -92,11 +92,11 @@
       </div>
       <div class="form" style="margin-top:68px;" v-show="form.type === 'reset'">
         <div class="input-box reg tel">
-          <van-field v-model="reset.tel" placeholder />
+          <van-field type="tel" v-model="reset.tel" placeholder />
         </div>
         <div class="input-box flex">
           <div class="reg-captch">
-            <van-field v-model="reset.captcha" placeholder />
+            <van-field type="tel" v-model="reset.captcha" placeholder />
           </div>
 
           <div class="code">
@@ -114,7 +114,7 @@
           </div>
         </div>
         <div class="input-box reg ver_code">
-          <van-field v-model="reset.verification_code" center clearable placeholder></van-field>
+          <van-field type="tel" v-model="reset.verification_code" center clearable placeholder></van-field>
           <van-button
             class="sms"
             size="small"
@@ -191,7 +191,7 @@ import refresh from "@/assets/img/refresh.png";
 import Pdfh5 from "pdfh5";
 import Vue from "vue";
 import { Field, Button, Notify, Dialog } from "vant";
-
+import store from "@/store";
 Vue.use(Field)
   .use(Button)
   .use(Dialog)
@@ -314,10 +314,22 @@ export default {
       const params = Object.assign({}, this.ruleForm);
       this.$request
         .post("/auth/login", params)
-        .then(data => {
-          Notify({ message: "登录成功", type: "success" });
+        .then((data)=> {
           sessionStorage.setItem("access", JSON.stringify(data));
-          window.open('/personal','_self');
+          Notify({ message: "登录成功", type: "success" });
+        })
+        .then(()=> {
+          this.$request
+            .get("/personal/home")
+            .then(data => {
+              store.dispatch("INFO", data);
+              sessionStorage.setItem('user data',JSON.stringify(data));
+
+            })
+            .then(()=> {
+              // window.open("/personal", "_self");
+              this.$router.go(-1)
+            });
         })
         .catch(err => {
           Notify(err);

@@ -46,14 +46,16 @@
           </div>
         </div>
       </div>
-      <div class="card-name">长按图片，保存或发送给朋友</div>
+      <div class="card-name" v-longTouch="handleLongTouch">长按图片，保存或发送给朋友</div>
     </div>
   </div>
 </template>
 <script>
 import { getGoodsById } from "@/api/category.js";
+import longTouch from '@/utils/longTouch'
 export default {
   name: "share",
+  directives: { longTouch },
   data() {
     return {
       goods_copy: {
@@ -68,6 +70,10 @@ export default {
     }
   },
   methods: {
+    // 长按
+    handleLongTouch(el) {
+      console.log(el)
+    },
     getGoodsInfo() {
       const { goodsId } = this.$route.query;
       getGoodsById(goodsId).then(response => {

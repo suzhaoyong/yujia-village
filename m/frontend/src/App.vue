@@ -28,6 +28,9 @@ export default {
 #app {
   background-color: #eee;
 }
+.van-cell__title {
+  color: #2c2c2c;
+}
 .loding_wrap {
   position: fixed;
   top: 0;

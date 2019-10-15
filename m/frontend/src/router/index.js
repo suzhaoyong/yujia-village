@@ -33,6 +33,10 @@ const router = new Router({
       component: Home,
       children: [{
         path: '/main',
+        meta: {
+          header_name: 'home',
+          keepAlive: false
+        },
         component: () => import('@/pages/main')
       }]
     },
@@ -62,6 +66,10 @@ const router = new Router({
       component: Home,
       children: [{
         path: '/personal',
+        meta: {
+          header_name: 'personal',
+          keepAlive: false
+        },
         component: () => import('@/pages/personal')
       }]
     },
@@ -158,7 +166,7 @@ const router = new Router({
         path: 'category',
         name: 'category',
         meta: {
-          header_name: 'market',
+          header_name: 'store',
           keepAlive: true
         },
         component: () => import('@/pages/market/category')
@@ -221,7 +229,8 @@ const router = new Router({
         path: 'list',
         name: 'teacherClub list',
         meta: {
-          header_name: 'market'
+          header_name: 'teacherClub',
+          keepAlive: false
         },
         component: () => import('@/pages/teacherClub/teacherClub')
       }]
@@ -255,7 +264,10 @@ const router = new Router({
       children: [{
         path: 'list',
         name: 'yogamessage list',
-
+        meta: {
+          header_name: 'yogamessage',
+          keepAlive: false
+        },
         component: () => import('@/pages/informationpage/yogaMessage.vue')
       }]
     },

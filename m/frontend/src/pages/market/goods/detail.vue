@@ -315,8 +315,10 @@ export default {
     },
     // 获取购物袋数据
     getShoppingBag() {
+      // if(this.getSelectParams() == '') return;
+      
       if (this.isUserNeedLogin) {
-        // this.$router.push('/login');
+        this.$router.push("/login");
         return;
       }
       this.$request.get("/userCart/create").then(data => {
@@ -326,6 +328,8 @@ export default {
     },
     // 点击加入购物车
     handleAddCart() {
+      
+      
       if (this.isUserNeedLogin) {
         this.$router.push("/login");
         return;
@@ -379,11 +383,11 @@ export default {
     },
     // 点击立即购买
     handleBuyGoods() {
-      if (this.isUserNeedLogin) {
-        // this.$router.push("/login");
-        // return;
-      }
       if(this.getSelectParams() == '') return;
+      if (this.isUserNeedLogin) {
+        this.$router.push("/login");
+        return;
+      }
       const { describe, discount, sell_price, cover } = this.goods_copy
       const params = {
         ...this.getSelectParams(),

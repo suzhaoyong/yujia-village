@@ -10,6 +10,7 @@
     </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 export default {
     name: 'Footer',
     data() {
@@ -49,7 +50,12 @@ export default {
             ],
         }
     },
+    computed: {
+      ...mapGetters(['isUserNeedLogin'])
+    },
     created() {
+        const { header_name } = this.$route.meta
+        this.active = header_name
         this.refresh()
     },
     methods: {
@@ -61,10 +67,9 @@ export default {
             // 切换 tabbar 路由跳转
             if(active === 'home' && window.sessionStorage.getItem('index')) {
                 this.$router.push('/'+ window.sessionStorage.getItem('index'));
+            } else if(active === 'personal' && this.isUserNeedLogin) {
+                this.$router.push('/login');
             } 
-            // else if(active === 'personal' && !window.sessionStorage.getItem('access')) {
-            //     this.$router.push('/login');
-            // } 
             else {
                 this.$router.push('/'+ active);
             }

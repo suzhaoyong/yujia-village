@@ -12,8 +12,8 @@ function handleRequest(config) {
   config.headers['Authorization'] = access && `${JSON.parse(access).token_type}${JSON.parse(access).access_token}` || '';
   // config.baseURL = 'http://api.aomengyujia.com/api';
   // config.baseURL = 'http://testapi.aomengyujia.com/document/api';
-  config.baseURL = 'https://api.yujiacun.net/api';
-  // config.baseURL = 'http://testapi.aomengyujia.com/api';
+  // config.baseURL = 'https://api.yujiacun.net/api';
+  config.baseURL = 'http://testapi.aomengyujia.com/api';
 
   if (contentType === 'json') {
     config.headers['Content-Type'] = 'application/json';
@@ -37,6 +37,7 @@ function handleResponeseErr(err) {
   if(data.code === '0001') {
     request.post('/auth/refresh')
         .then(data => {
+          console.log(data)
           sessionStorage.setItem('access', JSON.stringify(data))
           store.dispatch("INFO", data);
           window.location.reload();

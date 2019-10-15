@@ -19,7 +19,10 @@ export default new Vuex.Store({
   },
   getters: {
     info: state => state.info,
-    isUserNeedLogin: state => state.info.user.name === ''
+    isUserNeedLogin: state => {
+      console.log(JSON.stringify(state.info))
+      return !state.info.user.name
+    }
   },
   mutations: {
     loadStatus(state, flag) {
@@ -53,7 +56,8 @@ export default new Vuex.Store({
       state
     }, info) {
       console.log(info)
-      commit('UPDATE_INFO', info)
+      info ? commit('UPDATE_INFO', info)
+      : commit('UPDATE_INFO', {})
     },
     ADD_GOODS({
       commit,

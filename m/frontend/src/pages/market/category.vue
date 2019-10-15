@@ -18,7 +18,7 @@
       <!-- 每日推荐 -->
       <section class="daily" v-show="kinds.curIndex === -1">
         <!-- 新品 -->
-        <div class="news">
+        <div class="news" @click="viewGoods(goodsRecomment.new)">
           <div class="news_title">新品推荐</div>
           <div class="news_content">
             <div
@@ -278,7 +278,7 @@ export default {
       isActive: false,
       kinds: {
         list: [],
-        curIndex: 0
+        curIndex: -1
       },
       subAside: {
         isOpen: false,

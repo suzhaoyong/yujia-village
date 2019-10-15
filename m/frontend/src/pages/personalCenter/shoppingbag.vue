@@ -49,7 +49,7 @@ export default {
     },
     computed: {
         isAllChecked(){
-            return this.shoppingBagList.every( item => item.check )
+            return this.shoppingBagList.length > 0 && this.shoppingBagList.every( item => item.check )
         },
         hasSomeChecked(){
             return this.shoppingBagList.some( item => item.check )
