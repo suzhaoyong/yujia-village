@@ -10,16 +10,16 @@
                 </div>
                 <div class="messagelist">
                     <div class="messagelist_img">
-                        <img src="../../assets/teacherclub/headimg.png"/>
+                        <img src="../../assets/teacherclub/messageimg.png"/>
                     </div>
-                    <div class="notice">99</div>
-                    <!-- <div class="notices"></div> -->
+                    <div class="notice" v-if="Message.count != 0">{{Message.count}}</div>
+                     <div class="notices" v-else></div>
                     <div class="messagelist_name">
                         <div class="messagelist_title">
                             <div class="title1 van-ellipsis">瑜伽村</div>
-                            <div class="title2">09/27 12:30</div>
+                            <div class="title2">{{first.day}} {{first.time}}</div>
                         </div>
-                        <div class="messagelist_text van-ellipsis">恭喜您，您的认证审核已通过guogugougou</div>
+                        <div class="messagelist_text van-ellipsis">{{first.content}}</div>
                     </div>
                 </div>
             </div>
@@ -28,21 +28,40 @@
   </div>
 </template>
 <script>
+/* eslint-disable */
 export default {
   data() {
         return {
+            Message:{},
+            first:{}
         }
     },
+    created(){
+        this.messagecenter();
+    },
     methods: {
+        messagecenter(){
+            this.$request.get(`/personal/message/mobile/first`).then(res => {
+                this.Message = res;
+                this.first = res.first;
+        })
+        .catch(error => {
+            let { response: { data: { errorCode, msg } } } = error;
+            if (errorCode != 0) {
+            this.$message({
+                message: msg,
+                type: "error"
+            });
+            return;
+            }
+        });
+        },
         onClickLeft() {
             this.$router.go(-1);
         },
         nextstep(){
             this.$router.push({
             path: "/messagedetails",
-            // query: {
-            // id: item.id
-            // }
          });
         }
     }
@@ -54,6 +73,7 @@ export default {
     top: 0;
     width: 100%;
     font-size: 16px;
+    background: #fff;
     .van-icon {
         font-size: 20px;
         color: #2c2c2c;
@@ -110,12 +130,12 @@ export default {
                     left:32px;
                     top:-2px;
                 }
-                .notice {
+                .notices {
                     width:19px;
                     height:19px;
                     line-height:20px;
                     font-size:10px;
-                    // color:#fff;
+                    color:#fff;
                     text-align:center;
                     // background-color:#E31414;
                     border-radius:50%;

@@ -150,12 +150,13 @@ export default {
     top: 0;
     left: 0;
     width: 100%;
+    background-color: #fff !important;
 }
 .clubhouse_main{
     width: 100%;
     height: 100%;
     display: inline-block;
-    background: #fff;
+    background: #fff !important;
     .list_clubhouse{
         width: 93%;
         height: 60px;

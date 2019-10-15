@@ -2,15 +2,15 @@
   <div>
     <van-nav-bar title="系统消息" left-arrow @click-left="onClickLeft"></van-nav-bar>
     <div class="System">
-        <div class="System_list">
-            <div class="text">2019-05-20 09:00</div>
+        <div class="System_list" v-for="(item,index) in Message" :key="index">
+            <div class="text">{{item.day}} {{item.time}}</div>
             <div class="System_list_item">
                 <div class="System_img">
-                   <img src="../../assets/teacherclub/headimg.png"/>
+                   <img src="../../assets/teacherclub/messageimg.png"/>
                 </div>
                 <div class="send">
                    <div class="kailong"></div>
-                   <div class="send_text">恭喜您，您的认证审核已通过恭喜您，您的认证审核已通过恭喜您，您的认证审核已通过</div>
+                   <div class="send_text">{{item.content}}</div>
                 </div>
             </div>
         </div>
@@ -18,12 +18,32 @@
   </div>
 </template>
 <script>
+/* eslint-disable */
 export default {
   data() {
         return {
+            Message:[]
         }
     },
+    created(){
+        this.messagedetails();
+    },
     methods: {
+        messagedetails(){
+            this.$request.get(`/personal/message/mobile/all`).then(res => {
+                this.Message = res;
+        })
+        .catch(error => {
+            let { response: { data: { errorCode, msg } } } = error;
+            if (errorCode != 0) {
+            this.$message({
+                message: msg,
+                type: "error"
+            });
+            return;
+            }
+        });
+        },
         onClickLeft() {
             this.$router.go(-1);
         },
@@ -36,6 +56,7 @@ export default {
     top: 0;
     width: 100%;
     font-size: 16px;
+    background: #fff;
     .van-icon {
         font-size: 20px;
         color: #2c2c2c;

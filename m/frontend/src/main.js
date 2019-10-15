@@ -14,7 +14,8 @@ import {
   NavBar, Icon, Cell, CellGroup, Button, 
   AddressEdit, Dialog, Checkbox, CheckboxGroup,
   Stepper, Rate, Field, Popup, Area ,Toast ,
-  Uploader ,Picker ,DatetimePicker, Swipe, SwipeItem, List,ActionSheet    } from 'vant';
+  Uploader ,Picker ,DatetimePicker, Swipe, SwipeItem, List,ActionSheet,
+  DropdownMenu, DropdownItem } from 'vant';
 
 import 'swiper/dist/css/swiper.min.css';
 import lrz from 'lrz';
@@ -51,8 +52,9 @@ Vue.use(Area);
 Vue.use(Toast);
 Vue.use(Uploader);
 Vue.use(Picker);
+Vue.use(Uploader);
 Vue.use(DatetimePicker);
-
+Vue.use(DropdownMenu).use(DropdownItem); 
 
 require('./mock')
 

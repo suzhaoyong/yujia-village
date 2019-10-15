@@ -5,53 +5,59 @@
             <van-tab v-for="(item,index) in orderTitle" :key="index" :title="item" :name="item">
                 <div v-if="activeName === '未使用'">
                     <div class="Notused">
-                        <div class="Notused_count">
+                        <div v-for="(item,index) in couponlist" :key="index">
+                        <div class="Notused_count" v-if="item.status == '未使用'">
                             <div class="Notused_count_title">
                                 <div class="title1">消费商品</div>
-                                <div class="title2">优惠券</div>
-                                <div class="title3">满199即可使用</div>
+                                <div class="title2">{{item.name}}</div>
+                                <div class="title3">{{item.range}}</div>
                             </div>
                             <div class="Notused_count_price">
-                                <div class="price"><span class="coin">￥</span>200</div>
-                                <div class="date">2019.05.20-2019.10.20</div>
+                                <div class="price"><span class="coin">￥</span>{{item.money}}</div>
+                                <div class="date">{{item.startDate}}-{{item.endDate}}</div>
                             </div>
                             <div class="Notused_count_horn"></div>
+                        </div>
                         </div>
                     </div>
                 </div>
                 <div v-if="activeName === '已使用'">
                     <div class="Notused2">
-                        <div class="Notused_count">
+                        <div v-for="(item,index) in couponlist" :key="index">
+                        <div class="Notused_count" v-if="item.status == '已使用'">
                             <div class="Notused_count_title">
                                 <div class="title1">消费商品</div>
-                                <div class="title2">优惠券</div>
-                                <div class="title3">满199即可使用</div>
+                                <div class="title2">{{item.name}}</div>
+                                <div class="title3">{{item.range}}</div>
                             </div>
                             <div class="Notused_count_price">
-                                <div class="price"><span class="coin">￥</span>200</div>
-                                <div class="date">2019.05.20-2019.10.20</div>
+                                <div class="price"><span class="coin">￥</span>{{item.money}}</div>
+                                <div class="date">{{item.startDate}}-{{item.endDate}}</div>
                             </div>
                             <div class="Notused_count_horn">
                                 <span class="bestow">已使用</span>
                             </div>
                         </div>
+                        </div>
                     </div>
                 </div>
                 <div v-if="activeName === '已失效'">
                     <div class="Notused3">
-                        <div class="Notused_count">
+                        <div v-for="(item,index) in couponlist" :key="index">
+                        <div class="Notused_count" v-if="item.status == '已失效'">
                             <div class="Notused_count_title">
                                 <div class="title1">消费商品</div>
-                                <div class="title2">优惠券</div>
-                                <div class="title3">满199即可使用</div>
+                                <div class="title2">{{item.name}}</div>
+                                <div class="title3">{{item.range}}</div>
                             </div>
                             <div class="Notused_count_price">
-                                <div class="price"><span class="coin">￥</span>200</div>
-                                <div class="date">2019.05.20-2019.10.20</div>
+                                <div class="price"><span class="coin">￥</span>{{item.money}}</div>
+                                <div class="date">{{item.startDate}}-{{item.endDate}}</div>
                             </div>
                             <div class="Notused_count_horn">
                                 <span class="abate">已失效</span>
                             </div>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -60,17 +66,38 @@
     </div>
 </template>
 <script>
+/* eslint-disable */
 export default {
     data() {
         return {
             activeName: '未使用',
             orderTitle: ['未使用','已使用','已失效'],
+            couponlist:[],
         }
+    },
+    created(){
+        this.coupon();
     },
     methods: {
         onClickLeft() {
             this.$router.go(-1);
         },
+        coupon(){
+        this.$request.get(`/personal/home`).then(res => {
+            let { coupon } = res;
+            this.couponlist = coupon;
+        })
+        .catch(error => {
+            let { response: { data: { errorCode, msg } } } = error;
+            if (errorCode != 0) {
+            this.$message({
+                message: msg,
+                type: "error"
+            });
+            return;
+            }
+        });
+      },
     }
 }
 </script>
@@ -80,6 +107,7 @@ export default {
     top: 0;
     width: 100%;
     font-size: 16px;
+    background: #fff;
     .van-icon {
         font-size: 20px;
         color: #2c2c2c;
