@@ -2,7 +2,7 @@
   <div>
     <van-nav-bar title="消息中心" left-arrow @click-left="onClickLeft"></van-nav-bar>
     <div class="messagecenter">
-        <div class="messagecenter_warp" @click="nextstep(item)" v-for="(item,index) in Message" :key="index">
+        <div class="messagecenter_warp" @click="nextstep">
             <div class="messagecenter_title">
                 <div class="messagecenter_img">
                     <img src="../../assets/teacherclub/message1.png" class="message_img"/>
@@ -10,15 +10,16 @@
                 </div>
                 <div class="messagelist">
                     <div class="messagelist_img">
-                        <img src="../../assets/teacherclub/headimg.png"/>
+                        <img src="../../assets/teacherclub/messageimg.png"/>
                     </div>
-                    <div class="notice">{{item.object}}</div>
+                    <div class="notice" v-if="Message.count != 0">{{Message.count}}</div>
+                     <div class="notices" v-else></div>
                     <div class="messagelist_name">
                         <div class="messagelist_title">
                             <div class="title1 van-ellipsis">瑜伽村</div>
-                            <div class="title2">{{item.updated_at}}</div>
+                            <div class="title2">{{first.day}} {{first.time}}</div>
                         </div>
-                        <div class="messagelist_text van-ellipsis">{{item.content}}</div>
+                        <div class="messagelist_text van-ellipsis">{{first.content}}</div>
                     </div>
                 </div>
             </div>
@@ -31,7 +32,8 @@
 export default {
   data() {
         return {
-            Message:[]
+            Message:{},
+            first:{}
         }
     },
     created(){
@@ -39,8 +41,9 @@ export default {
     },
     methods: {
         messagecenter(){
-            this.$request.get(`/personal/getMessage`).then(res => {
+            this.$request.get(`/personal/message/mobile/first`).then(res => {
                 this.Message = res;
+                this.first = res.first;
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -56,15 +59,9 @@ export default {
         onClickLeft() {
             this.$router.go(-1);
         },
-        nextstep(item){
+        nextstep(){
             this.$router.push({
             path: "/messagedetails",
-            query: {
-            id: item.id,
-            object:item.object,
-            updated_at:item.updated_at,
-            content:item.content
-            }
          });
         }
     }
@@ -128,6 +125,19 @@ export default {
                     color:#fff;
                     text-align:center;
                     background-color:#E31414;
+                    border-radius:50%;
+                    position:absolute;
+                    left:32px;
+                    top:-2px;
+                }
+                .notices {
+                    width:19px;
+                    height:19px;
+                    line-height:20px;
+                    font-size:10px;
+                    color:#fff;
+                    text-align:center;
+                    // background-color:#E31414;
                     border-radius:50%;
                     position:absolute;
                     left:32px;

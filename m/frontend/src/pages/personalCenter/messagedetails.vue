@@ -2,15 +2,15 @@
   <div>
     <van-nav-bar title="系统消息" left-arrow @click-left="onClickLeft"></van-nav-bar>
     <div class="System">
-        <div class="System_list">
-            <div class="text">{{this.$route.query.updated_at}}</div>
+        <div class="System_list" v-for="(item,index) in Message" :key="index">
+            <div class="text">{{item.day}} {{item.time}}</div>
             <div class="System_list_item">
                 <div class="System_img">
-                   <img src="../../assets/teacherclub/headimg.png"/>
+                   <img src="../../assets/teacherclub/messageimg.png"/>
                 </div>
                 <div class="send">
                    <div class="kailong"></div>
-                   <div class="send_text">{{this.$route.query.content}}</div>
+                   <div class="send_text">{{item.content}}</div>
                 </div>
             </div>
         </div>
@@ -22,12 +22,28 @@
 export default {
   data() {
         return {
+            Message:[]
         }
     },
     created(){
-        let query = this.$route.query;
+        this.messagedetails();
     },
     methods: {
+        messagedetails(){
+            this.$request.get(`/personal/message/mobile/all`).then(res => {
+                this.Message = res;
+        })
+        .catch(error => {
+            let { response: { data: { errorCode, msg } } } = error;
+            if (errorCode != 0) {
+            this.$message({
+                message: msg,
+                type: "error"
+            });
+            return;
+            }
+        });
+        },
         onClickLeft() {
             this.$router.go(-1);
         },

@@ -7,7 +7,8 @@
             </div>
             <div class="bell" @click="message">
                 <img src="../assets/teacherclub/bell.png" class="bell_img"/>
-                <div class="bell_circle">4</div>
+                <div class="bell_circle" v-if="Message.count != 0">{{Message.count}}</div>
+                <div class="bell_circles" v-else></div>
             </div>
             <div class="my-box">
                 <router-link to="/myorder">我的订单</router-link>
@@ -92,11 +93,13 @@ export default {
         return {
             show: false,
             // 个人信息数据
+            Message:{},
             personalData: {},
         }
     },
     created() {
         this.getPersonalData()
+        this.messagecenter();
     },
     computed: {
       ...mapGetters(['info'])
@@ -129,6 +132,21 @@ export default {
         },
         message(){
             this.$router.push('/messagecenter')
+        },
+        messagecenter(){
+            this.$request.get(`/personal/message/mobile/first`).then(res => {
+                this.Message = res;
+        })
+        .catch(error => {
+            let { response: { data: { errorCode, msg } } } = error;
+            if (errorCode != 0) {
+            this.$message({
+                message: msg,
+                type: "error"
+            });
+            return;
+            }
+        });
         },
         showPopup() {
             this.show = true;
@@ -185,6 +203,18 @@ export default {
             width: 15px;
             height: 15px;
             background-color: #E60012;
+            font-size: 10px;
+            color: #fff;
+            border-radius: 50%;
+            text-align: center;
+            position: absolute;
+            top: 4px;
+            right: -9px;
+        }
+        .bell_circles{
+            width: 15px;
+            height: 15px;
+            // background-color: #E60012;
             font-size: 10px;
             color: #fff;
             border-radius: 50%;
