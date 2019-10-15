@@ -317,10 +317,10 @@ export default {
     getShoppingBag() {
       // if(this.getSelectParams() == '') return;
       
-      if (this.isUserNeedLogin) {
-        this.$router.push("/login");
-        return;
-      }
+      // if (this.isUserNeedLogin) {
+      //   this.$router.push("/login");
+      //   return;
+      // }
       this.$request.get("/userCart/create").then(data => {
         // console.log(data);
         this.shoppingBagNumber = data.length;

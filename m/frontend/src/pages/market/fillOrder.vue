@@ -116,8 +116,20 @@ export default {
       selectAddress: {},
       userMessage: "",
       goods: [],
-      alipay_html: ""
+      alipay_html: "",
+      url: '',
+      newWin: null  // 新窗口的引用
     };
+  },
+  watch: {
+    url(newVal, oldVal) {
+      if(newVal && this.newWin) {
+        this.newWin.location.href = newVal;
+        // 重定向后把 url 和 newWin 重置
+        this.url = '';
+        this.newWin = null;
+      }
+    }
   },
   computed: {
     countPrice() {
@@ -153,26 +165,24 @@ export default {
   methods: {
     // 直接下单
     directGoodsOrder(params = {}) {
+      let _this = this;
+      // 先打开一个空的新窗口，再请求
+      this.newWin = window.open();
       postDirectGoodOrder(params).then(response => {
         let { out_trade_no, body, totalPrice } = response;
-        // window.open(`https://m.alipay.com/Gk8NF23?`)
-        postGetAlipayCode({ out_trade_no, total_fee: totalPrice, body })
-          .then(data => {
-            // this.alipay_html = data
-            console.log(data)
-          })
+        let url = `http://testapi.aomengyujia.com/api/alipay/wappay/get?out_trade_no=${out_trade_no}&body=${body}&totalPrice=${totalPrice}`
+        _this.url = url || '';
       });
     },
     // 订单下单
     goodsOrder(params) {
+      let _this = this;
+      // 先打开一个空的新窗口，再请求
+      this.newWin = window.open();
       postGoodOrder(params).then(response => {
         let { out_trade_no, body, totalPrice } = response;
-        // window.open(`https://m.alipay.com/Gk8NF23?`)
-        postGetAlipayCode({ out_trade_no, total_fee: totalPrice, body })
-          .then(data => {
-            this.alipay_html = data
-            console.log(data)
-          })
+        let url = `http://testapi.aomengyujia.com/api/alipay/wappay/get?out_trade_no=${out_trade_no}&body=${body}&totalPrice=${totalPrice}`
+        _this.url = url || '';
       });
     },
     // 支付
