@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <div class="loding_wrap" v-show="loading" >
+    <!-- <div class="loding_wrap" v-show="loading" >
       <van-loading color="#89b264" ref="appLoading"  />
-    </div>
+    </div> -->
     <router-view></router-view>
   </div>
 </template>

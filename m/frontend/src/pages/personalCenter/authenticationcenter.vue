@@ -149,7 +149,9 @@ export default {
             region_b: '',
             region_c: '',
             // slide的索引
-            slideIndex: ''
+            slideIndex: '',
+            // 多选图片时，图片名保存的数组
+            picNameArr: [],
         }
     },
     created() {
@@ -243,10 +245,15 @@ export default {
         },
         // 图片上传之后的 回掉函数
         afterRead(fileInfo, name) {
-            console.log(fileInfo);
-            
+            console.log(fileInfo,name);
             let that = this;
+            // const nameArr = [];
             if(fileInfo.length == 2) {
+                // nameArr.push(fileInfo[0].file.name);
+                // nameArr.push(fileInfo[1].file.name);
+                // this.picNameArr = nameArr;
+                // console.log(nameArr);
+                
                 lrz(fileInfo[0].file).then(rst => {
                     that.ownerAndCoachList.img_work = rst.base64;
                 })
@@ -267,7 +274,14 @@ export default {
                         that.ownerDataList.img_work = rst.base64
                     } else if (that.slideIndex == 1) {
                         that.coachDataList.img_license = rst.base64
-                    } 
+                    } else {
+                        if(that.ownerAndCoachList.img_work === '') {
+                            that.ownerAndCoachList.img_work = rst.base64
+                        } else {
+                            that.ownerAndCoachList.img_license = rst.base64
+                        } 
+                        
+                    }
                 })
                 .catch(function (err) {
                     alert(err);
@@ -275,15 +289,18 @@ export default {
             }
             
         },
-        onDel(file,detail) {
-            console.log(file, detail);
+        onDel(fileInfo,detail) {
+            // console.log(fileInfo, detail);
             if(this.slideIndex == 0) {
                 this.ownerDataList.img_work = ''
             } else if(this.slideIndex == 1) {
                 this.coachDataList.img_license = ''
             } else {
-                if(detail.index == 0) {
-
+                
+                if(detail.index == 0 && this.ownerAndCoachList.img_work !== '') {
+                    this.ownerAndCoachList.img_work = '';
+                } else {
+                    this.ownerAndCoachList.img_license = ''
                 }
             }
             

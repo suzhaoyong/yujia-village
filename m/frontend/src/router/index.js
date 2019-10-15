@@ -7,8 +7,8 @@ const Home = resolve => require(['@/pages/home'], resolve) //首页
 Vue.use(Router)
 
 export default new Router({
-  // mode: 'history',
-  mode: 'hash',
+  mode: 'history',
+  // mode: 'hash',
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
       return savedPosition
@@ -108,6 +108,12 @@ export default new Router({
       component: () => import('@/pages/personalCenter/authenticationcenter')
     },
     {
+      // 更改手机
+      path: '/changephone',
+      component: () => import('@/pages/personalCenter/changephone')
+    },
+    {
+      // 邀请
       path: '/invitation',
       component: () => import('@/pages/personalCenter/invitation')
     },

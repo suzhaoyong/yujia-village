@@ -13,6 +13,7 @@ function handleRequest(config) {
   // config.baseURL = 'http://testapi.aomengyujia.com/document/api';
   config.baseURL = 'https://api.yujiacun.net/api';
   // config.baseURL = 'http://testapi.aomengyujia.com/api';
+  // config.baseURL = '/api';
 
   if (contentType === 'json') {
     config.headers['Content-Type'] = 'application/json';

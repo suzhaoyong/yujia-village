@@ -47,12 +47,12 @@
                     <span class="custom-title">我点赞的名师</span>
                 </template>
             </van-cell>
-            <van-cell is-link to="/buycourse">
+            <!-- <van-cell is-link to="/buycourse">
                 <template slot="title">
                     <img class="icon" src="../assets/img/courses.png" alt="">
                     <span class="custom-title">我购买的课程</span>
                 </template>
-            </van-cell>
+            </van-cell> -->
             <van-cell is-link class="rz-center" to="/authenticationcenter">
                 <template slot="title">
                     <img class="icon" src="../assets/img/certification.png" alt="">
@@ -70,14 +70,21 @@
                 <div class="phone-img"></div>
                 <div class="hot-line">客服电话　400-100-7191</div>
             </van-popup>
+            <van-cell is-link class="" to="/changephone">
+                <template slot="title">
+                    <img class="icon" src="../assets/img/mobile-phone.png" alt="">
+                    <span class="custom-title">更改绑定手机</span>
+                </template>
+            </van-cell>
             <van-cell is-link class="invitation" to="/invitation">
                 <template slot="title">
                     <img class="icon" src="../assets/img/yaoqing.png" alt="">
                     <span class="custom-title">我的邀请</span>
                 </template>
             </van-cell>
+
         </div>
-        <van-button class="logout" type="default" @click="logout">退出登录</van-button>
+        <div class="logout" @click="logout">退出登录</div>
     </div>
 </template>
 <script>
@@ -132,7 +139,6 @@ export default {
 <style lang="scss" scoped>
 .personal {
     margin-bottom: 50px;
-    overflow: hidden;
 }
 .banner-box {
     position: relative;
@@ -182,6 +188,7 @@ export default {
     background-color: #fff;
     font-size: 11px;
     .asset-item1 {
+        position: relative;
         display: flex;
         flex-direction: column;
         justify-content: space-around;
@@ -247,13 +254,17 @@ export default {
         }
     }
     .invitation {
-        margin-top: 8px;
+        margin-top: 4px;
     }
 }
 .logout {
-    width: 343px;
-    margin-left: 16px;
+    width: 100%;
+    height: 44px;
+    line-height: 44px;
     margin-bottom: 20px;
+    background-color: #fff;
+    text-align: center;
+    font-size: 14px;
 }
 
 </style>
