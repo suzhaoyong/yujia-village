@@ -3,7 +3,7 @@
         <div class="home">首页</div>
         <van-tabs v-model="activeName" color="#B3D465" title-active-color="#7BBB62" @click="onClick">
             <van-tab title="首页" name="home" to="/main" replace></van-tab>
-            <van-tab title="瑜伽资讯" name="yogainfo" replace></van-tab>
+            <van-tab title="瑜伽资讯" name="yogainfo" to="/yagainformation" replace></van-tab>
             <van-tab title="瑜伽知识" name="yogaknowledge" to="/yogaknowledge" replace></van-tab>
             <van-tab title="关于我们" name="aboutUs" to="/aboutUs" replace></van-tab>
         </van-tabs>

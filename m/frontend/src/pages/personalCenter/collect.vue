@@ -5,7 +5,7 @@
         <van-tabs v-model="activeName" color="#7BBB62" title-active-color="#7BBB62" animated :border="false">
             <van-tab title="培训课程" name="course">
                 <div class="course-content" v-if="collectCourse.length > 0">
-                    <div class="course" v-for="(item,index) in collectCourse" :key="index">
+                    <div class="course" v-for="(item,index) in collectCourse" :key="index" @click="toCourseDetail(item.id)">
                         <div class="img" :style="{backgroundImage:'url('+ item.teacher_img +')'}"></div>
                         <div class="info">
                             <div class="title">{{item.theme}}</div>
@@ -26,7 +26,7 @@
             </van-tab>
             <van-tab title="商品" name="commodity">
                 <div class="commodity-box" v-if="collectCourse.length > 0">
-                    <div class="commodity-item" v-for="(item,index) in collectGoods" :key="index">
+                    <div class="commodity-item" v-for="(item,index) in collectGoods" :key="index" @click="toGoodsDetail(item.id)">
                         <div class="img" :style="{backgroundImage:'url('+ item.url +')'}"></div>
                         <div class="name">{{item.describe}}</div>
                         <div class="price">￥{{item.sell_price}}</div>
@@ -71,7 +71,15 @@ export default {
                 console.log(data);
                 this.collectCourse = data.data;
             })
+        },
+        // 
+        toGoodsDetail(goodsId) {
+            this.$router.push("/goods/detail/" + goodsId)
+        },
+        toCourseDetail(courseId) {
+            this.$router.push("/messagedetail/?" + courseId)
         }
+        
     }
 }
 </script>

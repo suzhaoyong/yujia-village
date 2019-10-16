@@ -43,13 +43,22 @@
 export default {
     data() {
         return {
-
+            thumbTeacherList: {}
         }
+    },
+    created() {
+        this.getTeacherThumbs();
     },
     methods: {
         onClickLeft() {
             this.$router.go(-1);
         },
+        // 获取我点赞的老师数据
+        async getTeacherThumbs() {
+            const data = await this.$request.get('/personal/teacherThumbsUp');
+            console.log(data);
+            this.thumbTeacherList = data.data;
+        }
     }
 }
 </script>

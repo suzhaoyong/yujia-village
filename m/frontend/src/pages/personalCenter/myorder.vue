@@ -6,7 +6,7 @@
             <van-tab v-for="(item,index) in orderTitle" :key="index" :title="item" :name="item">
                 <div v-if="activeName === '全部'">
                     <div class="all-order order" v-if="orderDataList.all.length > 0">
-                        <div class="order-item" v-for="(item,index) in orderDataList.all" :key="index">
+                        <div class="order-item" v-for="(item,index) in orderDataList.all" :key="index" @click="toOrderDetail(item.id)">
                             <div class="order-num">
                                 <span>订单号：{{item.out_trade_no}}</span>
                                 <!-- <van-icon name="delete" @click="deleted"/> -->
@@ -24,7 +24,7 @@
                 </div>
                 <div v-if="activeName === '待付款'">
                     <div class="obligation-order order" v-if="orderDataList.pay.length > 0">
-                        <div class="order-item" v-for="(item,index) in orderDataList.pay" :key="index">
+                        <div class="order-item" v-for="(item,index) in orderDataList.pay" :key="index" @click="toOrderDetail(item.id)">
                             <div class="order-num">
                                 <span>订单号：{{item.out_trade_no}}</span>
                                 <!-- <van-icon name="delete" @click="deleted"/> -->
@@ -42,7 +42,7 @@
                 </div>
                 <div v-if="activeName === '待发货'">
                     <div class="await-order order" v-if="orderDataList.send.length > 0">
-                        <div class="order-item" v-for="(item,index) in orderDataList.send" :key="index">
+                        <div class="order-item" v-for="(item,index) in orderDataList.send" :key="index" @click="toOrderDetail(item.id)">
                             <div class="order-num">
                                 <span>订单号：{{item.out_trade_no}}</span>
                                 <!-- <van-icon name="delete" @click="deleted"/> -->
@@ -59,7 +59,7 @@
                 </div>
                 <div v-if="activeName === '待收货'">
                     <div class="shipped-order order" v-if="orderDataList.receive.length > 0">
-                        <div class="order-item" v-for="(item,index) in orderDataList.receive" :key="index">
+                        <div class="order-item" v-for="(item,index) in orderDataList.receive" :key="index" @click="toOrderDetail(item.id)">
                             <div class="order-num">
                                 <span>订单号：{{item.out_trade_no}}</span>
                                 <!-- <van-icon name="delete" @click="deleted"/> -->
@@ -129,6 +129,9 @@ export default {
                 } 
                 this.orderDataList = orderList;
             })
+        },
+        toOrderDetail(id) {
+            this.$router.push("/fillorder/?" + id);
         }
     }
 }

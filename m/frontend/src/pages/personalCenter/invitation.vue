@@ -16,20 +16,42 @@
                 <div class="time">2019.09.01</div>
             </div>
         </div>
-        <div class="invite">立即邀请</div>
+        <div class="invite" @click="immediatelyInvitation">立即邀请</div>
+        <div class="overlay " v-if="show" @click="show = false">
+            <div  class="invite-pic">
+                <img :src="pic_img" alt/>
+            </div>
+        </div>
     </div>
 </template>
 <script>
 export default {
     data() {
         return {
-            
+            show: false,
+            inviteInfo: {
+                id: '',
+                identity: 'person',
+                userId: ''
+            },
+            pic_img: ''
         }
     },
     methods: {
         onClickLeft() {
             this.$router.go(-1);
         },
+        immediatelyInvitation() {
+            this.show = true;
+            const userId = JSON.parse(window.sessionStorage.getItem('user')).id;
+            this.inviteInfo.userId = userId;   
+            this.inviteInfo.id = userId;
+            this.$request.post('/show/share/photo',this.inviteInfo).then(data => {
+                // console.log(data);
+                this.pic_img = data;
+            })
+            // this.$router.push('/shareation');
+        }
     }
 }
 </script>
@@ -100,5 +122,22 @@ export default {
     text-align: center;
     font-size: 14px;
     color: #fff;
+}
+.overlay {
+    position: fixed;
+    top: 0;
+    z-index: 999;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+.invite-pic {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 500px;
+    margin-top: 60px;
+    border-radius: 10px;
+    overflow: hidden;
 }
 </style>
