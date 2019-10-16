@@ -10,10 +10,8 @@ function handleRequest(config) {
   // 向请求头中添加 token
   const access = sessionStorage.getItem('access') || ''
   config.headers['Authorization'] = access && `${JSON.parse(access).token_type}${JSON.parse(access).access_token}` || '';
-  // config.baseURL = 'http://api.aomengyujia.com/api';
-  // config.baseURL = 'http://testapi.aomengyujia.com/document/api';
-  config.baseURL = 'https://api.yujiacun.net/api';
-  // config.baseURL = 'http://testapi.aomengyujia.com/api';
+  // config.baseURL = 'https://api.yujiacun.net/api';
+  config.baseURL = 'http://testapi.aomengyujia.com/api';
   // config.baseURL = '/api';
 
   if (contentType === 'json') {
