@@ -1,27 +1,38 @@
 <template>
   <div class="messagedetail">
-    <header>课程详情</header>
+    <header> <span @click="goback"><van-icon name="arrow-left"/></span> 课程详情</header>
     <main class="messagedetail-main">
       <section>
-        <img src="https://api.yujiacun.net/uploads/default-train-banner.png">
+        <img :src="detailData.teacher_img">
       </section>
       <ul  class="messagedetail-main-title">
         <li class="li1">
-          <div class="li1-text">空中瑜伽</div>
-          <div><span><img src="../../../static/img/eye.png">220</span><span><img src="../../../static/img/hand.png" class="hand">550</span></div>
+          <div class="li1-text">{{ detailData.type }}</div>
+          <div><span><img src="../../../static/img/eye.png">{{ detailData.views }}</span><span><img src="../../../static/img/hand.png" class="hand">100</span></div>
+        </li>
+        <li>
+          <p class="stardiff">
+            <van-rate
+              v-model='detailData.diff'
+              readonly
+              :size="8"
+              color='#58B708'
+              void-icon="star"
+              void-color="#eee"
+            /></p>
         </li>
         <li class="li2">
           <div>空中瑜伽</div>
-          <div>￥4880.00</div>
+          <div>￥{{ detailData.price }}</div>
         </li>
-        <li class="li3">培训老师： ivav</li>
+        <li class="li3">培训老师： {{ detailData.name }}</li>
         <li class="li4">
           <p>培训时间</p>
-          <div>2019.05.20-2019.06.20</div>
+          <div>{{ detailData.startTime }}-{{ detailData.endTime }}</div>
         </li>
         <li class="li5">
           <p>培训地址</p>
-          <div>成都市锦江区双桂路泰合财富中心7栋二单元302</div>
+          <div>{{ detailData.address }}</div>
         </li>
       </ul>
       <div class="messagedetail-main-proper">
@@ -30,14 +41,14 @@
           <span>Suitable crowd</span>
         </div>
         <div class="messagedetail-main-proper-show">
-          <swiper :options="swiperOption" slideToClickedSlide="true">
+          <!-- <swiper :options="swiperOption" slideToClickedSlide="true" > -->
             <swiper-slide>
               <div class="messagedetail-main-proper-show-list">
-                <div class="list-img"><img src="https://api.yujiacun.net/uploads/base64img/20190909/ad6b4a1e692e1a3ef5ac7b67b0f4744c.jpeg"></div>
-                <div class="list-text">有专业瑜伽会员课程1年以上的 瑜伽爱好者，及舞蹈爱好者。</div>
+                <div class="list-img"><img :src="detailData.teacher_img"></div>
+                <div class="list-text">{{ detailData.intro }}</div>
               </div>
             </swiper-slide>
-            <swiper-slide>
+            <!-- <swiper-slide>
               <div class="messagedetail-main-proper-show-list">
                 <div class="list-img"><img src="https://api.yujiacun.net/uploads/base64img/20190909/ad6b4a1e692e1a3ef5ac7b67b0f4744c.jpeg"></div>
                 <div class="list-text">有专业瑜伽会员课程1年以上的 瑜伽爱好者，及舞蹈爱好者。</div>
@@ -48,21 +59,10 @@
                 <div class="list-img"><img src="https://api.yujiacun.net/uploads/default-hot-train-cover.png"></div>
                 <div class="list-text">有专业瑜伽会员课程1年以上的 瑜伽爱好者，及舞蹈爱好者。</div>
               </div>
-            </swiper-slide>
-          </swiper>
+            </swiper-slide> -->
+          <!-- </swiper> -->
         </div>
-
-        <!-- 
-
-          <div class="messagedetail-main-proper-show-list">
-            <div class="list-img"><img src="https://api.yujiacun.net/uploads/default-hot-train-cover.png"></div>
-            <div class="list-text">有专业瑜伽会员课程1年以上的 瑜伽爱好者，及舞蹈爱好者。</div>
-          </div>
-          <div class="messagedetail-main-proper-show-list">
-            <div class="list-img"><img src="https://api.yujiacun.net/uploads/default-hot-train-cover.png"></div>
-            <div class="list-text">有专业瑜伽会员课程1年以上的 瑜伽爱好者，及舞蹈爱好者。</div>
-          </div>
-        </div> -->
+        
       </div>
       <div class="messagedetail-main-teach">
         <div class="messagedetail-main-teach-title">
@@ -70,7 +70,8 @@
           <span>Suitable crowd</span>
         </div>
         <div class="messagedetail-main-teach-box">
-          <img src=""> 一 空中瑜伽设备的介绍和选择 空中课程的注意事项和会员反应的应对 空中瑜伽的热身体式 空中瑜伽的五大原则  二 1.握姿体系 
+          <img src="../../../static/img/bookbg.png">
+          <span v-html="detailData.content"></span>
           <!-- <div class="messagedetail-main-teach-box-text">
           </div> -->
         </div>
@@ -81,12 +82,15 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import '../../dist/swiper.css'
+import { Rate} from 'vant'
+Vue.use(Rate)
 export default {
   data () {
     return {
-      messageDetailLists: [],
+      detailData: [],
       swiperOption: {
           slidesPerView: 3,
           spaceBetween: 30,
@@ -107,8 +111,14 @@ export default {
   mounted () {
   },
   methods: {
+    goback () {
+      this.$router.back()
+    },
     getmessageDetail() {
-      this.$request.get('trains').then((res) => {
+      const id = this.$route.query.id
+      this.$request.get('trains/' + id).then((res) => {
+        this.detailData = res
+        console.log(res)
       })
     },
   }
@@ -125,25 +135,32 @@ export default {
       background: #EEEEEE;
       font-size: 16px;
       line-height: 35px;
+      span {
+        position: relative;
+        left: -35%;
+        top: 5%;
+        i {
+          font-size: 16px;
+        }
+      }
     }
     &-main {
       background: #EEEEEE;
       section {
         width: 100%;
-        height: 200px;
+        height: auto;
         img {
           width: 100%;
-          height: 100%;
         }
       }
       &-title {
         width: 100%;
         height: 208px;
-        padding: 8px 16px;
+        padding: 8px 14px;
         font-size: 12px;
         background: white;
         li {
-          margin-top: 9px;
+          margin-top: 4px;
         }
         .li1 {
           display: flex;
@@ -215,6 +232,7 @@ export default {
             width: 120px;
             height: 160px;
             margin-right: 20px;
+            overflow: hidden;
             .list-img {
               width: 120px;
               height: 120px;
@@ -226,7 +244,7 @@ export default {
             }
             .list-text {
               margin-top: 10px;
-              width: 90%;
+              overflow: hidden;
             }
           }
         }

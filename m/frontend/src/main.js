@@ -8,6 +8,8 @@ import './assets/font_jx305aumbc/iconfont.css'
 import store from './store'
 import 'amfe-flexible'
 import 'vant/lib/button/style';
+import Share from 'vue-social-share'
+import 'vue-social-share/dist/client.css';
 import {
   Tab, Tabs, Tabbar, TabbarItem, 
   Collapse, CollapseItem, 
@@ -17,7 +19,6 @@ import {
   Swipe, SwipeItem, List,ActionSheet} from 'vant';
 
 import 'swiper/dist/css/swiper.min.css';
-
 import VConsole from 'vconsole';
 
 // if (process.env.NODE_ENV === 'production') {
@@ -29,6 +30,7 @@ Vue.use(Tabs);
 Vue.use(Tabbar);
 Vue.use(TabbarItem);
 Vue.use(Collapse);
+Vue.use(Share)
 Vue.use(ActionSheet);
 Vue.use(CollapseItem);
 Vue.use(Swipe).use(SwipeItem);
