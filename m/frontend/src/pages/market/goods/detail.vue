@@ -139,7 +139,7 @@
       </div>
       <div class="car_rh">
         <div class="car_rh_item" @click="handleAddCart">加入购物车</div>
-        <div class="car_rh_item" @click="handleBuyGoods">立即购买</div>
+        <div class="car_rh_item" :style="`background:${ isAllowBuy ?'':'#ccc'}`" @click="handleBuyGoods">立即购买</div>
       </div>
     </footer>
   </div>
@@ -219,6 +219,9 @@ export default {
         return "请选择规格和数量";
       }
       return `尺寸：${selectedSkuComb.s2} / 数量：${selectedNum}`;
+    },
+    isAllowBuy() {
+      return this.changeGoods.selectedNum
     }
   },
   mounted() {
@@ -315,12 +318,12 @@ export default {
     },
     // 获取购物袋数据
     getShoppingBag() {
-      // if(this.getSelectParams() == '') return;
+      if(this.getSelectParams() == '') return;
       
-      // if (this.isUserNeedLogin) {
-      //   this.$router.push("/login");
-      //   return;
-      // }
+      if (this.isUserNeedLogin) {
+        this.$router.push("/login");
+        return;
+      }
       this.$request.get("/userCart/create").then(data => {
         // console.log(data);
         this.shoppingBagNumber = data.length;

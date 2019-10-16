@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
+const store = new Vuex.Store({
   state: {
     loading: true,
     buyGoods: [],
@@ -20,7 +20,10 @@ export default new Vuex.Store({
   getters: {
     info: state => state.info,
     isUserNeedLogin: state => {
-      console.log(JSON.stringify(state.info))
+      const user = sessionStorage.getItem('user data')
+      if (user) {
+        store.dispatch('INFO', JSON.parse(user))
+      }
       return !state.info.user.name
     }
   },
@@ -59,17 +62,7 @@ export default new Vuex.Store({
       info ? commit('UPDATE_INFO', info)
       : commit('UPDATE_INFO', {})
     },
-    ADD_GOODS({
-      commit,
-      state
-    }, goods) {
-      commit('addGoods', goods)
-    },
-    REMOVE_GOODS({
-      commit,
-      state
-    }, goods) {
-      commit('removeGoods', goods)
-    },
   }
 })
+
+export default store
