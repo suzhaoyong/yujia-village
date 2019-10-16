@@ -274,18 +274,18 @@ export default {
         }.pdf`
       });
       //监听完成事件
-      this.pdfh5.on("complete", function(status, msg, time) {
-        console.log(
-          "状态：" +
-            status +
-            "，信息：" +
-            msg +
-            "，耗时：" +
-            time +
-            "毫秒，总页数：" +
-            this.totalNum
-        );
-      });
+      // this.pdfh5.on("complete", function(status, msg, time) {
+      //   console.log(
+      //     "状态：" +
+      //       status +
+      //       "，信息：" +
+      //       msg +
+      //       "，耗时：" +
+      //       time +
+      //       "毫秒，总页数：" +
+      //       this.totalNum
+      //   );
+      // });
     },
     getUrlParams() {
       let search = window.location.search;
@@ -349,7 +349,7 @@ export default {
       const params = Object.assign({}, this.registerForm);
       this.$request
         .post("/register", params)
-        .then(data => {
+        .then(() => {
           Notify({ message: "注册成功, 请登录", type: "success" });
         })
         .catch(err => {
@@ -517,8 +517,6 @@ export default {
   border: none;
   width: 260px;
   /* font-size: 10px; */
-}
-.van-field__button {
 }
 .sms {
   position: absolute;

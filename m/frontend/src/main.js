@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
 import Vue from 'vue'
 import App from './App.vue'
 import request from './utils/request'

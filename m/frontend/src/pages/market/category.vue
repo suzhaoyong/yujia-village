@@ -342,7 +342,7 @@ export default {
     },
     isTagActive() {
       return item => {
-        if (item.name !== "不限") {
+        if (item.name !== "全部") {
           return (
             this.selected.tags.findIndex(tag => tag.name === item.name) >= 0
           );
@@ -405,7 +405,7 @@ export default {
     // 选择菜单项
     handleChooseSubAsideMenu(item) {
       this.subAside.selected[item.type] = item;
-      if (item.name === "不限") {
+      if (item.name === "全部") {
         this.subAside.selected[item.type] = {};
       }
       // this.$nextTick(() => {
@@ -417,7 +417,7 @@ export default {
       this.subAside.isOpen = true;
       if (type === "isPrice") {
         this.subAside.list = [
-          { name: "不限", id: "1", type: "isPrice" },
+          { name: "全部", id: "1", type: "isPrice" },
           { name: "从高到低", id: true, type: "isPrice" },
           { name: "从低到高", id: false, type: "isPrice" }
         ];
@@ -453,11 +453,11 @@ export default {
     },
     // 移除筛选项
     closeAsideTags(item) {
-      this.chooseTagsFor(item.name, { name: "不限", type: item.type });
+      this.chooseTagsFor(item.name, { name: "全部", type: item.type });
     },
     chooseTagsFor(name, tag) {
       if (this.isTagActive(tag)) return;
-      if (tag.name === "不限") {
+      if (tag.name === "全部") {
         this.selected.tags = this.selected.tags.filter(
           item => item.type !== tag.type
         );
@@ -473,7 +473,7 @@ export default {
         this.selected.tags.push(tag);
       }
     },
-    removeTags(tag, index) {
+    removeTags(tag) {
       this.selected.tags = this.selected.tags.filter(
         item => item.name !== tag.name
       );

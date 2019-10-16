@@ -226,84 +226,7 @@ export default {
   },
   mounted() {
     this.getShoppingBag();
-    const { goods_id } = this.$route.params;
-    getGoodsById(goods_id).then(response => {
-      const {
-        cover,
-        describe,
-        sell_price,
-        discount,
-        color_size,
-        path1,
-        path2,
-        path3,
-        path4
-      } = response;
-      this.goods_copy = response;
-      this.goods_copy.detail_img = [path1, path2, path3, path4].filter(
-        item => item
-      );
-      this.sku.tree = [
-        {
-          k: "颜色", // skuKeyName：规格类目名称
-          v: [
-            ...color_size.map((item, index) => {
-              return {
-                id: item.id,
-                name: item.name,
-                imgUrl: item.cover,
-                previewImgUrl: item.cover
-              };
-            })
-          ],
-          k_s: "s1" // skuKeyStr：sku 组合列表（下方 list）中当前类目对应的 key 值，value 值会是从属于当前类目的一个规格值 id
-        },
-        {
-          k: "尺寸", // skuKeyName：规格类目名称
-          v: [
-            {
-              id: "S", // skuValueId：规格值 id
-              name: "S" // skuValueName：规格值名称
-            },
-            {
-              id: "M",
-              name: "M"
-            },
-            {
-              id: "X",
-              name: "X"
-            },
-            {
-              id: "L",
-              name: "L"
-            },
-            {
-              id: "XL",
-              name: "XL"
-            }
-          ],
-          k_s: "s2" // skuKeyStr：sku 组合列表（下方 list）中当前类目对应的 key 值，value 值会是从属于当前类目的一个规格值 id
-        }
-      ];
-      const RADIX_PRE = 100; //分进制
-      color_size.map(item => {
-        this.sku.list.push(
-          ...item.data.map((sub_item, sub_index) => ({
-            id: sub_index + item.id,
-            price: (sell_price - discount).toFixed(2) * RADIX_PRE + "",
-            s1: item.id,
-            s2: sub_item.size,
-            s3: 0,
-            stock_num: sub_item.num
-          }))
-        );
-      });
-      this.sku.stock_num = color_size.reduce((pre, next) => {
-        return pre + next.data.reduce((pre, next) => pre + next.num, 0);
-      }, 0);
-      this.sku.price = (sell_price - discount).toFixed(2);
-      this.goods = { title: describe, picture: cover };
-    });
+    this.viewGoods();
   },
   beforeDestroy() {
     this.$nextTick(() => {
@@ -311,6 +234,87 @@ export default {
     });
   },
   methods: {
+    // 查看商品详情
+    viewGoods() {
+      const { goods_id } = this.$route.params;
+      getGoodsById(goods_id).then(response => {
+        const {
+          cover,
+          describe,
+          sell_price,
+          discount,
+          color_size,
+          path1,
+          path2,
+          path3,
+          path4
+        } = response;
+        this.goods_copy = response;
+        this.goods_copy.detail_img = [path1, path2, path3, path4].filter(
+          item => item
+        );
+        this.sku.tree = [
+          {
+            k: "颜色", // skuKeyName：规格类目名称
+            v: [
+              ...color_size.map((item) => {
+                return {
+                  id: item.id,
+                  name: item.name,
+                  imgUrl: item.cover,
+                  previewImgUrl: item.cover
+                };
+              })
+            ],
+            k_s: "s1" // skuKeyStr：sku 组合列表（下方 list）中当前类目对应的 key 值，value 值会是从属于当前类目的一个规格值 id
+          },
+          {
+            k: "尺寸", // skuKeyName：规格类目名称
+            v: [
+              {
+                id: "S", // skuValueId：规格值 id
+                name: "S" // skuValueName：规格值名称
+              },
+              {
+                id: "M",
+                name: "M"
+              },
+              {
+                id: "X",
+                name: "X"
+              },
+              {
+                id: "L",
+                name: "L"
+              },
+              {
+                id: "XL",
+                name: "XL"
+              }
+            ],
+            k_s: "s2" // skuKeyStr：sku 组合列表（下方 list）中当前类目对应的 key 值，value 值会是从属于当前类目的一个规格值 id
+          }
+        ];
+        const RADIX_PRE = 100; //分进制
+        color_size.map(item => {
+          this.sku.list.push(
+            ...item.data.map((sub_item, sub_index) => ({
+              id: sub_index + item.id,
+              price: (sell_price - discount).toFixed(2) * RADIX_PRE + "",
+              s1: item.id,
+              s2: sub_item.size,
+              s3: 0,
+              stock_num: sub_item.num
+            }))
+          );
+        });
+        this.sku.stock_num = color_size.reduce((pre, next) => {
+          return pre + next.data.reduce((pre, next) => pre + next.num, 0);
+        }, 0);
+        this.sku.price = (sell_price - discount).toFixed(2);
+        this.goods = { title: describe, picture: cover };
+      });
+    },
     // 分享商品
     handleShareGoods() {
       const { goods_id } = this.$route.params;
@@ -318,16 +322,13 @@ export default {
     },
     // 获取购物袋数据
     getShoppingBag() {
-      if(this.getSelectParams() == '') return;
-      
       if (this.isUserNeedLogin) {
         this.$router.push("/login");
         return;
       }
-      this.$request.get("/userCart/create").then(data => {
-        // console.log(data);
-        this.shoppingBagNumber = data.length;
-      });
+      // this.$request.get("/userCart/create").then(data => {
+      //   this.shoppingBagNumber = data.length;
+      // });
     },
     // 点击加入购物车
     handleAddCart() {
@@ -343,12 +344,12 @@ export default {
       }
       if(this.getSelectParams() == '') return;
       postUserCart(this.getSelectParams())
-        .then(response => {
+        .then(() => {
           this.clock = false;
           this.shoppingBagNumber += 1;
           Toast("添加成功");
         })
-        .catch(err => {
+        .catch(() => {
           this.clock = false;
         });
     },

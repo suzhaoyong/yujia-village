@@ -36,7 +36,6 @@ function handleResponeseErr(err) {
   if(data.code === '0001') {
     request.post('/auth/refresh')
         .then(data => {
-          console.log(data)
           sessionStorage.setItem('access', JSON.stringify(data))
           store.dispatch("INFO", data);
           window.location.reload();
