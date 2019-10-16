@@ -543,26 +543,7 @@ export default {
       }
       this.wantStudy(id)
     },
-    changePage(val) {
-      if(this.keyWord === 'default') {
-        this.getTrainsList(val);    
-        return
-      } else if(this.keyWord === 'host') {
-        this.postGetRank(val,this.getRankParams(this.keyWord))
-        return
-      } else if(this.keyWord === 'price') {
-        this.priceFlag = !this.priceFlag
-        this.postGetRank(val,this.getRankParams(this.keyWord))
-        this.priceFlag = !this.priceFlag
-        return
-      }
-      if (this.selectTags.length > 0) {
-        this.postGetTrainsList(val, this.getFiltersParams());
-        return;
-      } else {
-        this.getTrainsList(val);
-      }
-    },
+
     changeTime(e) {
       if (e.length > 1) {
         this.time.name = e[0] + "/" + e[1];
