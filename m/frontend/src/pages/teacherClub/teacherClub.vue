@@ -1,18 +1,19 @@
 <template>
 <div>
     <div class="club_warp">
-        <div class="club_warp_head">名师&会馆</div>
+        <div class="club_warp_head">名师&机构</div>
         <div class="club_warp_list">
           <span class="liList" v-for="(item,index) in liList" :key="index" v-on:click="addClass(index)" :class="{ischeck:index==current}">{{item}}</span>
         </div>
         <div class="list_teacher" v-show="this.current === 0">
             <div class="list_banner" :style="{backgroundImage: 'url('+banner+')'}"></div>
+            <div class="league" @click="goto()">申请加盟</div>
             <div class="club_house">
                 <div class="club_house_title">
                     <span class="items" v-for="(item,index) in items" @click="clicktext(index)" :key="index" :class="{active:index==curritem}">{{item}}</span>
                 </div>
                 <div class="club_house_inquiry">
-                    <input type="text" class="club_house_inquiry_input" v-model="name" placeholder="输入会馆名称"/>
+                    <input type="text" class="club_house_inquiry_input" v-model="name" placeholder="输入机构名称"/>
                     <img src="../../assets/teacherclub/seek.png" class="seek" @click="seekclick"/>
                 </div>
             </div>
@@ -49,12 +50,14 @@
                     </div>
                     <div class="list_house_div" @click="toggle">
                         <span class="house_title_tips">擅长类型</span>
-                        <img src="../../assets/teacherclub/launch.png" class="house_title_img"/>
+                        <img src="../../assets/teacherclub/launch.png" class="house_title_img" v-if="launch"/>
+                        <img src="../../assets/teacherclub/top.png" class="house_title_img2" v-else/>
                     </div>
                 </div>
                 <div class="list_house_inquirys" @click="more">
                     <span class="house_title_tips">更多</span>
-                    <img src="../../assets/teacherclub/launch.png" class="house_title_img"/>
+                    <img src="../../assets/teacherclub/launch.png" class="house_title_img" v-if="launch"/>
+                    <img src="../../assets/teacherclub/top.png" class="house_title_img2" v-else/>
                 </div>
             </div>
             <transition name="fade">
@@ -141,12 +144,18 @@
 /* eslint-disable */
 import Swiper from 'swiper';
 import areaList from "../../assets/js/area.js";
+import Vue from 'vue';
+import Bus from "@/utils/Bus";
+import { mapGetters } from "vuex"
+import { Notify } from "vant";
+Vue.use(Notify);
 export default {
     data() {
     return {
         isOpen: false,
         isOpen2: false,
         isOpen3:false,
+        launch:false,
         current:0,
         curritem:0,
         banner:'',
@@ -159,7 +168,7 @@ export default {
         record:"",
         Giveupimg:true,
         Giveupimg1:false,
-        liList:["联盟会馆","瑜伽名师"],
+        liList:["培训机构","瑜伽名师"],
         items:["全部","最新","距离最近"],
         clubBox:[],
         change:[],
@@ -176,12 +185,15 @@ export default {
         area:"",
     };
   },
+   computed: {
+    ...mapGetters(["info"]),
+  },
   created(){
       this.joindata();
       this.exhibitionList();
   },
   methods:{
-      //会馆列表
+      //机构列表
       joindata(){
         this.$request.get(`/clubs`).then(res => {
             this.clubBox = res.data.data;
@@ -225,7 +237,7 @@ export default {
         this.$request.post(`/teachers/thumbsUp`,params).then(data => {
             this.msg = data.msg;
             if(this.msg == "OK"){
-            alert('点赞成功');
+            Notify({ message: "点赞成功", type: "success" });
             this.Giveupimg1 = true;
             this.Giveupimg = false;
             }
@@ -241,6 +253,31 @@ export default {
             }
         });
       },
+      //申请加盟
+      goto() {
+      const { name, identity_auth } = this.info.user;
+      if(name){
+        if(parseInt(identity_auth) === 1) {
+          this.$router.push("/authenticationcenter");
+          return;
+        }
+        const obj = {
+          2: {message:'您已在申请中，请耐心等待审核', type:'success'},
+          3: {message:'您已加盟成功',type:'success'},
+          4: {message:'您是教练认证中，暂时不能申请加盟，详情请联系馆主认证',type:'warning'},
+          5: {message:'您是教练，暂时不能申请加盟，详情请联系馆主认证',type:'warning'},
+          6: {message:'您的申请未通过，详情请联系客服',type:'error'},
+          7: {message:'您已加盟成功',type:'success'},
+          8: {message:'您已加盟成功',type:'success'},
+        }
+        obj[identity_auth] && this.$alert(`${obj[identity_auth].message}`, '温馨提示', {
+          confirmButtonText: '确定',
+        })
+        // obj[identity_auth] && this.$message(obj[identity_auth])
+      }else{
+        Bus.$emit("login", true);
+      }
+    },
     addClass:function(index){
         this.current=index;
     },
@@ -260,9 +297,11 @@ export default {
     },
     toggle: function() {
         this.visible = !this.visible //取反
+        this.launch = !this.launch;
      },
      more(){
-        this.visible = false;
+        this.visible = !this.visible;
+        this.launch = !this.launch;
      },
      //省市区
      changeArea(val) {
@@ -349,7 +388,7 @@ export default {
             return;
         });
     },
-    //会馆名称查询
+    //机构名称查询
     seekclick(){
         let params = {
                 name:this.name,//老师名字
@@ -431,14 +470,14 @@ input:-ms-input-placeholder{
     height: 100%;
     display: inline-block;
     .club_warp_head{
-        background-color: #fff;
+        background-color: #E0EED2;
         color: #2c2c2c;
         font-size: 16px;
         font-family:PingFang SC;
-        font-weight:500;
+        font-weight:700;
         width: 100%;
-        height: 50px;
-        line-height: 50px;
+        height: 44px;
+        line-height: 44px;
         text-align: center;
         position: fixed;
         top: 0px;
@@ -454,7 +493,7 @@ input:-ms-input-placeholder{
         line-height: 44px;
         text-align: center;
         display: flex;
-        margin-top: 49px;
+        margin-top: 44px;
         position: fixed;
         left: 0;
         top: 0;
@@ -475,12 +514,26 @@ input:-ms-input-placeholder{
     .list_teacher{
         width: 100%;
         // height: 100%;
-        padding-top: 93px;
+        padding-top: 88px;
         background: #fff !important;
+        position: relative;
         .list_banner{
           height: 170px;
           background-size: cover;
           background-position: center;
+        }
+        .league{
+            width: 60px;
+            height: 15px;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 10px;
+            color: #ffffff;
+            line-height: 15px;
+            background: #97B3C1;
+            position: absolute;
+            left: 160px;
+            top: 217px;
         }
         .club_house{
             width: 93%;
@@ -513,19 +566,19 @@ input:-ms-input-placeholder{
                     background-color: #eeeeee;
                     border-radius: 13px;
                     height: 30px;
-                    width: 90%;
+                    width: 70%;
                     float: right;
                     font-size: 12px;
                     color: #999;
-                    text-indent: 25px;
+                    text-indent: 15px;
                     margin-top: 10px;
                 }
                 .seek{
                     position: absolute;
                     width: 10px;
                     height: 11px;
-                    right: 20px;
-                    top: 19px;
+                    right: 18px;
+                    top: 20px;
                 }
             }
         }
@@ -535,6 +588,7 @@ input:-ms-input-placeholder{
             margin: 0 auto;
             display: flow-root;
             // margin-bottom: 49px;
+            background: #fff !important;
             .club_item_box{
                 width: 48%;
                 height: 100%;
@@ -635,7 +689,7 @@ input:-ms-input-placeholder{
     .list_clubhouse{
         width: 100%;
         // height: 100%;
-        padding-top: 93px;
+        padding-top: 88px;
         background: #fff !important;
         .list_banner{
           height: 170px;
@@ -717,6 +771,13 @@ input:-ms-input-placeholder{
                       height: 7px;
                       margin-left: -12px;
                   }
+                  .house_title_img2{
+                    width: 18px;
+                    height: 25px;
+                    margin-left: -14px;
+                    position: relative;
+                    top: 8px;
+                  }
                 }
             }
             .list_house_inquirys{
@@ -735,6 +796,13 @@ input:-ms-input-placeholder{
                       width: 10px;
                       height: 7px;
                       margin-left: -12px;
+                  }
+                  .house_title_img2{
+                    width: 18px;
+                    height: 25px;
+                    margin-left: -14px;
+                    position: relative;
+                    top: 8px;
                   }
             }
         }

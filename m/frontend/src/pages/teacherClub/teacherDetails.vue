@@ -1,7 +1,11 @@
 <template>
     <div>
         <div class="details_main">
-            <van-nav-bar title="名师详情" left-arrow @click-left="goback" fixed/>
+            <van-nav-bar title="名师详情" left-arrow @click-left="goback" fixed>
+                <div class="share_img" slot="right" @click="handleShareGoods">
+                    <img class="share" src="../../assets/teacherclub/share.png" />
+                </div>
+            </van-nav-bar>
             <div class="details_head">
                 <div class="count-img">
                     <div class="count-name">
@@ -40,14 +44,23 @@
                 </div>
             </div>
         </div>
+        <van-popup v-model="show">
+            <img :src="base64img"/>
+            <div class="textbase">长按图片，保存或发送给朋友</div>
+        </van-popup>
     </div>
 </template>
 <script>
+import Vue from 'vue';
+import { Popup} from 'vant';
+Vue.use(Popup);
 export default {
   data() {
     return {
         footlist:[],
         teacher:{},
+        show: false,
+        base64img:""
     };
   },
   created(){
@@ -59,6 +72,7 @@ export default {
             let { teacher,course} = res;
             this.footlist = res.teacher.teacher_img;
             this.teacher = res.teacher;
+            this.teacherid = res.teacher.id;
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -71,6 +85,20 @@ export default {
             }
         });
       },
+      // 分享商品
+    handleShareGoods() {
+    this.show = true;
+    const params = {
+        id:this.$route.query.id,
+        identity:'teacher',
+        userId:"",
+        responseType: 'arraybuffer'
+    }
+    this.$request.post(`/show/share/photo`,params)
+    .then(res => {
+        this.base64img = res;
+    })
+    },
       goback(){
         this.$router.push({
             path: "/teacherClub/list",
@@ -89,12 +117,34 @@ export default {
     top: 0;
     left: 0;
     width: 100%;
+    background-color: #E0EED2 !important;
 }
+.share_img{
+    line-height: 0px;
+    margin-top: -34px;
+  .share{
+      width: 22px;
+      height: 22px;
+  }
+  }
+  .van-popup--center{
+      width: 87%;
+      height: 85%;
+  }
+  .textbase{
+      width: 100%;
+      height: 30px;
+      background: #fff;
+      font-size: 12px;
+      color: #2c2c2c;
+      text-align: center;
+      line-height: 20px;
+  }
 .details_main{
     width: 100%;
     height: 100%;
     display: inline-block;
-    background: #fff;
+    background: #fff !important;
     .details_head{
         width: 100%;
         height: 210px;
@@ -102,7 +152,7 @@ export default {
         background-image: url('../../assets/teacherclub/bg2.png');
         background-repeat: no-repeat;
         background-size: 100% 100%;
-        margin-top: 47px;
+        margin-top: 46px;
         .count-img{
             width: 93%;
             height: 100%;

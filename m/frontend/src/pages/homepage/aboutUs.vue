@@ -151,6 +151,9 @@ export default {
         display: inline-block;
         position: relative;
         width: 100%;
+        background-image: url('../../assets/teacherclub/aboutbg.png');
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
         .share_warp_rule{
             width: 100%;
             line-height: 23px;
