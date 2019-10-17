@@ -22,7 +22,6 @@ import {
   CountDown } from 'vant';
 
 import 'swiper/dist/css/swiper.min.css';
-import lrz from 'lrz';
 
 import VConsole from 'vconsole';
 

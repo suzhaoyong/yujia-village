@@ -1,7 +1,7 @@
 <template>
   <div class="infordetail">
     <header><van-nav-bar
-      title="瑜伽资讯"
+      title="瑜伽知识"
       left-arrow
       @click-left="onClickLeft"
       @click-right="onClickRight"
@@ -9,7 +9,7 @@
       <van-icon slot="right" ><img src="../../../static/img/share.svg"></van-icon>
     </van-nav-bar></header>
     <section>
-      <van-popup v-model="show"   
+      <van-popup v-model="show"
         position="top"
         :style="{ height: '20%' }"
       ><share :config="config"></share></van-popup>
@@ -56,6 +56,7 @@ export default {
   },
   created() {
     this.yujiamation()
+
   },
   methods: {
     onClickLeft() {
@@ -142,7 +143,7 @@ export default {
         margin-top: 7px;
       }
     }
-    p img {
+    img {
       width: 100%;
     }
   }

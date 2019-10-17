@@ -407,11 +407,11 @@ export default {
 .message {
   width: 100%;
   header {
-    height: 35px;
+    height: 44px;
     text-align: center;
     background: #EEEEEE;
     font-size: 16px;
-    line-height: 35px;
+    line-height: 44px;
   }
 
   &-main {
@@ -550,11 +550,14 @@ export default {
             position: relative;
             margin-left: 20px;
             .p1 {
+              font-size: 14px;
               overflow:hidden;
               text-overflow:ellipsis;
               white-space:nowrap;
             }
             .p2 {
+              color: #2C2C2C;
+              font-weight: 600;
               margin: 6px 0;
             }
             .p3 {
