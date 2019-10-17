@@ -64,6 +64,7 @@ export default {
     },
     created() {
         this.getUserInitialInfo();
+        // this.$toast('完善全部资料可获得积分哦!');
     },
     methods: {
         // 修改资料时，用户原数据的渲染
@@ -111,9 +112,11 @@ export default {
             this.$request.post('/personal/updateInfo',this.personalData).then(data => {
                 console.log(data);
                 if(data.msg === '保存成功,完善全部资料可获得积分哦') {
-                    this.$toast({
-                        message: '保存成功,完善全部资料可获得积分哦',
-                    });
+                    this.$toast('保存成功,完善全部资料可获得积分哦');
+                } else if(data.msg === 'OK') {
+                    this.$toast('保存成功');
+                } else {
+                    this.$toast('保存成功,获得积分:300');
                 }
             })
         },

@@ -8,7 +8,7 @@
                 <div class="swiper-wrapper">
                     <div class="swiper-slide">
                         <img src="../../assets/img/hunker1.png" alt="">
-                        <div class="identity-box">我是馆主</div>
+                        <div class="identity-box">机构负责人</div>
                     </div>
                     <div class="swiper-slide">
                         <img src="../../assets/img/hunker2.png" alt="">
@@ -16,7 +16,7 @@
                     </div>
                     <div class="swiper-slide">
                         <img src="../../assets/img/hunker3.png" alt="">
-                        <div class="identity-box">馆主&教练</div>
+                        <div class="identity-box">机构负责人&教练</div>
                     </div>
                 </div>
             </div>
@@ -79,7 +79,9 @@
                 <div id="pdf"></div>
             </div>
         </van-dialog>
-        <div class="submit" @click="submit">提交认证</div>
+        <van-button class="submit" :disabled="isDisabled" @click="submit(slideIndex)">
+            {{isDisabled ? '您已提交认证，不能再次认证...' : '提交认证'}}
+        </van-button>
         <div class="agreement">
             <van-checkbox v-model="checked" checked-color="#CCE198"></van-checkbox>
             <div>
@@ -93,7 +95,6 @@
 import Swiper from 'swiper';
 import Pdfh5 from "pdfh5";
 import "pdfh5/css/pdfh5.css";
-
 import areaList from "../../assets/js/area.js";
 export default {
     data() {
@@ -152,10 +153,17 @@ export default {
             slideIndex: '',
             // 多选图片时，图片名保存的数组
             picNameArr: [],
+            // 提交按钮的状态
+            isDisabled: ''
         }
     },
     created() {
         this.loadProtocolFile();
+        if(this.$route.query.status !== '未认证') {
+            this.isDisabled = true;
+        } else {
+            this.isDisabled = false
+        }
     },
     mounted() {
         const that = this;
@@ -247,13 +255,7 @@ export default {
         afterRead(fileInfo, name) {
             console.log(fileInfo,name);
             let that = this;
-            // const nameArr = [];
             if(fileInfo.length == 2) {
-                // nameArr.push(fileInfo[0].file.name);
-                // nameArr.push(fileInfo[1].file.name);
-                // this.picNameArr = nameArr;
-                // console.log(nameArr);
-                
                 lrz(fileInfo[0].file).then(rst => {
                     that.ownerAndCoachList.img_work = rst.base64;
                 })
@@ -280,7 +282,6 @@ export default {
                         } else {
                             that.ownerAndCoachList.img_license = rst.base64
                         } 
-                        
                     }
                 })
                 .catch(function (err) {
@@ -289,6 +290,7 @@ export default {
             }
             
         },
+        // 删除上传图片
         onDel(fileInfo,detail) {
             // console.log(fileInfo, detail);
             if(this.slideIndex == 0) {
@@ -296,7 +298,6 @@ export default {
             } else if(this.slideIndex == 1) {
                 this.coachDataList.img_license = ''
             } else {
-                
                 if(detail.index == 0 && this.ownerAndCoachList.img_work !== '') {
                     this.ownerAndCoachList.img_work = '';
                 } else {
@@ -332,25 +333,82 @@ export default {
             //     );
             // });
         },
-        submit() {
-            
+        // 提交认证
+        submit(slideIndex) {
             if(this.checked) {
                 if(this.slideIndex == 0) {
                     this.ownerDataList.identity_auth = 2;
-                     console.log(this.ownerDataList);
+                    let status = this.formVerify(this.ownerDataList, this.fileList1);
+                    if(status === -1) {
+                        return
+                    } else {
+                        this.identityVerify(this.ownerDataList);
+                    }                   
                 } else if(this.slideIndex == 1) {
                     this.coachDataList.identity_auth = 4;
+                    let status = this.formVerify(this.coachDataList, this.fileList2);
+                    if(status === -1) {
+                        return
+                    } else {
+                        this.identityVerify(this.coachDataList);
+                    }  
                 } else if(this.slideIndex == 2) {
                     this.ownerAndCoachList.identity_auth = 7;
-                    console.log(this.ownerAndCoachList);
+                    let status = this.formVerify(this.ownerAndCoachList, this.fileList3);
+                    if(status === -1) {
+                        return
+                    } else {
+                        this.identityVerify(this.ownerAndCoachList);
+                    }  
                 } 
-                
-
             } else {
                 this.$toast({
                     message: '请阅读并勾选瑜伽村平台认证服务协议',
                 });
             }
+        },
+        // 表单验证不为空
+        formVerify(submitData, file) {
+            if(submitData.real_name === '') {
+                this.$toast('真实姓名不能为空！')
+                return -1
+            } 
+            if(submitData.club_name === '') {
+                this.$toast('会馆名不能为空！')
+                return -1
+            } 
+            if(submitData.club_tel === '') {
+                this.$toast('会馆电话不能为空！')
+                return -1
+            } 
+            if(submitData.province === '') {
+                this.$toast('请填写会馆所在地区！')
+                return -1
+            } 
+            if(submitData.address === '') {
+                this.$toast('请填写会馆的详细地址！')
+                return -1
+            } 
+            if(file.length === 0) {
+                this.$toast('请上传认证图片！')
+                return -1
+            } 
+            if(this.slideIndex == 2) {
+                if(file.length !== 2) {
+                    this.$toast('上传的图片资料至少2张！')
+                    return -1
+                }
+            }
+        },
+        // 认证
+        identityVerify(submitList) {
+            this.$request.post('/personal/home',submitList).then(data => {
+                console.log(data);
+                if(data.msg == 'OK') {
+                    this.$toast('资料已上传，请耐心等候...');
+                    this.isDisabled = true;
+                }
+            })
         }
     }
 }
@@ -447,12 +505,15 @@ export default {
 } 
 
 .submit {
+    width: 100%;
     height: 44px;
     line-height: 44px;
     background-color: #CCE198;
+    border: none;
     text-align: center;
     font-size: 12px;
 }
+
 .agreement {
     display: flex;
     justify-content: center;

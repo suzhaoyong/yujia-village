@@ -137,6 +137,7 @@ const router = new Router({
     {
       // 认证中心
       path: '/authenticationcenter',
+      name: 'authenticationcenter',
       component: () => import('@/pages/personalCenter/authenticationcenter')
     },
     {

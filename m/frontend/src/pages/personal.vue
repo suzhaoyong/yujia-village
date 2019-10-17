@@ -20,7 +20,7 @@
         <div class="asset">
             <div class="asset-item1">
                 <div class="img"></div>
-                <span class="my-asset">我的资产</span>
+                <span class="my-asset">我的账户</span>
             </div>
             <div class="asset-item">
                 <div>{{personalData.money}}</div>
@@ -58,7 +58,7 @@
                     <span class="custom-title">我购买的课程</span>
                 </template>
             </van-cell> -->
-            <van-cell is-link class="rz-center" to="/authenticationcenter">
+            <van-cell is-link class="rz-center" @click="goAuthentication">
                 <template slot="title">
                     <img class="icon" src="../assets/img/certification.png" alt="">
                     <span class="custom-title">认证中心</span>
@@ -105,10 +105,8 @@ export default {
         }
     },
     created() {
-        // this.getPersonalData()
     },
     mounted() {
-        // this.setPersonalData()
         this.getPersonalData()
         this.messagecenter();
     },
@@ -119,7 +117,6 @@ export default {
         setPersonalData() {
           const user_data = JSON.parse(sessionStorage.getItem('user data'))
           store.dispatch("INFO", user_data);
-          // if(this.isUserNeedLogin) return;
           const { fraction, icon, name, identity_auth, reason } = this.info.user;
                 window.sessionStorage.setItem('user',JSON.stringify(this.info.user));
                 const index = this.info.user.money.indexOf(".");
@@ -178,6 +175,17 @@ export default {
             }
         });
         },
+        // 去认证
+        goAuthentication() {
+            // console.log(this.personalData.identity_auth);
+            
+            this.$router.push({
+                name: 'authenticationcenter',
+                query: {
+                    status: this.personalData.identity_auth
+                }
+            })
+        },
         showPopup() {
             this.show = true;
         },
@@ -185,6 +193,7 @@ export default {
             // console.log('退出');
             store.dispatch("INFO", { user: {} });
             window.sessionStorage.removeItem('access');
+            window.sessionStorage.removeItem('user data');
             // 退出回到首页
             window.open(`${window.location.origin}`, "_self");
         },

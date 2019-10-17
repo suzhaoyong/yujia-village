@@ -326,21 +326,8 @@ export default {
         .then((data)=> {
           sessionStorage.setItem("access", JSON.stringify(data));
           Notify({ message: "登录成功", type: "success" });
-        })
-        .then(()=> {
-          this.$request
-            .get("/personal/home")
-            .then(data => {
-              store.dispatch("INFO", data);
-              sessionStorage.setItem('user data',JSON.stringify(data));
-
-            })
-            .then(()=> {
-              // window.open("/personal", "_self");
-              this.$router.go(-1)
-            });
-        })
-        .catch(err => {
+          this.$router.push('/personal');
+        }).catch(err => {
           Notify(err);
         });
     },
