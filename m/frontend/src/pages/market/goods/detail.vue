@@ -323,12 +323,12 @@ export default {
     // 获取购物袋数据
     getShoppingBag() {
       if (this.isUserNeedLogin) {
-        this.$router.push("/login");
+        // this.$router.push("/login");
         return;
       }
-      // this.$request.get("/userCart/create").then(data => {
-      //   this.shoppingBagNumber = data.length;
-      // });
+      this.$request.get("/userCart/create").then(data => {
+        this.shoppingBagNumber = data.length;
+      });
     },
     // 点击加入购物车
     handleAddCart() {
