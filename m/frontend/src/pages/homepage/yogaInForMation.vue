@@ -91,7 +91,7 @@ export default {
   },
   methods: {
     viewdetail (id) {
-      this.$router.push('/informationdetail/'+id)
+      this.$router.push('/informationdetail/' + id)
     },
     // li选中变色
     changestyle (id, index) {
@@ -118,14 +118,15 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+html body {width: 100%; height: 100%;}
 .active {
   color: #7BBB62;
 }
 .information {
-  height: 530px;
+  height: 100%;
   width: 100%;
-  overflow: auto;
   margin-top: 88px;
+  margin-bottom: 50px;
   &-banner {
     width: 100%;
     height: 170px;

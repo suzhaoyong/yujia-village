@@ -11,6 +11,9 @@
           <div><span><img src="../../../static/img/eye.png">{{ detailData.views }}</span><span><img src="../../../static/img/hand.png" class="hand">100</span></div>
         </li>
         <li>
+
+        </li>
+        <li class="li2">
           <p class="stardiff">
             <van-rate
               v-model='detailData.diff'
@@ -20,77 +23,68 @@
               void-icon="star"
               void-color="#eee"
             /></p>
-        </li>
-        <li class="li2">
-          <div>空中瑜伽</div>
           <div>￥{{ detailData.price }}</div>
         </li>
-        <li class="li3">培训老师： {{ detailData.name }}</li>
+        <li class="li3">培训老师： <span>{{ detailData.name }}</span></li>
         <li class="li4">
           <p>培训时间</p>
           <div>{{ detailData.startTime }}-{{ detailData.endTime }}</div>
         </li>
         <li class="li5">
           <p>培训地址</p>
-          <div>{{ detailData.address }}</div>
+          <div>{{ detailData.custom_address }}{{ detailData.address }}</div>
         </li>
       </ul>
       <div class="messagedetail-main-proper">
         <div class="messagedetail-main-proper-title">
-          <h6>适宜人群</h6>
+          <h6><span><img src="../../../static/img/yogateach.png"></span>适宜人群</h6>
           <span>Suitable crowd</span>
         </div>
-        <div class="messagedetail-main-proper-show">
-          <!-- <swiper :options="swiperOption" slideToClickedSlide="true" > -->
-            <swiper-slide>
-              <div class="messagedetail-main-proper-show-list">
-                <div class="list-img"><img :src="detailData.teacher_img"></div>
-                <div class="list-text">{{ detailData.intro }}</div>
+
+        <div class="messagedetail-main-proper-show" >
+              <div class="messagedetail-main-proper-show-list" v-for="(list, index) in crowds" :key="index">
+                <div class="list-img"><img :src="crowdimg[index]"></div>
+                <div class="list-text">{{ list }}</div>
               </div>
-            </swiper-slide>
-            <!-- <swiper-slide>
-              <div class="messagedetail-main-proper-show-list">
-                <div class="list-img"><img src="https://api.yujiacun.net/uploads/base64img/20190909/ad6b4a1e692e1a3ef5ac7b67b0f4744c.jpeg"></div>
-                <div class="list-text">有专业瑜伽会员课程1年以上的 瑜伽爱好者，及舞蹈爱好者。</div>
-              </div>
-            </swiper-slide>
-            <swiper-slide>
-              <div class="messagedetail-main-proper-show-list">
-                <div class="list-img"><img src="https://api.yujiacun.net/uploads/default-hot-train-cover.png"></div>
-                <div class="list-text">有专业瑜伽会员课程1年以上的 瑜伽爱好者，及舞蹈爱好者。</div>
-              </div>
-            </swiper-slide> -->
-          <!-- </swiper> -->
         </div>
         
       </div>
       <div class="messagedetail-main-teach">
         <div class="messagedetail-main-teach-title">
-          <h6>适宜人群</h6>
-          <span>Suitable crowd</span>
+          <h6><span><img src="../../../static/img/yogateach.png"></span>教学大纲</h6>
+          <span>syllabus</span>
         </div>
+
         <div class="messagedetail-main-teach-box">
           <img src="../../../static/img/bookbg.png">
           <span v-html="detailData.content"></span>
-          <!-- <div class="messagedetail-main-teach-box-text">
-          </div> -->
+
         </div>
       </div>
-    </main>
 
+      <!-- <div class="content" v-html="detailData.content"></div> -->
+
+    </main>
+  <Footer></Footer>
   </div>
 </template>
 
 <script>
 import Vue from 'vue';
-import { swiper, swiperSlide } from 'vue-awesome-swiper'
+import Footer from '../../components/footer'
 import '../../dist/swiper.css'
 import { Rate} from 'vant'
+
+
 Vue.use(Rate)
 export default {
+  components: {
+    Footer
+  },
   data () {
     return {
       detailData: [],
+      crowds: [],
       swiperOption: {
           slidesPerView: 3,
           spaceBetween: 30,
@@ -98,12 +92,14 @@ export default {
             el: '.swiper-pagination',
             clickable: true
           }
-      }
+      },
+      crowdimg: [
+        require('../../../static/img/image71.png'),
+        require('../../../static/img/image72.png'),
+        require('../../../static/img/image73.png'),
+        require('../../../static/img/image71.png')
+      ]
     }
-  },
-  components: {
-    swiper,
-    swiperSlide
   },
   created() {
     this.getmessageDetail()
@@ -118,6 +114,8 @@ export default {
       const id = this.$route.params.id
       this.$request.get('trains/' + id).then((res) => {
         this.detailData = res
+        this.crowds = res.crowd.split("；")
+        console.log(this.crowd)
         console.log(res)
       })
     },
@@ -130,11 +128,15 @@ export default {
     width: 100%;
     height: 100%;
     header {
-      height: 35px;
+      width: 100%;
+      height: 44px;
       text-align: center;
       background: #EEEEEE;
       font-size: 16px;
-      line-height: 35px;
+      line-height: 44px;
+      position: fixed;
+      top: 0;
+      z-index: 99;
       span {
         position: relative;
         left: -35%;
@@ -145,7 +147,12 @@ export default {
       }
     }
     &-main {
+      width: 100%;
+      height: auto;
       background: #EEEEEE;
+      overflow: auto;
+      margin-top: 44px;
+      margin-bottom: 50px;
       section {
         width: 100%;
         height: auto;
@@ -183,9 +190,13 @@ export default {
         .li2 {
           display: flex;
           justify-content: space-between;
+          margin: 13px 0;
         }
         .li3 {
           font-weight: 100;
+          span {
+            color: #22AC38;
+          }
         }
         .li4 {
           div {
@@ -216,23 +227,37 @@ export default {
         &-title {
           height: 55px;
           width: 91%;
-          border-bottom: 1px solid black;
+          border-bottom: 1px solid #EEEEEE;
           margin: 0 auto;
           h6 {
+            span {
+              margin-right: 8px;
+              img {
+                width: 10px;
+                height: 15px;
+              }
+            }
             display: block;
-            padding-top: 15px;
+            padding-top: 18px;
+            font-size: 14px;
+            font-weight: 900;
+            color: #2C2C2C;
+          }
+          span {
+            font-size: 10px;
+            color: #999999;
           }
         }
         &-show {
           height: 200px;
           display: flex;
-          max-width: 100%;
+          min-width: 50%;
           overflow-x: auto;
+          align-items: center;
           &-list {
             width: 120px;
             height: 160px;
-            margin-right: 20px;
-            overflow: hidden;
+            margin: 0 20px;
             .list-img {
               width: 120px;
               height: 120px;
@@ -243,8 +268,10 @@ export default {
               }
             }
             .list-text {
+              font-size: 10px;
               margin-top: 10px;
               overflow: hidden;
+              text-align: center;
             }
           }
         }
@@ -258,15 +285,29 @@ export default {
         margin-top: 4px;
         background: white;
         font-size: 10px;
-        overflow: hidden;
+        min-height: 250px;
         &-title {
           height: 55px;
           width: 91%;
-          border-bottom: 1px solid black;
+          border-bottom: 1px solid #EEEEEE;
           margin: 0 auto;
           h6 {
+            span {
+              margin-right: 8px;
+              img {
+                width: 10px;
+                height: 15px;
+              }
+            }
             display: block;
-            padding-top: 15px;
+            padding-top: 18px;
+            font-size: 14px;
+            font-weight: 900;
+            color: #2C2C2C;
+          }
+          span {
+            font-size: 10px;
+            color: #999999;
           }
         }
         &-box {
@@ -279,6 +320,14 @@ export default {
             float: left;
           }
         }
+      }
+      .content {
+        margin-top: 4px;
+        padding: 16px;
+        width: 100%;
+        height: auto;
+        background: white;
+        font-size: 12px;
       }
     }
 
