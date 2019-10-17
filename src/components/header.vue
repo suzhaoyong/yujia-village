@@ -7,7 +7,7 @@
             <el-button type="text" class="span2"></el-button>
             <div style="display:inline-block;" v-if="info.user.name">
               <div class="identity">
-                <img :src="identity" alt="头像" />
+                <img :src="identity" alt="" />
               </div>
               <span class="span1" style="line-height: 40px;">{{info.user.name}}</span>
             </div>
@@ -36,7 +36,7 @@
               @select="handleSelect"
             >
               <el-menu-item index="main">首页</el-menu-item>
-              <el-menu-item index="joinclubhouse">联盟会馆</el-menu-item>
+              <el-menu-item index="joinclubhouse">培训机构</el-menu-item>
               <el-menu-item index="yogoteacher">瑜伽名师</el-menu-item>
               <el-menu-item index="cultivate">培训信息</el-menu-item>
               <el-menu-item index="yogoknowledge">瑜伽知识</el-menu-item>
@@ -58,7 +58,7 @@
                   <el-menu-item
                     v-show="parseInt(info.user.identity_auth) === 7 || parseInt(info.user.identity_auth) === 2"
                     index="hell"
-                  >会馆信息</el-menu-item>
+                  >机构信息</el-menu-item>
                   <el-menu-item index="safety-center">信息与安全中心</el-menu-item>
                   <el-menu-item index="share">分享邀请好友</el-menu-item>
                   <el-menu-item index="out" @click="logout">退出</el-menu-item>

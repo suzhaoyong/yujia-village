@@ -121,7 +121,7 @@ export default {
       this.joindatalist();
   },
   computed: {
-    ...mapGetters(["info"]),
+    ...mapGetters(["info","isUserNeedLogin"]),
   },
   methods:{
       joindatalist(){
@@ -144,10 +144,12 @@ export default {
         });
       },
       study(id){
-          if (!this.info.user.name) {
-            Bus.$emit("login", true);
-            Notify({ message: "请先登录", type: "warning" });
-            return;
+          if (this.isUserNeedLogin) {
+            // Bus.$emit("login", true);
+            // Notify({ message: "请先登录", type: "warning" });
+            // return;
+             this.$router.push("/login");
+             return;
         }
           this.$request.get(`/personal/followTrain?id=${id}`).then(data => {
             this.msg = data.msg;

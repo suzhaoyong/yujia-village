@@ -169,8 +169,8 @@
                 <el-pagination
                   background
                   :hide-on-single-page="true"
-                  layout="prev, pager, next, jumper"
-                  :page-size="12"
+                  layout="total,prev, pager, next, jumper"
+                  :page-size="fruit.per_page"
                   @current-change="changePage"
                   :current-page="fruit.current_page"
                   :total="fruit.total"
@@ -454,12 +454,12 @@ export default {
       this.hostFw = false;
       this.priceFW = false;
     },
-    postGetTrainsList(page = 1, params) {
+    postGetTrainsList(page = this.fruit.current_page, params) {
       postTrainsList(page, params).then(data => {
         this.fruit = data;
       });
     },
-    getTrainsList(page = 1) {
+    getTrainsList(page = this.fruit.current_page) {
       getTrains(page).then(data => {
         const mapClassfiy = array =>
           array.map(item => {
@@ -495,14 +495,17 @@ export default {
       }
       return params;
     },
-    
+    changePage(val){
+      this.fruit.current_page = val;
+      this.getTrainsList();
+    },
     // 排序请求
     getRank(params) {
       postTrains(params).then(data => {
         this.fruit = data       
       })
     },
-    postGetRank(page=1, params) {
+    postGetRank(page=this.fruit.current_page, params) {
       postTrainsRank(page, params).then(data => {
         this.fruit = data
       })

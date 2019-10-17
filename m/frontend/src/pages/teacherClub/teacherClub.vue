@@ -54,11 +54,6 @@
                         <img src="../../assets/teacherclub/top.png" class="house_title_img2" v-else/>
                     </div>
                 </div>
-                <div class="list_house_inquirys" @click="more">
-                    <span class="house_title_tips">更多</span>
-                    <img src="../../assets/teacherclub/launch.png" class="house_title_img" v-if="launch"/>
-                    <img src="../../assets/teacherclub/top.png" class="house_title_img2" v-else/>
-                </div>
             </div>
             <transition name="fade">
             <div class="list_house_type" v-if="visible">
@@ -264,8 +259,8 @@ export default {
         const obj = {
           2: {message:'您已在申请中，请耐心等待审核', type:'success'},
           3: {message:'您已加盟成功',type:'success'},
-          4: {message:'您是教练认证中，暂时不能申请加盟，详情请联系馆主认证',type:'warning'},
-          5: {message:'您是教练，暂时不能申请加盟，详情请联系馆主认证',type:'warning'},
+          4: {message:'您是教练认证中，暂时不能申请加盟，详情请联系机构负责人认证',type:'warning'},
+          5: {message:'您是教练，暂时不能申请加盟，详情请联系机构负责人认证',type:'warning'},
           6: {message:'您的申请未通过，详情请联系客服',type:'error'},
           7: {message:'您已加盟成功',type:'success'},
           8: {message:'您已加盟成功',type:'success'},
@@ -275,7 +270,8 @@ export default {
         })
         // obj[identity_auth] && this.$message(obj[identity_auth])
       }else{
-        Bus.$emit("login", true);
+        // Bus.$emit("login", true);
+        this.$router.push("/login");
       }
     },
     addClass:function(index){
@@ -297,10 +293,6 @@ export default {
     },
     toggle: function() {
         this.visible = !this.visible //取反
-        this.launch = !this.launch;
-     },
-     more(){
-        this.visible = !this.visible;
         this.launch = !this.launch;
      },
      //省市区
@@ -701,13 +693,13 @@ input:-ms-input-placeholder{
             // height: 100%;
             margin: 0 auto;
             display: flex;
-            justify-content: space-around;
+            justify-content:flex-start;
             .list_house_title{
-                width: 77%;
-                height: 55px;
+                width:85%;
+                height: 50px;
                 line-height: 45px;
                 display: flex;
-                justify-content: space-evenly;
+                margin-left: 11px;
                 .list_house_div:nth-child(1){
                     width: 80px;
                     float: left;

@@ -74,7 +74,7 @@
         <div class="card" v-show="isShow('7') || isShow('2')">
           <div class="title-tips">
             <div class="title" style="left: 1em;">营业执照</div>
-            <div class="tips">请上传最新的营业执照(仅馆主需要提交)</div>
+            <div class="tips">请上传最新的营业执照(仅机构负责人需要提交)</div>
           </div>
           <div class="upload-box">
             <el-upload

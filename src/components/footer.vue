@@ -14,7 +14,7 @@
                         <div class="left-name-main">
                         <div class="foot-left-name">
                             <router-link to="/main"><span class="apns">首&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;页</span></router-link>
-                            <router-link to="/joinclubhouse"><span class="apns">联盟会馆</span></router-link>
+                            <router-link to="/joinclubhouse"><span class="apns">培训机构</span></router-link>
                             <router-link to="/yogoteacher"><span class="apns">瑜伽名师</span></router-link>
                         </div>
                         <div class="foot-left-name">

@@ -27,11 +27,11 @@
                 <div>金币</div>
             </div>
             <div class="asset-item">
-                <div>1</div>
+                <div>{{personalData.cashCount}}</div>
                 <div><router-link to="/cashvoucher">现金券</router-link></div>
             </div>
             <div class="asset-item">
-                <div>1</div>
+                <div>{{personalData.couponCount}}</div>
                 <div><router-link to="/coupon">优惠券</router-link></div>
             </div>
             <div class="asset-item">
@@ -140,7 +140,7 @@ export default {
             this.$request.get('/personal/home').then(data => {
                 store.dispatch("INFO", data);
                 // console.log(data);
-                const { fraction, icon, name, identity_auth, reason } = data.user;
+                const { fraction, icon, name, identity_auth, reason,cashCount,couponCount } = data.user;
                 window.sessionStorage.setItem('user',JSON.stringify(data.user));
                 const index = data.user.money.indexOf(".");
                 const money = data.user.money.substring(index,0);
@@ -151,7 +151,9 @@ export default {
                     icon,
                     name,
                     identity_auth,
-                    reason
+                    reason,
+                    cashCount,
+                    couponCount
                 }
                 this.personalData = personal;
             })
