@@ -25,7 +25,7 @@
                 <div class="empty" v-else></div>
             </van-tab>
             <van-tab title="商品" name="commodity">
-                <div class="commodity-box" v-if="collectCourse.length > 0">
+                <div class="commodity-box" v-if="collectGoods.length > 0">
                     <div class="commodity-item" v-for="(item,index) in collectGoods" :key="index" @click="toGoodsDetail(item.id)">
                         <div class="img" :style="{backgroundImage:'url('+ item.url +')'}"></div>
                         <div class="name">{{item.describe}}</div>
@@ -45,9 +45,9 @@ export default {
             // 难度指数
             value: 2,
             // 收藏的课程数据
-            collectCourse: '',
+            collectCourse: [],
             // 收藏的商品数据
-            collectGoods: ''
+            collectGoods: []
         }
     },
     created() {
@@ -117,7 +117,8 @@ export default {
     width: 100%;
     height: 193px;
     margin-top: 90px;
-    background: url('../../assets/img/Nothing_Order.png');
+    padding: 0 16px;
+    background: url('../../assets/img/empty.jpg');
     background-size: cover;
 }
 .course {

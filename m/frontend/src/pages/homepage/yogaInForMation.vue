@@ -91,12 +91,7 @@ export default {
   },
   methods: {
     viewdetail (id) {
-      this.$router.push({
-        name: 'informationdetail',
-        params: {
-          id
-        }
-      })
+      this.$router.push('/informationdetail/'+id)
     },
     // li选中变色
     changestyle (id, index) {

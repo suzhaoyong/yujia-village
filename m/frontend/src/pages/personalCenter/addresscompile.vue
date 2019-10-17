@@ -16,16 +16,7 @@ export default {
             isShowDelete: true,
             areaList,
             // 初始地址信息
-            AddressInfo: {
-                userName: "",
-                userTel: "",
-                province: "",
-                county: "",
-                city: "",
-                userAddress: "",
-                areaCode: "",
-                isDefault: false
-            },
+            AddressInfo: {},
             // 用户信息
             userInfoForm: {
                 userName: "",
@@ -92,12 +83,10 @@ export default {
                 } else {
                     isDefault = false
                 }
+                console.log(data);
                 const info = {
                     name: data.name,
                     tel: data.tel,
-                    province: data.province,
-                    city: data.city,
-                    county: data.area,
                     areaCode: data.areaCode,
                     addressDetail: data.address,
                     isDefault
@@ -105,7 +94,7 @@ export default {
                 this.AddressInfo = info
             })
         },
-        // 编辑地址
+        // 修改地址
         complileAddress() {
             this.$request.post('/updateAddress/'+this.addressId,this.userInfoForm).then(data => {
                 if(data.msg === 'ok') {

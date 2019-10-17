@@ -9,14 +9,14 @@
                         <span class="e-title">Popular course</span>
                     </div>
                     <div>
-                        <span class="more">更多</span>
+                        <span class="more" @click="more('course')">更多</span>
                         <span class="el-icon-arrow-right i-right"></span>
                     </div>
                 </div>
                 <div class="hot-swiper">
                     <div class="swiper-container swiper1">
                         <div class="swiper-wrapper">
-                            <div class="swiper-slide" v-for="(item,index) in hotCourse" :key="index">
+                            <div class="swiper-slide" v-for="(item,index) in hotCourse" :key="index" @click="goCourseDetail(item.id)">
                                 <div class="img" :style="{backgroundImage: 'url('+item.teacher_img+')'}"></div>
                                 <div class="overlay">{{item.type}}</div>
                             </div>
@@ -32,14 +32,14 @@
                         <span class="e-title">Yoga news</span>
                     </div>
                     <div>
-                        <span class="more">更多</span>
+                        <span class="more" @click="more('news')">更多</span>
                         <span class="el-icon-arrow-right i-right"></span>
                     </div>
                 </div>
                 <div class="news-swiper"> 
                     <div class="swiper-container swiper2">
                         <div class="swiper-wrapper">
-                            <div class="swiper-slide" v-for="(item,index) in yogaNews" :key="index">
+                            <div class="swiper-slide" v-for="(item,index) in yogaNews" :key="index" @click="goInfoDetail(item.id)">
                                 <div class="img" :style="{backgroundImage: 'url('+item.icon_url+')'}"></div>
                                 <div class="introduce">{{item.headline}}</div>
                             </div>
@@ -55,14 +55,14 @@
                         <span class="e-title">Famous teacher</span>
                     </div>
                     <div>
-                        <span class="more">更多</span>
+                        <span class="more" @click="more('teacher')">更多</span>
                         <span class="el-icon-arrow-right i-right"></span>
                     </div>
                 </div>
                 <div class="teacher">
                     <div class="swiper-container swiper3">
                         <div class="swiper-wrapper" :v-if="famousTeacher.length">
-                            <div class="swiper-slide" v-for="(item,index) in famousTeacher" :key="index">
+                            <div class="swiper-slide" v-for="(item,index) in famousTeacher" :key="index" @click="goTeacherDetail(item.id)">
                                 <div class="img" :style="{backgroundImage: 'url('+item.first_img+')'}"></div>                                
                                 <div class="name">
                                     <div class="en-name">{{item.name}}</div>
@@ -85,21 +85,20 @@
                         <span class="e-title">Training Information</span>
                     </div>
                     <div>
-                        <span class="more">更多</span>
+                        <span class="more" @click="more('information')">更多</span>
                         <span class="el-icon-arrow-right i-right"></span>
                     </div>
                 </div>
                 <div class="information-box">
-                    <div class="training-item" v-for="(item,index) in trainingInfo" :key="index">
+                    <div class="training-item" v-for="(item,index) in trainingInfo" :key="index" @click="goCourseDetail(item.id)">
                         <div class="left-box">
                             <div class="img" :style="{backgroundImage: 'url('+item.teacher_img+')'}"></div>                                
                         </div>
                         <div class="right-box">
                             <div class="title">{{item.theme}}</div>
-                            <div class="certification">全球认证</div>
+                            <div class="certification">{{item.type}}</div>
                             <div class="time">{{item.startTime}}至{{item.endTime}}</div>
-                            <div class="address">{{item.province + item.city + item.area }}</div>
-                            <div class="more">了解更多</div>
+                            <div class="address">{{item.custom_address }}</div>
                         </div>
                     </div>
                 </div>
@@ -112,7 +111,7 @@
                         <span class="e-title">Union hall</span>
                     </div>
                     <div>
-                        <span class="more">更多</span>
+                        <span class="more" @click="more('hall')">更多</span>
                         <span class="el-icon-arrow-right i-right"></span>
                     </div>
                 </div>
@@ -178,7 +177,7 @@ export default {
         },
         getHomeData() {
             this.$request.get('/home').then(data => {
-                // console.log(data);
+                console.log(data);
                 const { hot, information, teachers, clubs} = data;
                 this.hotCourse = hot;
                 this.yogaNews = information;
@@ -191,6 +190,31 @@ export default {
             }).catch(error => {
                 console.log(error);
             })
+        },
+        more(keyword) {
+            if(keyword === 'course' || keyword === 'information') {
+                this.$router.push('/yogamessage');
+            } else if(keyword === 'news') {
+                this.$router.push('/yagainformation');
+            } else if(keyword === 'teacher') {
+                this.$router.push('/teacherClub');
+            } else if(keyword === 'hall') {
+                this.$router.push('/teacherClub');
+            }  
+        },
+        goCourseDetail(id) {
+            this.$router.push('/messagedetail/'+id);
+        },
+        goInfoDetail(id) {
+            this.$router.push('/informationdetail/'+id);
+        },
+        goTeacherDetail(id) {
+            this.$router.push({
+                name: 'teacherDetails',
+                query: {
+                    id: id
+                }
+            });
         }
     }
 }
@@ -381,7 +405,7 @@ export default {
                     text-overflow:ellipsis;
                 }
                 .certification {
-                    width: 60px;
+                    width: 75px;
                     height: 17px;
                     line-height: 17px;
                     margin-top: 8px;
@@ -433,7 +457,6 @@ export default {
                 width: 83px;
                 height: 30px;
                 margin-right: 2px;
-                background-color: #f00;
             }
         }
         

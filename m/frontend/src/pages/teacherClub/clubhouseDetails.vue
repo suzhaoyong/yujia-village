@@ -182,9 +182,7 @@ export default {
         this.$router.push('/messagedetail/?id='+id);
     },
       goback(){
-        this.$router.push({
-            path: "/teacherClub/list",
-        });
+        this.$router.go(-1);
       },
   }
 };

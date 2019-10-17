@@ -3,36 +3,14 @@
         <van-nav-bar title="点赞的名师" left-arrow @click-left="onClickLeft">
         </van-nav-bar>
         <div class="teacher-content">
-            <div class="teacher-card">
-                <div class="img"></div>
-                <div class="teacher-name text">Ivan</div>
-                <div class="text">流瑜伽</div>
+            <div class="teacher-card" v-for="(item,index) in thumbTeacherList" :key="index" @click="goTeacherDetail(item.id)">
+                <div class="img" :style="{backgroundImage: 'url('+ item.first_img +')'}"></div>
+                <div class="teacher-name text">{{item.name}}</div>
+                <div class="text">{{item.good_at}}</div>
                 <div class="bottom-box text">
-                    <div>教龄：5年</div>
+                    <div>教龄：{{item.num}}年</div>
                     <div>
-                        <van-icon name="good-job" /><span> 554</span>
-                    </div>
-                </div>
-            </div>
-            <div class="teacher-card">
-                <div class="img"></div>
-                <div class="teacher-name text">Ivan</div>
-                <div class="text">流瑜伽</div>
-                <div class="bottom-box text">
-                    <div>教龄：5年</div>
-                    <div>
-                        <van-icon name="good-job" /><span> 554</span>
-                    </div>
-                </div>
-            </div>
-            <div class="teacher-card">
-                <div class="img"></div>
-                <div class="teacher-name text">Ivan</div>
-                <div class="text">流瑜伽</div>
-                <div class="bottom-box text">
-                    <div>教龄：5年</div>
-                    <div>
-                        <van-icon name="good-job" /><span> 554</span>
+                        <van-icon name="good-job" /><span> {{item.praise}}</span>
                     </div>
                 </div>
             </div>
@@ -58,6 +36,15 @@ export default {
             const data = await this.$request.get('/personal/teacherThumbsUp');
             console.log(data);
             this.thumbTeacherList = data.data;
+        },
+        // 跳转 -> 老师详情页
+        goTeacherDetail(id) {
+            this.$router.push({
+                name: 'teacherDetails',
+                query: {
+                    id: id
+                }
+            });
         }
     }
 }
@@ -68,6 +55,7 @@ export default {
     top: 0;
     width: 100%;
     font-size: 16px;
+    background-color: #fff;
     .van-icon {
         font-size: 20px;
         color: #2c2c2c;
@@ -78,7 +66,8 @@ export default {
     justify-content: space-between;
     flex-wrap: wrap;
     margin-top: 46px;
-    padding: 6px 16px;
+    padding: 0 16px;
+    padding-top: 10px;
     .teacher-card {
         width: 169px;
         height: 251px;
@@ -87,23 +76,27 @@ export default {
         border-radius:5px;
         box-shadow: 0px 3px 3px #c8c8c8;
         font-size: 10px;
+        overflow: hidden;
         .img {
             width: 169px;
             height: 155px;
-            background-color: pink;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         }
         .text {
             padding: 0 9px;
+            padding-top: 5px;
         }
         .teacher-name {
-            margin-top: 24px;
+            margin-top: 15px;
             font-size: 12px;
             font-weight: 700;
         }
         .bottom-box {
             display: flex;
             justify-content: space-between;
-            margin-top: 13px;
+            margin-top: 10px;
             .van-icon {
                 font-size: 16px;
                 vertical-align: sub;

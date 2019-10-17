@@ -115,7 +115,7 @@ export default {
       this.$router.back()
     },
     getmessageDetail() {
-      const id = this.$route.query.id
+      const id = this.$route.params.id
       this.$request.get('trains/' + id).then((res) => {
         this.detailData = res
         console.log(res)
