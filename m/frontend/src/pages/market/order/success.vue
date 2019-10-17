@@ -1,9 +1,12 @@
 <template>
   <div class="wrap">
-    <van-nav-bar title="支付成功" left-arrow @click-left="back" fixed>
+    <van-nav-bar title="支付成功"  fixed>
       <!-- <div class="" slot="right" @click="handleShareGoods">
         <img class="icon" src="../../../assets/img/share.png" />
       </div>-->
+      <div class="" slot="left" @click="handleBackHome">
+        <span>返回个人中心</span>
+      </div>
     </van-nav-bar>
     <div class="order_body">
       <div class="pay_success">
@@ -12,8 +15,8 @@
         </div>
         <span class="tips">感谢您的光顾，宝贝一定准时送到府上！</span>
         <div class="actions">
-          <span class="see_order">查看订单</span>
-          <span class="go_on">继续逛</span>
+          <span class="see_order" @click="viewOrder">查看订单</span>
+          <span class="go_on"  @click="goOn">继续逛</span>
         </div>
       </div>
     </div>
@@ -24,9 +27,20 @@ export default {
   data() {
     return {};
   },
-  mounted() {},
+  mounted() {
+    this.$store.commit('loadStatus', false)
+  },
   methods: {
-    back() {}
+    back() {},
+    handleBackHome() {
+      this.$router.push('/personal')
+    },
+    viewOrder() {
+      this.$router.push('/myorder')
+    },
+    goOn() {
+      this.$router.push('/store/category')
+    }
   }
 };
 </script>

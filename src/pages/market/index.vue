@@ -380,11 +380,12 @@ img {
 }
 .sub-menu {
   // width: 80vw;
-  width: 99%;
-  position: fixed;
-  z-index: 999;
+  // width: 99%;
+  position: -webkit-sticky;
+  position: sticky;
+  // z-index: 999;
   left: 0;
-  top: 5.8rem;
+  // top: 5.8rem;
   height: 5rem;
   padding: 0 1rem;
   background: #fff;

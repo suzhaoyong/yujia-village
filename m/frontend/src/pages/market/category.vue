@@ -70,6 +70,15 @@
               <div class="range_select_range">
                 <van-tag
                   style="margin:2px;"
+                  @click="closePriceRange"
+                  plain
+                  round
+                  color="#89b264"
+                  v-if="max_price.value && min_price.value"
+                >{{`${min_price.value}-${max_price.value} x`}}</van-tag>
+
+                <van-tag
+                  style="margin:2px;"
                   @click="closeAsideTags(item)"
                   plain
                   round
@@ -77,6 +86,7 @@
                   v-for="(item, index) in selected.tags"
                   :key="index"
                 >{{`${item.name} x`}}</van-tag>
+                
               </div>
               <span class="filters_btn" style="flex-shrink: 0;" @click="aside.isOpen = true">筛选</span>
             </div>
@@ -111,8 +121,12 @@
             @click="subAside.isOpen = false"
             :custom-style="{ position: 'absolute'}"
           />-->
-            <!-- <van-skeleton v-for="item in 4" :key="item" title title-width="100" :row="6" /> -->
-          <div v-if="showGoods.list.length === 0" class="empty" style="background-size: 100% 100%;width: 7rem"></div>
+          <!-- <van-skeleton v-for="item in 4" :key="item" title title-width="100" :row="6" /> -->
+          <div
+            v-if="showGoods.list.length === 0"
+            class="empty"
+            style="background-size: 100% 100%;width: 7rem;margin-top:1rem;"
+          ></div>
           <div
             class="goods-box"
             @click="viewGoods(item)"
@@ -155,7 +169,6 @@
           <div class="filters_right_title">理想价格</div>
           <div class="filters_right_content">
             <div class="min_price">
-      
               <van-field
                 readonly
                 clickable
@@ -258,7 +271,15 @@
   </div>
 </template>
 <script>
-import { Button, Popup, Tag, Overlay, NumberKeyboard, Skeleton, Toast } from "vant";
+import {
+  Button,
+  Popup,
+  Tag,
+  Overlay,
+  NumberKeyboard,
+  Skeleton,
+  Toast
+} from "vant";
 import {
   getGoodsFilter,
   getGoodRecomment,
@@ -384,6 +405,11 @@ export default {
     this.showGoodsList();
   },
   methods: {
+    // 顶部筛选项-金额范围
+    closePriceRange() {
+      this.min_price.value = "";
+      this.max_price.value = "";
+    },
     // 顶部筛选-确定关闭
     changeSubAside() {
       this.subAside.isOpen = false;
@@ -398,7 +424,11 @@ export default {
     // 因为要显示出被选择的那一项
     isSelectSubAside(item) {
       const { isPrice, season, material } = this.subAside.selected;
-      if (item === isPrice.name || item === season.name || item === material.name) {
+      if (
+        item === isPrice.name ||
+        item === season.name ||
+        item === material.name
+      ) {
         return true;
       }
     },
@@ -432,16 +462,16 @@ export default {
         params[item.type] = item.id;
       });
       params.sort = this.kinds.curIndex;
-      const {min_price, max_price } = this
-      if(min_price.value - max_price.value > 0) {
-        Toast('输入金额有误');
+      const { min_price, max_price } = this;
+      if (min_price.value - max_price.value > 0) {
+        Toast("输入金额有误");
         return;
       }
-      if(min_price.value) {
-        params.minPrice = min_price.value
+      if (min_price.value) {
+        params.minPrice = min_price.value;
       }
-      if(max_price.value) {
-        params.maxPrice = max_price.value
+      if (max_price.value) {
+        params.maxPrice = max_price.value;
       }
 
       this.showGoodsList({ ...params, ...args });
@@ -449,6 +479,8 @@ export default {
     },
     // 筛选 - 重置
     asideReset() {
+      this.min_price.value = "";
+      this.max_price.value = "";
       this.selected.tags = [];
     },
     // 移除筛选项
@@ -567,6 +599,12 @@ $main_bg_color: #89b264;
         margin-bottom: 1em;
       }
       .news_goods_name {
+        line-height: 1.4em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
       }
     }
   }
@@ -583,9 +621,12 @@ $main_bg_color: #89b264;
       }
       .sales_goods_name {
         width: 82px;
+        line-height: 1.4em;
         overflow: hidden;
         text-overflow: ellipsis;
-        white-space: nowrap;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
       }
     }
   }
@@ -602,9 +643,12 @@ $main_bg_color: #89b264;
       }
       .hot_goods_name {
         width: 82px;
+        line-height: 1.4em;
         overflow: hidden;
         text-overflow: ellipsis;
-        white-space: nowrap;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
       }
     }
   }
@@ -660,11 +704,12 @@ $main_bg_color: #89b264;
     .goods_filters {
       position: relative;
       .filters_range {
+        padding-bottom: 10px;
         .range_price_sell {
           padding-right: 16px;
           display: flex;
           justify-content: space-between;
-          margin-bottom: 16px;
+          margin-bottom: 14px;
           span {
             &.active {
               color: $main_bg_color;
@@ -739,6 +784,12 @@ $main_bg_color: #89b264;
         .goods_name {
           display: block;
           width: 124px;
+          line-height: 1.4em;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
         }
         .goods_price {
           display: block;

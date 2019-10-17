@@ -17,6 +17,13 @@
                 </div>
                 <van-stepper v-model="item.num" integer @change="numChange"/>
             </div>
+            <div
+            v-if="shoppingBagList.length === 0"
+            class="empty"
+            style="background-size: 100% 100%;margin-top:1rem;"
+            >
+            <span class="empty_tips">暂无商品</span>
+            </div>
         </div>
         <div class="check-all" v-if="isCompile==false">
             <van-checkbox :value="isAllChecked" @click="handleAllCheck" checked-color="#B3D465">全选</van-checkbox>
@@ -25,12 +32,12 @@
         </div>
         <div class="check-all delete" v-if="isCompile==true">
             <van-checkbox :value="isAllChecked" checked-color="#B3D465" @click="handleAllCheck">全选</van-checkbox>
-            <div class="del" @click="delCommodity">删除</div>
+            <div class="del" :style="`background:${ hasSomeChecked ?'':'#ccc'}`" @click="delCommodity">删除</div>
         </div>
     </div>
 </template>
 <script>
-import { postUserOrder } from '@/api/goods.js'
+import { postUserOrder, deleteUserCartDelCart } from '@/api/goods.js'
 export default {
     data() {
         return {
@@ -100,6 +107,7 @@ export default {
 
         },
         delCommodity() {
+            if(!this.hasSomeChecked) return;
             this.$dialog.confirm({
                 message: '是否删除选中商品？',
                 confirmButtonText: '是',
@@ -109,13 +117,20 @@ export default {
                 beforeClose: (action, done) => {
                     if(action === 'confirm') {
                         console.log('confirm');
-                        this.shoppingBagList = this.shoppingBagList.filter(item => !item.check)
+                        this.delShoppingBag(this.shoppingBagList.filter(item => item.check).map(item => item.id))
                         done(); 
                     } else {
                         done(); 
                     }
                 }
             });
+        },
+        delShoppingBag(items_id) {
+          
+          deleteUserCartDelCart({ id: items_id }).then(() => {
+            this.$toast("删除成功");
+            this.shoppingBagList = this.shoppingBagList.filter(item => !item.check)
+          });
         },
         // 获取购物袋数据
         getShoppingBag() {
@@ -129,7 +144,7 @@ export default {
                         size: item.size,
                         price: item.sell_price,
                         pic: item.url,
-                        num: data.num,
+                        num: item.num,
                         check: true 
                     }
                     this.shoppingBagList.push(cart);
@@ -165,7 +180,7 @@ export default {
     }
 }
 .content {
-    margin-top: 46px;
+    padding-top: 46px;
     margin-bottom: 49px;
     overflow: hidden;
     overflow-y: scroll;
@@ -260,7 +275,7 @@ export default {
         width: 104px;
         height: 49px;
         line-height: 49px;
-        background-color: #B3D465;
+        background-color: #FF1900;
         color: #fff;
         text-align: center;
     }

@@ -29,9 +29,7 @@ export default {
 #app {
   background-color: #eee;
 }
-.van-cell__title {
-  color: #2c2c2c;
-}
+
 .loding_wrap {
   position: fixed;
   top: 0;
@@ -48,7 +46,7 @@ export default {
     position: fixed;
     top: 0;
     width: 100%;
-    background-color: #eee;
+    background-color: #E0EED2!important;
     font-size: 16px;
     .van-icon {
         font-size: 20px;
@@ -60,12 +58,32 @@ export default {
         height: 22px;
         margin-bottom: 12px;
     }
+    .van-ellipsis {
+      width: 100%;
+      height: 1.17333rem;
+      line-height: 1.17333rem;
+      font-size: 0.42667rem;
+      font-weight: 700;
+      color: #000;
+      text-align: center;
+    }
 }
 .empty {
+    
     width: 100%;
     height: 193px;
     margin-top: 90px;
-    background: url('~@/assets/img/Nothing_Order.png');
+    background: url('~@/assets/img/empty_img.png');
     background-size: cover;
+    position: relative;
+    .empty_tips{
+      position: absolute;
+      top:40%;
+      right:20%;
+      transform: translateY(-100%);
+      font-size: 13px;
+      color:#999;
+    } 
 }
+
 </style>

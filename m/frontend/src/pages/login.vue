@@ -1,5 +1,8 @@
 <template>
   <div class="body-wrap">
+    <div class="back_home-wrap" @click="goHome">
+      <div class="back_home"><van-icon name="wap-home" /></div>
+    </div>
     <div class="body">
       <!-- <div class="tips" v-show="false">
         <span :class="isActive('register')" @click="changeType('register')">注册</span>
@@ -190,11 +193,12 @@ import key from "@/assets/img/key.png";
 import refresh from "@/assets/img/refresh.png";
 import Pdfh5 from "pdfh5";
 import Vue from "vue";
-import { Field, Button, Notify, Dialog } from "vant";
+import { Field, Button, Notify, Dialog, Icon } from "vant";
 import store from "@/store";
 Vue.use(Field)
   .use(Button)
   .use(Dialog)
+  .use(Icon)
   .use(Notify);
 export default {
   data() {
@@ -258,11 +262,16 @@ export default {
     }
   },
   mounted() {
+    // this.$store.commit('loadStatus', false)
     this.getVerificationCode();
     this.loadFile("sy");
     this.loadFile("ys");
   },
   methods: {
+    // 返回主页
+    goHome() {
+      this.$router.replace('/main')
+    },
     openFile(type) {
       this.show[type] = true;
       this.open[type] = true;
@@ -532,6 +541,27 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.back_home-wrap{
+  position: absolute;
+  left: 20px;
+  top: 10px;
+  .back_home{
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    width: 1rem;
+    height: 1rem;
+    border: 0;
+    border-radius: 100%;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.4);
+    color: #fff;
+  }
+}
 .back-wrap {
   width: 100%;
   padding-bottom: 30px;

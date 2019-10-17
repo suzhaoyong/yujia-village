@@ -13,6 +13,13 @@
                 <div class="default" v-if="item.is_default == 1">默认地址</div>
                 <div class="compile" @click="addressCompile(item.id)"></div>
             </div>
+            <div
+            v-if="userAddress.length === 0"
+            class="empty"
+            style="background-size: 100% 100%;margin-top:1rem;"
+          >
+          <span class="empty_tips">暂无地址</span>
+          </div>
         </div>
         <div class="add-address" @click="addAddress">
             <van-icon name="plus" />
@@ -47,6 +54,11 @@ export default {
                 // console.log(data.address);
                 this.userAddress = data.address;
                 // window.sessionStorage.setItem('userAddress',JSON.stringify(data.address))
+            })
+            .then(() => {
+              // TODO 无地址直接进入新增地址页面
+              // const { type } = this.$route.query;
+              // type == 1 && this.userAddress.length === 0? this.addAddress() : ''
             })
         },
         addressCompile(id) {
@@ -87,7 +99,7 @@ export default {
     }
 }
 .content {
-    margin-top: 46px;
+    padding-top: 46px;
 }
 .info {
     position: relative;

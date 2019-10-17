@@ -7,8 +7,8 @@ const Home = resolve => require(['@/pages/home'], resolve) //首页
 Vue.use(Router)
 
 const router = new Router({
-  mode: 'history',
-  // mode: 'hash',
+  // mode: 'history',
+  mode: 'hash',
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
       return savedPosition

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding-bottom:5rem;background:#F4F4F4;">
     <el-row>
       <el-col :span="24">
         <div class="cultivate-main">

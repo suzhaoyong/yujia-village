@@ -173,6 +173,29 @@
               </span>
             </el-dialog>
             <div class="edit-personage" v-show="tagList[2].active && info.user.name">
+              <div class="item" style="align-items: flex-start;">
+                <div class="lable">用户头像</div>
+                <div class="value">
+                  <div class="upload-box">
+                    <el-upload
+                      action="#"
+                      :class="{disabled:uploadAvatorDisabled}"
+                      :on-change="changeAvatorFile"
+                      :on-remove="() => this.userForm['user_avator'] = ''"
+                      list-type="picture-card"
+                      :limit="1"
+                      :auto-upload="false"
+                    >
+                      <i class="el-icon-plus"></i>
+                      <div class="el-upload__tip" slot="tip">支持jpg,jpeg,png格式，图片大小限制在2M之内</div>
+                    </el-upload>
+                    <el-dialog :visible.sync="dialogVisible">
+                      <img width="100%" :src="dialogImageUrl" alt />
+                    </el-dialog>
+                  </div>
+                </div>
+              </div>
+            
               <div class="item">
                 <div class="lable">用户名</div>
                 <div class="value">
@@ -392,6 +415,7 @@ export default {
         area: ""
       },
       userForm: {
+        user_avator: '',
         name: "", //
         real_name: "", //
         sex: "", // 性别1-女 2-男 3-保密
@@ -428,7 +452,11 @@ export default {
           11
         )}`
       );
-    }
+    },
+    uploadAvatorDisabled: function() {
+      return this.userForm.user_avator;
+      // return true
+    },
   },
   created() {
     // this.getPersonal();
@@ -438,6 +466,20 @@ export default {
     type && this.tagsChange(type);
   },
   methods: {
+    changeAvatorFile(file, fileList) {
+      this.changeFile(file, fileList, "user_avator");
+    },
+    changeFile(file, fileList, name) {
+      // this.userForm[name] = file;
+      // return;
+      let This = this;
+      let reader = new FileReader();
+      reader.readAsDataURL(file.raw);
+      reader.onload = function(e) {
+        this.result; // 这个就是base64编码了
+        This.userForm[name] = this.result;
+      };
+    },
     getCodeMessage() {
       if (this.ruleForm.tel === "") {
         this.getCodepass = false;

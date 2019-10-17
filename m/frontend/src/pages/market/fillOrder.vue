@@ -11,7 +11,12 @@
           <van-icon name="arrow" />
         </span>
       </div>
-      <div class="order-main-editdefalut" v-show="true">
+      <!-- <div class="add_address" @click="changeAddress"><span style="font-size:26px;">+</span>新增地址</div> -->
+      <div class="add-address" @click="changeAddress" v-if="!selectAddress.name">
+        <van-icon name="plus" />
+        <span>添加地址</span>
+      </div>
+      <div class="order-main-editdefalut" v-show="selectAddress.name">
         <div class="order-main-editdefalut-p1" v-if="selectAddress.is_default == 1">默认地址</div>
         <div class="order-main-editdefalut-name">
           {{selectAddress.name}}
@@ -74,7 +79,9 @@
           <van-cell is-link @click="showPopup('coupon')">
             <template slot="title">
               <span class="custom-title">优惠券：</span>
-              <van-tag v-if="coupon.columns.length > 0">{{coupon.value ? coupon.value.name : '请选择优惠券'}}</van-tag>
+              <van-tag
+                v-if="coupon.columns.length > 0"
+              >{{coupon.value ? coupon.value.name : '请选择优惠券'}}</van-tag>
               <van-tag v-if="coupon.columns.length == 0">{{'暂无可用优惠券'}}</van-tag>
             </template>
           </van-cell>
@@ -144,7 +151,7 @@
         </div>
       </div>
       <div class="youHuiQuan-body" v-if="coupon.show">
-        <div class="youHuiQuan"  v-for="(item, index) in cash.columns" :key="index">
+        <div class="youHuiQuan" v-for="(item, index) in cash.columns" :key="index">
           <div class="number_tips">
             <div class="number">{{item.money}}</div>
             <div class="tips">
@@ -161,7 +168,8 @@
 
 <script>
 import Vue from "vue";
-import { Cell, CellGroup, Icon, Tag, Picker, Toast } from 'vant';
+import store from '@/store'
+import { Cell, CellGroup, Icon, Tag, Picker, Toast } from "vant";
 import back from "@/assets/img/back.png";
 
 Vue.use(Cell)
@@ -254,7 +262,7 @@ export default {
       }, 0);
     },
     isAllowPay() {
-      return this.payway.value;
+      return this.payway.value && this.selectAddress.name;
     }
   },
   created() {},
@@ -263,6 +271,7 @@ export default {
     if (address) {
       this.selectAddress = JSON.parse(address);
       this.goods = JSON.parse(sessionStorage.getItem("roder good"));
+      store.commit('loadStatus', false)
     } else {
       this.getAddress();
     }
@@ -291,10 +300,9 @@ export default {
     showPopup(type) {
       this[type].show = true;
       if (["coupon", "cash"].indexOf(type) >= 0) {
-        if(this[type].columns.length > 0) {
+        if (this[type].columns.length > 0) {
           this.aside.isOpen = true;
         }
-        
       }
     },
     // 直接下单
@@ -322,16 +330,16 @@ export default {
     // 支付
     pay() {
       if (!this.isAllowPay) return;
-      if (this.payway.value === '微信'){
-        Toast('暂不支持该支付方式')
+      if (this.payway.value === "微信") {
+        Toast("暂不支持该支付方式");
         return;
       }
-      
+
       const ids = this.goods.map(item => item.id);
       const goodsIds = this.goods.map(item => item.goodListId);
       const nums = this.goods.map(item => item.num);
       const { tel, address, area, city, province, name } = this.selectAddress;
-      const { id:couponId } = this.coupon.value
+      const { id: couponId } = this.coupon.value;
       // console.log(couponId);
       // return;
       let params = {
@@ -349,7 +357,7 @@ export default {
         addressId: this.selectAddress.id,
         cashId: "", //现金券编号
         cashMoney: "", //现金券使用金额
-        couponId: couponId || '', //优惠券编号
+        couponId: couponId || "", //优惠券编号
         fraction: "" //使用积分
       };
 
@@ -364,7 +372,7 @@ export default {
           addressId: this.selectAddress.id,
           cashId: "", //	现金券编号
           cashMoney: "", //	现金券使用金额
-          couponId: couponId ||"", //	优惠券编号
+          couponId: couponId || "", //	优惠券编号
           fraction: "" //	使用积分
         };
         this.directGoodsOrder(m_params);
@@ -392,11 +400,12 @@ export default {
           this.goods = data.goods;
         }
 
+        this.coupon.columns = data.coupon;
+        this.cash.columns = data.cash;
+
         if (data.address.length === 0) {
           return;
         }
-        this.coupon.columns = data.coupon
-        this.cash.columns = data.cash
         const default_address = data.address.filter(
           item => item.is_default == 1
         )[0];
@@ -417,6 +426,47 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.add-address {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 49px;
+    background-color: #fff;
+    color: #A3C554;
+    font-size: 13px;
+    .van-icon {
+        color: #A3C554;
+        margin-right: 5px;
+    }
+    span{
+      color: #A3C554;
+    }
+}
+.add_address {
+  padding: 1em;
+  text-align: center;
+  border: 10px solid transparent;
+  background: #fff;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  // background: linear-gradient(white, white) padding-box,
+  //   repeating-linear-gradient(
+  //       -45deg,
+  //       red 0,
+  //       red 12.5%,
+  //       transparent 0,
+  //       transparent 25%,
+  //       #58a 0,
+  //       #58a 37.5%,
+  //       transparent 0,
+  //       transparent 50%
+  //     )
+  //     0 / 6em 6em;
+}
 * {
   margin: 0;
   border: 0;
@@ -649,6 +699,7 @@ export default {
         font-size: 18px;
         top: 38%;
         right: 3%;
+        display: inline-block;
       }
     }
     &-shop {

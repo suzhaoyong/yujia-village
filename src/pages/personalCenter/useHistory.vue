@@ -66,8 +66,7 @@
               <div v-if="item.id">
                 <span>{{item.out_trade_no}}</span>
                 <span style="width: 5em;flex-shrink: 0;">+{{(+item.money).toFixed(2)}}</span>
-                <span :style="`width: 5em;flex-shrink: 0;color:${isStatus(item.status).color}`">{{isStatus(item.status).text}}</span>
-                <span>{{item.created_at}}</span>
+                <span :style="`width: 5em;flex-shrink: 0;color:${isStatus(item.status).color}`">{{isStatus(item.status).text}}</span>                <span>{{item.created_at}}</span>
               </div>
             </div>
             <div style="text-align:center;" v-if="glod.list.length === 0">暂无充值记录</div>
@@ -133,9 +132,9 @@ export default {
     isStatus() {
       return item => {
         let obj = {
-          1: { text: "充值成功", color: "green" },
-          2: { text: "充值失败", color: "#FF1900" },
-          3: { text: "待审核", color: '' }
+          '支付成功': { text: "支付成功", color: "green" },
+          '支付失败': { text: "支付失败", color: "#FF1900" },
+          '未支付': { text: "未支付", color: '' }
         };
         return obj[item];
       };
@@ -153,7 +152,7 @@ export default {
     this.them = type;
     getRechargeRecord().then(data => {
       this.record.recharge = data;
-
+      console.table(data)
       this.glod.meta.total = data.length;
       const { limit, currentPage } = this.glod.meta;
       this.glod.list = this.paginate(data, limit, currentPage);
@@ -232,6 +231,7 @@ export default {
   }
 }
 .bg {
+  height: 100vh;
   background-image: url("../../assets/personal/bg.png");
   background-size: 100% 100%;
   @include full-width(margin, 960px);

@@ -212,6 +212,8 @@ img {
   height: 100%;
 }
 .car {
+  padding-bottom:5rem;
+  // background:#F1F1F1;
   @include no_select();
   .header {
     display: flex;

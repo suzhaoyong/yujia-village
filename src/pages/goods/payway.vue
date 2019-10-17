@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding-bottom:5rem;">
     <div class="order">订单提交成功，请尽快付款！订单号：{{order.out_trade_no}}</div>
     <div class="payway">
       <div class="payway_money">

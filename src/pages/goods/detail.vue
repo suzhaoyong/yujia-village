@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding-bottom:5rem;">
     <div class="goods-box">
       <!-- <div class="navs">
         <el-breadcrumb separator-class="el-icon-arrow-right">

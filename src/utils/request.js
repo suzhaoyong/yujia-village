@@ -91,6 +91,24 @@ function handleResponeseErr(err) {
       user: {}
     });
   }
+  if(data.code === '0001') {
+    request.post('/auth/refresh')
+        .then(data => {
+          sessionStorage.setItem('access', JSON.stringify(data))
+          store.dispatch("INFO", data);
+          window.location.reload();
+        })
+        .catch(() => {
+          store.dispatch("INFO", {});
+          Message({
+            message: '重置令牌失败',
+            type: 'error',
+            duration: 5 * 1000
+          });
+          Toast('请重新登录');
+        })
+        return Promise.resolve();
+  }
   /*
   if (data.code === '0001') {
     if (sessionStorage.getItem('access')) {

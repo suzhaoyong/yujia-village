@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding-bottom:5rem;">
     <div class="car">
       <div class="header">
         <session-title name="收藏中心"></session-title>
