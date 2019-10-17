@@ -257,7 +257,7 @@ const router = new Router({
       component: () => import('@/pages/homepage/yogaInForMation.vue'),
     },
     {
-      path: '/informationdetail',
+      path: '/informationdetail/:id',
       name: 'informationdetail',
       component: () => import('@/pages/homepage/inForMationDetail.vue')
     },
@@ -278,7 +278,7 @@ const router = new Router({
       }]
     },
     {
-      path: '/messagedetail',
+      path: '/messagedetail/:id',
       name: 'messagedetail',
       component: () => import('@/pages/informationpage/messageDetail.vue')
     },

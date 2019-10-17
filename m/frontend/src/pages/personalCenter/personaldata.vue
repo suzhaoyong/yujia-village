@@ -66,6 +66,7 @@ export default {
         this.getUserInitialInfo();
     },
     methods: {
+        // 修改资料时，用户原数据的渲染
         getUserInitialInfo() {
             const { icon, name, real_name, sex, birthday,
                 province, city, area } = JSON.parse(window.sessionStorage.getItem('user'));
@@ -74,16 +75,26 @@ export default {
             this.personalData.real_name = real_name;
             if(sex == 1) {
                 this.sex = '女';
+                this.personalData.sex = sex;
             } else if(sex == 2) {
                 this.sex = '男';
+                this.personalData.sex = sex;
             } else {
                 this.sex = '保密';
+                this.personalData.sex = sex;
             }
             this.personalData.birthday = birthday;
-            if(province === city) {
-                this.area = province + '/' + area;
+            if(province === null && city === null && area === null) {
+                this.area = ''
             } else {
-                this.area = province + '/' + city + '/' + area;
+                if(province === city) {
+                    this.area = province + '/' + area;
+                } else {
+                    this.area = province + '/' + city + '/' + area;
+                }
+                this.personalData.province = province;
+                this.personalData.city = city;
+                this.personalData.area = area;
             }
         },
         onClickLeft() {
@@ -99,7 +110,11 @@ export default {
             }
             this.$request.post('/personal/updateInfo',this.personalData).then(data => {
                 console.log(data);
-                
+                if(data.msg === '保存成功,完善全部资料可获得积分哦') {
+                    this.$toast({
+                        message: '保存成功,完善全部资料可获得积分哦',
+                    });
+                }
             })
         },
         // 图片上传完毕后的回调函数

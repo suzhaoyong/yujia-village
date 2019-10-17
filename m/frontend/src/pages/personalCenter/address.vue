@@ -46,7 +46,6 @@ export default {
             this.$request.get('/goodOrder/create').then(data => {
                 // console.log(data.address);
                 this.userAddress = data.address;
-                // window.sessionStorage.setItem('userAddress',JSON.stringify(data.address))
             })
         },
         addressCompile(id) {

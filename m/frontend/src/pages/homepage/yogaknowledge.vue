@@ -3,14 +3,16 @@
         <div class="banner" :style="{backgroundImage: 'url('+knowledgeClassify.banner+')'}" >
         </div>
         <div class="recommended">
-            <van-collapse v-model="activeNames">
-                <van-collapse-item title="推荐" value="更多" name="1" accordion :border="false">
-                    <div class="genre" :class="{selected: isActive == index}" v-for="(item,index) in knowledgeClassify.classify" :key="index" @click="chooseClassify(item.id,index)">{{item.classify}}</div>
+            <van-collapse v-model="activeNames" @change="onChange">
+                <van-collapse-item title="推荐" :value="label" name="1" accordion :border="false">
+                    <div class="genre" :class="{selected: isActive == index}" 
+                    v-for="(item,index) in knowledgeClassify.classify" :key="index" 
+                    @click="chooseClassify(item.id,index)">{{item.classify}}</div>
                 </van-collapse-item>
             </van-collapse>
         </div>
         <div class="knowledge-box">
-            <div class="knowledge-item" v-for="(item,index) in knowledgeList" :key="index" >
+            <div class="knowledge-item" v-for="(item,index) in knowledgeList" :key="index" @click="goInfoDetail(item.id)">
                 <div class="left-box">
                     <div class="img" :style="{backgroundImage: 'url('+item.icon_url+')'}"></div>                               
                 </div>
@@ -34,6 +36,7 @@ export default {
     data() {
         return {
             activeNames: ['1'],
+            label: '收起',
             // 瑜伽知识分类数据
             knowledgeClassify: '',
             isActive: 0,
@@ -47,6 +50,13 @@ export default {
         this.getKnowledgeList();
     },
     methods: {
+        onChange() {
+            if(this.label != '更多') {
+                this.label = '更多';
+            } else {
+                this.label = '收起';
+            }
+        },
         // 获取瑜伽知识分类
         getKnowledgeClassify() {
             this.$request.get('/KnowledgeClassify').then(data => {
@@ -68,6 +78,10 @@ export default {
                 // console.log(data);
                 this.knowledgeList = data.data                
             })
+        },
+        // 跳转到 知识详情页
+        goInfoDetail(id) {
+            this.$router.push('/informationdetail/'+id);
         }
         
     }

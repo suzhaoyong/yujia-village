@@ -71,10 +71,9 @@ export default {
             }
         });
       },
-      goback(){
-        this.$router.push({
-            path: "/teacherClub/list",
-        });
+      goback() {
+        // 这儿用这个，返回上一级页面
+        this.$router.go(-1);
       },
   }
 };

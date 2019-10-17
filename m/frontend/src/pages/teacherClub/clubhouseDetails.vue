@@ -133,9 +133,7 @@ export default {
         });
     },
       goback(){
-        this.$router.push({
-            path: "/teacherClub/list",
-        });
+        this.$router.go(-1);
       },
   }
 };

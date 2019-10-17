@@ -209,7 +209,7 @@ export default {
     },
     // 点击li跳转到详情页
     viewdetail (id) {
-      this.$router.push('/messagedetail/?id='+id)
+      this.$router.push('/messagedetail/'+id)
       return false;
     },
     // 获取列表
