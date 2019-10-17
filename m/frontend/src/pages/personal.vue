@@ -105,10 +105,8 @@ export default {
         }
     },
     created() {
-        // this.getPersonalData()
     },
     mounted() {
-        // this.setPersonalData()
         this.getPersonalData()
         this.messagecenter();
     },
@@ -116,25 +114,6 @@ export default {
       ...mapGetters(['info', 'isUserNeedLogin'])
     },
     methods: {
-        setPersonalData() {
-          const user_data = JSON.parse(sessionStorage.getItem('user data'))
-          store.dispatch("INFO", user_data);
-          // if(this.isUserNeedLogin) return;
-          const { fraction, icon, name, identity_auth, reason } = this.info.user;
-                window.sessionStorage.setItem('user',JSON.stringify(this.info.user));
-                const index = this.info.user.money.indexOf(".");
-                const money = this.info.user.money.substring(index,0);
-                // 获取 金币和积分
-                const personal = {
-                    money,
-                    fraction,
-                    icon,
-                    name,
-                    identity_auth,
-                    reason
-                }
-                this.personalData = personal;
-        },
         getPersonalData() {
             const token = JSON.parse(window.sessionStorage.getItem('access')) 
             this.$request.get('/personal/home').then(data => {
