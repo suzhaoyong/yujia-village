@@ -139,6 +139,7 @@ export default {
             const token = JSON.parse(window.sessionStorage.getItem('access')) 
             this.$request.get('/personal/home').then(data => {
                 store.dispatch("INFO", data);
+                sessionStorage.setItem('user data',JSON.stringify(data));
                 // console.log(data);
                 const { fraction, icon, name, identity_auth, reason } = data.user;
                 window.sessionStorage.setItem('user',JSON.stringify(data.user));
