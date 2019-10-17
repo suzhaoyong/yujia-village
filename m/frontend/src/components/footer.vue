@@ -24,7 +24,7 @@ export default {
                     active: require('../assets/img/home-active.png')
                 },
                 {
-                    title: '名师会馆',
+                    title: '名师机构',
                     name: 'teacherClub',
                     normal: require('../assets/img/teacher-normal.png'),
                     active: require('../assets/img/teacher-active.png')

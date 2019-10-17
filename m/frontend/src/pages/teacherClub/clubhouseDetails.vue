@@ -1,11 +1,15 @@
 <template>
     <div>
         <div class="clubhouse_main">
-            <van-nav-bar title="会馆详情" left-arrow @click-left="goback" fixed/>
+            <van-nav-bar title="机构详情" left-arrow @click-left="goback" fixed>
+                 <div class="share_img" slot="right" @click="handleShareGoods">
+                    <img class="share" src="../../assets/teacherclub/share.png" />
+                </div>
+            </van-nav-bar>
             <div class="list_clubhouse">
                 <div class="list_clubhouse_page">
                     <img src="../../assets/teacherclub/yujia.png"/>
-                    <span class="tips">会馆课程</span>
+                    <span class="tips">机构课程</span>
                 </div>
                 <div class="list_clubhouse_staff">Sometimes beauty is so simple</div>
             </div>
@@ -13,7 +17,7 @@
                 <van-swipe :loop="false" :width="131" id="vanswipe2" :show-indicators="false">
                     <van-swipe-item class="vanswipeitem2" v-for="(item,index) in clubItems" :key="index">
                         <div class="club_items_list">
-                            <div class="club_items_img">
+                            <div class="club_items_img" @click="clubdetail(item.id)">
                                 <img :src="item.teacher_img"/>
                             </div>
                             <div class="club_items_title">
@@ -21,7 +25,7 @@
                                 <van-rate v-model="item.diff" readonly size="10px" gutter="2px" color="#58B708" void-color="#58B708"/>
                                 <div class="club_items_title_its">
                                     <div class="club_price">￥{{item.price}}</div>
-                                    <div class="club_prict">
+                                    <div class="club_prict" @click="study(item.id)">
                                         <img src="../../assets/teacherclub/enlist.png"/>
                                         想学
                                     </div>
@@ -38,7 +42,7 @@
             <div class="club_ambient">
                 <div class="club_ambient_page">
                     <img src="../../assets/teacherclub/yujia.png"/>
-                    <span class="tips">会馆环境</span>
+                    <span class="tips">机构环境</span>
                 </div>
                 <div class="club_ambient_staff">Sometimes beauty simple</div>
                  <img src="../../assets/teacherclub/clubimg.png" class="club_ambient_img"/>
@@ -88,9 +92,19 @@
                 <span class="page-span2">我寻寻觅觅却找不到您的踪迹~</span>
             </div>
         </div>
+        <van-popup v-model="show">
+            <img :src="base64img"/>
+            <div class="textbase">长按图片，保存或发送给朋友</div>
+        </van-popup>
     </div>
 </template>
 <script>
+import Vue from 'vue';
+import Bus from '../../utils/Bus'
+import { mapGetters } from "vuex";
+import { Notify,Popup } from "vant";
+Vue.use(Notify);
+Vue.use(Popup);
 export default {
   data() {
     return {
@@ -98,11 +112,16 @@ export default {
         clubs:{},
         vanswipeItem:[],
         clubItems:[],
-        personnelItem:[]
+        personnelItem:[],
+        show: false,
+        base64img:""
     };
   },
   created(){
       this.joindatalist();
+  },
+  computed: {
+    ...mapGetters(["info"]),
   },
   methods:{
       joindatalist(){
@@ -124,6 +143,19 @@ export default {
             }
         });
       },
+      study(id){
+          if (!this.info.user.name) {
+            Bus.$emit("login", true);
+            Notify({ message: "请先登录", type: "warning" });
+            return;
+        }
+          this.$request.get(`/personal/followTrain?id=${id}`).then(data => {
+            this.msg = data.msg;
+            if(this.msg == "OK"){
+            Notify({ message: "成功", type: "success" });
+            }
+        })
+      },
       exhibition(item){
         this.$router.push({
             path: "/teacherClub/teacherDetails",
@@ -131,6 +163,23 @@ export default {
             id: item.id
             }
         });
+    },
+    // 分享商品
+    handleShareGoods() {
+    this.show = true;
+    const params = {
+        id:this.$route.query.id,
+        identity:'club',
+        userId:"",
+        responseType: 'arraybuffer'
+    }
+    this.$request.post(`/show/share/photo`,params)
+    .then(res => {
+        this.base64img = res;
+    })
+    },
+    clubdetail(id){
+        this.$router.push('/messagedetail/?id='+id);
     },
       goback(){
         this.$router.push({
@@ -150,8 +199,29 @@ export default {
     top: 0;
     left: 0;
     width: 100%;
-    background-color: #fff !important;
+    background-color: #E0EED2 !important;
 }
+.share_img{
+    line-height: 0px;
+    margin-top: -34px;
+  .share{
+      width: 22px;
+      height: 22px;
+  }
+  }
+  .van-popup--center{
+      width: 87%;
+      height: 85%;
+  }
+   .textbase{
+      width: 100%;
+      height: 30px;
+      background: #fff;
+      font-size: 12px;
+      color: #2c2c2c;
+      text-align: center;
+      line-height: 20px;
+  }
 .clubhouse_main{
     width: 100%;
     height: 100%;
@@ -161,7 +231,7 @@ export default {
         width: 93%;
         height: 60px;
         margin: 0 auto;
-        margin-top: 45px;
+        margin-top: 50px;
         .list_clubhouse_page{
             display: flex;
             margin-top: 15px;
