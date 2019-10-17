@@ -9,7 +9,7 @@
           <div @click="tagsChange(1)" :class="['tab', isTagActive(1)]">修改绑定手机</div>
           <div @click="tagsChange(2)" :class="['tab', isTagActive(2)]">个人信息</div>
           <div
-            v-show="parseInt(info.user.identity_auth) == 3  || parseInt(info.user.identity_auth) == 8"
+            v-show="info.user.identity_auth == '认证机构负责人'  || info.user.identity_auth == '认证机构负责人&认证教练'"
             @click="tagsChange(3)"
             :class="['tab', isTagActive(3)]"
           >会馆信息</div>
@@ -176,18 +176,26 @@
               <div class="item" style="align-items: flex-start;">
                 <div class="lable">用户头像</div>
                 <div class="value">
-                  <div class="upload-box">
+                  <div class="upload-box" style="overflow:hidden;">
+                    <div class="upload-img" v-if="userForm.icon">
+                      <img :src="userForm.icon" alt />
+                      <span class="item-actions"></span>
+                      <i @click="userForm.icon = ''" class="el-icon-delete"></i>
+                    </div>
                     <el-upload
+                      v-else
                       action="#"
+                      accept="image/jpeg, image/gif, image/png"
+                      :before-upload="onBeforeUpload"
                       :class="{disabled:uploadAvatorDisabled}"
                       :on-change="changeAvatorFile"
-                      :on-remove="() => this.userForm['user_avator'] = ''"
+                      :on-remove="() => this.userForm['icon'] = ''"
                       list-type="picture-card"
                       :limit="1"
                       :auto-upload="false"
                     >
                       <i class="el-icon-plus"></i>
-                      <div class="el-upload__tip" slot="tip">支持jpg,jpeg,png格式，图片大小限制在2M之内</div>
+                      <div class="el-upload__tip" slot="tip">支持jpg,jpeg,png格式，图片大小限制在1M之内</div>
                     </el-upload>
                     <el-dialog :visible.sync="dialogVisible">
                       <img width="100%" :src="dialogImageUrl" alt />
@@ -195,7 +203,7 @@
                   </div>
                 </div>
               </div>
-            
+
               <div class="item">
                 <div class="lable">用户名</div>
                 <div class="value">
@@ -246,7 +254,7 @@
               </div>
               <div
                 class="teach"
-                v-show="userForm.identity_auth == 5 || userForm.identity_auth == 8"
+                v-show="userForm.identity_auth == '认证教练' || userForm.identity_auth == '认证机构负责人&认证教练'"
               >
                 <div class="item">
                   <div class="lable">系统认证身份</div>
@@ -365,6 +373,9 @@ export default {
     return {
       success: false,
       getCodepass: false,
+      dialogVisible: false,
+      dialogImageUrl: "",
+      origin_icon: '',
       club: { list: [], select_id: "" },
       codeTips: {
         msg: "发送验证码",
@@ -415,7 +426,7 @@ export default {
         area: ""
       },
       userForm: {
-        user_avator: '',
+        icon: "",
         name: "", //
         real_name: "", //
         sex: "", // 性别1-女 2-男 3-保密
@@ -453,21 +464,37 @@ export default {
         )}`
       );
     },
-    uploadAvatorDisabled: function() {
-      return this.userForm.user_avator;
+    uploadAvatorDisabled() {
+      return this.userForm.icon;
       // return true
-    },
+    }
   },
   created() {
-    // this.getPersonal();
+    this.getPersonal();
   },
   mounted() {
     const { type } = this.$route.query;
     type && this.tagsChange(type);
   },
   methods: {
+    onBeforeUpload(file) {
+      const isIMAGE = file.type === "image/jpeg" || "image/gif" || "image/png";
+      const isLt1M = file.size / 1024 / 1024 < 1;
+      console.log(isLt1M, file.size / 1024 / 1024);
+      if (!isIMAGE) {
+        this.$message.error("上传文件只能是图片格式!");
+      }
+      if (!isLt1M) {
+        this.$message.error("上传文件大小不能超过 1MB!");
+      }
+      return isIMAGE && isLt1M;
+    },
     changeAvatorFile(file, fileList) {
-      this.changeFile(file, fileList, "user_avator");
+      if(!this.onBeforeUpload(file)){
+        this.userForm['icon'] = this.origin_icon
+        return;
+      }
+      this.changeFile(file, fileList, "icon");
     },
     changeFile(file, fileList, name) {
       // this.userForm[name] = file;
@@ -526,8 +553,10 @@ export default {
           tel,
           identity_auth,
           name,
-          real_name
+          real_name,
+          icon
         } = data.user;
+        this.origin_icon = icon
         this.userForm = Object.assign(
           {},
           {
@@ -539,9 +568,11 @@ export default {
             tel,
             identity_auth,
             name,
-            real_name
+            real_name,
+            icon
           }
         );
+        console.log(this.userForm);
       });
     },
     onDistpickerSelected(data) {
@@ -694,7 +725,8 @@ export default {
         tel,
         identity_auth,
         name,
-        real_name
+        real_name,
+        icon
       } = this.info.user;
       this.userForm = Object.assign(
         {},
@@ -707,7 +739,8 @@ export default {
           tel,
           identity_auth,
           name,
-          real_name
+          real_name,
+          icon
         }
       );
       if (identity_auth === 5 || identity_auth === 8) {
@@ -787,6 +820,42 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.upload-img {
+  width: 148px;
+  height: 148px;
+  position: relative;
+  .el-icon-delete {
+    display: none;
+  }
+  &:hover .item-actions {
+    display: block;
+  }
+  .item-actions {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    cursor: default;
+    text-align: center;
+    color: #fff;
+    opacity: 1;
+    font-size: 20px;
+    background-color: rgba(0, 0, 0, 0.5);
+    -webkit-transition: opacity 0.3s;
+    transition: opacity 0.3s;
+  }
+  &:hover .el-icon-delete {
+    color: #fff;
+    display: block;
+    position: absolute;
+    font-size: 30px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
 .code-title {
   height: 37px;
   margin-left: 30px;

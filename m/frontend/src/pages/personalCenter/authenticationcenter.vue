@@ -2,13 +2,13 @@
     <div>
         <van-nav-bar title="认证中心" left-arrow @click-left="onClickLeft">
         </van-nav-bar>
-        <div class="notice">注：普通用户无须认证，该认证仅面向馆主、教练等专业群体</div>
+        <div class="notice">注：普通用户无须认证，该认证仅面向机构负责人、教练等专业群体</div>
         <div class="swiper-picture">
             <div class="swiper-container">
                 <div class="swiper-wrapper">
                     <div class="swiper-slide">
                         <img src="../../assets/img/hunker1.png" alt="">
-                        <div class="identity-box">我是馆主</div>
+                        <div class="identity-box">我是机构负责人</div>
                     </div>
                     <div class="swiper-slide">
                         <img src="../../assets/img/hunker2.png" alt="">
@@ -16,7 +16,7 @@
                     </div>
                     <div class="swiper-slide">
                         <img src="../../assets/img/hunker3.png" alt="">
-                        <div class="identity-box">馆主&教练</div>
+                        <div class="identity-box">机构负责人&教练</div>
                     </div>
                 </div>
             </div>
@@ -107,7 +107,7 @@ export default {
             // 是否显示 协议 pdf
             isshowFile: false,
             pdfh5: null,
-            // 认证馆主需要提交的 数据列表
+            // 认证机构负责人需要提交的 数据列表
             ownerDataList: {
                 identity_auth: '',
                 real_name:'',

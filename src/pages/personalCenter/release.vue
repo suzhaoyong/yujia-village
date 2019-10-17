@@ -146,6 +146,8 @@
                   <el-upload
                     v-else
                     action="#"
+                    accept="image/jpeg, image/gif, image/png"
+                    :before-upload="onBeforeUpload"
                     :class="{disabled:uploadDisabled('img_train_first')}"
                     :on-change="changeTrainFirstFile"
                     :on-remove="() => this.ruleForm['img_train_first'] = ''"
@@ -154,7 +156,7 @@
                     :auto-upload="false"
                   >
                     <i class="el-icon-plus"></i>
-                    <div class="el-upload__tip" slot="tip">支持jpg,jpeg,png格式</div>
+                    <div class="el-upload__tip" slot="tip">支持jpg,jpeg,png格式，图片大小限制在1M之内</div>
                   </el-upload>
                 </div>
                 <div class="upload-box">
@@ -166,6 +168,8 @@
                   <el-upload
                     v-else
                     action="#"
+                    accept="image/jpeg, image/gif, image/png"
+                    :before-upload="onBeforeUpload"
                     :class="{disabled:uploadDisabled('img_train_two')}"
                     :on-change="changeTrainTwoFile"
                     :on-remove="() => this.ruleForm['img_train_two'] = ''"
@@ -174,7 +178,7 @@
                     :auto-upload="false"
                   >
                     <i class="el-icon-plus"></i>
-                    <div class="el-upload__tip" slot="tip">支持jpg,jpeg,png格式</div>
+                    <div class="el-upload__tip" slot="tip">支持jpg,jpeg,png格式，图片大小限制在1M之内</div>
                   </el-upload>
                 </div>
                 <div class="upload-box">
@@ -186,6 +190,8 @@
                   <el-upload
                     v-else
                     action="#"
+                    accept="image/jpeg, image/gif, image/png"
+                    :before-upload="onBeforeUpload"
                     :class="{disabled:uploadDisabled('img_train_three')}"
                     :on-change="changeTrainThreeFile"
                     :on-remove="() => this.ruleForm['img_train_three'] = ''"
@@ -194,7 +200,7 @@
                     :auto-upload="false"
                   >
                     <i class="el-icon-plus"></i>
-                    <div class="el-upload__tip" slot="tip">支持jpg,jpeg,png格式</div>
+                    <div class="el-upload__tip" slot="tip">支持jpg,jpeg,png格式，图片大小限制在1M之内</div>
                   </el-upload>
                 </div>
               </div>
@@ -383,6 +389,12 @@ export default {
   },
   data() {
     return {
+      origin_select: {
+        path: "",
+        first: "",
+        two: "",
+        three: ""
+      },
       select: {
         path: "",
         first: "",
@@ -457,6 +469,18 @@ export default {
     this.getTrainFailed();
   },
   methods: {
+    onBeforeUpload(file) {
+      const isIMAGE = file.type === "image/jpeg" || "image/gif" || "image/png";
+      const isLt1M = file.size / 1024 / 1024 < 1;
+
+      if (!isIMAGE) {
+        this.$message.error("上传文件只能是图片格式!");
+      }
+      if (!isLt1M) {
+        this.$message.error("上传文件大小不能超过 1MB!");
+      }
+      return isIMAGE && isLt1M;
+    },
     reasonItem(item, index) {
       let type = "release_failed";
       // type = "release";
@@ -525,6 +549,12 @@ export default {
           two: two || "",
           three: three || ""
         };
+        this.origin_select = {
+          path: teacher_img || "",
+          first: first || "",
+          two: two || "",
+          three: three || ""
+        }
         this.time = {
           value: {
             startTime: startTime || "",
@@ -686,15 +716,31 @@ export default {
       };
     },
     changeTeacherFile(file, fileList) {
+      if(!this.onBeforeUpload(file)){
+        this.ruleForm['teacher_img'] = this.origin_select.path
+        return;
+      }
       this.changeFile(file, fileList, "teacher_img");
     },
     changeTrainFirstFile(file, fileList) {
+      if(!this.onBeforeUpload(file)){
+        this.ruleForm['img_train_first'] = this.origin_select.first
+        return;
+      }
       this.changeFile(file, fileList, "img_train_first");
     },
     changeTrainTwoFile(file, fileList) {
+      if(!this.onBeforeUpload(file)){
+        this.ruleForm['img_train_two'] = this.origin_select.two
+        return;
+      }
       this.changeFile(file, fileList, "img_train_two");
     },
     changeTrainThreeFile(file, fileList) {
+      if(!this.onBeforeUpload(file)){
+        this.ruleForm['img_train_three'] = this.origin_select.three
+        return;
+      }
       this.changeFile(file, fileList, "img_train_three");
     },
     changeFile(file, fileList, name) {

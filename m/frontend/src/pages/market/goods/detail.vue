@@ -20,7 +20,7 @@
         </div>
         <div class="goods_price">
           <span class="new_price">￥{{(goods_copy.sell_price - goods_copy.discount).toFixed(2)}}</span>
-          <span class="old_price">￥{{goods_copy.sell_price}}</span>
+          <span class="old_price" v-if="goods_copy.discount > 0">￥{{goods_copy.sell_price}}</span>
         </div>
         <span class="goods_name">{{goods_copy.describe}}</span>
       </div>

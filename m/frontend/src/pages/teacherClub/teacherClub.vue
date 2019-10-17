@@ -257,25 +257,26 @@ export default {
       goto() {
       const { name, identity_auth } = this.info.user;
       if(name){
-        if(parseInt(identity_auth) === 1) {
+        if(parseInt(identity_auth) === '未认证') {
           this.$router.push("/authenticationcenter");
           return;
         }
         const obj = {
-          2: {message:'您已在申请中，请耐心等待审核', type:'success'},
-          3: {message:'您已加盟成功',type:'success'},
-          4: {message:'您是教练认证中，暂时不能申请加盟，详情请联系馆主认证',type:'warning'},
-          5: {message:'您是教练，暂时不能申请加盟，详情请联系馆主认证',type:'warning'},
-          6: {message:'您的申请未通过，详情请联系客服',type:'error'},
-          7: {message:'您已加盟成功',type:'success'},
-          8: {message:'您已加盟成功',type:'success'},
+        '认证机构负责人中': {message:'您已在申请中，请耐心等待审核', type:'success'},
+          '认证机构负责人': {message:'您已加盟成功',type:'success'},
+          '认证教练中': {message:'您是教练认证中，暂时不能申请加盟，详情请联系机构负责人认证',type:'warning'},
+          '认证教练': {message:'您是教练，暂时不能申请加盟，详情请联系机构负责人认证',type:'warning'},
+          '认证不通过': {message:'您的申请未通过，详情请联系客服',type:'error'},
+          '认证机构负责人&教练中': {message:'您已加盟成功',type:'success'},
+          '认证机构负责人&认证教练': {message:'您已加盟成功',type:'success'},
         }
-        obj[identity_auth] && this.$alert(`${obj[identity_auth].message}`, '温馨提示', {
-          confirmButtonText: '确定',
-        })
+        obj[identity_auth] && Dialog.confirm({ 
+            message:`${obj[identity_auth].message}`, 
+            title: '温馨提示'
+          })
         // obj[identity_auth] && this.$message(obj[identity_auth])
       }else{
-        Bus.$emit("login", true);
+        this.$router.push('/login')
       }
     },
     addClass:function(index){

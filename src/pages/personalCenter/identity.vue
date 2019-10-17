@@ -9,14 +9,14 @@
           <div class="img">
             <img :src="icon.identity_1" alt />
           </div>
-          <div class="type" @click="myIdentity('2')">我是馆主</div>
+          <div class="type" @click="myIdentity('2')">我是机构负责人</div>
         </div>
 
         <div class="box id2">
           <div class="img">
             <img :src="icon.identity_2" alt />
           </div>
-          <div class="type" @click="myIdentity('7')">馆主&amp;教练</div>
+          <div class="type" @click="myIdentity('7')">机构负责人&amp;教练</div>
         </div>
 
         <div class="box id3">
@@ -80,7 +80,7 @@
         <div class="card">
           <div class="title">
             尊贵的
-            <span>{{getIdentityAuth(info.user.identity_auth)}}</span> 未查询到您的银行卡信息，请完整信息：
+            <span>{{info.user.identity_auth}}</span> 未查询到您的银行卡信息，请完整信息：
           </div>
           <div style="padding-bottom:1em;">请填写银行卡号码</div>
           <div class="input-box">
@@ -130,6 +130,7 @@
               <span>充值金币</span>
             </div>
             <div class="money-wrap">
+              <span :class="[isRechangeActive(100)]" @click="rechargeChange('num', 100)">100</span>
               <span :class="[isRechangeActive(300)]" @click="rechargeChange('num', 300)">300</span>
               <span :class="[isRechangeActive(500)]" @click="rechargeChange('num', 500)">500</span>
               <span :class="[isRechangeActive(800)]" @click="rechargeChange('num', 800)">800</span>
@@ -137,7 +138,8 @@
               <span :class="[isRechangeActive(2000)]" @click="rechargeChange('num', 2000)">2000</span>
               <span :class="[isRechangeActive(5000)]" @click="rechargeChange('num', 5000)">5000</span>
               <div class="input-money">
-                <input v-model.number="money" type="text" placeholder="填写金币" />
+                <input v-model.number.lazy.trim="money" @change="changeMoney" type="text" placeholder="填写金币" />
+                <div class="waring" v-if="isInputWrong">输入金币不能低于100金币</div>
               </div>
             </div>
           </div>
@@ -199,6 +201,7 @@ export default {
       certificate: {
         identity: ""
       },
+      isInputWrong: false,
       playcode: { show: false, src: "", count: 0, success: false },
       hiddenMoney: "",
       money: "",
@@ -233,9 +236,9 @@ export default {
       return item => {
         const obj = {
           1: "用户",
-          2: "馆主",
+          2: "机构负责人",
           4: "教练",
-          7: "馆主&教练"
+          7: "机构负责人&教练"
         };
 
         return obj[item];
@@ -245,9 +248,9 @@ export default {
     getIdentityIcon() {
       return item => {
         const obj = {
-          3: this.icon.identity_1,
-          5: this.icon.identity_3,
-          8: this.icon.identity_2
+          '认证机构负责人': this.icon.identity_1,
+          '认证教练': this.icon.identity_3,
+          '认证机构负责人&认证教练': this.icon.identity_2
         };
 
         return obj[item] || "";
@@ -276,6 +279,14 @@ export default {
     timer && clearInterval(timer);
   },
   methods: {
+    // 改变金币的额度
+    changeMoney() {
+      if(this.money <= 100) {
+        this.isInputWrong = true
+      }else{
+        this.isInputWrong = false
+      }
+    },
     back() {
       const { type } = this.step;
       const obj = {
@@ -305,7 +316,7 @@ export default {
     /** 充值 */
     reCharge() {
       timer && clearInterval(timer);
-      if (this.rechargeForm.payment == "") {
+      if (this.rechargeForm.payment == "" || this.isInputWrong) {
         // this.$message({
         //   type: "warning",
         //   message: "请选择支付方式"
@@ -701,7 +712,10 @@ img {
         }
       }
       .money-wrap {
+        display: flex;
+        flex-wrap: wrap;
         span {
+          flex-shrink: 0;
           border: 1px solid #d6d6d6;
           width: 3rem;
           text-align: center;
@@ -723,7 +737,7 @@ img {
         }
         .input-money {
           width: 8em;
-          margin-top: 1em;
+          // margin-top: 1em;
           position: relative;
           &::after {
             position: absolute;
@@ -746,6 +760,12 @@ img {
               outline: none;
             }
           }
+          .waring{
+            margin-top: 0.23rem;
+            width: 200%;
+            font-size: 0.5rem;
+            color: red;
+          }
         }
       }
     }
@@ -756,7 +776,7 @@ img {
     padding-top: 2rem;
     position: relative;
     .way {
-      padding-left: 1.5rem;
+      padding-left: 0.5rem;
       padding-top: 0.5rem;
       span {
         font-size: 0.8rem;

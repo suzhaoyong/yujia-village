@@ -8,7 +8,7 @@ export function getUserInfo() {
 /** 提交认证资料 */
 export function postUserInfo(args) {
   // let params = {
-  //   identity_auth: "", // 认证的身份 2=>馆主,4=>教练,7=>馆主+教练
+  //   identity_auth: "", // 认证的身份 2=>机构负责人,4=>教练,7=>机构负责人+教练
   //   real_name: "",
   //   club_tel: "",
   //   club_name: "",
@@ -78,7 +78,7 @@ export function getClubInfo() {
 export function getMyShare() {
   return request(`/personal/myShare`)
 }
-/** 认证馆主修改会馆资料 */
+/** 认证机构负责人修改会馆资料 */
 
 export function postUpdateClubInfo(args) {
   let params = {

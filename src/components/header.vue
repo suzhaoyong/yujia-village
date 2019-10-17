@@ -56,7 +56,7 @@
                   <!-- <el-menu-item index="identity">个人信息</el-menu-item> -->
                   <el-menu-item index="recode">订单中心</el-menu-item>
                   <el-menu-item
-                    v-show="parseInt(info.user.identity_auth) === 7 || parseInt(info.user.identity_auth) === 2"
+                    v-show="info.user.identity_auth === '认证机构负责人&教练中' || info.user.identity_auth === '认证机构负责人中'"
                     index="hell"
                   >会馆信息</el-menu-item>
                   <el-menu-item index="safety-center">信息与安全中心</el-menu-item>

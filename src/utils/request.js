@@ -91,6 +91,7 @@ function handleResponeseErr(err) {
       user: {}
     });
   }
+  /*
   if(data.code === '0001') {
     request.post('/auth/refresh')
         .then(data => {
@@ -109,6 +110,7 @@ function handleResponeseErr(err) {
         })
         return Promise.resolve();
   }
+  */
   /*
   if (data.code === '0001') {
     if (sessionStorage.getItem('access')) {

@@ -7,12 +7,15 @@
             <img :src="identity" alt />
           </div>
           <div class="name">{{info.user.name}}</div>
-          <span class="identity" style="cursor: pointer;" @click="withdraw" v-if="info.user.identity_auth == 1">未认证</span>
-          <span class="identity" v-if="info.user.identity_auth == 3">已认证（馆主）</span>
+          <span class="identity" style="cursor: pointer;" @click="withdraw" v-if="info.user.identity_auth == '未认证'">未认证</span>
+          <span class="identity" v-else>{{info.user.identity_auth}}</span>
+          <!-- <span class="identity" v-if="info.user.identity_auth == 3">已认证（机构负责人）</span>
+          <span class="identity" v-if="info.user.identity_auth == 4">认证机教练中</span>
           <span class="identity" v-if="info.user.identity_auth == 5">已认证（教练）</span>
           <span class="identity" v-if="info.user.identity_auth == 6">未通过认证</span>
-          <span class="identity" v-if="info.user.identity_auth == 8">已认证（馆主、教练）</span>
-          <span class="class_release" @click="goPage('release')" v-if="info.user.identity_auth > 1">课程发布</span>
+          <span class="identity" v-if="info.user.identity_auth == 8">认证机构负责人、教练中</span>          
+          <span class="identity" v-if="info.user.identity_auth == 8">已认证（机构负责人、教练）</span> -->
+          <span class="class_release" @click="goPage('release')" v-if="hasPower">课程发布</span>
         </div>
         <div class="info">
           <div class="balance" @click="viewHistory('glod')">
@@ -51,12 +54,20 @@ export default {
     ...mapGetters(["info"]),
     identity() {
       const obj = {
-        1: identity_y,
-        3: identity_g,
-        5: identity_j,
-        8: identity_gj
+        '未认证': identity_y,
+        '认证机构负责人': identity_g,
+        '认证教练': identity_j,
+        '认证机构负责人&认证教练': identity_gj
       };
       return obj[this.info.user.identity_auth];
+    },
+    hasPower() {
+      const obj = {
+        '认证机构负责人': true,
+        '认证教练': true,
+        '认证机构负责人&认证教练': true
+      }
+      return obj[this.info.user.identity_auth]
     }
   },
   mounted() {
@@ -134,6 +145,7 @@ img {
       color: #aaa;
     }
     .class_release{
+      margin-left: 10px;
       color: #5B905E;
       cursor: pointer;
     }

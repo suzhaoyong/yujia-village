@@ -56,6 +56,8 @@
           <div class="upload-box">
             <el-upload
               action="#"
+              accept="image/jpeg, image/gif, image/png"
+              :before-upload="onBeforeUpload"
               :class="{disabled:uploadWorkDisabled}"
               :on-change="changeWorkFile"
               :on-remove="() => this.ruleForm['img_work'] = ''"
@@ -64,7 +66,7 @@
               :auto-upload="false"
             >
               <i class="el-icon-plus"></i>
-              <div class="el-upload__tip" slot="tip">支持jpg,jpeg,png格式</div>
+              <div class="el-upload__tip" slot="tip">支持jpg,jpeg,png格式，图片大小限制在1M之内</div>
             </el-upload>
             <el-dialog :visible.sync="dialogVisible">
               <img width="100%" :src="dialogImageUrl" alt />
@@ -74,11 +76,13 @@
         <div class="card" v-show="isShow('7') || isShow('2')">
           <div class="title-tips">
             <div class="title" style="left: 1em;">营业执照</div>
-            <div class="tips">请上传最新的营业执照(仅馆主需要提交)</div>
+            <div class="tips">请上传最新的营业执照(仅机构负责人需要提交)</div>
           </div>
           <div class="upload-box">
             <el-upload
               action="#"
+              accept="image/jpeg, image/gif, image/png"
+              :before-upload="onBeforeUpload"
               :class="{disabled:uploadLicenseDisabled}"
               :on-change="changeLicenseFile"
               :on-remove="() => this.ruleForm['img_license'] = ''"
@@ -87,7 +91,7 @@
               :auto-upload="false"
             >
               <i class="el-icon-plus"></i>
-              <div class="el-upload__tip" slot="tip">支持jpg,jpeg,png格式</div>
+              <div class="el-upload__tip" slot="tip">支持jpg,jpeg,png格式，图片大小限制在1M之内</div>
             </el-upload>
             <el-dialog :visible.sync="dialogVisible">
               <img width="100%" :src="dialogImageUrl" alt />
@@ -167,13 +171,37 @@ export default {
   },
   mounted() {},
   methods: {
+    onBeforeUpload(file) {
+      const isIMAGE = file.type === "image/jpeg" || "image/gif" || "image/png";
+      const isLt1M = file.size / 1024 / 1024 < 1;
+
+      if (!isIMAGE) {
+        this.$message.error("上传文件只能是图片格式!");
+      }
+      if (!isLt1M) {
+        this.$message.error("上传文件大小不能超过 1MB!");
+      }
+      return isIMAGE && isLt1M;
+    },
     changeExemptionFile(file, fileList) {
+      if(!this.onBeforeUpload(file)){
+        this.ruleForm['img_exemption'] = ''
+        return;
+      }
       this.changeFile(file, fileList, "img_exemption");
     },
     changeLicenseFile(file, fileList) {
+      if(!this.onBeforeUpload(file)){
+        this.ruleForm['img_license'] = ''
+        return;
+      }
       this.changeFile(file, fileList, "img_license");
     },
     changeWorkFile(file, fileList) {
+      if(!this.onBeforeUpload(file)){
+        this.ruleForm['img_work'] = ''
+        return;
+      }
       this.changeFile(file, fileList, "img_work");
     },
 
