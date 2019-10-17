@@ -178,7 +178,7 @@
                 <div class="value">
                   <div class="upload-box" style="overflow:hidden;">
                     <div class="upload-img" v-if="userForm.icon">
-                      <img :src="userForm.icon" alt />
+                      <img style="width:100%;" :src="userForm.icon" alt />
                       <span class="item-actions"></span>
                       <i @click="userForm.icon = ''" class="el-icon-delete"></i>
                     </div>

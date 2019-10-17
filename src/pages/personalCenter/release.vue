@@ -279,7 +279,7 @@
                 :auto-upload="false"
               >
                 <i class="el-icon-plus"></i>
-                <div class="el-upload__tip" slot="tip">支持jpg,jpeg,png格式</div>
+                <div class="el-upload__tip" slot="tip">支持jpg,jpeg,png格式，图片大小限制在1M之内</div>
               </el-upload>
             </div>
             <div class="title_tips">
@@ -717,28 +717,28 @@ export default {
     },
     changeTeacherFile(file, fileList) {
       if(!this.onBeforeUpload(file)){
-        this.ruleForm['teacher_img'] = this.origin_select.path
+        this.ruleForm['teacher_img'] = this.origin_select.path || 'NO'
         return;
       }
       this.changeFile(file, fileList, "teacher_img");
     },
     changeTrainFirstFile(file, fileList) {
       if(!this.onBeforeUpload(file)){
-        this.ruleForm['img_train_first'] = this.origin_select.first
+        this.ruleForm['img_train_first'] = this.origin_select.first || 'NO'
         return;
       }
       this.changeFile(file, fileList, "img_train_first");
     },
     changeTrainTwoFile(file, fileList) {
       if(!this.onBeforeUpload(file)){
-        this.ruleForm['img_train_two'] = this.origin_select.two
+        this.ruleForm['img_train_two'] = this.origin_select.two || 'NO'
         return;
       }
       this.changeFile(file, fileList, "img_train_two");
     },
     changeTrainThreeFile(file, fileList) {
       if(!this.onBeforeUpload(file)){
-        this.ruleForm['img_train_three'] = this.origin_select.three
+        this.ruleForm['img_train_three'] = this.origin_select.three || 'NO'
         return;
       }
       this.changeFile(file, fileList, "img_train_three");

@@ -126,7 +126,9 @@
             v-if="showGoods.list.length === 0"
             class="empty"
             style="background-size: 100% 100%;width: 7rem;margin-top:1rem;"
-          ></div>
+          >
+          <span class="empty_tips">暂未查到</span>
+          </div>
           <div
             class="goods-box"
             @click="viewGoods(item)"

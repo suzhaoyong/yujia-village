@@ -105,6 +105,7 @@ export default {
         }
     },
     created() {
+      this.$store.commit('lastLoginStatus', true)
     },
     mounted() {
         this.getPersonalData()

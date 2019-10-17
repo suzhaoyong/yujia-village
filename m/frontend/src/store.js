@@ -7,6 +7,7 @@ const store = new Vuex.Store({
   state: {
     loading: true,
     buyGoods: [],
+    lastLogin: false,
     info: {
       cart: [],
       cash: [],
@@ -30,6 +31,9 @@ const store = new Vuex.Store({
   mutations: {
     loadStatus(state, flag) {
       state.loading = flag
+    },
+    lastLoginStatus(state, status) {
+      state.lastLogin = status
     },
     addGoods(state, goods) {
       state.buyGoods.push(goods);

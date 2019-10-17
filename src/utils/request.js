@@ -143,7 +143,7 @@ function handleResponeseErr(err) {
     if (config.url.search("login") != -1 || config.url.search("telLogin") != -1) { // 显示图形码报错信息
       message = data.msg
     } else {
-      message = '请先登录'
+      message = data.msg
     }
     
 

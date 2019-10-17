@@ -147,8 +147,8 @@ import areaList from "../../assets/js/area.js";
 import Vue from 'vue';
 import Bus from "@/utils/Bus";
 import { mapGetters } from "vuex"
-import { Notify } from "vant";
-Vue.use(Notify);
+import { Notify, Dialog } from "vant";
+Vue.use(Notify).use(Dialog);
 export default {
     data() {
     return {
@@ -270,7 +270,7 @@ export default {
           '认证机构负责人&教练中': {message:'您已加盟成功',type:'success'},
           '认证机构负责人&认证教练': {message:'您已加盟成功',type:'success'},
         }
-        obj[identity_auth] && Dialog.confirm({ 
+        obj[identity_auth] && Dialog({ 
             message:`${obj[identity_auth].message}`, 
             title: '温馨提示'
           })

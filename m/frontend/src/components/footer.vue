@@ -51,8 +51,9 @@ export default {
         }
     },
     computed: {
-      ...mapGetters(['isUserNeedLogin'])
+      ...mapGetters(['isUserNeedLogin', 'lastLogin'])
     },
+    
     created() {
         const { header_name } = this.$route.meta
         this.active = header_name

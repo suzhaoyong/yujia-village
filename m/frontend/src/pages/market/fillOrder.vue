@@ -69,10 +69,10 @@
               <van-tag>{{payway.value ? payway.value : '请选择支付方式'}}</van-tag>
             </template>
           </van-cell>
-          <van-cell v-show="false" is-link @click="showPopup('cash')">
+          <van-cell is-link @click="showPopup('cash')">
             <template slot="title">
               <span class="custom-title">现金券：</span>
-              <van-tag v-if="cash.columns.length > 0">{{cash.value ? cash.value : '请选择现金券'}}</van-tag>
+              <van-tag v-if="cash.columns.length > 0">{{cash.value.name ? cash.value.name : '请选择现金券'}}</van-tag>
               <van-tag v-if="cash.columns.length == 0">{{'暂无可用现金券'}}</van-tag>
             </template>
           </van-cell>
@@ -81,7 +81,7 @@
               <span class="custom-title">优惠券：</span>
               <van-tag
                 v-if="coupon.columns.length > 0"
-              >{{coupon.value ? coupon.value.name : '请选择优惠券'}}</van-tag>
+              >{{coupon.value ? `${coupon.value.name}` : '请选择优惠券'}}</van-tag>
               <van-tag v-if="coupon.columns.length == 0">{{'暂无可用优惠券'}}</van-tag>
             </template>
           </van-cell>
@@ -102,7 +102,7 @@
     </main>
     <footer class="order-foot">
       <div class="order-foot-message">
-        <p class="order-foot-message-p1">实际支付：¥{{(countPrice - countDiscount).toFixed(2)}}</p>
+        <p class="order-foot-message-p1">实际支付：¥{{(countPrice - countDiscount).toFixed(2)>0 ? (countPrice - countDiscount).toFixed(2):0}}</p>
         <p>免减总额：¥{{countDiscount.toFixed(2)}}</p>
       </div>
       <div
@@ -136,22 +136,22 @@
         <div class="xianJinQuan" v-for="(item, index) in cash.columns" :key="index">
           <div class="number_btn">
             <div class="number">
-              <span class="price_used">1000</span>
+              <span class="price_used">{{item.surplus}}</span>
               /
-              <span class="price_all">2000</span>
+              <span class="price_all">{{item.money}}</span>
             </div>
-            <div class="btn">使用</div>
+            <div class="btn" @click="chooseCash(item)">{{item.id == cash.value.id ? '正在使用' :'使用'}}</div>
           </div>
           <div class="inputbox_time">
             <div class="inputbox">
-              <input type="tel" placeholder="请输入使用券值" />
+              <input type="tel" v-model.lazy.number.trim="item.use_val" @change="useCashVal(item, index)" placeholder="请输入使用券值" />
             </div>
-            <div class="time">有效期至：2019.05.21</div>
+            <div class="time">有效期至：{{item.endDate}}</div>
           </div>
         </div>
       </div>
       <div class="youHuiQuan-body" v-if="coupon.show">
-        <div class="youHuiQuan" v-for="(item, index) in cash.columns" :key="index">
+        <div class="youHuiQuan" v-for="(item, index) in coupon.columns" :key="index">
           <div class="number_tips">
             <div class="number">{{item.money}}</div>
             <div class="tips">
@@ -159,7 +159,7 @@
               <span class="time">有效期至 {{item.endDate}}</span>
             </div>
           </div>
-          <div class="btn" @click="chooseCoupon(item)">使用</div>
+          <div class="btn" @click="chooseCoupon(item)">{{item.id == coupon.value.id ? '正在使用' :'使用'}}</div>
         </div>
       </div>
     </van-popup>
@@ -194,13 +194,6 @@ export default {
         show: false,
         columns: [
           {
-            endDate: "2019.08.31",
-            id: 1,
-            money: 200,
-            name: "测试优惠券",
-            range: "全部适用",
-            startDate: "2019.08.26",
-            status: "未使用"
           }
         ],
         value: ""
@@ -209,13 +202,6 @@ export default {
         show: false,
         columns: [
           {
-            endDate: "2019.08.31",
-            id: 1,
-            money: 200,
-            name: "测试优惠券",
-            range: "全部适用",
-            startDate: "2019.08.26",
-            status: "未使用"
           }
         ],
         value: ""
@@ -257,9 +243,23 @@ export default {
       }, 0);
     },
     countDiscount() {
+      let total = 0;
+      let { money: p_money = 0 } = this.coupon.value
+      let { money: s_money = 0, surplus, use_val } = this.cash.value
+      if(p_money) {
+        total += p_money
+      }
+      if(surplus) {
+        if(use_val){
+          total += parseInt(use_val)
+        } else {
+          total += surplus
+        }
+        
+      }
       return this.goods.reduce((pre, next) => {
         return pre + next.discount * next.num;
-      }, 0);
+      }, 0) + total;
     },
     isAllowPay() {
       return this.payway.value && this.selectAddress.name;
@@ -286,6 +286,28 @@ export default {
     sessionStorage.removeItem("select address");
   },
   methods: {
+    // 现金券的输入金额
+    useCashVal(item) {      
+      if(item.surplus < item.use_val) {
+        Toast('输入的券值不能超过剩余券值')
+      }
+      if(item.use_val < 0) {
+        Toast('输入的券值不能为负数')
+      }
+    },
+    // 选择现金券
+    chooseCash(item) {
+      if(item.surplus < item.use_val) {
+        Toast('输入的券值不能超过剩余券值')
+        return;
+      }
+      if(item.use_val < 0) {
+        Toast('输入的券值不能为负数')
+        return;
+      }
+      this.cash.value = item
+      this.aside.isOpen = false;
+    },
     // 选择优惠券
     chooseCoupon(item) {
       this.coupon.value = item;
@@ -340,6 +362,7 @@ export default {
       const nums = this.goods.map(item => item.num);
       const { tel, address, area, city, province, name } = this.selectAddress;
       const { id: couponId } = this.coupon.value;
+      const { id: cashId, use_val, surplus } = this.cash.value;
       // console.log(couponId);
       // return;
       let params = {
@@ -355,8 +378,8 @@ export default {
         userMessage: this.userMessage,
         status: "0", // 0不是新增地址 1是新增地址
         addressId: this.selectAddress.id,
-        cashId: "", //现金券编号
-        cashMoney: "", //现金券使用金额
+        cashId: cashId || "", //现金券编号
+        cashMoney: (use_val >= surplus ? surplus : use_val) || "", //现金券使用金额
         couponId: couponId || "", //优惠券编号
         fraction: "" //使用积分
       };
@@ -370,9 +393,9 @@ export default {
           size: this.goods.map(item => item.size),
           color: this.goods.map(item => item.color),
           addressId: this.selectAddress.id,
-          cashId: "", //	现金券编号
-          cashMoney: "", //	现金券使用金额
-          couponId: couponId || "", //	优惠券编号
+          cashId: cashId || "", //现金券编号
+          cashMoney: (use_val >= surplus ? surplus : use_val) || "", //现金券使用金额
+          couponId: couponId || "", //优惠券编号
           fraction: "" //	使用积分
         };
         this.directGoodsOrder(m_params);
@@ -401,7 +424,10 @@ export default {
         }
 
         this.coupon.columns = data.coupon;
-        this.cash.columns = data.cash;
+        this.cash.columns = data.cash.map(item => {
+          item.use_val = ''
+          return item
+        });
 
         if (data.address.length === 0) {
           return;
@@ -494,6 +520,7 @@ export default {
   }
   .xianJianQuan-body {
     .xianJinQuan {
+      margin: 5px 0;
       background-image: url("~@/assets/img/coup_bg.png");
       background-size: 100% 100%;
       background-repeat: no-repeat;
@@ -513,6 +540,7 @@ export default {
             content: "剩余券值/总券值";
             display: back;
             position: absolute;
+            width: 8em;
             left: 50%;
             bottom: -1em;
             transform: translateX(-70%);
@@ -571,6 +599,7 @@ export default {
   }
   .youHuiQuan-body {
     .youHuiQuan {
+      margin: 5px 0;
       background-image: url("~@/assets/img/coup_bg.png");
       background-size: 100% 100%;
       background-repeat: no-repeat;
