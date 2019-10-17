@@ -312,7 +312,7 @@ export default {
         }
         &-box {
           padding: 0 16px;
-          max-height: 300px;
+          min-height: 250px;
           margin-top: 10px;
           img {
             width: 134px;

@@ -2,8 +2,8 @@
   <div class="message">
     <header>培训信息</header>
     <main class="message-main">
-      <ul class="message-main-head">
-        <li @click="defaultRank('default')"> 默认排序</li>
+      <ul class="message-main-head" @click="clickweight">
+        <li @click="defaultRank('default')" class="changeweight"> 默认排序</li>
         <li @click="hostRank('host')">热度</li>
         <li @click="priceRank('price')">价格 {{ priceFlag? '∧': '∨' }}</li>
         <li class="head-list" is-link @click="showPopup">筛选</li>
@@ -21,12 +21,21 @@
         <div class="popup-diff">
           <p>难度</p>
           <ul class="popup-diff-list">
-            <li 
+            <!-- <li
               v-for="(list, index) in 5" 
               :key="index" 
               @click="selected(list, index)" 
               :class="{'bgcolor':categoryIndex == index}"
-            >{{ index + 1 }}星</li>
+            >{{ index + 1 }}星</li> -->
+            <li>
+              <van-rate
+                v-model='stardiff'
+                :size="20"
+                color='#58B708'
+                void-icon="star"
+                void-color="#eee"
+              />
+            </li>
           </ul>
         </div>
 
@@ -63,7 +72,7 @@
           />
         </van-popup>
       <div class="message-main-container">
-          <div class="message-main-container-list">
+          <div class="message-main-container-list" v-if="messageLists.length > 0" >
             <div class="message-main-container-list-count" v-for="list in messageLists" :key="list.id" @click="viewdetail(list.id)">
               <div class="message-main-container-list-count-img">
                 <img :src="list.teacher_img">
@@ -88,6 +97,10 @@
                 <button class="wantbtn" @click.stop="study(list.id)">我想学</button>
               </div>
             </div>
+          </div>
+          <div v-else class="defaultpage">
+            <img src="../../../static/img/defaultpage.png">
+            <span>没有发现哦(╯▽╰)</span>
           </div>
       </div>
     </main>
@@ -134,6 +147,8 @@ export default {
       spanIndex: [],
       spanIndex2: [],
       page: 1,
+      pages: 1,
+      stardiff: 0,
       isLoading: false,
       show: false,
       fruit: {
@@ -178,7 +193,14 @@ export default {
     },
     // 重置按钮功能
     resetlist () {
-      this.show = true
+        this.selectArea.province = ""
+        this.selectArea.city = ""
+        this.selectArea.area = ""
+        this.stardiff = 0, // 难度,整数,小于10
+        this.selectTtype = []
+        this.spanIndex2 = []
+        this.minprice = 0
+        this.maxprice = 50000
     },
     // 地址选择
     changeArea (value) {
@@ -222,16 +244,15 @@ export default {
           })
           this.classfly = res.course_types
         } else {
-          Toast('已经是最后一页');
+          Toast('只有这么多了');
         }
     })
     },
     // 我想学的操作
     study(id) {
-      // console.log(id);
-      // if (!this.info.user.name) {
-      if (!this.info.user.name) {
-        Bus.$emit("login", true);
+      console.log(id)
+      if (!JSON.parse(sessionStorage.getItem("user"))) {
+        this.$router.push('/index')
         return;
       }
       this.wantStudy(id)
@@ -241,44 +262,37 @@ export default {
       // 调用我想学接口
       getFollowTrain(id)
         .then(data => {
-          this.$message({type:'success', message: '成功'})
+          Toast('已添加至我的收藏');
         })
     },
     // 下拉刷新
     // 上拉加载更多
     PullUpReload () {
       var _this = this
-      var pages = 1
       document.querySelector('.message-main-container').onscroll = function() {
       let innerHeight = document.querySelector('.message-main-container').clientHeight // 容器高度
       let outerHeight = document.querySelector('.message-main-container-list').clientHeight // 容器高+滚动高
       let scrollTop = document.querySelector('.message-main-container').scrollTop  // 滚动高
       if (innerHeight + scrollTop === outerHeight + 20) {
-        pages++
-        _this.messageList(pages)
-        console.log(pages)
+        _this.pages++
+        _this.messageList(_this.pages)
+        console.log(_this.pages)
       }
+      }
+    },
+    // 点击加重字体
+    clickweight (e) {
+      var target = e.target || event.target
+      if(target.nodeName == "LI") {
+        var li = target.parentNode.children
+        for(var i =0; i < li.length; i++) {
+          li[i].classList.remove('changeweight')
+        }
+        target.classList.add('changeweight')
+        this.pages = 1
       }
     },
     // 选择功能
-    selected(item, index) {
-      this.categoryIndex = index
-      let selectTag = this.selectTags.indexOf(item)
-      if (this.selectTags.indexOf(item) > -1) {
-        this.selectTags.splice(selectTag, 1, item)
-      } else {
-        this.selectTags.splice(selectTag, 1, item)
-      }
-      this.selectTags.diff = this.selectTags[0]
-      console.log(this.selectTags)
-
-      let arrIndex = this.spanIndex.indexOf(index);
-      if (this.spanIndex.indexOf(index) > -1) {
-        this.spanIndex.splice(arrIndex,1)
-      } else {
-        this.spanIndex.push(index)
-      }
-    },
     selected2 (item, index) {
       let selectTag = this.selectTtype.indexOf(item.id)
       if (this.selectTtype.indexOf(item.id) > -1) {
@@ -287,7 +301,7 @@ export default {
         this.selectTtype.push(item.id)
         console.log(this.selectTtype)
       }
-      
+
       let arrIndex2 = this.spanIndex2.indexOf(index);
       if (this.spanIndex2.indexOf(index) > -1) {
         this.spanIndex2.splice(arrIndex2,1)
@@ -336,15 +350,14 @@ export default {
       params = {
         tartTime: "",
         endTime: "",
-        minPrice: "",
-        maxPrice: "",
+        minPrice: '',
+        maxPrice: '',
         province: this.selectArea.province || "",
         city: this.selectArea.city || "",
         area: this.selectArea.area || "",
-        diff: this.selectTags.diff || "", // 难度,整数,小于10
+        diff: this.stardiff, // 难度,整数,小于10
         course_type_id: this.selectTtype || [],
       }
-      console.log(this.selectTags, this.selectArea)
       return params;
     },
     // 排序请求
@@ -404,14 +417,36 @@ export default {
 .bgcolor {
   background: #7BBB62;
 }
+// 点击字体加粗
+.changeweight {
+  font-weight: 900;
+}
+// 缺省页
+.defaultpage {
+  width: 100%;
+  height: 160px;
+  margin-top: 160px;
+  img {
+    width: 100%;
+    height: 100%;
+  }
+  span {
+    position: relative;
+    left: 56%;
+    top: -105%;
+    font-size: 16px;
+    color: #999999;
+  }
+}
 .message {
   width: 100%;
   header {
     height: 44px;
     text-align: center;
-    background: #EEEEEE;
+    background: #E0EED2;
     font-size: 16px;
     line-height: 44px;
+    font-weight: 700;
   }
 
   &-main {
