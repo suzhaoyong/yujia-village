@@ -29,7 +29,7 @@
               </div>
             </div>
           </div>
-
+          
 
         <!-- <div class="information-main-count" v-for="list in informationLists" :key="list.id" ref="box1" @click="viewdetail(list.id)">
           <div class="information-main-count-img"><img :src="list.icon_url"></div>
@@ -42,6 +42,9 @@
           </div>
         </div> -->
       </div>
+      <div class="morebtn">
+        <van-button round color="#7BBB62" type="primary" size="large" @click="loadmore">查看更多</van-button>
+      </div>
     </main>
   </div>
   <Footer></Footer>
@@ -49,8 +52,12 @@
 
 </template>
 <script>
+import Vue from 'vue';
 import Header from '../../components/header'
 import Footer from '../../components/footer'
+import { Button, Toast } from 'vant';
+
+Vue.use(Button).use(Toast);
 export default {
   components: {
     Header,
@@ -59,6 +66,8 @@ export default {
   data() {
     return {
       classifyLists: [],
+      typeid: 0,
+      typepage: 1,
       informationLists: [],
       spanIndex: 0,
       imgsArr: [],
@@ -66,6 +75,9 @@ export default {
       classifyImg: [
         {
           img: require('../../../static/img/mationclassfiy/recommend.png')
+        },
+        {
+          img: require('../../../static/img/mationclassfiy/all.png')
         },
         {
           img: require('../../../static/img/mationclassfiy/mation.png')
@@ -83,11 +95,11 @@ export default {
     }
   },
   mounted () {
-
   },
   created() {
     this.InformationClassify()
-    this.informationList()
+    this.mationdata()
+    
   },
   methods: {
     viewdetail (id) {
@@ -96,11 +108,14 @@ export default {
     // li选中变色
     changestyle (id, index) {
       this.spanIndex = index
-      console.log(id)
-      this.informationList(id)
+      this.typeid = id
+      this.typepage = 1
+      this.informationLists = []
+      this.mationdata()
     },
     InformationClassify () {
       this.$request.get('InformationClassify').then((res) => {
+        console.log(res)
         this.classifyLists = res
         // 将本地图片加入到data数组中
         this.classifyLists.classify.map((list, index) => {
@@ -108,12 +123,34 @@ export default {
         })
       })
     },
-    informationList (id = 0) {
-      this.$request.get('informationList/'+ id).then((res) => {
-        console.log(res)
-        this.informationLists = res.data
-      })
-    },
+    // 加载更多
+  loadmore () {
+    this.typepage++
+    this.mationdata()
+  },
+  mationdata(){
+  let _this = this;
+  this.$request(`/informationList/${_this.typeid}?page=${_this.typepage}`).then(res => {
+    console.log(res)
+    res.data.map((item) => {
+      _this.informationLists.push(item)
+    })
+    if(res.current_page >= res.last_page) {
+      Toast('没有了哦')
+      _this.typepage = res.last_page
+    }
+  })
+  .catch(error => {
+      // let { response: { data: { errorCode, msg } } } = error;
+      // if (errorCode != 0) {
+      // this.$message({
+      //     message: msg,
+      //     type: "error"
+      // });
+      // return;
+      // }
+  });
+},
   }
 }
 </script>
@@ -123,10 +160,9 @@ html body {width: 100%; height: 100%;}
   color: #7BBB62;
 }
 .information {
-  height: 100%;
+  height: 530px;
   width: 100%;
   margin-top: 88px;
-  margin-bottom: 50px;
   &-banner {
     width: 100%;
     height: 170px;
@@ -138,18 +174,25 @@ html body {width: 100%; height: 100%;}
   &-nav {
     width: 100%;
     height: 49px;
+    &-list::-webkit-scrollbar{
+    display: none;
+    }
     &-list {
+      width: 100%;
       height: 49px;
       display: flex;
-      justify-content: space-around;
-      align-items: center;
+      overflow: auto;
       li {
+        white-space: nowrap;
         height: 42px;
         text-align: center;
         font-size: 12px;
+        margin-right: 30px;
+        margin-left: 10px;
         img {
           width: 22px;
           height: 22px;
+          margin-top: 5px;
         }
       }
     }
@@ -158,10 +201,6 @@ html body {width: 100%; height: 100%;}
     width: 100%;
     height: auto;
     .watefullbox {
-      // width: 335px;
-      // height: auto;
-      // position: relative;
-      // margin: 8px auto;
       -moz-column-count:2; /* Firefox */
       -webkit-column-count:2; /* Safari 和 Chrome */
       column-count:2;
@@ -169,10 +208,9 @@ html body {width: 100%; height: 100%;}
       -webkit-column-gap: 10px;
       column-gap: 10px;
       padding: 12px;
+      height: auto;
+      margin-bottom: 50px;
       .information-main-count {
-        // width: 159px;
-        // margin: 4px;
-        // height: auto;
           padding: 6px;
           margin: 0 0 10px 0;
           -moz-page-break-inside: avoid;
@@ -207,6 +245,14 @@ html body {width: 100%; height: 100%;}
             }
           }
         }
+      }
+    }
+    .morebtn {
+      margin-bottom: 50px;
+      position: relative;
+      bottom: 1%;
+      .van-button {
+        height: 44px;
       }
     }
   }
