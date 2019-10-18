@@ -19,19 +19,7 @@
     </div>
     <main class="information-main">
       <div class="watefullbox" ref="box">
-          <div class="information-main-count" v-for="(list, index) in informationLists" :key="index" @click="viewdetail(list.id)">
-            <div class="information-main-count-img"><img :src="list.icon_url"></div>
-            <div class="information-main-count-text">
-              <p>{{ list.headline }}</p>
-              <div>
-                <span>{{ list.type }}</span>
-                <span><img src="../../../static/img/eye.png" class="eyeimg"><span>{{ list.views }}</span></span>
-              </div>
-            </div>
-          </div>
-          
-
-        <!-- <div class="information-main-count" v-for="list in informationLists" :key="list.id" ref="box1" @click="viewdetail(list.id)">
+        <div class="information-main-count" v-for="(list, index) in informationLists" :key="index" @click="viewdetail(list.id)">
           <div class="information-main-count-img"><img :src="list.icon_url"></div>
           <div class="information-main-count-text">
             <p>{{ list.headline }}</p>
@@ -40,10 +28,10 @@
               <span><img src="../../../static/img/eye.png" class="eyeimg"><span>{{ list.views }}</span></span>
             </div>
           </div>
-        </div> -->
+        </div>
       </div>
-      <div class="morebtn">
-        <van-button round color="#7BBB62" type="primary" size="large" @click="loadmore">{{  current_page >= last_page? "没有更多了": "查看更多"}}</van-button>
+      <div class="morebtn" @click="loadmore">
+        {{  current_page >= last_page? informationLists.length > 0? "我也是有底线的": "没有这个哦！" : "点我加载更多"}}
       </div>
     </main>
   </div>
@@ -147,7 +135,8 @@ export default {
     },
     // 加载更多
   loadmore () {
-    this.current_page++
+    this.current_page > this.last_page? '': this.current_page++
+    console.log(this.current_page, this.last_page)
     this.mationdata()
   },
   mationdata(){
@@ -237,20 +226,19 @@ html body {
       -moz-column-count:2; /* Firefox */
       -webkit-column-count:2; /* Safari 和 Chrome */
       column-count:2;
-      -moz-column-gap: 10px;
-      -webkit-column-gap: 10px;
-      column-gap: 10px;
+      -moz-column-gap: 12px;
+      -webkit-column-gap: 12px;
+      column-gap: 12px;
       padding: 12px;
       height: auto;
       .information-main-count {
-          padding: 6px;
-          margin: 0 0 10px 0;
-          -moz-page-break-inside: avoid;
-          -webkit-column-break-inside: avoid;
-          break-inside: avoid;
+        padding: 0 0 12px 0;
+        -moz-page-break-inside: avoid;
+        -webkit-column-break-inside: avoid;
+        break-inside: avoid;
         &-img {
           width: 100%;
-          box-shadow: 0 0 5px #ccc;
+          background: white;
         }
         &-text {
           height: 62px;
@@ -280,11 +268,15 @@ html body {
       }
     }
     .morebtn {
-      position: relative;
-      bottom: 1%;
-      .van-button {
-        height: 44px;
-      }
+      width: 100%;
+      height: 25px;
+      text-align: center;
+      font-size: 12px;
+      color: #999999;
+      line-height: 25px;
+    //   .van-button {
+    //     height: 44px;
+    //   }
     }
   }
 }

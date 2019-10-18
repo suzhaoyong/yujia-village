@@ -11,7 +11,6 @@
           <div><span><img src="../../../static/img/eye.png">{{ detailData.views }}</span><span><img src="../../../static/img/hand.png" class="hand">100</span></div>
         </li>
         <li>
-
         </li>
         <li class="li2">
           <p class="stardiff">
@@ -40,30 +39,24 @@
           <h6><span><img src="../../../static/img/yogateach.png"></span>适宜人群</h6>
           <span>Suitable crowd</span>
         </div>
-
         <div class="messagedetail-main-proper-show" >
-              <div class="messagedetail-main-proper-show-list" v-for="(list, index) in crowds" :key="index">
-                <div class="list-img"><img :src="crowdimg[index]"></div>
-                <div class="list-text">{{ list }}</div>
-              </div>
+          <div class="messagedetail-main-proper-show-list" v-for="(list, index) in crowds" :key="index">
+            <div class="list-img"><img :src="crowdimg[index]"></div>
+            <div class="list-text">{{ list }}</div>
+          </div>
         </div>
-        
       </div>
       <div class="messagedetail-main-teach">
         <div class="messagedetail-main-teach-title">
           <h6><span><img src="../../../static/img/yogateach.png"></span>教学大纲</h6>
           <span>syllabus</span>
         </div>
-
         <div class="messagedetail-main-teach-box">
           <img src="../../../static/img/bookbg.png">
           <span v-html="detailData.content"></span>
-
         </div>
       </div>
-
       <!-- <div class="content" v-html="detailData.content"></div> -->
-
     </main>
   <Footer></Footer>
   </div>
@@ -115,8 +108,6 @@ export default {
       this.$request.get('trains/' + id).then((res) => {
         this.detailData = res
         this.crowds = res.crowd.split("；")
-        console.log(this.crowd)
-        console.log(res)
       })
     },
   }
@@ -155,6 +146,7 @@ export default {
       margin-bottom: 50px;
       section {
         width: 100%;
+        background: white;
         height: auto;
         img {
           width: 100%;
@@ -251,9 +243,9 @@ export default {
         &-show {
           height: 200px;
           display: flex;
-          min-width: 50%;
           overflow-x: auto;
           align-items: center;
+          justify-content: space-around;
           &-list {
             width: 120px;
             height: 160px;
@@ -264,7 +256,6 @@ export default {
               img {
                 width: 100%;
                 height: 100%;
-                border-radius: 50%;
               }
             }
             .list-text {
