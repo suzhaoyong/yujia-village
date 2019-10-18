@@ -31,7 +31,8 @@
         <div class="invite-bottom">
             <div class="invite" @click="immediatelyInvitation">立即邀请</div>
         </div>
-        <div class="overlay " v-if="show" @click="show = false">
+        <div class="overlay" v-if="show" @click="show = false">
+            <van-loading v-if="isShow" type="spinner" class="loading" color="#fff" vertical>加载中...</van-loading>
             <div  class="invite-pic">
                 <img :src="pic_img" alt/>
             </div>
@@ -45,6 +46,7 @@ export default {
             activeName: '',
             integralTotal: 0,
             show: false,
+            isShow: true,
             // 获取 分享码，传递的参数
             inviteInfo: {
                 id: '',
@@ -75,6 +77,9 @@ export default {
                 // console.log(data);
                 this.pic_img = data;
             })
+            if(this.pic_img !== '') {
+                this.isShow = false;
+            }
         },
         // 获取积分信息
         getIntegral() {
@@ -94,11 +99,13 @@ export default {
         },
         // 获取 我邀请的用户，再次邀请的用户
         getMyShareBelow(id) {
-            this.$request.post('/personal/myShareBelow/'+ id ).then(data => {
-                console.log(data);
-                this.info = this.dealingData( data.data, this.info)
-                console.log(this.info);
-            })
+            if(id !== '') {
+                this.$request.post('/personal/myShareBelow/'+ id ).then(data => {
+                    console.log(data);
+                    this.info = this.dealingData( data.data, this.info)
+                    console.log(this.info);
+                })
+            }
         },
         // 处理 获取的 电话号码 和时间 数据
         dealingData(data, userInfo) {
@@ -231,7 +238,16 @@ export default {
     z-index: 999;
     width: 100%;
     height: 100%;
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(0, 0, 0, 0.5);
+    .loading {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate3d(-50%, -50%, 0);
+        /deep/ .van-loading__text {
+            color: #fff;
+        }
+    }
 }
 .invite-pic {
     position: relative;

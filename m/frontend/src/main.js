@@ -20,7 +20,7 @@ import {
   Stepper, Rate, Field, Popup, Area ,Toast ,
   Uploader ,Picker ,DatetimePicker, Swipe, SwipeItem,
   List, ActionSheet, Overlay, PasswordInput, NumberKeyboard,
-  DropdownMenu, DropdownItem,
+  DropdownMenu, DropdownItem, Loading,
   CountDown } from 'vant';
 
 import 'swiper/dist/css/swiper.min.css';
@@ -66,6 +66,7 @@ Vue.use(DropdownMenu).use(DropdownItem);
 Vue.use(Overlay);
 Vue.use(PasswordInput).use(NumberKeyboard);
 Vue.use(CountDown);
+Vue.use(Loading);
 
 require('./mock')
 
