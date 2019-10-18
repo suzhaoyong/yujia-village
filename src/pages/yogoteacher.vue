@@ -698,13 +698,13 @@ export default {
                         height: 100%;
                         position: relative;
                         .rhomb1{
-                            width: 240px;
-                            height: 250px;
-                            // border: 7px solid #fff;
+                            width: 290px;
+                            height: 275px;
                             background-color: #E2DBC8;
-                            transform:rotate(0deg);
+                            -webkit-transform: rotate(0deg);
+                            transform: rotate(0deg);
                             position: absolute;
-                            right: 53%;
+                            right: 44%;
                             top: 10%;
                             overflow: hidden;
                             img{
@@ -716,13 +716,14 @@ export default {
                             }
                         }
                         .rhomb2{
-                            width: 220px;
-                            height: 220px;
+                            width: 245px;
+                            height: 245px;
                             border: 7px solid #E2DBC8;
-                            transform:rotate(45deg);
+                            -webkit-transform: rotate(45deg);
+                            transform: rotate(45deg);
                             position: absolute;
-                            right: 31%;
-                            top: 14%;
+                            right: 25%;
+                            top: 15%;
                             border-left: #fff;
                             border-bottom: #fff;
                         }
@@ -756,13 +757,13 @@ export default {
                             top: 5%;
                         }
                         .rhomb4{
-                            width: 95px;
-                            height: 95px;
+                            width: 90px;
+                            height: 90px;
                             border: 4px solid #E2DBC8;
                             transform:rotate(45deg);
                             position: absolute;
-                            right: 8%;
-                            top:56%;
+                            right: 5%;
+                            top:62%;
                         }
                     }
                     .yogoswiper-text{
