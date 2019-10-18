@@ -81,7 +81,7 @@ export default {
         },
         // 跳转到 知识详情页
         goInfoDetail(id) {
-            this.$router.push('/informationdetail/'+id);
+            this.$router.push('/knowledgedetail/'+id);
         }
         
     }
