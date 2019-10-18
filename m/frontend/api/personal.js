@@ -70,19 +70,19 @@ export function postUpdateInfo(args) {
   return request.post(`/personal/updateInfo`, params)
 }
 
-/** 会馆资料 */
+/** 机构资料 */
 export function getClubInfo() {
   return request(`/personal/clubInfo`)
 }
-/** 会馆资料 */
+/** 机构资料 */
 export function getMyShare() {
   return request(`/personal/myShare`)
 }
-/** 认证机构负责人修改会馆资料 */
+/** 认证机构负责人修改机构资料 */
 
 export function postUpdateClubInfo(args) {
   let params = {
-    id: "", // 会馆id
+    id: "", // 机构id
     name: "",
     tel: "",
     club_tel: "",
@@ -104,7 +104,7 @@ export function getTeacherInfo() {
 /** 更新教练信息 */
 export function postUpdateTeacherInfo(args) {
   let params = {
-    id: "", // 会馆id
+    id: "", // 机构id
     info: "",
     city: "",
     province: "",

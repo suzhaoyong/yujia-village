@@ -3,38 +3,44 @@
         <van-nav-bar title="我的收藏" left-arrow @click-left="onClickLeft">
         </van-nav-bar>
         <van-tabs v-model="activeName" color="#7BBB62" title-active-color="#7BBB62" animated :border="false">
-            <van-tab title="培训课程" name="course">
-                <div class="course-content" v-if="collectCourse.length > 0">
-                    <div class="course" v-for="(item,index) in collectCourse" :key="index" @click="toCourseDetail(item.id)">
-                        <div class="img" :style="{backgroundImage:'url('+ item.teacher_img +')'}"></div>
-                        <div class="info">
-                            <div class="title">{{item.theme}}</div>
-                            <van-rate v-model="value" :size="5" color="#7BBB62" void-color="#7BBB62" readonly />
-                            <div class="price">￥{{item.price}}</div>
-                            <div class="address">成都市锦江区泰和国际发顺丰八佰伴</div>
-                            <div class="want-study">
-                                <van-icon class="item" name="eye-o" />
-                                <div class="item">550</div>
-                                <img class="hand item" src="../../assets/img/hand.png" alt="">
-                                <div class="item">220</div>
+                <van-tab title="培训课程" name="course">
+                    <div class="course-content" v-if="courseList.length > 0">
+                        <van-list v-model="loading" :offset="30" :finished="courseFinished" finished-text="没有更多了" @load="onLoadCourse">
+                            <div class="course" v-for="(item,index) in courseList" :key="index" @click="toCourseDetail(item.id)">
+                                <div class="img" :style="{backgroundImage:'url('+ item.teacher_img +')'}"></div>
+                                <div class="info">
+                                    <div class="title">{{item.theme}}</div>
+                                    <van-rate v-model="item.diff" :size="5" color="#7BBB62" void-color="#7BBB62" readonly />
+                                    <div class="price">￥{{item.price}}</div>
+                                    <div class="address">{{item.custom_address}}</div>
+                                    <div class="time">{{item.startTime}}~{{item.endTime}}</div>
+                                </div>
+                                <div class="advisory" @click.stop="show = true">咨询</div>
                             </div>
-                        </div>
-                        <div class="advisory">咨询</div>
+                        </van-list>
                     </div>
-                </div>
-                <div class="empty" v-else></div>
-            </van-tab>
-            <van-tab title="商品" name="commodity">
-                <div class="commodity-box" v-if="collectGoods.length > 0">
-                    <div class="commodity-item" v-for="(item,index) in collectGoods" :key="index" @click="toGoodsDetail(item.id)">
-                        <div class="img" :style="{backgroundImage:'url('+ item.url +')'}"></div>
-                        <div class="name">{{item.describe}}</div>
-                        <div class="price">￥{{item.sell_price}}</div>
+                    <div class="empty" v-else></div>
+                </van-tab>
+                <van-tab title="商品" name="commodity">
+                    <div v-if="goodsList.length > 0">
+                        <van-list v-model="loading" :offset="30" :finished="GoodsFinished" finished-text="没有更多了" @load="onLoadGoods">
+                            <div class="commodity-box">
+                                <div class="commodity-item" v-for="(item,index) in goodsList" :key="index" @click="toGoodsDetail(item.id)">
+                                    <div class="img" :style="{backgroundImage:'url('+ item.url +')'}"></div>
+                                    <div class="name">{{item.describe}}</div>
+                                    <div class="price">￥{{item.sell_price}}</div>
+                                </div>
+                            </div>
+                        </van-list>
                     </div>
-                </div>
-                <div class="empty" v-else></div>
-            </van-tab>
+                    <div class="empty" v-else></div>
+                </van-tab>
         </van-tabs>
+        <van-popup class="tel-advisory" v-model="show">
+            <div class="hint">资讯课程，请拨打以下电话</div>
+            <div class="phone-img"></div>
+            <div class="hot-line">客服电话　400-100-7191</div>
+        </van-popup>
     </div>
 </template>
 <script>
@@ -42,12 +48,20 @@ export default {
     data() {
         return {
             activeName: 'course',
+            show: false,
             // 难度指数
             value: 2,
+            loading: false,
+            courseFinished: false,
+            GoodsFinished: false,
+            coursePage: 1,
+            goodsPage: 1,
+            courseTotal: '',
+            goodsTotal: '',
             // 收藏的课程数据
-            collectCourse: [],
+            courseList: [],
             // 收藏的商品数据
-            collectGoods: []
+            goodsList: []
         }
     },
     created() {
@@ -58,18 +72,53 @@ export default {
         onClickLeft() {
             this.$router.go(-1);
         },
+        onLoadCourse() {
+            // 异步更新数据
+            setTimeout(() => {
+                this.coursePage++;
+                this.getCollectCourse(this.coursePage);
+                // 加载状态结束
+                this.loading = false;
+                // 数据全部加载完成
+                if (this.courseList.length >= this.courseTotal) {
+                    this.courseFinished = true;
+                }
+            }, 500);
+        },
+        onLoadGoods() {
+            // 异步更新数据
+            setTimeout(() => {
+                this.goodsPage++;
+                this.getCollectGoods(this.goodsPage)
+                this.loading = false;
+                // 数据全部加载完成
+                if (this.goodsList.length >= this.goodsTotal) {
+                    this.GoodsFinished = true;
+                }
+            }, 500);
+        },
         // 获取收藏商品的数据
-        getCollectGoods() {
-            this.$request.get('/userCollect/create').then(data => {
+        getCollectGoods(page = 1) {
+            this.$request.get('/userCollect/create/6?page=' + page).then(data => {
                 console.log(data);
-                this.collectGoods = data.data;
+                const collectGoods = data.data;
+                collectGoods.forEach(item => {
+                    this.goodsList.push(item);
+                })
+                this.goodsTotal = data.total;
             })
         },
         // 获取收藏(我想学)的课程数据
-        getCollectCourse() {
-            this.$request.get('/personal/myFollowTrain').then(data => {
-                console.log(data);
-                this.collectCourse = data.data;
+        getCollectCourse(page = 1) {
+            this.$request.get('/personal/myFollowTrain/5?page=' + page).then(data => {
+                // console.log(data);
+                const collectCourse = data.data;
+                collectCourse.forEach(item => {
+                    item.startTime = item.startTime.replace(/-/g,'.');
+                    item.endTime = item.endTime.replace(/-/g,'.');
+                    this.courseList.push(item);
+                })
+                this.courseTotal = data.total;
             })
         },
         // 
@@ -77,7 +126,7 @@ export default {
             this.$router.push("/goods/detail/" + goodsId)
         },
         toCourseDetail(courseId) {
-            this.$router.push("/messagedetail/?" + courseId)
+            this.$router.push("/messagedetail/" + courseId) 
         }
         
     }
@@ -149,7 +198,7 @@ export default {
         }
         .price {
             padding-top: 5px;
-            padding-bottom: 8px;
+            padding-bottom: 10px;
         }
         .address {
             width: 160px;
@@ -157,28 +206,8 @@ export default {
             white-space: nowrap; 
             text-overflow:ellipsis;
         }
-        .want-study {
-            display: flex;
-            position: absolute;
-            bottom: 0;
-            width: 212px;
-            height: 24px;
-            border-top: 0.5px solid #E5E5E5;
-            .item {
-                height: 24px;
-                line-height: 32px;
-                margin-right: 3px; 
-            }
-            .van-icon {
-                font-size: 18px;
-            }
-            .hand {
-                width: 8px;
-                height: 14px;
-                margin-left: 9px;
-                margin-top: 8px;
-            }
-
+        .time {
+            margin-top: 8px;
         }
     }
     .advisory {
@@ -228,5 +257,28 @@ export default {
         }
     }
 }
-
+.tel-advisory {
+    width: 285px;
+    height: 132px;
+    background: url('../../assets/img/yuan.png') no-repeat;
+    background-size: cover;
+    font-size: 14px;
+    text-align: center;
+    .hint {
+        margin-top: 22px;
+    }
+    .phone-img {
+        position: absolute;
+        top: 66px;
+        left: 50px;
+        width: 23px;
+        height: 27px;
+        background: url('../../assets/img/phone.png') no-repeat;
+        background-size: cover;
+    }
+    .hot-line {
+        margin-top: 28px;
+        margin-left: 32px;
+    }
+}
 </style>

@@ -408,7 +408,7 @@ export default {
         captcha: ""
       },
       clubForm: {
-        id: "", // 会馆id
+        id: "", // 机构id
         name: "",
         tel: "",
         club_tel: "",
@@ -419,7 +419,7 @@ export default {
         area: ""
       },
       teacherForm: {
-        id: "", // 会馆id
+        id: "", // 机构id
         info: "",
         city: "",
         province: "",

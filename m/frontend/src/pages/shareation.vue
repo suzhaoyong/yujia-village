@@ -5,7 +5,7 @@
           <div class="ation">
               <img src="../assets/img/img6.png" class="ation_img"/>
               <div class="share_warp_title">
-                  <span class="tips">欢迎瑜伽老师，优质会馆入驻平台！</span>
+                  <span class="tips">欢迎瑜伽老师，优质机构入驻平台！</span>
               </div>
               <div class="share_warp_rule">
                 <div class="border-left"></div>
@@ -16,7 +16,7 @@
                   <img src="../assets/img/img7.png" class="picture_img"/>
                   <div class="warp_picture_right">
                       <img src="../assets/img/img8.png" class="picture_img2"/>
-                      <span class="picture_text">找瑜伽老师、会馆、专业用品<br/>只需简单注册，平台帮你搞定!</span>
+                      <span class="picture_text">找瑜伽老师、机构、专业用品<br/>只需简单注册，平台帮你搞定!</span>
                   </div>
               </div>
               <div class="share_warp_code">

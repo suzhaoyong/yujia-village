@@ -103,11 +103,11 @@
                     </div>
                 </div>
             </div>
-            <!-- 联盟会馆 -->
+            <!-- 联盟机构 -->
             <div class="union-hall">
                 <div class="top-course">
                     <div>
-                        <span>联盟会馆</span>
+                        <span>机构</span>
                         <span class="e-title">Union hall</span>
                     </div>
                     <div>

@@ -336,7 +336,7 @@ export default {
       const params = {
         id: this.$route.params.goods_id,
         identity: "good",
-        userId: "",
+        userId: this.isUserNeedLogin ? "" : (this.info.user && this.info.user.id) || '',
         responseType: "arraybuffer"
       };
       this.$request.post(`/show/share/photo`, params).then(res => {

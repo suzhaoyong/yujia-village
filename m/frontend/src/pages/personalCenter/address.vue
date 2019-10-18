@@ -1,7 +1,6 @@
 <template>
     <div>
         <van-nav-bar title="地址管理" left-arrow @click-left="onClickLeft">
-            <!-- <img class="icon" src="../../assets/img/shopping.png" slot="right"> -->
         </van-nav-bar>
         <div class="content">
             <div class="info" @click="chooseAddress(item)" v-for="(item,index) in userAddress" :key="index">

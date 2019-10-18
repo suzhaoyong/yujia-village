@@ -24,9 +24,9 @@
         <div class="rz-content">
             <div class="owner" v-if="slideIndex==0">
                 <van-field v-model="ownerDataList.real_name" clearable input-align="right" label="真实姓名" placeholder="只能是中文或者英文" @blur="onBlur"/>
-                <van-field v-model="ownerDataList.club_name" clearable input-align="right" label="会馆名称" placeholder="由中文、字母、数字组成" @blur="onBlur"/>
-                <van-field v-model="ownerDataList.club_tel" type="tel" clearable input-align="right" label="会馆电话" placeholder="电话" @blur="onBlur"/>
-                <van-field v-model="region_a" readonly input-align="right" label="会馆地区" placeholder="选择省/市/区" @focus="focus"/>
+                <van-field v-model="ownerDataList.club_name" clearable input-align="right" label="机构名称" placeholder="由中文、字母、数字组成" @blur="onBlur"/>
+                <van-field v-model="ownerDataList.club_tel" type="tel" clearable input-align="right" label="机构电话" placeholder="电话" @blur="onBlur"/>
+                <van-field v-model="region_a" readonly input-align="right" label="机构地区" placeholder="选择省/市/区" @focus="focus"/>
                 <van-popup v-model="show" position="bottom" :style="{ height: '40%' }">
                     <van-area :area-list="areaList" @confirm="onConfirm" @cancel="onCancel"/>
                 </van-popup>
@@ -41,9 +41,9 @@
             </div>
             <div class="coach" v-if="slideIndex==1">
                 <van-field v-model="coachDataList.real_name" clearable input-align="right" label="真实姓名" placeholder="只能是中文或者英文" @blur="onBlur"/>
-                <van-field v-model="coachDataList.club_name" clearable input-align="right" label="会馆名称" placeholder="由中文、字母、数字组成" @blur="onBlur"/>
-                <van-field v-model="coachDataList.club_tel" type="tel" clearable input-align="right" label="会馆电话" placeholder="电话" @blur="onBlur"/>
-                <van-field v-model="region_b" readonly input-align="right" label="会馆地区" placeholder="选择省/市/区" @focus="focus"/>
+                <van-field v-model="coachDataList.club_name" clearable input-align="right" label="机构名称" placeholder="由中文、字母、数字组成" @blur="onBlur"/>
+                <van-field v-model="coachDataList.club_tel" type="tel" clearable input-align="right" label="机构电话" placeholder="电话" @blur="onBlur"/>
+                <van-field v-model="region_b" readonly input-align="right" label="机构地区" placeholder="选择省/市/区" @focus="focus"/>
                 <van-popup v-model="show" position="bottom" :style="{ height: '40%' }">
                     <van-area :area-list="areaList" @confirm="onConfirm" @cancel="onCancel"/>
                 </van-popup>
@@ -58,9 +58,9 @@
             </div>
             <div class="owner-coach" v-if="slideIndex==2">
                 <van-field v-model="ownerAndCoachList.real_name" clearable input-align="right" label="真实姓名" placeholder="只能是中文或者英文" @blur="onBlur"/>
-                <van-field v-model="ownerAndCoachList.club_name" clearable input-align="right" label="会馆名称" placeholder="由中文、字母、数字组成" @blur="onBlur"/>
-                <van-field v-model="ownerAndCoachList.club_tel" type="tel" clearable input-align="right" label="会馆电话" placeholder="电话" @blur="onBlur"/>
-                <van-field v-model="region_c" readonly input-align="right" label="会馆地区" placeholder="选择省/市/区" @focus="focus"/>
+                <van-field v-model="ownerAndCoachList.club_name" clearable input-align="right" label="机构名称" placeholder="由中文、字母、数字组成" @blur="onBlur"/>
+                <van-field v-model="ownerAndCoachList.club_tel" type="tel" clearable input-align="right" label="机构电话" placeholder="电话" @blur="onBlur"/>
+                <van-field v-model="region_c" readonly input-align="right" label="机构地区" placeholder="选择省/市/区" @focus="focus"/>
                 <van-popup v-model="show" position="bottom" :style="{ height: '40%' }">
                     <van-area :area-list="areaList" @confirm="onConfirm" @cancel="onCancel"/>
                 </van-popup>
@@ -74,12 +74,17 @@
                 </div>
             </div>
         </div>
-        <van-dialog v-model="isshowFile" title="瑜伽村平台认证服务协议">
-            <div class="temp" style="height:400px;overflow: scroll;">
+        <!-- <van-dialog v-model="isshowFile" title="瑜伽村平台认证服务协议">
+            <div style="height:400px;overflow: scroll;">
                 <div id="pdf"></div>
             </div>
-        </van-dialog>
-        <div class="submit" @click="submit">提交认证</div>
+        </van-dialog> -->
+        <!-- <div class="dialog" v-if="isshowFile">
+            <div id="pdf"></div>
+        </div> -->
+        <van-button class="submit" :disabled="isDisabled" @click="submit(slideIndex)">
+            {{isDisabled ? '您已提交认证，不能再次认证...' : '提交认证'}}
+        </van-button>
         <div class="agreement">
             <van-checkbox v-model="checked" checked-color="#CCE198"></van-checkbox>
             <div>
@@ -317,7 +322,7 @@ export default {
         // 展示 协议文件
         loadProtocolFile() {
             // this.pdfh5 = new Pdfh5('#pdf',{
-            //     pdfurl:  "./static/doc/瑜伽村平台认证服务协议.pdf"
+            //     pdfurl:  "../../../static/doc/瑜伽村平台认证服务协议.pdf"
             // })
             // this.pdfh5.on("complete", function(status, msg, time) {
             //     console.log(
@@ -351,6 +356,49 @@ export default {
                     message: '请阅读并勾选瑜伽村平台认证服务协议',
                 });
             }
+        },
+        // 表单验证不为空
+        formVerify(submitData, file) {
+            if(submitData.real_name === '') {
+                this.$toast('真实姓名不能为空！')
+                return -1
+            } 
+            if(submitData.club_name === '') {
+                this.$toast('机构名不能为空！')
+                return -1
+            } 
+            if(submitData.club_tel === '') {
+                this.$toast('机构电话不能为空！')
+                return -1
+            } 
+            if(submitData.province === '') {
+                this.$toast('请填写机构所在地区！')
+                return -1
+            } 
+            if(submitData.address === '') {
+                this.$toast('请填写机构的详细地址！')
+                return -1
+            } 
+            if(file.length === 0) {
+                this.$toast('请上传认证图片！')
+                return -1
+            } 
+            if(this.slideIndex == 2) {
+                if(file.length !== 2) {
+                    this.$toast('上传的图片资料至少2张！')
+                    return -1
+                }
+            }
+        },
+        // 认证
+        identityVerify(submitList) {
+            this.$request.post('/personal/home',submitList).then(data => {
+                console.log(data);
+                if(data.msg == 'OK') {
+                    this.$toast('资料已上传，请耐心等候...');
+                    this.isDisabled = true;
+                }
+            })
         }
     }
 }
@@ -440,12 +488,20 @@ export default {
             }
         }
     }
-    .temp {
-        height: 400px;
-        overflow: scroll;
-    }
 } 
-
+#pdf {
+    height: 400px;
+}
+.dialog {
+    position: fixed;
+    top: 5%;
+    left: 50%;
+    z-index: 999;
+    transform: translateX(-50%);
+    width: 320px;
+    height: 500px;
+    background-color: #fff;
+}
 .submit {
     height: 44px;
     line-height: 44px;

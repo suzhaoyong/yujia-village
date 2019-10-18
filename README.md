@@ -56,8 +56,8 @@ src
 │   │   ├── payway.vue  // 支付
 │   │   └── shopcar.vue // 购物车
 │   ├── home.vue // 布局页
-│   ├── joinclubhouse.vue // 联盟会馆
-│   ├── joinclubhousedetails.vue // 联盟会馆详情
+│   ├── joinclubhouse.vue // 联盟机构
+│   ├── joinclubhousedetails.vue // 联盟机构详情
 │   ├── main.vue // 首页
 │   ├── market // 商场相关
 │   │   ├── SessionTitle.vue

@@ -20,16 +20,16 @@ import {
   Stepper, Rate, Field, Popup, Area ,Toast ,
   Uploader ,Picker ,DatetimePicker, Swipe, SwipeItem,
   List, ActionSheet, Overlay, PasswordInput, NumberKeyboard,
-  DropdownMenu, DropdownItem,
+  DropdownMenu, DropdownItem, Loading,
   CountDown } from 'vant';
 
 import 'swiper/dist/css/swiper.min.css';
 
 import VConsole from 'vconsole';
 
-// if (process.env.NODE_ENV === 'production') {
-  // new VConsole()
-// }
+if (process.env.NODE_ENV !== 'production') {
+  new VConsole()
+}
 // 全局注册
 Vue.use(Tab);
 Vue.use(Tabs);
@@ -64,6 +64,7 @@ Vue.use(DropdownMenu).use(DropdownItem);
 Vue.use(Overlay);
 Vue.use(PasswordInput).use(NumberKeyboard);
 Vue.use(CountDown);
+Vue.use(Loading);
 
 require('./mock')
 

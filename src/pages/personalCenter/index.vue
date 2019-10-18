@@ -32,7 +32,7 @@
             background
             :hide-on-single-page="true"
             layout="prev, pager, next, jumper"
-            :page-size="12"
+            :page-size="want.per_page"
             @current-change="changePage"
             :current-page="want.current_page"
             :total="want.total"
@@ -70,7 +70,7 @@
             background
             :hide-on-single-page="true"
             layout="prev, pager, next, jumper"
-            :page-size="12"
+            :page-size="collect.per_page"
             @current-change="changePage"
             :current-page="collect.current_page"
             :total="collect.total"
@@ -110,7 +110,7 @@
             background
             :hide-on-single-page="true"
             layout="prev, pager, next, jumper"
-            :page-size="12"
+            :page-size="like.per_page"
             @current-change="changePage"
             :current-page="like.current_page"
             :total="like.total"
