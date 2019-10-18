@@ -172,7 +172,7 @@ export default {
     const params = {
         id:this.$route.query.id,
         identity:'club',
-        userId:"",
+        userId:this.isUserNeedLogin ? "" : (this.info.user && this.info.user.id) || '',
         responseType: 'arraybuffer'
     }
     this.$request.post(`/show/share/photo`,params)
@@ -215,12 +215,12 @@ export default {
   }
    .textbase{
       width: 100%;
-      height: 30px;
+      height: 60px;
       background: #fff;
       font-size: 12px;
       color: #2c2c2c;
       text-align: center;
-      line-height: 20px;
+      line-height: 50px;
   }
 .clubhouse_main{
     width: 100%;

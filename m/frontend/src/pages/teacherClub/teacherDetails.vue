@@ -52,6 +52,8 @@
 </template>
 <script>
 import Vue from 'vue';
+import Bus from "@/utils/Bus";
+import { mapGetters } from "vuex"
 import { Popup} from 'vant';
 Vue.use(Popup);
 export default {
@@ -62,6 +64,9 @@ export default {
         show: false,
         base64img:"",
     };
+  },
+   computed: {
+    ...mapGetters(["info","isUserNeedLogin"]),
   },
   created(){
       this.yogoteacherdata();
@@ -91,7 +96,7 @@ export default {
     const params = {
         id:this.$route.query.id,
         identity:'teacher',
-        userId:"",
+        userId: this.isUserNeedLogin ? "" : (this.info.user && this.info.user.id) || '',
         responseType: 'arraybuffer'
     }
     this.$request.post(`/show/share/photo`,params)
@@ -134,12 +139,12 @@ export default {
   }
   .textbase{
       width: 100%;
-      height: 30px;
+      height: 60px;
       background: #fff;
       font-size: 12px;
       color: #2c2c2c;
       text-align: center;
-      line-height: 20px;
+      line-height: 50px;
   }
 .details_main{
     width: 100%;
