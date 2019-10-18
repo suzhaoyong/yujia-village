@@ -66,7 +66,7 @@
       <section class="goods_content" v-show="kinds.curIndex !== -1">
         <div class="goods_filters">
           <div class="filters_range">
-            <div class="range_price_sell">
+            <!-- <div class="range_price_sell">
               <div class="range_select_range">
                 <van-tag
                   style="margin:2px;"
@@ -88,8 +88,9 @@
                 >{{`${item.name} x`}}</van-tag>
                 
               </div>
-              <span class="filters_btn" style="flex-shrink: 0;" @click="aside.isOpen = true">筛选</span>
-            </div>
+              
+            </div> -->
+            <span class="filters_btn" style="flex-shrink: 0;position: absolute;right: 20px;top: 0;" @click="aside.isOpen = true">筛选</span>
             <div class="range_news_size">
               <span
                 :class="{ active: isSubAsideActive('isPrice') }"
@@ -706,6 +707,7 @@ $main_bg_color: #89b264;
     .goods_filters {
       position: relative;
       .filters_range {
+        position: relative;
         padding-bottom: 10px;
         .range_price_sell {
           padding-right: 16px;
