@@ -1,7 +1,7 @@
 <template>
     <div>
         <van-nav-bar :title="navTitle" left-arrow @click-left="onClickLeft"></van-nav-bar>
-        <van-address-edit :area-list="areaList" :show-delete="isShowDelete" :address-info="AddressInfo" show-set-default 
+        <van-address-edit style="padding-top: 46px;" :area-list="areaList" :show-delete="isShowDelete" :address-info="AddressInfo" show-set-default 
         @save="onSave" @delete="onDelete"/>
     </div>
 </template>

@@ -28,7 +28,7 @@ import 'swiper/dist/css/swiper.min.css';
 import VConsole from 'vconsole';
 
 // if (process.env.NODE_ENV === 'production') {
-  new VConsole()
+  // new VConsole()
 // }
 // 全局注册
 Vue.use(Tab);

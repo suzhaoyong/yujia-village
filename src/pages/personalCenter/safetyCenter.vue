@@ -375,7 +375,7 @@ export default {
       getCodepass: false,
       dialogVisible: false,
       dialogImageUrl: "",
-      origin_icon: '',
+      origin_icon: "",
       club: { list: [], select_id: "" },
       codeTips: {
         msg: "发送验证码",
@@ -490,8 +490,8 @@ export default {
       return isIMAGE && isLt1M;
     },
     changeAvatorFile(file, fileList) {
-      if(!this.onBeforeUpload(file)){
-        this.userForm['icon'] = this.origin_icon
+      if (!this.onBeforeUpload(file)) {
+        this.userForm["icon"] = this.origin_icon;
         return;
       }
       this.changeFile(file, fileList, "icon");
@@ -556,7 +556,7 @@ export default {
           real_name,
           icon
         } = data.user;
-        this.origin_icon = icon
+        this.origin_icon = icon;
         this.userForm = Object.assign(
           {},
           {
@@ -754,8 +754,27 @@ export default {
     },
     updateTeachUser() {
       const user = () => {
-        let params = Object.assign({}, this.userForm);
-        return postUpdateInfo(params).then(data => {});
+        // let params = Object.assign({}, this.userForm);
+        const {
+          area,
+          province,
+          city,
+          birthday,
+          sex,
+          name,
+          real_name,
+          icon
+        } = this.userForm;
+        return postUpdateInfo({
+          area,
+          province,
+          city,
+          birthday,
+          sex,
+          name,
+          real_name,
+          icon
+        }).then(data => {});
       };
       const teacher = () => {
         const { identity_auth } = this.info.user;

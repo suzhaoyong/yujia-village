@@ -1,9 +1,9 @@
 <template>
   <div class="warp" style>
     <van-nav-bar title="商品" left-arrow @click-left="back" fixed>
-      <!-- <div class="" slot="right" @click="handleShareGoods">
+      <div class="" slot="right" @click="handleShareGoods">
         <img class="icon" src="../../../assets/teacherclub/share.png" />
-      </div>-->
+      </div>
     </van-nav-bar>
     <van-skeleton v-if="goods_copy.picture === ''" avatar avatar-shape="square" avatar-size="100" />
     <van-skeleton v-if="goods_copy.describe === ''" title title-width="100" :row="6" />
@@ -334,8 +334,8 @@ export default {
     handleShareGoods() {
       this.showShareImg = true;
       const params = {
-        id: this.$route.query.id,
-        identity: "club",
+        id: this.$route.params.goods_id,
+        identity: "good",
         userId: "",
         responseType: "arraybuffer"
       };
@@ -512,6 +512,7 @@ $main_color: #b4d565;
   bottom: 0;
   overflow: hidden;
   width: 100%;
+  // padding-top: 46px;
   padding-bottom: 1.06667rem;
   background: #fff;
   -webkit-overflow-scrolling: touch; /* 解决 ios 滑动不流畅问题 */

@@ -14,7 +14,7 @@
             <img :src="item.teacher_img" alt />
           </div>
           <div class="teacher-content">
-            <div class="teacher_theme">{{item.theme}}</div>
+            <div class="teacher_theme" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{item.theme}}</div>
             <div class="teacher_theme" style="font-size:14px;">￥{{item.price}}</div>
             <div class="teacher_name">培训老师：<span style="color:#22ac38;">{{item.name}}</span></div>
             <div class="teacher_name">培训时间：{{item.startTime}}/{{item.endTime}}</div>
@@ -47,13 +47,13 @@
         <div
           class="goods-box"
           @click="viewGoodsDetail(item)"
-          v-for="(item, index) in info.collect"
+          v-for="(item, index) in collect.data"
           :key="index"
         >
           <div class="pic">
             <img :src="item.url" alt />
           </div>
-          <div class="gtitle">{{item.describe}}</div>
+          <div class="gtitle" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{item.describe}}</div>
           <div class="price-views-collenct">
             <div class="price">
               <div class="old-price">￥{{item.sell_price}}</div>
@@ -78,28 +78,30 @@
         </div>
       </div>
       <div>
-        <not-found v-if="info.collect.length === 0" type="not-fond_2" msg="我寻寻觅觅却找不见您收藏的踪迹"></not-found>
+        <not-found v-if="collect.data.length === 0" type="not-fond_2" msg="我寻寻觅觅却找不见您收藏的踪迹"></not-found>
       </div>
       <session-title name="我点赞的老师"></session-title>
       <div class="my-class">
         <div
           class="goods-box"
-          @click="viewGoodsDetail(item)"
-          v-for="(item, index) in info.collect"
+          @click="viewTeacher(item)"
+          v-for="(item, index) in like.data"
           :key="index"
         >
           <div class="pic">
-            <img :src="item.url" alt />
+            <img :src="item.first_img" alt />
           </div>
-          <div class="gtitle">{{item.describe}}</div>
-          <div class="price-views-collenct">
-            <div class="price">
-              <div class="old-price">￥{{item.sell_price}}</div>
-              <div class="new-price">￥{{item.sell_price - item.discount}}</div>
-            </div>
-            <div class="views-collenct">
-              <!-- <div class="views">{{item.views}}</div>
-              <div class="collenct" @click="addCollect">收藏</div>-->
+          <div class="teacher-content">
+            <div class="teacher_theme" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{item.good_at}}</div>
+            <!-- <div class="teacher_theme" style="font-size:14px;">￥{{item.price}}</div> -->
+            <div class="teacher_name">培训老师：<span style="color:#22ac38;">{{item.name}}</span></div>
+            <!-- <div class="teacher_name">培训时间：{{item.startTime}}/{{item.endTime}}</div> -->
+            <div class="price-views-collenct">
+              <div class="price"></div>
+              <div class="views-collenct">
+                <!-- <div class="views">{{item.views}}</div>
+                <div class="collenct" @click="addCollect">收藏</div>-->
+              </div>
             </div>
           </div>
         </div>
@@ -116,7 +118,7 @@
         </div>
       </div>
       <div>
-        <not-found v-if="info.collect.length === 0" type="not-fond_2" msg="我寻寻觅觅却找不见您收藏的踪迹"></not-found>
+        <not-found v-if="like.data.length === 0" type="not-fond_2" msg="我寻寻觅觅却找不见您点赞的老师"></not-found>
       </div>
       <div class="cash-voucher">
         <session-title name="现金券">
@@ -244,6 +246,7 @@ import {
   postThumbsUp,
   getFollowTrain
 } from "@/api/personal";
+import { getUserCollect } from "@/api/market";
 import { mapGetters } from "vuex";
 import store from "@/store";
 import Cloud from "./cloud";
@@ -348,7 +351,12 @@ export default {
     getMyFollowTrain().then(data => {
       this.want = data;
     });
-    // getTeacherThumbsUp()
+    getTeacherThumbsUp().then(data => {
+      this.like = data
+    })
+    getUserCollect().then(data => {
+      this.collect = data
+    })
     // getFollowTrain(424)
     // postThumbsUp(23)
   },
@@ -383,6 +391,11 @@ export default {
     getPersonal() {
       this.$request("/personal/home").then(data => {
         store.dispatch("INFO", data);
+      });
+    },
+    viewTeacher(teacher) {
+      this.$router.push({
+        path: `/yogoteacher/yogoteacherdetails?id=${teacher.id}`
       });
     },
     viewGoodsDetail(goods) {

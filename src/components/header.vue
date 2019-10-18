@@ -6,8 +6,8 @@
           <div class="head-right">
             <el-button type="text" class="span2"></el-button>
             <div style="display:inline-block;" v-if="info.user.name">
-              <div class="identity">
-                <img :src="identity" alt="" />
+              <div class="identity" >
+                <img :src="info.user.icon" style="border-radius:50%;" alt="头像" />
               </div>
               <span class="span1" style="line-height: 40px;">{{info.user.name}}</span>
             </div>
