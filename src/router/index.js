@@ -2,8 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 const Home = resolve => require(['@/pages/home'], resolve) //首页
 const Main = resolve => require(['@/pages/main'], resolve) //首页
-const Joinclubhouse = resolve => require(['@/pages/joinclubhouse'], resolve) //加盟会馆
-const Joinclubhousedetails = resolve => require(['@/pages/joinclubhousedetails'], resolve) //加盟会馆---详情
+const Joinclubhouse = resolve => require(['@/pages/joinclubhouse'], resolve) //加盟机构
+const Joinclubhousedetails = resolve => require(['@/pages/joinclubhousedetails'], resolve) //加盟机构---详情
 const Yogoteacher = resolve => require(['@/pages/yogoteacher'], resolve) //瑜伽名师
 const Yogoteacherdetails = resolve => require(['@/pages/yogoteacherdetails'], resolve) //瑜伽名师---详情
 const Login = resolve => require(['@/pages/Login/login'], resolve) //登录
@@ -236,11 +236,11 @@ const router = new Router({
             header_name: 'joinclubhouse'
           },
           component: Joinclubhouse
-        }, //加盟会馆
+        }, //加盟机构
         {
           path: '/joinclubhouse/joinclubhousedetails',
           component: Joinclubhousedetails
-        } //加盟会馆----详情
+        } //加盟机构----详情
       ]
     },
     {

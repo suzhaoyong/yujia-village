@@ -82,7 +82,7 @@ export default {
   },
   mounted() {
     getMyShare().then(data => {
-      this.listData = data.data
+      this.listData = data
     });
   },
   methods: {

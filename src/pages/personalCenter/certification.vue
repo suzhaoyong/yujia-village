@@ -34,12 +34,12 @@
               <el-input v-model="ruleForm.club_tel" placeholder="请填写负责人电话"></el-input>
             </div>
             <div class="shop">
-              <span class="title">联盟馆馆名</span>
-              <el-input v-model="ruleForm.club_name" placeholder="请填写联盟馆馆名"></el-input>
+              <span class="title">机构名称</span>
+              <el-input v-model="ruleForm.club_name" placeholder="请填写机构名称"></el-input>
             </div>
           </div>
           <div class="address">
-            <span class="title">联盟馆地址</span>
+            <span class="title">机构地址</span>
             <!-- <v-distpicker :province="province" :city="city" :area="area" @selected="selectAddress"></v-distpicker> -->
             <v-distpicker @selected="selectAddress"></v-distpicker>
           </div>
