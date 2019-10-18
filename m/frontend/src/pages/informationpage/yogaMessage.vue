@@ -2,10 +2,10 @@
   <div class="message">
     <header>培训信息</header>
     <main class="message-main">
-      <ul class="message-main-head" @click="clickweight">
-        <li @click="defaultRank('default')" class="changeweight"> 默认排序</li>
-        <li @click="hostRank('host')">热度</li>
-        <li @click="priceRank('price')">价格 {{ priceFlag? '∧': '∨' }}</li>
+      <ul class="message-main-head">
+        <li @click="defaultRank('default')" :class="{'changeweight': isActive == '1' }"> 默认排序</li>
+        <li @click="hostRank('host')" :class="{'changeweight': isActive == '2' }">热度</li>
+        <li @click="priceRank('price')" :class="{'changeweight': isActive == '3' }">价格 {{ priceFlag? '∧': '∨' }}</li>
         <li class="head-list" is-link @click="showPopup">筛选</li>
         <!-- <li>价格 ∨</li> -->
       </ul>
@@ -133,6 +133,7 @@ export default {
       list: areaList,
       messageLists: [],
       classfly: [],
+      isActive: '1',
       selectArea: {
         province: "",
         city: "",
@@ -280,18 +281,6 @@ export default {
       }
       }
     },
-    // 点击加重字体
-    clickweight (e) {
-      var target = e.target || event.target
-      if(target.nodeName == "LI") {
-        var li = target.parentNode.children
-        for(var i =0; i < li.length; i++) {
-          li[i].classList.remove('changeweight')
-        }
-        target.classList.add('changeweight')
-        this.pages = 1
-      }
-    },
     // 选择功能
     selected2 (item, index) {
       let selectTag = this.selectTtype.indexOf(item.id)
@@ -382,6 +371,7 @@ export default {
     },
     // 价格排序
     priceRank (keyWord) {
+      this.isActive = '3'
       this.priceFW = true;
       this.defaultFW = true;
       this.hostFW = false;
@@ -392,6 +382,7 @@ export default {
     },
     // 默认排序
     defaultRank (keyWord) {
+      this.isActive = '1'
       this.hostFw = true
       this.defaultFw = true;
       this.priceFW = false;
@@ -401,6 +392,7 @@ export default {
     },
     // 热度排序
     hostRank (keyWord) {
+      this.isActive = '2'
       this.hostFw = true
       this.defaultFw = true;
       this.priceFW = false;

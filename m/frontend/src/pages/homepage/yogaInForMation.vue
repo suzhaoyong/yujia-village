@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="mymation">
   <Header></Header>
   <div class="information">
     <div class="information-banner">
@@ -43,7 +43,7 @@
         </div> -->
       </div>
       <div class="morebtn">
-        <van-button round color="#7BBB62" type="primary" size="large" @click="loadmore">查看更多</van-button>
+        <van-button round color="#7BBB62" type="primary" size="large" @click="loadmore">{{  current_page >= last_page? "没有更多了": "查看更多"}}</van-button>
       </div>
     </main>
   </div>
@@ -56,6 +56,7 @@ import Vue from 'vue';
 import Header from '../../components/header'
 import Footer from '../../components/footer'
 import { Button, Toast } from 'vant';
+import { setInterval } from 'timers';
 
 Vue.use(Button).use(Toast);
 export default {
@@ -67,11 +68,10 @@ export default {
     return {
       classifyLists: [],
       typeid: 0,
-      typepage: 1,
       informationLists: [],
       spanIndex: 0,
-      imgsArr: [],
-      group: 0, // request param
+      current_page: 1,
+      last_page: 2,
       classifyImg: [
         {
           img: require('../../../static/img/mationclassfiy/recommend.png')
@@ -95,6 +95,7 @@ export default {
     }
   },
   mounted () {
+    this.PullUpReload()
   },
   created() {
     this.InformationClassify()
@@ -109,7 +110,7 @@ export default {
     changestyle (id, index) {
       this.spanIndex = index
       this.typeid = id
-      this.typepage = 1
+      this.current_page = 1
       this.informationLists = []
       this.mationdata()
     },
@@ -123,21 +124,44 @@ export default {
         })
       })
     },
+    // 上拉加载
+    PullUpReload () {
+      var _this = this
+      var isScroll = false  // 函数截流
+      document.querySelector('.information').onscroll = function() {
+      if (isScroll) {
+        setTimeout(() => {
+          isScroll = false
+        },100)
+      } else {
+        let innerHeight = document.querySelector('.information').clientHeight // 容器高度
+        let outerHeight = document.querySelector('.watefullbox').clientHeight // 容器高+滚动高
+        let scrollTop = document.querySelector('.information').scrollTop  // 滚动高
+        if (innerHeight + scrollTop >= outerHeight + 219) {
+          _this.current_page > _this.last_page? '': _this.current_page++
+          _this.mationdata()
+        }
+        isScroll = true
+      }
+      }
+    },
     // 加载更多
   loadmore () {
-    this.typepage++
+    this.current_page++
     this.mationdata()
   },
   mationdata(){
   let _this = this;
-  this.$request(`/informationList/${_this.typeid}?page=${_this.typepage}`).then(res => {
-    console.log(res)
+  this.$request(`/informationList/${_this.typeid}?page=${_this.current_page}`).then(res => {
     res.data.map((item) => {
       _this.informationLists.push(item)
     })
-    if(res.current_page >= res.last_page) {
-      Toast('没有了哦')
-      _this.typepage = res.last_page
+    _this.current_page = res.current_page
+    _this.last_page = res.last_page
+    if(_this.current_page > _this.last_page) {
+      _this.current_page = res.last_page
+      console.log()
+      Toast('没有更多了哦')
     }
   })
   .catch(error => {
@@ -155,14 +179,23 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-html body {width: 100%; height: 100%;}
+html body {
+  width: 100%; 
+  height: 100%;
+}
 .active {
   color: #7BBB62;
 }
+.mymation {
+  height: 100%;
+  display: flex;
+}
 .information {
-  height: 530px;
+  flex: 1;
   width: 100%;
   margin-top: 88px;
+  overflow: auto;
+  margin-bottom: 50px;
   &-banner {
     width: 100%;
     height: 170px;
@@ -209,7 +242,6 @@ html body {width: 100%; height: 100%;}
       column-gap: 10px;
       padding: 12px;
       height: auto;
-      margin-bottom: 50px;
       .information-main-count {
           padding: 6px;
           margin: 0 0 10px 0;
@@ -248,7 +280,6 @@ html body {width: 100%; height: 100%;}
       }
     }
     .morebtn {
-      margin-bottom: 50px;
       position: relative;
       bottom: 1%;
       .van-button {
