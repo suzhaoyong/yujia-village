@@ -33,7 +33,7 @@
             :hide-on-single-page="true"
             layout="prev, pager, next, jumper"
             :page-size="want.per_page"
-            @current-change="changePage"
+            @current-change="changeWantPage"
             :current-page="want.current_page"
             :total="want.total"
           ></el-pagination>
@@ -71,7 +71,7 @@
             :hide-on-single-page="true"
             layout="prev, pager, next, jumper"
             :page-size="collect.per_page"
-            @current-change="changePage"
+            @current-change="changeCollectPage"
             :current-page="collect.current_page"
             :total="collect.total"
           ></el-pagination>
@@ -111,7 +111,7 @@
             :hide-on-single-page="true"
             layout="prev, pager, next, jumper"
             :page-size="like.per_page"
-            @current-change="changePage"
+            @current-change="changeLikePage"
             :current-page="like.current_page"
             :total="like.total"
           ></el-pagination>
@@ -348,19 +348,37 @@ export default {
   },
   mounted() {
     this.getPersonal();
-    getMyFollowTrain().then(data => {
-      this.want = data;
-    });
-    getTeacherThumbsUp().then(data => {
-      this.like = data
-    })
-    getUserCollect().then(data => {
-      this.collect = data
-    })
+    this.followTrain()
+    this.teacherThumbsUp()
+    this.userCollect()
     // getFollowTrain(424)
     // postThumbsUp(23)
   },
   methods: {
+    followTrain(page = 1) {
+      getMyFollowTrain(page).then(data => {
+        this.want = data;
+      });
+    },
+    teacherThumbsUp(page = 1) {
+      getTeacherThumbsUp(page).then(data => {
+        this.like = data
+      })
+    },
+    userCollect(page = 1 ) {
+      getUserCollect(page).then(data => {
+        this.collect = data
+      })
+    },
+    changeWantPage(val) {
+      this.followTrain(val)
+    },
+    changeLikePage(val) {
+      this.teacherThumbsUp(val)
+    },
+    changeCollectPage(val) {
+      this.userCollect(val)
+    },
     changePage(val) {},
     getUseRecord(item) {
       this.quan_used = {

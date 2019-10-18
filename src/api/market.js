@@ -38,8 +38,8 @@ export function getGoodsById(id) {
 }
 
 /* 我的收藏 */
-export function getUserCollect() {
-  return request(`/userCollect/create`)
+export function getUserCollect(page = '') {
+  return request(`/userCollect/create?page=${page}`)
 }
 
 /* 收藏商品 */

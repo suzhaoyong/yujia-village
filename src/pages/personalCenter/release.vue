@@ -1,5 +1,5 @@
 <template>
-  <div style="background:#EAEAEA;">
+  <div style="background:#EAEAEA;padding-bottom:3rem;">
     <div class="release">
       <div class="my lf">
         <div class="apply">
@@ -344,7 +344,7 @@
           </div>
           <div class="agreen-next">
             <div class="back" @click="() => { this.$router.go(-1); }">返回</div>
-            <div class="next" @click="sure">完成</div>
+            <div class="next" :style="`${isAllowClick ? '': 'background:#ccc;cursor: not-allowed;'}`" @click="sure">完成</div>
           </div>
         </div>
       </div>
@@ -368,7 +368,7 @@
       </div>
       <span slot="footer">
         <el-button @click="resetTeacher">取 消</el-button>
-        <el-button type="primary" @click="selectTeacher">确 定</el-button>
+        <el-button type="primary"  @click="selectTeacher">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -462,6 +462,23 @@ export default {
   computed: {
     uploadDisabled() {
       return type => this.ruleForm[type];
+    },
+    isAllowClick() {
+      let isAllowed = true
+      for(let[k, v] of Object.entries(this.ruleForm)) {
+        if(['img_train_first', 'img_train_two', 'img_train_three'].indexOf(k) > -1) {
+
+        } else {
+          if(!v) isAllowed = false
+        }
+      }
+      let { img_train_first, img_train_two, img_train_three } = this.ruleForm
+      if(img_train_first || img_train_two || img_train_three) {
+
+      } else {
+        isAllowed = false
+      }
+      return isAllowed
     }
   },
   mounted() {
@@ -530,7 +547,7 @@ export default {
           linkman: linkman || "", // 报名联系人
           endTime: endTime || "",
           startTime: startTime || "",
-          teacher_img: "",
+          teacher_img: teacher_img ||"",
           name: name || "",
           address: address || "",
           area:  area || "" || '山海关区',
@@ -539,9 +556,9 @@ export default {
           price: price || "",
           diff: diff || 0,
           theme: theme || "",
-          img_train_three: "",
-          img_train_two: "",
-          img_train_first: ""
+          img_train_three: three || "",
+          img_train_two: two || "",
+          img_train_first: first || ""
         };
         this.select = {
           path: teacher_img || "",
@@ -589,6 +606,9 @@ export default {
       });
     },
     sure() {
+      if(!this.isAllowClick) {
+        return;
+      }
       let params = Object.assign({}, this.ruleForm, { ...this.time.value });
       let { path, first, two, three } = this.select;
       path && (params.teacher_img = path);
@@ -759,6 +779,8 @@ export default {
         this.time.name = e[0] + "/" + e[1];
         this.time.value.startTime = e[0];
         this.time.value.endTime = e[1];
+        this.ruleForm.startTime = e[0]
+        this.ruleForm.endTime = e[1]
       } else {
       }
     },
@@ -910,7 +932,7 @@ img {
           }
           .club {
             display: flex;
-            flex-wrap: wrap;
+            // flex-wrap: wrap;
             padding: 0.7rem 1.4rem 0.7rem 1rem;
             position: relative;
             border-bottom: 1px solid #e5e5e5;

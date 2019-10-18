@@ -74,11 +74,13 @@
                 </div>
             </div>
         </div>
-        <!-- <van-dialog v-model="isshowFile" title="瑜伽村平台认证服务协议">
-            <div style="height:400px;overflow: scroll;">
-                <div id="pdf"></div>
-            </div>
-        </van-dialog> -->
+        <div v-show="isshowFileWrap">
+            <van-dialog v-model="isshowFile" title="瑜伽村平台认证服务协议">
+                <div style="height:400px;overflow: scroll;">
+                    <div id="pdf1"></div>
+                </div>
+            </van-dialog>
+        </div>
         <!-- <div class="dialog" v-if="isshowFile">
             <div id="pdf"></div>
         </div> -->
@@ -109,8 +111,10 @@ export default {
             fileList2: [],
             fileList3: [],
             checked: true,
+            isDisabled: false,
             // 是否显示 协议 pdf
-            isshowFile: false,
+            isshowFileWrap: false,
+            isshowFile: true,
             pdfh5: null,
             // 认证机构负责人需要提交的 数据列表
             ownerDataList: {
@@ -160,9 +164,9 @@ export default {
         }
     },
     created() {
-        this.loadProtocolFile();
     },
     mounted() {
+        this.loadProtocolFile();
         const that = this;
         var swiper = new Swiper('.swiper-container', {
             slidesPerView: 'auto',
@@ -317,25 +321,26 @@ export default {
             });
         },
         showFile() {
+            this.isshowFileWrap = true;
             this.isshowFile = true;
         },
         // 展示 协议文件
         loadProtocolFile() {
-            // this.pdfh5 = new Pdfh5('#pdf',{
-            //     pdfurl:  "../../../static/doc/瑜伽村平台认证服务协议.pdf"
-            // })
-            // this.pdfh5.on("complete", function(status, msg, time) {
-            //     console.log(
-            //     "状态：" +
-            //         status +
-            //         "，信息：" +
-            //         msg +
-            //         "，耗时：" +
-            //         time +
-            //         "毫秒，总页数：" +
-            //         this.totalNum
-            //     );
-            // });
+            this.pdfh5 = new Pdfh5('#pdf1',{
+                pdfurl:  "./static/doc/瑜伽村平台认证服务协议.pdf"
+            })
+            this.pdfh5.on("complete", function(status, msg, time) {
+                console.log(
+                "状态：" +
+                    status +
+                    "，信息：" +
+                    msg +
+                    "，耗时：" +
+                    time +
+                    "毫秒，总页数：" +
+                    this.totalNum
+                );
+            });
         },
         submit() {
             
