@@ -150,12 +150,12 @@ export default {
         isOpen: false,
         isOpen2: false,
         isOpen3:false,
-        launch:false,
+        launch:true,
         current:0,
         curritem:0,
         banner:'',
-        visible:true,
-        Box2:false,
+        visible:false,
+        Box2:true,
         banner2:'',
         isActive: 0,
         name:"",
@@ -186,6 +186,7 @@ export default {
   created(){
       this.joindata();
       this.exhibitionList();
+      this.choiceness();
   },
   methods:{
       //机构列表
@@ -212,6 +213,22 @@ export default {
             this.houseType = res.course_types;
             this.actions = res.year;
             this.banner2 = res.banner;
+        })
+        .catch(error => {
+            let { response: { data: { errorCode, msg } } } = error;
+            if (errorCode != 0) {
+            this.$message({
+                message: msg,
+                type: "error"
+            });
+            return;
+            }
+        });
+      },
+      //名师精选
+      choiceness(){
+        this.$request.get(`/teachers/elites`).then(res => {
+            this.exhibitionBox2 = res;
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
