@@ -1,9 +1,9 @@
 <template>
   <div class="warp" style>
     <van-nav-bar title="商品" left-arrow @click-left="back" fixed>
-      <div class="" slot="right" @click="handleShareGoods">
-        <img class="icon" src="../../../assets/img/share.png" />
-      </div>
+      <!-- <div class="" slot="right" @click="handleShareGoods">
+        <img class="icon" src="../../../assets/teacherclub/share.png" />
+      </div>-->
     </van-nav-bar>
     <van-skeleton v-if="goods_copy.picture === ''" avatar avatar-shape="square" avatar-size="100" />
     <van-skeleton v-if="goods_copy.describe === ''" title title-width="100" :row="6" />
@@ -131,17 +131,25 @@
         <!-- <div class="car_lf_icon"></div>
         <div class="car_lf_icon"></div>-->
         <div class="good_barige" @click="handleViewGoods">
-        <img class="icon" src="../../../assets/img/shopping.png" />
-        <div class="numbers" v-if="shoppingBagNumber > 0">
-          <span>{{shoppingBagNumber}}</span>
+          <img class="icon" src="../../../assets/img/shopping.png" />
+          <div class="numbers" v-if="shoppingBagNumber > 0">
+            <span>{{shoppingBagNumber}}</span>
+          </div>
         </div>
-      </div>
       </div>
       <div class="car_rh">
         <div class="car_rh_item" @click="handleAddCart">加入购物车</div>
-        <div class="car_rh_item" :style="`background:${ isAllowBuy ?'':'#ccc'}`" @click="handleBuyGoods">立即购买</div>
+        <div
+          class="car_rh_item"
+          :style="`background:${ isAllowBuy ?'':'#ccc'}`"
+          @click="handleBuyGoods"
+        >立即购买</div>
       </div>
     </footer>
+    <van-popup v-model="showShareImg">
+      <img :src="base64img" />
+      <div class="textbase">长按图片，保存或发送给朋友</div>
+    </van-popup>
   </div>
 </template>
 <script>
@@ -159,6 +167,8 @@ export default {
   },
   data() {
     return {
+      showShareImg: false,
+      base64img: "",
       clock: false,
       shoppingBagNumber: 0,
       icon: {
@@ -221,7 +231,7 @@ export default {
       return `尺寸：${selectedSkuComb.s2} / 数量：${selectedNum}`;
     },
     isAllowBuy() {
-      return this.changeGoods.selectedNum
+      return this.changeGoods.selectedNum;
     }
   },
   mounted() {
@@ -257,7 +267,7 @@ export default {
           {
             k: "颜色", // skuKeyName：规格类目名称
             v: [
-              ...color_size.map((item) => {
+              ...color_size.map(item => {
                 return {
                   id: item.id,
                   name: item.name,
@@ -316,9 +326,22 @@ export default {
       });
     },
     // 分享商品
+    // handleShareGoods() {
+    //   const { goods_id } = this.$route.params;
+    //   this.$router.push(`/share?type=goods&goodsId=${goods_id}`)
+    // },
+    // 分享商品
     handleShareGoods() {
-      const { goods_id } = this.$route.params;
-      this.$router.push(`/share?type=goods&goodsId=${goods_id}`)
+      this.showShareImg = true;
+      const params = {
+        id: this.$route.query.id,
+        identity: "club",
+        userId: "",
+        responseType: "arraybuffer"
+      };
+      this.$request.post(`/show/share/photo`, params).then(res => {
+        this.base64img = res;
+      });
     },
     // 获取购物袋数据
     getShoppingBag() {
@@ -332,8 +355,6 @@ export default {
     },
     // 点击加入购物车
     handleAddCart() {
-      
-      
       if (this.isUserNeedLogin) {
         this.$router.push("/login");
         return;
@@ -342,7 +363,7 @@ export default {
         Toast("正在加入购物车");
         return;
       }
-      if(this.getSelectParams() == '') return;
+      if (this.getSelectParams() == "") return;
       postUserCart(this.getSelectParams())
         .then(() => {
           this.clock = false;
@@ -358,7 +379,7 @@ export default {
       if (!(selectedSkuComb && selectedNum)) {
         Toast("请选择规格");
         this.clock = false;
-        return '';
+        return "";
       }
       this.clock = true;
       const { tree } = this.sku;
@@ -387,12 +408,12 @@ export default {
     },
     // 点击立即购买
     handleBuyGoods() {
-      if(this.getSelectParams() == '') return;
+      if (this.getSelectParams() == "") return;
       if (this.isUserNeedLogin) {
         this.$router.push("/login");
         return;
       }
-      const { describe, discount, sell_price, cover } = this.goods_copy
+      const { describe, discount, sell_price, cover } = this.goods_copy;
       const params = {
         ...this.getSelectParams(),
         describe,
@@ -400,7 +421,7 @@ export default {
         sell_price,
         url: cover,
         price: sell_price - discount
-      }
+      };
       sessionStorage.setItem("buy goods", JSON.stringify(params));
       this.$router.push(`/fillorder?type=1`);
     },
@@ -437,9 +458,23 @@ export default {
   color: #2c2c2c;
   max-width: 100%;
 }
+
 img {
   width: 100%;
   // height: 100%;
+}
+.van-popup--center {
+  width: 87%;
+  height: 85%;
+}
+.textbase {
+  width: 100%;
+  height: 30px;
+  background: #fff;
+  font-size: 12px;
+  color: #2c2c2c;
+  text-align: center;
+  line-height: 20px;
 }
 .good_barige {
   position: relative;

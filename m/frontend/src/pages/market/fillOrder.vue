@@ -193,16 +193,12 @@ export default {
       coupon: {
         show: false,
         columns: [
-          {
-          }
         ],
         value: ""
       },
       cash: {
         show: false,
         columns: [
-          {
-          }
         ],
         value: ""
       },
@@ -250,7 +246,7 @@ export default {
         total += p_money
       }
       if(surplus) {
-        if(use_val){
+        if(use_val && use_val < surplus){
           total += parseInt(use_val)
         } else {
           total += surplus
