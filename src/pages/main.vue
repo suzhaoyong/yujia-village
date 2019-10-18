@@ -18,7 +18,7 @@
                     <el-col :span="24" class="bg-pic">
                     <div class="nav-contunt-div2">
                         <div class="carousel">
-                        <el-carousel height="620px" :interval="5000" arrow="always" trigger="click" direction="horizontal" :autoplay="false">
+                        <!-- <el-carousel height="620px" :interval="5000" arrow="always" trigger="click" direction="horizontal" :autoplay="false">
                             <el-carousel-item v-for="item in dataimg" :key="item.id">
                                 <div class="contunt2">
                                 <div class="carousel-explain">
@@ -32,6 +32,18 @@
                                 <div class="carousel-detals">
                                     <span class="span">{{item.intro}}</span>
                                     <el-button type="text" class="carousel-btn" @click="Learnmore(item)">了解更多</el-button>
+                                </div>
+                            </div>
+                            </el-carousel-item>
+                        </el-carousel> -->
+                        <el-carousel :interval="5000" type="card" trigger="click" height="580px" direction="horizontal" :autoplay="true">
+                            <el-carousel-item v-for="item in dataimg" :key="item.id">
+                            <div class="contunt2">
+                                <div class="carousel-explain" @click="Learnmore(item)">
+                                    <img :src="item.teacher_img" class="img1"/>
+                                </div>
+                                 <div class="carousel-text" @click="Learnmore(item)">
+                                    <div class="textss">{{item.theme}}</div>
                                 </div>
                             </div>
                             </el-carousel-item>
@@ -134,7 +146,7 @@
                         </div>
                     </div>
                     <div class="nav-contunt-div10">
-                        <h2><img src="../assets/yujia.png"/>联盟会馆</h2>
+                        <h2><img src="../assets/yujia.png"/>培训机构</h2>
                         <p class="nav-text">Sometimes beauty is so simple</p>
                         <div class="border-left"></div>
                         <div class="border-right"></div>
@@ -397,43 +409,40 @@ export default {
                 margin: 0 auto;
                 height: 100%;
             .contunt2{
-                width: 1200px;
-                height: 620px;
+                width: 500px;
+                height: 540px;
                 margin: 0 auto;
-                background-color: #939EC4;
-                opacity: 0.7;
-                margin-top: 6%;
+                margin-top: 5%;
                 cursor:pointer;
             .carousel-explain{
-                height: 350px;
-                position: relative;
+                height: 420px;
+                background-color: #eee;
+                opacity:1;
+                // position: relative;
                 .img1{
-                    width: 600px;
-                    height: 370px;
-                    transform: rotate(10deg);
-                    -ms-transform: rotate(10deg);
-                    -moz-transform: rotate(10deg);
-                    -webkit-transform: rotate(10deg);
-                    -o-transform: rotate(10deg);
-                    position: inherit;
-                    left: 0px;
-                    top: -24px;
+                    width: 100%;
+                    height: 420px;
                     object-fit: cover;
+                    // transform: rotate(10deg);
+                    // -ms-transform: rotate(10deg);
+                    // -moz-transform: rotate(10deg);
+                    // -webkit-transform: rotate(10deg);
+                    // -o-transform: rotate(10deg);
+                    // position: inherit;
+                    // left: 0px;
+                    // top: -24px;
                     }
-                .img2{
-                       width: 376px;
-                        height: 325px;
-                        position: absolute;
-                        right: 80px;
-                        bottom: -23px;
-                }
             }
             .carousel-text{
-                width: 38%;
-                margin-top: 20px;
-                margin-left: 37px;
-                h4{
-                    color: #fff;
+                width: 100%;
+                height: 120px;
+                line-height: 120px;
+                text-align: center;
+                background-color: #fff;
+                .textss{
+                    width: 93%;
+                    margin: 0 auto;
+                    color: #2c2c2c;
                     font-size: 20px;
                     font-family:Source Han Sans CN;
                     font-weight:bold;
@@ -441,12 +450,6 @@ export default {
                     -webkit-box-orient: vertical !important;
                     -webkit-line-clamp: 1 !important;// 限制快级元素的文本行数
                     overflow: hidden !important;
-                    span{
-                    padding-left: 13px;
-                    font-size: 14px;
-                    font-family:Source Han Sans CN;
-                    font-weight:400;
-                }
                 }
                 .el-rate{
                     margin-top: 1px;

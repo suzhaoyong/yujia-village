@@ -191,6 +191,7 @@ export default {
         opacity: 0.7;
         height: auto;
         background-color: #fff;
+        padding: 1px;
         .nav{
             line-height: 50px;
             display: inline-block;
@@ -227,7 +228,7 @@ export default {
             width: 100%;
             height: 60px;
         }
-        .formation-count-div1{
+        .formation-count-div1:nth-child(3n+1){
             width: 100%;
             height:606px;
             margin: 0 auto;
@@ -504,7 +505,7 @@ export default {
             }
         }
         }
-        .formation-count-div1:nth-child(2){
+        .formation-count-div1:nth-child(3n+2){
             width: 100%;
             height:606px;
             margin: 0 auto;
@@ -780,7 +781,7 @@ export default {
             }
         }
         }
-        .formation-count-div1:nth-child(3){
+        .formation-count-div1:nth-child(3n+3){
             width: 100%;
             height:606px;
             margin: 0 auto;

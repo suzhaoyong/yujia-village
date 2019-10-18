@@ -13,7 +13,7 @@
                 </template>
                 <div class="joinclub-cont">
                     <div class="joinclub-cont-div4">
-                        <h2><img src="../assets/yujia.png"/>会馆展示</h2>
+                        <h2><img src="../assets/yujia.png"/>机构展示</h2>
                          <p class="nav-text">Sometimes beauty is so simple</p>
                          <div class="border-left"></div>
                          <div class="border-right"></div>

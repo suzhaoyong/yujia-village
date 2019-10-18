@@ -6,7 +6,7 @@
                     <div class="joinclubdetails-div3-main">
                     <div class="joinclubdetails-left">
                         <div class="left1">
-                            <h2><img src="../assets/yujia.png"/>会馆环境</h2>
+                            <h2><img src="../assets/yujia.png"/>机构环境</h2>
                             <p class="nav-text">Sometimes beauty is so simple</p>
                             <img src="../assets/image18.png" class="bg-image4"/>
                         </div>
@@ -64,7 +64,7 @@
                     </div>
                 </div>
                 <div class="joinclubdetails-cont-div1">
-                    <h2><img src="../assets/yujia.png"/>会馆课程</h2>
+                    <h2><img src="../assets/yujia.png"/>机构课程</h2>
                     <p class="nav-text">Sometimes beauty is so simple</p>
                     <div class="border-left"></div>
                     <div class="border-right"></div>

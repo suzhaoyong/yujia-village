@@ -225,6 +225,7 @@ const router = new Router({
       component: () => import('@/pages/login')
     },
     {
+      //名师机构
       path: '/teacherClub',
       name: 'teacherClub',
       component: Home,
@@ -236,7 +237,7 @@ const router = new Router({
         name: 'teacherClub list',
         meta: {
           header_name: 'teacherClub',
-          keepAlive: false
+          keepAlive: true
         },
         component: () => import('@/pages/teacherClub/teacherClub')
       }]
@@ -297,7 +298,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   // 进入是详情，且从首页过来的，才缓存
-  if (to.path.match('detail') && from.path.match('store/category')) {
+  if ((to.path.match('detail') && from.path.match('store/category'))||(to.path.match('teacherDetails') && from.path.match('teacherClub/list'))){
     from.meta.keepAlive = true
   } else {
     from.meta.keepAlive = false

@@ -60,7 +60,7 @@ export default {
         footlist:[],
         teacher:{},
         show: false,
-        base64img:""
+        base64img:"",
     };
   },
   created(){
@@ -101,6 +101,8 @@ export default {
     },
       goback() {
         // 这儿用这个，返回上一级页面
+        // this.$router.push({path:'/teacherClub',query:{fenmsg:this.fan}});
+        // this.$router.push('/teacherClub');
         this.$router.go(-1);
       },
   }

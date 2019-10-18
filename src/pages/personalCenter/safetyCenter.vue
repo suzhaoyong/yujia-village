@@ -12,7 +12,7 @@
             v-show="info.user.identity_auth == '认证机构负责人'  || info.user.identity_auth == '认证机构负责人&认证教练'"
             @click="tagsChange(3)"
             :class="['tab', isTagActive(3)]"
-          >会馆信息</div>
+          >机构信息</div>
         </div>
         <div class="content">
           <div v-show="!success">
@@ -285,9 +285,9 @@
             </div>
             <div class="edit-hall" v-show="tagList[3].active">
               <div class="item">
-                <div class="lable">会馆名称</div>
+                <div class="lable">机构名称</div>
                 <div class="value">
-                  <el-select v-model="club.select_id" @change="changeClub" placeholder="请选择会馆名称">
+                  <el-select v-model="club.select_id" @change="changeClub" placeholder="请选择机构名称">
                     <el-option
                       v-for="item in club.list"
                       :key="item.id"
@@ -300,13 +300,13 @@
 
               <div v-show="clubForm.club_name">
                 <div class="item">
-                  <div class="lable">会馆电话</div>
+                  <div class="lable">机构电话</div>
                   <div class="value">
                     <el-input v-model="clubForm.club_tel"></el-input>
                   </div>
                 </div>
                 <div class="item">
-                  <div class="lable">会馆所在城市</div>
+                  <div class="lable">机构所在城市</div>
                   <div class="value">
                     <v-distpicker
                       :province="clubForm.province"
@@ -317,13 +317,13 @@
                   </div>
                 </div>
                 <div class="item">
-                  <div class="lable">会馆地址</div>
+                  <div class="lable">机构地址</div>
                   <div class="value" style="flex-grow:1;">
                     <el-input v-model="clubForm.club_address"></el-input>
                   </div>
                 </div>
                 <div class="item">
-                  <div class="lable">会馆联系人</div>
+                  <div class="lable">机构联系人</div>
                   <div class="value">
                     <el-input v-model="clubForm.name"></el-input>
                   </div>

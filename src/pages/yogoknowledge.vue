@@ -177,6 +177,7 @@ export default {
     opacity: 0.7;
     height: auto;
     background-color: #fff;
+    padding: 1px;
     .nav{
         line-height: 50px;
         display: inline-block;
