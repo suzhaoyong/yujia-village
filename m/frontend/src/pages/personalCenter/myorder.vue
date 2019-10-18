@@ -163,7 +163,7 @@ export default {
     width: 100%;
     height: 193px;
     margin-top: 180px;
-    // background: url('../../assets/img/Nothing_Order.png');
+    background: url('../../assets/img/Nothing_Order.png');
     background-size: cover;
 }
 .order-item {

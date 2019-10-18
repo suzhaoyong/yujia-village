@@ -2,26 +2,32 @@
     <div>
         <van-nav-bar title="点赞的名师" left-arrow @click-left="onClickLeft">
         </van-nav-bar>
-        <div class="teacher-content">
-            <div class="teacher-card" v-for="(item,index) in thumbTeacherList" :key="index" @click="goTeacherDetail(item.id)">
-                <div class="img" :style="{backgroundImage: 'url('+ item.first_img +')'}"></div>
-                <div class="teacher-name text">{{item.name}}</div>
-                <div class="text">{{item.good_at}}</div>
-                <div class="bottom-box text">
-                    <div>教龄：{{item.num}}年</div>
-                    <div>
-                        <van-icon name="good-job" /><span> {{item.praise}}</span>
+        <van-list v-model="loading" :offset="30" :finished="finished" finished-text="没有更多了" @load="onLoad">
+            <div class="teacher-content">
+                <div class="teacher-card" v-for="(item,index) in thumbTeacherList" :key="index" @click="goTeacherDetail(item.id)">
+                    <div class="img" :style="{backgroundImage: 'url('+ item.first_img +')'}"></div>
+                    <div class="teacher-name text">{{item.name}}</div>
+                    <div class="text">{{item.good_at}}</div>
+                    <div class="bottom-box text">
+                        <div>教龄：{{item.num}}年</div>
+                        <div>
+                            <van-icon name="good-job" /><span> {{item.praise}}</span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </van-list>    
     </div>
 </template>
 <script>
 export default {
     data() {
         return {
-            thumbTeacherList: {}
+            thumbTeacherList: [],
+            loading: false,
+            finished: false,
+            page: 1,
+            total: '',
         }
     },
     created() {
@@ -31,11 +37,29 @@ export default {
         onClickLeft() {
             this.$router.go(-1);
         },
+        onLoad() {
+            // 异步更新数据
+            setTimeout(() => {
+                this.page++;
+                this.getTeacherThumbs(this.page);
+                // 加载状态结束
+                this.loading = false;
+                // 数据全部加载完成
+                if (this.thumbTeacherList.length >= this.total) {
+                    this.finished = true;
+                }
+            }, 500);
+        },    
         // 获取我点赞的老师数据
-        async getTeacherThumbs() {
-            const data = await this.$request.get('/personal/teacherThumbsUp');
-            console.log(data);
-            this.thumbTeacherList = data.data;
+        async getTeacherThumbs(page = 1) {
+            const data = await this.$request.get('/personal/teacherThumbsUp/6?page=' + page);
+            // console.log(data);
+            const info = data.data;
+            info.forEach(item => {
+                this.thumbTeacherList.push(item);
+            });
+            this.total = data.total;
+
         },
         // 跳转 -> 老师详情页
         goTeacherDetail(id) {
