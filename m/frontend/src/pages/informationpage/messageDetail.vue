@@ -122,7 +122,9 @@ export default {
       width: 100%;
       height: 44px;
       text-align: center;
-      background: #EEEEEE;
+      background-color: #E0EED2;
+      font-weight: 700;
+      font-size: 16px;
       font-size: 16px;
       line-height: 44px;
       position: fixed;

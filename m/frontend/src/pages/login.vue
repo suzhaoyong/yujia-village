@@ -1,7 +1,7 @@
 <template>
   <div class="body-wrap">
     <div class="back_home-wrap" @click="goHome">
-      <div class="back_home"><van-icon name="wap-home" /></div>
+      <div class="back_home" style=""><van-icon style="font-size: 20px;" name="wap-home" /></div>
     </div>
     <div class="body">
       <!-- <div class="tips" v-show="false">
@@ -534,6 +534,7 @@ export default {
   left: 20px;
   top: 10px;
   .back_home{
+    font-size: 20px;
     display: flex;
     -webkit-box-align: center;
     -webkit-align-items: center;
