@@ -250,7 +250,8 @@ export default {
     // 我想学的操作
     study(id) {
       if (!JSON.parse(sessionStorage.getItem("user"))) {
-        this.$router.push('/index')
+        this.$router.push('/login')
+        Toast('请登录')
         return;
       }
       this.wantStudy(id)

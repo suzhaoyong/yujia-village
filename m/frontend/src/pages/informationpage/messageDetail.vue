@@ -1,10 +1,27 @@
 <template>
   <div class="messagedetail">
-    <header> <span @click="goback"><van-icon name="arrow-left"/></span> 课程详情</header>
+    <header><van-nav-bar
+      title="瑜伽资讯"
+      left-arrow
+      @click-left="goback"
+      @click-right="shareMessage"
+    >
+      <van-icon slot="right" ><img src="../../../static/img/share.svg"></van-icon>
+    </van-nav-bar></header>
     <main class="messagedetail-main">
       <section>
         <img :src="detailData.teacher_img">
       </section>
+      <van-popup 
+        v-model="show"
+        round
+        :style="{ height: '70%', width: '80%' }"
+      >
+        <div class="sharepopup">
+          <img :src="shareimg">
+          <div class="sharetext">长按图片，保存或发送给朋友</div>
+        </div>
+      </van-popup>
       <ul  class="messagedetail-main-title">
         <li class="li1">
           <div class="li1-text">{{ detailData.type }}</div>
@@ -66,10 +83,10 @@
 import Vue from 'vue';
 import Footer from '../../components/footer'
 import '../../dist/swiper.css'
-import { Rate} from 'vant'
+import { Rate, Popup, NavBar} from 'vant'
 
 
-Vue.use(Rate)
+Vue.use(Rate).use(NavBar).use(Popup)
 export default {
   components: {
     Footer
@@ -78,14 +95,8 @@ export default {
     return {
       detailData: [],
       crowds: [],
-      swiperOption: {
-          slidesPerView: 3,
-          spaceBetween: 30,
-          pagination: {
-            el: '.swiper-pagination',
-            clickable: true
-          }
-      },
+      show: false,
+      shareimg: '',
       crowdimg: [
         require('../../../static/img/image71.png'),
         require('../../../static/img/image72.png'),
@@ -110,11 +121,36 @@ export default {
         this.crowds = res.crowd.split("；")
       })
     },
+    // 分享图片
+    shareMessage() {
+      this.show = true
+      console.log(this.$route.params.id)
+      var params = {
+          id: this.$route.params.id,
+          identity:'train',
+          userId:"",
+          responseType: 'arraybuffer'
+      }
+      this.$request.post(`/show/share/photo`,params).then(res => {
+        this.shareimg = res;
+      })
+    },
   }
 }
 </script>
 
 <style lang="scss" scope>
+  // 分享样式
+  .sharepopup {
+    img {
+      padding: 16px;
+    }
+    .sharetext {
+      text-align: center;
+      margin-top: 25px;
+      font-size: 12px;
+    }
+  }
   .messagedetail {
     width: 100%;
     height: 100%;
@@ -130,6 +166,14 @@ export default {
       position: fixed;
       top: 0;
       z-index: 99;
+      .van-nav-bar {
+        background: #FFFFFF;
+        border-bottom: 2px solid #EEEEEE;
+        img {
+          width: 15px;
+          height: 15px;
+        }
+      }
       span {
         position: relative;
         left: -35%;
