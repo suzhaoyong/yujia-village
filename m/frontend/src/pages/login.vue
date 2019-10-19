@@ -149,7 +149,7 @@
       </van-dialog>
     </div>
     <div v-show="show.ys">
-      <van-dialog style="margin-top:1rem;" width="50rem" title="查看瑜伽村隐私政策" v-model="open.ys">
+      <van-dialog style="margin-top:1rem;" title="查看瑜伽村隐私政策" v-model="open.ys">
         <div style="height:60vh;overflow: scroll;">
           <div id="ys"></div>
           <!-- <iframe src="../../static/doc/瑜伽村隐私政策.pdf" width="100%" height="100%" frameborder="1"></iframe> -->
