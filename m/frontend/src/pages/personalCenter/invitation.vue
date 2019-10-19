@@ -4,17 +4,32 @@
         </van-nav-bar>
         <div class="integral">
             <div>累计获得积分</div>
-            <div class="num">200</div>
+            <div class="num">{{integralTotal}}</div>
             <div class="notice">注：积分可抵扣现金</div>
         </div>
         <div class="success-invitation">
             <div class="title">成功邀请</div>
-            <div class="invitation-people">
-                <div class="img"></div>
-                <div class="nickname">艾克</div>
-                <div class="tel">15623548796</div>
-                <div class="time">2019.09.01</div>
-            </div>
+            <van-collapse v-model="activeName" accordion @change="getMyShareBelow">
+                <van-collapse-item :border="false" :name="item.id" value="他的邀请" 
+                v-for="(item,index) in userInfo" :key="index">
+                    <div class="invitation-people" slot="title">
+                        <div class="img" :style="{backgroundImage: 'url('+ item.icon +')'}"></div>
+                        <div class="user"> 
+                            <div class="nickname">{{item.name}}</div>
+                            <div class="tel">{{item.tel}}</div>
+                        </div>
+                        <div class="time">{{item.created_at[0]}}</div>
+                    </div>
+                    <div class="invitation-people second" v-for="(item,index) in info" :key="index">
+                        <div class="img" :style="{backgroundImage: 'url('+ item.icon +')'}"></div>
+                        <div class="nickname">{{item.name}}</div>
+                        <div class="time">{{item.created_at[0]}}</div>
+                    </div>
+                </van-collapse-item>
+            </van-collapse>
+        </div>
+        <div class="invite-bottom">
+            <div class="invite" @click="immediatelyInvitation">立即邀请</div>
         </div>
         <div class="overlay" v-if="show" @click="show = false">
             <van-loading v-if="isShow" type="spinner" class="loading" color="#fff" vertical>加载中...</van-loading>
@@ -28,6 +43,8 @@
 export default {
     data() {
         return {
+            activeName: '',
+            integralTotal: 0,
             show: false,
             isShow: true,
             // 获取 分享码，传递的参数
@@ -36,8 +53,16 @@ export default {
                 identity: 'person',
                 userId: ''
             },
-            pic_img: ''
+            pic_img: '',
+            // 我邀请的用户信息
+            userInfo: [],
+            // 我邀请的用户,再次邀请的用户信息
+            info: []
         }
+    },
+    created() {
+        this.getIntegral();
+        this.myShare();
     },
     methods: {
         onClickLeft() {
@@ -127,31 +152,75 @@ export default {
     }
 }
 .success-invitation {
-    padding: 0 16px;
     padding-top: 24px;
     background-color: #fff;
     font-size: 14px;
+    margin-bottom: 74px;
     overflow: hidden;
     .title {
+        padding: 0 16px;
         padding-bottom: 10px;
     }
     .invitation-people {
         display: flex;
-        justify-content: space-between;
-        margin: 10px 0;
-        height: 49px;
-        line-height: 49px;
+        height: 50px;
         font-size: 10px;
         color: #999;
         .img {
-            width: 49px;
-            height: 49px;
-            background-color: #eee;
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            background-size: cover;
+            background-position: center;
+        }
+        .user {
+            margin-left: 10px;
+            height: 50px;
+            .nickname {
+                font-size: 14px;
+                font-weight: 600;
+                color: #2c2c2c;
+            }
+        }
+        .time {
+            margin-left: 40px;
+            line-height: 50px;
+        }
+    }
+    /deep/ .van-cell__value {
+        flex: none;
+        line-height: 50px;
+        font-size: 10px;
+    }
+    /deep/ .van-icon {
+        margin-top: 13px;
+    }
+    /deep/ .van-collapse-item__content {
+        padding: 0;
+    }
+    .second {
+        height: 60px;
+        padding: 5px 0;
+        margin: 0 32px;
+        border-top: 0.5px solid #eee;
+        line-height: 50px;
+        .nickname {
+            margin-left: 40px;
+        }
+        .time {
+            margin-left: 60px;
         }
     }
 }
-.invite {
+.invite-bottom {
     position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 76px;
+    background-color: #eee;
+}
+.invite {
+    position: absolute;
     left: 16px;
     bottom: 16px;
     width: 342px;
