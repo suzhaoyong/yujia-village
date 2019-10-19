@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import axios from 'axios'
 import store from '@/store'
 import { Toast } from 'vant';
@@ -12,9 +13,15 @@ function handleRequest(config) {
   const access = sessionStorage.getItem('access') || ''
   config.headers['Authorization'] = access && `${JSON.parse(access).token_type}${JSON.parse(access).access_token}` || '';
   // config.baseURL = 'https://api.yujiacun.net/api';
-  config.baseURL = 'http://testapi.aomengyujia.com/api';
+  // config.baseURL = 'http://testapi.aomengyujia.com/api';
   // config.baseURL = '/api';
-
+  if (process.env.NODE_ENV === 'development') {
+    // config.baseURL = '/api'; // 
+    // config.baseURL = 'http://api.aomengyujia.com/api';
+    config.baseURL = 'http://testapi.aomengyujia.com/api';
+  } else {
+    config.baseURL = 'https://api.yujiacun.net/api';
+  }
   if (contentType === 'json') {
     config.headers['Content-Type'] = 'application/json';
   }
