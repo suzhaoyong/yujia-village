@@ -258,10 +258,6 @@ export default {
             let that = this;
             // const nameArr = [];
             if(fileInfo.length == 2) {
-                // nameArr.push(fileInfo[0].file.name);
-                // nameArr.push(fileInfo[1].file.name);
-                // this.picNameArr = nameArr;
-                // console.log(nameArr);
                 
                 lrz(fileInfo[0].file).then(rst => {
                     that.ownerAndCoachList.img_work = rst.base64;
@@ -343,7 +339,6 @@ export default {
             });
         },
         submit() {
-            
             if(this.checked) {
                 if(this.slideIndex == 0) {
                     this.ownerDataList.identity_auth = 2;
@@ -354,8 +349,6 @@ export default {
                     this.ownerAndCoachList.identity_auth = 7;
                     console.log(this.ownerAndCoachList);
                 } 
-                
-
             } else {
                 this.$toast({
                     message: '请阅读并勾选瑜伽村平台认证服务协议',
@@ -508,6 +501,7 @@ export default {
     background-color: #fff;
 }
 .submit {
+    width: 100%;
     height: 44px;
     line-height: 44px;
     background-color: #CCE198;
