@@ -2,13 +2,13 @@
     <div>
         <van-nav-bar title="认证中心" left-arrow @click-left="onClickLeft">
         </van-nav-bar>
-        <div class="notice">注：普通用户无须认证，该认证仅面向机构负责人、教练等专业群体</div>
+        <div class="notice">注：普通用户无须认证，该认证仅面向馆主、教练等专业群体</div>
         <div class="swiper-picture">
             <div class="swiper-container">
                 <div class="swiper-wrapper">
                     <div class="swiper-slide">
                         <img src="../../assets/img/hunker1.png" alt="">
-                        <div class="identity-box">我是机构负责人</div>
+                        <div class="identity-box">机构负责人</div>
                     </div>
                     <div class="swiper-slide">
                         <img src="../../assets/img/hunker2.png" alt="">
@@ -75,12 +75,13 @@
             </div>
         </div>
         <div v-show="isshowFileWrap">
-            <van-dialog v-model="isshowFile" title="瑜伽村平台认证服务协议">
-                <div style="height:400px;overflow: scroll;">
-                    <div id="pdf1"></div>
-                </div>
-            </van-dialog>
+          <van-dialog v-model="isshowFile" title="瑜伽村平台认证服务协议">
+            <div style="height:400px;overflow: scroll;">
+                <div id="pdf"></div>
+            </div>
+          </van-dialog>
         </div>
+        
         <!-- <div class="dialog" v-if="isshowFile">
             <div id="pdf"></div>
         </div> -->
@@ -100,7 +101,6 @@
 import Swiper from 'swiper';
 import Pdfh5 from "pdfh5";
 import "pdfh5/css/pdfh5.css";
-
 import areaList from "../../assets/js/area.js";
 export default {
     data() {
@@ -111,12 +111,11 @@ export default {
             fileList2: [],
             fileList3: [],
             checked: true,
-            isDisabled: false,
             // 是否显示 协议 pdf
             isshowFileWrap: false,
             isshowFile: true,
             pdfh5: null,
-            // 认证机构负责人需要提交的 数据列表
+            // 认证馆主需要提交的 数据列表
             ownerDataList: {
                 identity_auth: '',
                 real_name:'',
@@ -161,12 +160,19 @@ export default {
             slideIndex: '',
             // 多选图片时，图片名保存的数组
             picNameArr: [],
+            // 提交按钮的状态
+            isDisabled: ''
         }
     },
     created() {
+        this.loadProtocolFile();
+        if(this.$route.query.status !== '未认证') {
+            this.isDisabled = true;
+        } else {
+            this.isDisabled = false
+        }
     },
     mounted() {
-        this.loadProtocolFile();
         const that = this;
         var swiper = new Swiper('.swiper-container', {
             slidesPerView: 'auto',
@@ -256,13 +262,7 @@ export default {
         afterRead(fileInfo, name) {
             console.log(fileInfo,name);
             let that = this;
-            // const nameArr = [];
             if(fileInfo.length == 2) {
-                // nameArr.push(fileInfo[0].file.name);
-                // nameArr.push(fileInfo[1].file.name);
-                // this.picNameArr = nameArr;
-                // console.log(nameArr);
-                
                 lrz(fileInfo[0].file).then(rst => {
                     that.ownerAndCoachList.img_work = rst.base64;
                 })
@@ -289,7 +289,6 @@ export default {
                         } else {
                             that.ownerAndCoachList.img_license = rst.base64
                         } 
-                        
                     }
                 })
                 .catch(function (err) {
@@ -298,6 +297,7 @@ export default {
             }
             
         },
+        // 删除上传图片
         onDel(fileInfo,detail) {
             // console.log(fileInfo, detail);
             if(this.slideIndex == 0) {
@@ -305,7 +305,6 @@ export default {
             } else if(this.slideIndex == 1) {
                 this.coachDataList.img_license = ''
             } else {
-                
                 if(detail.index == 0 && this.ownerAndCoachList.img_work !== '') {
                     this.ownerAndCoachList.img_work = '';
                 } else {
@@ -321,41 +320,55 @@ export default {
             });
         },
         showFile() {
-            this.isshowFileWrap = true;
+            this.isshowFileWrap = true
             this.isshowFile = true;
         },
         // 展示 协议文件
         loadProtocolFile() {
-            this.pdfh5 = new Pdfh5('#pdf1',{
-                pdfurl:  "./static/doc/瑜伽村平台认证服务协议.pdf"
-            })
-            this.pdfh5.on("complete", function(status, msg, time) {
-                console.log(
-                "状态：" +
-                    status +
-                    "，信息：" +
-                    msg +
-                    "，耗时：" +
-                    time +
-                    "毫秒，总页数：" +
-                    this.totalNum
-                );
-            });
+            // this.pdfh5 = new Pdfh5('#pdf',{
+            //     pdfurl:  "../../../static/doc/瑜伽村平台认证服务协议.pdf"
+            // })
+            // this.pdfh5.on("complete", function(status, msg, time) {
+            //     console.log(
+            //     "状态：" +
+            //         status +
+            //         "，信息：" +
+            //         msg +
+            //         "，耗时：" +
+            //         time +
+            //         "毫秒，总页数：" +
+            //         this.totalNum
+            //     );
+            // });
         },
-        submit() {
-            
+        // 提交认证
+        submit(slideIndex) {
             if(this.checked) {
                 if(this.slideIndex == 0) {
                     this.ownerDataList.identity_auth = 2;
-                     console.log(this.ownerDataList);
+                    let status = this.formVerify(this.ownerDataList, this.fileList1);
+                    if(status === -1) {
+                        return
+                    } else {
+                        this.identityVerify(this.ownerDataList);
+                    }                   
                 } else if(this.slideIndex == 1) {
                     this.coachDataList.identity_auth = 4;
+                    let status = this.formVerify(this.coachDataList, this.fileList2);
+                    if(status === -1) {
+                        return
+                    } else {
+                        this.identityVerify(this.coachDataList);
+                    }  
                 } else if(this.slideIndex == 2) {
                     this.ownerAndCoachList.identity_auth = 7;
-                    console.log(this.ownerAndCoachList);
+                    let status = this.formVerify(this.ownerAndCoachList, this.fileList3);
+                    if(status === -1) {
+                        return
+                    } else {
+                        this.identityVerify(this.ownerAndCoachList);
+                    }  
                 } 
-                
-
             } else {
                 this.$toast({
                     message: '请阅读并勾选瑜伽村平台认证服务协议',
@@ -508,12 +521,15 @@ export default {
     background-color: #fff;
 }
 .submit {
+    width: 100%;
     height: 44px;
     line-height: 44px;
     background-color: #CCE198;
+    border: none;
     text-align: center;
     font-size: 12px;
 }
+
 .agreement {
     display: flex;
     justify-content: center;
