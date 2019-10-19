@@ -144,7 +144,7 @@
           <div id="sy"></div>
         </div>
         <span slot="footer">
-          <van-button type="primary" @click="open.sy = false">确 定</van-button>
+          <van-button class="sure_btn" type="primary" @click="open.sy = false">确 定</van-button>
         </span>
       </van-dialog>
     </div>
@@ -155,7 +155,7 @@
           <!-- <iframe src="../../static/doc/瑜伽村隐私政策.pdf" width="100%" height="100%" frameborder="1"></iframe> -->
         </div>
         <span slot="footer">
-          <van-button type="primary" @click="open.ys = false">确 定</van-button>
+          <van-button class="sure_btn" type="primary" @click="open.ys = false">确 定</van-button>
         </span>
       </van-dialog>
     </div>
@@ -456,7 +456,7 @@ export default {
   }
 };
 </script>
-<style >
+<style scoped>
 /* @import "pdfh5/css/pdfh5.css"; */
 .pageNum {
   display: none;
@@ -515,12 +515,15 @@ export default {
   width: 260px;
   /* font-size: 10px; */
 }
+.van-button.van-button--default.van-button--large.van-dialog__confirm{
+  width: 100%;
+}
 .sms {
   position: absolute;
   right: 0;
   top: 50%;
   transform: translateY(-50%);
-  width: 70px;
+  width: 90px;
   height: 100%;
   padding: 0;
   background: #fff;
