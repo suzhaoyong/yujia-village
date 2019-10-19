@@ -33,7 +33,7 @@ module.exports = {
     }
   },
   // 打包输出目录
-  outputDir: '../../wap',
-  publicPath: '/',
+  outputDir: '../../dist/wap',
+  publicPath: './',
   assetsDir: './',
 }
