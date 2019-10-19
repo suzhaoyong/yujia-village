@@ -13,10 +13,27 @@
                 </template>
                 <div class="joinclub-cont">
                     <div class="joinclub-cont-div4">
-                        <h2><img src="../assets/yujia.png"/>机构展示</h2>
-                         <p class="nav-text">Sometimes beauty is so simple</p>
-                         <div class="border-left"></div>
-                         <div class="border-right"></div>
+                        <p class="nav-text">100多家培训机构进驻</p>
+                        <p class="nav-text">1000多个知名导师展示</p>
+                        <p class="nav-text">10000多条瑜伽培训、大会信息</p>
+                        <p class="nav-text">100000多名注册瑜伽老师</p>
+                        <p class="nav-text">1000000元/年平台推广费用</p>
+                    </div>
+                    <div class="joinclub-cont-div5">
+                        <p class="nav-text2">中国瑜伽培训信息最丰富、信息搜索最方便（精准）的瑜伽行业网站！</p>
+                    </div>
+                    <div class="joinclub-cont-div6">
+                        <div class="cont-div6-left">
+                            <img src="../assets/huo.png"/>
+                            <div class="nav-text3">热门城市</div>
+                        </div>
+                        <div class="cont-div6-right">
+                            <v-distpicker :province="province" :city="city" :area="area" @province="onChangeProvince" @city="onChangeCity" @area="onchangearea"></v-distpicker>
+                            <div class="search" @click="Provincescity">搜索</div>
+                        </div>
+                    </div>
+                    <div class="joinclub-cont-div7">
+                        <div class="text7" v-for="(item,index) in itemsList" :key="index" :class="{blue:i===index}" @click="changSemester(index,item)">{{item}}</div>
                     </div>
                     <div class="joinclub-cont-div3">
                        <div class="clubhouse2" v-if="this.joinlist.length > 0">
@@ -59,17 +76,23 @@
 import Banner from "../components/banner";
 import Bus from "@/utils/Bus";
 import { mapGetters } from "vuex"
+import VDistpicker from 'v-distpicker'
 export default {
     inject: ["reload"],
     components:{
-        Banner
+        Banner,
+        VDistpicker
     },
   data() {
     return {
         ishow:false,
         joinlist:[],
         banner:'',
+        city:'',
+        area:'',
+        province:'',
         labelPosition:'left',
+        itemsList:["北京","上海","深圳","成都","武汉","厦门","天津","广州","北京","重庆","长沙","南京","杭州"],
         ruleForm: {
           name: '',
           tel: '',
@@ -79,7 +102,8 @@ export default {
         },
         currentPage:1,
         pagesize: 0,
-        total:0
+        total:0,
+        i:"",
     };
   },
   computed: {
@@ -99,6 +123,67 @@ export default {
           }
         });
       },
+     onChangeProvince(data) {
+      this.province = data.value;
+    },
+     onChangeCity(data) {
+      this.city = data.value;
+    },
+    onchangearea(data){
+     this.area = data.value;
+    },
+     //热门城市
+     changSemester(index,item){
+         this.i = index;
+         let params2 = {
+            hot:item,
+        }
+        this.$request.post(`/clubs/search/hot/club?page=${this.currentPage}`,params2).then(res => {
+            this.joinlist = res.data;
+            this.total = res.total;
+            this.currentPage = res.current_page;
+            this.pagesize = res.per_page;
+        })
+        .catch(error => {
+            let { response: { data: { errorCode, msg } } } = error;
+            if (errorCode != 0) {
+            this.$message({
+                message: msg,
+                type: "error"
+            });
+            return;
+            }
+        });
+     },
+     //省市区查询
+     Provincescity(){
+        let params = {
+            province:this.province,
+            city:this.city,
+            area:this.area
+        }
+        this.$request.post(`/clubs/search/club?page=${this.currentPage}`,params).then(res => {
+            this.joinlist = res.data;
+            this.total = res.total;
+            this.currentPage = res.current_page;
+            this.pagesize = res.per_page;
+            this.$message({
+                message: '查询成功',
+                type: "success"
+            });
+        })
+        .catch(error => {
+            let { response: { data: { errorCode, msg } } } = error;
+            if (errorCode != 0) {
+            this.$message({
+                message: msg,
+                type: "error"
+            });
+            return;
+            }
+        });
+      },
+      //会所列表
       joindata(){
         let _this = this;
         this.$request(`/clubs?page=${_this.currentPage}`).then(res => {
@@ -246,9 +331,14 @@ export default {
   }
 }
 .el-select-dropdown__item.selected {
-        color: #CCE198;
-        font-weight: 700;
-    }
+    color: #CCE198;
+    font-weight: 700;
+}
+.distpicker-address-wrapper select{
+    width: 145px !important;
+    padding: 0px 4px !important;
+    font-size: 14px !important;
+}
     .joinclub-main{
     width: 100%;
     height: 100%;
@@ -372,7 +462,7 @@ export default {
                     width: 278px;
                     height: auto;
                     float: left;
-                    margin: 10px;
+                    margin: 11px;
                     margin-bottom: 20px;
                     position: relative;
                     cursor:pointer;
@@ -468,47 +558,95 @@ export default {
             }
         }
         .joinclub-cont-div4{
-            width: 1200px;
+            width: 1180px;
             height: 150px;
             text-align: center;
             margin: 0 auto;
-            position: relative;
             margin-top: 34px;
-            .border-left{
-                width: 20%;
-                height: 1px;
-                background-color: #dcdcdc;
-                position: absolute;
-                left:19%;
-                top: 41%;
-            }
-            .border-right{
-                width: 20%;
-                height: 1px;
-                background-color: #dcdcdc;
-                position: absolute;
-                right: 19%;
-                top: 41%;
-            }
+            margin-bottom: 34px;
             .nav-text{
-                color: #999999;
+                color: #2c2c2c;
                 font-size: 14px;
                 margin-top: 8px;
+                line-height: 12px;
             }
-            h2{
-                color: #2c2c2c;
-                font-size: 1.4rem;
-                margin-top: 40px;
+        }
+        .joinclub-cont-div5{
+            width: 1180px;
+            height: 50px;
+            line-height: 50px;
+            background: #eeeeee;
+            text-align: center;
+            margin: 0 auto;
+            margin-bottom: 6%;
+            .nav-text2{
                 font-family:Microsoft YaHei;
                 font-weight:bold;
-                padding-top: 24px;
+                color:rgba(44,44,44,1);
+                font-size: 16px;
+            }
+        }
+        .joinclub-cont-div6{
+            width: 1180px;
+            border-bottom: 1px solid #E5E5E5;
+            text-align: center;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            .cont-div6-left{
+                display: flex;
+                margin-top: 14px;
                 img{
-                    width: 28px;
-                    height: 28px;
-                    position: absolute;
-                    left: 42%;
-                    top: 18%;
+                    width: 15px;
+                    height: 20px;
                 }
+                .nav-text3{
+                    font-family:Microsoft YaHei;
+                    font-weight:bold;
+                    color:rgba(44,44,44,1);
+                    font-size: 14px;
+                    line-height: 23px;
+                    margin-left: 7px;
+                }
+            }
+            .cont-div6-right{
+                display: flex;
+                margin-top: 7px;
+                .search{
+                    width: 100px;
+                    height: 40px;
+                    background: #8ABB62;
+                    line-height: 40px;
+                    text-align: center;
+                    color: #fff;
+                    font-family:Microsoft YaHei;
+                    font-weight:bold;
+                    font-size: 14px;
+                }
+            }
+        }
+        .joinclub-cont-div7{
+            width: 1180px;
+            height: 50px;
+            border-bottom: 1px solid #e5e5e5;
+            line-height: 50px;
+            margin:0 auto;
+            display: flex;
+            padding-left: 50px;
+            margin-bottom: 50px;
+            cursor: pointer;
+            .text7{
+                color: #2c2c2c;
+                font-family:Microsoft YaHei;
+                font-weight:400;
+                font-size: 14px;
+                padding-left: 25px;
+            }
+            .blue{
+                color: #8ABB62;
+                font-family:Microsoft YaHei;
+                font-weight:bold;
+                font-size: 14px;
             }
         }
       }
