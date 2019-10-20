@@ -1,7 +1,6 @@
 <template>
 <div class="mymation">
-  <!-- <Header></Header> -->
-  <van-nav-bar title="瑜伽资讯" left-arrow @click-left="back" fixed>
+  <van-nav-bar title="瑜伽资讯" left-arrow @click-left="onClickLeft">
   </van-nav-bar>
   <div class="information">
     <div class="information-banner">
@@ -43,7 +42,6 @@
 </template>
 <script>
 import Vue from 'vue';
-import Header from '../../components/header'
 import Footer from '../../components/footer'
 import { Button, Toast } from 'vant';
 import { setInterval } from 'timers';
@@ -51,7 +49,6 @@ import { setInterval } from 'timers';
 Vue.use(Button).use(Toast);
 export default {
   components: {
-    Header,
     Footer
   },
   data() {
@@ -93,7 +90,7 @@ export default {
     
   },
   methods: {
-    back() {
+    onClickLeft() {
       this.$router.go(-1);
     },
     viewdetail (id) {
@@ -214,9 +211,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-html body {
-  width: 100%; 
-  height: 100%;
+.van-nav-bar {
+  position: fixed;
+  top: 0;
+  // height: 44px;
 }
 .active {
   color: #7BBB62;
@@ -224,16 +222,18 @@ html body {
 .mymation {
   height: 100%;
   display: flex;
+  background: white;
 }
 .information {
   flex: 1;
   width: 100%;
-  margin-top: 88px;
+  margin-top: 45px;
   overflow: auto;
   margin-bottom: 50px;
   &-banner {
     width: 100%;
     height: 170px;
+    border: none;
     img {
       width: 100%;
       height: 100%;
