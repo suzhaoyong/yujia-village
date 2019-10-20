@@ -23,7 +23,9 @@
                     <img src="../../assets/teacherclub/seek.png" class="seek" @click="seekclick"/>
                 </div>
             </div>
-            <div class="club_item" v-if="clubBox.length > 0">
+           <div class="club_item_count" v-if="clubBox.length > 0">
+            <van-list v-model="loading" :finished="finished" :offset="30" finished-text="没有更多了" @load="onLoad">
+               <div class="club_item">
                 <div class="club_item_box" v-for="(item,index) in clubBox" :key="index" @click="clubBoxItem(item)">
                     <div class="club_item_img">
                         <img :src="item.first_img"/>
@@ -33,9 +35,8 @@
                         <div class="text van-ellipsis">{{item.custom_address}}</div>
                     </div>
                 </div>
-                <div class="tips_text" @click="Loadmore">
-                    {{current_page >= last_page ? clubBox.length > 0? "我也是有底线的": "没有这个哦！" : "点我加载更多"}}
-                </div>
+              </div>
+            </van-list>
             </div>
             <div class="Default-page4" v-else>
                 <span class="page-span4">我寻寻觅觅却找不到您的踪迹~</span>
@@ -113,6 +114,7 @@
                 <div class="list_exhibition_staff">Guild staff profile</div>
             </div>
             <div class="exhibition_items" v-if="exhibitionBox.length > 0">
+                 <van-list v-model="loading2" :offset="30" :finished="finished2" finished-text="没有更多了" @load="onLoad2">
                 <div class="exhibition_content">
                     <div class="exhibition_box" v-for="(item,index) in exhibitionBox" :key="index">
                         <div class="exhibition_img" @click="exhibition(item)">
@@ -132,9 +134,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="tips_text" @click="Loadmore2">
-                    {{current_page2 >= last_page2 ? exhibitionBox.length > 0? "我也是有底线的": "没有这个哦！" : "点我加载更多"}}
-                </div>
+                </van-list> 
             </div>
              <div class="Default-page5" v-else>
                 <span class="page-span5">我寻寻觅觅却找不到您的踪迹~</span>
@@ -160,8 +160,9 @@ import areaList from "../../assets/js/area.js";
 import Vue from 'vue';
 import Bus from "@/utils/Bus";
 import { mapGetters } from "vuex"
-import { Notify, Dialog, Toast, Tab, Tabs} from "vant";
+import { Notify, Dialog, Toast, Tab, Tabs, List} from "vant";
 import { DropdownMenu, DropdownItem } from 'vant';
+Vue.use(List);
 Vue.use(DropdownMenu).use(DropdownItem);
 Vue.use(Tab).use(Tabs);
 Vue.use(Notify)
@@ -177,6 +178,10 @@ export default {
         current:0,
         curritem:0,
         banner:'',
+        finished: false,
+        loading: false,
+        finished2: false,
+        loading2: false,
         visible:false,
         Box2:true,
         banner2:'',
@@ -201,7 +206,7 @@ export default {
         record:"",
         Giveupimg:true,
         Giveupimg1:true,
-        liList:["培训机构","瑜伽名师"],
+        // liList:["培训机构","瑜伽名师"],
         items:["全部"],
         clubBox:[],
         change:[],
@@ -218,8 +223,10 @@ export default {
         area:"",
         current_page:1,
         last_page: 2,
+        total:'',
         current_page2:1,
         last_page2: 2,
+        total2:'',
         id:0,
         id2:0
     };
@@ -227,18 +234,13 @@ export default {
    computed: {
     ...mapGetters(["info"]),
   },
-  mounted () {
-    this.PullUpReload();
-    this.PullUpReload2();
-  },
   created(){
       this.joindata();
       this.exhibitionList();
       this.choiceness();
   },
   mounted() {
-    const { current } = this.$route.query
-    console.log(current)
+    const { current } = this.$route.query;
     if (typeof current != 'undefined') {
       this.current = parseInt(current)
     }
@@ -247,17 +249,11 @@ export default {
       //机构列表
       joindata(){
         this.$request.get(`/clubs?page=${this.current_page}`).then(res => {
-            // this.clubBox = res.data.data;
-            res.data.data.map((item) => {
-            this.clubBox.push(item);
-            })
+            this.clubBox = res.data.data;
             this.banner = res.banner;
             this.current_page = res.data.current_page;
             this.last_page = res.data.last_page;
-            if(this.current_page > this.last_page) {
-            this.current_page = res.data.last_page;
-            Toast('没有更多了哦');
-            }
+            this.total = res.data.total;
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -269,6 +265,26 @@ export default {
             return;
             }
         });
+      },
+      //机构
+      onLoadlist(){
+          this.$request.get(`/clubs?page=${this.current_page}`).then(res => {
+             const info = res.data.data;
+            info.forEach(item => {
+                this.clubBox.push(item);
+            });
+            this.total = res.data.total;
+        })
+      },
+      //名师
+      onLoadlist2(){
+          this.$request.get(`/teachers?page=${this.current_page2}`).then(res => {
+             const info2 = res.teachers.data;
+            info2.forEach(item => {
+                this.exhibitionBox.push(item);
+            });
+            this.total2 = res.teachers.total;
+        })
       },
       //热门城市
       dropdownchange(){
@@ -279,10 +295,7 @@ export default {
             this.clubBox = res.data;
             this.current_page = res.current_page;
             this.last_page = res.last_page;
-            if(this.current_page > this.last_page) {
-            this.current_page = res.last_page;
-            Toast('没有更多了哦');
-            }
+            this.total = res.total;
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -295,76 +308,45 @@ export default {
             }
         });
       },
-       // 上拉加载
-    PullUpReload () {
-      let isScroll = false;  // 函数截流
-      document.querySelector('.list_teacher').onscroll = function() {
-      if (isScroll) {
+      //机构
+      onLoad() {
         setTimeout(() => {
-          isScroll = false;
-        },100)
-      } else {
-        let innerHeight = document.querySelector('.list_teacher').clientHeight; // 容器高度
-        let outerHeight = document.querySelector('.club_item').clientHeight; // 容器高+滚动高
-        let scrollTop = document.querySelector('.list_teacher').scrollTop;  // 滚动高
-        if (innerHeight + scrollTop >= outerHeight + 219) {
-          this.current_page > this.last_page? '': this.current_page++;
-          this.joindata();
-        }
-        isScroll = true;
-      }
-      }
-    },
-    PullUpReload2 () {
-      let isScroll = false;  // 函数截流
-      document.querySelector('.list_clubhouse').onscroll = function() {
-      if (isScroll) {
+            this.current_page++;
+            this.onLoadlist(this.current_page);
+            this.loading = false;
+            // 数据全部加载完成
+            if (this.clubBox.length >= this.total) {
+                this.finished = true;
+            }
+        }, 500);
+    },   
+    //名师
+    onLoad2() {
         setTimeout(() => {
-          isScroll = false;
-        },100)
-      } else {
-        let innerHeight = document.querySelector('.list_clubhouse').clientHeight; // 容器高度
-        let outerHeight = document.querySelector('.exhibition_items').clientHeight; // 容器高+滚动高
-        let scrollTop = document.querySelector('.list_clubhouse').scrollTop;  // 滚动高
-        if (innerHeight + scrollTop >= outerHeight + 219) {
-          this.current_page2 > this.last_page2? '': this.current_page2++;
-          this.exhibitionList();
-        }
-        isScroll = true;
-      }
-      }
-    },
-      Loadmore(){
-        this.current_page > this.last_page? '': this.current_page++;
-        this.joindata();
-      },
-      Loadmore2(){
-        this.current_page2 > this.last_page2? '': this.current_page2++;
-        this.exhibitionList();
-      },
+            this.current_page2++;
+            this.onLoadlist2(this.current_page2);
+            this.loading2 = false;
+            // 数据全部加载完成
+            if (this.exhibitionBox.length >= this.total2) {
+                this.finished2 = true;
+            }
+        }, 500);
+    },   
       //名师列表
       exhibitionList(){
         this.$request.get(`/teachers?page=${this.current_page2}`).then(res => {
-            // this.exhibitionBox = res.teachers.data;
-            res.teachers.data.map((item) => {
-            this.exhibitionBox.push(item);
-            })
+            this.exhibitionBox = res.teachers.data;
             this.houseType = res.course_types;
             this.actions = res.year;
             this.banner2 = res.banner;
             this.current_page2 = res.teachers.current_page;
             this.last_page2 = res.teachers.last_page;
-            if(this.current_page2 > this.last_page2) {
-            this.current_page2 = res.teachers.last_page;
-            Toast('没有更多了哦');
-            }
+            this.total2 = res.teachers.total;
             for(var i=0;i<this.exhibitionBox.length;i++){
                 if(this.exhibitionBox[i].id==this.id){
                     this.exhibitionBox[i]["Giveupimg"]=false;
-                    // this.$set(this.exhibitionBox[i], 'Giveupimg', false);
                 }else{
                     this.exhibitionBox[i]["Giveupimg"]=true;
-                    // this.$set(this.exhibitionBox[i], 'Giveupimg', true);
                 }              
             }
         })
@@ -390,6 +372,9 @@ export default {
       choiceness(){
         this.$request.get(`/teachers/elites`).then(res => {
             this.exhibitionBox2 = res;
+            this.$nextTick(function() {
+                this.swiperInit();
+            })
             for(var i=0;i<this.exhibitionBox2.length;i++){
                 if(this.exhibitionBox2[i].id==this.id2){
                     this.exhibitionBox2[i]["Giveupimg1"]=false;
@@ -397,9 +382,6 @@ export default {
                     this.exhibitionBox2[i]["Giveupimg1"]=true;
                 }              
             }
-            this.$nextTick(function() {
-                this.swiperInit();
-            })
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -422,7 +404,6 @@ export default {
             this.msg = data.msg;
             if(this.msg == "OK"){
             Notify({ message: "点赞成功", type: "success" });
-            // Vue.set(this.exhibitionList());
             this.exhibitionList();
             }
         })
@@ -446,7 +427,6 @@ export default {
             this.msg = data.msg;
             if(this.msg == "OK"){
             Notify({ message: "点赞成功", type: "success" });
-            // Vue.set(this.choiceness());
             this.choiceness();
             }
         })
@@ -806,13 +786,17 @@ input:-ms-input-placeholder{
                 }
             }
         }
+        .club_item_count{
+        width: 100%;
+        height: 100%;
+        background: #eee !important;
+        display: inline-block;
         .club_item{
             width: 93%;
             // height: 100%;
             margin: 0 auto;
             display: flow-root;
             // margin-bottom: 49px;
-            background: #eee !important;
             .club_item_box{
                 width: 48%;
                 height: 100%;
@@ -905,6 +889,7 @@ input:-ms-input-placeholder{
                 margin-top: 70%;
                 margin-bottom: 30px;
             }
+        }
         }
         .Default-page4{
             width: 100%;
