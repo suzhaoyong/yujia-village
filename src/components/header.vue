@@ -41,11 +41,11 @@
               <el-menu-item index="cultivate">培训信息</el-menu-item>
               <el-menu-item index="yogoknowledge">瑜伽知识</el-menu-item>
               <el-menu-item index="yogoinformation">瑜伽资讯</el-menu-item>
-              <el-menu-item index="market">商城</el-menu-item>
+              <!-- <el-menu-item index="market">商城</el-menu-item> -->
               <el-menu-item index="aboutus">关于我们</el-menu-item>
               <el-submenu index="personal">
                 <template slot="title">
-                  <div class="submenu">个人中心</div>
+                  <div class="submenu"><router-link to="/personal/index" class="routlink">个人中心</router-link></div>
                 </template>
                 <!-- <el-menu-item index="personal">收藏的课程</el-menu-item> -->
                 <div v-show="!info.user.name">
@@ -54,7 +54,7 @@
                 <div v-show="info.user.name">
                   <el-menu-item index="personal">现金券与优惠券</el-menu-item>
                   <!-- <el-menu-item index="identity">个人信息</el-menu-item> -->
-                  <el-menu-item index="recode">订单中心</el-menu-item>
+                  <!-- <el-menu-item index="recode">订单中心</el-menu-item> -->
                   <el-menu-item
                     v-show="info.user.identity_auth === '认证机构负责人&教练中' || info.user.identity_auth === '认证机构负责人中'"
                     index="hell"
@@ -296,6 +296,10 @@ export default {
   height: 64px;
   margin-left: 20%;
 }
+.routlink{
+  text-decoration: none;
+  color: #2c2c2c;
+}
 .el-menu.el-menu--horizontal,
 .el-menu--horizontal.el-submenu .el-submenu__title {
   border-bottom: solid 1px #e8f5db;
@@ -310,6 +314,8 @@ export default {
   font-weight: bold;
   height: 65px;
   background: #fff;
+  border-right: 1px solid #eee;
+  border-left: 1px solid #eee;
 }
 .el-menu--horizontal > .el-submenu.is-active .el-submenu__title {
   border: none;

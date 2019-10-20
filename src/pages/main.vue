@@ -153,7 +153,7 @@
                     </div>
                     <div class="nav-contunt-div7">
                         <div class="explain4">
-                            <img class="nav-div7-img" v-for="(item,index) in clubInfo" :key="index" :src="item.first_img" @click="ImgItem(item)"/>
+                            <img class="nav-div7-img" v-for="(item,index) in clubInfo" :key="index" :src="item.logo" @click="ImgItem(item)"/>
                         </div>
                     </div>
                     </el-col>

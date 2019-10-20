@@ -112,7 +112,7 @@
                   <span class="span">已选：</span>
                   <el-tag
                     color="#EFF5DE"
-                    effect="Dark"
+                    
                     v-for="tag in selectTags"
                     :key="tag.name"
                     closable
@@ -136,15 +136,14 @@
               <div class="fruit-list">
                 <div
                   class="fruit-list-li"
-                  style="cursor: pointer;"
-                  v-for="(item,index) in fruit.data"
+                  v-for="(item,index) in fruit"
                   :key="index"
                 >
-                  <div @click="selectItem(item)">
-                    <div class="fruit-list-li-img" :style="`backgroundImage: url(${item.teacher_img})`" >
+                  <div>
+                    <div class="fruit-list-li-img" :style="`backgroundImage: url(${item.teacher_img})`"  @click="selectItem(item)" >
                       <!-- <img :src="item.teacher_img" /> -->
                     </div>
-                    <div class="fruit-list-li-text">
+                    <div class="fruit-list-li-text"  @click="selectItem(item)">
                       <h4>{{item.theme}}</h4>
                     </div>
                     <div class="fruit-list-li-text2">
@@ -163,17 +162,17 @@
                     <span class="study" @click="study(item.id)">我想学</span>
                   </div>
                 </div>
-                <not-found v-if="fruit.data.length === 0" type="not-fond" msg="暂无相关信息"></not-found>
+                <not-found v-if="fruit.length === 0" type="not-fond" msg="暂无相关信息"></not-found>
               </div>
               <div class="pages">
                 <el-pagination
                   background
                   :hide-on-single-page="true"
                   layout="total,prev, pager, next, jumper"
-                  :page-size="fruit.per_page"
+                  :page-size="per_page"
                   @current-change="changePage"
-                  :current-page="fruit.current_page"
-                  :total="fruit.total"
+                  :current-page="current_page"
+                  :total="total"
                 ></el-pagination>
               </div>
             </div>
@@ -181,14 +180,13 @@
             <div class="cultivate-count-div3">
               <div
                 class="fruit-list-li"
-                style="cursor: pointer;"
                 v-for="(item,index) in fruitclasslist"
                 :key="index">
-                <div @click="selectItem(item)">
-                  <div class="fruit-list-li-img" :style="`backgroundImage: url(${item.teacher_img})`">
+                <div>
+                  <div class="fruit-list-li-img" :style="`backgroundImage: url(${item.teacher_img})`" @click="selectItem(item)">
                   <!-- <img :src="item.teacher_img" /> -->
                   </div>
-                  <div class="fruit-list-li-text">
+                  <div class="fruit-list-li-text" @click="selectItem(item)">
                     <h4>{{item.theme}}</h4>
                   </div>
                   <div class="fruit-list-li-text2">
@@ -212,18 +210,16 @@
             <session-title name="最新发布" brief="Sometimes beauty is so simple"></session-title>
             <div
               :class="['cultivate-count-div5',{left: index%2 == 1}]"
-              style="cursor: pointer;"
               v-for="(item, index) in newList"
-              @click="selectItem(item)"
               :key="index"
             >
-              <div class="news_bg_img" :style="`backgroundImage: url(${item.teacher_img})`">
+              <div class="news_bg_img" :style="`backgroundImage: url(${item.teacher_img})`" @click="selectItem(item)">
                 <!-- <img :src="item.teacher_img" /> -->
               </div>
               <div class="bian">
                 <div class="div5-list">
                   <div class="li-text">
-                    <h4>{{item.theme}}</h4>
+                    <h4 @click="selectItem(item)">{{item.theme}}</h4>
                     <div class="list-eye">￥{{item.price}}</div>
                   </div>
                   <el-rate :value="item.diff" :colors="['#58B708','#58B708','#58B708']" disabled></el-rate>
@@ -369,8 +365,11 @@ export default {
       ],
       selectTags: [],
       fruit: {
-        data: []
+        // data: []
       },
+      per_page:0,
+      current_page:1,
+      total:0,
       fruitclasslist: [],
       newList: [],
       // 添加 fw 类 的判定状态
@@ -397,6 +396,9 @@ export default {
       };
     },
   },
+  created(){
+    this.maintype();
+  },
   mounted() {
     this.getTrainsList();
     getOrderByTrains().then(data => {
@@ -421,7 +423,14 @@ export default {
     wantStudy(id) {
       getFollowTrain(id)
         .then(data => {
-          this.$message({type:'success', message: '提交成功'})
+          this.$message({type:'success', message: '操作成功'})
+        })
+    },
+    //类型和banner
+    maintype(){
+      this.$request.get(`/trains/type`).then(res => {
+            this.classfiy = res.course_types;
+            this.banner = res.banner;
         })
     },
     getFiltersParams(params = {}) {
@@ -446,7 +455,10 @@ export default {
     },
     searchResult() {
       postTrains(this.getFiltersParams()).then(data => {
-        this.fruit = data;
+        this.fruit = data.data;
+        this.per_page = data.per_page;
+        this.current_page = data.current_page;
+        this.total = data.total;
         // this.getTrainsList();
       });
       this.resultFw = true;
@@ -454,12 +466,15 @@ export default {
       this.hostFw = false;
       this.priceFW = false;
     },
-    postGetTrainsList(page = this.fruit.current_page, params) {
+    postGetTrainsList(page = this.current_page, params) {
       postTrainsList(page, params).then(data => {
-        this.fruit = data;
+        this.fruit = data.data;
+        this.per_page = data.per_page;
+        this.current_page = data.current_page;
+        this.total = data.total;
       });
     },
-    getTrainsList(page = this.fruit.current_page) {
+    getTrainsList(page = this.current_page) {
       getTrains(page).then(data => {
         const mapClassfiy = array =>
           array.map(item => {
@@ -468,17 +483,16 @@ export default {
             item.isArray = true;
             return item;
           });
-        // console.log(data);
-        const { all, banner ,course_types} = data;
-        this.fruit = all;
-        // console.log(this.fruit);
+        this.fruit = data.data;
+        this.per_page = data.per_page;
+        this.current_page = data.current_page;
+        this.total = data.total;
         if (page > 1) return;
-        this.classfiy = mapClassfiy(course_types);
+        // this.classfiy = mapClassfiy(course_types);
         // if (course_types.length > 8) {
         //   this.classfiy = mapClassfiy(course_types.slice(0, 8));
         //   this.moreClassfiy = mapClassfiy(course_types.slice(8));
         // }
-        this.banner = banner;
       });
     },
     getRankParams(keyWord, params = {}) {
@@ -496,18 +510,24 @@ export default {
       return params;
     },
     changePage(val){
-      this.fruit.current_page = val;
+      this.current_page = val;
       this.getTrainsList();
     },
     // 排序请求
     getRank(params) {
       postTrains(params).then(data => {
-        this.fruit = data       
+        this.fruit = data.data;
+        this.per_page = data.per_page;
+        this.current_page = data.current_page;
+        this.total = data.total;       
       })
     },
-    postGetRank(page=this.fruit.current_page, params) {
+    postGetRank(page=this.current_page, params) {
       postTrainsRank(page, params).then(data => {
-        this.fruit = data
+        this.fruit = data.data;
+        this.per_page = data.per_page;
+        this.current_page = data.current_page;
+        this.total = data.total; 
       })
     },
     // 默认排序
@@ -539,7 +559,6 @@ export default {
       this.priceFlag = !this.priceFlag
     },
     study(id) {
-      // console.log(id);
       if (!this.info.user.name) {
         Bus.$emit("login", true);
         return;
@@ -1030,7 +1049,7 @@ img {
         margin: 0 auto;
         .fruit-list-li {
           width: 19.2rem;
-          height: 30rem;
+          height: 28.5rem;
           // height: 100%;
           // padding-bottom: 1rem;
           background-color: #ffffff;
@@ -1050,6 +1069,7 @@ img {
             background-repeat: no-repeat;
             background-position: top center;
             background: #eee;
+            cursor: pointer;
             img {
               width: 100%;
               height: 100%;
@@ -1061,13 +1081,14 @@ img {
             // align-items: center;
             width: 90%;
             margin: 0 auto;
-            margin-top: 1rem;
-            height: 3.1rem;
+            margin-top: 1.5rem;
+            height: 1.7rem;
             overflow: hidden !important;
             -webkit-line-clamp: 2 !important;
             text-overflow: ellipsis !important;
             display: -webkit-box !important;
             -webkit-box-orient: vertical;
+            cursor: pointer;
             h4 {
               font-size: 1.3rem;
               color: #2c2c2c;
@@ -1079,7 +1100,7 @@ img {
             // align-items: center;
             width: 90%;
             margin: 0 auto;
-            margin-top: 1rem;
+            margin-top: 0.5rem;
             h4 {
               font-size: 1.3rem;
               color: #2c2c2c;
@@ -1137,7 +1158,15 @@ img {
             }
             .study {
               float: right;
-              color: #567a2f;
+              color: #fff;
+              width: 70px;
+              background: #8FCD71;
+              height: 27px;
+              border-radius: 20px;
+              text-align: center;
+              line-height: 27px;
+              font-weight: bold;
+              cursor: pointer;
             }
           }
         }
@@ -1200,7 +1229,7 @@ img {
       margin: 0 auto;
       .fruit-list-li {
         width: 19.2rem;
-        height: 30rem;
+        height: 28.5rem;
         // height: 100%;
         // padding-bottom: 1rem;
         background-color: #ffffff;
@@ -1220,6 +1249,7 @@ img {
           background-repeat: no-repeat;
           background-position: top center;
           background: #eee;
+          cursor: pointer;
           img {
             width: 100%;
             height: 100%;
@@ -1231,13 +1261,14 @@ img {
           // align-items: center;
           width: 90%;
           margin: 0 auto;
-          margin-top: 1rem;
-          height: 3.1rem;
+          margin-top: 1.5rem;
+          height: 1.7rem;
           overflow: hidden !important;
           -webkit-line-clamp: 2 !important;
           text-overflow: ellipsis !important;
           display: -webkit-box !important;
           -webkit-box-orient: vertical;
+          cursor: pointer;
           h4 {
             font-size: 1.3rem;
             color: #2c2c2c;
@@ -1260,7 +1291,7 @@ img {
           // align-items: center;
           width: 90%;
           margin: 0 auto;
-          margin-top: 1rem;
+          margin-top: 0.5rem;
           h4 {
             font-size: 1.3rem;
             color: #2c2c2c;
@@ -1329,7 +1360,15 @@ img {
             }
             .study {
               float: right;
-              color: #567a2f;
+              color: #fff;
+              width: 70px;
+              background: #8FCD71;
+              height: 27px;
+              border-radius: 20px;
+              text-align: center;
+              line-height: 27px;
+              font-weight: bold;
+              cursor: pointer;
             }
           }
       }
@@ -1377,6 +1416,7 @@ img {
       justify-content: flex-end;
       .news_bg_img {
         order: 3;
+        cursor: pointer;
       }
       .bian {
         background: linear-gradient(
@@ -1425,6 +1465,7 @@ img {
         background-repeat: no-repeat;
         background-position: top center;
         background: #eee;
+        cursor: pointer;
         img {
           object-fit: cover;
           height: 100%;
@@ -1475,6 +1516,7 @@ img {
         .li-text {
           display: flex;
           justify-content: space-between;
+          cursor: pointer;
           h4 {
             display: -webkit-box;
             -webkit-box-orient: vertical;
@@ -1564,6 +1606,7 @@ img {
         .li-text {
           display: flex;
           justify-content: space-between;
+          cursor: pointer;
           h4 {
             font-size: 1.3rem;
             color: #2c2c2c;
