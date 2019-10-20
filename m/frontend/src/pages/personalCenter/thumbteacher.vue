@@ -116,6 +116,9 @@ export default {
             margin-top: 15px;
             font-size: 12px;
             font-weight: 700;
+            overflow: hidden;
+            white-space: nowrap; 
+            text-overflow:ellipsis;
         }
         .bottom-box {
             display: flex;

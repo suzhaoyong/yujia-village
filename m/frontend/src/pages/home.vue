@@ -1,35 +1,19 @@
 <template>
     <div style="width:100%;height:100%;">
-        <!-- <Header v-if="value === 'home'"></Header> -->
         <div class="main_content">
           <router-view></router-view>
         </div>
-        <Footer @footerByValue="footerByValue"></Footer>
+        <Footer></Footer>
     </div>
 </template>
 <script>
-import Header from "../components/header";
 import Footer from "../components/footer";
 import Main from "./main";
 export default {
     name: 'home',
     components: {
         Main,
-        Footer,
-        Header
-    },
-    data() {
-        return {
-            value: 'home'
-        };
-    },
-    methods: {
-        footerByValue(val) {
-            // console.log(val);
-            this.value = val;
-            // console.log(this.value);
-
-        }
+        Footer
     }
 }
 </script>
