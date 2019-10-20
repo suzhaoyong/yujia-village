@@ -1,8 +1,8 @@
 <template>
   <div class="body-wrap">
     <div class="back_home-wrap" @click="goHome">
-      <div class="back_home" style>
-        <van-icon style="font-size: 20px;" name="wap-home" />
+      <div class="back_home" style="font-size: 20px;color: #fff;">
+        <van-icon style="font-size: 20px;color: #fff;" name="wap-home" />
       </div>
     </div>
     <div class="body">
@@ -11,8 +11,8 @@
         <span :class="isActive('login')" @click="changeType('login')">登录</span>
         <span :class="isActive('reset')" @click="changeType('reset')">登录</span>
       </div>-->
-      <div class="form" v-show="form.type === 'login'">
-        <div class="logo">
+      <div class="form login" v-show="form.type === 'login'">
+        <div class="logo" v-if="false">
           <img :src="icon.welcome" alt />
         </div>
         <div class="input-box flex line">
@@ -51,30 +51,38 @@
           </div>
         </div>
       </div>
-      <div class="form" style="margin-top:68px;" v-show="form.type === 'register'">
+      <div class="form register" v-show="form.type === 'register'">
         <div class="input-box reg tel">
           <van-field type="tel" v-model="registerForm.tel" placeholder />
         </div>
-
-        <div class="input-box flex">
-          <div class="reg-captch">
-            <van-field type="tel" v-model="registerForm.captcha" placeholder />
-          </div>
-
-          <div class="code">
-            <div class="img">
-              <img :src="verification.code_img" alt />
+        <van-dialog
+          title="请输入下方图形验证码"
+          v-model="to_send_sms.registerForm"
+          @confirm="confirmSend('registerForm')"
+          @cancel="cancelSend('registerForm')"
+          show-cancel-button
+        >
+          <div style="padding-top:20px;"></div>
+          <div class="input-box flex">
+            <div class="reg-captch">
+              <van-field type="tel" v-model="registerForm.captcha" placeholder />
             </div>
-            <div class="refresh">
-              <img
-                @click="getVerificationCode"
-                :class="[{start: verification.is_tap}]"
-                :src="icon.refresh"
-                alt
-              />
+
+            <div class="code">
+              <div class="img">
+                <img :src="verification.code_img" alt />
+              </div>
+              <div class="refresh">
+                <img
+                  @click="getVerificationCode"
+                  :class="[{start: verification.is_tap}]"
+                  :src="icon.refresh"
+                  alt
+                />
+              </div>
             </div>
           </div>
-        </div>
+        </van-dialog>
         <div class="input-box reg ver_code">
           <van-field
             type="tel"
@@ -86,7 +94,7 @@
           <van-button
             class="sms"
             size="small"
-            @click="getCode('registerForm')"
+            @click="openImgCode('registerForm')"
             type="primary"
           >{{codeTips.msg}}</van-button>
         </div>
@@ -105,10 +113,17 @@
           </div>
         </div>
       </div>
-      <div class="form" style="margin-top:68px;" v-show="form.type === 'reset'">
-        <div class="input-box reg tel">
+      <div class="form reset" v-show="form.type === 'reset'">
+        <div class="input-box reg re_tel">
           <van-field type="tel" v-model="reset.tel" placeholder />
         </div>
+        <van-dialog
+          title="请输入下方图形验证码"
+          v-model="to_send_sms.reset"
+          @confirm="confirmSend('reset')"
+          @cancel="cancelSend('reset')"
+          show-cancel-button
+        >
         <div class="input-box flex">
           <div class="reg-captch">
             <van-field type="tel" v-model="reset.captcha" placeholder />
@@ -128,12 +143,13 @@
             </div>
           </div>
         </div>
+        </van-dialog>
         <div class="input-box reg ver_code">
           <van-field type="tel" v-model="reset.verification_code" center clearable placeholder></van-field>
           <van-button
             class="sms"
             size="small"
-            @click="getCode('reset')"
+            @click="openImgCode('reset')"
             type="primary"
           >{{codeTips.msg}}</van-button>
         </div>
@@ -236,6 +252,10 @@ export default {
         sy: false,
         ys: false
       },
+      to_send_sms: {
+        registerForm: false,
+        reset: false
+      },
       open: {
         sy: true,
         ys: true
@@ -253,7 +273,7 @@ export default {
         msg: "发送验证码",
         count: 0
       },
-      form: { type: "login" },
+      form: { type: "register" },
       ruleForm: {
         tel: "",
         password: ""
@@ -275,7 +295,7 @@ export default {
         verification_key: "",
         verification_code: "",
         captcha: "",
-        key: "",
+        key: ""
       },
       verification: {
         code_img: "",
@@ -290,9 +310,9 @@ export default {
     }
   },
   mounted() {
-    this.registerForm.invitation_id = getUrlParams().invitation_id || ''
-    this.registerForm.invitation_id && (this.form.type = 'register')
-    // this.$store.commit('loadStatus', false)
+    this.registerForm.invitation_id = getUrlParams().invitation_id || "";
+    this.registerForm.invitation_id && (this.form.type = "register");
+    this.$store.commit("loadStatus", false);
     // this.getVerificationCode();
     this.loadFile("sy");
     this.loadFile("ys");
@@ -312,19 +332,6 @@ export default {
           type == "ys" ? "瑜伽村隐私政策" : "瑜伽村使用协议"
         }.pdf`
       });
-      //监听完成事件
-      // this.pdfh5.on("complete", function(status, msg, time) {
-      //   console.log(
-      //     "状态：" +
-      //       status +
-      //       "，信息：" +
-      //       msg +
-      //       "，耗时：" +
-      //       time +
-      //       "毫秒，总页数：" +
-      //       this.totalNum
-      //   );
-      // });
     },
     getUrlParams() {
       let search = window.location.search;
@@ -402,7 +409,7 @@ export default {
     resetCode() {
       this.ruleForm = {
         tel: "",
-        password: "",
+        password: ""
         // captcha: "",
         // key: "",
         // invitation_id: ""
@@ -426,6 +433,28 @@ export default {
         // 重置获取验证码
         (this.codeTips.msg = "发送验证码");
       this.codeTips.count = 0;
+    },
+    /* 打开图形验证码 */
+    openImgCode(formName) {
+      if (this.codeTips.count > 0) return;
+      const { tel, captcha, key } = this[formName];
+      if (!tel || tel.length !== 11) {
+        Notify("请填写正确的手机号码");
+        return;
+      }
+
+      if (this.to_send_sms[formName]) {
+        return;
+      }
+      this.getVerificationCode();
+      this.to_send_sms[formName] = true;
+    },
+    cancelSend(formName) {
+      this.to_send_sms[formName] = false;
+      this[formName].captcha = "";
+    },
+    confirmSend(formName) {
+      this.getCode(formName);
     },
     /* 短信验证码 */
     getCode(formName) {
@@ -493,7 +522,7 @@ export default {
   display: none;
 }
 .shuoming {
-  color: #fff;
+  color: #999;
   padding: 10px 0;
   width: 100%;
   margin: 0 auto;
@@ -532,16 +561,17 @@ export default {
 }
 .van-cell {
   background: transparent;
-  color: #fff;
+  color: #999;
   border-radius: 5px;
   border: 1px solid #fff;
 }
 .van-field__control {
-  color: #fff;
+  color: #999;
 }
 .van-button {
-  border-radius: 7.5px;
-  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 20px;
+  background-color: #8fcd71;
+  color: #fff;
   border: none;
   width: 260px;
   /* font-size: 10px; */
@@ -557,8 +587,9 @@ export default {
   width: 90px;
   height: 100%;
   padding: 0;
-  background: #fff;
-  color: #2c2c2c;
+  background: #8fcd71;
+  color: #fff;
+  border-radius: 10px;
   border-color: transparent;
 }
 </style>
@@ -582,13 +613,13 @@ export default {
     border-radius: 100%;
     text-align: center;
     background: rgba(0, 0, 0, 0.4);
-    color: #fff;
+    color: #999;
   }
 }
 .back-wrap {
   width: 100%;
   padding-bottom: 30px;
-  color: #fff;
+  color: #999;
   position: absolute;
   left: 0;
   bottom: 0;
@@ -602,7 +633,7 @@ export default {
   }
   span {
     text-decoration: underline;
-    color: #fff;
+    color: #999;
     padding-left: 5px;
   }
 }
@@ -612,24 +643,24 @@ export default {
   width: 100%;
   margin: 0;
   padding: 0;
-  color: #fff;
+  color: #999;
   text-align: left;
   background-color: transparent;
   border: 0;
   resize: none;
 }
 input::-webkit-input-placeholder {
-  color: #fff;
+  color: #999;
 }
 .body-wrap /deep/ .van-field__control {
-  color: #fff;
+  color: #999;
 }
 .input.tel,
 .input.key,
 input.nvitation_id .input.captcha {
   padding: 8px 6px;
   margin-left: 10px;
-  color: #fff;
+  color: #999;
   position: relative;
 }
 .input.captcha {
@@ -643,12 +674,17 @@ img {
   height: 100%;
 }
 .body-wrap {
-  background-image: url("../assets/img/bg.png");
-  background-size: 100% 100%;
+  background-image: url("~@/assets/img/login_bg.png");
+  background-color: #fff;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  position: relative;
+  z-index: 10;
 }
 .body {
   font-size: 10px;
-  background: rgba(0, 0, 0, 0.3);
+  // background: rgba(0, 0, 0, 0.3);
+  // background: #fff;
   width: 100%;
   height: 100vh;
   display: flex;
@@ -663,7 +699,7 @@ img {
 // }
 .tips {
   width: 320px;
-  color: #fff;
+  color: #999;
   padding-bottom: 20px;
   font-size: 14px;
   span {
@@ -676,6 +712,15 @@ img {
 .form {
   display: flex;
   flex-direction: column;
+  &.login {
+    padding-top: 260px;
+  }
+  &.register {
+    padding-top: 190px;
+  }
+  &.reset {
+    padding-top: 260px;
+  }
   .logo {
     width: 212px;
     height: 25px;
@@ -726,7 +771,7 @@ img {
     content: "图形验证码";
     width: 200%;
     text-align: center;
-    color: #fff;
+    color: #999;
     display: block;
     position: absolute;
     bottom: 100%;
@@ -741,6 +786,20 @@ img {
     border: none;
   }
   position: relative;
+  &.tel,
+  &.re_tel,
+  &.ver_code,
+  &.nvitation_id,
+  &.pwd {
+    &::before {
+      color: #999;
+      display: block;
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
   &.ver_code {
     &::before {
       content: "短信验证码";
@@ -759,19 +818,12 @@ img {
   &.tel {
     &::before {
       content: "手机号码";
+      color: #fff;
     }
   }
-  &.tel,
-  &.ver_code,
-  &.nvitation_id,
-  &.pwd {
+  &.re_tel {
     &::before {
-      color: #fff;
-      display: block;
-      position: absolute;
-      bottom: 100%;
-      left: 50%;
-      transform: translateX(-50%);
+      content: "手机号码";
     }
   }
 }
@@ -780,7 +832,7 @@ img {
   align-items: center;
 }
 .input-box.flex.line {
-  border-bottom: 1px solid #fff;
+  border-bottom: 1px solid #e5e5e5;
   font-size: 12px;
 }
 .input-btn {
@@ -789,7 +841,7 @@ img {
     padding: 12px 0;
     display: flex;
     justify-content: space-between;
-    color: #fff;
+    color: #999;
   }
   .reg-tips {
     color: #dee0e2;
@@ -797,7 +849,7 @@ img {
     text-align: right;
     span {
       cursor: pointer;
-      color: #fff;
+      color: #999;
       text-decoration: underline;
       margin-left: 4px;
     }

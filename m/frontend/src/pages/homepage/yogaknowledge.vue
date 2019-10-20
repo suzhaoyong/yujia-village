@@ -89,7 +89,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .knowledge {
-    padding-top: 88px;
+    // padding-top: 88px;
     margin-bottom: 50px;
 }
 .banner {

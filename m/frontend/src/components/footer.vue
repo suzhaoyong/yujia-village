@@ -53,10 +53,13 @@ export default {
     computed: {
       ...mapGetters(['isUserNeedLogin', 'lastLogin'])
     },
-    
-    created() {
-        const { header_name } = this.$route.meta
+    watch: {
+      '$route'(to, from){
+        const { header_name } = to.meta
         this.active = header_name
+      }
+    },
+    created() {
         this.refresh()
     },
     methods: {

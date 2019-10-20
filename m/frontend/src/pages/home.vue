@@ -1,6 +1,6 @@
 <template>
     <div style="width:100%;height:100%;">
-        <Header v-if="value === 'home'"></Header>
+        <!-- <Header v-if="value === 'home'"></Header> -->
         <div class="main_content">
           <router-view></router-view>
         </div>

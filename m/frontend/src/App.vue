@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <!-- <div class="loding_wrap" v-show="loading" >
-      <van-loading color="#89b264" ref="appLoading"  />
-    </div> -->
+    <div class="loding_wrap" v-show="loading" >
+      <van-loading color="#638C0B" ref="appLoading"  />
+    </div>
     <keep-alive>
       <router-view v-if="$route.meta.keepAlive"></router-view>
     </keep-alive>
@@ -30,16 +30,16 @@ export default {
 }
 
 .loding_wrap {
-  position: fixed;
+  position: absolute;
   top: 0;
-  left: 0;
+  // left: 0;
   right: 0;
-  bottom: 0;
+  // bottom: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 10000;
-  background: rgba(0, 0, 0, 0.3);
+  // background: rgba(0, 0, 0, 0.3);
 }
 .van-nav-bar {
     // 不要全局 配置定位

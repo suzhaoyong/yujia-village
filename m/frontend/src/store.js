@@ -22,7 +22,7 @@ const store = new Vuex.Store({
     info: state => state.info,
     isUserNeedLogin: state => {
       const user = sessionStorage.getItem('user data')
-      if (user) {
+      if (typeof user == 'string' && user !== 'undefined') {
         store.dispatch('INFO', JSON.parse(user))
       }
       return !state.info.user.name

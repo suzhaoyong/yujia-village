@@ -195,6 +195,13 @@ export default {
       this.exhibitionList();
       this.choiceness();
   },
+  mounted() {
+    const { current } = this.$route.query
+    console.log(current)
+    if (typeof current != 'undefined') {
+      this.current = parseInt(current)
+    }
+  },
   methods:{
       //机构列表
       joindata(){

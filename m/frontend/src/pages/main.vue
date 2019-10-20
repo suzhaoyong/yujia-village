@@ -1,465 +1,387 @@
 <template>
-    <div>
-        <div class="main" >
-            <!-- 热门课程 -->
-            <div class="popular-course">
-                <div class="top-course">
-                    <div>
-                        <span>热门课程</span>
-                        <span class="e-title">Popular course</span>
-                    </div>
-                    <div>
-                        <span class="more" @click="more('course')">更多</span>
-                        <span class="el-icon-arrow-right i-right"></span>
-                    </div>
-                </div>
-                <div class="hot-swiper">
-                    <div class="swiper-container swiper1">
-                        <div class="swiper-wrapper">
-                            <div class="swiper-slide" v-for="(item,index) in hotCourse" :key="index" @click="goCourseDetail(item.id)">
-                                <div class="img" :style="{backgroundImage: 'url('+item.teacher_img+')'}"></div>
-                                <div class="overlay">{{item.type}}</div>
-                            </div>
-                        </div>
-                    </div>    
-                </div>
-            </div>
-            <!-- 瑜伽资讯 -->
-            <div class="yoga-news">
-                <div class="top-course">
-                    <div>
-                        <span>瑜伽资讯</span>
-                        <span class="e-title">Yoga news</span>
-                    </div>
-                    <div>
-                        <span class="more" @click="more('news')">更多</span>
-                        <span class="el-icon-arrow-right i-right"></span>
-                    </div>
-                </div>
-                <div class="news-swiper"> 
-                    <div class="swiper-container swiper2">
-                        <div class="swiper-wrapper">
-                            <div class="swiper-slide" v-for="(item,index) in yogaNews" :key="index" @click="goInfoDetail(item.id)">
-                                <div class="img" :style="{backgroundImage: 'url('+item.icon_url+')'}"></div>
-                                <div class="introduce">{{item.headline}}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- 瑜伽名师 -->
-            <div class="famous-teacher">
-                <div class="top-course">
-                    <div>
-                        <span>瑜伽名师</span>
-                        <span class="e-title">Famous teacher</span>
-                    </div>
-                    <div>
-                        <span class="more" @click="more('teacher')">更多</span>
-                        <span class="el-icon-arrow-right i-right"></span>
-                    </div>
-                </div>
-                <div class="teacher">
-                    <div class="swiper-container swiper3">
-                        <div class="swiper-wrapper" :v-if="famousTeacher.length">
-                            <div class="swiper-slide" v-for="(item,index) in famousTeacher" :key="index" @click="goTeacherDetail(item.id)">
-                                <div class="img" :style="{backgroundImage: 'url('+item.first_img+')'}"></div>                                
-                                <div class="name">
-                                    <div class="en-name">{{item.name}}</div>
-                                    <div class="title">{{item.good_at}}</div>
-                                </div>
-                                <div class="line">
-                                    <div class="short-line line-l"></div>
-                                    <div class="short-line line-r"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- 培训信息 -->
-            <div class="training-information">
-                <div class="top-course">
-                    <div>
-                        <span>培训信息</span>
-                        <span class="e-title">Training Information</span>
-                    </div>
-                    <div>
-                        <span class="more" @click="more('information')">更多</span>
-                        <span class="el-icon-arrow-right i-right"></span>
-                    </div>
-                </div>
-                <div class="information-box">
-                    <div class="training-item" v-for="(item,index) in trainingInfo" :key="index" @click="goCourseDetail(item.id)">
-                        <div class="left-box">
-                            <div class="img" :style="{backgroundImage: 'url('+item.teacher_img+')'}"></div>                                
-                        </div>
-                        <div class="right-box">
-                            <div class="title">{{item.theme}}</div>
-                            <div class="certification">{{item.type}}</div>
-                            <div class="time">{{item.startTime}}至{{item.endTime}}</div>
-                            <div class="address">{{item.custom_address }}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- 联盟机构 -->
-            <div class="union-hall">
-                <div class="top-course">
-                    <div>
-                        <span>机构</span>
-                        <span class="e-title">Union hall</span>
-                    </div>
-                    <div>
-                        <span class="more" @click="more('hall')">更多</span>
-                        <span class="el-icon-arrow-right i-right"></span>
-                    </div>
-                </div>
-                <div class="hall-swiper">
-                    <div class="swiper-container swiper4">
-                        <div class="swiper-wrapper">
-                            <div class="swiper-slide" v-for="(item,index) in unionHall" :key="index">
-                                <div class="img" :style="{backgroundImage: 'url('+item.first_img+')'}"></div>                                
-                            </div>
-                        </div>
-                    </div> 
-                </div>
-            </div>
-        </div>
+  <div class="main_wrap">
+    <!-- 轮播图 -->
+    <div class="bg_imgs-wrap">
+      <div style="background:#8FCD71; height:64px;width:100%;"></div>
+      <div style="background:#8FCD71; height:64px;width:100%;border-radius: 0 0 50% 50%;"></div>
+      <div class="imgs_box">
+        <van-swipe :autoplay="3000" style="height:100%;" indicator-color="white">
+          <van-swipe-item v-for="(item, index) in main.banner" :key="index"><img :src="item" alt="商品"></van-swipe-item>
+        </van-swipe>
+      </div>
+      
     </div>
+    <!-- tab 导航 -->
+    <div class="tab-wrap">
+      <div class="tab-box">
+        <div href="" @click="gotoPage('train')">
+          <div class="tab_pic">
+            <img :src="icon.zixun" alt="图标">
+          </div>
+          <div class="tab_tips">资讯</div>
+        </div>
+      </div>
+      <div class="tab-box">
+        <div href="" @click="gotoPage('information')">
+          <div class="tab_pic">
+            <img :src="icon.zishi" alt="图标">
+          </div>
+          <div class="tab_tips">知识</div>
+        </div>
+      </div>
+      <div class="tab-box">
+        <div href="" @click="gotoPage('club')">
+          <div class="tab_pic">
+            <img :src="icon.jigou" alt="图标">
+          </div>
+          <div class="tab_tips">机构</div>
+        </div>
+      </div>
+      <div class="tab-box">
+        <div href="" @click="gotoPage('teacher')">
+          <div class="tab_pic">
+            <img :src="icon.mingshi" alt="图标">
+          </div>
+          <div class="tab_tips">名师</div>
+        </div>
+      </div>
+    </div>
+    <!-- 培训信息 -->
+    <div class="train-wrap" id="train">
+      <div class="content_title">
+        <div class="lf">
+          <span class="zh">培训信息</span>
+          <span class="en">Famous teacher</span>
+        </div>
+        <div class="rh" @click="gotoPage('train')">
+          <span class="more">更多 》</span>
+        </div>
+      </div>
+      <div class="content_box">
+        <div class="train" @click="viewTrain(item)" v-for="(item, index) in main.hot" :key="index">
+          <div class="pic">
+            <img :src="item.cover" alt="培训信息">
+          </div>
+          <div class="info">
+            <div class="title"><span class="tag">{{item.type}}</span> <span class="des">{{item.theme}}</span></div>
+            <div class="address_time">
+              <div class="address">{{item.custom_address}}</div>
+              <div class="time">{{item.startTime}} / {{item.endTime}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 名师信息 -->
+    <div class="teacher-wrap" id="teacher">
+      <div class="content_title">
+        <div class="lf">
+          <span class="zh">瑜伽名师</span>
+          <span class="en">Famous teacher</span>
+        </div>
+        <div class="rh" @click="gotoPage('teacher')">
+          <span class="more">更多 》</span>
+        </div>
+      </div>
+      <div class="content_box">
+        <div class="info" @click="viewTeacher(item)" v-for="(item, index) in main.teachers" :key="index">
+          <div class="pic">
+            <img :src="item.first_img" alt="名师">
+          </div>
+          <div class="name_en">{{item.name}}</div>
+          <div class="name_zh">{{item.info}}</div>
+        </div>
+      </div>
+    </div>
+    <!-- 机构推荐 -->
+    <div class="club-wrap" id="club">
+      <div class="content_title">
+        <div class="lf">
+          <span class="zh">机构推荐</span>
+          <span class="en">Training Information</span>
+        </div>
+        <div class="rh" @click="gotoPage('club')">
+          <span class="more">更多 》</span>
+        </div>
+      </div>
+      <div class="content_box">
+        <div class="club" @click="viewClub(item)" v-for="(item, index) in main.clubs" :key="index">
+          <div class="club_pic">
+            <img :src="item.first_img" alt="机构">
+          </div>
+          <div class="name">{{item.club_name}}</div>
+          <div class="address">{{item.club_address}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
-import Swiper from 'swiper';
+import Vue from 'vue';
+import { getMainDetail } from '@/api/main.js'
+import { Swipe, SwipeItem } from 'vant';
+Vue.use(Swipe).use(SwipeItem);
 export default {
-    data() {
-        return {
-            hotCourse: [],
-            yogaNews: [],
-            famousTeacher: [],
-            trainingInfo: [],
-            unionHall: []
-        }
-    }, 
-    created() {
-        this.getHomeData();
-        // 清空index 和 tabbar ，防止通过地址访问 “/” 时的头部消失
-        window.sessionStorage.removeItem('index');
-        window.sessionStorage.removeItem('tabbar');
-    },
-    methods: {
-        swiperInit() {
-            new Swiper('.swiper1', {
-                slidesPerView: 'auto',
-                freeMode: true,
-                observer: true,
-            });
-            new Swiper('.swiper2', {
-                slidesPerView: 'auto',
-                freeMode: true,
-                observer: true,
-            });
-            new Swiper('.swiper3', {
-                slidesPerView: 'auto',
-                freeMode: true,
-                observer: true,
-            });
-            new Swiper('.swiper4', {
-                slidesPerView: 'auto',
-                freeMode: true,
-                freeModeMomentumRatio: 0.1,
-                loop: true,
-                speed: 2500,
-                autoplay: {
-                    delay: 0,
-                    disableOnInteraction: false,
-                },
-            });
-        },
-        getHomeData() {
-            this.$request.get('/home').then(data => {
-                console.log(data);
-                const { hot, information, teachers, clubs} = data;
-                this.hotCourse = hot;
-                this.yogaNews = information;
-                this.famousTeacher = teachers;
-                this.trainingInfo = data.new;
-                this.unionHall = clubs;
-                this.$nextTick(function() {
-                    this.swiperInit();
-                })
-            }).catch(error => {
-                console.log(error);
-            })
-        },
-        more(keyword) {
-            if(keyword === 'course' || keyword === 'information') {
-                this.$router.push('/yogamessage');
-            } else if(keyword === 'news') {
-                this.$router.push('/yagainformation');
-            } else if(keyword === 'teacher') {
-                this.$router.push('/teacherClub');
-            } else if(keyword === 'hall') {
-                this.$router.push('/teacherClub');
-            }  
-        },
-        goCourseDetail(id) {
-            this.$router.push('/messagedetail/'+id);
-        },
-        goInfoDetail(id) {
-            this.$router.push('/informationdetail/'+id);
-        },
-        goTeacherDetail(id) {
-            this.$router.push({
-                name: 'teacherDetails',
-                query: {
-                    id: id
-                }
-            });
-        }
+  data() {
+    return {
+      icon: {
+        zixun: require('@/assets/img/zixun.png'),
+        zishi: require('@/assets/img/zishi.png'),
+        jigou: require('@/assets/img/jigou.png'),
+        mingshi: require('@/assets/img/mingshi.png'),
+      },
+      main: {
+        banner: [],
+        hot: [],
+        teachers: [],
+        clubs: []
+      },
     }
+  },
+  mounted() {
+    getMainDetail().then(response => {
+      this.main = response
+    })
+  },
+  methods: {
+    gotoPage(type) {
+      const path = {
+        train: '/yogamessage/list',
+        information: '/yogaknowledge',
+        teacher: '/teacherClub/list?current=1',
+        club: '/teacherClub/list?current=0',
+      }
+      path[type] && this.$router.push(path[type])
+    },
+    viewClub(item) {
+      this.$router.push(`/teacherClub/clubhouseDetails?id=${item.id}`)
+    },
+    viewTeacher(item) {
+      this.$router.push(`/teacherClub/teacherDetails?id=${item.id}`)
+    },
+    viewTrain(item) {
+      this.$router.push(`/messagedetail/${item.id}`)
+    } 
+  }
 }
 </script>
 <style lang="scss" scoped>
-.main {
-    width: 100%;
-    padding-top: 88px;
-    // margin-bottom: 50px;
+*{
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  color: #2c2c2c;
 }
-.top-course {
-    display: flex;
-    justify-content: space-between;
-    height: 44px;
-    line-height: 44px;
-    padding: 0 16px;
-    font-size: 14px;
-    background-color: #E0EED2;
-    .e-title {
-        margin-left: 8px;
-        margin-top: 2px;
-        font-size: 10px;
-        color: #2c2c2c;
+img{
+  width: 100%;
+  height: 100%;
+}
+  .main_wrap{
+    background: #fff;
+    padding-bottom: 20px;
+    .bg_imgs-wrap{
+      .imgs_box{
+        margin: 0 auto;
+        margin-top: -64px;
+        width: 340px;
+        height: 140px;
+        border-radius: 10px;
+        overflow: hidden;
+        background: #e5e5e5;
+      }
     }
-    .more,
-    .i-right {
-        font-size: 12px;
-    }
-}
-.yoga-news,
-.famous-teacher,
-.training-information,
-.union-hall {
-    margin-top: 3px;
-    background-color: #fff;
-}
-.popular-course,
-.union-hall {
-    background-color: #fff;
-    .top-course {
-        background-color: #fff;
-        .e-title {
-            color: #999;
+    .tab-wrap{
+      padding-top: 20px;
+      margin: 0 auto;
+      width: 340px;
+      display: flex;
+      justify-content: space-between;
+      .tab-box{
+        div{
+          .tab_pic{
+            width: 44px;
+            height: 44px;
+            // background: #e5e5e5;
+          }
+          .tab_tips{
+            padding-top: 10px;
+            text-align: center;
+          }
         }
+      }
     }
-}
-.img {
-    height: 100%;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-}
-.popular-course {
-    height: 195px;
-    .hot-swiper {
-        padding: 5px 0 23px 16px;
-        .swiper-slide {
-            width: 123px;
-            height: 123px;
-            margin-right: 11px;
-            .overlay {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 123px;
-                line-height: 123px;
-                background-color: rgba(0,0,0,.3);
-                text-align: center;
-                font-size: 12px;
-                color: #fff;
-                font-weight: 700;
+    .train-wrap, .teacher-wrap, .club-wrap{
+      margin: 0 auto;
+      padding-top: 30px;
+      width: 340px;
+      .content_title{
+        display: flex;
+        justify-content: space-between;
+        .lf{
+          .zh{
+            position: relative;
+            font-size: 16px;
+            padding-left: 10px;
+            &::before{
+              content:'';
+              display: block;
+              position: absolute;
+              left: 0px;
+              top: 0;
+              width: 5px;
+              height: 100%;
+              background: #72BC46;
             }
+          }
+          .en{
+            margin-left: 15px;
+            font-size: 10px;
+          }
         }
-   }
-}
-.yoga-news {
-    height: 222px;
-    .news-swiper {
-        padding: 14px 0 23px 16px;
-        .swiper-slide {
-            width: 226px;
-            height: 141px;
-            margin-right: 10px;
-            .img {
-                height: 118px;
-            }
-            .introduce {
-                width: 165px;
-                margin-top: 5px; 
-                overflow: hidden;
-                white-space: nowrap; 
-                text-overflow:ellipsis;
-                font-size: 10px;
-            }
+        .rh{
+          .more{
+            color: #638C0B;
+          }
         }
+      }
     }
-}
-.famous-teacher {
-    position: relative;
-    height: 290px;
-    .teacher {
-        position: relative;
-        z-index: 99;
-        padding: 10px 0 16px 16px;
-        .swiper-slide {
-            width: 130px;
-            height: 220px;
-            margin-right: 10px;
-            background-color: #fff;
-            .img {
-                width: 100%;
-                height: 165px;
-                // background-repeat: no-repeat;
-                // background-size: contain;
-                // background-position: center;
-            }
-            .name {
-                margin-top: 11px;
-                text-align: center;
-                .en-name {
-                    width: 40px;
-                    margin: 0 auto;
-                    overflow: hidden;
-                    white-space: nowrap; 
-                    text-overflow:ellipsis;
-                    font-size: 12px;
-                }
-                .title {
-                    margin-top: 6px;
-                    font-size: 10px;
-                }
-            }
-            .line {
-                position: absolute;
-                left: 0;
-                bottom: 34px;
-                width: 140px;
-                .short-line {
-                    height: 1px;
-                    background-color: #BFBFBF;            
-                }
-                .line-l {
-                    float: left;
-                    width: 23px;
-                }
-                .line-r {
-                    float: right;
-                    width: 43px;
-                }
-            }
-        }
-    }
-}
-.training-information {
-    height: 451px;
-    overflow: hidden;
-    .information-box {
-        padding-left: 16px;
-        padding-right: 26px;
-        width: 385px;
-        height: 408px;
-        overflow-y: auto;
-        .training-item {
-            padding: 12px 0;
+    .train-wrap{
+      margin: 0 auto;
+      padding-top: 30px;
+      width: 340px;
+      .content_box{
+        .train{
+          padding-top: 10px;
+          display: flex;
+          justify-content: space-between;
+          .pic{
+            flex-shrink: 0;
+            width: 140px;
+            height: 90px;
+            background: #e5e5e5;
+            border-radius: 10px;
             overflow: hidden;
-            border-bottom: 1px solid #e5e5e5;
-            .left-box {
-                float: left;
-                width: 137px;
-                height: 112px;
-                .img {
-                    background-position: center top;
-                }
+          }
+          .info{
+            flex-grow: 1;
+            padding-left: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            .title{
+              padding-top: 10px;
+              line-height: 1.6em;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              display: -webkit-box;
+              -webkit-line-clamp: 2;
+              -webkit-box-orient: vertical;
+              .tag{
+                background: #638C0B;
+                color:#fff;
+                margin: 0 2px;
+                padding: 4px 8px;
+                border-radius: 10px;
+              }
+              .des{
+                font-size: 18px;
+                font-weight: 800;
+              }
             }
-            .right-box {
-                position: relative;
-                float: right;
-                width: 187px;
-                height: 113px;
-                font-size: 10px;
-                .title {
-                    width: 130px;
-                    font-size: 12px;
-                    font-weight: 700;
-                    overflow: hidden;
-                    white-space: nowrap; 
-                    text-overflow:ellipsis;
-                }
-                .certification {
-                    width: 75px;
-                    height: 17px;
-                    line-height: 17px;
-                    margin-top: 8px;
-                    background-color: #638C0B;
-                    border-radius: 8px;
-                    text-align: center;
-                    color: #fff;
-                }
-                .time {
-                    margin-top: 15px;
-                    color: #999;
-                }
-                .address {
-                    position: absolute;
-                    left: 0;
-                    bottom: 0;
-                    width: 110px;
-                    height: 32px;
-                    color: #999;
-                    overflow: hidden;
-                    display: -webkit-box;
-                    -webkit-box-orient: vertical;
-                    -webkit-line-clamp: 2; 
-                }
-                .more {
-                    position: absolute;
-                    right: 0;
-                    bottom: 0;
-                    width: 60px;
-                    height: 26px;
-                    line-height: 26px;
-                    background-color: #313131;
-                    border-radius: 5px;
-                    text-align: center;
-                    color: #fff;
-                }
+            .address_time{
+              font-size: 10px;
+              .address{
+                color:#999;
+                margin-bottom: 4px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 1;
+                -webkit-box-orient: vertical;
+              }
+              .time{
+                color:#999;
+              }
             }
+          }
         }
-        
+
+      }
     }
-}
-.union-hall {
-    height: 85px;
-    .hall-swiper {
-        padding: 8px 0;
-        .swiper-wrapper {
-            transition-timing-function: linear;
-            .swiper-slide {
-                width: 83px;
-                height: 30px;
-                margin-right: 2px;
-            }
+    .teacher-wrap{
+      .content_box{
+        display: flex;
+        flex-wrap: wrap;
+        .info{
+          padding-top: 16px;
+          margin-right: 8px;
+          width: 78px;
+          &:nth-child(4n) {
+            margin-right: 0;
+          }
+          .pic{
+            width: 78px;
+            height: 78px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #e5e5e5;
+          }
+          .name_en{
+            padding-top: 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+          }
+          .name_zh{
+            padding-top: 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+          }
         }
-        
+      }
     }
-}
+    .club-wrap{
+      .content_box{
+        display: flex;
+        flex-wrap: wrap;
+        .club{
+          padding-top: 10px;
+          padding-bottom: 10px;
+          width: 166px;
+          &:nth-child(even){
+            margin-left: 6px;
+          }
+          .club_pic{
+            width: 166px;
+            height: 122px;
+            background: #e5e5e5;
+            overflow: hidden;
+            border-radius: 10px;
+          }
+          .name{
+            padding-top: 14px;
+            margin-bottom: 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+          }
+          .address{
+            color:#999;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+          }
+        }
+      }
+    }
+  }
 </style>

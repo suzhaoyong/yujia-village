@@ -40,7 +40,7 @@ function handleResponeseErr(err) {
   var response = err.response
   var data = response.data
   var status = response.status
-
+/*
   if(data.code === '0001') {
     request.post('/auth/refresh')
         .then(data => {
@@ -54,6 +54,7 @@ function handleResponeseErr(err) {
         })
         return Promise.resolve();
   }
+  */
   if (status === 404) {
     message = '接口不存在';
   } else if (status >= 400 && status < 500) {
