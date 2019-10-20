@@ -318,13 +318,13 @@ export default {
                 width: 100%;
                 height:270px;
                 background-color: #E5E5E5;
-                border-radius: 20px;
+                border-radius: 4px;
                 .list_foot_img{
                     width: 100%;
                     height: 100%;
                     display: block;
                     object-fit: cover;
-                    border-radius: 20px;
+                    border-radius: 4px;
                 }
             }
         }

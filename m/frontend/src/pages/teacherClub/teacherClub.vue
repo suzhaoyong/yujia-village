@@ -24,7 +24,7 @@
                     </div>
                     <div class="club_item_title">
                         <h3 class="van-ellipsis">{{item.club_name}}</h3>
-                        <div class="text van-ellipsis">{{item.club_address}}</div>
+                        <div class="text van-ellipsis">{{item.custom_address}}</div>
                     </div>
                 </div>
                 <div class="tips_text" @click="Loadmore">加载更多</div>
@@ -240,8 +240,12 @@ export default {
             for(var i=0;i<this.exhibitionBox.length;i++){
                 if(this.exhibitionBox[i].id==this.id){
                     this.exhibitionBox[i]["Giveupimg"]=false;
+                    // this.$set(this.exhibitionBox[i], 'Giveupimg', false);
+                    // console.log(this.$set(this.exhibitionBox[i], 'Giveupimg', false));
                 }else{
                     this.exhibitionBox[i]["Giveupimg"]=true;
+                    // this.$set(this.exhibitionBox[i], 'Giveupimg', true);
+                    // console.log(this.$set(this.exhibitionBox[i], 'Giveupimg', true));
                 }              
             }
         })
@@ -299,6 +303,7 @@ export default {
             this.msg = data.msg;
             if(this.msg == "OK"){
             Notify({ message: "点赞成功", type: "success" });
+            // Vue.set(this.exhibitionList());
             this.exhibitionList();
             }
         })
@@ -322,6 +327,7 @@ export default {
             this.msg = data.msg;
             if(this.msg == "OK"){
             Notify({ message: "点赞成功", type: "success" });
+            // Vue.set(this.choiceness());
             this.choiceness();
             }
         })
@@ -682,6 +688,7 @@ input:-ms-input-placeholder{
                 float: left;
                 margin-bottom: 10px;
                 overflow: hidden;
+                border-radius: 7px;
                 .club_item_img{
                     width: 100%;
                     height: 146px;
@@ -691,7 +698,6 @@ input:-ms-input-placeholder{
                         height: 100%;
                         display: block;
                         object-fit: cover;
-                        border-radius: 20px;
                     }
                 }
                 .club_item_title{
@@ -960,19 +966,18 @@ input:-ms-input-placeholder{
                 height: 190px;
                 margin-right: 10px;
                 box-shadow:0px 1px 4px 0px rgba(22,27,27,0.18);
-                border-radius:3px;
+                border-radius:7px;
                 margin-bottom: 10px;
                 .club_items_img{
                     width: 100%;
                     height: 110px;
                     background-color: #E5E5E5;
-                    border-radius: 20px;
                     img{
                         width: 100%;
                         height: 100%;
                         display: block;
                         object-fit: cover;
-                        border-radius: 20px;
+                        border-radius: 7px 7px 0px 0px;
                     }
                 }
                 .club_items_title{
@@ -1073,19 +1078,19 @@ input:-ms-input-placeholder{
                     width: 48%;
                     height: 100%;
                     float: left;
-                    border-radius:3px;
+                    border-radius:7px;
                     margin-bottom: 8px;
                     .exhibition_img{
                         width: 100%;
                         height: 130px;
                         background-color: #E5E5E5;
-                        border-radius: 20px;
+                        border-radius: 4px;
                         img{
                             width: 100%;
                             height: 100%;
                             display: block;
                             object-fit: cover;
-                            border-radius: 20px;
+                            border-radius: 7px 7px 0px 0px;
                         }
                     }
                     .exhibition_title{
@@ -1093,6 +1098,7 @@ input:-ms-input-placeholder{
                         height: 85px;
                         background-color: #ffffff;
                         display: inline-block;
+                        border-radius: 0px 0px 7px 7px;
                         h3{
                             font-size:14px;
                             font-family:PingFang SC;
