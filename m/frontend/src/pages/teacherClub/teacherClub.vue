@@ -867,7 +867,7 @@ input:-ms-input-placeholder{
                         font-family:Microsoft YaHei;
                         font-weight:400;
                         color:rgba(44,44,44,1);
-                        margin-top: 20px;
+                        margin-top: 15px;
                         text-indent: 10px;
                         width: 93%;
                     }
@@ -876,7 +876,7 @@ input:-ms-input-placeholder{
                         font-family:PingFang SC;
                         font-weight:400;
                         color: #999;
-                        margin-top: 15px;
+                        margin-top: 10px;
                         text-indent: 10px;
                         width: 93%;
                     }
