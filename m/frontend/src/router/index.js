@@ -140,6 +140,12 @@ const router = new Router({
       component: () => import('@/pages/personalCenter/authenticationcenter')
     },
     {
+      // 认证表单
+      path: 'authenticationForm',
+      name: 'authenticationForm',
+      component: () => import('@/pages/personalCenter/authenticationForm')
+    },
+    {
       // 更改手机
       path: '/changephone',
       component: () => import('@/pages/personalCenter/changephone')

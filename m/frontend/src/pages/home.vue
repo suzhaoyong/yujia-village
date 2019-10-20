@@ -14,9 +14,9 @@ import Main from "./main";
 export default {
     name: 'home',
     components: {
-        Header,
         Main,
-        Footer
+        Footer,
+        Header
     },
     data() {
         return {

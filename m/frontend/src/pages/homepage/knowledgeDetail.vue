@@ -1,7 +1,7 @@
 <template>
   <div class="infordetail">
     <header><van-nav-bar
-      title="瑜伽资讯"
+      title="瑜伽知识"
       left-arrow
       @click-left="onClickLeft"
       @click-right="shareMessage"
@@ -77,7 +77,7 @@ export default {
     },
     yujiamation () {
       const id = this.$route.params.id
-      this.$request.get('informationInfo/' + id).then((res) => {
+      this.$request.get('knowledgeInfo/' + id).then((res) => {
         console.log(res)
         this.detailLists = res
         this.createddate = res.created_at.substr(0, 10)
