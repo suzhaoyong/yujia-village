@@ -14,7 +14,7 @@
     <!-- tab 导航 -->
     <div class="tab-wrap">
       <div class="tab-box">
-        <div href="" @click="gotoPage('train')">
+        <div href="" @click="gotoPage('yagainformation')">
           <div class="tab_pic">
             <img :src="icon.zixun" alt="图标">
           </div>
@@ -22,7 +22,7 @@
         </div>
       </div>
       <div class="tab-box">
-        <div href="" @click="gotoPage('information')">
+        <div href="" @click="gotoPage('yogaknowledge')">
           <div class="tab_pic">
             <img :src="icon.zishi" alt="图标">
           </div>
@@ -146,8 +146,8 @@ export default {
   methods: {
     gotoPage(type) {
       const path = {
-        train: '/yogamessage/list',
-        information: '/yogaknowledge',
+        yagainformation: '/yagainformation',
+        yogaknowledge: '/yogaknowledge',
         teacher: '/teacherClub/list?current=1',
         club: '/teacherClub/list?current=0',
       }

@@ -1,6 +1,5 @@
 <template>
   <div class="message">
-    <header> <span>培训信息</span></header>
     <main class="message-main">
       <ul class="message-main-head">
         <li @click="defaultRank('default')" :class="{'changeweight': isActive == '1' }"> 默认排序</li>
@@ -79,20 +78,11 @@
               </div>
               <div class="message-main-container-list-count-text">
                 <h6 class="p1">{{ list.theme }}</h6>
-                <!-- <span class="message-main-container-list-count-text-star">
-                <van-rate
-                  v-model='list.diff'
-                  readonly
-                  :size="8"
-                  color='#58B708'
-                  void-icon="star"
-                  void-color="#eee"
-                /></span> -->
                 <p class="areap">{{ list.custom_address }}</p>
-                <p class="p2"><span class="pprice">￥{{ list.price }}</span><span class="pdiff">难度： 1</span> </p>
+                <p class="p2"><span class="pprice">￥{{ list.price }}</span><span class="pdiff">难度： {{ list.diff }}</span> </p>
                 <p class="p4">
+                  <span class="p4-hand">观看   {{ list.follow  }}</span>
                   <span class="p4-eye">想学   {{ list.views }}</span>
-                  <span class="p4-hand">观看   {{ list.follow || 100 }}</span>
                 </p>
                 <button class="wantbtn" @click.stop="study(list.id)">想学</button>
               </div>
@@ -483,6 +473,8 @@ export default {
           height: 29px;
           border: 1px solid #E5E5E5;
           border-radius: 15px;
+          text-align: center;
+          font-size: 12px;
         }
       }
       .popup-diff {
@@ -624,9 +616,9 @@ export default {
               font-size: 10px;
               color: #999999;
               .p4-eye {
+                margin-left: 10px;
               }
               .p4-hand {
-                margin-left: 10px;
               }
             }
             .wantbtn {
