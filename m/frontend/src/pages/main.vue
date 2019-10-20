@@ -5,7 +5,7 @@
       <div style="background:#8FCD71; height:64px;width:100%;"></div>
       <div style="background:#8FCD71; height:64px;width:100%;border-radius: 0 0 50% 50%;"></div>
       <div class="imgs_box">
-        <van-swipe :autoplay="3000" style="height:100%;" indicator-color="white">
+        <van-swipe :autoplay="5000" style="height:100%;" indicator-color="white">
           <van-swipe-item v-for="(item, index) in main.banner" :key="index"><img :src="item" alt="商品"></van-swipe-item>
         </van-swipe>
       </div>
@@ -89,7 +89,7 @@
             <img :src="item.first_img" alt="名师">
           </div>
           <div class="name_en">{{item.name}}</div>
-          <div class="name_zh">{{item.info}}</div>
+          <div class="name_zh" v-if="false">{{item.info}}</div>
         </div>
       </div>
     </div>
@@ -183,8 +183,8 @@ img{
       .imgs_box{
         margin: 0 auto;
         margin-top: -64px;
-        width: 340px;
-        height: 140px;
+        width: 344px;
+        height: 160px;
         border-radius: 10px;
         overflow: hidden;
         background: #e5e5e5;
@@ -277,14 +277,14 @@ img{
               -webkit-line-clamp: 2;
               -webkit-box-orient: vertical;
               .tag{
-                background: #638C0B;
+                background: #8FCD71;
                 color:#fff;
                 margin: 0 2px;
                 padding: 4px 8px;
                 border-radius: 10px;
               }
               .des{
-                font-size: 18px;
+                font-size: 12px;
                 font-weight: 800;
               }
             }
@@ -331,7 +331,7 @@ img{
             overflow: hidden;
             text-overflow: ellipsis;
             display: -webkit-box;
-            -webkit-line-clamp: 1;
+            -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
           }
           .name_zh{

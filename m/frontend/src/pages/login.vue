@@ -273,7 +273,7 @@ export default {
         msg: "发送验证码",
         count: 0
       },
-      form: { type: "register" },
+      form: { type: "login" },
       ruleForm: {
         tel: "",
         password: ""

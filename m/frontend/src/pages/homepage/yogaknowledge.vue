@@ -1,5 +1,7 @@
 <template>
     <div class="knowledge">
+        <van-nav-bar title="瑜伽知识" left-arrow @click-left="back" fixed>
+        </van-nav-bar>
         <div class="banner" :style="{backgroundImage: 'url('+knowledgeClassify.banner+')'}" >
         </div>
         <div class="recommended">
@@ -57,6 +59,18 @@ export default {
         this.getKnowledgeList();
     },
     methods: {
+          back() {
+            this.$router.go(-1);
+          },
+          gotoPage(type) {
+          const path = {
+            train: '/yogamessage/list',
+            information: '/yogaknowledge',
+            teacher: '/teacherClub/list?current=1',
+            club: '/teacherClub/list?current=0',
+          }
+          path[type] && this.$router.push(path[type])
+        },
         onChange() {
             if(this.label != '更多') {
                 this.label = '更多';
@@ -124,8 +138,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 .knowledge {
-    // padding-top: 88px;
+    padding-top: 40px;
     margin-bottom: 50px;
+}
+.knowledge /deep/ .van-nav-bar--fixed {
+  position: fixed;
 }
 .banner {
     height: 170px;

@@ -47,7 +47,7 @@ const router = new Router({
       children: [{
         path: '/yogaknowledge',
         meta: {
-          header_name: 'home',
+          header_name: 'yogaknowledge',
           keepAlive: false
         },
         component: () => import('@/pages/homepage/yogaknowledge')

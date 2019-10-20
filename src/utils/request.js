@@ -74,8 +74,8 @@ function handleResponeseErr(err) {
   if (status === 404) {
     message = '接口不存在';
   } else if (typeof status === 'undefined') {
-    message = "登录已失效，请再次登录"
-    Bus.$emit('login', true)
+    message = "网路不稳定，请稍后再试。"
+    // Bus.$emit('login', true)
     sessionStorage.removeItem('user')
     sessionStorage.removeItem('access')
     store.dispatch("INFO", {
