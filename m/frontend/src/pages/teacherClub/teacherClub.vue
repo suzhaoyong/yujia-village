@@ -27,6 +27,7 @@
                         <div class="text van-ellipsis">{{item.club_address}}</div>
                     </div>
                 </div>
+                <div class="tips_text" @click="Loadmore">加载更多</div>
             </div>
             <div class="Default-page4" v-else>
                 <span class="page-span4">我寻寻觅觅却找不到您的踪迹~</span>
@@ -66,27 +67,29 @@
             </transition>
             <transition name="fade">
             <div class="club_items" v-if="exhibitionBox2.length > 0" v-show="Box2">
-                <van-swipe :loop="false" :width="131" id="vanswipe2" :show-indicators="false">
-                    <van-swipe-item class="vanswipeitem2" v-for="(item,index) in exhibitionBox2" :key="index">
-                        <div class="club_items_list">
-                            <div class="club_items_img" @click="exhibition(item)">
-                                <img :src="item.first_img"/>
-                            </div>
-                            <div class="club_items_title">
-                                <h3 class="van-ellipsis">{{item.name}}</h3>
-                                <div class="texts van-ellipsis">{{item.good_at}}</div>
-                                 <div class="Rotation_zan">
-                                <div class="Rotation_zan_items">教龄：{{item.num}}年</div>
-                                <div class="Rotation_zan_tips">
-                                    <img src="../../assets/teacherclub/Give.png" v-if="Giveupimg" @click="Giveuppraise(item)"/>
-                                    <img src="../../assets/teacherclub/Give2.png" v-if="Giveupimg1" @click="Giveuppraise(item)"/>
-                                    <span class="span">{{item.praise}}</span>
+                <div class="news-swiper"> 
+                    <div class="swiper-container swiper2">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide" v-for="(item,index) in exhibitionBox2" :key="index">
+                                <div class="club_items_img" @click="exhibition(item)">
+                                    <img :src="item.first_img"/>
                                 </div>
+                                <div class="club_items_title">
+                                    <h3 class="van-ellipsis">{{item.name}}</h3>
+                                    <div class="texts van-ellipsis">{{item.good_at}}</div>
+                                    <div class="Rotation_zan">
+                                    <div class="Rotation_zan_items">教龄：{{item.num}}年</div>
+                                    <div class="Rotation_zan_tips">
+                                        <img src="../../assets/teacherclub/Give.png" v-if="item.Giveupimg1" @click="Giveuppraise2(item,index)"/>
+                                        <img src="../../assets/teacherclub/Give2.png" v-if="!item.Giveupimg1" @click="Giveuppraise2(item,index)"/>
+                                        <span class="span">{{item.praise}}</span>
+                                    </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </van-swipe-item>
-                </van-swipe>
+                    </div>
+                </div>
             </div>
             <div class="Default-page7" v-else>
                 <span class="page-span7">我寻寻觅觅却找不到您的踪迹~</span>
@@ -111,14 +114,15 @@
                             <div class="exhibition_zan">
                             <div class="exhibition_zan_items">教龄：{{item.num}}年</div>
                             <div class="exhibition_zan_tips">
-                                <img src="../../assets/teacherclub/Give.png" v-if="Giveupimg" @click="Giveuppraise(item)"/>
-                                <img src="../../assets/teacherclub/Give2.png" v-if="Giveupimg1" @click="Giveuppraise(item)"/>
+                                <img src="../../assets/teacherclub/Give.png" v-if="item.Giveupimg" @click="Giveuppraise(item,index)"/>
+                                <img src="../../assets/teacherclub/Give2.png" v-if="!item.Giveupimg" @click="Giveuppraise(item,index)"/>
                                 <span class="span">{{item.praise}}</span>
                             </div>
                         </div>
                         </div>
                     </div>
                 </div>
+                <div class="tips_text" @click="Loadmore2">加载更多</div>
             </div>
              <div class="Default-page5" v-else>
                 <span class="page-span5">我寻寻觅觅却找不到您的踪迹~</span>
@@ -162,7 +166,7 @@ export default {
         num:"",
         record:"",
         Giveupimg:true,
-        Giveupimg1:false,
+        Giveupimg1:true,
         liList:["培训机构","瑜伽名师"],
         items:["全部","最新","距离最近"],
         clubBox:[],
@@ -178,6 +182,9 @@ export default {
         province:"",
         city:"",
         area:"",
+        current_page:1,
+        id:0,
+        id2:0
     };
   },
    computed: {
@@ -191,9 +198,10 @@ export default {
   methods:{
       //机构列表
       joindata(){
-        this.$request.get(`/clubs`).then(res => {
+        this.$request.get(`/clubs?page=${this.current_page}`).then(res => {
             this.clubBox = res.data.data;
             this.banner = res.banner;
+            this.current_page = res.data.current_page;
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -206,13 +214,29 @@ export default {
             }
         });
       },
+      Loadmore(){
+        this.current_page++;
+        this.joindata();
+      },
+      Loadmore2(){
+        this.current_page++;
+        this.exhibitionList();
+      },
       //名师列表
       exhibitionList(){
-        this.$request.get(`/teachers`).then(res => {
+        this.$request.get(`/teachers?page=${this.current_page}`).then(res => {
             this.exhibitionBox = res.teachers.data;
             this.houseType = res.course_types;
             this.actions = res.year;
             this.banner2 = res.banner;
+            this.current_page = res.teachers.current_page;
+            for(var i=0;i<this.exhibitionBox.length;i++){
+                if(this.exhibitionBox[i].id==this.id){
+                    this.exhibitionBox[i]["Giveupimg"]=false;
+                }else{
+                    this.exhibitionBox[i]["Giveupimg"]=true;
+                }              
+            }
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -224,11 +248,28 @@ export default {
             return;
             }
         });
+      },
+      swiperInit() {
+            new Swiper('.swiper2', {
+                slidesPerView: 'auto',
+                freeMode: true,
+                observer: true,
+            });
       },
       //名师精选
       choiceness(){
         this.$request.get(`/teachers/elites`).then(res => {
             this.exhibitionBox2 = res;
+            for(var i=0;i<this.exhibitionBox2.length;i++){
+                if(this.exhibitionBox2[i].id==this.id2){
+                    this.exhibitionBox2[i]["Giveupimg1"]=false;
+                }else{
+                    this.exhibitionBox2[i]["Giveupimg1"]=true;
+                }              
+            }
+            this.$nextTick(function() {
+                this.swiperInit();
+            })
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -242,7 +283,8 @@ export default {
         });
       },
       //点赞
-      Giveuppraise(item){
+      Giveuppraise(item,index){
+          this.id=item.id;
         let params ={
             id:item.id
         }
@@ -250,8 +292,30 @@ export default {
             this.msg = data.msg;
             if(this.msg == "OK"){
             Notify({ message: "点赞成功", type: "success" });
-            this.Giveupimg1 = true;
-            this.Giveupimg = false;
+            this.exhibitionList();
+            }
+        })
+        .catch(error => {
+            let { response: { data: { errorCode, msg } } } = error;
+            if (errorCode != 0) {
+            this.$message({
+                message: msg,
+                type: "error"
+            });
+            return;
+            }
+        });
+      },
+      Giveuppraise2(item,index){
+          this.id2=item.id;
+        let params ={
+            id:item.id
+        }
+        this.$request.post(`/teachers/thumbsUp`,params).then(data => {
+            this.msg = data.msg;
+            if(this.msg == "OK"){
+            Notify({ message: "点赞成功", type: "success" });
+            this.choiceness();
             }
         })
         .catch(error => {
@@ -388,6 +452,13 @@ export default {
         .then(res => {
             this.exhibitionBox2 = res.data;
             this.Box2 = true;
+            for(var i=0;i<this.exhibitionBox2.length;i++){
+                if(this.exhibitionBox2[i].id==this.id2){
+                    this.exhibitionBox2[i]["Giveupimg1"]=false;
+                }else{
+                    this.exhibitionBox2[i]["Giveupimg1"]=true;
+                }              
+            }
         })
         .catch(error => {
             this.$message({
@@ -613,6 +684,7 @@ input:-ms-input-placeholder{
                         height: 100%;
                         display: block;
                         object-fit: cover;
+                        border-radius: 20px;
                     }
                 }
                 .club_item_title{
@@ -679,6 +751,15 @@ input:-ms-input-placeholder{
                         width: 93%;
                     }
                 }
+            }
+            .tips_text{
+                text-align: center;
+                color: #999;
+                font-size:12px;
+                font-family:PingFang SC;
+                font-weight:500;
+                margin-top: 70%;
+                margin-bottom: 30px;
             }
         }
         .Default-page4{
@@ -856,98 +937,88 @@ input:-ms-input-placeholder{
             }
         }
         .club_items{
-        width: 96%;
-        margin-left: auto;
-        height: 190px;
-        display: flex;
-        margin-top: 5px;
-        margin-bottom: 20px;
-        #vanswipe2{
-            position: relative;
-            overflow: hidden;
-            -webkit-user-select: none;
-            user-select: none;
-            .van-swipe__track{
-                height: 100%;
-                width: 100% !important;
-                display: -webkit-box;
-                justify-content: center;
-            .vanswipeitem2{
-                float: left;
+            .tips_text{
+                text-align: center;
+                color: #999;
+                font-size:12px;
+                font-family:PingFang SC;
+                font-weight:500;
+                padding-top: 3px;
+                margin-bottom: 15px;
+            }
+            .news-swiper {
+            padding: 2px 0 5px 16px;
+            .swiper-slide {
                 width: 131px;
-                height: 113px;
-                margin-right:8px;
-                .club_items_list{
-                    width: 131px;
-                    box-shadow:0px 1px 4px 0px rgba(22,27,27,0.18);
-                    border-radius:3px;
-                    margin-right: 10px;
-                    margin-bottom: 10px;
-                    .club_items_img{
+                height: 190px;
+                margin-right: 10px;
+                box-shadow:0px 1px 4px 0px rgba(22,27,27,0.18);
+                border-radius:3px;
+                margin-bottom: 10px;
+                .club_items_img{
+                    width: 100%;
+                    height: 110px;
+                    background-color: #E5E5E5;
+                    border-radius: 20px;
+                    img{
                         width: 100%;
-                        height: 110px;
-                        background-color: #E5E5E5;
-                        img{
-                            width: 100%;
-                            height: 100%;
-                            display: block;
-                            object-fit: cover;
-                        }
-                    }
-                    .club_items_title{
-                        width: 100%;
-                        height: 63px;
-                        width: 90%;
-                        margin: 0 auto;
-                        h3{
-                            font-size:14px;
-                            font-family:PingFang SC;
-                            font-weight:bold;
-                            color:rgba(44,44,44,1);
-                            text-indent: 2px;
-                            margin-top: 8%;
-                        }
-                        .texts{
-                        font-size:12px;
-                        font-family:PingFang SC;
-                        font-weight:400;
-                        color:rgba(44,44,44,1);
-                        padding-top: 2px;
-                        text-indent: 2px;
-                    }
-                        .Rotation_zan{
-                        font-size:12px;
-                        font-family:PingFang SC;
-                        font-weight:400;
-                        color:rgba(44,44,44,1);
-                        display: flex;
-                        justify-content: space-between;
-                        margin-top: 5px;
-                        margin-bottom: 10px;
-                        .Rotation_zan_items{
-                            text-indent: 2px;
-                        }
-                        .Rotation_zan_tips{
-                            display: flex;
-                            padding-right: 2px;
-                            img{
-                                width: 11px;
-                                height: 11px;
-                                display: block;
-                            }
-                            .span{
-                                font-size:12px;
-                                font-family:PingFang SC;
-                                font-weight:400;
-                                color:rgba(44,44,44,1);
-                                margin-left: 4px;
-                                margin-top: -2px;
-                            }
-                        }
-                    }
+                        height: 100%;
+                        display: block;
+                        object-fit: cover;
+                        border-radius: 20px;
                     }
                 }
-            }
+                .club_items_title{
+                    height: 63px;
+                    width: 90%;
+                    margin: 0 auto;
+                    h3{
+                        font-size:14px;
+                        font-family:PingFang SC;
+                        font-weight:bold;
+                        color:rgba(44,44,44,1);
+                        text-indent: 2px;
+                        margin-top: 8%;
+                    }
+                    .texts{
+                    font-size:12px;
+                    font-family:PingFang SC;
+                    font-weight:400;
+                    color:rgba(44,44,44,1);
+                    padding-top: 2px;
+                    text-indent: 2px;
+                   }
+                    .Rotation_zan{
+                    font-size:12px;
+                    font-family:PingFang SC;
+                    font-weight:400;
+                    color:rgba(44,44,44,1);
+                    display: flex;
+                    justify-content: space-between;
+                    margin-top: 5px;
+                    margin-bottom: 10px;
+                    .Rotation_zan_items{
+                        text-indent: 2px;
+                    }
+                    .Rotation_zan_tips{
+                        display: flex;
+                        padding-right: 2px;
+                        img{
+                            width: 11px;
+                            height: 11px;
+                            display: block;
+                        }
+                        .span{
+                            font-size:12px;
+                            font-family:PingFang SC;
+                            font-weight:400;
+                            color:rgba(44,44,44,1);
+                            margin-left: 4px;
+                            margin-top: -2px;
+                        }
+                    }
+                }
+                }
             }
         }
     }
@@ -1001,11 +1072,13 @@ input:-ms-input-placeholder{
                         width: 100%;
                         height: 130px;
                         background-color: #E5E5E5;
+                        border-radius: 20px;
                         img{
                             width: 100%;
                             height: 100%;
                             display: block;
                             object-fit: cover;
+                            border-radius: 20px;
                         }
                     }
                     .exhibition_title{
@@ -1130,6 +1203,15 @@ input:-ms-input-placeholder{
                         }
                     }
                 }
+            }
+            .tips_text{
+                text-align: center;
+                color: #999;
+                font-size:12px;
+                font-family:PingFang SC;
+                font-weight:500;
+                margin-top: 30px;
+                margin-bottom: 30px;
             }
         }
         .Default-page5{

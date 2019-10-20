@@ -14,26 +14,28 @@
                 <div class="list_clubhouse_staff">Sometimes beauty is so simple</div>
             </div>
             <div class="club_items" v-if="clubItems.length > 0">
-                <van-swipe :loop="false" :width="131" id="vanswipe2" :show-indicators="false">
-                    <van-swipe-item class="vanswipeitem2" v-for="(item,index) in clubItems" :key="index">
-                        <div class="club_items_list">
-                            <div class="club_items_img" @click="clubdetail(item.id)">
-                                <img :src="item.teacher_img"/>
-                            </div>
-                            <div class="club_items_title">
-                                <h3 class="van-ellipsis">{{item.theme}}</h3>
-                                <van-rate v-model="item.diff" readonly size="10px" gutter="2px" color="#58B708" void-color="#58B708"/>
-                                <div class="club_items_title_its">
-                                    <div class="club_price">￥{{item.price}}</div>
-                                    <div class="club_prict" @click="study(item.id)">
-                                        <img src="../../assets/teacherclub/enlist.png"/>
-                                        想学
+                <div class="news-swiper"> 
+                    <div class="swiper-container swiper1">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide" v-for="(item,index) in clubItems" :key="index">
+                                <div class="club_items_img" @click="clubdetail(item.id)">
+                                    <img :src="item.teacher_img"/>
+                                </div>
+                                <div class="club_items_title">
+                                    <h3 class="van-ellipsis">{{item.theme}}</h3>
+                                    <van-rate v-model="item.diff" readonly size="10px" gutter="2px" color="#58B708" void-color="#58B708"/>
+                                    <div class="club_items_title_its">
+                                        <div class="club_price">￥{{item.price}}</div>
+                                        <div class="club_prict" @click="study(item.id)">
+                                            <img src="../../assets/teacherclub/enlist.png"/>
+                                            想学
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </van-swipe-item>
-                </van-swipe>
+                    </div>
+                </div>
             </div>
              <div class="Default-page3" v-else>
                 <span class="page-span3">我寻寻觅觅却找不到您的踪迹~</span>
@@ -48,11 +50,17 @@
                  <img src="../../assets/teacherclub/clubimg.png" class="club_ambient_img"/>
             </div>
             <div class="club_picture">
-                <van-swipe :loop="false" :width="151" id="vanswipe" :show-indicators="false">
-                    <van-swipe-item class="vanswipeitem" v-for="(item,index) in vanswipeItem" :key="index">
-                        <img :src="item" class="img_pl"/>
-                    </van-swipe-item>
-                </van-swipe>
+                <div class="hot-swiper">
+                    <div class="swiper-container swiper2">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide" v-for="(item,index) in vanswipeItem" :key="index">
+                                <div class="club_items_img">
+                                    <img :src="item" class="list_foot_img"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+                </div>
             </div>
             <div class="club_picture_present">
                 <p class="present_text" v-html="club.content">
@@ -76,17 +84,19 @@
                 <div class="house_personnel_staff">Guild staff profile</div>
             </div>
             <div class="house_personnel_lists" v-if="personnelItem.length > 0">
-                 <van-swipe :loop="false" :width="254" id="vanswipe3" :show-indicators="false">
-                    <van-swipe-item class="vanswipeitem3" v-for="(item,index) in personnelItem" :key="index" @click="exhibition(item)">
-                        <div class="personnel_lists_items">
-                            <div class="personnel_lists_img">
-                                <img :src="item.first_img"/>
+                <div class="club-swiper">
+                    <div class="swiper-container swiper3">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide" v-for="(item,index) in personnelItem" :key="index" @click="exhibition(item)">
+                                <div class="club_items_img">
+                                    <img :src="item.first_img" class="list_foot_img"/>
+                                </div>
+                                <div class="personnel_lists_name van-ellipsis">{{item.name}}</div>
+                                <div class="personnel_lists_name2 van-ellipsis">{{item.good_at}}</div>
                             </div>
-                            <div class="personnel_lists_name van-ellipsis">{{item.name}}</div>
-                            <div class="personnel_lists_name2 van-ellipsis">{{item.good_at}}</div>
                         </div>
-                    </van-swipe-item>
-                </van-swipe>
+                    </div>    
+                </div>
             </div>
             <div class="Default-page2" v-else>
                 <span class="page-span2">我寻寻觅觅却找不到您的踪迹~</span>
@@ -102,6 +112,7 @@
 import Vue from 'vue';
 import Bus from '../../utils/Bus'
 import { mapGetters } from "vuex";
+import Swiper from 'swiper';
 import { Notify,Popup } from "vant";
 Vue.use(Notify);
 Vue.use(Popup);
@@ -124,6 +135,23 @@ export default {
     ...mapGetters(["info","isUserNeedLogin"]),
   },
   methods:{
+      swiperInit() {
+            new Swiper('.swiper1', {
+                slidesPerView: 'auto',
+                freeMode: true,
+                observer: true,
+            });
+            new Swiper('.swiper2', {
+                slidesPerView: 'auto',
+                freeMode: true,
+                observer: true,
+            });
+            new Swiper('.swiper3', {
+                slidesPerView: 'auto',
+                freeMode: true,
+                observer: true,
+            });
+      },
       joindatalist(){
         this.$request.get(`/clubs/${this.$route.query.id}`).then(res => {
             let { club } = res;
@@ -131,6 +159,9 @@ export default {
             this.vanswipeItem = club.club_img;
             this.personnelItem = res.teacher;
             this.clubItems= res.trains;
+            this.$nextTick(function() {
+                this.swiperInit();
+            })
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -145,9 +176,6 @@ export default {
       },
       study(id){
           if (this.isUserNeedLogin) {
-            // Bus.$emit("login", true);
-            // Notify({ message: "请先登录", type: "warning" });
-            // return;
              this.$router.push("/login");
              return;
         }
@@ -181,7 +209,7 @@ export default {
     })
     },
     clubdetail(id){
-        this.$router.push('/messagedetail/?id='+id);
+        this.$router.push('/messagedetail/'+id);
     },
       goback(){
         this.$router.go(-1);
@@ -199,6 +227,7 @@ export default {
     top: 0;
     left: 0;
     width: 100%;
+    z-index: 99 !important;
     background-color: #E0EED2 !important;
 }
 .share_img{
@@ -257,85 +286,65 @@ export default {
         }
     }
     .club_items{
-        width: 96%;
-        // margin: 0 auto;
-        margin-left: auto;
-        // margin-inline-start: auto;
-        height: 100%;
-        display: flex;
-        margin-bottom: 20px;
-        #vanswipe2{
-            position: relative;
-            overflow: hidden;
-            -webkit-user-select: none;
-            user-select: none;
-            .van-swipe__track{
-                height: 100%;
-                width: 100% !important;
-                display: -webkit-box;
-                justify-content: center;
-            .vanswipeitem2{
-                float: left;
-                width: 131px;
-                height: 113px;
-                margin-right:8px;
-                .club_items_list{
-                    width: 131px;
+        .news-swiper {
+        padding: 2px 0 5px 16px;
+        .swiper-slide {
+            width: 131px;
+            height: 190px;
+            margin-right: 10px;
+            box-shadow:0px 1px 4px 0px rgba(22,27,27,0.18);
+            border-radius:3px;
+            margin-bottom: 10px;
+            .club_items_img{
+                width: 100%;
+                height: 110px;
+                background-color: #E5E5E5;
+                img{
+                    width: 100%;
                     height: 100%;
-                    box-shadow:0px 1px 4px 0px rgba(22,27,27,0.18);
-                    border-radius:3px;
-                    margin-right: 10px;
-                    margin-bottom: 10px;
-                    .club_items_img{
-                        width: 100%;
-                        height: 110px;
-                        img{
-                            width: 100%;
-                            height: 100%;
-                            display: block;
-                            object-fit: cover;
-                        }
+                    display: block;
+                    object-fit: cover;
+                    border-radius: 20px;
+                }
+            }
+            .club_items_title{
+                height: 63px;
+                width: 92%;
+                margin: 0 auto;
+                h3{
+                    font-family:PingFang SC;
+                    font-weight:bold;
+                    color:rgba(44,44,44,1);
+                    font-size: 12px;
+                    margin-top:15px;
+                }
+                .van-rate{
+                    display: inherit;
+                    user-select:none;
+                    height: 20px;
+                    line-height: 14px;
+                }
+                .club_items_title_its{
+                    display: flex;
+                    justify-content: space-between;
+                    margin-top: 8px;
+                    .club_price{
+                        font-family:PingFang SC;
+                        font-weight:500;
+                        font-size: 10px;
+                        color:rgba(44,44,44,1);
                     }
-                    .club_items_title{
-                        width: 100%;
-                        height: 63px;
-                        width: 92%;
-                        margin: 0 auto;
-                        h3{
-                            font-family:PingFang SC;
-                            font-weight:bold;
-                            color:rgba(44,44,44,1);
-                            font-size: 12px;
-                            margin-top:8px;
-                        }
-                        .van-rate{
-                            display: inherit;
-                            user-select:none;
-                            height: 20px;
-                            line-height: 10px;
-                        }
-                        .club_items_title_its{
-                            display: flex;
-                            justify-content: space-between;
-                            .club_price{
-                                font-family:PingFang SC;
-                                font-weight:500;
-                                font-size: 10px;
-                                color:rgba(44,44,44,1);
-                            }
-                            .club_prict{
-                                font-family:PingFang SC;
-                                font-weight:500;
-                                font-size: 10px;
-                                color: #999;
-                            }
-                        }
+                    .club_prict{
+                        font-family:PingFang SC;
+                        font-weight:500;
+                        font-size: 10px;
+                        color: #999;
                     }
                 }
             }
-            }
         }
     }
+}
     .Default-page3{
         width: 100%;
         height: 100px;
@@ -391,33 +400,27 @@ export default {
     .club_picture{
         width: 100%;
         height: 100%;
-        // display: flex;
-        margin-bottom: 20px;
-        #vanswipe{
-            position: relative;
-            overflow: hidden;
-            -webkit-user-select: none;
-            user-select: none;
-            .van-swipe__track{
-                height: 100%;
-                width: 100% !important;
-                display: -webkit-box;
-                justify-content: center;
-            .vanswipeitem{
-                float: left;
-                width: 151px;
-                height: 113px;
-                margin-right:8px;
-                .img_pl{
-                    width: 151px;
-                    height: 113px;
+        .hot-swiper {
+        padding: 5px 0 23px 0px;
+        .swiper-slide {
+            width: 151px;
+            height:113px;
+            margin-right: 11px;
+            .club_items_img{
+                width: 100%;
+                height:113px;
+                background-color: #E5E5E5;
+                border-radius: 20px;
+                .list_foot_img{
+                    width: 100%;
+                    height: 100%;
                     display: block;
                     object-fit: cover;
-                    margin-right: 10px;
+                    border-radius: 20px;
                 }
             }
-            }
         }
+    }
     }
     .club_picture_present{
         width: 93%;
@@ -499,64 +502,47 @@ export default {
     .house_personnel_lists{
         width: 100%;
         height: 100%;
-        margin-bottom: 20px;
-        display: inline-block;
-        #vanswipe3{
-            position: relative;
-            overflow: hidden;
-            -webkit-user-select: none;
-            user-select: none;
-            .van-swipe__track{
-                height: 100%;
-                width: 100% !important;
-                display: -webkit-box;
-                justify-content: center;
-            .vanswipeitem3{
-                float: left;
-                width: 254px;
-                height: 300px;
-                margin-right:8px;
-                .personnel_lists_items{
-                    width: 254px;
+        .club-swiper {
+        padding: 5px 0 23px 0px;
+        .swiper-slide {
+            width: 254px;
+            height:330px;
+            margin-right: 11px;
+            .club_items_img{
+                width: 100%;
+                height:254px;
+                background-color: #E5E5E5;
+                .list_foot_img{
+                    width: 100%;
                     height: 100%;
-                    margin-right: 10px;
-                    float: left;
-                    .personnel_lists_img{
-                        width: 100%;
-                        height: 254px;
-                        background: #EEEEEE;
-                        img{
-                            width: 100%;
-                            height: 100%;
-                            display: block;
-                            object-fit: cover;
-                        }
-                    }
-                    .personnel_lists_name{
-                        text-align: center;
-                        font-size:12px;
-                        font-family:PingFang SC;
-                        font-weight:400;
-                        color:rgba(44,44,44,1);
-                        line-height: 30px;
-                        padding-top: 10px;
-                        width: 90%;
-                        margin: 0 auto;
-                    }
-                    .personnel_lists_name2{
-                        text-align: center;
-                        font-size:10px;
-                        font-family:PingFang SC;
-                        font-weight:400;
-                        color:rgba(44,44,44,1);
-                        padding-bottom: 20px;
-                        width: 90%;
-                        margin: 0 auto;
-                    }
+                    display: block;
+                    object-fit: cover;
+                    border-radius: 20px;
                 }
             }
+            .personnel_lists_name{
+                text-align: center;
+                font-size:12px;
+                font-family:PingFang SC;
+                font-weight:400;
+                color:rgba(44,44,44,1);
+                line-height: 30px;
+                padding-top: 10px;
+                width: 90%;
+                margin: 0 auto;
+            }
+            .personnel_lists_name2{
+                text-align: center;
+                font-size:10px;
+                font-family:PingFang SC;
+                font-weight:400;
+                color:rgba(44,44,44,1);
+                padding-bottom: 20px;
+                width: 90%;
+                margin: 0 auto;
             }
         }
+    }
     }
     .Default-page2{
         width: 100%;

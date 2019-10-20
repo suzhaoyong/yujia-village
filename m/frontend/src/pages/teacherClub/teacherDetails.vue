@@ -32,12 +32,16 @@
                     </div>
                     <div class="foot_exhibition_staff">PERSONAL DISPLAY</div>
                 </div>
-                <div class="details_foot_list" v-if="footlist.length > 0">
-                    <van-swipe :loop="false" :width="214" id="vanswipe" :show-indicators="false">
-                        <van-swipe-item class="vanswipeitem" v-for="(item,index) in footlist" :key="index">
-                            <img :src="item" class="list_foot_img"/>
-                        </van-swipe-item>
-                    </van-swipe>
+                <div class="hot-swiper" v-if="footlist.length > 0">
+                    <div class="swiper-container swiper1">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide" v-for="(item,index) in footlist" :key="index">
+                                <div class="club_items_img">
+                                    <img :src="item" class="list_foot_img"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
                 </div>
                 <div class="Default-page" v-else>
                     <span class="page-span">我寻寻觅觅却找不到您的踪迹~</span>
@@ -54,6 +58,7 @@
 import Vue from 'vue';
 import Bus from "@/utils/Bus";
 import { mapGetters } from "vuex"
+import Swiper from 'swiper';
 import { Popup} from 'vant';
 Vue.use(Popup);
 export default {
@@ -72,12 +77,22 @@ export default {
       this.yogoteacherdata();
   },
   methods:{
+      swiperInit() {
+            new Swiper('.swiper1', {
+                slidesPerView: 'auto',
+                freeMode: true,
+                observer: true,
+            });
+      },
        yogoteacherdata(){
         this.$request.get(`/teachers/${this.$route.query.id}`).then(res => {
             let { teacher,course} = res;
             this.footlist = res.teacher.teacher_img;
             this.teacher = res.teacher;
             this.teacherid = res.teacher.id;
+            this.$nextTick(function() {
+                this.swiperInit();
+            })
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -105,9 +120,6 @@ export default {
     })
     },
       goback() {
-        // 这儿用这个，返回上一级页面
-        // this.$router.push({path:'/teacherClub',query:{fenmsg:this.fan}});
-        // this.$router.push('/teacherClub');
         this.$router.go(-1);
       },
   }
@@ -123,6 +135,7 @@ export default {
     top: 0;
     left: 0;
     width: 100%;
+    z-index: 99 !important;
     background-color: #E0EED2 !important;
 }
 .share_img{
@@ -295,35 +308,27 @@ export default {
                 padding-top: 5px;
             }
         }
-        .details_foot_list{
-            width: 96%;
-            // margin: 0 auto;
-            margin-left: auto;
-            margin-bottom: 10px;
-            #vanswipe{
-            position: relative;
-            overflow: hidden;
-            -webkit-user-select: none;
-            user-select: none;
-            .van-swipe__track{
-                height: 100%;
-                width: 100% !important;
-                display: -webkit-box;
-                justify-content: center;
-            .vanswipeitem{
-                float: left;
-                width: 214px;
-                height: 270px;
-                margin-right:8px;
+        .hot-swiper {
+        padding: 5px 0 23px 16px;
+        .swiper-slide {
+            width: 214px;
+            height: 270px;
+            margin-right: 11px;
+            .club_items_img{
+                width: 100%;
+                height:270px;
+                background-color: #E5E5E5;
+                border-radius: 20px;
                 .list_foot_img{
-                width: 214px;
-                height: 270px;
-                object-fit: cover;
-              }
-            }
+                    width: 100%;
+                    height: 100%;
+                    display: block;
+                    object-fit: cover;
+                    border-radius: 20px;
+                }
             }
         }
-        }
+    }
         .Default-page{
             width: 100%;
             height: 100px;
