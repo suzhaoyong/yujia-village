@@ -41,7 +41,7 @@
                                 <figure class="test6">
                                     <img :src="item.first_img" class="yogocontunt2-img"/>
                                     <p class="p1">{{item.club_name}}</p>
-                                    <p class="p2">{{item.club_address}}</p>
+                                    <p class="p2">{{item.custom_address}}</p>
                                     <figcaption>
                                         <div class="telimg">
                                             <span v-html="item.content" class="telpp">{{item.content}}</span>

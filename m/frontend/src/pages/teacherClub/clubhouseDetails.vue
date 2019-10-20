@@ -293,7 +293,7 @@ export default {
             height: 190px;
             margin-right: 10px;
             box-shadow:0px 1px 4px 0px rgba(22,27,27,0.18);
-            border-radius:3px;
+            border-radius:7px;
             margin-bottom: 10px;
             .club_items_img{
                 width: 100%;
@@ -304,7 +304,7 @@ export default {
                     height: 100%;
                     display: block;
                     object-fit: cover;
-                    border-radius: 20px;
+                    border-radius:7px 7px 0px 0px;
                 }
             }
             .club_items_title{
@@ -410,13 +410,13 @@ export default {
                 width: 100%;
                 height:113px;
                 background-color: #E5E5E5;
-                border-radius: 20px;
+                border-radius: 4px;
                 .list_foot_img{
                     width: 100%;
                     height: 100%;
                     display: block;
                     object-fit: cover;
-                    border-radius: 20px;
+                    border-radius: 4px;
                 }
             }
         }
@@ -508,16 +508,20 @@ export default {
             width: 254px;
             height:330px;
             margin-right: 11px;
+            box-shadow:0px 1px 4px 0px rgba(22,27,27,0.18);
+            margin-bottom: 30px;
+            border-radius: 7px;
             .club_items_img{
                 width: 100%;
                 height:254px;
                 background-color: #E5E5E5;
+                border-radius: 7px;
                 .list_foot_img{
                     width: 100%;
                     height: 100%;
                     display: block;
                     object-fit: cover;
-                    border-radius: 20px;
+                    border-radius: 7px 7px 0px 0px;
                 }
             }
             .personnel_lists_name{
