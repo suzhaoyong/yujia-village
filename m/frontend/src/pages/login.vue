@@ -1,7 +1,9 @@
 <template>
   <div class="body-wrap">
     <div class="back_home-wrap" @click="goHome">
-      <div class="back_home" style=""><van-icon style="font-size: 20px;" name="wap-home" /></div>
+      <div class="back_home" style>
+        <van-icon style="font-size: 20px;" name="wap-home" />
+      </div>
     </div>
     <div class="body">
       <!-- <div class="tips" v-show="false">
@@ -25,7 +27,7 @@
           </div>
           <input class="input key" type="password" v-model="ruleForm.password" placeholder="请输入密码" />
         </div>
-        <div class="input-box flex">
+        <div class="input-box flex" v-show="false">
           <input class="input captcha" type="tel" v-model="ruleForm.captcha" placeholder="请输入验证码" />
           <div class="code">
             <div class="img">
@@ -53,6 +55,7 @@
         <div class="input-box reg tel">
           <van-field type="tel" v-model="registerForm.tel" placeholder />
         </div>
+
         <div class="input-box flex">
           <div class="reg-captch">
             <van-field type="tel" v-model="registerForm.captcha" placeholder />
@@ -73,7 +76,13 @@
           </div>
         </div>
         <div class="input-box reg ver_code">
-          <van-field type="tel" v-model="registerForm.verification_code" center clearable placeholder></van-field>
+          <van-field
+            type="tel"
+            v-model="registerForm.verification_code"
+            center
+            clearable
+            placeholder
+          ></van-field>
           <van-button
             class="sms"
             size="small"
@@ -81,10 +90,13 @@
             type="primary"
           >{{codeTips.msg}}</van-button>
         </div>
+
         <div class="input-box reg pwd">
           <van-field v-model="registerForm.password" type="password" placeholder />
         </div>
-
+        <div class="input-box reg nvitation_id">
+          <van-field type="text" v-model="registerForm.invitation_id" placeholder />
+        </div>
         <div class="input-btn">
           <van-button type="default" @click="register">注册</van-button>
           <div class="reg-tips">
@@ -200,6 +212,22 @@ Vue.use(Field)
   .use(Dialog)
   .use(Icon)
   .use(Notify);
+const getUrlParams = function getUrlParams() {
+  var search = window.location.search;
+  var url = decodeURI(search); // 编码字符 解码
+  var splitIndex = url.indexOf("?"); // 返回第一个？号的位置
+  var str = url.substring(splitIndex + 1); // 获取到查询参数
+  var getAllUrlParam = function(str) {
+    var urlArr = str.split("&");
+    var obj = {};
+    for (var i = 0; i < urlArr.length; i++) {
+      var arg = urlArr[i].split("=");
+      arg[0] && (obj[arg[0]] = arg[1]);
+    }
+    return obj;
+  };
+  return getAllUrlParam(str);
+};
 export default {
   data() {
     return {
@@ -228,9 +256,9 @@ export default {
       form: { type: "login" },
       ruleForm: {
         tel: "",
-        password: "",
-        captcha: "",
-        key: ""
+        password: ""
+        // captcha: "",
+        // key: ""
       },
       registerForm: {
         name: "",
@@ -247,7 +275,7 @@ export default {
         verification_key: "",
         verification_code: "",
         captcha: "",
-        key: ""
+        key: "",
       },
       verification: {
         code_img: "",
@@ -262,15 +290,17 @@ export default {
     }
   },
   mounted() {
+    this.registerForm.invitation_id = getUrlParams().invitation_id || ''
+    this.registerForm.invitation_id && (this.form.type = 'register')
     // this.$store.commit('loadStatus', false)
-    this.getVerificationCode();
+    // this.getVerificationCode();
     this.loadFile("sy");
     this.loadFile("ys");
   },
   methods: {
     // 返回主页
     goHome() {
-      this.$router.replace('/main')
+      this.$router.replace("/main");
     },
     openFile(type) {
       this.show[type] = true;
@@ -319,14 +349,15 @@ export default {
           is_not_pass = true;
         }
       }
+      console.log(is_not_pass, this.ruleForm);
       if (is_not_pass) return;
       const params = Object.assign({}, this.ruleForm);
       this.$request
-        .post("/auth/login", params)
-        .then((data)=> {
+        .post("/auth/auth", params)
+        .then(data => {
           sessionStorage.setItem("access", JSON.stringify(data));
           Notify({ message: "登录成功", type: "success" });
-          this.$router.push('/personal');
+          this.$router.push("/personal");
         })
         .catch(err => {
           Notify(err);
@@ -372,9 +403,9 @@ export default {
       this.ruleForm = {
         tel: "",
         password: "",
-        captcha: "",
-        key: "",
-        invitation_id: ""
+        // captcha: "",
+        // key: "",
+        // invitation_id: ""
       };
       this.registerForm = {
         name: "",
@@ -445,7 +476,7 @@ export default {
           }, 1000);
           const { img, key } = data;
           this.verification.code_img = img;
-          this.ruleForm.key = key;
+          // this.ruleForm.key = key;
           this.registerForm.key = key;
           this.reset.key = key;
         })
@@ -515,7 +546,7 @@ export default {
   width: 260px;
   /* font-size: 10px; */
 }
-.van-button.van-button--default.van-button--large.van-dialog__confirm{
+.van-button.van-button--default.van-button--large.van-dialog__confirm {
   width: 100%;
 }
 .sms {
@@ -532,11 +563,11 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
-.back_home-wrap{
+.back_home-wrap {
   position: absolute;
   left: 20px;
   top: 10px;
-  .back_home{
+  .back_home {
     font-size: 20px;
     display: flex;
     -webkit-box-align: center;
@@ -590,11 +621,15 @@ export default {
 input::-webkit-input-placeholder {
   color: #fff;
 }
+.body-wrap /deep/ .van-field__control {
+  color: #fff;
+}
 .input.tel,
 .input.key,
-.input.captcha {
+input.nvitation_id .input.captcha {
   padding: 8px 6px;
   margin-left: 10px;
+  color: #fff;
   position: relative;
 }
 .input.captcha {
@@ -688,7 +723,7 @@ img {
     border: none;
   }
   &::before {
-    content: "请输入图形验证码";
+    content: "图形验证码";
     width: 200%;
     text-align: center;
     color: #fff;
@@ -708,7 +743,7 @@ img {
   position: relative;
   &.ver_code {
     &::before {
-      content: "请输入短信验证码";
+      content: "短信验证码";
     }
   }
   &.pwd {
@@ -716,13 +751,19 @@ img {
       content: "设置登录密码";
     }
   }
+  &.nvitation_id {
+    &::before {
+      content: "邀请码";
+    }
+  }
   &.tel {
     &::before {
-      content: "请输入手机号码";
+      content: "手机号码";
     }
   }
   &.tel,
   &.ver_code,
+  &.nvitation_id,
   &.pwd {
     &::before {
       color: #fff;
