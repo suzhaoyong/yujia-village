@@ -18,11 +18,11 @@
           <span class="class_release" @click="goPage('release')" v-if="hasPower">课程发布</span>
         </div>
         <div class="info">
-          <div class="balance" @click="viewHistory('glod')">
+          <!-- <div class="balance" @click="viewHistory('glod')">
             金币可用
             <span class="number">{{info.user.money}}</span>
-          </div>
-          <div class="recharge" @click="changMoney">充值</div>
+          </div> -->
+          <!-- <div class="recharge" @click="changMoney">充值</div> -->
           <div class="recharge" @click="viewHistory('score')">积分</div>
           <div class="withdraw">
             <!-- 提现 -->

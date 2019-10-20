@@ -57,8 +57,8 @@
                                             <div class="rhomb3"></div>
                                             <div class="rhomb4"></div>
                                         </div>
-                                        <div class="yogoswiper-text" @click="namelistItem(namelist)">
-                                            <h3>{{namelist.name}}</h3>
+                                        <div class="yogoswiper-text">
+                                            <h3 @click="namelistItem(namelist)">{{namelist.name}}</h3>
                                             <p class="p1">{{namelist.info}}</p>
                                             <p class="p3">从业时间: {{namelist.num}}年</p>
                                             <p class="p2">擅长：{{namelist.good_at}}</p>
@@ -618,7 +618,7 @@ export default {
                 margin: 0 auto;
                 margin-bottom: 50px;
                 position: relative;
-                cursor: pointer;
+                // cursor: pointer;
                 .margin-auto{
                     width: 100%;
                     margin:0 auto;
@@ -770,7 +770,7 @@ export default {
                         width: 46%;
                         height: 100%;
                         margin-left: 35px;
-                        cursor: pointer;
+                        // cursor: pointer;
                         .yogoswiper-butt{
                             width: 120px;
                             border: 1px solid #e2dbc8;
@@ -812,6 +812,7 @@ export default {
                             -webkit-box-orient: vertical !important;
                             -webkit-line-clamp: 1 !important;// 限制快级元素的文本行数
                             overflow: hidden !important;
+                            cursor: pointer;
                         }
                         .p1{
                             color: #2c2c2c;
@@ -850,6 +851,7 @@ export default {
                         background-color: #fff;
                         background-image: url('../assets/left.png');
                         background-position: center;
+                        cursor: pointer;
                 }
                 .swiper-button-prev1:hover{
                         position: absolute;
@@ -883,6 +885,7 @@ export default {
                         background-color: #fff;
                         background-image: url('../assets/right.png');
                         background-position: center;
+                        cursor: pointer;
                 }
                 .swiper-button-next1:hover{
                         position: absolute;

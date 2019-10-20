@@ -1,9 +1,10 @@
 <template>
 <div>
     <div class="club_warp">
-        <div class="club_warp_head">名师&机构</div>
+        <!-- <div class="club_warp_head">名师&机构</div> -->
         <div class="club_warp_list">
           <span class="liList" v-for="(item,index) in liList" :key="index" v-on:click="addClass(index)" :class="{ischeck:index==current}">{{item}}</span>
+          <!-- <div class="stylelist"></div> -->
         </div>
         <div class="list_teacher" v-show="this.current === 0">
             <div class="list_banner" :style="{backgroundImage: 'url('+banner+')'}"></div>
@@ -11,6 +12,9 @@
             <div class="club_house">
                 <div class="club_house_title">
                     <span class="items" v-for="(item,index) in items" @click="clicktext(index)" :key="index" :class="{active:index==curritem}">{{item}}</span>
+                        <van-dropdown-menu active-color="#7BBB62">
+                        <van-dropdown-item v-model="value1" :options="option1" title="热门城市" @change="dropdownchange"/>
+                       </van-dropdown-menu>
                 </div>
                 <div class="club_house_inquiry">
                     <input type="text" class="club_house_inquiry_input" v-model="name" placeholder="输入机构名称"/>
@@ -27,7 +31,9 @@
                         <div class="text van-ellipsis">{{item.custom_address}}</div>
                     </div>
                 </div>
-                <div class="tips_text" @click="Loadmore">加载更多</div>
+                <div class="tips_text" @click="Loadmore">
+                    {{current_page >= last_page ? clubBox.length > 0? "我也是有底线的": "没有这个哦！" : "点我加载更多"}}
+                </div>
             </div>
             <div class="Default-page4" v-else>
                 <span class="page-span4">我寻寻觅觅却找不到您的踪迹~</span>
@@ -122,7 +128,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="tips_text" @click="Loadmore2">加载更多</div>
+                <div class="tips_text" @click="Loadmore2">
+                    {{current_page2 >= last_page2 ? exhibitionBox.length > 0? "我也是有底线的": "没有这个哦！" : "点我加载更多"}}
+                </div>
             </div>
              <div class="Default-page5" v-else>
                 <span class="page-span5">我寻寻觅觅却找不到您的踪迹~</span>
@@ -146,8 +154,12 @@ import areaList from "../../assets/js/area.js";
 import Vue from 'vue';
 import Bus from "@/utils/Bus";
 import { mapGetters } from "vuex"
-import { Notify, Dialog } from "vant";
-Vue.use(Notify).use(Dialog);
+import { Notify, Dialog, Toast} from "vant";
+import { DropdownMenu, DropdownItem } from 'vant';
+Vue.use(DropdownMenu).use(DropdownItem);
+Vue.use(Notify)
+.use(Dialog)
+.use(Toast);
 export default {
     data() {
     return {
@@ -162,13 +174,28 @@ export default {
         Box2:true,
         banner2:'',
         isActive: 0,
+        value1:'',
+        option1: [
+        { text: '北京', value: '北京' },
+        { text: '上海', value: '上海' },
+        { text: '深圳', value: '深圳' },
+        { text: '成都', value: '成都' },
+        { text: '武汉', value: '武汉' },
+        { text: '厦门', value: '厦门' },
+        { text: '天津', value: '天津' },
+        { text: '广州', value: '广州' },
+        { text: '重庆', value: '重庆' },
+        { text: '长沙', value: '长沙' },
+        { text: '南京', value: '南京' },
+        { text: '杭州', value: '杭州' },
+       ],
         name:"",
         num:"",
         record:"",
         Giveupimg:true,
         Giveupimg1:true,
         liList:["培训机构","瑜伽名师"],
-        items:["全部","最新","距离最近"],
+        items:["全部"],
         clubBox:[],
         change:[],
         value:"",
@@ -183,12 +210,19 @@ export default {
         city:"",
         area:"",
         current_page:1,
+        last_page: 2,
+        current_page2:1,
+        last_page2: 2,
         id:0,
         id2:0
     };
   },
    computed: {
     ...mapGetters(["info"]),
+  },
+  mounted () {
+    this.PullUpReload();
+    this.PullUpReload2();
   },
   created(){
       this.joindata();
@@ -199,9 +233,17 @@ export default {
       //机构列表
       joindata(){
         this.$request.get(`/clubs?page=${this.current_page}`).then(res => {
-            this.clubBox = res.data.data;
+            // this.clubBox = res.data.data;
+            res.data.data.map((item) => {
+            this.clubBox.push(item);
+            })
             this.banner = res.banner;
             this.current_page = res.data.current_page;
+            this.last_page = res.data.last_page;
+            if(this.current_page > this.last_page) {
+            this.current_page = res.data.last_page;
+            Toast('没有更多了哦');
+            }
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -214,31 +256,101 @@ export default {
             }
         });
       },
+      //热门城市
+      dropdownchange(){
+         let params2 = {
+            hot:this.value1,
+        }
+        this.$request.post(`/clubs/search/hot/club?page=${this.current_page}`,params2).then(res => {
+            this.clubBox = res.data;
+            this.current_page = res.current_page;
+            this.last_page = res.last_page;
+            if(this.current_page > this.last_page) {
+            this.current_page = res.last_page;
+            Toast('没有更多了哦');
+            }
+        })
+        .catch(error => {
+            let { response: { data: { errorCode, msg } } } = error;
+            if (errorCode != 0) {
+            this.$message({
+                message: msg,
+                type: "error"
+            });
+            return;
+            }
+        });
+      },
+       // 上拉加载
+    PullUpReload () {
+      let isScroll = false;  // 函数截流
+      document.querySelector('.list_teacher').onscroll = function() {
+      if (isScroll) {
+        setTimeout(() => {
+          isScroll = false;
+        },100)
+      } else {
+        let innerHeight = document.querySelector('.list_teacher').clientHeight; // 容器高度
+        let outerHeight = document.querySelector('.club_item').clientHeight; // 容器高+滚动高
+        let scrollTop = document.querySelector('.list_teacher').scrollTop;  // 滚动高
+        if (innerHeight + scrollTop >= outerHeight + 219) {
+          this.current_page > this.last_page? '': this.current_page++;
+          this.joindata();
+        }
+        isScroll = true;
+      }
+      }
+    },
+    PullUpReload2 () {
+      let isScroll = false;  // 函数截流
+      document.querySelector('.list_clubhouse').onscroll = function() {
+      if (isScroll) {
+        setTimeout(() => {
+          isScroll = false;
+        },100)
+      } else {
+        let innerHeight = document.querySelector('.list_clubhouse').clientHeight; // 容器高度
+        let outerHeight = document.querySelector('.exhibition_items').clientHeight; // 容器高+滚动高
+        let scrollTop = document.querySelector('.list_clubhouse').scrollTop;  // 滚动高
+        if (innerHeight + scrollTop >= outerHeight + 219) {
+          this.current_page2 > this.last_page2? '': this.current_page2++;
+          this.exhibitionList();
+        }
+        isScroll = true;
+      }
+      }
+    },
       Loadmore(){
-        this.current_page++;
+        this.current_page > this.last_page? '': this.current_page++;
         this.joindata();
       },
       Loadmore2(){
-        this.current_page++;
+        this.current_page2 > this.last_page2? '': this.current_page2++;
         this.exhibitionList();
       },
       //名师列表
       exhibitionList(){
-        this.$request.get(`/teachers?page=${this.current_page}`).then(res => {
-            this.exhibitionBox = res.teachers.data;
+        this.$request.get(`/teachers?page=${this.current_page2}`).then(res => {
+            // this.exhibitionBox = res.teachers.data;
+            res.teachers.data.map((item) => {
+            this.exhibitionBox.push(item);
+            })
             this.houseType = res.course_types;
             this.actions = res.year;
             this.banner2 = res.banner;
-            this.current_page = res.teachers.current_page;
+            this.current_page2 = res.teachers.current_page;
+            this.last_page2 = res.teachers.last_page;
+            if(this.current_page2 > this.last_page2) {
+            this.current_page2 = res.teachers.last_page;
+            Toast('没有更多了哦');
+            }
             for(var i=0;i<this.exhibitionBox.length;i++){
                 if(this.exhibitionBox[i].id==this.id){
                     this.exhibitionBox[i]["Giveupimg"]=false;
                     // this.$set(this.exhibitionBox[i], 'Giveupimg', false);
-                    // console.log(this.$set(this.exhibitionBox[i], 'Giveupimg', false));
                 }else{
                     this.exhibitionBox[i]["Giveupimg"]=true;
                     // this.$set(this.exhibitionBox[i], 'Giveupimg', true);
-                    // console.log(this.$set(this.exhibitionBox[i], 'Giveupimg', true));
                 }              
             }
         })
@@ -369,12 +481,6 @@ export default {
         switch(index) {
             case 0:
                 this.joindata();
-                break;
-            case 1:
-                this.clubBox.reverse();
-                break;
-            case 2:
-                this.clubBox.reverse();
                 break;
         } 
     },
@@ -551,10 +657,18 @@ input:-ms-input-placeholder{
   .el-icon-arrow-down {
     font-size: 12px!important;
   }
+  .van-dropdown-menu{
+    height: 40px;
+    background-color: #eee;
+    color: #2c2c2c;
+    width: 80px;
+    padding-top: 1px;
+}
 .club_warp{
     width: 100%;
     height: 100%;
     display: inline-block;
+    // position: relative;
     .club_warp_head{
         background-color: #E0EED2;
         color: #2c2c2c;
@@ -579,7 +693,7 @@ input:-ms-input-placeholder{
         line-height: 44px;
         text-align: center;
         display: flex;
-        margin-top: 44px;
+        // margin-top: 44px;
         position: fixed;
         left: 0;
         top: 0;
@@ -590,18 +704,27 @@ input:-ms-input-placeholder{
             background-color: #fff;
             color: #2C2C2C;
         }
+        // .stylelist{
+        //     width: 16%;
+        //     background: #7BBB62;
+        //     height: 2px;
+        //     position: absolute;
+        //     top: 42px;
+        //     left: 63px;
+        // }
         .ischeck  {
-            background: #7BBB62;
+            background: #fff;
             height: 100%;
             width: 50%;
-            color: #fff;
+            color: #7BBB62;
+            border-bottom: 4px solid #7BBB62;
         }
     }
     .list_teacher{
         width: 100%;
         // height: 100%;
-        padding-top: 88px;
-        background: #fff !important;
+        padding-top: 44px;
+        background: #eee !important;
         position: relative;
         .list_banner{
           height: 170px;
@@ -619,7 +742,7 @@ input:-ms-input-placeholder{
             background: #97B3C1;
             position: absolute;
             left: 160px;
-            top: 217px;
+            top: 173px;
         }
         .club_house{
             width: 93%;
@@ -630,15 +753,16 @@ input:-ms-input-placeholder{
                 width: 50%;
                 height: 50px;
                 line-height: 40px;
+                display: flex;
                 .items{
-                    font-size:12px;
+                    font-size:14px;
                     font-family:Microsoft YaHei;
                     font-weight:400;
                     color:rgba(44,44,44,1);
                     padding-right: 10px;
                 }
                 .active{
-                    font-size:12px;
+                    font-size:14px;
                     font-family:Microsoft YaHei;
                     font-weight:bold;
                     color:rgba(44,44,44,1);
@@ -649,7 +773,7 @@ input:-ms-input-placeholder{
                 height: 50px;
                 position: relative;
                 .club_house_inquiry_input{
-                    background-color: #eeeeee;
+                    background-color: #fff;
                     border-radius: 13px;
                     height: 30px;
                     width: 70%;
@@ -674,7 +798,7 @@ input:-ms-input-placeholder{
             margin: 0 auto;
             display: flow-root;
             // margin-bottom: 49px;
-            background: #fff !important;
+            background: #eee !important;
             .club_item_box{
                 width: 48%;
                 height: 100%;
@@ -696,14 +820,14 @@ input:-ms-input-placeholder{
                 .club_item_title{
                     width: 100%;
                     height: 75px;
-                    background-color: #eeeeee;
+                    background-color: #fff;
                     display: inline-block;
                     h3{
                         font-size:12px;
                         font-family:Microsoft YaHei;
                         font-weight:400;
                         color:rgba(44,44,44,1);
-                        margin-top: 20px;
+                        margin-top: 15px;
                         text-indent: 10px;
                         width: 93%;
                     }
@@ -712,7 +836,7 @@ input:-ms-input-placeholder{
                         font-family:PingFang SC;
                         font-weight:400;
                         color: #999;
-                        margin-top: 15px;
+                        margin-top: 10px;
                         text-indent: 10px;
                         width: 93%;
                     }
@@ -736,7 +860,7 @@ input:-ms-input-placeholder{
                 .club_item_title{
                     width: 100%;
                     height: 75px;
-                    background-color: #eeeeee;
+                    background-color: #fff;
                     display: inline-block;
                     h3{
                         font-size:12px;
@@ -785,7 +909,7 @@ input:-ms-input-placeholder{
     .list_clubhouse{
         width: 100%;
         // height: 100%;
-        padding-top: 88px;
+        padding-top: 44px;
         background: #fff !important;
         .list_banner{
           height: 170px;

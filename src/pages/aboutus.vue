@@ -10,7 +10,7 @@
                         </div>
                     </template>
                     <div class="aboutus-count">
-                        <div class="aboutus-count-div1">
+                        <!-- <div class="aboutus-count-div1">
                             <h2><img src="../assets/yujia.png"/>瑜伽照片墙</h2>
                             <p class="nav-text">Sometimes beauty is so simple</p>
                             <div class="border-left"></div>
@@ -40,7 +40,7 @@
                                     <img class="img2" :src="aboutUs.img9"/>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <el-col :span="24" class="bg-img">
                         <div class="aboutus-count-div3">
                             <h2><img src="../assets/yujia.png"/>瑜伽村平台</h2>
@@ -337,9 +337,10 @@ export default {
         }
         .aboutus-count-div4{
             width: 1200px;
-            height: 155px;
-            line-height: 0px;
+            height: 250px;
             margin: 0 auto;
+            line-height: 0px;
+            margin-bottom: 20px;
             .abouts-p{
                 text-align: center;
                 font-size: 14px;
@@ -347,6 +348,7 @@ export default {
                 width: 90%;
                 margin: 0 auto;
                 padding-top: 3%;
+                line-height: 28px;
             }
         }
         .aboutus-count-div5{
@@ -393,7 +395,7 @@ export default {
         }
         .aboutus-count-div6{
             width: 1200px;
-            height: 155px;
+            height: 180px;
             margin: 0 auto;
             line-height: 0px;
             .abouts-p2{
@@ -402,6 +404,7 @@ export default {
                 color: #2c2c2c;
                 width: 90%;
                 margin: 0 auto;
+                line-height: 28px;
                 padding-top: 3%;
             }
         }

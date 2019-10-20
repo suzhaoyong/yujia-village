@@ -120,7 +120,7 @@
       <div>
         <not-found v-if="like.data.length === 0" type="not-fond_2" msg="我寻寻觅觅却找不见您点赞的老师"></not-found>
       </div>
-      <div class="cash-voucher">
+      <!-- <div class="cash-voucher">
         <session-title name="现金券">
           <span slot="tips" style="color:#999;">(可拆分使用)</span>
         </session-title>
@@ -176,8 +176,8 @@
             msg="虽然您没有券，但至少您还拥有一盆花请温笑面对生活^-^"
           ></not-found>
         </div>
-      </div>
-      <div class="useable-voucher">
+      </div> -->
+      <!-- <div class="useable-voucher">
         <session-title name="已领取优惠券"></session-title>
         <div class="body">
           <div class="vouchers">
@@ -197,8 +197,8 @@
                 <div class="name"></div>
                 <div class="condition">
                   {{item.range}}
-                  <!-- 订单满{{item.limit_money}}元 -->
-                  <!-- <br /> -->
+                  订单满{{item.limit_money}}元
+                  <br />
                   可使用
                 </div>
               </div>
@@ -210,7 +210,7 @@
             msg="我们的优惠券一般为限时发放，请您注意时间哟(＾Ｕ＾)ノ~ＹＯ"
           ></not-found>
         </div>
-      </div>
+      </div> -->
     </div>
     <el-dialog title="使用记录" width="50rem" :visible.sync="used.show" v-if="used.show">
       <div class="table">
