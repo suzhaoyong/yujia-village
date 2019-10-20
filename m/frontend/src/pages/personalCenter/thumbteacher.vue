@@ -97,7 +97,7 @@ export default {
         height: 251px;
         margin-bottom: 13px;
         background-color: #fff;
-        border-radius:5px;
+        border-radius: 10px;
         box-shadow: 0px 3px 3px #c8c8c8;
         font-size: 10px;
         overflow: hidden;

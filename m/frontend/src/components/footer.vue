@@ -35,12 +35,6 @@ export default {
                     normal: require('../assets/img/information-normal.png'),
                     active: require('../assets/img/information-active.png')
                 },
-                // {
-                //     title: '商城',
-                //     name: 'store',
-                //     normal: require('../assets/img/mall-normal.png'),
-                //     active: require('../assets/img/mall-active.png')
-                // },
                 {
                     title: '个人中心',
                     name: 'personal',
@@ -71,7 +65,7 @@ export default {
             // 切换 tabbar 路由跳转
             if(active === 'home' && window.sessionStorage.getItem('index')) {
                 this.$router.push('/'+ window.sessionStorage.getItem('index'));
-            } else if(active === 'personal' && this.isUserNeedLogin) {
+            } else if(active === 'personal' && !window.sessionStorage.getItem('access')) {
                 this.$router.push('/login');
             } 
             else {

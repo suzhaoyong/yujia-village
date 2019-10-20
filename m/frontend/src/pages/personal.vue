@@ -11,60 +11,73 @@
                 <div class="bell_circles" v-else></div>
             </div>
             <div class="my-box">
-                <router-link to="/myorder">我的订单</router-link>
-                <router-link to="/shoppingbag">购物袋</router-link>
-                <router-link to="/address">收货地址</router-link>
+                <ul class="my-item">
+                    <li @click="routerSkip('invite')">
+                        <div class="img"></div>
+                        <div>邀请</div>
+                    </li>
+                    <li @click="routerSkip('collect')">
+                        <div class="img bgc-position1"></div>
+                        <div>收藏</div>
+                    </li>
+                    <li @click="routerSkip('thumb')">
+                        <div class="img bgc-position2"></div>
+                        <div>赞</div>
+                    </li>
+                </ul>
             </div>
         </div>
         
         <div class="asset">
-            <div class="asset-item1">
-                <div class="img"></div>
-                <span class="my-asset">我的资产</span>
+            <div class="asset-title">
+                <img class="img" src="../assets/img/asset.png"/>
+                <span>我的资产</span>
             </div>
-            <div class="asset-item">
-                <div>{{personalData.money}}</div>
-                <div>金币</div>
-            </div>
-            <div class="asset-item">
-                <div>{{personalData.cashCount}}</div>
-                <div><router-link to="/cashvoucher">现金券</router-link></div>
-            </div>
-            <div class="asset-item">
-                <div>{{personalData.couponCount}}</div>
-                <div><router-link to="/coupon">优惠券</router-link></div>
-            </div>
-            <div class="asset-item">
-                <div>{{personalData.fraction}}</div>
-                <div>积分</div>
+            <div class="item-box">
+                <div class="asset-item">
+                    <div class="item-title">金币</div>
+                    <div>
+                        <span class="number">{{personalData.money}}</span>
+                        <span>可用</span>
+                    </div>
+                </div>
+                <div class="asset-item">
+                    <div class="item-title">现金券</div>
+                    <div>
+                        <span class="number">{{personalData.cashCount}}</span>
+                        <span>张可用</span>
+                    </div>
+                </div>
+                <div class="asset-item">
+                    <div class="item-title">优惠券</div>
+                    <div>
+                        <span class="number">{{personalData.couponCount}}</span>
+                        <span>张可用</span>
+                    </div>
+                </div>
+                <div class="asset-item">
+                    <div class="item-title">积分</div>
+                    <div>
+                        <span class="number">{{personalData.fraction}}</span>
+                        <span>可用</span>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="cell">
-            <van-cell is-link to="/collect">
-                <template slot="title">
-                    <img class="icon" src="../assets/img/collection.png" alt="">
-                    <span class="custom-title">我的收藏</span>
-                </template>
-            </van-cell>
-            <van-cell is-link to="/thumbteacher">
-                <template slot="title">
-                    <img class="icon" src="../assets/img/praise.png" alt="">
-                    <span class="custom-title">我点赞的名师</span>
-                </template>
-            </van-cell>
             <!-- <van-cell is-link to="/buycourse">
                 <template slot="title">
                     <img class="icon" src="../assets/img/courses.png" alt="">
                     <span class="custom-title">我购买的课程</span>
                 </template>
             </van-cell> -->
-            <van-cell is-link class="rz-center" to="/authenticationcenter">
+            <van-cell is-link :border="false" class="rz-center" to="/authenticationcenter">
                 <template slot="title">
                     <img class="icon" src="../assets/img/certification.png" alt="">
                     <span class="custom-title">认证中心</span>
                 </template>
             </van-cell>
-            <van-cell is-link @click="showPopup">
+            <van-cell is-link :border="false" @click="showPopup">
                 <template slot="title">
                     <img class="icon" src="../assets/img/customer-service.png" alt="">
                     <span class="custom-title">客服中心</span>
@@ -75,19 +88,12 @@
                 <div class="phone-img"></div>
                 <div class="hot-line">客服电话　400-100-7191</div>
             </van-popup>
-            <van-cell is-link class="" to="/changephone">
+            <van-cell is-link :border="false" to="/changephone">
                 <template slot="title">
                     <img class="icon" src="../assets/img/mobile-phone.png" alt="">
                     <span class="custom-title">更改绑定手机</span>
                 </template>
             </van-cell>
-            <van-cell is-link class="invitation" to="/invitation">
-                <template slot="title">
-                    <img class="icon" src="../assets/img/yaoqing.png" alt="">
-                    <span class="custom-title">我的邀请</span>
-                </template>
-            </van-cell>
-
         </div>
         <div class="logout" @click="logout">退出登录</div>
     </div>
@@ -105,22 +111,14 @@ export default {
         }
     },
     created() {
-      this.$store.commit('lastLoginStatus', true)
-    },
-    mounted() {
         this.getPersonalData()
         this.messagecenter();
     },
-    computed: {
-      ...mapGetters(['info', 'isUserNeedLogin'])
-    },
     methods: {
         getPersonalData() {
-            // const token = JSON.parse(window.sessionStorage.getItem('access')) 
             this.$request.get('/personal/home').then(data => {
-                store.dispatch("INFO", data);
-                sessionStorage.setItem('user data',JSON.stringify(data));
-                // console.log(data);
+                console.log(data);
+                
                 const { fraction, icon, name, identity_auth, reason,cashCount,couponCount } = data.user;
                 window.sessionStorage.setItem('user',JSON.stringify(data.user));
                 const index = data.user.money.indexOf(".");
@@ -149,17 +147,25 @@ export default {
         messagecenter(){
             this.$request.get(`/personal/message/mobile/first`).then(res => {
                 this.Message = res;
-        })
-        .catch(error => {
-            let { response: { data: { errorCode, msg } } } = error;
-            if (errorCode != 0) {
-            this.$message({
-                message: msg,
-                type: "error"
+            }).catch(error => {
+                let { response: { data: { errorCode, msg } } } = error;
+                if (errorCode != 0) {
+                    this.$message({
+                        message: msg,
+                        type: "error"
+                    });
+                    return;
+                }
             });
-            return;
+        },
+        routerSkip(keyword) {
+            if(keyword === 'invite') {
+                this.$router.push('/invitation');
+            } else if(keyword === 'collect') {
+                this.$router.push('/collect');
+            } else {
+                this.$router.push('/thumbteacher');
             }
-        });
         },
         showPopup() {
             this.show = true;
@@ -168,6 +174,7 @@ export default {
             // console.log('退出');
             store.dispatch("INFO", { user: {} });
             window.sessionStorage.removeItem('access');
+            window.sessionStorage.removeItem('user');
             // 退出回到首页
             window.open(`${window.location.origin}`, "_self");
         },
@@ -242,51 +249,76 @@ export default {
     position: absolute;
     left: 16px;
     bottom: -25px;
-    display: flex;
-    justify-content: space-between;
-    padding: 0 16px;
-    margin-bottom: 4px;
     width: 343px;
     height: 64px;
-    line-height: 64px;
+    border-radius: 10px;
     background-color: #fff;
+    box-shadow:2px 0px 6px 0px rgba(0, 0, 0, 0.15);
     font-size: 14px;
+    .my-item {
+        display: flex;
+        height: 64px;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        li {
+            .img {
+                width: 31px;
+                height: 30px;
+                background: url('../assets/img/personal.png') no-repeat;
+                background-size: cover;
+            }
+            .bgc-position1 {
+                background-position: -110px 0;
+            }
+            .bgc-position2 {
+                background-position: -221px 0;
+            }
+        }
+    }
 }
 .asset {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 16px;
-    margin-bottom: 3px;
-    height: 70px;
+    padding: 0 16px;
+    padding-top: 20px;
     background-color: #fff;
-    font-size: 11px;
-    .asset-item1 {
-        position: relative;
+    font-size: 10px;
+    color: #999;
+    .asset-title {
         display: flex;
-        flex-direction: column;
-        justify-content: space-around;
         .img {
-            position: absolute;
-            width: 17px;
-            height: 15px;
-            background: url('../assets/img/asset.png') no-repeat;
-            background-size: cover;
-        }
-        .my-asset {
-            font-size: 14px;
-            margin-left: 25px;
+            width: 14px;
+            height: 16px;
+            margin-right: 9px;
         }
     }
-    .asset-item {
+    .item-box {
         display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        width: 50px;
-        div {
-            text-align: center;
+        justify-content: space-between;
+        padding-top: 15px;
+        padding-bottom: 5px;
+        .asset-item {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 82px;
+            height: 54px;
+            padding-left: 9px;
+            border-radius: 5px;
+            box-shadow:2px 0px 6px 0px rgba(0, 0, 0, 0.15);
+            .item-title {
+                margin-bottom: 4px;
+                font-size: 14px;
+                color: #2c2c2c;
+                font-weight: 700;
+            }
+            .number {
+                margin-right: 2px;
+                font-size: 14px;
+                color: #DB1717;
+                font-weight: 700;
+            }
         }
     }
-    
 }
 .cell {
     margin-bottom: 20px;
@@ -298,9 +330,6 @@ export default {
             margin-top: 4px;
             margin-right: 9px;
         }
-    }
-    .rz-center {
-        margin-top: 4px;
     }
     .call-center {
         width: 285px;

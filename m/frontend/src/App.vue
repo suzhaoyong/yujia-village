@@ -45,8 +45,8 @@ export default {
     // 不要全局 配置定位
     // position: fixed;
     // top: 0;
-    // width: 100%;
-    background-color: #E0EED2!important;
+    width: 100%;
+    background-color: #8FCD71!important;
     font-size: 16px;
     .van-icon {
         font-size: 20px;

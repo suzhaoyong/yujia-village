@@ -183,6 +183,8 @@ export default {
         height: 108px;
         background-size: cover;
         background-position: center;
+        border-radius: 15px;
+        overflow: hidden;
     }
     .info {
         position: relative;
@@ -232,14 +234,16 @@ export default {
     padding-top: 8px;
     .commodity-item {
         margin-bottom: 22px; 
-        border-radius: 5px;
         box-shadow: 1px 3px 3px #c8c8c8;
         background-color: #fff;
+        border-radius: 10px;
+        overflow: hidden;
         .img {
             width: 166px;
             height: 197px;
             background-size: cover;
             background-position: center;
+            
         }
         .name {
             width: 130px;
