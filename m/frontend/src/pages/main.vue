@@ -146,7 +146,7 @@ export default {
   methods: {
     gotoPage(type) {
       const path = {
-        train: '/yogamessage/list',
+        train: '/yagainformation',
         information: '/yogaknowledge',
         teacher: '/teacherClub/list?current=1',
         club: '/teacherClub/list?current=0',

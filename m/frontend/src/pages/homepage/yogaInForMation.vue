@@ -1,6 +1,8 @@
 <template>
 <div class="mymation">
-  <Header></Header>
+  <!-- <Header></Header> -->
+  <van-nav-bar title="瑜伽资讯" left-arrow @click-left="back" fixed>
+  </van-nav-bar>
   <div class="information">
     <div class="information-banner">
       <img :src="classifyLists.banner" />
@@ -91,6 +93,9 @@ export default {
     
   },
   methods: {
+    back() {
+      this.$router.go(-1);
+    },
     viewdetail (id) {
       this.$router.push('/informationdetail/' + id)
     },
