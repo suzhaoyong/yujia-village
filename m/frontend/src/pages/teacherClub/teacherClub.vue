@@ -2,11 +2,13 @@
 <div>
     <div class="club_warp">
         <!-- <div class="club_warp_head">名师&机构</div> -->
-        <div class="club_warp_list">
-          <span class="liList" v-for="(item,index) in liList" :key="index" v-on:click="addClass(index)" :class="{ischeck:index==current}">{{item}}</span>
+        <!-- <div class="club_warp_list"> -->
+          <!-- <span class="liList" v-for="(item,index) in liList" :key="index" v-on:click="addClass(index)" :class="{ischeck:index==current}">{{item}}</span> -->
           <!-- <div class="stylelist"></div> -->
-        </div>
-        <div class="list_teacher" v-show="this.current === 0">
+        <!-- </div> -->
+        <van-tabs title-active-color="#8FCD71" color="#8FCD71" line-width="70px" sticky>
+        <van-tab title="培训机构">
+        <div class="list_teacher">
             <div class="list_banner" :style="{backgroundImage: 'url('+banner+')'}"></div>
             <div class="league" @click="goto()">申请加盟</div>
             <div class="club_house">
@@ -39,7 +41,9 @@
                 <span class="page-span4">我寻寻觅觅却找不到您的踪迹~</span>
             </div>
         </div>
-        <div class="list_clubhouse" v-show="this.current === 1">
+        </van-tab>
+        <van-tab title="瑜伽名师">
+        <div class="list_clubhouse">
             <div class="list_banner" :style="{backgroundImage: 'url('+banner2+')'}"></div>
             <div class="list_house">
                 <div class="list_house_title">
@@ -136,6 +140,8 @@
                 <span class="page-span5">我寻寻觅觅却找不到您的踪迹~</span>
             </div>
         </div>
+        </van-tab>
+         </van-tabs>
         <!-- 最大资历 -->
         <van-action-sheet v-model="isOpen" :actions="actions" @select="onSelect" cancel-text="取消"/>
         <!-- 最小资历 -->
@@ -154,9 +160,10 @@ import areaList from "../../assets/js/area.js";
 import Vue from 'vue';
 import Bus from "@/utils/Bus";
 import { mapGetters } from "vuex"
-import { Notify, Dialog, Toast} from "vant";
+import { Notify, Dialog, Toast, Tab, Tabs} from "vant";
 import { DropdownMenu, DropdownItem } from 'vant';
 Vue.use(DropdownMenu).use(DropdownItem);
+Vue.use(Tab).use(Tabs);
 Vue.use(Notify)
 .use(Dialog)
 .use(Toast);
@@ -723,7 +730,7 @@ input:-ms-input-placeholder{
     .list_teacher{
         width: 100%;
         // height: 100%;
-        padding-top: 44px;
+        // padding-top: 44px;
         background: #eee !important;
         position: relative;
         .list_banner{
@@ -742,11 +749,11 @@ input:-ms-input-placeholder{
             background: #97B3C1;
             position: absolute;
             left: 160px;
-            top: 173px;
+            top: 128px;
         }
         .club_house{
             width: 93%;
-            // height: 100%;
+            height: 50px;
             margin: 0 auto;
             display: flex;
             .club_house_title{
@@ -909,7 +916,7 @@ input:-ms-input-placeholder{
     .list_clubhouse{
         width: 100%;
         // height: 100%;
-        padding-top: 44px;
+        // padding-top: 44px;
         background: #fff !important;
         .list_banner{
           height: 170px;
@@ -1054,7 +1061,7 @@ input:-ms-input-placeholder{
                         font-family:PingFang SC;
                         font-weight:400;
                         display: block;
-                        padding-top: 13px;
+                        padding-top: 17px;
                         margin: 3px;
                         color:rgba(44,44,44,1);
                     }
