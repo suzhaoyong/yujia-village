@@ -17,10 +17,10 @@
                                     <el-option v-for="item in coursetypes" :key="item.id" :label="item.name" :value="item.id"></el-option>
                                 </el-select>
                                 <el-select v-model="value2" placeholder="最小资历" @change="yearchange" style="width:105px">
-                                    <el-option v-for="item in yearlist" :key="item" :label="item" :value="item"></el-option>
+                                    <el-option v-for="item in yearlist" :key="item.id" :label="item.name" :value="item.id"></el-option>
                                 </el-select>
                                 <el-select v-model="value3" placeholder="最大资历" @change="yearchange" style="width:105px">
-                                    <el-option v-for="item in yearlist" :key="item" :label="item" :value="item"></el-option>
+                                    <el-option v-for="item in yearlist" :key="item.id" :label="item.name" :value="item.id"></el-option>
                                 </el-select>
                                 <v-distpicker :province="province" :city="city" :area="area" @selected="onSelected"></v-distpicker>
                             </div>
@@ -293,7 +293,9 @@ export default {
         this.area = data.area.value;
      },
      changecoure(val){},
-     yearchange(val){},
+     yearchange(val){
+         console.log(val);
+     },
     selectItem(item,idx){
         this.namelist = item;
         this.activeClass = idx;

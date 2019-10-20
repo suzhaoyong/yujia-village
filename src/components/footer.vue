@@ -42,7 +42,7 @@
                         </div>
                         <div class="foot-left-address">
                             <img src="../assets/address.png" class="addressimg"/>
-                            <span class="address">成都市锦江区泰合国际财富中心7栋302</span>
+                            <span class="address">上海长宁区愚园路716号楼3楼</span>
                         </div>
                     </div>
                 </div>

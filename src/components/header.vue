@@ -52,14 +52,14 @@
                   <el-menu-item index="login">请先登录</el-menu-item>
                 </div>
                 <div v-show="info.user.name">
-                  <el-menu-item index="personal">现金券与优惠券</el-menu-item>
+                  <el-menu-item index="personal">个人中心</el-menu-item>
                   <!-- <el-menu-item index="identity">个人信息</el-menu-item> -->
                   <!-- <el-menu-item index="recode">订单中心</el-menu-item> -->
                   <el-menu-item
                     v-show="info.user.identity_auth === '认证机构负责人&教练中' || info.user.identity_auth === '认证机构负责人中'"
                     index="hell"
                   >机构信息</el-menu-item>
-                  <el-menu-item index="safety-center">信息与安全中心</el-menu-item>
+                  <el-menu-item index="safety-center">个人信息与安全</el-menu-item>
                   <el-menu-item index="share">分享邀请好友</el-menu-item>
                   <el-menu-item index="out" @click="logout">退出</el-menu-item>
                 </div>

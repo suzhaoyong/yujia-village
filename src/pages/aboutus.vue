@@ -43,22 +43,42 @@
                         </div> -->
                         <el-col :span="24" class="bg-img">
                         <div class="aboutus-count-div3">
-                            <h2><img src="../assets/yujia.png"/>瑜伽村平台</h2>
+                            <h2><img src="../assets/yujia.png"/>瑜伽村平台简介</h2>
                             <p class="nav-text">Sometimes beauty is so simple</p>
                             <div class="border-left"></div>
                             <div class="border-right"></div>
                         </div>
                          <div class="aboutus-count-div4">
-                             <p class="abouts-p">{{aboutUs.intro}}</p>
+                             <p class="abouts-p">中国瑜伽村是全国培训信息最丰富的瑜伽行业平台。</p>
+                             <p class="abouts-p">瑜伽村平台集合了全球瑜伽名师信息，瑜伽培训、大会信息等。</p>
+                             <p class="abouts-p">可通过课程类型、地域、时间、老师、价格等信息进行进准分类搜索，</p>
+                             <p class="abouts-p">是目前中国培训信息最丰富、搜索最进准的瑜伽行业资讯平台。</p>
+                             <p class="abouts-p">我们的目标是要做到：在瑜伽村只有你想要，没有找不到。</p>
+                             <p class="abouts-p">目前有100多家培训机构进驻，1000多个知名导师展示，10000多条瑜伽培训、大会信息，三个月目标做到100000位注册瑜伽老师。</p>
+                             <p class="abouts-p">中国瑜伽村致力于打造内容最丰富，搜索最精准，注册瑜伽老师最多的的瑜伽行业平台。</p>
+                             <p class="abouts-p">只要注册成为中国瑜伽村村民，</p>
+                             <p class="abouts-p">即可参与推荐分享积分活动，积分可兑换瑜伽培训课程及各种瑜伽活动等优惠礼遇。</p>
+                             <p class="abouts-p">详情请见中国瑜伽村积分规则。</p>
                         </div>
                          <div class="aboutus-count-div5">
-                            <h2><img src="../assets/yujia.png"/>瑜伽村群分布范围</h2>
+                            <h2><img src="../assets/yujia.png"/>瑜伽村积分规则</h2>
                             <p class="nav-text">Sometimes beauty is so simple</p>
                             <div class="border-left"></div>
                             <div class="border-right"></div>
                         </div>
                          <div class="aboutus-count-div6">
-                             <p class="abouts-p2">{{aboutUs.range}}</p>
+                             <p class="abouts-p2">注册中国瑜伽村普通村民，即获得500积分；</p>
+                             <p class="abouts-p2">注册后完善个人资料，即获得300积分；</p>
+                             <p class="abouts-p2">邀请好友注册中国瑜伽村普通村民，每邀请注册一个好友，</p>
+                             <p class="abouts-p2">即获得300积分，以此叠加；</p>
+                             <p class="abouts-p2">您邀请的好友再邀请其他好友注册，每邀请注册一个好友，</p>
+                             <p class="abouts-p2">即获得100积分，以此叠加；</p>
+                             <p class="abouts-p2">在2020年1月1日前参与注册推荐积分活动，所有积分翻倍，</p>
+                             <p class="abouts-p2">例：</p>
+                             <p class="abouts-p2">注册获得500积分，现可获得1000积分；</p>
+                             <p class="abouts-p2">完善资料300积分，现可获得600积分；</p>
+                             <p class="abouts-p2">推荐好友300积分，现可获得600积分；</p>
+                             <p class="abouts-p2">以此类推，最终解释权归中国瑜伽村所有。</p>
                         </div>
                         <div class="aboutus-count-div7">
                             <h2><img src="../assets/yujia.png"/>瑜伽村网络板块</h2>
@@ -162,6 +182,7 @@ export default {
         margin: 0 auto;
         height: 100%;
         display: inline-block;
+        background: #FCFBF1;
         .aboutus-count-div1{
             width: 1200px;
             height: 150px;
@@ -303,7 +324,7 @@ export default {
                 height: 1px;
                 background-color: #dcdcdc;
                 position: absolute;
-                left:19%;
+                left:18%;
                 top: 41%;
             }
             .border-right{
@@ -311,7 +332,7 @@ export default {
                 height: 1px;
                 background-color: #dcdcdc;
                 position: absolute;
-                right: 19%;
+                right: 18%;
                 top: 41%;
             }
             .nav-text{
@@ -330,25 +351,23 @@ export default {
                     width: 28px;
                     height: 28px;
                     position: absolute;
-                    left: 41%;
+                    left: 40%;
                     top: 18%;
                 }
             }
         }
         .aboutus-count-div4{
             width: 1200px;
-            height: 250px;
+            height: 420px;
             margin: 0 auto;
-            line-height: 0px;
-            margin-bottom: 20px;
+            line-height:40px;
+            margin-bottom: 4%;
             .abouts-p{
                 text-align: center;
                 font-size: 14px;
                 color: #2c2c2c;
                 width: 90%;
                 margin: 0 auto;
-                padding-top: 3%;
-                line-height: 28px;
             }
         }
         .aboutus-count-div5{
@@ -362,7 +381,7 @@ export default {
                 height: 1px;
                 background-color: #dcdcdc;
                 position: absolute;
-                left:15%;
+                left:18%;
                 top: 41%;
             }
             .border-right{
@@ -370,7 +389,7 @@ export default {
                 height: 1px;
                 background-color: #dcdcdc;
                 position: absolute;
-                right: 16%;
+                right: 18%;
                 top: 41%;
             }
             .nav-text{
@@ -388,24 +407,23 @@ export default {
                     width: 28px;
                     height: 28px;
                     position: absolute;
-                    left: 37%;
+                    left: 40%;
                     top: 18%;
                 }
             }
         }
         .aboutus-count-div6{
             width: 1200px;
-            height: 180px;
+            height: 500px;
             margin: 0 auto;
-            line-height: 0px;
+            line-height: 40px;
+            margin-bottom: 4%;
             .abouts-p2{
                 text-align: center;
                 font-size: 14px;
                 color: #2c2c2c;
                 width: 90%;
                 margin: 0 auto;
-                line-height: 28px;
-                padding-top: 3%;
             }
         }
         .aboutus-count-div7{
