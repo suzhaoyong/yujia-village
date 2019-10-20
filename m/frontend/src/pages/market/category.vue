@@ -619,6 +619,7 @@ $main_bg_color: #89b264;
         width: 82px;
         height: 92px;
         border-radius: 3px;
+        overflow: hidden;
         background: #eee;
         margin-bottom: 1em;
       }
@@ -641,6 +642,7 @@ $main_bg_color: #89b264;
         width: 126px;
         height: 116px;
         border-radius: 3px;
+        overflow: hidden;
         background: #eee;
         margin-bottom: 1em;
       }
@@ -782,6 +784,8 @@ $main_bg_color: #89b264;
         .goods_pic {
           width: 124px;
           height: 148px;
+          border-radius: 3px;
+          overflow: hidden;
           margin-bottom: 8px;
           background: #eee;
         }

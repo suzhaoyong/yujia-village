@@ -67,7 +67,7 @@ export default {
         // 瑜伽知识列表
         getKnowledgeList() {
             this.$request.get('/knowledgeList/0').then(data => {
-                // console.log(data);
+                console.log(data);
                 this.knowledgeList = data.data
             })
         },
@@ -75,13 +75,13 @@ export default {
         chooseClassify(id,index) {
             this.isActive = index;
             this.$request.get(`/knowledgeList/${id}`).then(data => {
-                // console.log(data);
+                console.log(data);
                 this.knowledgeList = data.data                
             })
         },
         // 跳转到 知识详情页
         goInfoDetail(id) {
-            this.$router.push('/informationdetail/'+id);
+            this.$router.push('/knowledgedetail/'+id);
         }
         
     }

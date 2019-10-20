@@ -336,7 +336,7 @@ export default {
       const params = {
         id: this.$route.params.goods_id,
         identity: "good",
-        userId: "",
+        userId: this.isUserNeedLogin ? "" : (this.info.user && this.info.user.id) || '',
         responseType: "arraybuffer"
       };
       this.$request.post(`/show/share/photo`, params).then(res => {
@@ -560,9 +560,11 @@ $main_color: #b4d565;
   flex-direction: column;
   .goods_carousel {
     height: 344px;
-    background: #ddd;
+    border-radius: 3px;
+    // overflow: hidden;
     img {
       height: 344px;
+      border-radius: 4px;
     }
   }
   // 商品信息

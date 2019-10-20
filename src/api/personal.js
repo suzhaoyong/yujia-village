@@ -70,19 +70,19 @@ export function postUpdateInfo(args) {
   return request.post(`/personal/updateInfo`, params)
 }
 
-/** 会馆资料 */
+/** 机构资料 */
 export function getClubInfo() {
   return request(`/personal/clubInfo`)
 }
-/** 会馆资料 */
+/** 机构资料 */
 export function getMyShare() {
   return request(`/personal/myShare`)
 }
-/** 认证机构负责人修改会馆资料 */
+/** 认证机构负责人修改机构资料 */
 
 export function postUpdateClubInfo(args) {
   let params = {
-    id: "", // 会馆id
+    id: "", // 机构id
     name: "",
     tel: "",
     club_tel: "",
@@ -104,7 +104,7 @@ export function getTeacherInfo() {
 /** 更新教练信息 */
 export function postUpdateTeacherInfo(args) {
   let params = {
-    id: "", // 会馆id
+    id: "", // 机构id
     info: "",
     city: "",
     province: "",
@@ -202,12 +202,12 @@ export function getShowMyTrain(id) {
   return request.get(`/personal/showMyTrain/${id}`)
 }
 /** 我的点赞 */
-export function getTeacherThumbsUp() {
-  return request.get(`/personal/teacherThumbsUp`)
+export function getTeacherThumbsUp(page = 1) {
+  return request.get(`/personal/teacherThumbsUp?page=${page}`)
 }
 /** 我的培训信息关注 */
-export function getMyFollowTrain() {
-  return request.get(`/personal/myFollowTrain`)
+export function getMyFollowTrain(page = 1) {
+  return request.get(`/personal/myFollowTrain?page=${page}`)
 }
 /** 关注培训信息(我想学) */
 export function getFollowTrain(id = '') {

@@ -25,6 +25,15 @@
     <script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   </body>
 </html>
+<script language="javascript"> 
+  (function() {
+    var sUserAgent = navigator.userAgent;
+    console.log(sUserAgent);
+    if (sUserAgent.indexOf('Android') > -1 || sUserAgent.indexOf('iPhone') > -1 || sUserAgent.indexOf('iPad') > -1 || sUserAgent.indexOf('iPod') > -1 || sUserAgent.indexOf('Symbian') > -1) {
+        location.href =  window.location.origin + '/wap/index.html';
+    } else {}
+  })(); 
+</script>
 <script>
 !(function(){
     new function () {

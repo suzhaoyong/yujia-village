@@ -175,8 +175,9 @@
             <div class="edit-personage" v-show="tagList[2].active && info.user.name">
               <div class="item" style="align-items: flex-start;">
                 <div class="lable">用户头像</div>
-                <div class="value">
-                  <div class="upload-box" style="overflow:hidden;">
+                <div class="value" style="width:6rem;height:6rem;">
+                  <Fileupload ref="fileUpload" :imageUrl="userForm.icon" @getNewIcon="getNewIcon"></Fileupload>
+                  <div class="upload-box" style="overflow:hidden;" v-show="false">
                     <div class="upload-img" v-if="userForm.icon">
                       <img style="width:100%;" :src="userForm.icon" alt />
                       <span class="item-actions"></span>
@@ -351,6 +352,7 @@
 </template>
 <script>
 import SessionTitle from "./SessionTitle";
+import Fileupload from "@/components/fileupload";
 import VDistpicker from "v-distpicker";
 import store from "@/store";
 import Bus from "@/utils/Bus";
@@ -367,10 +369,12 @@ import {
 export default {
   components: {
     VDistpicker,
-    Cloud
+    Cloud,
+    Fileupload
   },
   data() {
     return {
+      imageUrl: '',
       success: false,
       getCodepass: false,
       dialogVisible: false,
@@ -408,7 +412,7 @@ export default {
         captcha: ""
       },
       clubForm: {
-        id: "", // 会馆id
+        id: "", // 机构id
         name: "",
         tel: "",
         club_tel: "",
@@ -419,7 +423,7 @@ export default {
         area: ""
       },
       teacherForm: {
-        id: "", // 会馆id
+        id: "", // 机构id
         info: "",
         city: "",
         province: "",
@@ -477,6 +481,12 @@ export default {
     type && this.tagsChange(type);
   },
   methods: {
+    getNewIcon(val) {
+      this.userForm.icon = val
+    },
+    changeUserIcon() {
+      this.$refs.fileUpload.openFile();
+    },
     onBeforeUpload(file) {
       const isIMAGE = file.type === "image/jpeg" || "image/gif" || "image/png";
       const isLt1M = file.size / 1024 / 1024 < 1;
@@ -572,7 +582,6 @@ export default {
             icon
           }
         );
-        console.log(this.userForm);
       });
     },
     onDistpickerSelected(data) {
@@ -743,7 +752,7 @@ export default {
           icon
         }
       );
-      if (identity_auth === 5 || identity_auth === 8) {
+      if (identity_auth === '认证教练' || identity_auth === '认证机构负责人&认证教练') {
         getTeacherInfo().then(data => {
           data[0] && (this.teacherForm = data[0]);
         });
@@ -778,9 +787,10 @@ export default {
       };
       const teacher = () => {
         const { identity_auth } = this.info.user;
-        if (identity_auth === 5 || identity_auth === 8) {
+        if (identity_auth === '认证教练' || identity_auth === '认证机构负责人&认证教练') {
           const { id, info, city, province, area } = this.teacherForm;
-          return postUpdateTeacherInfo({ id, info, city, province, area });
+          let cur_id = id || this.info.user.id
+          return postUpdateTeacherInfo({ id: cur_id, info, city, province, area });
         }
       };
       Promise.all([user(), teacher()])

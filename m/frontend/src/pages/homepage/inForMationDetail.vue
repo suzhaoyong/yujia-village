@@ -4,15 +4,22 @@
       title="瑜伽资讯"
       left-arrow
       @click-left="onClickLeft"
-      @click-right="onClickRight"
-    > 
+      @click-right="shareMessage"
+    >
       <van-icon slot="right" ><img src="../../../static/img/share.svg"></van-icon>
     </van-nav-bar></header>
     <section>
-      <van-popup v-model="show"   
-        position="top"
-        :style="{ height: '20%' }"
-      ><share :config="config"></share></van-popup>
+      <van-popup 
+        v-model="show"
+        round
+        :style="{ height: '70%', width: '80%' }"
+      >
+        <div class="sharepopup">
+          <img :src="shareimg">
+          <div class="sharetext">长按图片，保存或发送给朋友</div>
+        </div>
+      </van-popup>
+
       <div class="infordetail-count">
         <div class="infordetail-count-title">
           <p class="titlep">{{ detailLists.headline }}</p>
@@ -39,16 +46,7 @@ export default {
       detailLists: [],
       createddate: '',
       show: false,
-      config: {
-        url: "",
-        source: "",
-        title: "",
-        description: "",
-        sites: ["qzone", "qq", "weibo", "wechat", "douban"],
-        wechatQrcodeTitle: "微信扫一扫：分享", // 微信二维码提示文字
-        wechatQrcodeHelper:
-          "<p>微信里点“发现”，扫一下</p><p>二维码便可将本文分享至朋友圈。</p>"
-      }
+      shareimg: ''
     }
   },
   components: {
@@ -61,8 +59,20 @@ export default {
     onClickLeft() {
       this.$router.back()
     },
-    onClickRight() {
+    // 分享图片
+    shareMessage() {
       this.show = true
+      console.log(this.$route.params.id)
+      const params = {
+          id: this.$route.params.id,
+          identity:'information',
+          userId:"",
+          responseType: 'arraybuffer'
+      }
+      this.$request.post(`/show/share/photo`,params).then(res => {
+        console.log(res)
+        this.shareimg = res;
+      })
     },
     yujiamation () {
       const id = this.$route.params.id
@@ -85,6 +95,17 @@ export default {
         width: 15px;
         height: 15px;
       }
+    }
+  }
+  // 分享样式
+  .sharepopup {
+    img {
+      padding: 16px;
+    }
+    .sharetext {
+      text-align: center;
+      margin-top: 25px;
+      font-size: 12px;
     }
   }
   section {

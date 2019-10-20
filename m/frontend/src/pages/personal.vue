@@ -116,7 +116,7 @@ export default {
     },
     methods: {
         getPersonalData() {
-            const token = JSON.parse(window.sessionStorage.getItem('access')) 
+            // const token = JSON.parse(window.sessionStorage.getItem('access')) 
             this.$request.get('/personal/home').then(data => {
                 store.dispatch("INFO", data);
                 sessionStorage.setItem('user data',JSON.stringify(data));

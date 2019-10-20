@@ -1,17 +1,33 @@
 <template>
   <div class="messagedetail">
-    <header> <span @click="goback"><van-icon name="arrow-left"/></span> 课程详情</header>
+    <header><van-nav-bar
+      title="瑜伽资讯"
+      left-arrow
+      @click-left="goback"
+      @click-right="shareMessage"
+    >
+      <van-icon slot="right" ><img src="../../../static/img/share.svg"></van-icon>
+    </van-nav-bar></header>
     <main class="messagedetail-main">
       <section>
         <img :src="detailData.teacher_img">
       </section>
+      <van-popup 
+        v-model="show"
+        round
+        :style="{ height: '70%', width: '80%' }"
+      >
+        <div class="sharepopup">
+          <img :src="shareimg">
+          <div class="sharetext">长按图片，保存或发送给朋友</div>
+        </div>
+      </van-popup>
       <ul  class="messagedetail-main-title">
         <li class="li1">
           <div class="li1-text">{{ detailData.type }}</div>
           <div><span><img src="../../../static/img/eye.png">{{ detailData.views }}</span><span><img src="../../../static/img/hand.png" class="hand">100</span></div>
         </li>
         <li>
-
         </li>
         <li class="li2">
           <p class="stardiff">
@@ -40,30 +56,24 @@
           <h6><span><img src="../../../static/img/yogateach.png"></span>适宜人群</h6>
           <span>Suitable crowd</span>
         </div>
-
         <div class="messagedetail-main-proper-show" >
-              <div class="messagedetail-main-proper-show-list" v-for="(list, index) in crowds" :key="index">
-                <div class="list-img"><img :src="crowdimg[index]"></div>
-                <div class="list-text">{{ list }}</div>
-              </div>
+          <div class="messagedetail-main-proper-show-list" v-for="(list, index) in crowds" :key="index">
+            <div class="list-img"><img :src="crowdimg[index]"></div>
+            <div class="list-text">{{ list }}</div>
+          </div>
         </div>
-        
       </div>
       <div class="messagedetail-main-teach">
         <div class="messagedetail-main-teach-title">
           <h6><span><img src="../../../static/img/yogateach.png"></span>教学大纲</h6>
           <span>syllabus</span>
         </div>
-
         <div class="messagedetail-main-teach-box">
           <img src="../../../static/img/bookbg.png">
           <span v-html="detailData.content"></span>
-
         </div>
       </div>
-
       <!-- <div class="content" v-html="detailData.content"></div> -->
-
     </main>
   <Footer></Footer>
   </div>
@@ -73,10 +83,10 @@
 import Vue from 'vue';
 import Footer from '../../components/footer'
 import '../../dist/swiper.css'
-import { Rate} from 'vant'
+import { Rate, Popup, NavBar} from 'vant'
 
 
-Vue.use(Rate)
+Vue.use(Rate).use(NavBar).use(Popup)
 export default {
   components: {
     Footer
@@ -85,14 +95,8 @@ export default {
     return {
       detailData: [],
       crowds: [],
-      swiperOption: {
-          slidesPerView: 3,
-          spaceBetween: 30,
-          pagination: {
-            el: '.swiper-pagination',
-            clickable: true
-          }
-      },
+      show: false,
+      shareimg: '',
       crowdimg: [
         require('../../../static/img/image71.png'),
         require('../../../static/img/image72.png'),
@@ -115,8 +119,20 @@ export default {
       this.$request.get('trains/' + id).then((res) => {
         this.detailData = res
         this.crowds = res.crowd.split("；")
-        console.log(this.crowd)
-        console.log(res)
+      })
+    },
+    // 分享图片
+    shareMessage() {
+      this.show = true
+      console.log(this.$route.params.id)
+      var params = {
+          id: this.$route.params.id,
+          identity:'train',
+          userId:"",
+          responseType: 'arraybuffer'
+      }
+      this.$request.post(`/show/share/photo`,params).then(res => {
+        this.shareimg = res;
       })
     },
   }
@@ -124,6 +140,17 @@ export default {
 </script>
 
 <style lang="scss" scope>
+  // 分享样式
+  .sharepopup {
+    img {
+      padding: 16px;
+    }
+    .sharetext {
+      text-align: center;
+      margin-top: 25px;
+      font-size: 12px;
+    }
+  }
   .messagedetail {
     width: 100%;
     height: 100%;
@@ -131,12 +158,22 @@ export default {
       width: 100%;
       height: 44px;
       text-align: center;
-      background: #EEEEEE;
+      background-color: #E0EED2;
+      font-weight: 700;
+      font-size: 16px;
       font-size: 16px;
       line-height: 44px;
       position: fixed;
       top: 0;
       z-index: 99;
+      .van-nav-bar {
+        background: #FFFFFF;
+        border-bottom: 2px solid #EEEEEE;
+        img {
+          width: 15px;
+          height: 15px;
+        }
+      }
       span {
         position: relative;
         left: -35%;
@@ -155,6 +192,7 @@ export default {
       margin-bottom: 50px;
       section {
         width: 100%;
+        background: white;
         height: auto;
         img {
           width: 100%;
@@ -251,9 +289,9 @@ export default {
         &-show {
           height: 200px;
           display: flex;
-          min-width: 50%;
           overflow-x: auto;
           align-items: center;
+          justify-content: space-around;
           &-list {
             width: 120px;
             height: 160px;
@@ -264,7 +302,6 @@ export default {
               img {
                 width: 100%;
                 height: 100%;
-                border-radius: 50%;
               }
             }
             .list-text {

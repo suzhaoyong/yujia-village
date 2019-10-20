@@ -42,9 +42,10 @@ export default {
   background: rgba(0, 0, 0, 0.3);
 }
 .van-nav-bar {
-    position: fixed;
-    top: 0;
-    width: 100%;
+    // 不要全局 配置定位
+    // position: fixed;
+    // top: 0;
+    // width: 100%;
     background-color: #E0EED2!important;
     font-size: 16px;
     .van-icon {

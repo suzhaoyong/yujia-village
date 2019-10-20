@@ -27,19 +27,19 @@
           <div class="name-phone">
             <div class="name">
               <span class="title">真实姓名</span>
-              <el-input v-model="ruleForm.real_name" placeholder="请填写真实姓名"></el-input>
+              <el-input v-model="ruleForm.real_name" required placeholder="请填写真实姓名"></el-input>
             </div>
             <div class="phone">
               <span class="title">负责人电话</span>
-              <el-input v-model="ruleForm.club_tel" placeholder="请填写负责人电话"></el-input>
+              <el-input v-model.number.trim.lazy="ruleForm.club_tel" required placeholder="请填写负责人电话"></el-input>
             </div>
             <div class="shop">
-              <span class="title">联盟馆馆名</span>
-              <el-input v-model="ruleForm.club_name" placeholder="请填写联盟馆馆名"></el-input>
+              <span class="title">机构名称</span>
+              <el-input v-model="ruleForm.club_name" required placeholder="请填写机构名称"></el-input>
             </div>
           </div>
           <div class="address">
-            <span class="title">联盟馆地址</span>
+            <span class="title">机构地址</span>
             <!-- <v-distpicker :province="province" :city="city" :area="area" @selected="selectAddress"></v-distpicker> -->
             <v-distpicker @selected="selectAddress"></v-distpicker>
           </div>
@@ -115,8 +115,8 @@
         >下一步</div>
       </div>
       <div class="agreen-next" v-show="step.cur_index === 2">
-        <div class="next" style="background:#fff;" @click="stepOpFor('prev')">上一步</div>
-        <div class="next" @click="stepOpFor('finish')">完成</div>
+        <div class="next" style="background:#fff;border: 1px solid #000;" @click="stepOpFor('prev')">上一步</div>
+        <div class="next" :style="`${isAllowClick ? '': 'background:#ccc;cursor: not-allowed;'}`" @click="stepOpFor('finish')">完成</div>
       </div>
     </div>
   </div>
@@ -141,7 +141,7 @@ export default {
         agree: false
       },
       ruleForm: {
-        identity_auth: "",
+        identity_auth: this.certificate.identity,
         real_name: "",
         club_tel: "",
         club_name: "",
@@ -167,7 +167,24 @@ export default {
     },
     isShow() {
       return id => this.certificate.identity == id;
-    }
+    },
+    isAllowClick() {
+      let isAllowed = true
+      for(let[k, v] of Object.entries(this.ruleForm)) {
+        if(['img_work', 'img_license'].indexOf(k) > -1) {
+
+        } else {
+          if(!v) isAllowed = false
+        }
+      }
+      let { img_work, img_license } = this.ruleForm
+      if(img_work || img_license ) {
+
+      } else {
+        isAllowed = false
+      }
+      return isAllowed
+    },
   },
   mounted() {},
   methods: {
@@ -185,21 +202,21 @@ export default {
     },
     changeExemptionFile(file, fileList) {
       if(!this.onBeforeUpload(file)){
-        this.ruleForm['img_exemption'] = ''
+        this.ruleForm['img_exemption'] = 'NO'
         return;
       }
       this.changeFile(file, fileList, "img_exemption");
     },
     changeLicenseFile(file, fileList) {
       if(!this.onBeforeUpload(file)){
-        this.ruleForm['img_license'] = ''
+        this.ruleForm['img_license'] = 'NO'
         return;
       }
       this.changeFile(file, fileList, "img_license");
     },
     changeWorkFile(file, fileList) {
       if(!this.onBeforeUpload(file)){
-        this.ruleForm['img_work'] = ''
+        this.ruleForm['img_work'] = 'NO'
         return;
       }
       this.changeFile(file, fileList, "img_work");
@@ -241,6 +258,7 @@ export default {
           this.step.cur_index += 1;
         },
         finish: () => {
+          if(!this.isAllowClick) return;
           const { img_license, img_work} = this.ruleForm;
           let identity_auth = 1;
           if (img_license && img_work) {

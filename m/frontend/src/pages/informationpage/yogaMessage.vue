@@ -2,10 +2,10 @@
   <div class="message">
     <header>培训信息</header>
     <main class="message-main">
-      <ul class="message-main-head" @click="clickweight">
-        <li @click="defaultRank('default')" class="changeweight"> 默认排序</li>
-        <li @click="hostRank('host')">热度</li>
-        <li @click="priceRank('price')">价格 {{ priceFlag? '∧': '∨' }}</li>
+      <ul class="message-main-head">
+        <li @click="defaultRank('default')" :class="{'changeweight': isActive == '1' }"> 默认排序</li>
+        <li @click="hostRank('host')" :class="{'changeweight': isActive == '2' }">热度</li>
+        <li @click="priceRank('price')" :class="{'changeweight': isActive == '3' }">价格 {{ priceFlag? '∧': '∨' }}</li>
         <li class="head-list" is-link @click="showPopup">筛选</li>
         <!-- <li>价格 ∨</li> -->
       </ul>
@@ -133,6 +133,7 @@ export default {
       list: areaList,
       messageLists: [],
       classfly: [],
+      isActive: '1',
       selectArea: {
         province: "",
         city: "",
@@ -224,7 +225,6 @@ export default {
     },
     selectedarea (item) {
       if (item.isArray) {
-        console.log(item)
         this.selectTags.push(item.val);
         return;
       }
@@ -238,7 +238,6 @@ export default {
     messageList (page = 1) {
       this.$request.get('trains?page=' + page).then((res) => {
         if (res.all.current_page < res.all.last_page ) {
-          console.log(res)
           res.all.data.map((item) => {
             this.messageLists.push(item)
           })
@@ -250,9 +249,9 @@ export default {
     },
     // 我想学的操作
     study(id) {
-      console.log(id)
       if (!JSON.parse(sessionStorage.getItem("user"))) {
-        this.$router.push('/index')
+        this.$router.push('/login')
+        Toast('请登录')
         return;
       }
       this.wantStudy(id)
@@ -269,29 +268,25 @@ export default {
     // 上拉加载更多
     PullUpReload () {
       var _this = this
+      var isScroll = false  // 函数截流
       document.querySelector('.message-main-container').onscroll = function() {
+      if (isScroll) {
+        setTimeout(() => {
+          isScroll = false
+        },100)
+      } else {
       let innerHeight = document.querySelector('.message-main-container').clientHeight // 容器高度
       let outerHeight = document.querySelector('.message-main-container-list').clientHeight // 容器高+滚动高
       let scrollTop = document.querySelector('.message-main-container').scrollTop  // 滚动高
       if (innerHeight + scrollTop === outerHeight + 20) {
         _this.pages++
         _this.messageList(_this.pages)
-        console.log(_this.pages)
+      }
+      isScroll = true
       }
       }
     },
-    // 点击加重字体
-    clickweight (e) {
-      var target = e.target || event.target
-      if(target.nodeName == "LI") {
-        var li = target.parentNode.children
-        for(var i =0; i < li.length; i++) {
-          li[i].classList.remove('changeweight')
-        }
-        target.classList.add('changeweight')
-        this.pages = 1
-      }
-    },
+    
     // 选择功能
     selected2 (item, index) {
       let selectTag = this.selectTtype.indexOf(item.id)
@@ -299,7 +294,6 @@ export default {
         this.selectTtype.splice(selectTag, 1)
       } else {
         this.selectTtype.push(item.id)
-        console.log(this.selectTtype)
       }
 
       let arrIndex2 = this.spanIndex2.indexOf(index);
@@ -312,7 +306,6 @@ export default {
     // 选择排序功能
     searchResult() {
       postTrains(this.getFiltersParams()).then((res) => {
-        console.log(res)
         this.messageLists = res.data
       })
       this.show = false
@@ -324,7 +317,6 @@ export default {
     },
     getTrainsList(page = 1) {
       getTrains(page).then(data => {
-        console.log(data)
         this.messageLists.push(data.all.data)
         // const mapClassfiy = array =>
         //   array.map(item => {
@@ -382,6 +374,7 @@ export default {
     },
     // 价格排序
     priceRank (keyWord) {
+      this.isActive = '3'
       this.priceFW = true;
       this.defaultFW = true;
       this.hostFW = false;
@@ -392,6 +385,7 @@ export default {
     },
     // 默认排序
     defaultRank (keyWord) {
+      this.isActive = '1'
       this.hostFw = true
       this.defaultFw = true;
       this.priceFW = false;
@@ -401,6 +395,7 @@ export default {
     },
     // 热度排序
     hostRank (keyWord) {
+      this.isActive = '2'
       this.hostFw = true
       this.defaultFw = true;
       this.priceFW = false;
