@@ -60,12 +60,8 @@ export default {
         onChange(active) {            
             // console.log(active);
             window.sessionStorage.setItem('tabbar',active);
-            // 向 home 传递参数，控制 tabbar 切换，是否显示 header
-            this.$emit('footerByValue',this.active)
             // 切换 tabbar 路由跳转
-            if(active === 'home' && window.sessionStorage.getItem('index')) {
-                this.$router.push('/'+ window.sessionStorage.getItem('index'));
-            } else if(active === 'personal' && !window.sessionStorage.getItem('access')) {
+            if(active === 'personal' && !window.sessionStorage.getItem('access')) {
                 this.$router.push('/login');
             } 
             else {
@@ -76,7 +72,6 @@ export default {
             if( window.sessionStorage.getItem('tabbar') ) {
                 // 防止刷新 tabbar 切换
                 this.active = window.sessionStorage.getItem('tabbar');
-                this.$emit('footerByValue',window.sessionStorage.getItem('tabbar'))
             }
         }
     }
