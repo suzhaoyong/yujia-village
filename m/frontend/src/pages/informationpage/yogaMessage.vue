@@ -1,6 +1,6 @@
 <template>
   <div class="message">
-    <header>培训信息</header>
+    <header> <span>培训信息</span></header>
     <main class="message-main">
       <ul class="message-main-head">
         <li @click="defaultRank('default')" :class="{'changeweight': isActive == '1' }"> 默认排序</li>
@@ -74,12 +74,12 @@
       <div class="message-main-container">
           <div class="message-main-container-list" v-if="messageLists.length > 0" >
             <div class="message-main-container-list-count" v-for="list in messageLists" :key="list.id" @click="viewdetail(list.id)">
-              <div class="message-main-container-list-count-img">
-                <img :src="list.teacher_img">
+              <div class="message-main-container-list-count-img" :style="{ 'background-image': 'url(' + list.teacher_img + ')','background-repeat':'no-repeat','background-size':'cover' }">
+                <!-- <img :src="list.teacher_img"> -->
               </div>
               <div class="message-main-container-list-count-text">
                 <h6 class="p1">{{ list.theme }}</h6>
-                <span class="message-main-container-list-count-text-star">
+                <!-- <span class="message-main-container-list-count-text-star">
                 <van-rate
                   v-model='list.diff'
                   readonly
@@ -87,14 +87,14 @@
                   color='#58B708'
                   void-icon="star"
                   void-color="#eee"
-                /></span>
-                <p class="p2">￥ {{ list.price }}</p>
-                <p class="p3">{{ list.city }}{{ list.area }}</p>
+                /></span> -->
+                <p class="areap">{{ list.custom_address }}</p>
+                <p class="p2"><span class="pprice">￥{{ list.price }}</span><span class="pdiff">难度： 1</span> </p>
                 <p class="p4">
-                  <span class="p4-eye"><img src="../../../static/img/eye.png">{{ list.views }}</span>
-                  <span class="p4-hand"><img src="../../../static/img/hand.png">{{ list.follow || 100 }}</span>
+                  <span class="p4-eye">想学   {{ list.views }}</span>
+                  <span class="p4-hand">观看   {{ list.follow || 100 }}</span>
                 </p>
-                <button class="wantbtn" @click.stop="study(list.id)">我想学</button>
+                <button class="wantbtn" @click.stop="study(list.id)">想学</button>
               </div>
             </div>
           </div>
@@ -172,9 +172,7 @@ export default {
   },
   created() {
     this.messageList()
-  },
-  computed: {
-    ...mapGetters(["info"]),
+    this.messagetypeList()
   },
   mounted () {
     this.PullUpReload()
@@ -237,15 +235,20 @@ export default {
     // 获取列表
     messageList (page = 1) {
       this.$request.get('trains?page=' + page).then((res) => {
-        if (res.all.current_page < res.all.last_page ) {
-          res.all.data.map((item) => {
+        console.log(res)
+        if (res.current_page < res.last_page ) {
+          res.data.map((item) => {
             this.messageLists.push(item)
           })
-          this.classfly = res.course_types
         } else {
           Toast('只有这么多了');
         }
     })
+    },
+    messagetypeList () {
+      this.$request.get('trains/type').then((res) => {
+        this.classfly = res.course_types
+      })
     },
     // 我想学的操作
     study(id) {
@@ -273,16 +276,17 @@ export default {
       if (isScroll) {
         setTimeout(() => {
           isScroll = false
-        },100)
+        },50)
       } else {
       let innerHeight = document.querySelector('.message-main-container').clientHeight // 容器高度
-      let outerHeight = document.querySelector('.message-main-container-list').clientHeight // 容器高+滚动高
+      let outerHeight = document.querySelector('.message-main-container').scrollHeight // 容器高+滚动高
       let scrollTop = document.querySelector('.message-main-container').scrollTop  // 滚动高
-      if (innerHeight + scrollTop === outerHeight + 20) {
+      console.log(innerHeight, outerHeight, scrollTop)
+      if (innerHeight + scrollTop + 10 >= outerHeight ) {
         _this.pages++
         _this.messageList(_this.pages)
+        isScroll = true
       }
-      isScroll = true
       }
       }
     },
@@ -438,12 +442,15 @@ export default {
   header {
     height: 44px;
     text-align: center;
-    background: #E0EED2;
     font-size: 16px;
-    line-height: 44px;
     font-weight: 700;
+    background: white;
+    overflow: hidden;
+    span {
+      display: block;
+      margin-top: 17px;
+    }
   }
-
   &-main {
     width: 100%;
     height: 94%;
@@ -551,75 +558,76 @@ export default {
     }
     &-container {
       flex: 1;
-      height: 93%;
+      height: 94%;
       overflow: auto;
       &-list {
         width: 100%;
         background: #EEEEEE;
         &-count {
           width: 100%;
-          height: 150px;
+          height: 155px;
           margin: 10px auto;
           background: white;
           display: flex;
           align-items: center;
           &-img {
-            width: 127px;
-            height: 127px;
-            margin-left: 16px;
-            background: #eeeeee;
-            img {
-              width: 100%;
-              height: 100%;
-            }
+            width: 136px;
+            height: 136px;
+            margin-left: 17px;
+            margin-top: 9;
+            background: white;
+            border-radius: 10px;
+            // img {
+            //   width: 100%;
+            //   height: 100%;
+            //   border-radius: 10px;
+            // }
           }
           &-text {
-            width: 180px;
+            width: 190px;
             height: 127px;
             font-size: 12px;
             position: relative;
-            margin-left: 20px;
+            margin-left: 18px;
             .p1 {
+              margin-top: 12px;
               font-size: 14px;
               overflow:hidden;
               text-overflow:ellipsis;
               white-space:nowrap;
             }
-            .p2 {
-              color: #2C2C2C;
-              font-weight: 600;
-              margin: 6px 0;
+            .areap {
+              color: #999999;
+              font-size: 12px;
+              margin-top: 10px;
             }
-            .p3 {
-              margin-top: 30px;
-              width: 85px;
-              overflow:hidden;
-              text-overflow:ellipsis;
-              white-space:nowrap;
+            .p2 {
+              margin-top: 15px;
+              display: flex;
+              justify-content: space-between;
+              .pprice {
+                color: #D71010;
+                font-size: 14px;
+                font-weight: 700;
+              }
+              .pdiff {
+                color: #BC866F;
+                font-size: 12px;
+              }
             }
             .p4 {
               display: block;
               width: 90%;
               height: 16px;
               line-height: 30px;
-              border-top: 1px solid #f1f1f1;
-              margin-top: 2px;
+              padding-top: 15px;
+              font-size: 10px;
+              color: #999999;
               .p4-eye {
-                img {
-                  width: 10px;
-                  height: 7px;
-                  margin-right: 5px;
-                }
               }
               .p4-hand {
                 margin-left: 10px;
-                img {
-                  width: 5px;
-                  height: 10px;
-                  margin-right: 5px;
-                }
               }
-
             }
             .wantbtn {
               width: 51px;
@@ -631,8 +639,8 @@ export default {
               border: none;
               background: #7BBB62;
               position: absolute;
-              top: 34%;
-              right: -11%;
+              top: 78%;
+              right: 0;
               font-size: 10px;
             }
           }

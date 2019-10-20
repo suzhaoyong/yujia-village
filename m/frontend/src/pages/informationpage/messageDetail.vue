@@ -15,7 +15,7 @@
       <van-popup 
         v-model="show"
         round
-        :style="{ height: '70%', width: '80%' }"
+        :style="{ maxHeight: '500px', width: '80%' }"
       >
         <div class="sharepopup">
           <img :src="shareimg">
@@ -198,6 +198,9 @@ export default {
           width: 100%;
         }
       }
+      .van-popup {
+        height: 70%;
+      }
       &-title {
         width: 100%;
         height: 208px;
@@ -291,7 +294,7 @@ export default {
           display: flex;
           overflow-x: auto;
           align-items: center;
-          justify-content: space-around;
+          justify-content: center;
           &-list {
             width: 120px;
             height: 160px;

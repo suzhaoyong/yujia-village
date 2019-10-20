@@ -19,7 +19,7 @@
     </div>
     <main class="information-main">
       <div class="watefullbox" ref="box">
-        <div class="information-main-count" v-for="(list, index) in informationLists" :key="index" @click="viewdetail(list.id)">
+        <div class="information-main-count" v-for="(list, index) in informationLists" :key="index" @click="viewdetail(list.id)" ref="boxchildren">
           <div class="information-main-count-img"><img :src="list.icon_url"></div>
           <div class="information-main-count-text">
             <p>{{ list.headline }}</p>
@@ -31,7 +31,7 @@
         </div>
       </div>
       <div class="morebtn" @click="loadmore">
-        {{  current_page >= last_page? informationLists.length > 0? "我也是有底线的": "没有这个哦！" : "点我加载更多"}}
+        {{  current_page >= last_page? informationLists.length > 0? "我也是有底线的": "没有这个哦！" : ""}}
       </div>
     </main>
   </div>
@@ -84,10 +84,10 @@ export default {
   },
   mounted () {
     this.PullUpReload()
+    this.mationdata()
   },
   created() {
     this.InformationClassify()
-    this.mationdata()
     
   },
   methods: {
@@ -104,7 +104,6 @@ export default {
     },
     InformationClassify () {
       this.$request.get('InformationClassify').then((res) => {
-        console.log(res)
         this.classifyLists = res
         // 将本地图片加入到data数组中
         this.classifyLists.classify.map((list, index) => {
@@ -112,6 +111,7 @@ export default {
         })
       })
     },
+    
     // 上拉加载
     PullUpReload () {
       var _this = this
@@ -120,23 +120,24 @@ export default {
       if (isScroll) {
         setTimeout(() => {
           isScroll = false
-        },100)
+        },50)
       } else {
         let innerHeight = document.querySelector('.information').clientHeight // 容器高度
-        let outerHeight = document.querySelector('.watefullbox').clientHeight // 容器高+滚动高
+        let outerHeight = document.querySelector('.information').scrollHeight // 容器高+滚动高
         let scrollTop = document.querySelector('.information').scrollTop  // 滚动高
-        if (innerHeight + scrollTop >= outerHeight + 219) {
+        _this.waterFall(_this.$refs.box)
+        if (innerHeight + scrollTop >= outerHeight) {
           _this.current_page > _this.last_page? '': _this.current_page++
           _this.mationdata()
+          isScroll = true
         }
-        isScroll = true
+        
       }
       }
     },
     // 加载更多
   loadmore () {
     this.current_page > this.last_page? '': this.current_page++
-    console.log(this.current_page, this.last_page)
     this.mationdata()
   },
   mationdata(){
@@ -149,9 +150,12 @@ export default {
     _this.last_page = res.last_page
     if(_this.current_page > _this.last_page) {
       _this.current_page = res.last_page
-      console.log()
       Toast('没有更多了哦')
     }
+  }).then(() => {
+    this.$nextTick(() => {
+      this.waterFall(this.$refs.box)
+    })
   })
   .catch(error => {
       // let { response: { data: { errorCode, msg } } } = error;
@@ -163,7 +167,44 @@ export default {
       // return;
       // }
   });
-},
+  },
+    waterFall(parent) { // 瀑布流
+      this.$nextTick(() => {
+        var items = parent.children;
+        var gap = 10; // 定义每一列之间的间隙 为10像素
+        var pad = 10;
+        if (items[0].offsetWidth) {
+          var pageWidth = parent.offsetWidth;
+          var itemWidth = items[0].offsetWidth;
+          var columns = parseInt(pageWidth / (itemWidth + gap));
+          var arr = [];
+            for (var i = 0; i < items.length; i++) {
+              if (i < columns) {
+                items[i].style.top = 0;
+                items[i].style.left = (itemWidth + gap) * i + 'px';
+                arr.push(items[i].offsetHeight);
+              } else {
+                var minHeight = arr[0];
+                var index = 0;
+                for (var j = 0; j < arr.length; j++) {
+                  if (minHeight > arr[j]) {
+                    minHeight = arr[j];
+                    index = j;
+                  }
+                }
+                // 4- 设置下一行的第一个盒子位置
+                // top值就是最小列的高度 + gap
+                items[i].style.top = arr[index] + gap + 'px';
+                // left值就是最小列距离左边的距离
+                items[i].style.left = items[index].offsetLeft + 'px';
+                // 5- 修改最小列的高度 
+                // 最小列的高度 = 当前自己的高度 + 拼接过来的高度 + 间隙的高度
+                arr[index] = arr[index] + items[i].offsetHeight + gap;
+            }
+          }
+        }
+      })
+    }
   }
 }
 </script>
@@ -223,19 +264,23 @@ html body {
     width: 100%;
     height: auto;
     .watefullbox {
-      -moz-column-count:2; /* Firefox */
-      -webkit-column-count:2; /* Safari 和 Chrome */
-      column-count:2;
-      -moz-column-gap: 12px;
-      -webkit-column-gap: 12px;
-      column-gap: 12px;
-      padding: 12px;
+      // -moz-column-count:2; /* Firefox */
+      // -webkit-column-count:2; /* Safari 和 Chrome */
+      // column-count:2;
+      // -moz-column-gap: 12px;
+      // -webkit-column-gap: 12px;
+      // column-gap: 12px;
+      width: 97%;
+      margin-left: 11px;
       height: auto;
+      position: relative;
+      margin-top: 5px;
       .information-main-count {
-        padding: 0 0 12px 0;
-        -moz-page-break-inside: avoid;
-        -webkit-column-break-inside: avoid;
-        break-inside: avoid;
+        width: 170px;
+        position: absolute;
+        // -moz-page-break-inside: avoid;
+        // -webkit-column-break-inside: avoid;
+        // break-inside: avoid;
         &-img {
           width: 100%;
           background: white;
