@@ -6,7 +6,7 @@
           <!-- <span class="liList" v-for="(item,index) in liList" :key="index" v-on:click="addClass(index)" :class="{ischeck:index==current}">{{item}}</span> -->
           <!-- <div class="stylelist"></div> -->
         <!-- </div> -->
-        <van-tabs title-active-color="#8FCD71" color="#8FCD71" line-width="70px" sticky>
+        <van-tabs title-active-color="#8FCD71" color="#8FCD71" v-model="current" line-width="70px" sticky>
         <van-tab title="培训机构">
         <div class="list_teacher">
             <div class="list_banner" :style="{backgroundImage: 'url('+banner+')'}"></div>
@@ -23,7 +23,9 @@
                     <img src="../../assets/teacherclub/seek.png" class="seek" @click="seekclick"/>
                 </div>
             </div>
-            <div class="club_item" v-if="clubBox.length > 0">
+           <div class="club_item_count" v-if="clubBox.length > 0">
+            <van-list v-model="loading" :finished="finished" :offset="30" finished-text="没有更多了" @load="onLoad">
+               <div class="club_item">
                 <div class="club_item_box" v-for="(item,index) in clubBox" :key="index" @click="clubBoxItem(item)">
                     <div class="club_item_img">
                         <img :src="item.first_img"/>
@@ -33,9 +35,8 @@
                         <div class="text van-ellipsis">{{item.custom_address}}</div>
                     </div>
                 </div>
-                <div class="tips_text" @click="Loadmore">
-                    {{current_page >= last_page ? clubBox.length > 0? "我也是有底线的": "没有这个哦！" : "点我加载更多"}}
-                </div>
+              </div>
+            </van-list>
             </div>
             <div class="Default-page4" v-else>
                 <span class="page-span4">我寻寻觅觅却找不到您的踪迹~</span>
@@ -75,7 +76,6 @@
                 </div>
             </div>
             </transition>
-            <transition name="fade">
             <div class="club_items" v-if="exhibitionBox2.length > 0" v-show="Box2">
                 <div class="news-swiper"> 
                     <div class="swiper-container swiper2">
@@ -90,8 +90,11 @@
                                     <div class="Rotation_zan">
                                     <div class="Rotation_zan_items">教龄：{{item.num}}年</div>
                                     <div class="Rotation_zan_tips">
-                                        <img src="../../assets/teacherclub/Give.png" v-if="item.Giveupimg1" @click="Giveuppraise2(item,index)"/>
+                                        <!-- <img src="../../assets/teacherclub/Give.png" v-if="item.Giveupimg1" @click="Giveuppraise2(item,index)"/>
                                         <img src="../../assets/teacherclub/Give2.png" v-if="!item.Giveupimg1" @click="Giveuppraise2(item,index)"/>
+                                        <span class="span">{{item.praise}}</span> -->
+                                        <img src="../../assets/teacherclub/Give.png" v-if="item.is_prais == 0" @click="Giveuppraise2(item,index)"/>
+                                        <img src="../../assets/teacherclub/Give2.png" v-if="item.is_prais == 1" @click="Giveuppraise2(item,index)"/>
                                         <span class="span">{{item.praise}}</span>
                                     </div>
                                     </div>
@@ -104,7 +107,6 @@
             <div class="Default-page7" v-else>
                 <span class="page-span7">我寻寻觅觅却找不到您的踪迹~</span>
             </div>
-            </transition>
             <div class="list_exhibition">
                 <div class="list_exhibition_page">
                     <img src="../../assets/teacherclub/yujia.png"/>
@@ -113,6 +115,7 @@
                 <div class="list_exhibition_staff">Guild staff profile</div>
             </div>
             <div class="exhibition_items" v-if="exhibitionBox.length > 0">
+                 <van-list v-model="loading2" :offset="30" :finished="finished2" finished-text="没有更多了" @load="onLoad2">
                 <div class="exhibition_content">
                     <div class="exhibition_box" v-for="(item,index) in exhibitionBox" :key="index">
                         <div class="exhibition_img" @click="exhibition(item)">
@@ -124,17 +127,18 @@
                             <div class="exhibition_zan">
                             <div class="exhibition_zan_items">教龄：{{item.num}}年</div>
                             <div class="exhibition_zan_tips">
-                                <img src="../../assets/teacherclub/Give.png" v-if="item.Giveupimg" @click="Giveuppraise(item,index)"/>
+                                <!-- <img src="../../assets/teacherclub/Give.png" v-if="item.Giveupimg" @click="Giveuppraise(item,index)"/>
                                 <img src="../../assets/teacherclub/Give2.png" v-if="!item.Giveupimg" @click="Giveuppraise(item,index)"/>
+                                <span class="span">{{item.praise}}</span> -->
+                                <img src="../../assets/teacherclub/Give.png" v-if="item.is_prais == 0" @click="Giveuppraise(item,index)"/>
+                                <img src="../../assets/teacherclub/Give2.png" v-if="item.is_prais == 1" @click="Giveuppraise(item,index)"/>
                                 <span class="span">{{item.praise}}</span>
                             </div>
                         </div>
                         </div>
                     </div>
                 </div>
-                <div class="tips_text" @click="Loadmore2">
-                    {{current_page2 >= last_page2 ? exhibitionBox.length > 0? "我也是有底线的": "没有这个哦！" : "点我加载更多"}}
-                </div>
+                </van-list> 
             </div>
              <div class="Default-page5" v-else>
                 <span class="page-span5">我寻寻觅觅却找不到您的踪迹~</span>
@@ -155,18 +159,19 @@
 </template>
 <script>
 /* eslint-disable */
-import Swiper from 'swiper';
 import areaList from "../../assets/js/area.js";
 import Vue from 'vue';
 import Bus from "@/utils/Bus";
 import { mapGetters } from "vuex"
-import { Notify, Dialog, Toast, Tab, Tabs} from "vant";
+import Swiper from 'swiper';
+import { Notify, Dialog, Toast, Tab, Tabs, List} from "vant";
 import { DropdownMenu, DropdownItem } from 'vant';
+Vue.use(List);
 Vue.use(DropdownMenu).use(DropdownItem);
 Vue.use(Tab).use(Tabs);
 Vue.use(Notify)
-.use(Dialog)
-.use(Toast);
+Vue.use(Dialog);
+Vue.use(Toast);
 export default {
     data() {
     return {
@@ -177,6 +182,10 @@ export default {
         current:0,
         curritem:0,
         banner:'',
+        finished: false,
+        loading: false,
+        finished2: false,
+        loading2: false,
         visible:false,
         Box2:true,
         banner2:'',
@@ -201,7 +210,7 @@ export default {
         record:"",
         Giveupimg:true,
         Giveupimg1:true,
-        liList:["培训机构","瑜伽名师"],
+        // liList:["培训机构","瑜伽名师"],
         items:["全部"],
         clubBox:[],
         change:[],
@@ -218,27 +227,31 @@ export default {
         area:"",
         current_page:1,
         last_page: 2,
+        total:'',
         current_page2:1,
         last_page2: 2,
+        total2:'',
         id:0,
         id2:0
     };
   },
    computed: {
-    ...mapGetters(["info"]),
-  },
-  mounted () {
-    this.PullUpReload();
-    this.PullUpReload2();
+    ...mapGetters(["info", "isUserNeedLogin"]),
   },
   created(){
       this.joindata();
-      this.exhibitionList();
-      this.choiceness();
+      // this.exhibitionList();
+      
   },
   mounted() {
-    const { current } = this.$route.query
-    console.log(current)
+    if (this.isUserNeedLogin) {
+      this.choiceness();
+      this.exhibitionList()
+    } else {
+      this.getChoicenessPrais()
+      this.getTeachersPrais()
+    }
+    const { current } = this.$route.query;
     if (typeof current != 'undefined') {
       this.current = parseInt(current)
     }
@@ -247,17 +260,11 @@ export default {
       //机构列表
       joindata(){
         this.$request.get(`/clubs?page=${this.current_page}`).then(res => {
-            // this.clubBox = res.data.data;
-            res.data.data.map((item) => {
-            this.clubBox.push(item);
-            })
+            this.clubBox = res.data.data;
             this.banner = res.banner;
             this.current_page = res.data.current_page;
             this.last_page = res.data.last_page;
-            if(this.current_page > this.last_page) {
-            this.current_page = res.data.last_page;
-            Toast('没有更多了哦');
-            }
+            this.total = res.data.total;
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -269,6 +276,33 @@ export default {
             return;
             }
         });
+      },
+      //机构
+      onLoadlist(){
+          this.$request.get(`/clubs?page=${this.current_page}`).then(res => {
+             const info = res.data.data;
+            info.forEach(item => {
+                this.clubBox.push(item);
+            });
+            this.total = res.data.total;
+        })
+      },
+      //名师
+      onLoadlist2(){
+          this.$request.get(`/teachers?page=${this.current_page2}`).then(res => {
+             const info2 = res.teachers.data;
+            info2.forEach(item => {
+                this.exhibitionBox.push(item);
+            });
+            this.total2 = res.teachers.total;
+            for(var i=0;i<this.exhibitionBox.length;i++){
+                if(this.exhibitionBox[i].id==this.id){
+                    this.exhibitionBox[i]["Giveupimg"]=false;
+                }else{
+                    this.exhibitionBox[i]["Giveupimg"]=true;
+                }              
+            }
+        })
       },
       //热门城市
       dropdownchange(){
@@ -279,10 +313,7 @@ export default {
             this.clubBox = res.data;
             this.current_page = res.current_page;
             this.last_page = res.last_page;
-            if(this.current_page > this.last_page) {
-            this.current_page = res.last_page;
-            Toast('没有更多了哦');
-            }
+            this.total = res.total;
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -295,60 +326,60 @@ export default {
             }
         });
       },
-       // 上拉加载
-    PullUpReload () {
-      let isScroll = false;  // 函数截流
-      document.querySelector('.list_teacher').onscroll = function() {
-      if (isScroll) {
+      //机构
+      onLoad() {
         setTimeout(() => {
-          isScroll = false;
-        },100)
-      } else {
-        let innerHeight = document.querySelector('.list_teacher').clientHeight; // 容器高度
-        let outerHeight = document.querySelector('.club_item').clientHeight; // 容器高+滚动高
-        let scrollTop = document.querySelector('.list_teacher').scrollTop;  // 滚动高
-        if (innerHeight + scrollTop >= outerHeight + 219) {
-          this.current_page > this.last_page? '': this.current_page++;
-          this.joindata();
-        }
-        isScroll = true;
-      }
-      }
-    },
-    PullUpReload2 () {
-      let isScroll = false;  // 函数截流
-      document.querySelector('.list_clubhouse').onscroll = function() {
-      if (isScroll) {
+            this.current_page++;
+            this.onLoadlist(this.current_page);
+            this.loading = false;
+            // 数据全部加载完成
+            if (this.clubBox.length >= this.total) {
+                this.finished = true;
+            }
+        }, 500);
+    },   
+    //名师
+    onLoad2() {
         setTimeout(() => {
-          isScroll = false;
-        },100)
-      } else {
-        let innerHeight = document.querySelector('.list_clubhouse').clientHeight; // 容器高度
-        let outerHeight = document.querySelector('.exhibition_items').clientHeight; // 容器高+滚动高
-        let scrollTop = document.querySelector('.list_clubhouse').scrollTop;  // 滚动高
-        if (innerHeight + scrollTop >= outerHeight + 219) {
-          this.current_page2 > this.last_page2? '': this.current_page2++;
-          this.exhibitionList();
-        }
-        isScroll = true;
-      }
-      }
+            this.current_page2++;
+            if (this.isUserNeedLogin) {
+              this.onLoadlist2(this.current_page2);
+            } else {
+              this.getTeachersPrais(this.current_page2)
+            }
+          
+            this.loading2 = false;
+            // 数据全部加载完成
+            if (this.exhibitionBox.length >= this.total2) {
+                this.finished2 = true;
+            }
+        }, 500);
     },
-      Loadmore(){
-        this.current_page > this.last_page? '': this.current_page++;
-        this.joindata();
-      },
-      Loadmore2(){
-        this.current_page2 > this.last_page2? '': this.current_page2++;
-        this.exhibitionList();
-      },
+    // 登录之后的名师列表
+    getTeachersPrais(page = 1) {
+      this.$request.get(`/teachers/list/prais?page=${page}`)
+      .then(res => {
+        if(page == 1) {
+          this.exhibitionBox = res.teachers.data;
+          this.houseType = res.course_types;
+          this.actions = res.year;
+          this.banner2 = res.banner;
+          this.current_page2 = res.teachers.current_page;
+          this.last_page2 = res.teachers.last_page;
+          this.total2 = res.teachers.total;
+        } else {
+          const info2 = res.teachers.data;
+            info2.forEach(item => {
+                this.exhibitionBox.push(item);
+            });
+            this.total2 = res.teachers.total;
+        }
+      })
+    },   
       //名师列表
       exhibitionList(){
         this.$request.get(`/teachers?page=${this.current_page2}`).then(res => {
-            // this.exhibitionBox = res.teachers.data;
-            res.teachers.data.map((item) => {
-            this.exhibitionBox.push(item);
-            })
+            this.exhibitionBox = res.teachers.data;
             this.houseType = res.course_types;
             this.actions = res.year;
             this.banner2 = res.banner;
@@ -383,23 +414,33 @@ export default {
             new Swiper('.swiper2', {
                 slidesPerView: 'auto',
                 freeMode: true,
-                observer: true,
+                observer: true,//修改swiper自己或子元素时，自动初始化swiper
+                observeParents:true,//修改swiper自己或子元素时，自动初始化swiper
             });
+      },
+      // 登录之后的点赞
+      getChoicenessPrais() {
+        this.$request.get(`/teachers/elites/prais`).then(res => {
+          this.exhibitionBox2 = res;
+          this.$nextTick(function() {
+              this.swiperInit();
+          })
+        })
       },
       //名师精选
       choiceness(){
         this.$request.get(`/teachers/elites`).then(res => {
             this.exhibitionBox2 = res;
-            for(var i=0;i<this.exhibitionBox2.length;i++){
-                if(this.exhibitionBox2[i].id==this.id2){
-                    this.exhibitionBox2[i]["Giveupimg1"]=false;
-                }else{
-                    this.exhibitionBox2[i]["Giveupimg1"]=true;
-                }              
-            }
             this.$nextTick(function() {
                 this.swiperInit();
             })
+            // for(var i=0;i<this.exhibitionBox2.length;i++){
+            //     if(this.exhibitionBox2[i].id==this.id2){
+            //         this.exhibitionBox2[i]["Giveupimg1"]=false;
+            //     }else{
+            //         this.exhibitionBox2[i]["Giveupimg1"]=true;
+            //     }              
+            // }
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -414,6 +455,7 @@ export default {
       },
       //点赞
       Giveuppraise(item,index){
+        if(this.isUserNeedLogin || item.is_prais == 1) return;
           this.id=item.id;
         let params ={
             id:item.id
@@ -422,8 +464,7 @@ export default {
             this.msg = data.msg;
             if(this.msg == "OK"){
             Notify({ message: "点赞成功", type: "success" });
-            // Vue.set(this.exhibitionList());
-            this.exhibitionList();
+            this.$set(this.exhibitionBox, index, {...this.exhibitionBox[index], is_prais: 1})
             }
         })
         .catch(error => {
@@ -438,6 +479,7 @@ export default {
         });
       },
       Giveuppraise2(item,index){
+        if(this.isUserNeedLogin || item.is_prais == 1) return;
           this.id2=item.id;
         let params ={
             id:item.id
@@ -446,8 +488,8 @@ export default {
             this.msg = data.msg;
             if(this.msg == "OK"){
             Notify({ message: "点赞成功", type: "success" });
-            // Vue.set(this.choiceness());
-            this.choiceness();
+            this.$set(this.exhibitionBox2, index, {...this.exhibitionBox2[index], is_prais: 1})
+            // this.choiceness();
             }
         })
         .catch(error => {
@@ -664,6 +706,9 @@ input::-moz-placeholder{
 input:-ms-input-placeholder{
     color:#999;
 }
+.swiper-wrapper{
+    overflow: auto;
+}
 .el-dropdown-link {
     cursor: pointer!important;
     color: #2c2c2c!important;
@@ -806,13 +851,17 @@ input:-ms-input-placeholder{
                 }
             }
         }
+        .club_item_count{
+        width: 100%;
+        height: 100%;
+        background: #eee !important;
+        display: inline-block;
         .club_item{
             width: 93%;
             // height: 100%;
             margin: 0 auto;
             display: flow-root;
             // margin-bottom: 49px;
-            background: #eee !important;
             .club_item_box{
                 width: 48%;
                 height: 100%;
@@ -905,6 +954,7 @@ input:-ms-input-placeholder{
                 margin-top: 70%;
                 margin-bottom: 30px;
             }
+        }
         }
         .Default-page4{
             width: 100%;
