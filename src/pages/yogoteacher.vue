@@ -14,7 +14,7 @@
                             <el-col class="yogo-lan">
                             <div class="search-left">
                                 <el-select v-model="value" placeholder="擅长类型" @change="changecoure">
-                                    <el-option v-for="item in coursetypes" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                                    <el-option v-for="item in coursetypes" :key="item.id" :label="item.name" :value="item.name"></el-option>
                                 </el-select>
                                 <el-select v-model="value2" placeholder="最小资历" @change="yearchange" style="width:105px">
                                     <el-option v-for="item in yearlist" :key="item.id" :label="item.name" :value="item.id"></el-option>
@@ -292,9 +292,9 @@ export default {
         this.city = data.city.value;
         this.area = data.area.value;
      },
-     changecoure(val){},
+     changecoure(val){
+     },
      yearchange(val){
-         console.log(val);
      },
     selectItem(item,idx){
         this.namelist = item;
