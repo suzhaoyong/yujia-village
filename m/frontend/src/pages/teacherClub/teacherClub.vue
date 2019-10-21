@@ -694,6 +694,9 @@ input::-moz-placeholder{
 input:-ms-input-placeholder{
     color:#999;
 }
+.van-action-sheet{
+    margin-bottom: 13%;
+}
 .swiper-wrapper{
     overflow: auto;
 }
