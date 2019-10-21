@@ -5,6 +5,11 @@
         <van-icon style="font-size: 20px;color: #fff;" name="wap-home" />
       </div>
     </div>
+    <div class="back_login-wrap" v-show="form.type !== 'login'" @click="changeType('login')">
+      <div class="back_login" style="font-size: 20px;color: #fff;">
+        <van-icon style="font-size: 20px;color: #fff;" name="manager" />
+      </div>
+    </div>
     <div class="body">
       <!-- <div class="tips" v-show="false">
         <span :class="isActive('register')" @click="changeType('register')">注册</span>
@@ -107,9 +112,9 @@
         </div>
         <div class="input-btn">
           <van-button type="default" @click="register">注册</van-button>
-          <div class="reg-tips">
+          <div class="reg-tips" v-show="false">
             已有账号？
-            <span :class="isActive('login')" @click="changeType('login')">立即登录</span>
+            <span style="color:#8FCD71;" :class="isActive('login')" @click="changeType('login')">立即登录</span>
           </div>
         </div>
       </div>
@@ -160,7 +165,7 @@
         <div class="input-btn">
           <van-button type="default" @click="resetPwd">更改</van-button>
           <div class="reg-tips" v-show="false">
-            <span :class="isActive('login')" @click="changeType('login')">立即登录</span>
+            <span style="color:#8FCD71;" :class="isActive('login')" @click="changeType('login')">立即登录</span>
           </div>
         </div>
       </div>
@@ -747,7 +752,7 @@ export default {
   padding: 0;
   background: #8fcd71;
   color: #fff;
-  border-radius: 10px;
+  border-radius: 4px;
   border-color: transparent;
 }
 </style>
@@ -772,6 +777,50 @@ export default {
     text-align: center;
     background: rgba(0, 0, 0, 0.4);
     color: #999;
+    position: relative;
+    &::after{
+      content: '首页';
+      position: absolute;
+      bottom: -18px;
+      left: 0;
+      width: 1rem;
+      text-align: center;
+      font-size: 12px;
+      color:#fff;
+    }
+  }
+}
+.back_login-wrap {
+  position: absolute;
+  right: 20px;
+  top: 10px;
+  .back_login {
+    font-size: 20px;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    width: 1rem;
+    height: 1rem;
+    border: 0;
+    border-radius: 100%;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.4);
+    color: #999;
+    position: relative;
+    &::after{
+      content: '登录';
+      position: absolute;
+      bottom: -18px;
+      left: 0;
+      width: 1rem;
+      text-align: center;
+      font-size: 12px;
+      color:#fff;
+    }
   }
 }
 .back-wrap {
