@@ -76,7 +76,6 @@
                 </div>
             </div>
             </transition>
-            <transition name="fade">
             <div class="club_items" v-if="exhibitionBox2.length > 0" v-show="Box2">
                 <div class="news-swiper"> 
                     <div class="swiper-container swiper2">
@@ -105,7 +104,6 @@
             <div class="Default-page7" v-else>
                 <span class="page-span7">我寻寻觅觅却找不到您的踪迹~</span>
             </div>
-            </transition>
             <div class="list_exhibition">
                 <div class="list_exhibition_page">
                     <img src="../../assets/teacherclub/yujia.png"/>
@@ -155,19 +153,19 @@
 </template>
 <script>
 /* eslint-disable */
-import Swiper from 'swiper';
 import areaList from "../../assets/js/area.js";
 import Vue from 'vue';
 import Bus from "@/utils/Bus";
 import { mapGetters } from "vuex"
+import Swiper from 'swiper';
 import { Notify, Dialog, Toast, Tab, Tabs, List} from "vant";
 import { DropdownMenu, DropdownItem } from 'vant';
 Vue.use(List);
 Vue.use(DropdownMenu).use(DropdownItem);
 Vue.use(Tab).use(Tabs);
 Vue.use(Notify)
-.use(Dialog)
-.use(Toast);
+Vue.use(Dialog);
+Vue.use(Toast);
 export default {
     data() {
     return {
@@ -284,6 +282,13 @@ export default {
                 this.exhibitionBox.push(item);
             });
             this.total2 = res.teachers.total;
+            for(var i=0;i<this.exhibitionBox.length;i++){
+                if(this.exhibitionBox[i].id==this.id){
+                    this.exhibitionBox[i]["Giveupimg"]=false;
+                }else{
+                    this.exhibitionBox[i]["Giveupimg"]=true;
+                }              
+            }
         })
       },
       //热门城市
@@ -365,7 +370,8 @@ export default {
             new Swiper('.swiper2', {
                 slidesPerView: 'auto',
                 freeMode: true,
-                observer: true,
+                observer: true,//修改swiper自己或子元素时，自动初始化swiper
+                observeParents:true,//修改swiper自己或子元素时，自动初始化swiper
             });
       },
       //名师精选
