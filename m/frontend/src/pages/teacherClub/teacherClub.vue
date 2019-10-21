@@ -23,8 +23,8 @@
                     <img src="../../assets/teacherclub/seek.png" class="seek" @click="seekclick"/>
                 </div>
             </div>
-           <div class="club_item_count" v-if="clubBox.length > 0">
             <van-list v-model="loading" :finished="finished" :offset="30" finished-text="没有更多了" @load="onLoad">
+            <div class="club_item_count" v-if="clubBox.length > 0">
                <div class="club_item">
                 <div class="club_item_box" v-for="(item,index) in clubBox" :key="index" @click="clubBoxItem(item)">
                     <div class="club_item_img">
@@ -36,11 +36,11 @@
                     </div>
                 </div>
               </div>
-            </van-list>
             </div>
             <div class="Default-page4" v-else>
                 <span class="page-span4">我寻寻觅觅却找不到您的踪迹~</span>
             </div>
+            </van-list>
         </div>
         </van-tab>
         <van-tab title="瑜伽名师">
@@ -114,8 +114,8 @@
                 </div>
                 <div class="list_exhibition_staff">Guild staff profile</div>
             </div>
-            <div class="exhibition_items" v-if="exhibitionBox.length > 0">
-                 <van-list v-model="loading2" :offset="30" :finished="finished2" finished-text="没有更多了" @load="onLoad2">
+            <van-list v-model="loading2" :offset="30" :finished="finished2" finished-text="没有更多了" @load="onLoad2">
+                <div class="exhibition_items" v-if="exhibitionBox.length > 0">
                 <div class="exhibition_content">
                     <div class="exhibition_box" v-for="(item,index) in exhibitionBox" :key="index">
                         <div class="exhibition_img" @click="exhibition(item)">
@@ -138,14 +138,14 @@
                         </div>
                     </div>
                 </div>
-                </van-list> 
             </div>
              <div class="Default-page5" v-else>
                 <span class="page-span5">我寻寻觅觅却找不到您的踪迹~</span>
             </div>
+            </van-list> 
         </div>
         </van-tab>
-         </van-tabs>
+        </van-tabs>
         <!-- 最大资历 -->
         <van-action-sheet v-model="isOpen" :actions="actions" @select="onSelect" cancel-text="取消"/>
         <!-- 最小资历 -->
@@ -464,7 +464,8 @@ export default {
             this.msg = data.msg;
             if(this.msg == "OK"){
             Notify({ message: "点赞成功", type: "success" });
-            this.$set(this.exhibitionBox, index, {...this.exhibitionBox[index], is_prais: 1})
+            const { praise } = this.exhibitionBox[index]
+            this.$set(this.exhibitionBox, index, {...this.exhibitionBox[index], is_prais: 1, praise: praise + 1 })
             }
         })
         .catch(error => {
@@ -488,7 +489,8 @@ export default {
             this.msg = data.msg;
             if(this.msg == "OK"){
             Notify({ message: "点赞成功", type: "success" });
-            this.$set(this.exhibitionBox2, index, {...this.exhibitionBox2[index], is_prais: 1})
+            const { praise } = this.exhibitionBox2[index]
+            this.$set(this.exhibitionBox2, index, {...this.exhibitionBox2[index], is_prais: 1, praise: praise + 1})
             // this.choiceness();
             }
         })
@@ -705,6 +707,9 @@ input::-moz-placeholder{
 }
 input:-ms-input-placeholder{
     color:#999;
+}
+.van-action-sheet{
+    margin-bottom: 13%;
 }
 .swiper-wrapper{
     overflow: auto;
