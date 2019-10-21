@@ -91,7 +91,6 @@ export default {
     height: 44px;
     .van-nav-bar {
       background: #FFFFFF;
-      border-bottom: 2px solid #EEEEEE;
       img {
         width: 15px;
         height: 15px;
@@ -146,7 +145,7 @@ export default {
         }
       }
     }
-
+    
   }
   &-main {
     width: 100%;

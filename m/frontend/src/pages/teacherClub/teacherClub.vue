@@ -365,7 +365,7 @@ export default {
                 }else{
                     this.exhibitionBox[i]["Giveupimg"]=true;
                     // this.$set(this.exhibitionBox[i], 'Giveupimg', true);
-                }              
+                }
             }
         })
         .catch(error => {
