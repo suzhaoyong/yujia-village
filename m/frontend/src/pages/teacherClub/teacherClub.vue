@@ -6,7 +6,7 @@
           <!-- <span class="liList" v-for="(item,index) in liList" :key="index" v-on:click="addClass(index)" :class="{ischeck:index==current}">{{item}}</span> -->
           <!-- <div class="stylelist"></div> -->
         <!-- </div> -->
-        <van-tabs title-active-color="#8FCD71" color="#8FCD71" line-width="70px" sticky>
+        <van-tabs title-active-color="#8FCD71" color="#8FCD71" v-model="current" line-width="70px" sticky>
         <van-tab title="培训机构">
         <div class="list_teacher">
             <div class="list_banner" :style="{backgroundImage: 'url('+banner+')'}"></div>
@@ -241,12 +241,14 @@ export default {
   created(){
       this.joindata();
       // this.exhibitionList();
-      this.choiceness();
+      
   },
   mounted() {
     if (this.isUserNeedLogin) {
+      this.choiceness();
       this.exhibitionList()
     } else {
+      this.getChoicenessPrais()
       this.getTeachersPrais()
     }
     const { current } = this.$route.query;
@@ -403,6 +405,15 @@ export default {
                 observer: true,//修改swiper自己或子元素时，自动初始化swiper
                 observeParents:true,//修改swiper自己或子元素时，自动初始化swiper
             });
+      },
+      // 登录之后的点赞
+      getChoicenessPrais() {
+        this.$request.get(`/teachers/elites/prais`).then(res => {
+          this.exhibitionBox2 = res;
+          this.$nextTick(function() {
+              this.swiperInit();
+          })
+        })
       },
       //名师精选
       choiceness(){
