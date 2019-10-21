@@ -650,6 +650,9 @@ input::-moz-placeholder{
 input:-ms-input-placeholder{
     color:#999;
 }
+.swiper-wrapper{
+    overflow: auto;
+}
 .el-dropdown-link {
     cursor: pointer!important;
     color: #2c2c2c!important;
