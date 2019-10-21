@@ -91,8 +91,11 @@
                                     <div class="Rotation_zan">
                                     <div class="Rotation_zan_items">教龄：{{item.num}}年</div>
                                     <div class="Rotation_zan_tips">
-                                        <img src="../../assets/teacherclub/Give.png" v-if="item.Giveupimg1" @click="Giveuppraise2(item,index)"/>
+                                        <!-- <img src="../../assets/teacherclub/Give.png" v-if="item.Giveupimg1" @click="Giveuppraise2(item,index)"/>
                                         <img src="../../assets/teacherclub/Give2.png" v-if="!item.Giveupimg1" @click="Giveuppraise2(item,index)"/>
+                                        <span class="span">{{item.praise}}</span> -->
+                                        <img src="../../assets/teacherclub/Give.png" v-if="item.is_prais == 0" @click="Giveuppraise2(item,index)"/>
+                                        <img src="../../assets/teacherclub/Give2.png" v-if="item.is_prais == 1" @click="Giveuppraise2(item,index)"/>
                                         <span class="span">{{item.praise}}</span>
                                     </div>
                                     </div>
@@ -126,8 +129,11 @@
                             <div class="exhibition_zan">
                             <div class="exhibition_zan_items">教龄：{{item.num}}年</div>
                             <div class="exhibition_zan_tips">
-                                <img src="../../assets/teacherclub/Give.png" v-if="item.Giveupimg" @click="Giveuppraise(item,index)"/>
+                                <!-- <img src="../../assets/teacherclub/Give.png" v-if="item.Giveupimg" @click="Giveuppraise(item,index)"/>
                                 <img src="../../assets/teacherclub/Give2.png" v-if="!item.Giveupimg" @click="Giveuppraise(item,index)"/>
+                                <span class="span">{{item.praise}}</span> -->
+                                <img src="../../assets/teacherclub/Give.png" v-if="item.is_prais == 0" @click="Giveuppraise(item,index)"/>
+                                <img src="../../assets/teacherclub/Give2.png" v-if="item.is_prais == 1" @click="Giveuppraise(item,index)"/>
                                 <span class="span">{{item.praise}}</span>
                             </div>
                         </div>
@@ -232,14 +238,19 @@ export default {
     };
   },
    computed: {
-    ...mapGetters(["info"]),
+    ...mapGetters(["info", "isUserNeedLogin"]),
   },
   created(){
       this.joindata();
-      this.exhibitionList();
+      // this.exhibitionList();
       this.choiceness();
   },
   mounted() {
+    if (this.isUserNeedLogin) {
+      this.exhibitionList()
+    } else {
+      this.getTeachersPrais()
+    }
     const { current } = this.$route.query;
     if (typeof current != 'undefined') {
       this.current = parseInt(current)
@@ -324,13 +335,39 @@ export default {
     onLoad2() {
         setTimeout(() => {
             this.current_page2++;
-            this.onLoadlist2(this.current_page2);
+            if (this.isUserNeedLogin) {
+              this.onLoadlist2(this.current_page2);
+            } else {
+              this.getTeachersPrais(this.current_page2)
+            }
+          
             this.loading2 = false;
             // 数据全部加载完成
             if (this.exhibitionBox.length >= this.total2) {
                 this.finished2 = true;
             }
         }, 500);
+    },
+    // 登录之后的名师列表
+    getTeachersPrais(page = 1) {
+      this.$request.get(`/teachers/list/prais?page=${page}`)
+      .then(res => {
+        if(page == 1) {
+          this.exhibitionBox = res.teachers.data;
+          this.houseType = res.course_types;
+          this.actions = res.year;
+          this.banner2 = res.banner;
+          this.current_page2 = res.teachers.current_page;
+          this.last_page2 = res.teachers.last_page;
+          this.total2 = res.teachers.total;
+        } else {
+          const info2 = res.teachers.data;
+            info2.forEach(item => {
+                this.exhibitionBox.push(item);
+            });
+            this.total2 = res.teachers.total;
+        }
+      })
     },   
       //名师列表
       exhibitionList(){
@@ -342,13 +379,6 @@ export default {
             this.current_page2 = res.teachers.current_page;
             this.last_page2 = res.teachers.last_page;
             this.total2 = res.teachers.total;
-            for(var i=0;i<this.exhibitionBox.length;i++){
-                if(this.exhibitionBox[i].id==this.id){
-                    this.exhibitionBox[i]["Giveupimg"]=false;
-                }else{
-                    this.exhibitionBox[i]["Giveupimg"]=true;
-                }              
-            }
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -375,13 +405,13 @@ export default {
             this.$nextTick(function() {
                 this.swiperInit();
             })
-            for(var i=0;i<this.exhibitionBox2.length;i++){
-                if(this.exhibitionBox2[i].id==this.id2){
-                    this.exhibitionBox2[i]["Giveupimg1"]=false;
-                }else{
-                    this.exhibitionBox2[i]["Giveupimg1"]=true;
-                }              
-            }
+            // for(var i=0;i<this.exhibitionBox2.length;i++){
+            //     if(this.exhibitionBox2[i].id==this.id2){
+            //         this.exhibitionBox2[i]["Giveupimg1"]=false;
+            //     }else{
+            //         this.exhibitionBox2[i]["Giveupimg1"]=true;
+            //     }              
+            // }
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -396,6 +426,7 @@ export default {
       },
       //点赞
       Giveuppraise(item,index){
+        if(this.isUserNeedLogin || item.is_prais == 1) return;
           this.id=item.id;
         let params ={
             id:item.id
@@ -404,7 +435,7 @@ export default {
             this.msg = data.msg;
             if(this.msg == "OK"){
             Notify({ message: "点赞成功", type: "success" });
-            this.exhibitionList();
+            this.$set(this.exhibitionBox, index, {...this.exhibitionBox[index], is_prais: 1})
             }
         })
         .catch(error => {
@@ -419,6 +450,7 @@ export default {
         });
       },
       Giveuppraise2(item,index){
+        if(this.isUserNeedLogin || item.is_prais == 1) return;
           this.id2=item.id;
         let params ={
             id:item.id
@@ -427,7 +459,8 @@ export default {
             this.msg = data.msg;
             if(this.msg == "OK"){
             Notify({ message: "点赞成功", type: "success" });
-            this.choiceness();
+            this.$set(this.exhibitionBox, index, {...this.exhibitionBox[index], is_prais: 1})
+            // this.choiceness();
             }
         })
         .catch(error => {

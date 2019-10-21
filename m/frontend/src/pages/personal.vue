@@ -118,7 +118,8 @@ export default {
         getPersonalData() {
             this.$request.get('/personal/home').then(data => {
                 console.log(data);
-                
+                store.dispatch("INFO", data);
+                sessionStorage.setItem('user data',JSON.stringify(data));
                 const { fraction, icon, name, identity_auth, reason,cashCount,couponCount } = data.user;
                 window.sessionStorage.setItem('user',JSON.stringify(data.user));
                 const index = data.user.money.indexOf(".");
@@ -173,6 +174,7 @@ export default {
         logout() {
             // console.log('退出');
             store.dispatch("INFO", { user: {} });
+            sessionStorage.removeItem('user data');
             window.sessionStorage.removeItem('access');
             window.sessionStorage.removeItem('user');
             // 退出回到首页
