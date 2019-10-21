@@ -476,7 +476,7 @@ export default {
             this.msg = data.msg;
             if(this.msg == "OK"){
             Notify({ message: "点赞成功", type: "success" });
-            this.$set(this.exhibitionBox, index, {...this.exhibitionBox[index], is_prais: 1})
+            this.$set(this.exhibitionBox2, index, {...this.exhibitionBox2[index], is_prais: 1})
             // this.choiceness();
             }
         })
