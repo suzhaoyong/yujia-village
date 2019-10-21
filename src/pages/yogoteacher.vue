@@ -14,13 +14,13 @@
                             <el-col class="yogo-lan">
                             <div class="search-left">
                                 <el-select v-model="value" placeholder="擅长类型" @change="changecoure">
-                                    <el-option v-for="item in coursetypes" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                                    <el-option v-for="item in coursetypes" :key="item.id" :label="item.name" :value="item.name"></el-option>
                                 </el-select>
                                 <el-select v-model="value2" placeholder="最小资历" @change="yearchange" style="width:105px">
-                                    <el-option v-for="item in yearlist" :key="item" :label="item" :value="item"></el-option>
+                                    <el-option v-for="item in yearlist" :key="item.id" :label="item.name" :value="item.id"></el-option>
                                 </el-select>
                                 <el-select v-model="value3" placeholder="最大资历" @change="yearchange" style="width:105px">
-                                    <el-option v-for="item in yearlist" :key="item" :label="item" :value="item"></el-option>
+                                    <el-option v-for="item in yearlist" :key="item.id" :label="item.name" :value="item.id"></el-option>
                                 </el-select>
                                 <v-distpicker :province="province" :city="city" :area="area" @selected="onSelected"></v-distpicker>
                             </div>
@@ -57,8 +57,8 @@
                                             <div class="rhomb3"></div>
                                             <div class="rhomb4"></div>
                                         </div>
-                                        <div class="yogoswiper-text" @click="namelistItem(namelist)">
-                                            <h3>{{namelist.name}}</h3>
+                                        <div class="yogoswiper-text">
+                                            <h3 @click="namelistItem(namelist)">{{namelist.name}}</h3>
                                             <p class="p1">{{namelist.info}}</p>
                                             <p class="p3">从业时间: {{namelist.num}}年</p>
                                             <p class="p2">擅长：{{namelist.good_at}}</p>
@@ -292,8 +292,10 @@ export default {
         this.city = data.city.value;
         this.area = data.area.value;
      },
-     changecoure(val){},
-     yearchange(val){},
+     changecoure(val){
+     },
+     yearchange(val){
+     },
     selectItem(item,idx){
         this.namelist = item;
         this.activeClass = idx;
@@ -618,7 +620,7 @@ export default {
                 margin: 0 auto;
                 margin-bottom: 50px;
                 position: relative;
-                cursor: pointer;
+                // cursor: pointer;
                 .margin-auto{
                     width: 100%;
                     margin:0 auto;
@@ -770,7 +772,7 @@ export default {
                         width: 46%;
                         height: 100%;
                         margin-left: 35px;
-                        cursor: pointer;
+                        // cursor: pointer;
                         .yogoswiper-butt{
                             width: 120px;
                             border: 1px solid #e2dbc8;
@@ -812,6 +814,7 @@ export default {
                             -webkit-box-orient: vertical !important;
                             -webkit-line-clamp: 1 !important;// 限制快级元素的文本行数
                             overflow: hidden !important;
+                            cursor: pointer;
                         }
                         .p1{
                             color: #2c2c2c;
@@ -850,6 +853,7 @@ export default {
                         background-color: #fff;
                         background-image: url('../assets/left.png');
                         background-position: center;
+                        cursor: pointer;
                 }
                 .swiper-button-prev1:hover{
                         position: absolute;
@@ -883,6 +887,7 @@ export default {
                         background-color: #fff;
                         background-image: url('../assets/right.png');
                         background-position: center;
+                        cursor: pointer;
                 }
                 .swiper-button-next1:hover{
                         position: absolute;

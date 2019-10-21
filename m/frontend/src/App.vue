@@ -18,6 +18,9 @@ export default {
   name: "app",
   computed: {
     loading() {
+      setTimeout(() => {
+        this.$store.commit("loadStatus", false);
+      }, 3000);
       return this.$store.state.loading
     }
   }

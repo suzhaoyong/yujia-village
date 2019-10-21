@@ -18,14 +18,14 @@
                             <router-link to="/yogoteacher"><span class="apns">瑜伽名师</span></router-link>
                         </div>
                         <div class="foot-left-name">
-                            <router-link to="/market/index"><span class="apns">商&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;城</span></router-link>
+                            <!-- <router-link to="/market/index"><span class="apns">商&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;城</span></router-link> -->
                             <router-link to="/cultivate/index"><span class="apns">培训信息</span></router-link>
                             <router-link to="/aboutus"><span class="apns">关于我们</span></router-link>
+                            <router-link to="/personal"><span class="apns">个人中心</span></router-link>
                         </div>
                         <div class="foot-left-name">
                             <router-link to="/yogoknowledge"><span class="apns">瑜伽知识</span></router-link>
                             <router-link to="/yogoinformation"><span class="apns">瑜伽资讯</span></router-link>
-                            <router-link to="/personal"><span class="apns">个人中心</span></router-link>
                         </div>
                         </div>
                     </div>
@@ -42,7 +42,7 @@
                         </div>
                         <div class="foot-left-address">
                             <img src="../assets/address.png" class="addressimg"/>
-                            <span class="address">成都市锦江区泰合国际财富中心7栋302</span>
+                            <span class="address">上海长宁区愚园路716号楼3楼</span>
                         </div>
                     </div>
                 </div>

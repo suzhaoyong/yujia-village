@@ -73,7 +73,7 @@ export default {
     top: 0;
     width: 100%;
     font-size: 16px;
-    background-color: #E0EED2 !important;
+    background-color: #8FCD71 !important;
     .van-icon {
         font-size: 20px;
         color: #2c2c2c;

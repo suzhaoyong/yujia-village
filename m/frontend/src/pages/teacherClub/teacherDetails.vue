@@ -20,8 +20,8 @@
                 <div class="yogofigcaption-title">
                     <h2>个人简介</h2>
                     <p class="p1">Good at courses</p>
-                    <div class="p2">擅长课程：<div style="width: 83%;line-height: 20px;">{{teacher.good_at}}</div></div>
-                    <div class="p3">课程特色：<div style="width: 83%;line-height: 20px;" v-html="teacher.content">{{teacher.content}}</div></div>
+                    <div class="p2">擅长课程：<div style="width: 81%;line-height: 20px;">{{teacher.good_at}}</div></div>
+                    <div class="p3">课程特色：<div style="width: 81%;line-height: 20px;" v-html="teacher.content">{{teacher.content}}</div></div>
                 </div>
             </div>
             <div class="details_foot">
@@ -136,7 +136,7 @@ export default {
     left: 0;
     width: 100%;
     z-index: 99 !important;
-    background-color: #E0EED2 !important;
+    background-color: #8FCD71 !important;
 }
 .share_img{
     line-height: 0px;

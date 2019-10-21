@@ -265,6 +265,7 @@ const router = new Router({
     {
       path: '/yagainformation',
       name: 'yagainformation',
+      component: Home,
       component: () => import('@/pages/homepage/yogaInForMation.vue'),
     },
     {

@@ -228,7 +228,7 @@ export default {
     left: 0;
     width: 100%;
     z-index: 99 !important;
-    background-color: #E0EED2 !important;
+    background-color: #8FCD71 !important;
 }
 .share_img{
     line-height: 0px;

@@ -14,7 +14,7 @@
     <!-- tab 导航 -->
     <div class="tab-wrap">
       <div class="tab-box">
-        <div href="" @click="gotoPage('train')">
+        <div href="" @click="gotoPage('yagainformation')">
           <div class="tab_pic">
             <img :src="icon.zixun" alt="图标">
           </div>
@@ -22,7 +22,7 @@
         </div>
       </div>
       <div class="tab-box">
-        <div href="" @click="gotoPage('information')">
+        <div href="" @click="gotoPage('yogaknowledge')">
           <div class="tab_pic">
             <img :src="icon.zishi" alt="图标">
           </div>
@@ -54,7 +54,7 @@
           <span class="en">Famous teacher</span>
         </div>
         <div class="rh" @click="gotoPage('train')">
-          <span class="more">更多 》</span>
+          <span class="more">更多 ></span>
         </div>
       </div>
       <div class="content_box">
@@ -80,7 +80,7 @@
           <span class="en">Famous teacher</span>
         </div>
         <div class="rh" @click="gotoPage('teacher')">
-          <span class="more">更多 》</span>
+          <span class="more">更多 ></span>
         </div>
       </div>
       <div class="content_box">
@@ -101,16 +101,16 @@
           <span class="en">Training Information</span>
         </div>
         <div class="rh" @click="gotoPage('club')">
-          <span class="more">更多 》</span>
+          <span class="more">更多 ></span>
         </div>
       </div>
       <div class="content_box">
         <div class="club" @click="viewClub(item)" v-for="(item, index) in main.clubs" :key="index">
           <div class="club_pic">
-            <img :src="item.first_img" alt="机构">
+            <img :src="item.logo" alt="机构">
           </div>
           <div class="name">{{item.club_name}}</div>
-          <div class="address">{{item.club_address}}</div>
+          <div class="address">{{item.custom_address}}</div>
         </div>
       </div>
     </div>
@@ -147,7 +147,8 @@ export default {
     gotoPage(type) {
       const path = {
         train: '/yogamessage/list',
-        information: '/yogaknowledge',
+        yagainformation: '/yagainformation',
+        yogaknowledge: '/yogaknowledge',
         teacher: '/teacherClub/list?current=1',
         club: '/teacherClub/list?current=0',
       }
@@ -182,12 +183,15 @@ img{
     .bg_imgs-wrap{
       .imgs_box{
         margin: 0 auto;
-        margin-top: -64px;
+        margin-top: -64PX;
         width: 344px;
         height: 160px;
         border-radius: 10px;
         overflow: hidden;
         background: #e5e5e5;
+        img{
+          border-radius: 10px;
+        }
       }
     }
     .tab-wrap{
@@ -240,6 +244,8 @@ img{
         }
         .rh{
           .more{
+            display: flex;
+            justify-content: center;
             color: #638C0B;
           }
         }
@@ -259,7 +265,7 @@ img{
             width: 140px;
             height: 90px;
             background: #e5e5e5;
-            border-radius: 10px;
+            border-radius: 4px;
             overflow: hidden;
           }
           .info{
@@ -269,8 +275,8 @@ img{
             flex-direction: column;
             justify-content: space-between;
             .title{
-              padding-top: 10px;
-              line-height: 1.6em;
+              padding-top: 6px;
+              line-height: 20px;
               overflow: hidden;
               text-overflow: ellipsis;
               display: -webkit-box;
@@ -279,12 +285,15 @@ img{
               .tag{
                 background: #8FCD71;
                 color:#fff;
+                font-size: 10px;
                 margin: 0 2px;
-                padding: 4px 8px;
+                margin-top: -2px;
+                display: inline-block;
+                padding: 0px 8px;
                 border-radius: 10px;
               }
               .des{
-                font-size: 12px;
+                font-size: 13px;
                 font-weight: 800;
               }
             }
@@ -292,6 +301,7 @@ img{
               font-size: 10px;
               .address{
                 color:#999;
+                font-size: 10px;
                 margin-bottom: 4px;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -301,6 +311,7 @@ img{
               }
               .time{
                 color:#999;
+                font-size: 10px;
               }
             }
           }
@@ -327,6 +338,7 @@ img{
             background: #e5e5e5;
           }
           .name_en{
+            font-size: 10PX;
             padding-top: 10px;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -359,9 +371,9 @@ img{
           .club_pic{
             width: 166px;
             height: 122px;
-            background: #e5e5e5;
+            // background: #e5e5e5;
             overflow: hidden;
-            border-radius: 10px;
+            border-radius: 4px;
           }
           .name{
             padding-top: 14px;

@@ -1,23 +1,31 @@
 <template>
 <div>
     <div class="club_warp">
-        <div class="club_warp_head">名师&机构</div>
-        <div class="club_warp_list">
-          <span class="liList" v-for="(item,index) in liList" :key="index" v-on:click="addClass(index)" :class="{ischeck:index==current}">{{item}}</span>
-        </div>
-        <div class="list_teacher" v-show="this.current === 0">
+        <!-- <div class="club_warp_head">名师&机构</div> -->
+        <!-- <div class="club_warp_list"> -->
+          <!-- <span class="liList" v-for="(item,index) in liList" :key="index" v-on:click="addClass(index)" :class="{ischeck:index==current}">{{item}}</span> -->
+          <!-- <div class="stylelist"></div> -->
+        <!-- </div> -->
+        <van-tabs title-active-color="#8FCD71" color="#8FCD71" v-model="current" line-width="70px" sticky>
+        <van-tab title="培训机构">
+        <div class="list_teacher">
             <div class="list_banner" :style="{backgroundImage: 'url('+banner+')'}"></div>
             <div class="league" @click="goto()">申请加盟</div>
             <div class="club_house">
                 <div class="club_house_title">
                     <span class="items" v-for="(item,index) in items" @click="clicktext(index)" :key="index" :class="{active:index==curritem}">{{item}}</span>
+                        <van-dropdown-menu active-color="#7BBB62">
+                        <van-dropdown-item v-model="value1" :options="option1" title="热门城市" @change="dropdownchange"/>
+                       </van-dropdown-menu>
                 </div>
                 <div class="club_house_inquiry">
                     <input type="text" class="club_house_inquiry_input" v-model="name" placeholder="输入机构名称"/>
                     <img src="../../assets/teacherclub/seek.png" class="seek" @click="seekclick"/>
                 </div>
             </div>
-            <div class="club_item" v-if="clubBox.length > 0">
+            <van-list v-model="loading" :finished="finished" :offset="30" finished-text="没有更多了" @load="onLoad">
+            <div class="club_item_count" v-if="clubBox.length > 0">
+               <div class="club_item">
                 <div class="club_item_box" v-for="(item,index) in clubBox" :key="index" @click="clubBoxItem(item)">
                     <div class="club_item_img">
                         <img :src="item.first_img"/>
@@ -27,13 +35,16 @@
                         <div class="text van-ellipsis">{{item.custom_address}}</div>
                     </div>
                 </div>
-                <div class="tips_text" @click="Loadmore">加载更多</div>
+              </div>
             </div>
             <div class="Default-page4" v-else>
                 <span class="page-span4">我寻寻觅觅却找不到您的踪迹~</span>
             </div>
+            </van-list>
         </div>
-        <div class="list_clubhouse" v-show="this.current === 1">
+        </van-tab>
+        <van-tab title="瑜伽名师">
+        <div class="list_clubhouse">
             <div class="list_banner" :style="{backgroundImage: 'url('+banner2+')'}"></div>
             <div class="list_house">
                 <div class="list_house_title">
@@ -65,7 +76,6 @@
                 </div>
             </div>
             </transition>
-            <transition name="fade">
             <div class="club_items" v-if="exhibitionBox2.length > 0" v-show="Box2">
                 <div class="news-swiper"> 
                     <div class="swiper-container swiper2">
@@ -80,8 +90,11 @@
                                     <div class="Rotation_zan">
                                     <div class="Rotation_zan_items">教龄：{{item.num}}年</div>
                                     <div class="Rotation_zan_tips">
-                                        <img src="../../assets/teacherclub/Give.png" v-if="item.Giveupimg1" @click="Giveuppraise2(item,index)"/>
+                                        <!-- <img src="../../assets/teacherclub/Give.png" v-if="item.Giveupimg1" @click="Giveuppraise2(item,index)"/>
                                         <img src="../../assets/teacherclub/Give2.png" v-if="!item.Giveupimg1" @click="Giveuppraise2(item,index)"/>
+                                        <span class="span">{{item.praise}}</span> -->
+                                        <img src="../../assets/teacherclub/Give.png" v-if="item.is_prais == 0" @click="Giveuppraise2(item,index)"/>
+                                        <img src="../../assets/teacherclub/Give2.png" v-if="item.is_prais == 1" @click="Giveuppraise2(item,index)"/>
                                         <span class="span">{{item.praise}}</span>
                                     </div>
                                     </div>
@@ -94,7 +107,6 @@
             <div class="Default-page7" v-else>
                 <span class="page-span7">我寻寻觅觅却找不到您的踪迹~</span>
             </div>
-            </transition>
             <div class="list_exhibition">
                 <div class="list_exhibition_page">
                     <img src="../../assets/teacherclub/yujia.png"/>
@@ -102,7 +114,8 @@
                 </div>
                 <div class="list_exhibition_staff">Guild staff profile</div>
             </div>
-            <div class="exhibition_items" v-if="exhibitionBox.length > 0">
+            <van-list v-model="loading2" :offset="30" :finished="finished2" finished-text="没有更多了" @load="onLoad2">
+                <div class="exhibition_items" v-if="exhibitionBox.length > 0">
                 <div class="exhibition_content">
                     <div class="exhibition_box" v-for="(item,index) in exhibitionBox" :key="index">
                         <div class="exhibition_img" @click="exhibition(item)">
@@ -114,20 +127,25 @@
                             <div class="exhibition_zan">
                             <div class="exhibition_zan_items">教龄：{{item.num}}年</div>
                             <div class="exhibition_zan_tips">
-                                <img src="../../assets/teacherclub/Give.png" v-if="item.Giveupimg" @click="Giveuppraise(item,index)"/>
+                                <!-- <img src="../../assets/teacherclub/Give.png" v-if="item.Giveupimg" @click="Giveuppraise(item,index)"/>
                                 <img src="../../assets/teacherclub/Give2.png" v-if="!item.Giveupimg" @click="Giveuppraise(item,index)"/>
+                                <span class="span">{{item.praise}}</span> -->
+                                <img src="../../assets/teacherclub/Give.png" v-if="item.is_prais == 0" @click="Giveuppraise(item,index)"/>
+                                <img src="../../assets/teacherclub/Give2.png" v-if="item.is_prais == 1" @click="Giveuppraise(item,index)"/>
                                 <span class="span">{{item.praise}}</span>
                             </div>
                         </div>
                         </div>
                     </div>
                 </div>
-                <div class="tips_text" @click="Loadmore2">加载更多</div>
             </div>
              <div class="Default-page5" v-else>
                 <span class="page-span5">我寻寻觅觅却找不到您的踪迹~</span>
             </div>
+            </van-list> 
         </div>
+        </van-tab>
+        </van-tabs>
         <!-- 最大资历 -->
         <van-action-sheet v-model="isOpen" :actions="actions" @select="onSelect" cancel-text="取消"/>
         <!-- 最小资历 -->
@@ -141,13 +159,19 @@
 </template>
 <script>
 /* eslint-disable */
-import Swiper from 'swiper';
 import areaList from "../../assets/js/area.js";
 import Vue from 'vue';
 import Bus from "@/utils/Bus";
 import { mapGetters } from "vuex"
-import { Notify, Dialog } from "vant";
-Vue.use(Notify).use(Dialog);
+import Swiper from 'swiper';
+import { Notify, Dialog, Toast, Tab, Tabs, List} from "vant";
+import { DropdownMenu, DropdownItem } from 'vant';
+Vue.use(List);
+Vue.use(DropdownMenu).use(DropdownItem);
+Vue.use(Tab).use(Tabs);
+Vue.use(Notify)
+Vue.use(Dialog);
+Vue.use(Toast);
 export default {
     data() {
     return {
@@ -158,17 +182,36 @@ export default {
         current:0,
         curritem:0,
         banner:'',
+        finished: false,
+        loading: false,
+        finished2: false,
+        loading2: false,
         visible:false,
         Box2:true,
         banner2:'',
         isActive: 0,
+        value1:'',
+        option1: [
+        { text: '北京', value: '北京' },
+        { text: '上海', value: '上海' },
+        { text: '深圳', value: '深圳' },
+        { text: '成都', value: '成都' },
+        { text: '武汉', value: '武汉' },
+        { text: '厦门', value: '厦门' },
+        { text: '天津', value: '天津' },
+        { text: '广州', value: '广州' },
+        { text: '重庆', value: '重庆' },
+        { text: '长沙', value: '长沙' },
+        { text: '南京', value: '南京' },
+        { text: '杭州', value: '杭州' },
+       ],
         name:"",
         num:"",
         record:"",
         Giveupimg:true,
         Giveupimg1:true,
-        liList:["培训机构","瑜伽名师"],
-        items:["全部","最新","距离最近"],
+        // liList:["培训机构","瑜伽名师"],
+        items:["全部"],
         clubBox:[],
         change:[],
         value:"",
@@ -183,21 +226,32 @@ export default {
         city:"",
         area:"",
         current_page:1,
+        last_page: 2,
+        total:'',
+        current_page2:1,
+        last_page2: 2,
+        total2:'',
         id:0,
         id2:0
     };
   },
    computed: {
-    ...mapGetters(["info"]),
+    ...mapGetters(["info", "isUserNeedLogin"]),
   },
   created(){
       this.joindata();
-      this.exhibitionList();
-      this.choiceness();
+      // this.exhibitionList();
+      
   },
   mounted() {
-    const { current } = this.$route.query
-    console.log(current)
+    if (this.isUserNeedLogin) {
+      this.choiceness();
+      this.exhibitionList()
+    } else {
+      this.getChoicenessPrais()
+      this.getTeachersPrais()
+    }
+    const { current } = this.$route.query;
     if (typeof current != 'undefined') {
       this.current = parseInt(current)
     }
@@ -209,6 +263,8 @@ export default {
             this.clubBox = res.data.data;
             this.banner = res.banner;
             this.current_page = res.data.current_page;
+            this.last_page = res.data.last_page;
+            this.total = res.data.total;
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -221,33 +277,115 @@ export default {
             }
         });
       },
-      Loadmore(){
-        this.current_page++;
-        this.joindata();
+      //机构
+      onLoadlist(){
+          this.$request.get(`/clubs?page=${this.current_page}`).then(res => {
+             const info = res.data.data;
+            info.forEach(item => {
+                this.clubBox.push(item);
+            });
+            this.total = res.data.total;
+        })
       },
-      Loadmore2(){
-        this.current_page++;
-        this.exhibitionList();
+      //名师
+      onLoadlist2(){
+          this.$request.get(`/teachers?page=${this.current_page2}`).then(res => {
+             const info2 = res.teachers.data;
+            info2.forEach(item => {
+                this.exhibitionBox.push(item);
+            });
+            this.total2 = res.teachers.total;
+            for(var i=0;i<this.exhibitionBox.length;i++){
+                if(this.exhibitionBox[i].id==this.id){
+                    this.exhibitionBox[i]["Giveupimg"]=false;
+                }else{
+                    this.exhibitionBox[i]["Giveupimg"]=true;
+                }              
+            }
+        })
       },
+      //热门城市
+      dropdownchange(){
+         let params2 = {
+            hot:this.value1,
+        }
+        this.$request.post(`/clubs/search/hot/club?page=${this.current_page}`,params2).then(res => {
+            this.clubBox = res.data;
+            this.current_page = res.current_page;
+            this.last_page = res.last_page;
+            this.total = res.total;
+        })
+        .catch(error => {
+            let { response: { data: { errorCode, msg } } } = error;
+            if (errorCode != 0) {
+            this.$message({
+                message: msg,
+                type: "error"
+            });
+            return;
+            }
+        });
+      },
+      //机构
+      onLoad() {
+        setTimeout(() => {
+            this.current_page++;
+            this.onLoadlist(this.current_page);
+            this.loading = false;
+            // 数据全部加载完成
+            if (this.clubBox.length >= this.total) {
+                this.finished = true;
+            }
+        }, 500);
+    },   
+    //名师
+    onLoad2() {
+        setTimeout(() => {
+            this.current_page2++;
+            if (this.isUserNeedLogin) {
+              this.onLoadlist2(this.current_page2);
+            } else {
+              this.getTeachersPrais(this.current_page2)
+            }
+          
+            this.loading2 = false;
+            // 数据全部加载完成
+            if (this.exhibitionBox.length >= this.total2) {
+                this.finished2 = true;
+            }
+        }, 500);
+    },
+    // 登录之后的名师列表
+    getTeachersPrais(page = 1) {
+      this.$request.get(`/teachers/list/prais?page=${page}`)
+      .then(res => {
+        if(page == 1) {
+          this.exhibitionBox = res.teachers.data;
+          this.houseType = res.course_types;
+          this.actions = res.year;
+          this.banner2 = res.banner;
+          this.current_page2 = res.teachers.current_page;
+          this.last_page2 = res.teachers.last_page;
+          this.total2 = res.teachers.total;
+        } else {
+          const info2 = res.teachers.data;
+            info2.forEach(item => {
+                this.exhibitionBox.push(item);
+            });
+            this.total2 = res.teachers.total;
+        }
+      })
+    },   
       //名师列表
       exhibitionList(){
-        this.$request.get(`/teachers?page=${this.current_page}`).then(res => {
+        this.$request.get(`/teachers?page=${this.current_page2}`).then(res => {
             this.exhibitionBox = res.teachers.data;
             this.houseType = res.course_types;
             this.actions = res.year;
             this.banner2 = res.banner;
-            this.current_page = res.teachers.current_page;
-            for(var i=0;i<this.exhibitionBox.length;i++){
-                if(this.exhibitionBox[i].id==this.id){
-                    this.exhibitionBox[i]["Giveupimg"]=false;
-                    // this.$set(this.exhibitionBox[i], 'Giveupimg', false);
-                    // console.log(this.$set(this.exhibitionBox[i], 'Giveupimg', false));
-                }else{
-                    this.exhibitionBox[i]["Giveupimg"]=true;
-                    // this.$set(this.exhibitionBox[i], 'Giveupimg', true);
-                    // console.log(this.$set(this.exhibitionBox[i], 'Giveupimg', true));
-                }              
-            }
+            this.current_page2 = res.teachers.current_page;
+            this.last_page2 = res.teachers.last_page;
+            this.total2 = res.teachers.total;
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -264,23 +402,33 @@ export default {
             new Swiper('.swiper2', {
                 slidesPerView: 'auto',
                 freeMode: true,
-                observer: true,
+                observer: true,//修改swiper自己或子元素时，自动初始化swiper
+                observeParents:true,//修改swiper自己或子元素时，自动初始化swiper
             });
+      },
+      // 登录之后的点赞
+      getChoicenessPrais() {
+        this.$request.get(`/teachers/elites/prais`).then(res => {
+          this.exhibitionBox2 = res;
+          this.$nextTick(function() {
+              this.swiperInit();
+          })
+        })
       },
       //名师精选
       choiceness(){
         this.$request.get(`/teachers/elites`).then(res => {
             this.exhibitionBox2 = res;
-            for(var i=0;i<this.exhibitionBox2.length;i++){
-                if(this.exhibitionBox2[i].id==this.id2){
-                    this.exhibitionBox2[i]["Giveupimg1"]=false;
-                }else{
-                    this.exhibitionBox2[i]["Giveupimg1"]=true;
-                }              
-            }
             this.$nextTick(function() {
                 this.swiperInit();
             })
+            // for(var i=0;i<this.exhibitionBox2.length;i++){
+            //     if(this.exhibitionBox2[i].id==this.id2){
+            //         this.exhibitionBox2[i]["Giveupimg1"]=false;
+            //     }else{
+            //         this.exhibitionBox2[i]["Giveupimg1"]=true;
+            //     }              
+            // }
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -295,6 +443,7 @@ export default {
       },
       //点赞
       Giveuppraise(item,index){
+        if(this.isUserNeedLogin || item.is_prais == 1) return;
           this.id=item.id;
         let params ={
             id:item.id
@@ -303,8 +452,8 @@ export default {
             this.msg = data.msg;
             if(this.msg == "OK"){
             Notify({ message: "点赞成功", type: "success" });
-            // Vue.set(this.exhibitionList());
-            this.exhibitionList();
+            const { praise } = this.exhibitionBox[index]
+            this.$set(this.exhibitionBox, index, {...this.exhibitionBox[index], is_prais: 1, praise: praise + 1 })
             }
         })
         .catch(error => {
@@ -319,6 +468,7 @@ export default {
         });
       },
       Giveuppraise2(item,index){
+        if(this.isUserNeedLogin || item.is_prais == 1) return;
           this.id2=item.id;
         let params ={
             id:item.id
@@ -327,8 +477,9 @@ export default {
             this.msg = data.msg;
             if(this.msg == "OK"){
             Notify({ message: "点赞成功", type: "success" });
-            // Vue.set(this.choiceness());
-            this.choiceness();
+            const { praise } = this.exhibitionBox2[index]
+            this.$set(this.exhibitionBox2, index, {...this.exhibitionBox2[index], is_prais: 1, praise: praise + 1})
+            // this.choiceness();
             }
         })
         .catch(error => {
@@ -376,12 +527,6 @@ export default {
         switch(index) {
             case 0:
                 this.joindata();
-                break;
-            case 1:
-                this.clubBox.reverse();
-                break;
-            case 2:
-                this.clubBox.reverse();
                 break;
         } 
     },
@@ -551,6 +696,12 @@ input::-moz-placeholder{
 input:-ms-input-placeholder{
     color:#999;
 }
+.van-action-sheet{
+    margin-bottom: 13%;
+}
+.swiper-wrapper{
+    overflow: auto;
+}
 .el-dropdown-link {
     cursor: pointer!important;
     color: #2c2c2c!important;
@@ -558,10 +709,18 @@ input:-ms-input-placeholder{
   .el-icon-arrow-down {
     font-size: 12px!important;
   }
+  .van-dropdown-menu{
+    height: 40px;
+    background-color: #eee;
+    color: #2c2c2c;
+    width: 80px;
+    padding-top: 1px;
+}
 .club_warp{
     width: 100%;
     height: 100%;
     display: inline-block;
+    // position: relative;
     .club_warp_head{
         background-color: #E0EED2;
         color: #2c2c2c;
@@ -586,7 +745,7 @@ input:-ms-input-placeholder{
         line-height: 44px;
         text-align: center;
         display: flex;
-        margin-top: 44px;
+        // margin-top: 44px;
         position: fixed;
         left: 0;
         top: 0;
@@ -597,18 +756,27 @@ input:-ms-input-placeholder{
             background-color: #fff;
             color: #2C2C2C;
         }
+        // .stylelist{
+        //     width: 16%;
+        //     background: #7BBB62;
+        //     height: 2px;
+        //     position: absolute;
+        //     top: 42px;
+        //     left: 63px;
+        // }
         .ischeck  {
-            background: #7BBB62;
+            background: #fff;
             height: 100%;
             width: 50%;
-            color: #fff;
+            color: #7BBB62;
+            border-bottom: 4px solid #7BBB62;
         }
     }
     .list_teacher{
         width: 100%;
         // height: 100%;
-        padding-top: 88px;
-        background: #fff !important;
+        // padding-top: 44px;
+        background: #eee !important;
         position: relative;
         .list_banner{
           height: 170px;
@@ -626,26 +794,27 @@ input:-ms-input-placeholder{
             background: #97B3C1;
             position: absolute;
             left: 160px;
-            top: 217px;
+            top: 128px;
         }
         .club_house{
             width: 93%;
-            // height: 100%;
+            height: 50px;
             margin: 0 auto;
             display: flex;
             .club_house_title{
                 width: 50%;
                 height: 50px;
                 line-height: 40px;
+                display: flex;
                 .items{
-                    font-size:12px;
+                    font-size:14px;
                     font-family:Microsoft YaHei;
                     font-weight:400;
                     color:rgba(44,44,44,1);
                     padding-right: 10px;
                 }
                 .active{
-                    font-size:12px;
+                    font-size:14px;
                     font-family:Microsoft YaHei;
                     font-weight:bold;
                     color:rgba(44,44,44,1);
@@ -656,7 +825,7 @@ input:-ms-input-placeholder{
                 height: 50px;
                 position: relative;
                 .club_house_inquiry_input{
-                    background-color: #eeeeee;
+                    background-color: #fff;
                     border-radius: 13px;
                     height: 30px;
                     width: 70%;
@@ -675,13 +844,17 @@ input:-ms-input-placeholder{
                 }
             }
         }
+        .club_item_count{
+        width: 100%;
+        height: 100%;
+        background: #eee !important;
+        display: inline-block;
         .club_item{
             width: 93%;
             // height: 100%;
             margin: 0 auto;
             display: flow-root;
             // margin-bottom: 49px;
-            background: #fff !important;
             .club_item_box{
                 width: 48%;
                 height: 100%;
@@ -703,14 +876,14 @@ input:-ms-input-placeholder{
                 .club_item_title{
                     width: 100%;
                     height: 75px;
-                    background-color: #eeeeee;
+                    background-color: #fff;
                     display: inline-block;
                     h3{
                         font-size:12px;
                         font-family:Microsoft YaHei;
                         font-weight:400;
                         color:rgba(44,44,44,1);
-                        margin-top: 20px;
+                        margin-top: 15px;
                         text-indent: 10px;
                         width: 93%;
                     }
@@ -719,7 +892,7 @@ input:-ms-input-placeholder{
                         font-family:PingFang SC;
                         font-weight:400;
                         color: #999;
-                        margin-top: 15px;
+                        margin-top: 10px;
                         text-indent: 10px;
                         width: 93%;
                     }
@@ -743,14 +916,14 @@ input:-ms-input-placeholder{
                 .club_item_title{
                     width: 100%;
                     height: 75px;
-                    background-color: #eeeeee;
+                    background-color: #fff;
                     display: inline-block;
                     h3{
                         font-size:12px;
                         font-family:Microsoft YaHei;
                         font-weight:400;
                         color:rgba(44,44,44,1);
-                        margin-top: 20px;
+                        margin-top: 15px;
                         text-indent: 10px;
                         width: 93%;
                     }
@@ -759,7 +932,7 @@ input:-ms-input-placeholder{
                         font-family:PingFang SC;
                         font-weight:400;
                         color: #999;
-                        margin-top: 15px;
+                        margin-top: 10px;
                         text-indent: 10px;
                         width: 93%;
                     }
@@ -774,6 +947,7 @@ input:-ms-input-placeholder{
                 margin-top: 70%;
                 margin-bottom: 30px;
             }
+        }
         }
         .Default-page4{
             width: 100%;
@@ -792,7 +966,7 @@ input:-ms-input-placeholder{
     .list_clubhouse{
         width: 100%;
         // height: 100%;
-        padding-top: 88px;
+        // padding-top: 44px;
         background: #fff !important;
         .list_banner{
           height: 170px;
@@ -937,7 +1111,7 @@ input:-ms-input-placeholder{
                         font-family:PingFang SC;
                         font-weight:400;
                         display: block;
-                        padding-top: 13px;
+                        padding-top: 17px;
                         margin: 3px;
                         color:rgba(44,44,44,1);
                     }

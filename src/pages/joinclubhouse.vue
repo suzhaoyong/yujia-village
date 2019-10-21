@@ -6,19 +6,12 @@
                     <!-- <Banner></Banner> -->
                     <div class="bg_img">
                         <img :src="banner" alt />
-                        <div class="banner_button">
+                        <!-- <div class="banner_button">
                             <el-button type="text" class="butt" @click="goto()">申请联盟</el-button>
-                        </div>
+                        </div> -->
                     </div>
                 </template>
                 <div class="joinclub-cont">
-                    <div class="joinclub-cont-div4">
-                        <p class="nav-text">100多家培训机构进驻</p>
-                        <p class="nav-text">1000多个知名导师展示</p>
-                        <p class="nav-text">10000多条瑜伽培训、大会信息</p>
-                        <p class="nav-text">100000多名注册瑜伽老师</p>
-                        <p class="nav-text">1000000元/年平台推广费用</p>
-                    </div>
                     <div class="joinclub-cont-div5">
                         <p class="nav-text2">中国瑜伽培训信息最丰富、信息搜索最方便（精准）的瑜伽行业网站！</p>
                     </div>
@@ -92,7 +85,7 @@ export default {
         area:'',
         province:'',
         labelPosition:'left',
-        itemsList:["北京","上海","深圳","成都","武汉","厦门","天津","广州","北京","重庆","长沙","南京","杭州"],
+        itemsList:["北京","上海","深圳","成都","武汉","厦门","天津","广州","重庆","长沙","南京","杭州"],
         ruleForm: {
           name: '',
           tel: '',
@@ -269,10 +262,10 @@ export default {
     margin: 0 auto;
     bottom: 0;
     opacity: 0;
-    height: auto;
+    // height: auto;
+    max-width: 100%;
     margin-top: -5px;
-    padding-bottom: 10px;
-    padding-top: 10px;
+    padding: 10px;
 }
 .test6 figcaption .telimg .telpp{
     opacity: 0;
@@ -300,7 +293,10 @@ export default {
     color: #fff;
     margin-left: 7px;
     transition: transform 1s ease-in;
-    
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 9 !important;// 限制快级元素的文本行数
+    overflow: hidden !important;
 }
 .test6:hover img{
     opacity: 0.1;
@@ -557,20 +553,6 @@ export default {
                 }
             }
         }
-        .joinclub-cont-div4{
-            width: 1180px;
-            height: 150px;
-            text-align: center;
-            margin: 0 auto;
-            margin-top: 34px;
-            margin-bottom: 34px;
-            .nav-text{
-                color: #2c2c2c;
-                font-size: 14px;
-                margin-top: 8px;
-                line-height: 12px;
-            }
-        }
         .joinclub-cont-div5{
             width: 1180px;
             height: 50px;
@@ -579,6 +561,7 @@ export default {
             text-align: center;
             margin: 0 auto;
             margin-bottom: 6%;
+            margin-top: 3%;
             .nav-text2{
                 font-family:Microsoft YaHei;
                 font-weight:bold;

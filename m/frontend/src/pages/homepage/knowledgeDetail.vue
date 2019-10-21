@@ -28,7 +28,7 @@
         </div>
       </div>
       <main class="infordetail-main">
-        <div v-html="detailLists.content"></div>
+        <div v-html="detailLists.main_body"></div>
       </main>
     </section>
 
@@ -98,6 +98,12 @@ export default {
       }
     }
   }
+  .sharetext {
+    text-align: center;
+    font-size: 12px;
+    margin-top: 25px;
+
+  }
   section {
     width: 100%;
     height: 86%;
@@ -147,7 +153,7 @@ export default {
     padding: 0 16px;
     margin-bottom: 55px;
     p {
-      font-size: 16px;
+      font-size: 14px;
       span {
         font-size: 12px;
         margin-top: 7px;
