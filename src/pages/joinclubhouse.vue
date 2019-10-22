@@ -239,9 +239,11 @@ export default {
           if(this.current == 'join'){
               this.joindata();
           }
+          
           if(this.current == 'city'){
               this.Provincescity();
           }
+
           if(this.current == 'Semester'){
               this.changSemester(this.i,this.changehot);
           }
