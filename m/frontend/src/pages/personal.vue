@@ -84,7 +84,7 @@
                 </template>
             </van-cell>
             <van-popup class="call-center" v-model="show">
-                <div class="hint">客服微信：China Yogo Village</div>
+                <div class="hint">客服微信：ChinaYogaVillage</div>
                 <div class="phone-img"></div>
                 <a href="tel:400-100-7191">
                     <div class="hot-line">点击拨打 400-100-7191</div>
