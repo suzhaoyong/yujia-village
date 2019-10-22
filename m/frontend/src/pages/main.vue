@@ -72,7 +72,7 @@
       <div class="content_box">
         <div class="train" @click="viewTrain(item)" v-for="(item, index) in main.hot" :key="index">
           <div class="pic">
-            <img :src="item.cover" alt="培训信息">
+            <img :src="item.teacher_img" alt="培训老师">
           </div>
           <div class="info">
             <div class="title"><span class="tag">{{item.type}}</span> <span class="des">{{item.theme}}</span></div>
@@ -119,7 +119,7 @@
       <div class="content_box">
         <div class="club" @click="viewClub(item)" v-for="(item, index) in main.clubs" :key="index">
           <div class="club_pic">
-            <img :src="item.logo" alt="机构">
+            <img :src="item.first_img" alt="机构">
           </div>
           <div class="name">{{item.club_name}}</div>
           <div class="address">{{item.custom_address}}</div>
