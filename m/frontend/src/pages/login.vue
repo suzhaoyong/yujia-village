@@ -330,7 +330,7 @@ export default {
       this.registerForm.invitation_id = invitation_id;
       this.form.type = "register";
     }
-    
+
     const { q_type } = this.$route.query
     if(type == 'register' || q_type == 'register' ) {
       this.form.type = "register";
@@ -374,13 +374,7 @@ export default {
       return getAllUrlParam(str);
     },
     login() {
-      // let is_not_pass = false;
-      // for (let key of Object.keys(this.ruleForm)) {
-      //   if (this.ruleForm[key] === "" && key !== "invitation_id") {
-      //     is_not_pass = true;
-      //   }
-      // }
-      // if (is_not_pass) return;
+      
       if (!this.validatorLogin()) return;
 
       const params = Object.assign({}, this.ruleForm);
@@ -429,16 +423,8 @@ export default {
         });
     },
     register() {
-      const urlParams = this.getUrlParams();
       this.registerForm.name = this.registerForm.tel.substr(7);
-      this.registerForm.invitation_id = urlParams.invitation_id || "";
-      // let is_not_pass = false;
-      // for (let key of Object.keys(this.registerForm)) {
-      //   if (this.registerForm[key] === "" && key !== "invitation_id") {
-      //     is_not_pass = true;
-      //   }
-      // }
-      // if (is_not_pass) return;
+      
       if (!this.validatorRegister()) return;
       this.postRegister()
     },
@@ -525,13 +511,6 @@ export default {
         });
     },
     resetPwd() {
-      // let is_not_pass = false;
-      // for (let key of Object.keys(this.reset)) {
-      //   if (this.reset[key] === "") {
-      //     is_not_pass = true;
-      //   }
-      // }
-      // if (is_not_pass) return;
       if (!this.validatorReset()) return;
       this.postReset();
     },
@@ -588,15 +567,11 @@ export default {
     changeType(type) {
       this.form.type = type;
       this.resetCode();
-      // this.getVerificationCode();
     },
     resetCode() {
       this.ruleForm = {
         tel: "",
         password: ""
-        // captcha: "",
-        // key: "",
-        // invitation_id: ""
       };
       this.registerForm = {
         name: "",
@@ -605,7 +580,7 @@ export default {
         verification_code: "",
         captcha: "",
         key: "",
-        invitation_id: ""
+        invitation_id: getUrlParams().invitation_id || ""
       };
       (this.reset = {
         tel: "",
