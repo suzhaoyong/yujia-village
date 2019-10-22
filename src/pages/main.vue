@@ -145,7 +145,7 @@
                         </el-carousel>
                         </div>
                     </div>
-                    <div class="nav-contunt-div10">
+                    <!-- <div class="nav-contunt-div10">
                         <h2><img src="../assets/yujia.png"/>培训机构</h2>
                         <p class="nav-text">Sometimes beauty is so simple</p>
                         <div class="border-left"></div>
@@ -155,7 +155,7 @@
                         <div class="explain4">
                             <img class="nav-div7-img" v-for="(item,index) in clubInfo" :key="index" :src="item.logo" @click="ImgItem(item)"/>
                         </div>
-                    </div>
+                    </div> -->
                     </el-col>
                     <div class="bai">
                         <img src="../assets/image60.png" class="bg-pic8"/>
