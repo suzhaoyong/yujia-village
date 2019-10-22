@@ -55,7 +55,7 @@
                         <span>张可用</span>
                     </div>
                 </div>
-                <div class="asset-item">
+                <div class="asset-item" @click="integralRules">
                     <div class="item-title">积分</div>
                     <div>
                         <span class="number">{{personalData.fraction}}</span>
@@ -138,7 +138,7 @@ export default {
                 this.personalData = personal;
             })
         },
-        // 
+        // 个人信息修改
         goInfoEditor() {
             this.$router.push('/personaldata')
         },
@@ -168,6 +168,10 @@ export default {
                 this.$router.push('/thumbteacher');
             }
         },
+        // 跳转积分规则
+        integralRules() {
+            this.$router.push('/integral');
+        },
         showPopup() {
             this.show = true;
         },
@@ -177,6 +181,7 @@ export default {
             sessionStorage.removeItem('user data');
             window.sessionStorage.removeItem('access');
             window.sessionStorage.removeItem('user');
+            window.sessionStorage.removeItem('tabbar');
             // 退出回到首页
             window.open(`${window.location.origin}`, "_self");
         },
