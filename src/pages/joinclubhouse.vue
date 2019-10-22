@@ -30,7 +30,7 @@
                     </div>
                     <div class="joinclub-cont-div3">
                        <div class="clubhouse2" v-if="this.joinlist.length > 0">
-                            <div class="clubhouse2-list" v-for="(item, index) in joinlist" :key="index" @mouseenter="onMouseOver(index)" @click="selectItem(item)">
+                            <div class="clubhouse2-list" v-for="(item, index) in joinlist" :key="index" @click="selectItem(item)">
                                 <figure class="test6">
                                     <img :src="item.first_img" class="yogocontunt2-img"/>
                                     <p class="p1">{{item.club_name}}</p>
@@ -78,7 +78,6 @@ export default {
     },
   data() {
     return {
-        ishow:false,
         joinlist:[],
         banner:'',
         city:'',
@@ -97,6 +96,8 @@ export default {
         pagesize: 0,
         total:0,
         i:"",
+        current:"",
+        changehot:""
     };
   },
   computed: {
@@ -128,14 +129,16 @@ export default {
      //热门城市
      changSemester(index,item){
          this.i = index;
+         this.changehot = item;
          let params2 = {
-            hot:item,
+            hot:this.changehot,
         }
         this.$request.post(`/clubs/search/hot/club?page=${this.currentPage}`,params2).then(res => {
             this.joinlist = res.data;
             this.total = res.total;
             this.currentPage = res.current_page;
             this.pagesize = res.per_page;
+            this.current = 'Semester';
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -160,6 +163,7 @@ export default {
             this.total = res.total;
             this.currentPage = res.current_page;
             this.pagesize = res.per_page;
+            this.current = 'city';
             this.$message({
                 message: '查询成功',
                 type: "success"
@@ -185,6 +189,7 @@ export default {
             _this.total = res.data.total;
             _this.currentPage = res.data.current_page;
             _this.pagesize = res.data.per_page;
+            _this.current = 'join';
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -229,12 +234,17 @@ export default {
         Bus.$emit("login", true);
       }
     },
-      onMouseOver(index){
-          this.ishow = index;
-      },
       handleCurrentChange(val) {
           this.currentPage = val;
-          this.joindata();
+          if(this.current == 'join'){
+              this.joindata();
+          }
+          if(this.current == 'city'){
+              this.Provincescity();
+          }
+          if(this.current == 'Semester'){
+              this.changSemester(this.i,this.changehot);
+          }
       }
   }
 };
@@ -245,6 +255,7 @@ export default {
     height: 100%;
     position: relative;
     transition: all 1s ease;
+    overflow: hidden;
     }
 .test6 .yogocontunt2-img{
     width: 100%;
@@ -262,7 +273,7 @@ export default {
     margin: 0 auto;
     bottom: 0;
     opacity: 0;
-    // height: auto;
+    // height: 100%;
     max-width: 100%;
     margin-top: -5px;
     padding: 10px;

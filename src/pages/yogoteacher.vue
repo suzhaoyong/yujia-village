@@ -167,6 +167,7 @@ export default {
         value3: '',
         activeClass: 0,
         namelist:[],
+        current:'',
         yogolist:[],
         iconList: [],
         swiperOption: {
@@ -226,6 +227,7 @@ export default {
             _this.total = res.teachers.total;
             _this.currentPage = res.teachers.current_page;
             _this.pagesize = res.teachers.per_page;
+            _this.current = 'listyogo';
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -255,6 +257,7 @@ export default {
             this.total = res.total;
             this.currentPage = res.current_page;
             this.pagesize = res.per_page;
+            this.current = 'inquiry';
             this.$message({
                 message: '查询成功',
                 type: "success"
@@ -304,7 +307,7 @@ export default {
          this.namelist=m[this.i-1][0];
          this.i--;
       },
-      buttonnext(m){
+    buttonnext(m){
         this.namelist=m[this.i+1][0];
         this.i++;
       },
@@ -312,7 +315,12 @@ export default {
     },
     handleCurrentChange(val) {
         this.currentPage = val;
-        this.listyogodata();
+        if(this.current == 'listyogo'){
+            this.listyogodata();
+        }
+        if(this.current == 'inquiry'){
+            this.inquirysearch();
+        }
     },
   }
 };
