@@ -232,25 +232,12 @@ export default {
   },
   computed: {
     ...mapGetters(["info"]),
-    getIdentityAuth() {
-      return item => {
-        const obj = {
-          1: "用户",
-          2: "机构负责人",
-          4: "教练",
-          7: "机构负责人&教练"
-        };
-
-        return obj[item];
-      };
-    },
-
     getIdentityIcon() {
       return item => {
         const obj = {
           '认证机构负责人': this.icon.identity_1,
           '认证教练': this.icon.identity_3,
-          '认证机构负责人&认证教练': this.icon.identity_2
+          '认证导师': this.icon.identity_2
         };
 
         return obj[item] || "";
@@ -317,10 +304,6 @@ export default {
     reCharge() {
       timer && clearInterval(timer);
       if (this.rechargeForm.payment == "" || this.isInputWrong) {
-        // this.$message({
-        //   type: "warning",
-        //   message: "请选择支付方式"
-        // });
         return;
       }
       const params = Object.assign({}, this.rechargeForm);

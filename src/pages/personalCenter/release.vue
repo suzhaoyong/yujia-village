@@ -256,7 +256,9 @@
               <div class="tips"></div>
             </div>
             <div class="input-box">
-              <el-input v-model="ruleForm.name" placeholder="请输入授课老师姓名"></el-input>
+              <el-input v-if="info.user.identity_auth !== '认证导师'" v-model="ruleForm.name" placeholder="请输入授课老师姓名"></el-input>
+              <el-input v-else :value="ruleForm.name" disabled ></el-input>
+              
             </div>
             <div class="title_tips">
               <div class="title">授课教师图片</div>
@@ -383,6 +385,7 @@ import {
   getShowMyTrain,
   postTrainInfoUpdate
 } from "@/api/personal";
+import { mapGetters } from "vuex";
 export default {
   components: {
     VDistpicker
@@ -460,6 +463,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["info"]),
     uploadDisabled() {
       return type => this.ruleForm[type];
     },
@@ -484,6 +488,10 @@ export default {
   mounted() {
     this.getTrain();
     this.getTrainFailed();
+    
+    if (this.info.user.identity_auth == '认证导师') {
+      this.ruleForm.name = this.info.user.name
+    }
   },
   methods: {
     onBeforeUpload(file) {

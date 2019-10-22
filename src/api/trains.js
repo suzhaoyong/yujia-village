@@ -26,7 +26,7 @@ export function getOrderByTrains() {
 }
 
 /** 培训信息筛选 */
-export function postTrains(args) {
+export function postTrains(page, args) {
   let params = {
     startTime: "",
     endTime: "",
@@ -39,7 +39,7 @@ export function postTrains(args) {
     course_type_id: [], // 瑜伽类型,数组传参且数组元素必须是正整数(数组元素是瑜伽类型的id)
   }
   params = Object.assign({}, params, args)
-  return request.post('/trains', params)
+  return request.post(`/trains?page=${page}`, params)
 }
 
 export function postTrainsRank(page=2, args) {
