@@ -973,7 +973,7 @@ export default {
                     margin-right: 5px;
                     margin-top: 5px;
                     transition: all 1s;
-                    object-fit: cover;
+                    // object-fit: cover;
                 }
                 .nav-div7-img:hover{
                     width: 235px;
