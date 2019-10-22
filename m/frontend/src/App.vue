@@ -16,6 +16,9 @@ import { Loading } from "vant";
 Vue.use(Loading);
 export default {
   name: "app",
+  mounted() {
+      
+  },
   computed: {
     loading() {
       setTimeout(() => {
@@ -31,7 +34,7 @@ export default {
 #app {
   background-color: #eee;
 }
-
+.focusState {position: relative;}
 .loding_wrap {
   position: absolute;
   top: 0;
@@ -49,7 +52,7 @@ export default {
     // position: fixed;
     // top: 0;
     width: 100%;
-    background-color: #8FCD71!important;
+    background-color: #fff!important;
     font-size: 16px;
     .van-icon {
         font-size: 20px;

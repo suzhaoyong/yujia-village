@@ -111,6 +111,9 @@ export default {
         .text {
             padding: 0 9px;
             padding-top: 5px;
+            overflow: hidden;
+            white-space: nowrap; 
+            text-overflow:ellipsis;
         }
         .teacher-name {
             margin-top: 15px;

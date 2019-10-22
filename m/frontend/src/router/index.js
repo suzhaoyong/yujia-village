@@ -159,6 +159,16 @@ const router = new Router({
       path: '/invitation',
       component: () => import('@/pages/personalCenter/invitation')
     },
+    {
+      // 积分中心
+      path: '/integral',
+      component: () => import('@/pages/personalCenter/integralcenter')
+    },
+    {
+      // 积分规则
+      path: '/integralrules',
+      component: () => import('@/pages/personalCenter/integralrules')
+    },
     // 登录
     {
       path: '/index',
