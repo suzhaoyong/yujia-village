@@ -324,8 +324,16 @@ export default {
     }
   },
   mounted() {
-    this.registerForm.invitation_id = getUrlParams().invitation_id || "";
-    this.registerForm.invitation_id && (this.form.type = "register");
+    const { invitation_id = '', type = ''} = getUrlParams()
+    
+    if(invitation_id) {
+      this.registerForm.invitation_id = invitation_id;
+      this.form.type = "register";
+    }
+    if(type == 'register') {
+      this.form.type = "register";
+    }
+
     this.$store.commit("loadStatus", false);
     // this.getVerificationCode();
     this.loadFile("sy");
