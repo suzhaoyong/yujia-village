@@ -224,12 +224,13 @@ export default {
     },
     // 获取列表
     messageList (page = 1) {
-      this.$request.get('trains').then((res) => {
-      // this.$request.get('trains?page=' + page).then((res) => {
-        if (res.current_page < res.last_page ) {
-          res.data.map((item) => {
-            this.messageLists.push(item)
-          })
+      
+      this.$request.get('trains?page=' + page).then((res) => {
+        console.log(res)
+        if (this.pages < res.last_page ) {
+            res.data.map((item) => {
+              this.messageLists.push(item);
+            })
         } else {
           Toast('只有这么多了');
         }
