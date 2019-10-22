@@ -224,13 +224,13 @@ export default {
     },
     // 获取列表
     messageList (page = 1) {
-      this.$request.get('trains').then((res) => {
-      // this.$request.get('trains?page=' + page).then((res) => {
+      
+      this.$request.get('trains?page=' + page).then((res) => {
         console.log(res)
-        if (res.current_page < res.last_page ) {
-          res.data.map((item) => {
-            this.messageLists.push(item)
-          })
+        if (this.pages < res.last_page ) {
+            res.data.map((item) => {
+              this.messageLists.push(item);
+            })
         } else {
           Toast('只有这么多了');
         }
@@ -272,7 +272,6 @@ export default {
       let innerHeight = document.querySelector('.message-main-container').clientHeight // 容器高度
       let outerHeight = document.querySelector('.message-main-container').scrollHeight // 容器高+滚动高
       let scrollTop = document.querySelector('.message-main-container').scrollTop  // 滚动高
-      console.log(innerHeight, outerHeight, scrollTop)
       if (innerHeight + scrollTop + 10 >= outerHeight ) {
         _this.pages++
         _this.messageList(_this.pages)

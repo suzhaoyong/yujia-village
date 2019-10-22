@@ -34,7 +34,7 @@ export default {
 #app {
   background-color: #eee;
 }
-.focusState {position: relative;}
+
 .loding_wrap {
   position: absolute;
   top: 0;
