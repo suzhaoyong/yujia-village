@@ -314,6 +314,11 @@ const router = new Router({
       name: 'fillorder',
       component: () => import('@/pages/market/fillOrder.vue')
     },
+    {
+      path: '/demo',
+      name: 'demo',
+      component: () => import('@/pages/demo/index.vue')
+    },
   ]
 })
 

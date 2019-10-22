@@ -330,7 +330,9 @@ export default {
       this.registerForm.invitation_id = invitation_id;
       this.form.type = "register";
     }
-    if(type == 'register') {
+    
+    const { q_types} = this.$route.query
+    if(type == 'register' || q_types == 'register' ) {
       this.form.type = "register";
     }
 
@@ -442,7 +444,7 @@ export default {
     },
     validatorRegister() {
       const validatorFunc = () => {
-        const { tel, password, verification_code } = this.registerForm
+        const { tel, password, verification_code, invitation_id } = this.registerForm
         let validator = new Validator();
 
         validator.add(tel, [{
@@ -467,6 +469,17 @@ export default {
         }, {
             strategy: 'minLength:6',
             errorMsg: '密码长度不能小于 6 位！'
+        }, {
+            strategy: 'maxLength:6',
+            errorMsg: '密码长度不能大于 18 位！'
+        }])
+
+        validator.add(invitation_id, [{
+            strategy: 'isNonEmpty',
+            errorMsg: '邀请码不能为空！'
+        }, {
+            strategy: 'minLength:4',
+            errorMsg: '邀请码不能小于 4 位！'
         }])
         let errorMsg = validator.start()
         return errorMsg

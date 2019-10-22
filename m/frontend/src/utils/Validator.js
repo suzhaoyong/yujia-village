@@ -8,6 +8,10 @@ const strategies = {
       return value.length < length ?
           errorMsg : void 0
   },
+  maxLength(value, length, errorMsg) {
+    return value.length > length ?
+        errorMsg : void 0
+  },
   isMoblie(value, errorMsg) {
       return !/^1[0-9]{10}$/.test(value) ?
           errorMsg : void 0
