@@ -5,7 +5,7 @@
         <div class="integral">
             <div>累计获得积分</div>
             <div class="num">{{integralTotal}}</div>
-            <div class="notice">注：积分可抵扣现金</div>
+            <div class="notice">注：积分可抵扣培训课程</div>
         </div>
         <div class="success-invitation">
             <div class="title">成功邀请</div>
