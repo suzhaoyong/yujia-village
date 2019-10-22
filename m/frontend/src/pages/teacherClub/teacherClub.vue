@@ -385,7 +385,19 @@ export default {
             this.banner2 = res.banner;
             this.current_page2 = res.teachers.current_page;
             this.last_page2 = res.teachers.last_page;
-            this.total2 = res.teachers.total;
+            if(this.current_page2 > this.last_page2) {
+            this.current_page2 = res.teachers.last_page;
+            Toast('没有更多了哦');
+            }
+            for(var i=0;i<this.exhibitionBox.length;i++){
+                if(this.exhibitionBox[i].id==this.id){
+                    this.exhibitionBox[i]["Giveupimg"]=false;
+                    // this.$set(this.exhibitionBox[i], 'Giveupimg', false);
+                }else{
+                    this.exhibitionBox[i]["Giveupimg"]=true;
+                    // this.$set(this.exhibitionBox[i], 'Giveupimg', true);
+                }
+            }
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
