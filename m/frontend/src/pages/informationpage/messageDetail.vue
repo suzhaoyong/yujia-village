@@ -30,7 +30,7 @@
         </li>
         <li class="li3"><img src="../../../static/img/teacher.png"> 培训老师： <span>{{ detailData.name }}</span></li>
         <li class="li4"><img src="../../../static/img/time.png"> 培训时间： <span>{{ time }}</span></li>
-        <li class="li5"><img src="../../../static/img/teacher.png">培训地址： <span>{{ detailData.address }}</span></li>
+        <li class="li5"><img src="../../../static/img/adress.png">培训地址： <span>{{ detailData.address }}</span></li>
       </ul>
       <div class="messagedetail-main-proper">
         <div class="messagedetail-main-proper-title">
@@ -39,7 +39,7 @@
         </div>
         <div class="messagedetail-main-proper-show" >
           <div class="messagedetail-main-proper-show-list" v-for="(list, index) in crowds" :key="index">
-            <div class="list-img"><img :src="crowdimg[index]"></div>
+            <div class="list-img"><img :src="crowdimg[index%3]"></div>
             <div class="list-text">{{ list }}</div>
           </div>
         </div>
@@ -83,7 +83,6 @@ export default {
         require('../../../static/img/image71.png'),
         require('../../../static/img/image72.png'),
         require('../../../static/img/image73.png'),
-        require('../../../static/img/image71.png')
       ]
     }
   },

@@ -226,7 +226,6 @@ export default {
     messageList (page = 1) {
       this.$request.get('trains').then((res) => {
       // this.$request.get('trains?page=' + page).then((res) => {
-        console.log(res)
         if (res.current_page < res.last_page ) {
           res.data.map((item) => {
             this.messageLists.push(item)
@@ -267,13 +266,12 @@ export default {
       if (isScroll) {
         setTimeout(() => {
           isScroll = false
-        },50)
+        }, 50)
       } else {
       let innerHeight = document.querySelector('.message-main-container').clientHeight // 容器高度
       let outerHeight = document.querySelector('.message-main-container').scrollHeight // 容器高+滚动高
       let scrollTop = document.querySelector('.message-main-container').scrollTop  // 滚动高
-      console.log(innerHeight, outerHeight, scrollTop)
-      if (innerHeight + scrollTop + 10 >= outerHeight ) {
+      if (innerHeight + scrollTop >= outerHeight ) {
         _this.pages++
         _this.messageList(_this.pages)
         isScroll = true
@@ -444,7 +442,7 @@ export default {
   }
   &-main {
     width: 100%;
-    height: 94%;
+    height: 100%;
     &-head {
       width: 100%;
       height: 44px;
