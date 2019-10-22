@@ -1,5 +1,16 @@
 <template>
   <div class="main_wrap">
+    <!-- 引导注册登录 -->
+    <van-overlay :show="registerBox.show" style="z-index:201; position: fixed;" >
+      <div class="register-box">
+        <div class="register">
+          <div class="register_btn" @click="() => { this.$router.push('/login?q_type=register')}"></div>
+        </div>
+        <div class="register_close-wrap">
+          <div class="register_close" @click="registerBox.show = false"></div>
+        </div>
+      </div>
+    </van-overlay>
     <!-- 轮播图 -->
     <div class="bg_imgs-wrap">
       <div style="background:#8FCD71; height:64px;width:100%;"></div>
@@ -119,8 +130,8 @@
 <script>
 import Vue from 'vue';
 import { getMainDetail } from '@/api/main.js'
-import { Swipe, SwipeItem } from 'vant';
-Vue.use(Swipe).use(SwipeItem);
+import { Swipe, SwipeItem, Overlay } from 'vant';
+Vue.use(Swipe).use(SwipeItem).use(Overlay);
 export default {
   data() {
     return {
@@ -129,6 +140,9 @@ export default {
         zishi: require('@/assets/img/zishi.png'),
         jigou: require('@/assets/img/jigou.png'),
         mingshi: require('@/assets/img/mingshi.png'),
+      },
+      registerBox: {
+        show: true
       },
       main: {
         banner: [],
@@ -166,6 +180,7 @@ export default {
   }
 }
 </script>
+
 <style lang="scss" scoped>
 *{
   margin: 0;
@@ -394,6 +409,46 @@ img{
           }
         }
       }
+    }
+  }
+</style>
+
+<style lang="scss">
+ // 注册引导
+  .register-box{
+    margin-top: 120px;
+    .register{
+      width: 325px;
+      height: 325px;
+      margin: 0 auto;
+      // width: 100%;
+      // height: 100%;
+      position: relative;
+      background-image: url('~@/assets/img/tips-box.png');
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      .register_btn{
+        position: absolute;
+        left: 50%;
+        bottom: 50px;
+        transform: translateX(-50%);
+        width: 50%;
+        height: 100px;
+        // background-color: rgba(57, 119, 36, 0.509);
+      }
+    }
+    .register_close-wrap{
+      margin-top: 40px;
+      display: flex;
+      justify-content: center;
+      .register_close{
+        background-image: url('~@/assets/img/tips-close.png');
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        width: 40px;
+        height: 40px;
+      }
+      
     }
   }
 </style>

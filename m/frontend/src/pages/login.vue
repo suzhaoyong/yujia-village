@@ -331,8 +331,8 @@ export default {
       this.form.type = "register";
     }
     
-    const { q_types} = this.$route.query
-    if(type == 'register' || q_types == 'register' ) {
+    const { q_type } = this.$route.query
+    if(type == 'register' || q_type == 'register' ) {
       this.form.type = "register";
     }
 
