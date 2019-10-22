@@ -10,7 +10,7 @@
         <van-tab title="培训机构">
         <div class="list_teacher">
             <div class="list_banner" :style="{backgroundImage: 'url('+banner+')'}"></div>
-            <div class="league" @click="goto()">申请加盟</div>
+            <!-- <div class="league" @click="goto()">申请加盟</div> -->
             <div class="club_house">
                 <div class="club_house_title">
                     <span class="items" v-for="(item,index) in items" @click="clicktext(index)" :key="index" :class="{active:index==curritem}">{{item}}</span>

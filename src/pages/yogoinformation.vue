@@ -37,11 +37,11 @@
                             </div>
                             <div class="count-desc">
                                 <div class="desc-img1">
-                                    <img :src="item.icon_url"/>
+                                    <img :src="item.icon_url" :alt="item.headline"/>
                                     <div class="box-content"></div>
                                 </div>
                                 <div class="desc-img2">
-                                    <img :src="item.icon_url"/>
+                                    <img :src="item.icon_url" alt="资讯图片"/>
                                 </div>
                             </div>
                             <div class="bg-border"></div>

@@ -51,7 +51,7 @@
                                     <div class="yogocontunt-swiper">
                                         <div class="yogoswiper-img">
                                             <div class="rhomb1">
-                                                <img :src="namelist.first_img"/>
+                                                <img :src="namelist.first_img" alt="名师头像"/>
                                             </div>
                                             <div class="rhomb2"></div>
                                             <div class="rhomb3"></div>
@@ -96,7 +96,7 @@
                            <div class="yogocontunt2" v-if="this.yogolist.length > 0">
                                <div class="yogocontunt2-list" v-for="(item, index) in yogolist" :key="index" @mouseenter="onMouseOver(index)" @click="yogolink(item)">
                                     <figure class="test5">
-                                        <img :src="item.first_img" class="yogocontunt2-img"/>
+                                        <img :src="item.first_img" class="yogocontunt2-img" :alt="item.name"/>
                                         <div class="test5-title">
                                             <h4>{{item.name}}</h4>
                                             <p class="p1">教龄：{{item.num}}年</p>

@@ -18,7 +18,7 @@
                         <div class="knowledge-count-div1" v-for="(item, index) in listdatas" :key="index" @click="selectItem(item)">
                             <div class="knowledge-auto">
                             <div class="count-img">
-                                <img :src="item.icon_url"/>
+                                <img :src="item.icon_url" :alt="item.headline"/>
                                 <div class="box-content"></div>
                             </div>
                             <div class="count-desc">

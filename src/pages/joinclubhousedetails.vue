@@ -23,12 +23,12 @@
                     </div>
                     <div class="joinclubdetails-right">
                         <div class="imgpic">
-                        <img :src="clubs[0]" class="img1"/>
-                        <img :src="clubs[1]"  class="img2"/>
+                        <img :src="clubs[0]" class="img1" :alt="club.club_name"/>
+                        <img :src="clubs[1]" class="img2" :alt="club.club_name"/>
                         </div>
                         <div class="imgpic1">
-                        <img :src="clubs[2]"  class="img3"/>
-                        <img :src="clubs[3]"  class="img4"/>
+                        <img :src="clubs[2]" class="img3" :alt="club.club_name"/>
+                        <img :src="clubs[3]" class="img4" :alt="club.club_name"/>
                         </div>
                     </div>
                     </div>
@@ -46,7 +46,7 @@
                     <swiper class="carousel5" :options="swiperOption2" style="height:660px">
                         <swiper-slide class="carousel5-item" v-for="(page2,index) of pages2" :key="index">
                         <div class="carousel-explain2" v-for="item of page2" :key="item.id" @click="explain2swiper(item)">
-                            <img :src="item.first_img"/>
+                            <img :src="item.first_img" alt="头像"/>
                             <div class="explain2-div">
                                 <h3>{{item.name}}</h3>
                                 <span class="explain2-span2" v-html="item.good_at">{{item.good_at}}</span>
@@ -76,7 +76,7 @@
                             <swiper-slide v-for="(page,index) of pages" :key="index">
                                 <div class="clubhouse-swiper" v-for="item of page" :key="item.id" @click="clubhouseItem(item)">
                                     <div class="clubhouse-swiper-img">
-                                        <img :src="item.teacher_img"/>
+                                        <img :src="item.teacher_img" :alt="item.theme"/>
                                     </div>
                                     <div class="clubhouse-swiper-name">
                                         <p class="name-p1">{{item.theme}}<span class="name-span">{{item.name}}</span></p>
