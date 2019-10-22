@@ -79,7 +79,7 @@
             <div class="club_items" v-if="exhibitionBox2.length > 0" v-show="Box2">
                 <div class="news-swiper"> 
                     <div class="swiper-container swiper2">
-                        <div class="swiper-wrapper">
+                        <div class="swiper-wrapper" :style="this.$route.query.current == 1? 'overflow: initial':'overflow: auto'">
                             <div class="swiper-slide" v-for="(item,index) in exhibitionBox2" :key="index">
                                 <div class="club_items_img" @click="exhibition(item)">
                                     <img :src="item.first_img"/>
@@ -232,7 +232,8 @@ export default {
         last_page2: 2,
         total2:'',
         id:0,
-        id2:0
+        id2:0,
+        routecurrent:''
     };
   },
    computed: {
@@ -241,7 +242,12 @@ export default {
   created(){
       this.joindata();
       // this.exhibitionList();
-      
+  },
+  watch:{
+      '$route'(to,from){
+          this.routecurrent = this.$route.query.current;
+          console.log(this.routecurrent)
+      }
   },
   mounted() {
     if (this.isUserNeedLogin) {
@@ -696,9 +702,6 @@ input:-ms-input-placeholder{
 }
 .van-action-sheet{
     margin-bottom: 13%;
-}
-.swiper-wrapper{
-    overflow: auto;
 }
 .el-dropdown-link {
     cursor: pointer!important;
