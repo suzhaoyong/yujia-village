@@ -246,7 +246,6 @@ export default {
   watch:{
       '$route'(to,from){
           this.routecurrent = this.$route.query.current;
-          console.log(this.routecurrent)
       }
   },
   mounted() {
