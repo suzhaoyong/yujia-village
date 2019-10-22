@@ -9,7 +9,7 @@
           <div @click="tagsChange(1)" :class="['tab', isTagActive(1)]">修改绑定手机</div>
           <div @click="tagsChange(2)" :class="['tab', isTagActive(2)]">个人信息</div>
           <div
-            v-show="info.user.identity_auth == '认证机构负责人'  || info.user.identity_auth == '认证机构负责人&认证教练'"
+            v-show="info.user.identity_auth == '认证机构负责人'  || info.user.identity_auth == '认证导师'"
             @click="tagsChange(3)"
             :class="['tab', isTagActive(3)]"
           >机构信息</div>
@@ -255,7 +255,7 @@
               </div>
               <div
                 class="teach"
-                v-show="userForm.identity_auth == '认证教练' || userForm.identity_auth == '认证机构负责人&认证教练'"
+                v-show="userForm.identity_auth == '认证教练' || userForm.identity_auth == '认证导师'"
               >
                 <div class="item">
                   <div class="lable">系统认证身份</div>
@@ -752,7 +752,7 @@ export default {
           icon
         }
       );
-      if (identity_auth === '认证教练' || identity_auth === '认证机构负责人&认证教练') {
+      if (identity_auth === '认证教练' || identity_auth === '认证导师') {
         getTeacherInfo().then(data => {
           data[0] && (this.teacherForm = data[0]);
         });
@@ -787,7 +787,7 @@ export default {
       };
       const teacher = () => {
         const { identity_auth } = this.info.user;
-        if (identity_auth === '认证教练' || identity_auth === '认证机构负责人&认证教练') {
+        if (identity_auth === '认证教练' || identity_auth === '认证导师') {
           const { id, info, city, province, area } = this.teacherForm;
           let cur_id = id || this.info.user.id
           return postUpdateTeacherInfo({ id: cur_id, info, city, province, area });
