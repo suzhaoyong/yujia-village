@@ -477,8 +477,7 @@ img{
   .register_fixed-box{
     position: fixed;
     right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
+    bottom: 80px;
     width: 60px;
     height: 140px;
     // background: rgba(0,0,0,0.3);
