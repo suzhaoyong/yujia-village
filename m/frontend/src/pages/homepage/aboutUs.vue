@@ -1,5 +1,7 @@
 <template>
     <div class="aboutUs">
+        <van-nav-bar title="关于我们" left-arrow @click-left="onClickLeft">
+        </van-nav-bar>
         <div class="banner" :style="{backgroundImage: 'url('+aboutUs.banner+')'}"></div>
         <div class="aboutUs_warp">
             <div class="share_warp_rule">
@@ -57,6 +59,9 @@ export default {
       this.listhomedata();
   },
    methods:{
+        onClickLeft() {
+            this.$router.go(-1);
+        },
         listhomedata(){
         this.$request.get("/aboutUs").then(res => {
             this.aboutUs = res;
@@ -78,10 +83,14 @@ export default {
 </script>
 <style lang="scss" scope>
 .aboutUs{
-    padding-top: 88px;
+    .van-nav-bar {
+        position: fixed;
+        top: 0;
+    }
     margin-bottom: 50px;
     background: #fff !important;
     .banner {
+        margin-top: 46px;
         background-image: url('../../assets/teacherclub/banner.png');
         height: 170px;
         background-size: cover;

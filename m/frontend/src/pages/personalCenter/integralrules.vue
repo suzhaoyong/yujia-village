@@ -49,7 +49,6 @@ export default {
             this.$router.go(-1);
         },
     }
-    
 }
 </script>
 <style lang="scss" scoped>
@@ -58,7 +57,12 @@ export default {
     top: 0;
 }
 .content-box {
-    margin-top: 46px;
+    position: absolute;
+    top: 46px;
+    bottom: 0;
+    left: 0;
+    overflow: scroll;
+    // margin-top: 46px;
     width: 100%;
     background-color: #fff;
     .rules-box {

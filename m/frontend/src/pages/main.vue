@@ -49,11 +49,11 @@
         </div>
       </div>
       <div class="tab-box">
-        <div href="" @click="gotoPage('teacher')">
+        <div href="" @click="gotoPage('aboutUs')">
           <div class="tab_pic">
             <img :src="icon.mingshi" alt="图标">
           </div>
-          <div class="tab_tips">名师</div>
+          <div class="tab_tips">关于我们</div>
         </div>
       </div>
     </div>
@@ -163,7 +163,7 @@ export default {
         train: '/yogamessage/list',
         yagainformation: '/yagainformation',
         yogaknowledge: '/yogaknowledge',
-        teacher: '/teacherClub/list?current=1',
+        aboutUs: '/aboutUs',
         club: '/teacherClub/list?current=0',
       }
       path[type] && this.$router.push(path[type])
@@ -212,15 +212,15 @@ img{
     .tab-wrap{
       padding-top: 20px;
       margin: 0 auto;
-      width: 340px;
+      width: 343px;
       display: flex;
       justify-content: space-between;
       .tab-box{
         div{
-          .tab_pic{
+          .tab_pic {
             width: 44px;
             height: 44px;
-            // background: #e5e5e5;
+            margin: 0 auto;
           }
           .tab_tips{
             padding-top: 10px;

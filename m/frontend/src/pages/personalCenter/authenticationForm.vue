@@ -37,7 +37,7 @@
                     </div>
                 </div>
             </div>
-            <div class="owner-coach" v-if="title==='认证负责人&教练'">
+            <div class="owner-coach" v-if="title==='认证导师'">
                 <van-field v-model="ownerAndCoachList.real_name" clearable input-align="right" label="真实姓名" placeholder="只能是中文或者英文" @blur="onBlur"/>
                 <van-field v-model="ownerAndCoachList.club_name" clearable input-align="right" label="机构名称" placeholder="由中文、字母、数字组成" @blur="onBlur"/>
                 <van-field v-model="ownerAndCoachList.club_tel" type="tel" clearable input-align="right" label="机构电话" placeholder="电话" @blur="onBlur"/>
@@ -53,6 +53,8 @@
                         :max-size="4096000" accept="image/gif, image/jpeg ,image/png" @oversize="overSize" @delete="onDel"/>
                     </div>
                 </div>
+                <van-field class="textarea" v-model="ownerAndCoachList.supplement" rows="3" 
+                autosize label="补充说明" type="textarea" maxlength="200" placeholder="（必填）不能超过200字" show-word-limit/>
             </div>
         </div>
 
@@ -78,8 +80,6 @@
     </div>
 </template>
 <script>
-import Pdfh5 from "pdfh5";
-import "pdfh5/css/pdfh5.css";
 import areaList from "../../assets/js/area.js";
 const editor_html =`
     <p>
@@ -206,7 +206,8 @@ export default {
                 area: '',
                 address: '',
                 img_work: '',
-                img_license: ''
+                img_license: '',
+                supplement: ''
             },
             // 渲染地区数据
             region_a: '',
@@ -231,7 +232,7 @@ export default {
         } else if(key === 'coach') {
             this.title = '认证教练'
         } else {
-            this.title = '认证负责人&教练'
+            this.title = '认证导师'
         }
     },
     methods: {
@@ -367,28 +368,10 @@ export default {
             });
         },
         showFile() {
-            this.loadProtocolFile();
             this.isshowFileWrap = true
             this.isshowFile = true;
         },
-        // 展示 协议文件
-        loadProtocolFile() {
-            this.pdfh5 = new Pdfh5('#pdf',{
-                pdfurl:  "./static/doc/瑜伽村平台认证服务协议.pdf"
-            })
-            this.pdfh5.on("complete", function(status, msg, time) {
-                console.log(
-                "状态：" +
-                    status +
-                    "，信息：" +
-                    msg +
-                    "，耗时：" +
-                    time +
-                    "毫秒，总页数：" +
-                    this.totalNum
-                );
-            });
-        },
+        
         // 提交认证
         submit() {
             if(this.checked) {
@@ -408,8 +391,9 @@ export default {
                     } else {
                         this.identityVerify(this.coachDataList);
                     }  
-                } else if(this.title==='认证负责人&教练') {
+                } else if(this.title==='认证导师') {
                     this.ownerAndCoachList.identity_auth = 7;
+                    console.log(this.ownerAndCoachList);
                     let status = this.formVerify(this.ownerAndCoachList, this.fileList3);
                     if(status === -1) {
                         return
@@ -449,11 +433,15 @@ export default {
                 this.$toast('请上传认证图片！')
                 return -1
             } 
-            if(this.slideIndex == 2) {
+            if(this.title==='认证导师') {
                 if(file.length !== 2) {
                     this.$toast('上传的图片资料至少2张！')
                     return -1
                 }
+            }
+            if(submitData === this.ownerAndCoachList && submitData.supplement === '') {
+                this.$toast('补充说明不能为空！')
+                return -1
             }
         },
         // 认证
@@ -498,6 +486,11 @@ export default {
             /deep/ .van-uploader__upload {
                 margin-bottom: 0;
             }
+        }
+    }
+    .textarea {
+        /deep/ .van-cell__title {
+            flex: none;
         }
     }
 } 
