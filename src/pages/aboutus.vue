@@ -89,7 +89,7 @@
                          <div class="aboutus-count-div8">
                              <div class="aboutus-content">
                                  <div class="content-img" v-for="(item,index) in aboutusmodel" :key="index">
-                                     <img :src="item.url_pic"/>
+                                     <img :src="item.url_pic" :alt="item.name"/>
                                      <h3>{{item.name}}</h3>
                                      <p>{{item.describe}}</p>
                                  </div>
@@ -108,7 +108,7 @@
                          <div class="aboutus-count-div10">
                              <div class="aboutus-foo">
                              <div class="codeimg">
-                                 <img :src="aboutUs.url_pic"/>
+                                 <img :src="aboutUs.url_pic" alt="背景图片"/>
                              </div>
                              <div class="codetext">
                                  <p class="p1">地址：{{aboutUs.address}}</p>

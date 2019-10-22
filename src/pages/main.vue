@@ -40,7 +40,7 @@
                             <el-carousel-item v-for="item in dataimg" :key="item.id">
                             <div class="contunt2">
                                 <div class="carousel-explain" @click="Learnmore(item)">
-                                    <img :src="item.teacher_img" class="img1"/>
+                                    <img :src="item.teacher_img" class="img1" :alt="item.theme"/>
                                 </div>
                                  <div class="carousel-text" @click="Learnmore(item)">
                                     <div class="textss">{{item.theme}}</div>
@@ -63,7 +63,7 @@
                                     <div class="yogocontunt-swiper">
                                         <div class="yogoswiper-img">
                                             <div class="rhomb1">
-                                                <img :src="namelist.icon_url"/>
+                                                <img :src="namelist.icon_url" :alt="namelist.headline"/>
                                             </div>
                                         </div>
                                         <div class="yogoswiper-text">
@@ -75,7 +75,7 @@
                                         <p class="p1">{{namelist.summary}}</p>
                                     </div>
                                     <div class="icon" v-for="(item,idx) of page2" :key="item.id" :class="activeClass == idx ? 'active':''" @click="selectItem(item,idx)">
-                                        <img class="icon-img-content" :src="item.icon_url">
+                                        <img class="icon-img-content" :src="item.icon_url" :alt="item.headline">
                                     </div>
                                 </swiper-slide>
                                 <div class="swiper-button-prev1" slot="button-prev" @click="buttonprev(pages2)"></div>
@@ -99,7 +99,7 @@
                         <swiper class="carousel5" :options="swiperOption" style="height:707px;width:1200px;">
                             <swiper-slide class="carousel5-item" v-for="(page,index) of pages" :key="index">
                             <div class="carousel-explain2" v-for="item of page" :key="item.id" @click="carouselswiper(item)">
-                                <img :src="item.first_img"/>
+                                <img :src="item.first_img" alt="头像"/>
                                 <div class="explain2-div">
                                     <h3>{{item.name}}</h3>
                                     <span class="explain2-span2">{{item.good_at}}</span>
@@ -126,7 +126,7 @@
                         <el-carousel-item v-for="item in newtrains" :key="item.id">
                             <div class="explain3">
                             <div class="explain3-border">
-                                <img :src="item.teacher_img" class="bg-border-img">
+                                <img :src="item.teacher_img" class="bg-border-img" :alt="item.theme">
                                 <img src="../assets/image62.png" class="bg-border-img2">
                             </div>
                             <div class="explain3-text">
@@ -153,7 +153,7 @@
                     </div>
                     <div class="nav-contunt-div7">
                         <div class="explain4">
-                            <img class="nav-div7-img" v-for="(item,index) in clubInfo" :key="index" :src="item.logo" @click="ImgItem(item)"/>
+                            <img class="nav-div7-img" v-for="(item,index) in clubInfo" :key="index" :src="item.logo" @click="ImgItem(item)" :alt="item.club_name"/>
                         </div>
                     </div> -->
                     </el-col>

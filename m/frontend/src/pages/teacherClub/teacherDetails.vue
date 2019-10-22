@@ -12,7 +12,7 @@
                         <span class="span1">瑜伽名师<span class="span2">-{{teacher.name}}</span></span>
                     </div>
                     <div class="count-imgpic">
-                      <img :src="teacher.cover" class="count-name-img"/>
+                      <img :src="teacher.cover" class="count-name-img" :alt="teacher.name"/>
                     </div>
                 </div>
             </div>
@@ -37,7 +37,7 @@
                         <div class="swiper-wrapper">
                             <div class="swiper-slide" v-for="(item,index) in footlist" :key="index">
                                 <div class="club_items_img">
-                                    <img :src="item" class="list_foot_img"/>
+                                    <img :src="item" class="list_foot_img" alt="名师个人show"/>
                                 </div>
                             </div>
                         </div>

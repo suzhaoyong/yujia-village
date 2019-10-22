@@ -7,7 +7,7 @@
                         <span class="span1">瑜伽名师<span class="span2"> —{{teacher.name}}</span></span>
                     </div>
                     <div class="count-imgpic">
-                      <img :src="teacher.cover" class="count-name-img"/>
+                      <img :src="teacher.cover" class="count-name-img" :alt="teacher.name"/>
                     </div>
                     <div class="share3" v-if="config.url">
                         <share :config="config"></share>
@@ -23,7 +23,7 @@
                 <div class="yogofigcaption-mian">
                 <img src="../assets/bgimg20.png" class="count-name-imgpic"/>
                 <div class="yogofigcaption">
-                    <img src="../assets/image82.png" class="count-name-img3"/>
+                    <img src="../assets/image82.png" class="count-name-img3" alt="个人简介"/>
                     <div class="yogofigcaption-title">
                         <h2>个人简介</h2>
                         <p class="p1">Good at courses</p>
@@ -44,7 +44,7 @@
                     <div class="showlist" v-for="(item,index) in teacher.teacher_img" :key="index">
                         <div class="showlist-auto">
                         <div class="showimg">
-                           <img :src="item" class="showimg1"/>
+                           <img :src="item" class="showimg1" alt="名师个人show"/>
                         </div>
                         </div>
                     </div>

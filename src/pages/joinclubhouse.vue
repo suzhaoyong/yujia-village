@@ -32,7 +32,7 @@
                        <div class="clubhouse2" v-if="this.joinlist.length > 0">
                             <div class="clubhouse2-list" v-for="(item, index) in joinlist" :key="index" @click="selectItem(item)">
                                 <figure class="test6">
-                                    <img :src="item.first_img" class="yogocontunt2-img"/>
+                                    <img :src="item.first_img" class="yogocontunt2-img" :alt="item.club_name"/>
                                     <p class="p1">{{item.club_name}}</p>
                                     <p class="p2">{{item.custom_address}}</p>
                                     <figcaption>
