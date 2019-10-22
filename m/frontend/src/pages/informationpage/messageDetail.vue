@@ -23,33 +23,14 @@
         </div>
       </van-popup>
       <ul  class="messagedetail-main-title">
+        <li class="li-title"> {{ detailData.theme }} </li>
         <li class="li1">
-          <div class="li1-text">{{ detailData.type }}</div>
-          <div><span><img src="../../../static/img/eye.png">{{ detailData.views }}</span><span><img src="../../../static/img/hand.png" class="hand">100</span></div>
+          <div class="li1-text"><span>难度: {{ detailData.diff }}</span><span>观看: {{detailData.views}}</span><span>想学: {{ detailData.follow }}</span></div>
+          <div class="li1-d2">￥{{ detailData.price }}</div>
         </li>
-        <li>
-        </li>
-        <li class="li2">
-          <p class="stardiff">
-            <van-rate
-              v-model='detailData.diff'
-              readonly
-              :size="8"
-              color='#58B708'
-              void-icon="star"
-              void-color="#eee"
-            /></p>
-          <div>￥{{ detailData.price }}</div>
-        </li>
-        <li class="li3">培训老师： <span>{{ detailData.name }}</span></li>
-        <li class="li4">
-          <p>培训时间</p>
-          <div>{{ detailData.startTime }}-{{ detailData.endTime }}</div>
-        </li>
-        <li class="li5">
-          <p>培训地址</p>
-          <div>{{ detailData.custom_address }}{{ detailData.address }}</div>
-        </li>
+        <li class="li3"><img src="../../../static/img/teacher.png"> 培训老师： <span>{{ detailData.name }}</span></li>
+        <li class="li4"><img src="../../../static/img/time.png"> 培训时间： <span>{{ time }}</span></li>
+        <li class="li5"><img src="../../../static/img/teacher.png">培训地址： <span>{{ detailData.address }}</span></li>
       </ul>
       <div class="messagedetail-main-proper">
         <div class="messagedetail-main-proper-title">
@@ -96,6 +77,7 @@ export default {
       detailData: [],
       crowds: [],
       show: false,
+      time: '',
       shareimg: '',
       crowdimg: [
         require('../../../static/img/image71.png'),
@@ -117,10 +99,13 @@ export default {
     getmessageDetail() {
       const id = this.$route.params.id
       this.$request.get('trains/' + id).then((res) => {
+        console.log(res)
         this.detailData = res
         this.crowds = res.crowd.split("；")
+        this.time = this.detailData.startTime.replace(/\-/g, '\.')+'-'+this.detailData.startTime.replace(/\-/g, '\.')
       })
     },
+
     // 分享图片
     shareMessage() {
       this.show = true
@@ -166,7 +151,6 @@ export default {
       top: 0;
       z-index: 99;
       .van-nav-bar {
-        // background: white !important; 
         img {
           width: 15px;
           height: 15px;
@@ -184,7 +168,7 @@ export default {
     &-main {
       width: 100%;
       height: auto;
-      background: #EEEEEE;
+      background: white;
       overflow: auto;
       margin-top: 44px;
       margin-bottom: 50px;
@@ -202,11 +186,20 @@ export default {
       &-title {
         width: 100%;
         height: 208px;
-        padding: 8px 14px;
+        padding: 8px 14px 0;
         font-size: 12px;
         background: white;
         li {
-          margin-top: 4px;
+          margin-top: 15px;
+          width: 100%;
+          overflow: hidden;
+          white-space: normal;
+          text-overflow: ellipsis;
+        }
+        .li-title {
+          color: #2C2C2C;
+          font-size: 14px;
+          font-weight: 600;
         }
         .li1 {
           display: flex;
@@ -214,16 +207,21 @@ export default {
           &-text {
             font-size: 14px;
             font-weight: 600;
+            span {
+              width: auto;
+              height: 20px;
+              background: #8FCD71;
+              font-size: 10px;
+              text-align: center;
+              border-radius: 10px;
+              margin-right: 6px;
+              padding: 0 6px;
+              color: white;
+            }
           }
-          img {
-            width: 10px;
-            height: 10px;
-            margin-right: 4px;
-          }
-          .hand {
-            margin-left: 4px;
-            width: 6px;
-            height: 12px;
+          .li1-d2 {
+            color: #DA1111;
+            font-size: 14px;
           }
         }
         .li2 {
@@ -231,30 +229,25 @@ export default {
           justify-content: space-between;
           margin: 13px 0;
         }
+        li img {
+          width: 16px;
+          height: 14px;
+          margin-right: 10px;
+        }
         .li3 {
           font-weight: 100;
+          color: #999999;
           span {
             color: #22AC38;
           }
         }
         .li4 {
-          div {
-            display: block;
-            width: 343px;
-            height: 22px;
-            background: #EEEEEE;
-            padding: 0 14px;
-            color: #999999;
-          }
+          color: #999999;
         }
         .li5 {
-          div {
-            display: block;
-            width: 343px;
-            height: 42px;
-            background: #EEEEEE;
-            padding: 0 14px;
-            color: #999999;
+          color: #999999;
+          img {
+            margin-right: 13px;
           }
         }
       }
@@ -289,14 +282,14 @@ export default {
         }
         &-show {
           height: 200px;
-          display: flex;
           overflow-x: auto;
-          align-items: center;
-          justify-content: center;
+          text-align: center;
+          white-space:nowrap;
           &-list {
+            display: inline-block;
             width: 120px;
             height: 160px;
-            margin: 0 20px;
+            margin: 30px 20px 0;
             .list-img {
               width: 120px;
               height: 120px;
@@ -313,7 +306,7 @@ export default {
             }
           }
         }
-        .messagedetail-main-proper-show::-webkit-scrollbar{   //去除滚动条
+        .messagedetail-main-proper-show::-webkit-scrollbar{  //去除滚动条
           width: 0;
           height: 0;
           display: none;
@@ -356,6 +349,9 @@ export default {
             width: 134px;
             height: 165px;
             float: left;
+          }
+          span {
+            height: auto;
           }
         }
       }

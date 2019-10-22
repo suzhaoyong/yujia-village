@@ -32,7 +32,7 @@
         </div>
       </div>
       <div class="morebtn" @click="loadmore">
-        {{  current_page >= last_page? informationLists.length > 0? "我也是有底线的": "没有这个哦！" : ""}}
+        {{  current_page >= last_page? informationLists.length > 0? "": "没有这个哦！" : ""}}
       </div>
     </main>
   </div>
@@ -133,7 +133,6 @@ export default {
           _this.mationdata()
           isScroll = true
         }
-        
       }
       }
     },
@@ -246,21 +245,25 @@ export default {
     display: none;
     }
     &-list {
-      width: 100%;
+      width: auto;
       height: 49px;
+      overflow-x: auto;
       display: flex;
-      overflow: auto;
       li {
+        width: 60px;
+        height: 100%;
         white-space: nowrap;
         height: 42px;
         text-align: center;
         font-size: 12px;
-        margin-right: 30px;
-        margin-left: 10px;
+        margin-right: 26px;
         img {
           width: 22px;
           height: 22px;
           margin-top: 5px;
+        }
+        p {
+          width: 60px;
         }
       }
     }

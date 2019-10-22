@@ -224,7 +224,8 @@ export default {
     },
     // 获取列表
     messageList (page = 1) {
-      this.$request.get('trains?page=' + page).then((res) => {
+      this.$request.get('trains').then((res) => {
+      // this.$request.get('trains?page=' + page).then((res) => {
         console.log(res)
         if (res.current_page < res.last_page ) {
           res.data.map((item) => {
