@@ -567,7 +567,7 @@ export default {
     changeType(type) {
       this.form.type = type;
       this.resetCode();
-      this.getVerificationCode();
+      // this.getVerificationCode();
     },
     resetCode() {
       this.ruleForm = {
