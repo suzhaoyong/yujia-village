@@ -19,7 +19,7 @@
                         <div class="swiper-wrapper">
                             <div class="swiper-slide" v-for="(item,index) in clubItems" :key="index">
                                 <div class="club_items_img" @click="clubdetail(item.id)">
-                                    <img :src="item.teacher_img"/>
+                                    <img :src="item.teacher_img" :alt="item.theme"/>
                                 </div>
                                 <div class="club_items_title">
                                     <h3 class="van-ellipsis">{{item.theme}}</h3>
@@ -55,7 +55,7 @@
                         <div class="swiper-wrapper">
                             <div class="swiper-slide" v-for="(item,index) in vanswipeItem" :key="index">
                                 <div class="club_items_img">
-                                    <img :src="item" class="list_foot_img"/>
+                                    <img :src="item" class="list_foot_img" alt="机构图片"/>
                                 </div>
                             </div>
                         </div>
@@ -89,7 +89,7 @@
                         <div class="swiper-wrapper">
                             <div class="swiper-slide" v-for="(item,index) in personnelItem" :key="index" @click="exhibition(item)">
                                 <div class="club_items_img">
-                                    <img :src="item.first_img" class="list_foot_img"/>
+                                    <img :src="item.first_img" class="list_foot_img" :alt="item.name"/>
                                 </div>
                                 <div class="personnel_lists_name van-ellipsis">{{item.name}}</div>
                                 <div class="personnel_lists_name2 van-ellipsis">{{item.good_at}}</div>

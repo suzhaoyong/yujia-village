@@ -28,7 +28,7 @@
                <div class="club_item">
                 <div class="club_item_box" v-for="(item,index) in clubBox" :key="index" @click="clubBoxItem(item)">
                     <div class="club_item_img">
-                        <img :src="item.first_img"/>
+                        <img :src="item.first_img" :alt="item.club_name"/>
                     </div>
                     <div class="club_item_title">
                         <h3 class="van-ellipsis">{{item.club_name}}</h3>
@@ -82,7 +82,7 @@
                         <div class="swiper-wrapper" :style="this.$route.query.current == 1? 'overflow: initial':'overflow: auto'">
                             <div class="swiper-slide" v-for="(item,index) in exhibitionBox2" :key="index">
                                 <div class="club_items_img" @click="exhibition(item)">
-                                    <img :src="item.first_img"/>
+                                    <img :src="item.first_img" :alt="item.name"/>
                                 </div>
                                 <div class="club_items_title">
                                     <h3 class="van-ellipsis">{{item.name}}</h3>
@@ -119,7 +119,7 @@
                 <div class="exhibition_content">
                     <div class="exhibition_box" v-for="(item,index) in exhibitionBox" :key="index">
                         <div class="exhibition_img" @click="exhibition(item)">
-                        <img :src="item.first_img"/>
+                        <img :src="item.first_img" :alt="item.name"/>
                         </div>
                         <div class="exhibition_title">
                             <h3 class="van-ellipsis">{{item.name}}</h3>
