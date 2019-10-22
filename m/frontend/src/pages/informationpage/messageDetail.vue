@@ -1,7 +1,7 @@
 <template>
   <div class="messagedetail">
     <header><van-nav-bar
-      title="瑜伽资讯"
+      title="课程详情"
       left-arrow
       @click-left="goback"
       @click-right="shareMessage"
@@ -158,7 +158,6 @@ export default {
       width: 100%;
       height: 44px;
       text-align: center;
-      background-color: #E0EED2;
       font-weight: 700;
       font-size: 16px;
       font-size: 16px;
@@ -167,8 +166,7 @@ export default {
       top: 0;
       z-index: 99;
       .van-nav-bar {
-        background: #FFFFFF;
-        border-bottom: 2px solid #EEEEEE;
+        // background: white !important; 
         img {
           width: 15px;
           height: 15px;
