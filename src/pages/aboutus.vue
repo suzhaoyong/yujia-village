@@ -41,7 +41,6 @@
                                 </div>
                             </div>
                         </div> -->
-                        <el-col :span="24" class="bg-img">
                         <div class="aboutus-count-div3">
                             <h2><img src="../assets/yujia.png"/>瑜伽村平台简介</h2>
                             <p class="nav-text">Sometimes beauty is so simple</p>
@@ -66,6 +65,7 @@
                             <div class="border-left"></div>
                             <div class="border-right"></div>
                         </div>
+                        <el-col :span="24" class="bg-img">
                          <div class="aboutus-count-div6">
                              <p class="abouts-p2">注册中国瑜伽村普通村民，即获得500积分；</p>
                              <p class="abouts-p2">注册后完善个人资料，即获得300积分；</p>
@@ -308,10 +308,6 @@ export default {
                 }
             }
         }
-        .bg-img{
-            background-image: url('../assets/image48.png');
-            background-repeat: no-repeat;
-            background-size: 100% 100%;
          .aboutus-count-div3{
             width: 1200px;
             height: 150px;
@@ -412,6 +408,10 @@ export default {
                 }
             }
         }
+        .bg-img{
+            background-image: url('../assets/image48.png');
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
         .aboutus-count-div6{
             width: 1200px;
             height: 500px;
