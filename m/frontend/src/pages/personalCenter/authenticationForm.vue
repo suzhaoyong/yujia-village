@@ -78,8 +78,8 @@
     </div>
 </template>
 <script>
-// import Pdfh5 from "pdfh5";
-// import "pdfh5/css/pdfh5.css";
+import Pdfh5 from "pdfh5";
+import "pdfh5/css/pdfh5.css";
 import areaList from "../../assets/js/area.js";
 const editor_html =`
     <p>
@@ -367,28 +367,28 @@ export default {
             });
         },
         showFile() {
-            // this.loadProtocolFile();
+            this.loadProtocolFile();
             this.isshowFileWrap = true
             this.isshowFile = true;
         },
         // 展示 协议文件
-        // loadProtocolFile() {
-        //     this.pdfh5 = new Pdfh5('#pdf',{
-        //         pdfurl:  "./static/doc/瑜伽村平台认证服务协议.pdf"
-        //     })
-        //     this.pdfh5.on("complete", function(status, msg, time) {
-        //         console.log(
-        //         "状态：" +
-        //             status +
-        //             "，信息：" +
-        //             msg +
-        //             "，耗时：" +
-        //             time +
-        //             "毫秒，总页数：" +
-        //             this.totalNum
-        //         );
-        //     });
-        // },
+        loadProtocolFile() {
+            this.pdfh5 = new Pdfh5('#pdf',{
+                pdfurl:  "./static/doc/瑜伽村平台认证服务协议.pdf"
+            })
+            this.pdfh5.on("complete", function(status, msg, time) {
+                console.log(
+                "状态：" +
+                    status +
+                    "，信息：" +
+                    msg +
+                    "，耗时：" +
+                    time +
+                    "毫秒，总页数：" +
+                    this.totalNum
+                );
+            });
+        },
         // 提交认证
         submit() {
             if(this.checked) {

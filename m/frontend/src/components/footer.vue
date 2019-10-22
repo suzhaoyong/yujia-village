@@ -50,7 +50,9 @@ export default {
     watch: {
       '$route'(to, from){
         const { header_name } = to.meta
-        this.active = header_name
+        this.active = header_name;
+        // 防止 路由变化之后的 刷新 tabbar 高亮错误
+        window.sessionStorage.setItem('tabbar', header_name);
       }
     },
     created() {

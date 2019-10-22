@@ -453,8 +453,9 @@ export default {
       });
       return params;
     },
-    searchResult() {
-      postTrains(this.getFiltersParams()).then(data => {
+    searchResult(page = 1) {
+      page = parseInt(page) || 1
+      postTrains(page, this.getFiltersParams()).then(data => {
         this.fruit = data.data;
         this.per_page = data.per_page;
         this.current_page = data.current_page;
@@ -511,7 +512,11 @@ export default {
     },
     changePage(val){
       this.current_page = val;
-      this.getTrainsList();
+      if(this.selectTags.length > 0) {
+        this.searchResult(val);
+      } else {
+        this.getTrainsList();
+      }
     },
     // 排序请求
     getRank(params) {
@@ -537,7 +542,11 @@ export default {
       this.priceFW = false;
       this.resultFw = false;
       this.keyWord = keyWord;
-      this.getTrainsList();
+      if(this.selectTags.length > 0) {
+        this.searchResult();
+      } else {
+        this.getTrainsList();
+      }
     },
     // 热度排序
     hostRank(keyWord) {

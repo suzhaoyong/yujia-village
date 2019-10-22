@@ -314,8 +314,6 @@ export default {
   font-weight: bold;
   height: 65px;
   background: #fff;
-  border-right: 1px solid #eee;
-  border-left: 1px solid #eee;
 }
 .el-menu--horizontal > .el-submenu.is-active .el-submenu__title {
   border: none;
@@ -330,6 +328,8 @@ export default {
   transition: border-color 0.3s, background-color 0.3s, color 0.3s;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
+  border-right: 1px solid #eee;
+  border-left: 1px solid #eee;
 }
 .el-menu--horizontal > .el-menu-item,
 .el-menu--horizontal > .el-submenu,

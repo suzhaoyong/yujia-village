@@ -1,8 +1,13 @@
 <template>
-  <div class="body-wrap">
+  <div class="body-wrap" :style="`${isHeightMore?'height:100%;':''}`">
     <div class="back_home-wrap" @click="goHome">
       <div class="back_home" style="font-size: 20px;color: #fff;">
         <van-icon style="font-size: 20px;color: #fff;" name="wap-home" />
+      </div>
+    </div>
+    <div class="back_login-wrap" v-show="form.type !== 'login'" @click="changeType('login')">
+      <div class="back_login" style="font-size: 20px;color: #fff;">
+        <van-icon style="font-size: 20px;color: #fff;" name="manager" />
       </div>
     </div>
     <div class="body">
@@ -107,9 +112,9 @@
         </div>
         <div class="input-btn">
           <van-button type="default" @click="register">注册</van-button>
-          <div class="reg-tips">
+          <div class="reg-tips" v-show="false">
             已有账号？
-            <span :class="isActive('login')" @click="changeType('login')">立即登录</span>
+            <span style="color:#8FCD71;" :class="isActive('login')" @click="changeType('login')">立即登录</span>
           </div>
         </div>
       </div>
@@ -160,7 +165,7 @@
         <div class="input-btn">
           <van-button type="default" @click="resetPwd">更改</van-button>
           <div class="reg-tips" v-show="false">
-            <span :class="isActive('login')" @click="changeType('login')">立即登录</span>
+            <span style="color:#8FCD71;" :class="isActive('login')" @click="changeType('login')">立即登录</span>
           </div>
         </div>
       </div>
@@ -219,10 +224,10 @@ import tel from "@/assets/img/tel.png";
 import back from "@/assets/img/back.png";
 import key from "@/assets/img/key.png";
 import refresh from "@/assets/img/refresh.png";
+import Validator from '@/utils/Validator.js'
 import Pdfh5 from "pdfh5";
 import Vue from "vue";
-import { Field, Button, Notify, Dialog, Icon } from "vant";
-import store from "@/store";
+import { Field, Button, Notify, Dialog, Icon, Toast } from "vant";
 Vue.use(Field)
   .use(Button)
   .use(Dialog)
@@ -283,6 +288,7 @@ export default {
       registerForm: {
         name: "",
         tel: "",
+        password: "",
         verification_key: "",
         verification_code: "",
         captcha: "",
@@ -292,6 +298,7 @@ export default {
 
       reset: {
         tel: "",
+        password: "",
         verification_key: "",
         verification_code: "",
         captcha: "",
@@ -307,6 +314,13 @@ export default {
   computed: {
     isActive() {
       return type => ({ active: this.form.type === type });
+    },
+    isHeightMore() {
+      if(document.body.clientHeight > 400) {
+        return true;
+      } else {
+        return false
+      }
     }
   },
   mounted() {
@@ -356,11 +370,45 @@ export default {
           is_not_pass = true;
         }
       }
-      console.log(is_not_pass, this.ruleForm);
       if (is_not_pass) return;
+      if (!this.validatorLogin()) return;
+
       const params = Object.assign({}, this.ruleForm);
+      this.postLogin(params)
+    },
+    validatorLogin() {
+      const validatorFunc = () => {
+        const { tel, password} = this.ruleForm
+        let validator = new Validator();
+
+        validator.add(tel, [{
+            strategy: 'isNonEmpty',
+            errorMsg: '手机号码不能为空！'
+        }, {
+            strategy: 'isMoblie',
+            errorMsg: '手机号码格式不正确！'
+        }])
+
+        validator.add(password, [{
+            strategy: 'isNonEmpty',
+            errorMsg: '密码不能为空！'
+        }, {
+            strategy: 'minLength:6',
+            errorMsg: '密码长度不能小于 6 位！'
+        }])
+        let errorMsg = validator.start()
+        return errorMsg
+      }
+      let errorMsg = validatorFunc()
+      if(errorMsg) {
+        Notify({ message: errorMsg, type: "warning" });
+        return false;
+      }
+      return true;
+    },
+    postLogin({ tel = "", password = "" }) {
       this.$request
-        .post("/auth/auth", params)
+        .post("/auth/auth", {tel, password})
         .then(data => {
           sessionStorage.setItem("access", JSON.stringify(data));
           Notify({ message: "登录成功", type: "success" });
@@ -381,17 +429,131 @@ export default {
         }
       }
       if (is_not_pass) return;
+      if (!this.validatorRegister()) return;
+      this.postRegister()
+    },
+    validatorRegister() {
+      const validatorFunc = () => {
+        const { tel, password, verification_code } = this.registerForm
+        let validator = new Validator();
+
+        validator.add(tel, [{
+            strategy: 'isNonEmpty',
+            errorMsg: '手机号码不能为空！'
+        }, {
+            strategy: 'isMoblie',
+            errorMsg: '手机号码格式不正确！'
+        }])
+
+        validator.add(verification_code, [{
+            strategy: 'isNonEmpty',
+            errorMsg: '短信验证码不能为空！'
+        }, {
+            strategy: 'minLength:6',
+            errorMsg: '短信验证码不能小于 6 位！'
+        }])
+
+        validator.add(password, [{
+            strategy: 'isNonEmpty',
+            errorMsg: '密码不能为空！'
+        }, {
+            strategy: 'minLength:6',
+            errorMsg: '密码长度不能小于 6 位！'
+        }])
+        let errorMsg = validator.start()
+        return errorMsg
+      }
+      let errorMsg = validatorFunc()
+      if(errorMsg) {
+        Notify({ message: errorMsg, type: "warning" });
+        return false;
+      }
+      return true;
+    },
+
+    postRegister() {
       const params = Object.assign({}, this.registerForm);
       this.$request
         .post("/register", params)
         .then(() => {
           Notify({ message: "注册成功, 请登录", type: "success" });
         })
+        .then(() => {
+          const toast = Toast.loading({
+            duration: 0, // 持续展示 toast
+            forbidClick: true,
+            message: '3 秒后自动登录，请稍后'
+          });
+
+          let second = 3;
+          const timer = setInterval(() => {
+            second--;
+            if (second) {
+              toast.message = `${second} 秒后自动登录，请稍后`;
+            } else {
+              clearInterval(timer);
+              // 手动清除 Toast
+              Toast.clear();
+              const { tel, password } = this.registerForm
+              this.postLogin({tel, password})
+            }
+          }, 1000);
+        })
         .catch(err => {
           Notify(err);
         });
     },
     resetPwd() {
+      let is_not_pass = false;
+      for (let key of Object.keys(this.reset)) {
+        if (this.reset[key] === "") {
+          is_not_pass = true;
+        }
+      }
+      if (is_not_pass) return;
+      if (!this.validatorReset()) return;
+      this.postReset();
+    },
+
+    validatorReset() {
+      const validatorFunc = () => {
+        const { tel, password, verification_code } = this.reset
+        let validator = new Validator();
+        validator.add(tel, [{
+            strategy: 'isNonEmpty',
+            errorMsg: '手机号码不能为空！'
+        }, {
+            strategy: 'isMoblie',
+            errorMsg: '手机号码格式不正确！'
+        }])
+
+        validator.add(verification_code, [{
+            strategy: 'isNonEmpty',
+            errorMsg: '短信验证码不能为空！'
+        }, {
+            strategy: 'minLength:6',
+            errorMsg: '短信验证码不能小于 6 位！'
+        }])
+
+        validator.add(password, [{
+            strategy: 'isNonEmpty',
+            errorMsg: '密码不能为空！'
+        }, {
+            strategy: 'minLength:6',
+            errorMsg: '密码长度不能小于 6 位！'
+        }])
+        let errorMsg = validator.start()
+        return errorMsg
+      }
+      let errorMsg = validatorFunc()
+      if(errorMsg) {
+        Notify({ message: errorMsg, type: "warning" });
+        return false;
+      }
+      return true;
+    },
+
+    postReset() {
       this.$request
         .post("/personal/forgetPassword", this.reset)
         .then(() => {
@@ -401,6 +563,7 @@ export default {
           Notify(err);
         });
     },
+
     changeType(type) {
       this.form.type = type;
       this.resetCode();
@@ -437,7 +600,7 @@ export default {
     /* 打开图形验证码 */
     openImgCode(formName) {
       if (this.codeTips.count > 0) return;
-      const { tel, captcha, key } = this[formName];
+      const { tel, } = this[formName];
       if (!tel || tel.length !== 11) {
         Notify("请填写正确的手机号码");
         return;
@@ -527,11 +690,11 @@ export default {
   width: 100%;
   margin: 0 auto;
   padding-bottom: 30px;
-  position: absolute;
+  /* position: absolute; */
   font-size: 10px;
   text-align: center;
-  left: 0;
-  bottom: 0;
+  /* left: 0;
+  bottom: 0; */
 }
 .shuoming .file {
   color: #b0f566;
@@ -589,7 +752,7 @@ export default {
   padding: 0;
   background: #8fcd71;
   color: #fff;
-  border-radius: 10px;
+  border-radius: 4px;
   border-color: transparent;
 }
 </style>
@@ -614,6 +777,50 @@ export default {
     text-align: center;
     background: rgba(0, 0, 0, 0.4);
     color: #999;
+    position: relative;
+    &::after{
+      content: '首页';
+      position: absolute;
+      bottom: -18px;
+      left: 0;
+      width: 1rem;
+      text-align: center;
+      font-size: 12px;
+      color:#fff;
+    }
+  }
+}
+.back_login-wrap {
+  position: absolute;
+  right: 20px;
+  top: 10px;
+  .back_login {
+    font-size: 20px;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    width: 1rem;
+    height: 1rem;
+    border: 0;
+    border-radius: 100%;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.4);
+    color: #999;
+    position: relative;
+    &::after{
+      content: '登录';
+      position: absolute;
+      bottom: -18px;
+      left: 0;
+      width: 1rem;
+      text-align: center;
+      font-size: 12px;
+      color:#fff;
+    }
   }
 }
 .back-wrap {
@@ -627,6 +834,7 @@ export default {
   justify-content: center;
   align-items: flex-end;
   font-size: 11px;
+  background: #fff;
   .back {
     width: 12px;
     height: 12px;
@@ -680,13 +888,14 @@ img {
   background-repeat: no-repeat;
   position: relative;
   z-index: 10;
+  // height: 100vh;
 }
 .body {
   font-size: 10px;
   // background: rgba(0, 0, 0, 0.3);
   // background: #fff;
   width: 100%;
-  height: 100vh;
+  // height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
