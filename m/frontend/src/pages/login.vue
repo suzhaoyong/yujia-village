@@ -374,13 +374,13 @@ export default {
       return getAllUrlParam(str);
     },
     login() {
-      let is_not_pass = false;
-      for (let key of Object.keys(this.ruleForm)) {
-        if (this.ruleForm[key] === "" && key !== "invitation_id") {
-          is_not_pass = true;
-        }
-      }
-      if (is_not_pass) return;
+      // let is_not_pass = false;
+      // for (let key of Object.keys(this.ruleForm)) {
+      //   if (this.ruleForm[key] === "" && key !== "invitation_id") {
+      //     is_not_pass = true;
+      //   }
+      // }
+      // if (is_not_pass) return;
       if (!this.validatorLogin()) return;
 
       const params = Object.assign({}, this.ruleForm);
@@ -432,13 +432,13 @@ export default {
       const urlParams = this.getUrlParams();
       this.registerForm.name = this.registerForm.tel.substr(7);
       this.registerForm.invitation_id = urlParams.invitation_id || "";
-      let is_not_pass = false;
-      for (let key of Object.keys(this.registerForm)) {
-        if (this.registerForm[key] === "" && key !== "invitation_id") {
-          is_not_pass = true;
-        }
-      }
-      if (is_not_pass) return;
+      // let is_not_pass = false;
+      // for (let key of Object.keys(this.registerForm)) {
+      //   if (this.registerForm[key] === "" && key !== "invitation_id") {
+      //     is_not_pass = true;
+      //   }
+      // }
+      // if (is_not_pass) return;
       if (!this.validatorRegister()) return;
       this.postRegister()
     },
@@ -525,13 +525,13 @@ export default {
         });
     },
     resetPwd() {
-      let is_not_pass = false;
-      for (let key of Object.keys(this.reset)) {
-        if (this.reset[key] === "") {
-          is_not_pass = true;
-        }
-      }
-      if (is_not_pass) return;
+      // let is_not_pass = false;
+      // for (let key of Object.keys(this.reset)) {
+      //   if (this.reset[key] === "") {
+      //     is_not_pass = true;
+      //   }
+      // }
+      // if (is_not_pass) return;
       if (!this.validatorReset()) return;
       this.postReset();
     },

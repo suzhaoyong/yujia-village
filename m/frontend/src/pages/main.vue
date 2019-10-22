@@ -11,6 +11,20 @@
         </div>
       </div>
     </van-overlay>
+    <!-- 客服图标-注册图标 -->
+    <div class="register_fixed-box">
+      <div v-if="isUserNeedLogin" class="register_fixed" @click="() => { this.$router.push('/login?q_type=register')}">
+      </div>
+      <div class="kefu_fixed" @click="callShow = true">
+      </div>
+    </div>
+    <van-popup class="call-center" v-model="callShow">
+      <div class="hint">客服微信：China Yogo Village</div>
+      <div class="phone-img"></div>
+      <a href="tel:400-100-7191">
+        <div class="hot-line">点击拨打 400-100-7191</div>
+      </a>
+    </van-popup>    
     <!-- 轮播图 -->
     <div class="bg_imgs-wrap">
       <div style="background:#8FCD71; height:64px;width:100%;"></div>
@@ -129,6 +143,7 @@
 </template>
 <script>
 import Vue from 'vue';
+import { mapGetters } from "vuex";
 import { getMainDetail } from '@/api/main.js'
 import { Swipe, SwipeItem, Overlay } from 'vant';
 Vue.use(Swipe).use(SwipeItem).use(Overlay);
@@ -144,6 +159,7 @@ export default {
       registerBox: {
         show: true
       },
+      callShow: false,
       main: {
         banner: [],
         hot: [],
@@ -151,6 +167,9 @@ export default {
         clubs: []
       },
     }
+  },
+  computed: {
+  ...mapGetters(["info", "isUserNeedLogin"]),
   },
   mounted() {
     getMainDetail().then(response => {
@@ -413,7 +432,7 @@ img{
   }
 </style>
 
-<style lang="scss">
+<style lang="scss" scoped>
  // 注册引导
   .register-box{
     margin-top: 120px;
@@ -449,6 +468,60 @@ img{
         height: 40px;
       }
       
+    }
+  }
+</style>
+
+
+<style lang="scss" scoped>
+  .register_fixed-box{
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 60px;
+    height: 140px;
+    // background: rgba(0,0,0,0.3);
+    .register_fixed{
+        background-image: url('~@/assets/img/zhuce.png');
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        width: 60px;
+        height: 60px;
+        margin-bottom: 20px;
+    }
+    .kefu_fixed{
+        background-image: url('~@/assets/img/kefu.png');
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        width: 60px;
+        height: 60px;
+    }
+  }
+  .call-center {
+    width: 285px;
+    height: 132px;
+    background-image: url('~@/assets/img/yuan.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-size: 14px;
+    text-align: center;
+    .hint {
+        margin-top: 22px;
+    }
+    .phone-img {
+        position: absolute;
+        top: 66px;
+        left: 50px;
+        width: 23px;
+        height: 27px;
+        background-image: url('~@/assets/img/phone.png');
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    .hot-line {
+        margin-top: 28px;
+        margin-left: 40px;
     }
   }
 </style>
