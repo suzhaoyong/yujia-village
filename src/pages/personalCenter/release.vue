@@ -463,7 +463,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["info"]),
+    ...mapGetters(["info", "isUserNeedLogin"]),
     uploadDisabled() {
       return type => this.ruleForm[type];
     },
@@ -486,6 +486,11 @@ export default {
     }
   },
   mounted() {
+    if (this.isUserNeedLogin) {
+      Bus.$emit('login', true);
+      return;
+    }
+
     this.getTrain();
     this.getTrainFailed();
     

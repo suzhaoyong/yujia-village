@@ -15,7 +15,7 @@
             <div class="item">
               <div class="item-content">
                 <div class="item-content-input">
-                  <input type="password" @blur="checkEmtypeInputBox('tel')" v-model.trim="ruleForm.tel" placeholder="请输入电话"/>
+                  <input type="password" v-model.trim="ruleForm.tel" placeholder="请输入电话"/>
                 </div>
                 <div class="item-content-tips">{{isError('tel')}}</div>
               </div>
@@ -23,7 +23,7 @@
             <div class="item">
               <div class="item-content">
                 <div class="item-content-input">
-                  <input type="text" @blur="checkEmtypeInputBox('verification_code')" v-model.trim="ruleForm.verification_code" placeholder="请输入短信验证码"/>
+                  <input type="text" v-model.trim="ruleForm.verification_code" placeholder="请输入短信验证码"/>
                   <div class="get_code" @click="getCodeMessage">发送验证码</div>
                 </div>
                 <div class="item-content-tips">{{isError('verification_code')}}</div>
@@ -32,7 +32,7 @@
             <div class="item">
               <div class="item-content">
                 <div class="item-content-input">
-                  <input type="password" @blur="checkEmtypeInputBox('password')" v-model.trim="ruleForm.password" placeholder="新密码"/>
+                  <input type="password" v-model.trim="ruleForm.password" placeholder="新密码"/>
                 </div>
                 <div class="item-content-tips">{{isError('password')}}</div>
               </div>
@@ -40,7 +40,7 @@
             <div class="item">
               <div class="item-content">
                 <div class="item-content-input">
-                  <input type="password" @blur="checkEmtypeInputBox('password2')" v-model.trim="ruleForm.password2" placeholder="再次确认"/>
+                  <input type="password" v-model.trim="ruleForm.password2" placeholder="再次确认"/>
                 </div>
                 <div class="item-content-tips">{{isError('password2')}}</div>
               </div>
@@ -69,7 +69,6 @@
           <div class="box-input">
             <input
               type="text"
-              @blur="checkEmtypeInputBox('captcha')"
               v-model="ruleForm.captcha"
             />
           </div>
@@ -85,6 +84,7 @@
 import Bus from "@/utils/Bus"
 import { Exp } from "@/utils/bee.js";
 import store from "@/store";
+import Validator from '@/utils/Validator.js'
 export default {
   data() {
     return {
@@ -201,25 +201,95 @@ export default {
         });
     },
     /** 提交 */
-    submit() {
-      if(this.ruleForm.password != this.ruleForm.password2){
-        this.$message({ message: "请检查密码是否一致", type: "error" });
-      }else{
-      let isPass = this.formVaildent("ruleForm");
-      if (!isPass) return;
-      this.isPostting = true;
-      const params = Object.assign({}, this.ruleForm);
-      this.$request
-        .post("/personal/forgetPassword", params)
-        .then(data => {
-          this.$message({ message: "提交成功", type: "success" });
-          this.isPostting = false;
-          this.$emit("close", "");
-        })
-        .catch(() => {
-          this.isPostting = false;
-        });
+  submit() {
+    if(!this.validatorRegister()) return;
+    const { password, password2} = this.ruleForm
+    if(password !== password2) {
+      this.$message({ type: 'warning', message: '密码不一致' })
+      return;
+    }
+    this.isPostting = true;
+    const params = Object.assign({}, this.ruleForm);
+    this.$request
+      .post("/personal/forgetPassword", params)
+      .then(data => {
+        this.$message({ message: "提交成功", type: "success" });
+        this.isPostting = false;
+        this.$emit("close", "");
+      })
+      .catch(() => {
+        this.isPostting = false;
+      });
+      
+    },
+    validatorRegister() {
+      const validatorFunc = () => {
+        const { tel, password, password2, verification_code, captcha} = this.ruleForm
+        let validator = new Validator();
+
+        validator.add(tel, [{
+            strategy: 'isNonEmpty',
+            errorMsg: '手机号码不能为空！'
+        }, {
+            strategy: 'isMoblie',
+            errorMsg: '手机号码格式不正确！'
+        }])
+
+        validator.add(verification_code, [{
+            strategy: 'isNonEmpty',
+            errorMsg: '短信验证码不能为空！'
+        }, {
+            strategy: 'minLength:6',
+            errorMsg: '短信验证码长度不能小于 6 位！'
+        }, {
+            strategy: 'maxLength:6',
+            errorMsg: '短信验证码长度不能大于 6 位！'
+        }])
+
+        validator.add(password, [{
+            strategy: 'isNonEmpty',
+            errorMsg: '密码不能为空！'
+        }, {
+            strategy: 'minLength:6',
+            errorMsg: '密码长度不能小于 6 位！'
+        }, {
+            strategy: 'maxLength:18',
+            errorMsg: '密码长度不能大于 18 位！'
+        }])
+
+        validator.add(password2, [{
+            strategy: 'isNonEmpty',
+            errorMsg: '密码不能为空！'
+        }, {
+            strategy: 'minLength:6',
+            errorMsg: '密码长度不能小于 6 位！'
+        }, {
+            strategy: 'maxLength:18',
+            errorMsg: '密码长度不能大于 18 位！'
+        }])
+
+        validator.add(captcha, [{
+            strategy: 'isNonEmpty',
+            errorMsg: '图形验证码不能为空！'
+        }, {
+            strategy: 'minLength:4',
+            errorMsg: '图形验证码不能小于 4 位！'
+        }, {
+            strategy: 'maxLength:4',
+            errorMsg: '图形验证码不能大于 4 位！'
+        }])
+
+        
+        let errorMsg = validator.start()
+        return errorMsg
       }
+      let errorMsg = validatorFunc()
+      if(errorMsg) {
+        console.log(errorMsg);
+        this.$message({ type: 'warning', message: errorMsg })
+        return false;
+      }
+      return true;
     },
     formVaildent(name) {
       // 提交按钮校验输入框

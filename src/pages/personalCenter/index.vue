@@ -247,6 +247,7 @@ import {
   getFollowTrain
 } from "@/api/personal";
 import { getUserCollect } from "@/api/market";
+import Bus from '@/utils/Bus.js'
 import { mapGetters } from "vuex";
 import store from "@/store";
 import Cloud from "./cloud";
@@ -315,7 +316,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["info"]),
+    ...mapGetters(["info", "isUserNeedLogin"]),
     voucherMoneyImg() {
       return index => {
         const obj = {
@@ -347,6 +348,11 @@ export default {
     }
   },
   mounted() {
+    if (this.isUserNeedLogin) {
+      Bus.$emit('login', true);
+      return;
+    }
+    
     this.getPersonal();
     this.followTrain()
     this.teacherThumbsUp()

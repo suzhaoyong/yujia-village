@@ -21,7 +21,6 @@
                 v-model.trim="accountRuleForm.tel"
                 type="text"
                 placeholder="请输入手机号"
-                @blur="checkEmtypeInputBox('tel')"
                 style="outline:none;"
               />
               <div class="form_input-tips">{{accountErrorRule.tel.show?accountErrorRule.tel.msg:''}}</div>
@@ -68,7 +67,6 @@
                 class="input"
                 type="text"
                 v-model.trim="messageRuleForm.tel"
-                @blur="checkEmtypeInputBox('tel')"
                 placeholder="请输入手机号"
               />
               <div class="form_input-tips">{{messageErrorRule.tel.show?messageErrorRule.tel.msg:''}}</div>
@@ -78,7 +76,6 @@
                 class="input"
                 type="text"
                 v-model.trim="messageRuleForm.verification_code"
-                @blur="checkEmtypeInputBox('verification_code')"
                 placeholder="请输入验证码"
               />
               <div class="get_code" @click="getCodeMessage">{{codeTips.msg}}</div>
@@ -115,7 +112,6 @@
         <div class="box-input">
           <input
             type="text"
-            @blur="checkEmtypeInputBox('captcha')"
             v-model="messageRuleForm.captcha"
             placeholder="请输入图形验证码"
           />
@@ -132,6 +128,7 @@
 import { Exp } from "@/utils/bee.js";
 import Bus from "@/utils/Bus";
 import logo from "@/assets/market/logo_max.png";
+import Validator from '@/utils/Validator.js'
 import store from "@/store";
 export default {
   data() {
@@ -198,17 +195,106 @@ export default {
   },
   methods: {
     submitForm(name) {
-      let isPass = this.formVaildent(name);
-      if (isPass) {
-        if (name === "message") {
-          this.postTelLogin();
-        }
-        if (name === "account") {
-          this.postAuthLogin();
-        }
-      } else {
+      // let isPass = this.formVaildent(name);
+      if (name === "message") {
+        if(!this.validatorTelLogin()) return;
+        this.postTelLogin();
+      }
+      if (name === "account") {
+        if(!this.validatorAuthLogin()) return;
+        this.postAuthLogin();
       }
     },
+    validatorAuthLogin() {
+      const validatorFunc = () => {
+        const { tel, password, captcha} = this.accountRuleForm
+        let validator = new Validator();
+
+        validator.add(tel, [{
+            strategy: 'isNonEmpty',
+            errorMsg: '手机号码不能为空！'
+        }, {
+            strategy: 'isMoblie',
+            errorMsg: '手机号码格式不正确！'
+        }])
+
+        validator.add(password, [{
+            strategy: 'isNonEmpty',
+            errorMsg: '密码不能为空！'
+        }, {
+            strategy: 'minLength:6',
+            errorMsg: '密码长度不能小于 6 位！'
+        }, {
+            strategy: 'maxLength:18',
+            errorMsg: '密码长度不能大于 18 位！'
+        }])
+
+        validator.add(captcha, [{
+            strategy: 'isNonEmpty',
+            errorMsg: '图形验证码不能为空！'
+        }, {
+            strategy: 'minLength:4',
+            errorMsg: '图形验证码不能小于 4 位！'
+        }, {
+            strategy: 'maxLength:4',
+            errorMsg: '图形验证码不能大于 4 位！'
+        }])
+        let errorMsg = validator.start()
+        return errorMsg
+      }
+      let errorMsg = validatorFunc()
+      if(errorMsg) {
+        console.log(errorMsg);
+        this.$message({ type: 'warning', message: errorMsg })
+        return false;
+      }
+      return true;
+    },
+    validatorTelLogin() {
+      const validatorFunc = () => {
+        const { tel, verification_code, captcha} = this.messageRuleForm
+        let validator = new Validator();
+
+        validator.add(tel, [{
+            strategy: 'isNonEmpty',
+            errorMsg: '手机号码不能为空！'
+        }, {
+            strategy: 'isMoblie',
+            errorMsg: '手机号码格式不正确！'
+        }])
+
+        validator.add(verification_code, [{
+            strategy: 'isNonEmpty',
+            errorMsg: '短信验证码不能为空！'
+        }, {
+            strategy: 'minLength:6',
+            errorMsg: '短信验证码长度不能小于 6 位！'
+        }, {
+            strategy: 'maxLength:6',
+            errorMsg: '短信验证码长度不能大于 6 位！'
+        }])
+
+        validator.add(captcha, [{
+            strategy: 'isNonEmpty',
+            errorMsg: '图形验证码不能为空！'
+        }, {
+            strategy: 'minLength:4',
+            errorMsg: '图形验证码不能小于 4 位！'
+        }, {
+            strategy: 'maxLength:4',
+            errorMsg: '图形验证码不能大于 4 位！'
+        }])
+        let errorMsg = validator.start()
+        return errorMsg
+      }
+      let errorMsg = validatorFunc()
+      if(errorMsg) {
+        console.log(errorMsg);
+        this.$message({ type: 'warning', message: errorMsg })
+        return false;
+      }
+      return true;
+    },    
     /* 图形验证码 */
     getVerificationCode() {
       this.$request("/verificationCode").then(data => {
@@ -248,8 +334,9 @@ export default {
           this.$emit("close", "");
         })
         .then(_ => {
+          this.$router.push('/personal/index')
           // this.getPersonal();
-          window.location.reload();
+          // window.location.reload();
         })
         .catch(() => {
           this.isPostting = false;
