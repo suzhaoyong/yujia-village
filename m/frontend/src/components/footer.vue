@@ -51,6 +51,8 @@ export default {
       '$route'(to, from){
         const { header_name } = to.meta
         this.active = header_name;
+        console.log(this.active);
+        
         // 防止 路由变化之后的 刷新 tabbar 高亮错误
         window.sessionStorage.setItem('tabbar', header_name);
       }
