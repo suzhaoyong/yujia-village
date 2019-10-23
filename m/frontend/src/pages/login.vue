@@ -470,7 +470,7 @@ export default {
             strategy: 'minLength:6',
             errorMsg: '密码长度不能小于 6 位！'
         }, {
-            strategy: 'maxLength:6',
+            strategy: 'maxLength:18',
             errorMsg: '密码长度不能大于 18 位！'
         }])
 
