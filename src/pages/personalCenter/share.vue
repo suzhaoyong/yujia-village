@@ -67,7 +67,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["info"]),
+    ...mapGetters(["info", "isUserNeedLogin"]),
     optionSingleHeight() {
       return {
         singleHeight: 30
@@ -81,6 +81,10 @@ export default {
     this.initSocialConfig();
   },
   mounted() {
+    if (this.isUserNeedLogin) {
+      Bus.$emit('login', true);
+      return;
+    }
     getMyShare().then(data => {
       this.listData = data
     });
