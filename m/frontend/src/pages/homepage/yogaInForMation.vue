@@ -155,7 +155,10 @@ export default {
     }
   }).then(() => {
     this.$nextTick(() => {
-      this.waterFall(this.$refs.box)
+      setTimeout(() => {
+        this.waterFall(this.$refs.box)
+      }, 30)
+      
     })
   })
   .catch(error => {
@@ -174,7 +177,7 @@ export default {
         var items = parent.children;
         var gap = 10; // 定义每一列之间的间隙 为10像素
         var pad = 10;
-        if (items[0].offsetWidth) {
+        if (items[0]) {
           var pageWidth = parent.offsetWidth;
           var itemWidth = items[0].offsetWidth;
           var columns = parseInt(pageWidth / (itemWidth + gap));
