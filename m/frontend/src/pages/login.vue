@@ -821,11 +821,8 @@ export default {
 }
 .back-wrap {
   width: 100%;
-  padding-bottom: 30px;
   color: #999;
-  position: absolute;
-  left: 0;
-  bottom: 0;
+  margin-top: 20px;
   display: flex;
   justify-content: center;
   align-items: flex-end;
@@ -878,10 +875,11 @@ img {
   height: 100%;
 }
 .body-wrap {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  overflow: scroll;
+  // position: absolute;
+  // top: 0;
+  // bottom: 0;
+  height: 100%;
+  // overflow: scroll;
   background-image: url("~@/assets/img/login_bg.png");
   background-color: #fff;
   background-size: 100%;
@@ -891,11 +889,11 @@ img {
   // height: 100vh;
 }
 .body {
+  // position: absolute;
+  // top: 0;
+  // bottom: 0;
   font-size: 10px;
-  // background: rgba(0, 0, 0, 0.3);
-  // background: #fff;
   width: 100%;
-  // height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;

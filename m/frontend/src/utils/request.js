@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 import axios from 'axios'
 import store from '@/store'
+import router from '../router/index'
 import { Toast } from 'vant';
 let timer = null
 // 处理非 get data 传参
@@ -51,6 +52,7 @@ function handleResponeseErr(err) {
         .catch(() => {
           store.dispatch("INFO", {});
           Toast('请重新登录');
+          this.$router.push('/login');
         })
         return Promise.resolve();
   }
