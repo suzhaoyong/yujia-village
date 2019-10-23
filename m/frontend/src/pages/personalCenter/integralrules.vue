@@ -11,9 +11,10 @@
             </div>
             <div class="rules-box">
                 <div class="title">2.瑜伽村积分有什么用</div>
-                <p class="introduction">
-                    积分可以抵扣课程费用及兑换课程。
-                </p>
+                <ul class="introduction">
+                    <li>1）瑜伽老师/普通村民：积分可兑换瑜伽培训课程、瑜伽活动优惠，及抵用课程费用等优惠礼遇</li>
+                    <li>2）瑜伽名师/瑜伽机构：积分可兑换中国瑜伽村官网及手机端的广告位信息展示</li>
+                </ul>
             </div>
             <div class="rules-box">
                 <div class="title">3.瑜伽村积分获取详情</div>
