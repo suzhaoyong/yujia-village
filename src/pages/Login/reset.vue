@@ -156,12 +156,35 @@ export default {
     },
     //发送验证码
     getCodeMessage(){
-        if (this.ruleForm.tel === "") {
-        this.ruleFormErrorRule.tel.show = true;
-        this.getCodepass = false;
+        if (!this.validatorRegisterTel()) {
+        // this.ruleFormErrorRule.tel.show = true;
+          this.getCodepass = false;
         }else{
           this.getCodepass = true;
         }
+    },
+    validatorRegisterTel() {
+      const validatorFunc = () => {
+        const { tel} = this.ruleForm
+        let validator = new Validator();
+
+        validator.add(tel, [{
+            strategy: 'isNonEmpty',
+            errorMsg: '手机号码不能为空！'
+        }, {
+            strategy: 'isMoblie',
+            errorMsg: '手机号码格式不正确！'
+        }])
+        let errorMsg = validator.start()
+        return errorMsg
+      }
+      let errorMsg = validatorFunc()
+      if(errorMsg) {
+        console.log(errorMsg);
+        this.$message({ type: 'warning', message: errorMsg })
+        return false;
+      }
+      return true;
     },
     //验证图形码
     getCodeMessage2(){

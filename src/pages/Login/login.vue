@@ -31,7 +31,6 @@
                 v-model.trim="accountRuleForm.password"
                 type="password"
                 placeholder="请输入密码"
-                @blur="checkEmtypeInputBox('password')"
                 style="outline:none;"
               />
               <div
@@ -48,7 +47,6 @@
                   <div class="item-box-input">
                     <input
                       type="text"
-                      @blur="checkEmtypeInputBox('captcha')"
                       placeholder="请输入图形验证码"
                       v-model.trim="accountRuleForm.captcha"
                     />
@@ -361,7 +359,8 @@ export default {
         })
         .then(_ => {
           // this.getPersonal();
-          window.location.reload();
+          this.$router.push('/personal/index')
+          // window.location.reload();
         })
         .catch(() => {
           this.isPostting = false;
@@ -417,12 +416,35 @@ export default {
       return is_pass;
     },
     getCodeMessage(){
-      if (this.messageRuleForm.tel === "") {
-        this.messageErrorRule.tel.show = true;
+      if (!this.validatorRegisterTel()) {
+        // this.messageErrorRule.tel.show = true;
         this.getCodepass = false;
       }else{
         this.getCodepass = true;
       }
+    },
+    validatorRegisterTel() {
+      const validatorFunc = () => {
+        const { tel } = this.messageRuleForm
+        let validator = new Validator();
+
+        validator.add(tel, [{
+            strategy: 'isNonEmpty',
+            errorMsg: '手机号码不能为空！'
+        }, {
+            strategy: 'isMoblie',
+            errorMsg: '手机号码格式不正确！'
+        }])
+        let errorMsg = validator.start()
+        return errorMsg
+      }
+      let errorMsg = validatorFunc()
+      if(errorMsg) {
+        console.log(errorMsg);
+        this.$message({ type: 'warning', message: errorMsg })
+        return false;
+      }
+      return true;
     },
     getCodeMessage2(){
       const { captcha, key } = this.messageRuleForm;
