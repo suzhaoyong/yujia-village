@@ -15,7 +15,7 @@
             <div class="item">
               <div class="item-content">
                 <div class="item-content-input">
-                  <input type="password" @blur="checkEmtypeInputBox('tel')" v-model.trim="ruleForm.tel" placeholder="请输入电话"/>
+                  <input type="password" v-model.trim="ruleForm.tel" placeholder="请输入电话"/>
                 </div>
                 <div class="item-content-tips">{{isError('tel')}}</div>
               </div>
@@ -23,7 +23,7 @@
             <div class="item">
               <div class="item-content">
                 <div class="item-content-input">
-                  <input type="text" @blur="checkEmtypeInputBox('verification_code')" v-model.trim="ruleForm.verification_code" placeholder="请输入短信验证码"/>
+                  <input type="text" v-model.trim="ruleForm.verification_code" placeholder="请输入短信验证码"/>
                   <div class="get_code" @click="getCodeMessage">发送验证码</div>
                 </div>
                 <div class="item-content-tips">{{isError('verification_code')}}</div>
@@ -32,7 +32,7 @@
             <div class="item">
               <div class="item-content">
                 <div class="item-content-input">
-                  <input type="password" @blur="checkEmtypeInputBox('password')" v-model.trim="ruleForm.password" placeholder="新密码"/>
+                  <input type="password" v-model.trim="ruleForm.password" placeholder="新密码"/>
                 </div>
                 <div class="item-content-tips">{{isError('password')}}</div>
               </div>
@@ -40,7 +40,7 @@
             <div class="item">
               <div class="item-content">
                 <div class="item-content-input">
-                  <input type="password" @blur="checkEmtypeInputBox('password2')" v-model.trim="ruleForm.password2" placeholder="再次确认"/>
+                  <input type="password" v-model.trim="ruleForm.password2" placeholder="再次确认"/>
                 </div>
                 <div class="item-content-tips">{{isError('password2')}}</div>
               </div>
@@ -69,7 +69,6 @@
           <div class="box-input">
             <input
               type="text"
-              @blur="checkEmtypeInputBox('captcha')"
               v-model="ruleForm.captcha"
             />
           </div>

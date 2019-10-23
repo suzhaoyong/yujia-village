@@ -67,7 +67,6 @@
                 class="input"
                 type="text"
                 v-model.trim="messageRuleForm.tel"
-                @blur="checkEmtypeInputBox('tel')"
                 placeholder="请输入手机号"
               />
               <div class="form_input-tips">{{messageErrorRule.tel.show?messageErrorRule.tel.msg:''}}</div>
@@ -77,7 +76,6 @@
                 class="input"
                 type="text"
                 v-model.trim="messageRuleForm.verification_code"
-                @blur="checkEmtypeInputBox('verification_code')"
                 placeholder="请输入验证码"
               />
               <div class="get_code" @click="getCodeMessage">{{codeTips.msg}}</div>
@@ -114,7 +112,6 @@
         <div class="box-input">
           <input
             type="text"
-            @blur="checkEmtypeInputBox('captcha')"
             v-model="messageRuleForm.captcha"
             placeholder="请输入图形验证码"
           />
