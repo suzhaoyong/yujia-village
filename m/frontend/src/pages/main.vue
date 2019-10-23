@@ -11,13 +11,13 @@
         </div>
       </div>
     </van-overlay>
-
+    <!-- 顶部 logo -->
+    <h1><img class="img" src="../assets/img/yujia_logo.png" alt="瑜伽村"></h1>
     <!-- 轮播图 -->
     <div class="bg_imgs-wrap">
-      <div style="background:#8FCD71; height:64px;width:100%;"></div>
-      <div style="background:#8FCD71; height:64px;width:100%;border-radius: 0 0 50% 50%;"></div>
+      <div class="bgc-color" style="background:#8FCD71; width:100%;"></div>
       <div class="imgs_box">
-        <van-swipe :autoplay="5000" style="height:100%;" indicator-color="white">
+        <van-swipe :autoplay="5000" indicator-color="white">
           <van-swipe-item v-for="(item, index) in main.banner" :key="index"><img :src="item" alt="商品"></van-swipe-item>
         </van-swipe>
       </div>
@@ -198,17 +198,43 @@ img{
   height: 100%;
 }
   .main_wrap{
+    position: relative;
     background: #fff;
     padding-bottom: 20px;
+    // log 图标
+    h1 {
+      position: absolute;
+      top: 12px;
+      left: 16px;
+      z-index: 10;
+      .img {
+        width: 70px;
+        height: 25px;
+      }
+    } 
+    // 轮播图
     .bg_imgs-wrap{
+      position: relative;
+      height: 208px;
+      .bgc-color {
+        height: 92px;
+        border-radius: 0 0 55% 55%;
+      }
       .imgs_box{
-        margin: 0 auto;
-        margin-top: -64PX;
-        width: 344px;
-        height: 160px;
+        position: absolute;
+        top: 46px;
+        left: 0;
+        padding: 0 16px;
+        width: 100%;
+        height: 162px;
         border-radius: 10px;
         overflow: hidden;
-        background: #e5e5e5;
+        .van-swipe {
+          height: 100%;
+          .van-swipe-item {
+            width: 343px!important;
+          }
+        }
         img{
           border-radius: 10px;
         }
@@ -274,18 +300,23 @@ img{
     .train-wrap{
       margin: 0 auto;
       padding-top: 30px;
-      width: 340px;
+      width: 343px;
       .content_box{
+        margin-top: 18px;
         .train{
-          padding-top: 10px;
+          height: 122px;
+          padding: 12px 18px;
+          // padding-left: 18px; 
+          margin-bottom: 5px; 
+          border-radius: 5px;
           display: flex;
           justify-content: space-between;
+          box-shadow:2px 0px 6px 0px rgba(0, 0, 0, 0.15);
           .pic{
             flex-shrink: 0;
-            width: 140px;
-            height: 90px;
-            background: #e5e5e5;
-            border-radius: 4px;
+            width: 102px;
+            height: 96px;
+            border-radius: 10px;
             overflow: hidden;
           }
           .info{
@@ -318,6 +349,7 @@ img{
               }
             }
             .address_time{
+              margin-bottom: 2px;
               font-size: 10px;
               .address{
                 color:#999;

@@ -1,5 +1,5 @@
 <template>
-  <div class="body-wrap" :style="`${isHeightMore?'height:100%;':''}`">
+  <div class="body-wrap">
     <div class="back_home-wrap" @click="goHome">
       <div class="back_home" style="font-size: 20px;color: #fff;">
         <van-icon style="font-size: 20px;color: #fff;" name="wap-home" />
@@ -878,12 +878,16 @@ img {
   height: 100%;
 }
 .body-wrap {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  overflow: scroll;
   background-image: url("~@/assets/img/login_bg.png");
   background-color: #fff;
   background-size: 100%;
   background-repeat: no-repeat;
   position: relative;
-  z-index: 10;
+  z-index: 999;
   // height: 100vh;
 }
 .body {
