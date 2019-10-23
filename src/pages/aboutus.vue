@@ -48,6 +48,7 @@
                             <div class="border-right"></div>
                         </div>
                          <div class="aboutus-count-div4">
+                             <p class="abouts-p">瑜伽村是隶属于上海一伽健身服务公司旗下的专业瑜伽综合平台。</p>
                              <p class="abouts-p">中国瑜伽村是全国培训信息最丰富的瑜伽行业平台。</p>
                              <p class="abouts-p">瑜伽村平台集合了全球瑜伽名师信息，瑜伽培训、大会信息等。</p>
                              <p class="abouts-p">可通过课程类型、地域、时间、老师、价格等信息进行进准分类搜索，</p>
@@ -354,7 +355,7 @@ export default {
         }
         .aboutus-count-div4{
             width: 1200px;
-            height: 420px;
+            height: 470px;
             margin: 0 auto;
             line-height:40px;
             margin-bottom: 4%;

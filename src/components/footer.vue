@@ -38,11 +38,13 @@
                         <div class="borders"></div>
                         <div class="foot-left-tel">
                             <img src="../assets/telp.png" class="telpimg"/>
+                            <span class="telp">021-62146321</span>
+                            <span>|</span>
                             <span class="telp">4001007191</span>
                         </div>
                         <div class="foot-left-address">
                             <img src="../assets/address.png" class="addressimg"/>
-                            <span class="address">上海长宁区愚园路716号楼3楼</span>
+                            <span class="address">上海长宁区愚园路716号3幢203室</span>
                         </div>
                     </div>
                 </div>
