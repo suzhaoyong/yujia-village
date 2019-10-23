@@ -132,6 +132,7 @@
 import { Exp } from "@/utils/bee.js";
 import Bus from "@/utils/Bus";
 import logo from "@/assets/market/logo_max.png";
+import Validator from '@/utils/Validator.js'
 import store from "@/store";
 export default {
   data() {
@@ -248,8 +249,9 @@ export default {
           this.$emit("close", "");
         })
         .then(_ => {
+          this.$router.push('/personal/index')
           // this.getPersonal();
-          window.location.reload();
+          // window.location.reload();
         })
         .catch(() => {
           this.isPostting = false;

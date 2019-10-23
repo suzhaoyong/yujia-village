@@ -315,7 +315,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["info"]),
+    ...mapGetters(["info", "isUserNeedLogin"]),
     voucherMoneyImg() {
       return index => {
         const obj = {

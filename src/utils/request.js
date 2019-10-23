@@ -84,7 +84,6 @@ function handleResponeseErr(err) {
       });
     */
   }
-  /*
   if (data.code === '0001') {
     message = "登录已失效，请再次登录"
     Bus.$emit('login', true)
@@ -94,7 +93,6 @@ function handleResponeseErr(err) {
       user: {}
     });
   }
-  */
   /*
   if(data.code === '0001') {
     request.post('/auth/refresh')
