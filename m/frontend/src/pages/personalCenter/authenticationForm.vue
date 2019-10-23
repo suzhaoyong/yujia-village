@@ -16,7 +16,7 @@
                     <div class="license">请上传营业执照</div>
                     <div class="upload">
                         <van-uploader v-model="fileList1" :after-read="afterRead" :max-count="1"
-                        :max-size="4096000" accept="image/gif, image/jpeg ,image/png" @oversize="overSize" @delete="onDel"/>
+                        :max-size="4096000" @oversize="overSize" @delete="onDel"/>
                     </div>
                 </div>
             </div>
@@ -33,7 +33,7 @@
                     <div class="license">请上传瑜伽毕业证书</div>
                     <div class="upload">
                         <van-uploader v-model="fileList2" :after-read="afterRead" :max-count="1"
-                        :max-size="4096000" accept="image/gif, image/jpeg ,image/png" @oversize="overSize" @delete="onDel"/>
+                        :max-size="4096000" @oversize="overSize" @delete="onDel"/>
                     </div>
                 </div>
             </div>
@@ -50,7 +50,7 @@
                     <div class="license">请上传营业执照以及瑜伽毕业证书</div>
                     <div class="upload">
                         <van-uploader v-model="fileList3" :after-read="afterRead" :max-count="2" multiple
-                        :max-size="4096000" accept="image/gif, image/jpeg ,image/png" @oversize="overSize" @delete="onDel"/>
+                        :max-size="4096000" @oversize="overSize" @delete="onDel"/>
                     </div>
                 </div>
                 <van-field class="textarea" v-model="ownerAndCoachList.supplement" rows="3" 

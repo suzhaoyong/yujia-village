@@ -54,13 +54,7 @@ export default {
   .van-nav-bar {
     position: fixed;
     top: 0;
-    width: 100%;
-    font-size: 16px;
-    background-color: #8FCD71 !important;
-    .van-icon {
-        font-size: 20px;
-        color: #2c2c2c;
-    }
+   
 }
 .System{
     display: flow-root;
