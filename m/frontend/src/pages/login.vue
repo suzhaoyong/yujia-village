@@ -1,13 +1,13 @@
 <template>
   <div class="body-wrap">
     <div class="back_home-wrap" @click="goHome">
-      <div class="back_home" style="font-size: 20px;color: #fff;">
-        <van-icon style="font-size: 20px;color: #fff;" name="wap-home" />
+      <div class="back_home" style="color: #fff;">
+        <van-icon style="color: #fff;" name="wap-home" />
       </div>
     </div>
     <div class="back_login-wrap" v-show="form.type !== 'login'" @click="changeType('login')">
-      <div class="back_login" style="font-size: 20px;color: #fff;">
-        <van-icon style="font-size: 20px;color: #fff;" name="manager" />
+      <div class="back_login" style="color: #fff;">
+        <van-icon style="color: #fff;" name="manager" />
       </div>
     </div>
     <div class="body">
