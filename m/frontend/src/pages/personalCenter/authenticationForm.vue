@@ -471,8 +471,14 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.van-nav-bar {
+    position: fixed;
+    top: 0;
+}
 .rz-content {
     background-color: #fff;
+    margin-top: 46px;
+    margin-bottom: 88px;
     .upload-license {
         .license {
             padding-left: 16px;
@@ -508,7 +514,6 @@ export default {
     text-align: center;
     font-size: 12px;
 }
-
 .agreement {
     display: flex;
     justify-content: center;
