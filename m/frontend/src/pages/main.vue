@@ -1,7 +1,7 @@
 <template>
-  <div class="main_wrap">
+  <div>
     <!-- 引导注册登录 -->
-    <van-overlay :show="registerBox.show && isUserNeedLogin" style="position: fixed;" >
+    <van-overlay :show="registerBox.show && isUserNeedLogin">
       <div class="register-box">
         <div class="register">
           <div class="register_btn" @click="() => { this.$router.push('/login?q_type=register')}"></div>
@@ -11,118 +11,120 @@
         </div>
       </div>
     </van-overlay>
-    <!-- 顶部 logo -->
-    <h1><img class="img" src="../assets/img/yujia_logo.png" alt="瑜伽村"></h1>
-    <!-- 轮播图 -->
-    <div class="bg_imgs-wrap">
-      <div class="bgc-color" style="background:#8FCD71; width:100%;"></div>
-      <div class="imgs_box">
-        <van-swipe :autoplay="5000" indicator-color="white">
-          <van-swipe-item v-for="(item, index) in main.banner" :key="index"><img :src="item" alt="商品"></van-swipe-item>
-        </van-swipe>
+    <div class="main_wrap">
+      <!-- 顶部 logo -->
+      <h1><img class="img" src="../assets/img/yujia_logo.png" alt="瑜伽村"></h1>
+      <!-- 轮播图 -->
+      <div class="bg_imgs-wrap">
+        <div class="bgc-color" style="background:#8FCD71; width:100%;"></div>
+        <div class="imgs_box">
+          <van-swipe :autoplay="5000" indicator-color="white">
+            <van-swipe-item v-for="(item, index) in main.banner" :key="index"><img :src="item" alt="商品"></van-swipe-item>
+          </van-swipe>
+        </div>
+        
       </div>
-      
-    </div>
-    <!-- tab 导航 -->
-    <div class="tab-wrap">
-      <div class="tab-box">
-        <div href="" @click="gotoPage('yagainformation')">
-          <div class="tab_pic">
-            <img :src="icon.zixun" alt="图标">
+      <!-- tab 导航 -->
+      <div class="tab-wrap">
+        <div class="tab-box">
+          <div href="" @click="gotoPage('yagainformation')">
+            <div class="tab_pic">
+              <img :src="icon.zixun" alt="图标">
+            </div>
+            <div class="tab_tips">资讯</div>
           </div>
-          <div class="tab_tips">资讯</div>
         </div>
-      </div>
-      <div class="tab-box">
-        <div href="" @click="gotoPage('yogaknowledge')">
-          <div class="tab_pic">
-            <img :src="icon.zishi" alt="图标">
+        <div class="tab-box">
+          <div href="" @click="gotoPage('yogaknowledge')">
+            <div class="tab_pic">
+              <img :src="icon.zishi" alt="图标">
+            </div>
+            <div class="tab_tips">知识</div>
           </div>
-          <div class="tab_tips">知识</div>
         </div>
-      </div>
-      <div class="tab-box">
-        <div href="" @click="gotoPage('club')">
-          <div class="tab_pic">
-            <img :src="icon.jigou" alt="图标">
+        <div class="tab-box">
+          <div href="" @click="gotoPage('club')">
+            <div class="tab_pic">
+              <img :src="icon.jigou" alt="图标">
+            </div>
+            <div class="tab_tips">机构</div>
           </div>
-          <div class="tab_tips">机构</div>
         </div>
-      </div>
-      <div class="tab-box">
-        <div href="" @click="gotoPage('aboutUs')">
-          <div class="tab_pic">
-            <img :src="icon.mingshi" alt="图标">
+        <div class="tab-box">
+          <div href="" @click="gotoPage('aboutUs')">
+            <div class="tab_pic">
+              <img :src="icon.mingshi" alt="图标">
+            </div>
+            <div class="tab_tips">关于我们</div>
           </div>
-          <div class="tab_tips">关于我们</div>
         </div>
       </div>
-    </div>
-    <!-- 培训信息 -->
-    <div class="train-wrap" id="train">
-      <div class="content_title">
-        <div class="lf">
-          <span class="zh">培训信息</span>
-          <span class="en">Famous teacher</span>
-        </div>
-        <div class="rh" @click="gotoPage('train')">
-          <span class="more">更多 ></span>
-        </div>
-      </div>
-      <div class="content_box">
-        <div class="train" @click="viewTrain(item)" v-for="(item, index) in main.hot" :key="index">
-          <div class="pic">
-            <img :src="item.teacher_img" alt="培训老师">
+      <!-- 培训信息 -->
+      <div class="train-wrap" id="train">
+        <div class="content_title">
+          <div class="lf">
+            <span class="zh">培训信息</span>
+            <span class="en">Famous teacher</span>
           </div>
-          <div class="info">
-            <div class="title"><span class="tag">{{item.type}}</span> <span class="des">{{item.theme}}</span></div>
-            <div class="address_time">
-              <div class="address">{{item.custom_address}}</div>
-              <div class="time">{{item.startTime}} / {{item.endTime}}</div>
+          <div class="rh" @click="gotoPage('train')">
+            <span class="more">更多 ></span>
+          </div>
+        </div>
+        <div class="content_box">
+          <div class="train" @click="viewTrain(item)" v-for="(item, index) in main.hot" :key="index">
+            <div class="pic">
+              <img :src="item.teacher_img" alt="培训老师">
+            </div>
+            <div class="info">
+              <div class="title"><span class="tag">{{item.type}}</span> <span class="des">{{item.theme}}</span></div>
+              <div class="address_time">
+                <div class="address">{{item.custom_address}}</div>
+                <div class="time">{{item.startTime}} / {{item.endTime}}</div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <!-- 名师信息 -->
-    <div class="teacher-wrap" id="teacher">
-      <div class="content_title">
-        <div class="lf">
-          <span class="zh">瑜伽名师</span>
-          <span class="en">Famous teacher</span>
-        </div>
-        <div class="rh" @click="gotoPage('teacher')">
-          <span class="more">更多 ></span>
-        </div>
-      </div>
-      <div class="content_box">
-        <div class="info" @click="viewTeacher(item)" v-for="(item, index) in main.teachers" :key="index">
-          <div class="pic">
-            <img :src="item.first_img" alt="名师">
+      <!-- 名师信息 -->
+      <div class="teacher-wrap" id="teacher">
+        <div class="content_title">
+          <div class="lf">
+            <span class="zh">瑜伽名师</span>
+            <span class="en">Famous teacher</span>
           </div>
-          <div class="name_en">{{item.name}}</div>
-          <div class="name_zh" v-if="false">{{item.info}}</div>
-        </div>
-      </div>
-    </div>
-    <!-- 机构推荐 -->
-    <div class="club-wrap" id="club">
-      <div class="content_title">
-        <div class="lf">
-          <span class="zh">机构推荐</span>
-          <span class="en">Training Information</span>
-        </div>
-        <div class="rh" @click="gotoPage('club')">
-          <span class="more">更多 ></span>
-        </div>
-      </div>
-      <div class="content_box">
-        <div class="club" @click="viewClub(item)" v-for="(item, index) in main.clubs" :key="index">
-          <div class="club_pic">
-            <img :src="item.first_img" alt="机构">
+          <div class="rh" @click="gotoPage('teacher')">
+            <span class="more">更多 ></span>
           </div>
-          <div class="name">{{item.club_name}}</div>
-          <div class="address">{{item.custom_address}}</div>
+        </div>
+        <div class="content_box">
+          <div class="info" @click="viewTeacher(item)" v-for="(item, index) in main.teachers" :key="index">
+            <div class="pic">
+              <img :src="item.first_img" alt="名师">
+            </div>
+            <div class="name_en">{{item.name}}</div>
+            <div class="name_zh" v-if="false">{{item.info}}</div>
+          </div>
+        </div>
+      </div>
+      <!-- 机构推荐 -->
+      <div class="club-wrap" id="club">
+        <div class="content_title">
+          <div class="lf">
+            <span class="zh">机构推荐</span>
+            <span class="en">Training Information</span>
+          </div>
+          <div class="rh" @click="gotoPage('club')">
+            <span class="more">更多 ></span>
+          </div>
+        </div>
+        <div class="content_box">
+          <div class="club" @click="viewClub(item)" v-for="(item, index) in main.clubs" :key="index">
+            <div class="club_pic">
+              <img :src="item.first_img" alt="机构">
+            </div>
+            <div class="name">{{item.club_name}}</div>
+            <div class="address">{{item.custom_address}}</div>
+          </div>
         </div>
       </div>
     </div>
@@ -197,7 +199,7 @@ img{
   width: 100%;
   height: 100%;
 }
-  .main_wrap{
+  .main_wrap {
     position: relative;
     background: #fff;
     padding-bottom: 20px;
@@ -453,7 +455,10 @@ img{
 <style lang="scss" scoped>
  // 注册引导
  .van-overlay {
-   z-index: 110 !important;
+   position: fixed;
+    top: 0;
+   z-index: 300 !important;
+    transform: translateZ(200px);
  }
   .register-box{
     margin-top: 67px;
