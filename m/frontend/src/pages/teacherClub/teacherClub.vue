@@ -10,7 +10,7 @@
         <van-tab title="培训机构">
         <div class="list_teacher">
             <div class="list_banner" :style="{backgroundImage: 'url('+banner+')'}"></div>
-            <div class="league" @click="goto()">申请加盟</div>
+            <!-- <div class="league" @click="goto()">申请加盟</div> -->
             <div class="club_house">
                 <div class="club_house_title">
                     <span class="items" v-for="(item,index) in items" @click="clicktext(index)" :key="index" :class="{active:index==curritem}">{{item}}</span>
@@ -28,7 +28,7 @@
                <div class="club_item">
                 <div class="club_item_box" v-for="(item,index) in clubBox" :key="index" @click="clubBoxItem(item)">
                     <div class="club_item_img">
-                        <img :src="item.first_img"/>
+                        <img :src="item.first_img" :alt="item.club_name"/>
                     </div>
                     <div class="club_item_title">
                         <h3 class="van-ellipsis">{{item.club_name}}</h3>
@@ -79,10 +79,10 @@
             <div class="club_items" v-if="exhibitionBox2.length > 0" v-show="Box2">
                 <div class="news-swiper"> 
                     <div class="swiper-container swiper2">
-                        <div class="swiper-wrapper">
+                        <div class="swiper-wrapper" :style="this.$route.query.current == 1? 'overflow: initial':'overflow: auto'">
                             <div class="swiper-slide" v-for="(item,index) in exhibitionBox2" :key="index">
                                 <div class="club_items_img" @click="exhibition(item)">
-                                    <img :src="item.first_img"/>
+                                    <img :src="item.first_img" :alt="item.name"/>
                                 </div>
                                 <div class="club_items_title">
                                     <h3 class="van-ellipsis">{{item.name}}</h3>
@@ -119,7 +119,7 @@
                 <div class="exhibition_content">
                     <div class="exhibition_box" v-for="(item,index) in exhibitionBox" :key="index">
                         <div class="exhibition_img" @click="exhibition(item)">
-                        <img :src="item.first_img"/>
+                        <img :src="item.first_img" :alt="item.name"/>
                         </div>
                         <div class="exhibition_title">
                             <h3 class="van-ellipsis">{{item.name}}</h3>
@@ -232,7 +232,8 @@ export default {
         last_page2: 2,
         total2:'',
         id:0,
-        id2:0
+        id2:0,
+        routecurrent:''
     };
   },
    computed: {
@@ -241,7 +242,11 @@ export default {
   created(){
       this.joindata();
       // this.exhibitionList();
-      
+  },
+  watch:{
+      '$route'(to,from){
+          this.routecurrent = this.$route.query.current;
+      }
   },
   mounted() {
     if (this.isUserNeedLogin) {
@@ -710,9 +715,6 @@ input:-ms-input-placeholder{
 }
 .van-action-sheet{
     margin-bottom: 13%;
-}
-.swiper-wrapper{
-    overflow: auto;
 }
 .el-dropdown-link {
     cursor: pointer!important;

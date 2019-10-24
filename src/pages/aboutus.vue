@@ -48,6 +48,7 @@
                             <div class="border-right"></div>
                         </div>
                          <div class="aboutus-count-div4">
+                             <p class="abouts-p">瑜伽村是隶属于上海一伽健身服务有限公司。</p>
                              <p class="abouts-p">中国瑜伽村是全国培训信息最丰富的瑜伽行业平台。</p>
                              <p class="abouts-p">瑜伽村平台集合了全球瑜伽名师信息，瑜伽培训、大会信息等。</p>
                              <p class="abouts-p">可通过课程类型、地域、时间、老师、价格等信息进行进准分类搜索，</p>
@@ -89,7 +90,7 @@
                          <div class="aboutus-count-div8">
                              <div class="aboutus-content">
                                  <div class="content-img" v-for="(item,index) in aboutusmodel" :key="index">
-                                     <img :src="item.url_pic"/>
+                                     <img :src="item.url_pic" :alt="item.name"/>
                                      <h3>{{item.name}}</h3>
                                      <p>{{item.describe}}</p>
                                  </div>
@@ -108,7 +109,7 @@
                          <div class="aboutus-count-div10">
                              <div class="aboutus-foo">
                              <div class="codeimg">
-                                 <img :src="aboutUs.url_pic"/>
+                                 <img :src="aboutUs.url_pic" alt="背景图片"/>
                              </div>
                              <div class="codetext">
                                  <p class="p1">地址：{{aboutUs.address}}</p>
@@ -126,6 +127,16 @@
 <script>
 import Banner from "../components/banner";
 export default {
+  metaInfo: {
+    title: '关于我们-中国瑜伽村简介', 
+    meta: [{
+        name: 'keyWords',
+        content: '中国瑜伽村，中国瑜伽村简介'
+    },{
+        name: 'description',
+        content: '中国瑜伽村是全国培训信息丰富的行业平台，本页内容会给大家详细的介绍一下中国瑜伽村，让大家更加的了解我们。'
+    }]
+  },
   components:{
     Banner,
   },
@@ -354,7 +365,7 @@ export default {
         }
         .aboutus-count-div4{
             width: 1200px;
-            height: 420px;
+            height: 470px;
             margin: 0 auto;
             line-height:40px;
             margin-bottom: 4%;

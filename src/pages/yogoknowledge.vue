@@ -18,7 +18,7 @@
                         <div class="knowledge-count-div1" v-for="(item, index) in listdatas" :key="index" @click="selectItem(item)">
                             <div class="knowledge-auto">
                             <div class="count-img">
-                                <img :src="item.icon_url"/>
+                                <img :src="item.icon_url" :alt="item.headline"/>
                                 <div class="box-content"></div>
                             </div>
                             <div class="count-desc">
@@ -65,6 +65,16 @@
 <script>
 import Banner from "../components/banner";
 export default {
+  metaInfo: {
+    title: '瑜伽知识-学瑜伽注意事项-中国瑜伽村知识科普', 
+    meta: [{
+        name: 'keyWords',
+        content: '瑜伽知识，瑜伽注意事项，学瑜伽要注意什么'
+    },{
+        name: 'description',
+        content: '学习瑜伽是一件说简单但是又不简单的事情，学习瑜伽是一条漫漫长路，不仅要学习各种瑜伽的知识还要了解学习瑜伽过程中的注意事项，这些内容中国瑜伽村都给大家一一整理了出来。'
+    }]
+  },
   inject: ["reload"],
   components:{
     Banner,

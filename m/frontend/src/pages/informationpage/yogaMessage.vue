@@ -4,7 +4,11 @@
       <ul class="message-main-head">
         <li @click="defaultRank('default')" :class="{'changeweight': isActive == '1' }"> 默认排序</li>
         <li @click="hostRank('host')" :class="{'changeweight': isActive == '2' }">热度</li>
-        <li @click="priceRank('price')" :class="{'changeweight': isActive == '3' }">价格 <span><van-icon name='arrow-up' v-show="priceFlag"/> <van-icon name='arrow-down' v-show="!priceFlag"/></span></li>
+        <li @click="priceRank('price')" :class="{'changeweight': isActive == '3' }">价格 
+          <!-- <span> -->
+            <van-icon name='arrow-up' v-show="priceFlag"/> <van-icon name='arrow-down' v-show="!priceFlag"/>
+          <!-- </span> -->
+        </li>
         <li class="head-list" is-link @click="showPopup">筛选</li>
         <!-- <li>价格 ∨</li> -->
       </ul>
@@ -168,13 +172,7 @@ export default {
     this.PullUpReload()
   },
   methods: {
-    // changeprice (e) {
-    //   var target = e.target || window.target
-    //   if(target.nodeName === "INPUT") {
-    //     target.value *= ''
-    //     console.log(this.minprice, this.maxprice)
-    //   }
-    // },
+    // 点击改变价格
     changeminprice () {
       this.minprice = ''
       this.$refs.input1.style.color = 'black'
@@ -241,12 +239,12 @@ export default {
     },
     // 获取列表
     messageList (page = 1) {
-      this.$request.get('trains').then((res) => {
-      // this.$request.get('trains?page=' + page).then((res) => {
-        if (res.current_page < res.last_page ) {
-          res.data.map((item) => {
-            this.messageLists.push(item)
-          })
+      
+      this.$request.get('trains?page=' + page).then((res) => {
+        if (this.pages < res.last_page ) {
+            res.data.map((item) => {
+              this.messageLists.push(item);
+            })
         } else {
           Toast('只有这么多了');
         }
@@ -466,18 +464,16 @@ export default {
       font-size: 12px;
       background: white;
       li {
+        position: relative;
         margin-left: 18px;
         float: left;
         height: 44px;
         line-height: 44px;
-        span {
-          margin-top: 12px;
-          position: relative;
-          .van-icon {
-            font-size: 20px;
-            position: absolute;
-            top: -1px;
-          }
+        .van-icon {
+          position: absolute;
+          top: 12px;
+          left: 25px;
+          font-size: 20px;
         }
       }
       .head-list {

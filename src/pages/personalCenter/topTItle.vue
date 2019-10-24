@@ -9,12 +9,6 @@
           <div class="name">{{info.user.name}}</div>
           <span class="identity" style="cursor: pointer;" @click="withdraw" v-if="info.user.identity_auth == '未认证'">未认证</span>
           <span class="identity" v-else>{{info.user.identity_auth}}</span>
-          <!-- <span class="identity" v-if="info.user.identity_auth == 3">已认证（机构负责人）</span>
-          <span class="identity" v-if="info.user.identity_auth == 4">认证机教练中</span>
-          <span class="identity" v-if="info.user.identity_auth == 5">已认证（教练）</span>
-          <span class="identity" v-if="info.user.identity_auth == 6">未通过认证</span>
-          <span class="identity" v-if="info.user.identity_auth == 8">认证机构负责人、教练中</span>          
-          <span class="identity" v-if="info.user.identity_auth == 8">已认证（机构负责人、教练）</span> -->
           <span class="class_release" @click="goPage('release')" v-if="hasPower">课程发布</span>
         </div>
         <div class="info">
@@ -23,7 +17,7 @@
             <span class="number">{{info.user.money}}</span>
           </div> -->
           <!-- <div class="recharge" @click="changMoney">充值</div> -->
-          <div class="recharge" @click="viewHistory('score')">积分</div>
+          <div class="recharge" @click="viewHistory('score')">积分：{{info.user.fraction}}</div>
           <div class="withdraw">
             <!-- 提现 -->
           </div>
@@ -57,15 +51,15 @@ export default {
         '未认证': identity_y,
         '认证机构负责人': identity_g,
         '认证教练': identity_j,
-        '认证机构负责人&认证教练': identity_gj
+        '认证导师': identity_gj
       };
       return obj[this.info.user.identity_auth];
     },
     hasPower() {
       const obj = {
         '认证机构负责人': true,
-        '认证教练': true,
-        '认证机构负责人&认证教练': true
+        '认证教练': false,
+        '认证导师': true
       }
       return obj[this.info.user.identity_auth]
     }

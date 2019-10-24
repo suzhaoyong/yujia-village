@@ -84,9 +84,11 @@
                 </template>
             </van-cell>
             <van-popup class="call-center" v-model="show">
-                <div class="hint">建设中，敬请期待...</div>
+                <div class="hint">客服微信：ChinaYogaVillage</div>
                 <div class="phone-img"></div>
-                <div class="hot-line">客服电话　400-100-7191</div>
+                <a href="tel:400-100-7191">
+                    <div class="hot-line">点击拨打 400-100-7191</div>
+                </a>
             </van-popup>
             <van-cell is-link :border="false" to="/changephone">
                 <template slot="title">
@@ -117,7 +119,7 @@ export default {
     methods: {
         getPersonalData() {
             this.$request.get('/personal/home').then(data => {
-                console.log(data);
+                // console.log(data);
                 store.dispatch("INFO", data);
                 sessionStorage.setItem('user data',JSON.stringify(data));
                 const { fraction, icon, name, identity_auth, reason,cashCount,couponCount } = data.user;
@@ -359,7 +361,7 @@ export default {
         }
         .hot-line {
             margin-top: 28px;
-            margin-left: 32px;
+            margin-left: 40px;
         }
     }
     .invitation {

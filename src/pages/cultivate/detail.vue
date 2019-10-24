@@ -15,7 +15,7 @@
               />
             </div>
             <div class="count-div2-imgpic">
-              <img class="img1" :src="train.teacher_img" />
+              <img class="img1" :src="train.teacher_img" :alt="train.theme"/>
             </div>
             <div class="count-div2-text">
               <h4>{{train.theme}}</h4>
@@ -53,9 +53,9 @@
             <div class="div3-crowd">
               <div class="div3-crowd-li" v-for="(item, index) in train.crowd" :key="index">
                 <h5>Easy to navigate</h5>
-                <img v-if="index%3 == 1" :src="icon.crowd_img_1" />
-                <img v-if="index%3 == 2" :src="icon.crowd_img_2" />
-                <img v-if="index%3 == 0" :src="icon.crowd_img_3" />
+                <img v-if="index%3 == 1" :src="icon.crowd_img_1" alt="图片"/>
+                <img v-if="index%3 == 2" :src="icon.crowd_img_2" alt="图片"/>
+                <img v-if="index%3 == 0" :src="icon.crowd_img_3" alt="图片"/>
                 <p>{{item}}</p>
               </div>
             </div>

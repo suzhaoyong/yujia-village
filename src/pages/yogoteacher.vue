@@ -51,7 +51,7 @@
                                     <div class="yogocontunt-swiper">
                                         <div class="yogoswiper-img">
                                             <div class="rhomb1">
-                                                <img :src="namelist.first_img"/>
+                                                <img :src="namelist.first_img" alt="名师头像"/>
                                             </div>
                                             <div class="rhomb2"></div>
                                             <div class="rhomb3"></div>
@@ -96,7 +96,7 @@
                            <div class="yogocontunt2" v-if="this.yogolist.length > 0">
                                <div class="yogocontunt2-list" v-for="(item, index) in yogolist" :key="index" @mouseenter="onMouseOver(index)" @click="yogolink(item)">
                                     <figure class="test5">
-                                        <img :src="item.first_img" class="yogocontunt2-img"/>
+                                        <img :src="item.first_img" class="yogocontunt2-img" :alt="item.name"/>
                                         <div class="test5-title">
                                             <h4>{{item.name}}</h4>
                                             <p class="p1">教龄：{{item.num}}年</p>
@@ -143,6 +143,16 @@
 import Banner from "../components/banner";
 import VDistpicker from 'v-distpicker'
 export default {
+    metaInfo: {
+        title: '瑜伽名师-中国瑜伽村瑜伽名师资讯', // set a title
+        meta: [{       // set meta
+            name: 'keyWords',
+            content: '瑜伽名师，有名的瑜伽老师，中国瑜伽村瑜伽导师'
+        },{
+            name: 'description',
+            content: '中国瑜伽村整合了全球知名导师以及国内许多专业导师的信息，帮助大家解决学瑜伽找哪个导师比较好的问题，可以根据自己的需求和爱好自行选择。'
+        }]
+    },
     components:{
         Banner,
         VDistpicker
@@ -167,6 +177,7 @@ export default {
         value3: '',
         activeClass: 0,
         namelist:[],
+        current:'',
         yogolist:[],
         iconList: [],
         swiperOption: {
@@ -226,6 +237,7 @@ export default {
             _this.total = res.teachers.total;
             _this.currentPage = res.teachers.current_page;
             _this.pagesize = res.teachers.per_page;
+            _this.current = 'listyogo';
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -255,6 +267,7 @@ export default {
             this.total = res.total;
             this.currentPage = res.current_page;
             this.pagesize = res.per_page;
+            this.current = 'inquiry';
             this.$message({
                 message: '查询成功',
                 type: "success"
@@ -304,7 +317,7 @@ export default {
          this.namelist=m[this.i-1][0];
          this.i--;
       },
-      buttonnext(m){
+    buttonnext(m){
         this.namelist=m[this.i+1][0];
         this.i++;
       },
@@ -312,7 +325,12 @@ export default {
     },
     handleCurrentChange(val) {
         this.currentPage = val;
-        this.listyogodata();
+        if(this.current == 'listyogo'){
+            this.listyogodata();
+        }
+        if(this.current == 'inquiry'){
+            this.inquirysearch();
+        }
     },
   }
 };

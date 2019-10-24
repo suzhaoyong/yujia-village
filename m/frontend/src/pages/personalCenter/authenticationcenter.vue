@@ -18,8 +18,8 @@
             </div>
             <div class="bgc hunker3" @click="goFormSubmit('both')">
                 <div class="identity border-color">
-                    <div class="text">负责人&教练</div>
-                    <div class="en-name color3">Principal & Coach</div>
+                    <div class="text">我是导师</div>
+                    <div class="en-name color3">I am a teacher</div>
                 </div>
             </div>
         </div>

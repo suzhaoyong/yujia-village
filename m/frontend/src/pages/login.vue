@@ -1,76 +1,138 @@
 <template>
-  <div class="body-wrap" :style="`${isHeightMore?'height:100%;':''}`">
-    <div class="back_home-wrap" @click="goHome">
-      <div class="back_home" style="font-size: 20px;color: #fff;">
-        <van-icon style="font-size: 20px;color: #fff;" name="wap-home" />
+  <div class="body-box">
+    <div class="body-wrap">
+      <div class="back_home-wrap" @click="goHome">
+        <div class="back_home" style="color: #fff;">
+          <van-icon style="color: #fff;" name="wap-home" />
+        </div>
       </div>
-    </div>
-    <div class="back_login-wrap" v-show="form.type !== 'login'" @click="changeType('login')">
-      <div class="back_login" style="font-size: 20px;color: #fff;">
-        <van-icon style="font-size: 20px;color: #fff;" name="manager" />
+      <div class="back_login-wrap" v-show="form.type !== 'login'" @click="changeType('login')">
+        <div class="back_login" style="color: #fff;">
+          <van-icon style="color: #fff;" name="manager" />
+        </div>
       </div>
-    </div>
-    <div class="body">
-      <!-- <div class="tips" v-show="false">
-        <span :class="isActive('register')" @click="changeType('register')">注册</span>
-        <span :class="isActive('login')" @click="changeType('login')">登录</span>
-        <span :class="isActive('reset')" @click="changeType('reset')">登录</span>
-      </div>-->
-      <div class="form login" v-show="form.type === 'login'">
-        <div class="logo" v-if="false">
-          <img :src="icon.welcome" alt />
-        </div>
-        <div class="input-box flex line">
-          <div class="icon">
-            <img :src="icon.tel" alt />
+      <div class="body">
+        <!-- <div class="tips" v-show="false">
+          <span :class="isActive('register')" @click="changeType('register')">注册</span>
+          <span :class="isActive('login')" @click="changeType('login')">登录</span>
+          <span :class="isActive('reset')" @click="changeType('reset')">登录</span>
+        </div>-->
+        <div class="form login" v-show="form.type === 'login'">
+          <div class="logo" v-if="false">
+            <img :src="icon.welcome" alt />
           </div>
-          <input class="input tel" type="tel" v-model="ruleForm.tel" placeholder="请输入手机号码" />
-        </div>
-        <div class="input-box flex line">
-          <div class="icon key">
-            <img :src="icon.key" alt />
-          </div>
-          <input class="input key" type="password" v-model="ruleForm.password" placeholder="请输入密码" />
-        </div>
-        <div class="input-box flex" v-show="false">
-          <input class="input captcha" type="tel" v-model="ruleForm.captcha" placeholder="请输入验证码" />
-          <div class="code">
-            <div class="img">
-              <img :src="verification.code_img" alt />
+          <div class="input-box flex line">
+            <div class="icon">
+              <img :src="icon.tel" alt />
             </div>
-            <div :class="['refresh', {start: verification.is_tap}]">
-              <img
-                :class="[{start: verification.is_tap}]"
-                @click="getVerificationCode"
-                :src="icon.refresh"
-                alt
-              />
+            <input class="input tel" type="tel" v-model="ruleForm.tel" placeholder="请输入手机号码" />
+          </div>
+          <div class="input-box flex line">
+            <div class="icon key">
+              <img :src="icon.key" alt />
+            </div>
+            <input class="input key" type="password" v-model="ruleForm.password" placeholder="请输入密码" />
+          </div>
+          <div class="input-box flex" v-show="false">
+            <input class="input captcha" type="tel" v-model="ruleForm.captcha" placeholder="请输入验证码" />
+            <div class="code">
+              <div class="img">
+                <img :src="verification.code_img" alt />
+              </div>
+              <div :class="['refresh', {start: verification.is_tap}]">
+                <img
+                  :class="[{start: verification.is_tap}]"
+                  @click="getVerificationCode"
+                  :src="icon.refresh"
+                  alt
+                />
+              </div>
+            </div>
+          </div>
+          <div class="input-btn">
+            <van-button @click="login" type="default">登录</van-button>
+            <div class="login-tips">
+              <span :class="isActive('register')" @click="changeType('register')">立即注册</span>
+              <span :class="isActive('reset')" @click="changeType('reset')">忘记密码</span>
             </div>
           </div>
         </div>
-        <div class="input-btn">
-          <van-button @click="login" type="default">登录</van-button>
-          <div class="login-tips">
-            <span :class="isActive('register')" @click="changeType('register')">立即注册</span>
-            <span :class="isActive('reset')" @click="changeType('reset')">忘记密码</span>
+        <div class="form register" v-show="form.type === 'register'">
+          <div class="input-box reg tel">
+            <van-field type="tel" v-model="registerForm.tel" placeholder />
+          </div>
+          <van-dialog
+            title="请输入下方图形验证码"
+            v-model="to_send_sms.registerForm"
+            @confirm="confirmSend('registerForm')"
+            @cancel="cancelSend('registerForm')"
+            show-cancel-button
+          >
+            <div style="padding-top:20px;"></div>
+            <div class="input-box flex">
+              <div class="reg-captch">
+                <van-field type="tel" v-model="registerForm.captcha" placeholder />
+              </div>
+
+              <div class="code">
+                <div class="img">
+                  <img :src="verification.code_img" alt />
+                </div>
+                <div class="refresh">
+                  <img
+                    @click="getVerificationCode"
+                    :class="[{start: verification.is_tap}]"
+                    :src="icon.refresh"
+                    alt
+                  />
+                </div>
+              </div>
+            </div>
+          </van-dialog>
+          <div class="input-box reg ver_code">
+            <van-field
+              type="tel"
+              v-model="registerForm.verification_code"
+              center
+              clearable
+              placeholder
+            ></van-field>
+            <van-button
+              class="sms"
+              size="small"
+              @click="openImgCode('registerForm')"
+              type="primary"
+            >{{codeTips.msg}}</van-button>
+          </div>
+
+          <div class="input-box reg pwd">
+            <van-field v-model="registerForm.password" type="password" placeholder />
+          </div>
+          <div class="input-box reg nvitation_id">
+            <van-field type="text" v-model="registerForm.invitation_id" placeholder />
+          </div>
+          <div class="input-btn">
+            <van-button type="default" @click="register">注册</van-button>
+            <div class="reg-tips" v-show="false">
+              已有账号？
+              <span style="color:#8FCD71;" :class="isActive('login')" @click="changeType('login')">立即登录</span>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="form register" v-show="form.type === 'register'">
-        <div class="input-box reg tel">
-          <van-field type="tel" v-model="registerForm.tel" placeholder />
-        </div>
-        <van-dialog
-          title="请输入下方图形验证码"
-          v-model="to_send_sms.registerForm"
-          @confirm="confirmSend('registerForm')"
-          @cancel="cancelSend('registerForm')"
-          show-cancel-button
-        >
-          <div style="padding-top:20px;"></div>
+        <div class="form reset" v-show="form.type === 'reset'">
+          <div class="input-box reg re_tel">
+            <van-field type="tel" v-model="reset.tel" placeholder />
+          </div>
+          <van-dialog
+            title="请输入下方图形验证码"
+            v-model="to_send_sms.reset"
+            @confirm="confirmSend('reset')"
+            @cancel="cancelSend('reset')"
+            show-cancel-button
+          >
           <div class="input-box flex">
             <div class="reg-captch">
-              <van-field type="tel" v-model="registerForm.captcha" placeholder />
+              <van-field type="tel" v-model="reset.captcha" placeholder />
             </div>
 
             <div class="code">
@@ -87,131 +149,71 @@
               </div>
             </div>
           </div>
-        </van-dialog>
-        <div class="input-box reg ver_code">
-          <van-field
-            type="tel"
-            v-model="registerForm.verification_code"
-            center
-            clearable
-            placeholder
-          ></van-field>
-          <van-button
-            class="sms"
-            size="small"
-            @click="openImgCode('registerForm')"
-            type="primary"
-          >{{codeTips.msg}}</van-button>
-        </div>
-
-        <div class="input-box reg pwd">
-          <van-field v-model="registerForm.password" type="password" placeholder />
-        </div>
-        <div class="input-box reg nvitation_id">
-          <van-field type="text" v-model="registerForm.invitation_id" placeholder />
-        </div>
-        <div class="input-btn">
-          <van-button type="default" @click="register">注册</van-button>
-          <div class="reg-tips" v-show="false">
-            已有账号？
-            <span style="color:#8FCD71;" :class="isActive('login')" @click="changeType('login')">立即登录</span>
+          </van-dialog>
+          <div class="input-box reg ver_code">
+            <van-field type="tel" v-model="reset.verification_code" center clearable placeholder></van-field>
+            <van-button
+              class="sms"
+              size="small"
+              @click="openImgCode('reset')"
+              type="primary"
+            >{{codeTips.msg}}</van-button>
           </div>
-        </div>
-      </div>
-      <div class="form reset" v-show="form.type === 'reset'">
-        <div class="input-box reg re_tel">
-          <van-field type="tel" v-model="reset.tel" placeholder />
-        </div>
-        <van-dialog
-          title="请输入下方图形验证码"
-          v-model="to_send_sms.reset"
-          @confirm="confirmSend('reset')"
-          @cancel="cancelSend('reset')"
-          show-cancel-button
-        >
-        <div class="input-box flex">
-          <div class="reg-captch">
-            <van-field type="tel" v-model="reset.captcha" placeholder />
+          <div class="input-box reg pwd">
+            <van-field v-model="reset.password" type="password" placeholder />
           </div>
 
-          <div class="code">
-            <div class="img">
-              <img :src="verification.code_img" alt />
-            </div>
-            <div class="refresh">
-              <img
-                @click="getVerificationCode"
-                :class="[{start: verification.is_tap}]"
-                :src="icon.refresh"
-                alt
-              />
+          <div class="input-btn">
+            <van-button type="default" @click="resetPwd">更改</van-button>
+            <div class="reg-tips" v-show="false">
+              <span style="color:#8FCD71;" :class="isActive('login')" @click="changeType('login')">立即登录</span>
             </div>
           </div>
         </div>
-        </van-dialog>
-        <div class="input-box reg ver_code">
-          <van-field type="tel" v-model="reset.verification_code" center clearable placeholder></van-field>
-          <van-button
-            class="sms"
-            size="small"
-            @click="openImgCode('reset')"
-            type="primary"
-          >{{codeTips.msg}}</van-button>
-        </div>
-        <div class="input-box reg pwd">
-          <van-field v-model="reset.password" type="password" placeholder />
-        </div>
-
-        <div class="input-btn">
-          <van-button type="default" @click="resetPwd">更改</van-button>
-          <div class="reg-tips" v-show="false">
-            <span style="color:#8FCD71;" :class="isActive('login')" @click="changeType('login')">立即登录</span>
+      </div>
+      <div v-show="show.sy">
+        <van-dialog title="查看瑜伽村使用协议" v-model="open.sy">
+          <div style="height:60vh;overflow: scroll;">
+            <!-- <iframe src="../../static/doc/瑜伽村使用协议.pdf" width="100%" height="100vh" frameborder="1"></iframe> -->
+            <div id="sy"></div>
           </div>
-        </div>
+          <span slot="footer">
+            <van-button class="sure_btn" type="primary" @click="open.sy = false">确 定</van-button>
+          </span>
+        </van-dialog>
       </div>
-    </div>
-    <div v-show="show.sy">
-      <van-dialog title="查看瑜伽村使用协议" v-model="open.sy">
-        <div style="height:60vh;overflow: scroll;">
-          <!-- <iframe src="../../static/doc/瑜伽村使用协议.pdf" width="100%" height="100vh" frameborder="1"></iframe> -->
-          <div id="sy"></div>
-        </div>
-        <span slot="footer">
-          <van-button class="sure_btn" type="primary" @click="open.sy = false">确 定</van-button>
-        </span>
-      </van-dialog>
-    </div>
-    <div v-show="show.ys">
-      <van-dialog style="margin-top:1rem;" title="查看瑜伽村隐私政策" v-model="open.ys">
-        <div style="height:60vh;overflow: scroll;">
-          <div id="ys"></div>
-          <!-- <iframe src="../../static/doc/瑜伽村隐私政策.pdf" width="100%" height="100%" frameborder="1"></iframe> -->
-        </div>
-        <span slot="footer">
-          <van-button class="sure_btn" type="primary" @click="open.ys = false">确 定</van-button>
-        </span>
-      </van-dialog>
-    </div>
-    <div class="back-wrap" v-show="form.type === 'reset'" @click="changeType('login')">
-      <div class="back">
-        <img :src="icon.back" alt />
+      <div v-show="show.ys">
+        <van-dialog style="margin-top:1rem;" title="查看瑜伽村隐私政策" v-model="open.ys">
+          <div style="height:60vh;overflow: scroll;">
+            <div id="ys"></div>
+            <!-- <iframe src="../../static/doc/瑜伽村隐私政策.pdf" width="100%" height="100%" frameborder="1"></iframe> -->
+          </div>
+          <span slot="footer">
+            <van-button class="sure_btn" type="primary" @click="open.ys = false">确 定</van-button>
+          </span>
+        </van-dialog>
       </div>
-      <span>返回</span>
-    </div>
-    <div class="shuoming" v-show="form.type === 'register'">
-      <p>
-        注册即等于同意
-        <span
-          href="../../../static/doc/瑜伽村隐私政策.DOCX"
-          @click="openFile('ys')"
-          class="file"
-        >《瑜伽村隐私政策》</span>和
-        <span
-          href="../../../static/doc/瑜伽村使用协议.DOCX"
-          @click="openFile('sy')"
-          class="file"
-        >《瑜伽村使用协议》</span>
-      </p>
+      <div class="back-wrap" v-show="form.type === 'reset'" @click="changeType('login')">
+        <div class="back">
+          <img :src="icon.back" alt />
+        </div>
+        <span>返回</span>
+      </div>
+      <div class="shuoming" v-show="form.type === 'register'">
+        <p>
+          注册即等于同意
+          <span
+            href="../../../static/doc/瑜伽村隐私政策.DOCX"
+            @click="openFile('ys')"
+            class="file"
+          >《瑜伽村隐私政策》</span>和
+          <span
+            href="../../../static/doc/瑜伽村使用协议.DOCX"
+            @click="openFile('sy')"
+            class="file"
+          >《瑜伽村使用协议》</span>
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -324,8 +326,18 @@ export default {
     }
   },
   mounted() {
-    this.registerForm.invitation_id = getUrlParams().invitation_id || "";
-    this.registerForm.invitation_id && (this.form.type = "register");
+    const { invitation_id = '', type = ''} = getUrlParams()
+    
+    if(invitation_id) {
+      this.registerForm.invitation_id = invitation_id;
+      this.form.type = "register";
+    }
+
+    const { q_type } = this.$route.query
+    if(type == 'register' || q_type == 'register' ) {
+      this.form.type = "register";
+    }
+
     this.$store.commit("loadStatus", false);
     // this.getVerificationCode();
     this.loadFile("sy");
@@ -364,13 +376,7 @@ export default {
       return getAllUrlParam(str);
     },
     login() {
-      let is_not_pass = false;
-      for (let key of Object.keys(this.ruleForm)) {
-        if (this.ruleForm[key] === "" && key !== "invitation_id") {
-          is_not_pass = true;
-        }
-      }
-      if (is_not_pass) return;
+      
       if (!this.validatorLogin()) return;
 
       const params = Object.assign({}, this.ruleForm);
@@ -419,22 +425,14 @@ export default {
         });
     },
     register() {
-      const urlParams = this.getUrlParams();
       this.registerForm.name = this.registerForm.tel.substr(7);
-      this.registerForm.invitation_id = urlParams.invitation_id || "";
-      let is_not_pass = false;
-      for (let key of Object.keys(this.registerForm)) {
-        if (this.registerForm[key] === "" && key !== "invitation_id") {
-          is_not_pass = true;
-        }
-      }
-      if (is_not_pass) return;
+      
       if (!this.validatorRegister()) return;
       this.postRegister()
     },
     validatorRegister() {
       const validatorFunc = () => {
-        const { tel, password, verification_code } = this.registerForm
+        const { tel, password, verification_code, invitation_id } = this.registerForm
         let validator = new Validator();
 
         validator.add(tel, [{
@@ -459,6 +457,17 @@ export default {
         }, {
             strategy: 'minLength:6',
             errorMsg: '密码长度不能小于 6 位！'
+        }, {
+            strategy: 'maxLength:18',
+            errorMsg: '密码长度不能大于 18 位！'
+        }])
+
+        validator.add(invitation_id, [{
+            strategy: 'isNonEmpty',
+            errorMsg: '邀请码不能为空！'
+        }, {
+            strategy: 'minLength:4',
+            errorMsg: '邀请码不能小于 4 位！'
         }])
         let errorMsg = validator.start()
         return errorMsg
@@ -504,13 +513,6 @@ export default {
         });
     },
     resetPwd() {
-      let is_not_pass = false;
-      for (let key of Object.keys(this.reset)) {
-        if (this.reset[key] === "") {
-          is_not_pass = true;
-        }
-      }
-      if (is_not_pass) return;
       if (!this.validatorReset()) return;
       this.postReset();
     },
@@ -567,15 +569,11 @@ export default {
     changeType(type) {
       this.form.type = type;
       this.resetCode();
-      this.getVerificationCode();
     },
     resetCode() {
       this.ruleForm = {
         tel: "",
         password: ""
-        // captcha: "",
-        // key: "",
-        // invitation_id: ""
       };
       this.registerForm = {
         name: "",
@@ -584,7 +582,7 @@ export default {
         verification_code: "",
         captcha: "",
         key: "",
-        invitation_id: ""
+        invitation_id: getUrlParams().invitation_id || ""
       };
       (this.reset = {
         tel: "",
@@ -825,11 +823,8 @@ export default {
 }
 .back-wrap {
   width: 100%;
-  padding-bottom: 30px;
   color: #999;
-  position: absolute;
-  left: 0;
-  bottom: 0;
+  margin: 20px 0;
   display: flex;
   justify-content: center;
   align-items: flex-end;
@@ -881,21 +876,25 @@ img {
   width: 100%;
   height: 100%;
 }
-.body-wrap {
-  background-image: url("~@/assets/img/login_bg.png");
+.body-box {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
   background-color: #fff;
+  overflow: scroll;
+  z-index: 999;
+
+}
+.body-wrap {
+  background-color: #fff;
+  background-image: url("~@/assets/img/login_bg.png");
   background-size: 100%;
   background-repeat: no-repeat;
-  position: relative;
-  z-index: 10;
-  // height: 100vh;
 }
 .body {
   font-size: 10px;
-  // background: rgba(0, 0, 0, 0.3);
-  // background: #fff;
   width: 100%;
-  // height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;

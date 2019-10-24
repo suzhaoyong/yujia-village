@@ -9,6 +9,7 @@ import NotFound from '@/utils/not_found.js';
 import SessionTitle from '@/utils/session_title.js';
 import MetaInfo from 'vue-meta-info'
 import ElementUI from 'element-ui'
+import MetaInfo from 'vue-meta-info'
 import 'element-ui/lib/theme-chalk/index.css'
 import {Carousel, CarouselItem} from 'element-ui'
 import VueAwesomeSwiper from 'vue-awesome-swiper'

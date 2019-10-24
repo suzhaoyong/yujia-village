@@ -56,7 +56,7 @@
                   <!-- <el-menu-item index="identity">个人信息</el-menu-item> -->
                   <!-- <el-menu-item index="recode">订单中心</el-menu-item> -->
                   <el-menu-item
-                    v-show="info.user.identity_auth === '认证机构负责人&教练中' || info.user.identity_auth === '认证机构负责人中'"
+                    v-show="info.user.identity_auth === '认证导师中' || info.user.identity_auth === '认证机构负责人中'"
                     index="hell"
                   >机构信息</el-menu-item>
                   <el-menu-item index="safety-center">个人信息与安全</el-menu-item>

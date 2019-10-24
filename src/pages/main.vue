@@ -40,7 +40,7 @@
                             <el-carousel-item v-for="item in dataimg" :key="item.id">
                             <div class="contunt2">
                                 <div class="carousel-explain" @click="Learnmore(item)">
-                                    <img :src="item.teacher_img" class="img1"/>
+                                    <img :src="item.teacher_img" class="img1" :alt="item.theme"/>
                                 </div>
                                  <div class="carousel-text" @click="Learnmore(item)">
                                     <div class="textss">{{item.theme}}</div>
@@ -63,7 +63,7 @@
                                     <div class="yogocontunt-swiper">
                                         <div class="yogoswiper-img">
                                             <div class="rhomb1">
-                                                <img :src="namelist.icon_url"/>
+                                                <img :src="namelist.icon_url" :alt="namelist.headline"/>
                                             </div>
                                         </div>
                                         <div class="yogoswiper-text">
@@ -75,7 +75,7 @@
                                         <p class="p1">{{namelist.summary}}</p>
                                     </div>
                                     <div class="icon" v-for="(item,idx) of page2" :key="item.id" :class="activeClass == idx ? 'active':''" @click="selectItem(item,idx)">
-                                        <img class="icon-img-content" :src="item.icon_url">
+                                        <img class="icon-img-content" :src="item.icon_url" :alt="item.headline">
                                     </div>
                                 </swiper-slide>
                                 <div class="swiper-button-prev1" slot="button-prev" @click="buttonprev(pages2)"></div>
@@ -99,7 +99,7 @@
                         <swiper class="carousel5" :options="swiperOption" style="height:707px;width:1200px;">
                             <swiper-slide class="carousel5-item" v-for="(page,index) of pages" :key="index">
                             <div class="carousel-explain2" v-for="item of page" :key="item.id" @click="carouselswiper(item)">
-                                <img :src="item.first_img"/>
+                                <img :src="item.first_img" alt="头像"/>
                                 <div class="explain2-div">
                                     <h3>{{item.name}}</h3>
                                     <span class="explain2-span2">{{item.good_at}}</span>
@@ -126,7 +126,7 @@
                         <el-carousel-item v-for="item in newtrains" :key="item.id">
                             <div class="explain3">
                             <div class="explain3-border">
-                                <img :src="item.teacher_img" class="bg-border-img">
+                                <img :src="item.teacher_img" class="bg-border-img" :alt="item.theme">
                                 <img src="../assets/image62.png" class="bg-border-img2">
                             </div>
                             <div class="explain3-text">
@@ -145,7 +145,7 @@
                         </el-carousel>
                         </div>
                     </div>
-                    <div class="nav-contunt-div10">
+                    <!-- <div class="nav-contunt-div10">
                         <h2><img src="../assets/yujia.png"/>培训机构</h2>
                         <p class="nav-text">Sometimes beauty is so simple</p>
                         <div class="border-left"></div>
@@ -153,9 +153,9 @@
                     </div>
                     <div class="nav-contunt-div7">
                         <div class="explain4">
-                            <img class="nav-div7-img" v-for="(item,index) in clubInfo" :key="index" :src="item.logo" @click="ImgItem(item)"/>
+                            <img class="nav-div7-img" v-for="(item,index) in clubInfo" :key="index" :src="item.logo" @click="ImgItem(item)" :alt="item.club_name"/>
                         </div>
-                    </div>
+                    </div> -->
                     </el-col>
                     <div class="bai">
                         <img src="../assets/image60.png" class="bg-pic8"/>
@@ -169,6 +169,16 @@
 import Banner from "../components/banner";
 import { swiper, swiperSlide } from "vue-awesome-swiper";
 export default {
+  metaInfo: {
+    title: '中国瑜伽村-瑜伽培训-瑜伽咨询-瑜伽综合资讯平台', // set a title
+    meta: [{       // set meta
+      name: 'keyWords',
+      content: '瑜伽培训，瑜伽咨询平台，瑜伽教练培训，瑜伽培训中心，中国瑜伽村'
+    },{
+      name: 'description',
+      content: '中国瑜伽村是全国培训信息丰富的瑜伽行业平台。瑜伽村平台集合了全球瑜伽名师信息，瑜伽培训、瑜伽培训中心、大会信息等。可通过课程类型、地域、时间、老师、价格等信息进行进准分类搜索，是一家专业的瑜伽咨询、瑜伽教练培训平台。'
+    }]
+  },
     components:{
         Banner,
         swiper,
@@ -973,7 +983,7 @@ export default {
                     margin-right: 5px;
                     margin-top: 5px;
                     transition: all 1s;
-                    object-fit: cover;
+                    // object-fit: cover;
                 }
                 .nav-div7-img:hover{
                     width: 235px;

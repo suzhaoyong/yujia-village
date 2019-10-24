@@ -247,6 +247,7 @@ import {
   getFollowTrain
 } from "@/api/personal";
 import { getUserCollect } from "@/api/market";
+import Bus from '@/utils/Bus.js'
 import { mapGetters } from "vuex";
 import store from "@/store";
 import Cloud from "./cloud";
@@ -259,6 +260,9 @@ import money_qin_right from "@/assets/order/money_qin_right.png";
 import yun_1 from "@/assets/order/yun.png";
 import yun_2 from "@/assets/order/yun_2.png";
 export default {
+  metaInfo: {
+    title: '瑜伽村个人中心'
+  },
   components: {
     Cloud
   },
@@ -315,7 +319,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["info"]),
+    ...mapGetters(["info", "isUserNeedLogin"]),
     voucherMoneyImg() {
       return index => {
         const obj = {
@@ -347,10 +351,18 @@ export default {
     }
   },
   mounted() {
-    this.getPersonal();
-    this.followTrain()
-    this.teacherThumbsUp()
-    this.userCollect()
+    if (this.isUserNeedLogin) {
+      Bus.$emit('login', true);
+      return;
+    }
+    
+    this.getPersonal()
+    .then(() => {
+      this.followTrain()
+      this.teacherThumbsUp()
+      this.userCollect()
+    })
+
     // getFollowTrain(424)
     // postThumbsUp(23)
   },
@@ -407,7 +419,7 @@ export default {
     },
     /** 个人信息 */
     getPersonal() {
-      this.$request("/personal/home").then(data => {
+      return this.$request("/personal/home").then(data => {
         store.dispatch("INFO", data);
       });
     },

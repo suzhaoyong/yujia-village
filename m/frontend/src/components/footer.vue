@@ -51,6 +51,8 @@ export default {
       '$route'(to, from){
         const { header_name } = to.meta
         this.active = header_name;
+        console.log(this.active);
+        
         // 防止 路由变化之后的 刷新 tabbar 高亮错误
         window.sessionStorage.setItem('tabbar', header_name);
       }
@@ -85,7 +87,7 @@ export default {
     position: fixed;
     left: 0;
     bottom: 0;
-    z-index: 99;
+    z-index: 999;
 }
 .fix-iphonex-bottom .footer{
   padding-bottom: 34px;

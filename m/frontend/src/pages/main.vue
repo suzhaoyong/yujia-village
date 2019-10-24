@@ -1,11 +1,23 @@
 <template>
   <div class="main_wrap">
+    <!-- 引导注册登录 -->
+    <van-overlay :show="registerBox.show && isUserNeedLogin" style="position: fixed;" >
+      <div class="register-box">
+        <div class="register">
+          <div class="register_btn" @click="() => { this.$router.push('/login?q_type=register')}"></div>
+        </div>
+        <div class="register_close-wrap">
+          <div class="register_close" @click="registerBox.show = false"></div>
+        </div>
+      </div>
+    </van-overlay>
+    <!-- 顶部 logo -->
+    <h1><img class="img" src="../assets/img/yujia_logo.png" alt="瑜伽村"></h1>
     <!-- 轮播图 -->
     <div class="bg_imgs-wrap">
-      <div style="background:#8FCD71; height:64px;width:100%;"></div>
-      <div style="background:#8FCD71; height:64px;width:100%;border-radius: 0 0 50% 50%;"></div>
+      <div class="bgc-color" style="background:#8FCD71; width:100%;"></div>
       <div class="imgs_box">
-        <van-swipe :autoplay="5000" style="height:100%;" indicator-color="white">
+        <van-swipe :autoplay="5000" indicator-color="white">
           <van-swipe-item v-for="(item, index) in main.banner" :key="index"><img :src="item" alt="商品"></van-swipe-item>
         </van-swipe>
       </div>
@@ -38,11 +50,11 @@
         </div>
       </div>
       <div class="tab-box">
-        <div href="" @click="gotoPage('teacher')">
+        <div href="" @click="gotoPage('aboutUs')">
           <div class="tab_pic">
             <img :src="icon.mingshi" alt="图标">
           </div>
-          <div class="tab_tips">名师</div>
+          <div class="tab_tips">关于我们</div>
         </div>
       </div>
     </div>
@@ -60,7 +72,7 @@
       <div class="content_box">
         <div class="train" @click="viewTrain(item)" v-for="(item, index) in main.hot" :key="index">
           <div class="pic">
-            <img :src="item.cover" alt="培训信息">
+            <img :src="item.teacher_img" alt="培训老师">
           </div>
           <div class="info">
             <div class="title"><span class="tag">{{item.type}}</span> <span class="des">{{item.theme}}</span></div>
@@ -107,7 +119,7 @@
       <div class="content_box">
         <div class="club" @click="viewClub(item)" v-for="(item, index) in main.clubs" :key="index">
           <div class="club_pic">
-            <img :src="item.logo" alt="机构">
+            <img :src="item.first_img" alt="机构">
           </div>
           <div class="name">{{item.club_name}}</div>
           <div class="address">{{item.custom_address}}</div>
@@ -118,9 +130,10 @@
 </template>
 <script>
 import Vue from 'vue';
+import { mapGetters } from "vuex";
 import { getMainDetail } from '@/api/main.js'
-import { Swipe, SwipeItem } from 'vant';
-Vue.use(Swipe).use(SwipeItem);
+import { Swipe, SwipeItem, Overlay } from 'vant';
+Vue.use(Swipe).use(SwipeItem).use(Overlay);
 export default {
   data() {
     return {
@@ -130,6 +143,9 @@ export default {
         jigou: require('@/assets/img/jigou.png'),
         mingshi: require('@/assets/img/mingshi.png'),
       },
+      registerBox: {
+        show: true
+      },
       main: {
         banner: [],
         hot: [],
@@ -137,6 +153,9 @@ export default {
         clubs: []
       },
     }
+  },
+  computed: {
+  ...mapGetters(["info", "isUserNeedLogin"]),
   },
   mounted() {
     getMainDetail().then(response => {
@@ -149,7 +168,7 @@ export default {
         train: '/yogamessage/list',
         yagainformation: '/yagainformation',
         yogaknowledge: '/yogaknowledge',
-        teacher: '/teacherClub/list?current=1',
+        aboutUs: '/aboutUs',
         club: '/teacherClub/list?current=0',
       }
       path[type] && this.$router.push(path[type])
@@ -166,6 +185,7 @@ export default {
   }
 }
 </script>
+
 <style lang="scss" scoped>
 *{
   margin: 0;
@@ -178,17 +198,43 @@ img{
   height: 100%;
 }
   .main_wrap{
+    position: relative;
     background: #fff;
     padding-bottom: 20px;
+    // log 图标
+    h1 {
+      position: absolute;
+      top: 12px;
+      left: 16px;
+      z-index: 10;
+      .img {
+        width: 70px;
+        height: 25px;
+      }
+    } 
+    // 轮播图
     .bg_imgs-wrap{
+      position: relative;
+      height: 208px;
+      .bgc-color {
+        height: 92px;
+        border-radius: 0 0 55% 55%;
+      }
       .imgs_box{
-        margin: 0 auto;
-        margin-top: -64PX;
-        width: 344px;
-        height: 160px;
+        position: absolute;
+        top: 46px;
+        left: 0;
+        padding: 0 16px;
+        width: 100%;
+        height: 162px;
         border-radius: 10px;
         overflow: hidden;
-        background: #e5e5e5;
+        .van-swipe {
+          height: 100%;
+          .van-swipe-item {
+            width: 343px!important;
+          }
+        }
         img{
           border-radius: 10px;
         }
@@ -197,15 +243,15 @@ img{
     .tab-wrap{
       padding-top: 20px;
       margin: 0 auto;
-      width: 340px;
+      width: 343px;
       display: flex;
       justify-content: space-between;
       .tab-box{
         div{
-          .tab_pic{
+          .tab_pic {
             width: 44px;
             height: 44px;
-            // background: #e5e5e5;
+            margin: 0 auto;
           }
           .tab_tips{
             padding-top: 10px;
@@ -254,18 +300,23 @@ img{
     .train-wrap{
       margin: 0 auto;
       padding-top: 30px;
-      width: 340px;
+      width: 343px;
       .content_box{
+        margin-top: 18px;
         .train{
-          padding-top: 10px;
+          height: 122px;
+          padding: 12px 18px;
+          // padding-left: 18px; 
+          margin-bottom: 5px; 
+          border-radius: 5px;
           display: flex;
           justify-content: space-between;
+          box-shadow:2px 0px 6px 0px rgba(0, 0, 0, 0.15);
           .pic{
             flex-shrink: 0;
-            width: 140px;
-            height: 90px;
-            background: #e5e5e5;
-            border-radius: 4px;
+            width: 102px;
+            height: 96px;
+            border-radius: 10px;
             overflow: hidden;
           }
           .info{
@@ -298,6 +349,7 @@ img{
               }
             }
             .address_time{
+              margin-bottom: 2px;
               font-size: 10px;
               .address{
                 color:#999;
@@ -397,3 +449,47 @@ img{
     }
   }
 </style>
+
+<style lang="scss" scoped>
+ // 注册引导
+ .van-overlay {
+   z-index: 110 !important;
+ }
+  .register-box{
+    margin-top: 67px;
+    .register{
+      width: 325px;
+      height: 325px;
+      margin: 0 auto;
+      // width: 100%;
+      // height: 100%;
+      position: relative;
+      background-image: url('~@/assets/img/tips-box.png');
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      .register_btn{
+        position: absolute;
+        left: 50%;
+        bottom: 50px;
+        transform: translateX(-50%);
+        width: 50%;
+        height: 100px;
+        // background-color: rgba(57, 119, 36, 0.509);
+      }
+    }
+    .register_close-wrap{
+      margin-top: 40px;
+      display: flex;
+      justify-content: center;
+      .register_close{
+        background-image: url('~@/assets/img/tips-close.png');
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        width: 40px;
+        height: 40px;
+      }
+      
+    }
+  }
+</style>
+

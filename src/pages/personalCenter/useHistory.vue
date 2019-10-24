@@ -89,6 +89,8 @@
 </template>
 <script>
 import { getRechargeRecord, getFractioRecord } from "@/api/personal";
+import Bus from '@/utils/Bus.js'
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -129,6 +131,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["info", "isUserNeedLogin"]),
     isStatus() {
       return item => {
         let obj = {
@@ -148,6 +151,11 @@ export default {
     }
   },
   mounted() {
+    if (this.isUserNeedLogin) {
+      Bus.$emit('login', true);
+      return;
+    }
+
     const { type } = this.$route.params;
     this.them = type;
     getRechargeRecord().then(data => {

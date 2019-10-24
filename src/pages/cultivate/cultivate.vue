@@ -260,6 +260,7 @@ import {
 } from "@/api/personal";
 import { mapGetters } from "vuex";
 export default {
+<<<<<<< HEAD
  metaInfo: {
    title: 'My Example App', // set a title
    meta: [{       // set meta
@@ -270,6 +271,18 @@ export default {
      content: '你皮肤反馈个人'
    }]
  },
+=======
+  metaInfo: {
+    title: '培训信息-瑜伽培训课程-中国瑜伽村培训日程表', // set a title
+    meta: [{       // set meta
+      name: 'keyWords',
+      content: '瑜伽培训，瑜伽培训课程，中国瑜伽村培训课程'
+    },{
+      name: 'description',
+      content: '很多人都不了解瑜伽培训和瑜伽培训的具体课程都有哪些，中国瑜伽村专门整合了各大商家和导师的瑜伽培训日程表和详细介绍，可根据需求和爱好报名。'
+    }]
+  },
+>>>>>>> tth
   components: {
     Banner,
     VDistpicker
