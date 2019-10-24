@@ -36,6 +36,7 @@
 </template>
 <script>
 import areaList from "../../assets/js/area.js";
+import lrz from 'lrz';
 export default {
     data() {
         return {

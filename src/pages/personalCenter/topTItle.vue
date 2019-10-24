@@ -45,7 +45,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["info"]),
+    ...mapGetters(["info", "isUserNeedLogin"]),
     identity() {
       const obj = {
         '未认证': identity_y,
@@ -77,6 +77,7 @@ export default {
       this.$router.push(`/personal/${name}`);
     },
     viewHistory(type) {
+      if(this.isUserNeedLogin) return;
       this.$router.push({
         name: "useHistory",
         params: {

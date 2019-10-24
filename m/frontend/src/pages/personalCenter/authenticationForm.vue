@@ -81,6 +81,7 @@
 </template>
 <script>
 import areaList from "../../assets/js/area.js";
+import lrz from 'lrz';
 const editor_html =`
     <p>
 			</p><p>
