@@ -260,6 +260,16 @@ import {
 } from "@/api/personal";
 import { mapGetters } from "vuex";
 export default {
+ metaInfo: {
+   title: 'My Example App', // set a title
+   meta: [{       // set meta
+    name: 'keyWords',
+    content: 'My Example App'
+   },{
+     name: 'description',
+     content: '你皮肤反馈个人'
+   }]
+ },
   components: {
     Banner,
     VDistpicker

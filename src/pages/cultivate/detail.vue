@@ -95,6 +95,20 @@ import crowd_img_1 from "@/assets/image71.png";
 import crowd_img_2 from "@/assets/image72.png";
 import crowd_img_3 from "@/assets/image73.png";
 export default {
+   metaInfo: {
+   title: 'My Example App', // set a title
+   meta: [{       // set meta
+    name: 'keyWords',
+    content: 'My Example App'
+   },{       // set meta
+    name: 'keyWords',
+    content: 'My Exampl65464f6e4ff'
+   }],
+   link: [{         // set link
+    rel: 'asstes',
+    href: 'https://assets-cdn.github.com/'
+   }]
+ },
   components: {
     SessionTitle
   },

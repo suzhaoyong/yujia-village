@@ -7,6 +7,7 @@ import router from './router'
 import request from '@/utils/request';
 import NotFound from '@/utils/not_found.js';
 import SessionTitle from '@/utils/session_title.js';
+import MetaInfo from 'vue-meta-info'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import {Carousel, CarouselItem} from 'element-ui'
@@ -26,6 +27,7 @@ Vue.use(VueAwesomeSwiper)
 Vue.use(Carousel)
 Vue.use(CarouselItem)
 Vue.use(Vuex)
+Vue.use(MetaInfo)
 Object.defineProperty(Vue.prototype, '$request', { value: request });
 Vue.config.productionTip = false
 
@@ -35,5 +37,8 @@ new Vue({
   router,
   store,
   components: { App },
-  template: '<App/>'
+  template: '<App/>',
+  mounted() {
+    document.dispatchEvent(new Even('render-event'))
+  },
 })
