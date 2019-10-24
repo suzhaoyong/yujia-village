@@ -1,7 +1,7 @@
 <template>
   <div class="main_wrap">
     <!-- 引导注册登录 -->
-    <van-overlay :show="registerBox.show && isUserNeedLogin" style="z-index:201; position: fixed;" >
+    <van-overlay :show="registerBox.show && isUserNeedLogin" style="position: fixed;" >
       <div class="register-box">
         <div class="register">
           <div class="register_btn" @click="() => { this.$router.push('/login?q_type=register')}"></div>
@@ -452,8 +452,11 @@ img{
 
 <style lang="scss" scoped>
  // 注册引导
+ .van-overlay {
+   z-index: 110 !important;
+ }
   .register-box{
-    margin-top: 120px;
+    margin-top: 67px;
     .register{
       width: 325px;
       height: 325px;
