@@ -43,7 +43,7 @@
         </div>
         <div class="overlay" v-if="show" @click="show = false">
             <van-loading v-if="isShow" type="spinner" class="loading" color="#fff" vertical>加载中...</van-loading>
-            <div  class="invite-pic">
+            <div  class="invite-pic" @click.stop="">
                 <img :src="pic_img" alt/>
             </div>
         </div>
@@ -145,6 +145,11 @@ export default {
         },
         // 获取 我邀请的用户，再次邀请的用户
         getMyShareBelow(id, page=1) {
+            if(this.id !== id) {
+                this.info =[];
+                this.finishedSecond = false;
+                this.page2 = 1;
+            }
             this.id = id;
             if(id !== '') {
                 this.$request.post('/personal/myShareBelow/'+id+'?page='+page ).then(data => {

@@ -123,7 +123,7 @@ export default {
     bottom: 80px;
     width: 60px;
     height: 140px;
-    z-index: 100;
+    z-index: 200;
     .register_fixed{
         background-image: url('~@/assets/img/zhuce.png');
         background-size: 100% 100%;
