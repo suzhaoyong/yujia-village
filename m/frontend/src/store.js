@@ -62,7 +62,7 @@ const store = new Vuex.Store({
       commit,
       state
     }, info) {
-      console.log(info)
+      // console.log(info)
       info ? commit('UPDATE_INFO', info)
       : commit('UPDATE_INFO', {})
     },
