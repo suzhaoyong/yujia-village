@@ -3,9 +3,12 @@
         <el-col :span="24">
             <div class="nav-main">
                 <template>
-                    <!-- <Banner></Banner> -->
                     <div class="bg_img">
-                      <img :src="banner" alt />
+                       <el-carousel height="500px" :interval="4000" arrow="hover" trigger="click" direction="horizontal" :autoplay="true">
+                            <el-carousel-item v-for="item in bannerArray" :key="item">
+                                <img :src="item" alt/>
+                            </el-carousel-item>
+                        </el-carousel>
                     </div>
                 </template>
                 <div class="nav-contunt">
@@ -18,25 +21,7 @@
                     <el-col :span="24" class="bg-pic">
                     <div class="nav-contunt-div2">
                         <div class="carousel">
-                        <!-- <el-carousel height="620px" :interval="5000" arrow="always" trigger="click" direction="horizontal" :autoplay="false">
-                            <el-carousel-item v-for="item in dataimg" :key="item.id">
-                                <div class="contunt2">
-                                <div class="carousel-explain">
-                                    <img :src="item.teacher_img" class="img1"/>
-                                    <img :src="item.cover" class="img2"/>
-                                </div>
-                                <div class="carousel-text">
-                                    <h4>{{item.theme}}<span>{{item.name}}</span></h4>
-                                    <el-rate :value="item.diff" disabled disabled-void-color="#c0c4cc" :colors="['#fff']"></el-rate>
-                                </div>
-                                <div class="carousel-detals">
-                                    <span class="span">{{item.intro}}</span>
-                                    <el-button type="text" class="carousel-btn" @click="Learnmore(item)">了解更多</el-button>
-                                </div>
-                            </div>
-                            </el-carousel-item>
-                        </el-carousel> -->
-                        <el-carousel :interval="5000" type="card" trigger="click" height="580px" direction="horizontal" :autoplay="true">
+                        <el-carousel :interval="4000" type="card" trigger="click" height="580px" direction="horizontal" :autoplay="true">
                             <el-carousel-item v-for="item in dataimg" :key="item.id">
                             <div class="contunt2">
                                 <div class="carousel-explain" @click="Learnmore(item)">
@@ -122,7 +107,7 @@
                     <el-col :span="24" class="bg-pic7">
                     <div class="nav-contunt-div6">
                         <div class="navcount">
-                        <el-carousel height="560px" :interval="5000" arrow="hover" trigger="click" direction="horizontal" :autoplay="true">
+                        <el-carousel height="590px" :interval="4000" arrow="hover" trigger="click" direction="horizontal" :autoplay="true">
                         <el-carousel-item v-for="item in newtrains" :key="item.id">
                             <div class="explain3">
                             <div class="explain3-border">
@@ -145,21 +130,20 @@
                         </el-carousel>
                         </div>
                     </div>
-                    <!-- <div class="nav-contunt-div10">
-                        <h2><img src="../assets/yujia.png"/>培训机构</h2>
+                    <div class="nav-contunt-div12">
+                        <h2><img src="../assets/yujia2.png"/>培训机构</h2>
                         <p class="nav-text">Sometimes beauty is so simple</p>
                         <div class="border-left"></div>
                         <div class="border-right"></div>
                     </div>
-                    <div class="nav-contunt-div7">
+                    <div class="nav-contunt-div11">
                         <div class="explain4">
-                            <img class="nav-div7-img" v-for="(item,index) in clubInfo" :key="index" :src="item.logo" @click="ImgItem(item)" :alt="item.club_name"/>
+                            <div class="explain4-img" v-for="(item,index) in clubInfo" :key="index">
+                              <img class="nav-div7-img" :src="item.logo" @click="ImgItem(item)" :alt="item.club_name"/>
+                            </div>
                         </div>
-                    </div> -->
-                    </el-col>
-                    <div class="bai">
-                        <img src="../assets/image60.png" class="bg-pic8"/>
                     </div>
+                    </el-col>
                 </div>
             </div>
         </el-col>
@@ -182,7 +166,7 @@ export default {
         clubInfo:[],
         info:[],
         namelist:[],
-        banner:'',
+        bannerArray:[],
         activeClass: 0,
         i:0,
         swiperOption: {
@@ -246,7 +230,7 @@ export default {
             _this.newtrains = res.new;
             _this.info = res.information;
             _this.namelist=res.information[0];
-            _this.banner = res.banner;
+            _this.bannerArray = res.bannerArray;
         })
         .catch(error => {
             let { response: { data: { errorCode, msg } } } = error;
@@ -340,6 +324,7 @@ export default {
   img{
       width: 100%;
       height: 100%;
+      object-fit: cover;
   }
 }
 .nav-main{
@@ -819,234 +804,6 @@ export default {
               }
             }
         }
-        .bg-pic7{
-            background-image: url('../assets/image7.png');
-            background-repeat: no-repeat;
-            background-size: 100% 100%;
-        .nav-contunt-div6{
-            width: 100%;
-            height: 660px;
-            margin: 0 auto;
-            margin-top: 40px;
-            .navcount{
-                width: 1280px;
-                margin: 0 auto;
-                height: 100%;
-            .explain3{
-                width: 1200px;
-                margin:0 auto;
-                height: 590px;
-                display: flex;
-                cursor:pointer;
-                .explain3-border{
-                    width: 67%;
-                    border: 10px solid #fff;
-                    height: 82%;
-                    margin: 0 auto;
-                    margin-top: 30px;
-                    margin-left: 14%;
-                    position: relative;
-                    .bg-border-img{
-                        width: 85%;
-                        height: 425px;
-                        position: absolute;
-                        top: 7%;
-                        left: -16%;
-                        object-fit: cover;
-                    }
-                    .bg-border-img2{
-                        width: 134px;
-                        height: 36px;
-                        position: absolute;
-                        top: 58%;
-                        left: -27%;
-                    }
-                }
-                .explain3-text{
-                    width: 32%;
-                    height: 82%;
-                    position: relative;
-                    .text-p{
-                        font-size: 20px;
-                        color: #2c2c2c;
-                        position: absolute;
-                        left: -53%;
-                        top: 20%;
-                        display: -webkit-box !important;
-                        -webkit-box-orient: vertical !important;
-                        -webkit-line-clamp:1 !important;// 限制快级元素的文本行数
-                        overflow: hidden !important;
-                    }
-                    .text-p2{
-                        font-size: 14px;
-                        color: #2c2c2c;
-                        position: absolute;
-                        left: 7%;
-                        top: 54%;
-                    }
-                    .text-p3{
-                        font-size: 14px;
-                        color: #2c2c2c;
-                        position: absolute;
-                        left: 7%;
-                        top: 62%;
-                        display: flex;
-                        .el-rate{
-                            margin-top: 1px;
-                        }
-                    }
-                     .text-p4{
-                        font-size: 14px;
-                        color: #2c2c2c;
-                        position: absolute;
-                        left: 7%;
-                        top: 70%;
-                    }
-                    .text-h4{
-                        font-size: 20px;
-                        color: #2c2c2c;
-                        position: absolute;
-                        left: -53%;
-                        top: 30%;
-                        display: -webkit-box !important;
-                        -webkit-box-orient: vertical !important;
-                        -webkit-line-clamp:1 !important;// 限制快级元素的文本行数
-                        overflow: hidden !important;
-                    }
-                    .bg-border-img3{
-                        width: 134px;
-                        height: 34px;
-                        position: absolute;
-                        top: 40%;
-                        right: 0%;
-                    }
-                    .text-butt{
-                        width: 122px;
-                        height: 53px;
-                        background-color: #ffffff;
-                        position: absolute;
-                        left: 7%;
-                        top: 90%;
-                        line-height: 52px;
-                        text-align: center;
-                        transition: all 1s;
-                        .text-button{
-                            color: #2c2c2c;
-                            width: 100%;
-                        }
-                    }
-                    .text-butt:hover{
-                        width: 122px;
-                        height: 53px;
-                        background-color: #ffffff;
-                        position: absolute;
-                        left: 7%;
-                        top: 90%;
-                        line-height: 52px;
-                        text-align: center;
-                        border-radius: 5px;
-                        transform: scale(.9);
-                        .text-button{
-                            color: #2c2c2c;
-                            font-size: 14px;
-                            width: 100%;
-                        }
-                    }
-                }
-            }
-          }
-        }
-        .nav-contunt-div7{
-            width: 100%;
-            height: 100%;
-            margin: 0 auto;
-            margin-top: 10px;
-            .explain4{
-                width: 1200px;
-                margin:0 auto;
-                height: 100%;
-                cursor:pointer;
-                .nav-div7-img{
-                    width: 235px;
-                    height: 198px;
-                    background-color: #eeeeee;
-                    margin-right: 5px;
-                    margin-top: 5px;
-                    transition: all 1s;
-                    // object-fit: cover;
-                }
-                .nav-div7-img:hover{
-                    width: 235px;
-                    height: 198px;
-                    background-color: #eeeeee;
-                    margin-right: 5px;
-                    margin-top: 5px;
-                    transform: scale(.9);
-                }
-                .block2{
-                    text-align: center;
-                    margin: 0 auto;
-                    width: 100%;
-                    display: inline-block;
-                    margin-top: 20px;
-                    .el-pagination {
-                        white-space: nowrap;
-                        padding: 30px 5px;
-                        color: #303133;
-                        font-weight: 700;
-                    }
-                    .el-pagination.is-background .el-pager li:not(.disabled).active {
-                        background-color: #CCE198;
-                        color: #fff;
-                    }
-                    
-                }
-            }
-        }
-        .nav-contunt-div10{
-            width: 1200px;
-            height: 150px;
-            text-align: center;
-            margin: 0 auto;
-            position: relative;
-            .border-left{
-                width: 20%;
-                height: 1px;
-                background-color: #ffffff;
-                position: absolute;
-                top: 41%;
-                left: 19%;
-            }
-            .border-right{
-                width: 20%;
-                height: 1px;
-                background-color: #ffffff;
-                position: absolute;
-                right: 19%;
-                top: 41%;
-            }
-            .nav-text{
-                color: #999999;
-                font-size: 14px;
-                margin-top: 8px;
-            }
-            h2{
-                color: #2c2c2c;
-                font-size: 1.4rem;
-                margin-top: 40px;
-                font-family:Microsoft YaHei;
-                font-weight:bold;
-                padding-top: 24px;
-                img{
-                    width: 28px;
-                    height: 28px;
-                    position: absolute;
-                    left: 42%;
-                    top: 18%;
-                }
-            }
-        }
-    }
         .nav-contunt-div8{
             width: 100%;
             height: 150px;
@@ -1171,19 +928,227 @@ export default {
                 }
             }
         }
-        .bai{
+        .bg-pic7{
+            background-image: url('../assets/image7.png');
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            margin-bottom: -30px;
+        .nav-contunt-div6{
             width: 100%;
-            height: 70px;
-            background-color: #FCFBF1;
-            display: inline-block;
-            position: relative;
-            .bg-pic8{
-                position: absolute;
-                width: 235px;
-                height: 500px;
-                right: 0%;
-                bottom: 3%;
+            height: 690px;
+            margin: 0 auto;
+            margin-top: 40px;
+            .navcount{
+                width: 1280px;
+                margin: 0 auto;
+                height: 100%;
+            .explain3{
+                width: 1200px;
+                margin:0 auto;
+                height: 590px;
+                display: flex;
+                cursor:pointer;
+                .explain3-border{
+                    width: 67%;
+                    border: 10px solid #fff;
+                    height: 85%;
+                    margin: 0 auto;
+                    margin-top: 30px;
+                    margin-left: 14%;
+                    position: relative;
+                    .bg-border-img{
+                        width: 85%;
+                        height: 425px;
+                        position: absolute;
+                        top: 7%;
+                        left: -16%;
+                        object-fit: cover;
+                        border: 6px solid #fff;
+                    }
+                    .bg-border-img2{
+                        width: 134px;
+                        height: 36px;
+                        position: absolute;
+                        top: 58%;
+                        left: -27%;
+                    }
+                }
+                .explain3-text{
+                    width: 32%;
+                    height: 82%;
+                    position: relative;
+                    .text-p{
+                        font-size: 20px;
+                        color: #2c2c2c;
+                        position: absolute;
+                        left: -53%;
+                        top: 20%;
+                        display: -webkit-box !important;
+                        -webkit-box-orient: vertical !important;
+                        -webkit-line-clamp:1 !important;// 限制快级元素的文本行数
+                        overflow: hidden !important;
+                    }
+                    .text-p2{
+                        font-size: 14px;
+                        color: #2c2c2c;
+                        position: absolute;
+                        left: 7%;
+                        top: 54%;
+                    }
+                    .text-p3{
+                        font-size: 14px;
+                        color: #2c2c2c;
+                        position: absolute;
+                        left: 7%;
+                        top: 62%;
+                        display: flex;
+                        .el-rate{
+                            margin-top: 1px;
+                        }
+                    }
+                     .text-p4{
+                        font-size: 14px;
+                        color: #2c2c2c;
+                        position: absolute;
+                        left: 7%;
+                        top: 70%;
+                    }
+                    .text-h4{
+                        font-size: 20px;
+                        color: #2c2c2c;
+                        position: absolute;
+                        left: -53%;
+                        top: 30%;
+                        display: -webkit-box !important;
+                        -webkit-box-orient: vertical !important;
+                        -webkit-line-clamp:1 !important;// 限制快级元素的文本行数
+                        overflow: hidden !important;
+                    }
+                    .bg-border-img3{
+                        width: 134px;
+                        height: 34px;
+                        position: absolute;
+                        top: 40%;
+                        right: 0%;
+                    }
+                    .text-butt{
+                        width: 122px;
+                        height: 53px;
+                        background-color: #ffffff;
+                        position: absolute;
+                        left: 7%;
+                        top: 90%;
+                        line-height: 52px;
+                        text-align: center;
+                        transition: all 1s;
+                        .text-button{
+                            color: #2c2c2c;
+                            width: 100%;
+                        }
+                    }
+                    .text-butt:hover{
+                        width: 122px;
+                        height: 53px;
+                        background-color: #ffffff;
+                        position: absolute;
+                        left: 7%;
+                        top: 90%;
+                        line-height: 52px;
+                        text-align: center;
+                        border-radius: 5px;
+                        transform: scale(.9);
+                        .text-button{
+                            color: #2c2c2c;
+                            font-size: 14px;
+                            width: 100%;
+                        }
+                    }
+                }
             }
+          }
+        }
+        .nav-contunt-div12{
+            width: 1200px;
+            height: 150px;
+            text-align: center;
+            margin: 0 auto;
+            position: relative;
+            .border-left{
+                width: 20%;
+                height: 1px;
+                background-color: #ffffff;
+                position: absolute;
+                top: 41%;
+                left: 19%;
+            }
+            .border-right{
+                width: 20%;
+                height: 1px;
+                background-color: #ffffff;
+                position: absolute;
+                right: 19%;
+                top: 41%;
+            }
+            .nav-text{
+                color: #ffffff;
+                font-size: 14px;
+                margin-top: 8px;
+            }
+            h2{
+                color: #ffffff;
+                font-size: 1.4rem;
+                margin-top: 40px;
+                font-family:Microsoft YaHei;
+                font-weight:bold;
+                padding-top: 24px;
+                position: relative;
+                img{
+                    width: 28px;
+                    height: 28px;
+                    position: absolute;
+                    left: 42%;
+                    top:44%;
+                }
+            }
+        }
+        .nav-contunt-div11{
+            width: 100%;
+            height: 100%;
+            margin: 0 auto;
+            margin-top: 10px;
+            margin-bottom: 10%;
+            .explain4{
+                width: 1200px;
+                margin:0 auto;
+                height: 100%;
+                display: flow-root;
+                cursor:pointer;
+                .explain4-img{
+                    float: left;
+                    width: 110px;
+                    height: 100px;
+                    border: 1px solid;
+                    background-color: #fff;
+                    margin-right: 10px;
+                    margin-bottom: 7px;
+                .nav-div7-img{
+                    width: 100%;
+                    height: 100%;
+                    margin-right: 5px;
+                    margin-top: 5px;
+                    transition: all 1s;
+                    // object-fit: cover;
+                }
+                .nav-div7-img:hover{
+                    width: 100%;
+                    height: 100%;
+                    margin-right: 5px;
+                    margin-top: 5px;
+                    transform: scale(.9);
+                }
+                }
+            }
+        }
         }
     }
 }
