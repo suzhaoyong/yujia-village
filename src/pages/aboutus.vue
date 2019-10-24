@@ -127,6 +127,16 @@
 <script>
 import Banner from "../components/banner";
 export default {
+  metaInfo: {
+    title: '关于我们-中国瑜伽村简介', 
+    meta: [{
+        name: 'keyWords',
+        content: '中国瑜伽村，中国瑜伽村简介'
+    },{
+        name: 'description',
+        content: '中国瑜伽村是全国培训信息丰富的行业平台，本页内容会给大家详细的介绍一下中国瑜伽村，让大家更加的了解我们。'
+    }]
+  },
   components:{
     Banner,
   },

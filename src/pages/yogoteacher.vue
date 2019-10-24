@@ -143,6 +143,16 @@
 import Banner from "../components/banner";
 import VDistpicker from 'v-distpicker'
 export default {
+    metaInfo: {
+        title: '瑜伽名师-中国瑜伽村瑜伽名师资讯', // set a title
+        meta: [{       // set meta
+            name: 'keyWords',
+            content: '瑜伽名师，有名的瑜伽老师，中国瑜伽村瑜伽导师'
+        },{
+            name: 'description',
+            content: '中国瑜伽村整合了全球知名导师以及国内许多专业导师的信息，帮助大家解决学瑜伽找哪个导师比较好的问题，可以根据自己的需求和爱好自行选择。'
+        }]
+    },
     components:{
         Banner,
         VDistpicker

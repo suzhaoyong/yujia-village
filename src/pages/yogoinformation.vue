@@ -78,9 +78,19 @@
 <script>
 import Banner from "../components/banner";
 export default {
-    inject: ["reload"],
+  metaInfo: {
+    title: '瑜伽资讯-瑜伽新闻-中国瑜伽村资讯栏目', 
+    meta: [{
+        name: 'keyWords',
+        content: '瑜伽资讯，中国瑜伽村，瑜伽热点新闻'
+    },{
+        name: 'description',
+        content: '中国瑜伽村整合了行业的一些新闻、要点，以及一些明星学习瑜伽的资讯，还有更多热点新闻等你来看。'
+    }]
+  },
+  inject: ["reload"],
   components:{
-    Banner,
+  Banner,
   },
   data() {
     return {

@@ -169,6 +169,16 @@
 import Banner from "../components/banner";
 import { swiper, swiperSlide } from "vue-awesome-swiper";
 export default {
+  metaInfo: {
+    title: '中国瑜伽村-瑜伽培训-瑜伽咨询-瑜伽综合平台', // set a title
+    meta: [{       // set meta
+      name: 'keyWords',
+      content: '瑜伽培训，瑜伽咨询平台，瑜伽教练培训，瑜伽培训中心，中国瑜伽村'
+    },{
+      name: 'description',
+      content: '中国瑜伽村是全国培训信息丰富的瑜伽行业平台。瑜伽村平台集合了全球瑜伽名师信息，瑜伽培训、瑜伽培训中心、大会信息等。可通过课程类型、地域、时间、老师、价格等信息进行进准分类搜索，是一家专业的瑜伽咨询、瑜伽教练培训平台。'
+    }]
+  },
     components:{
         Banner,
         swiper,

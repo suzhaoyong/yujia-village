@@ -260,6 +260,9 @@ import money_qin_right from "@/assets/order/money_qin_right.png";
 import yun_1 from "@/assets/order/yun.png";
 import yun_2 from "@/assets/order/yun_2.png";
 export default {
+  metaInfo: {
+    title: '瑜伽村个人中心'
+  },
   components: {
     Cloud
   },
