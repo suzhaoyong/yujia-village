@@ -18,55 +18,57 @@
         round
         :style="{ width: '85%', height: '100%' }"
       >
-      <div class="popup">
-        <p>理想价格</p>
-        <div class="popup-price"> <input type="text" v-model="minprice" @click="changeminprice" ref="input1"> — <input type="text" v-model="maxprice" @click="changemaxprice" ref="input2"></div>
-        <div class="popup-diff">
-          <p>难度</p>
-          <ul class="popup-diff-list">
-            <!-- <li
-              v-for="(list, index) in 5" 
-              :key="index" 
-              @click="selected(list, index)" 
-              :class="{'bgcolor':categoryIndex == index}"
-            >{{ index + 1 }}星</li> -->
-            <li>
-              <van-rate
-                v-model='stardiff'
-                :size="20"
-                color='#58B708'
-                void-icon="star"
-                void-color="#eee"
-              />
-            </li>
-          </ul>
-        </div>
+        <div class="popup">
+          <div class="content">
+            <p>理想价格</p>
+            <div class="popup-price"> <input type="text" v-model="minprice" @click="changeminprice" ref="input1"> — <input type="text" v-model="maxprice" @click="changemaxprice" ref="input2"></div>
+            <div class="popup-diff">
+              <p>难度</p>
+              <ul class="popup-diff-list">
+                <!-- <li
+                  v-for="(list, index) in 5" 
+                  :key="index" 
+                  @click="selected(list, index)" 
+                  :class="{'bgcolor':categoryIndex == index}"
+                >{{ index + 1 }}星</li> -->
+                <li>
+                  <van-rate
+                    v-model='stardiff'
+                    :size="20"
+                    color='#58B708'
+                    void-icon="star"
+                    void-color="#eee"
+                  />
+                </li>
+              </ul>
+            </div>
 
-        <div class="area">
-        <p>地区选择</p>
-        <div class="area-box" @click="areashow">
-          <div is-link  class="area-select">{{ selectArea.province || '请选择'}}</div>-
-          <div is-link  class="area-select">{{ selectArea.city || '请选择'}}</div>-
-          <div is-link  class="area-select">{{ selectArea.area || '请选择'}}</div>
+            <div class="area">
+              <p>地区选择</p>
+              <div class="area-box" @click="areashow">
+                <div is-link  class="area-select">{{ selectArea.province || '请选择'}}</div>-
+                <div is-link  class="area-select">{{ selectArea.city || '请选择'}}</div>-
+                <div is-link  class="area-select">{{ selectArea.area || '请选择'}}</div>
+              </div>
+            </div>
+            <div class="types">
+              <p>适用类别</p>
+              <ul class="types-container">
+                <li 
+                  v-for="(list, index) in classfly" 
+                  :key="list.id" 
+                  @click="selected2(list ,index)"
+                  :class="{'bgcolor':spanIndex2.indexOf(index)>-1}"
+                >{{ list.name }}</li>
+              </ul>
+            </div>
+          </div>
+          <div class="button">
+            <div class="reset" @click="resetlist">重置</div>
+            <div class="sure" @click="searchResult">确定</div>
+          </div>
         </div>
-        </div>
-        <div class="types">
-          <p>适用类别</p>
-          <ul class="types-container">
-            <li 
-              v-for="(list, index) in classfly" 
-              :key="list.id" 
-              @click="selected2(list ,index)"
-              :class="{'bgcolor':spanIndex2.indexOf(index)>-1}"
-            >{{ list.name }}</li>
-          </ul>
-        </div>
-        <div class="button">
-          <div class="reset" @click="resetlist">重置</div>
-          <div class="sure" @click="searchResult">确定</div>
-        </div>
-      </div>
-        </van-popup>
+      </van-popup>
         <van-popup v-model="areaisOpen" position="bottom" :style="{ height: '40%' }">
           <van-area
             :area-list="list"
@@ -490,11 +492,13 @@ export default {
     }
     .popup {
       font-size: 14px;
-      height: 100%;
+      // height: 100%;
       margin-left: 23px;
       padding-top: 32px;
       position: relative;
-      z-index: 99;
+      .content {
+        margin-bottom: 49px;
+      }
       &-price {
         float: left;
         input {
@@ -541,7 +545,6 @@ export default {
         width: 100%;
         margin-top: 30px;
         .types-container {
-          height: 220px;
           display: flex;
           padding-bottom: 49px;
           flex-wrap: wrap;
@@ -562,8 +565,9 @@ export default {
       .button {
         width: 100%;
         display: flex;
-        position: absolute;
+        position: fixed;
         bottom: 0;
+        z-index: 1000;
         div {
           width: 49%;
           height: 49px;

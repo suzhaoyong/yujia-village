@@ -110,7 +110,6 @@ export default {
         chooseClassify(id, page = 1) {
             this.finished = false;
             this.id = id;
-            console.log(this.id);
             this.page = 1;
             this.$request.get('/knowledgeList/'+ this.id +'?page='+ page).then(data => {
                 console.log(data);
