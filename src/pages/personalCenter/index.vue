@@ -353,10 +353,13 @@ export default {
       return;
     }
     
-    this.getPersonal();
-    this.followTrain()
-    this.teacherThumbsUp()
-    this.userCollect()
+    this.getPersonal()
+    .then(() => {
+      this.followTrain()
+      this.teacherThumbsUp()
+      this.userCollect()
+    })
+
     // getFollowTrain(424)
     // postThumbsUp(23)
   },
@@ -413,7 +416,7 @@ export default {
     },
     /** 个人信息 */
     getPersonal() {
-      this.$request("/personal/home").then(data => {
+      return this.$request("/personal/home").then(data => {
         store.dispatch("INFO", data);
       });
     },
