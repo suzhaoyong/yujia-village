@@ -172,13 +172,7 @@ export default {
     this.PullUpReload()
   },
   methods: {
-    // changeprice (e) {
-    //   var target = e.target || window.target
-    //   if(target.nodeName === "INPUT") {
-    //     target.value *= ''
-    //     console.log(this.minprice, this.maxprice)
-    //   }
-    // },
+    // 点击改变价格
     changeminprice () {
       this.minprice = ''
       this.$refs.input1.style.color = 'black'
@@ -247,7 +241,6 @@ export default {
     messageList (page = 1) {
       
       this.$request.get('trains?page=' + page).then((res) => {
-        console.log(res)
         if (this.pages < res.last_page ) {
             res.data.map((item) => {
               this.messageLists.push(item);

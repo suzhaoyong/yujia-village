@@ -11,9 +11,6 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
-const PrerenderSpaPlugin = require('prerender-spa-plugin') // prerender-spa-plugin
-const Renderer = PrerenderSPAPlugin.PuppeteerRenderer;
-const path = require('path');
 
 
 const env = require('../config/prod.env')
@@ -38,20 +35,6 @@ const webpackConfig = merge(baseWebpackConfig, {
       'process.env': env
     }),
     // 单页seo配置
-    new PrerenderSpaPlugin({
-      //将渲染的文件放到dist目录下
-          staticDir: path.join(__dirname, '../dist'),
-          //需要预渲染的路由信息
-          routes: [ '/index','/cultivate' ],
-          renderer: new Renderer ({
-            inject: {
-              foo: 'bar'
-            },
-            headless: false,
-            renderAfterDocumentEvent: 'render-event'
-          }),
-    }),
-
     new UglifyJsPlugin({
       uglifyOptions: {
         compress: {
