@@ -71,6 +71,16 @@ import Bus from "@/utils/Bus";
 import { mapGetters } from "vuex"
 import VDistpicker from 'v-distpicker'
 export default {
+    metaInfo: {
+        title: '培训机构-瑜伽培训中心-中国瑜伽村培训平台', // set a title
+        meta: [{       // set meta
+            name: 'keyWords',
+            content: '瑜伽培训机构，瑜伽培训哪家好'
+        },{
+            name: 'description',
+            content: '中国瑜伽村平台整合了国内各大知名且专业的瑜伽培训机构和瑜伽培训中心，要想知道瑜伽培训哪家好，就来找中国瑜伽村。'
+        }]
+    },
     inject: ["reload"],
     components:{
         Banner,

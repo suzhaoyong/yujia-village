@@ -65,6 +65,16 @@
 <script>
 import Banner from "../components/banner";
 export default {
+  metaInfo: {
+    title: '瑜伽名师-瑜伽知识-学瑜伽注意事项-中国瑜伽村知识科普', 
+    meta: [{
+        name: 'keyWords',
+        content: '瑜伽知识，瑜伽注意事项，学瑜伽要注意什么'
+    },{
+        name: 'description',
+        content: '学习瑜伽是一件说简单但是又不简单的事情，学习瑜伽是一条漫漫长路，不仅要学习各种瑜伽的知识还要了解学习瑜伽过程中的注意事项，这些内容中国瑜伽村都给大家一一整理了出来。'
+    }]
+  },
   inject: ["reload"],
   components:{
     Banner,
