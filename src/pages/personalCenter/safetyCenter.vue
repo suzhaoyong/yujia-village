@@ -442,7 +442,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["info"]),
+    ...mapGetters(["info", "isUserNeedLogin"]),
     getIdentity() {
       return type => {
         const obj = {
@@ -474,9 +474,13 @@ export default {
     }
   },
   created() {
-    this.getPersonal();
   },
   mounted() {
+    if (this.isUserNeedLogin) {
+      Bus.$emit('login', true);
+      return;
+    }
+    this.getPersonal();
     const { type } = this.$route.query;
     type && this.tagsChange(type);
   },

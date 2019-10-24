@@ -4,7 +4,7 @@
       <ul class="message-main-head">
         <li @click="defaultRank('default')" :class="{'changeweight': isActive == '1' }"> 默认排序</li>
         <li @click="hostRank('host')" :class="{'changeweight': isActive == '2' }">热度</li>
-        <li @click="priceRank('price')" :class="{'changeweight': isActive == '3' }">价格 {{ priceFlag? '∧': '∨' }}</li>
+        <li @click="priceRank('price')" :class="{'changeweight': isActive == '3' }">价格 <span><van-icon name='arrow-up' v-show="priceFlag"/> <van-icon name='arrow-down' v-show="!priceFlag"/></span></li>
         <li class="head-list" is-link @click="showPopup">筛选</li>
         <!-- <li>价格 ∨</li> -->
       </ul>
@@ -16,7 +16,7 @@
       >
       <div class="popup">
         <p>理想价格</p>
-        <div class="popup-price"> <input type="text" v-model="minprice"> — <input type="text" v-model="maxprice"> </div>
+        <div class="popup-price"> <input type="text" v-model="minprice" @click="changeminprice" ref="input1"> — <input type="text" v-model="maxprice" @click="changemaxprice" ref="input2"></div>
         <div class="popup-diff">
           <p>难度</p>
           <ul class="popup-diff-list">
@@ -168,6 +168,21 @@ export default {
     this.PullUpReload()
   },
   methods: {
+    // changeprice (e) {
+    //   var target = e.target || window.target
+    //   if(target.nodeName === "INPUT") {
+    //     target.value *= ''
+    //     console.log(this.minprice, this.maxprice)
+    //   }
+    // },
+    changeminprice () {
+      this.minprice = ''
+      this.$refs.input1.style.color = 'black'
+    },
+    changemaxprice () {
+      this.maxprice = ''
+      this.$refs.input2.style.color = 'black'
+    },
     // 点击弹出遮罩层
     showPopup() {
       this.show = true;
@@ -182,14 +197,16 @@ export default {
     },
     // 重置按钮功能
     resetlist () {
-        this.selectArea.province = ""
-        this.selectArea.city = ""
-        this.selectArea.area = ""
+        this.selectArea.province = "",
+        this.selectArea.city = "",
+        this.selectArea.area = "",
         this.stardiff = 0, // 难度,整数,小于10
-        this.selectTtype = []
-        this.spanIndex2 = []
-        this.minprice = 0
-        this.maxprice = 50000
+        this.selectTtype = [],
+        this.spanIndex2 = [],
+        this.minprice = 0,
+        this.maxprice = 50000,
+        this.$refs.input1.style.color = '#c2bfbf',
+        this.$refs.input2.style.color = '#c2bfbf'
     },
     // 地址选择
     changeArea (value) {
@@ -336,8 +353,8 @@ export default {
       params = {
         tartTime: "",
         endTime: "",
-        minPrice: '',
-        maxPrice: '',
+        // minPrice: parseInt(this.minprice),
+        // maxPrice: parseInt(this.maxprice),
         province: this.selectArea.province || "",
         city: this.selectArea.city || "",
         area: this.selectArea.area || "",
@@ -353,9 +370,9 @@ export default {
       }))
     },
     getRankParams (keyWord, params = {}) {
-      if (keyWord === 'default') {
+      if (keyWord === 'host') {
         params =Object.assign({}, params, {time: false})
-      } else if (keyWord === 'host') {
+      } else if (keyWord === 'default') { 
         params = Object.assign({}, params, {follow: false})
       } else {
         if(this.priceFlag) {
@@ -454,6 +471,15 @@ export default {
         float: left;
         height: 44px;
         line-height: 44px;
+        span {
+          margin-top: 12px;
+          position: relative;
+          .van-icon {
+            font-size: 20px;
+            position: absolute;
+            top: -1px;
+          }
+        }
       }
       .head-list {
         float: right;
@@ -466,6 +492,7 @@ export default {
       margin-left: 23px;
       padding-top: 32px;
       position: relative;
+      z-index: 99;
       &-price {
         float: left;
         input {
@@ -475,6 +502,7 @@ export default {
           border-radius: 15px;
           text-align: center;
           font-size: 12px;
+          color: #c2bfbf;
         }
       }
       .popup-diff {
@@ -482,6 +510,9 @@ export default {
         &-list {
           font-size: 12px;
           margin-top:20px;
+          .van-rate .van-icon {
+            font-size: 12px !important;
+          }
           li {
             float: left;
             margin-right: 20px;
@@ -506,13 +537,14 @@ export default {
       }
       .types {
         width: 100%;
-        height: 200px;
         margin-top: 30px;
         .types-container {
-          height: 200px;
+          height: 220px;
           display: flex;
+          padding-bottom: 49px;
           flex-wrap: wrap;
           justify-content: space-around;
+          overflow: auto;
           li {
             width: 89px;
             height: 29px;
@@ -550,7 +582,7 @@ export default {
     }
     &-container {
       flex: 1;
-      height: 94%;
+      height: 100%;
       overflow: auto;
       &-list {
         width: 100%;

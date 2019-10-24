@@ -56,22 +56,21 @@
       </div>
       <!-- <div class="content" v-html="detailData.content"></div> -->
     </main>
-  <Footer></Footer>
+  <footer class="footer">
+    <div class="wantstudy" @click="study(detailData.id)">我想学</div>
+    <!-- <div class="wantbuy">立即购买</div> -->
+  </footer>
   </div>
 </template>
 
 <script>
 import Vue from 'vue';
-import Footer from '../../components/footer'
 import '../../dist/swiper.css'
 import { Rate, Popup, NavBar} from 'vant'
 
 
 Vue.use(Rate).use(NavBar).use(Popup)
 export default {
-  components: {
-    Footer
-  },
   data () {
     return {
       detailData: [],
@@ -112,12 +111,30 @@ export default {
       var params = {
           id: this.$route.params.id,
           identity:'train',
-          userId:"",
+          userId: '',
           responseType: 'arraybuffer'
       }
       this.$request.post(`/show/share/photo`,params).then(res => {
         this.shareimg = res;
       })
+    },
+    // 我想学的操作
+    study(id) {
+      console.log(id)
+      if (!JSON.parse(sessionStorage.getItem("user"))) {
+        this.$router.push('/login')
+        Toast('请登录')
+        return;
+      }
+      this.wantStudy(id)
+      return false;
+    },
+    wantStudy(id) {
+      // 调用我想学接口
+      getFollowTrain(id)
+        .then(data => {
+          Toast('已添加至我的收藏');
+        })
     },
   }
 }
@@ -138,6 +155,7 @@ export default {
   .messagedetail {
     width: 100%;
     height: 100%;
+    position: relative;
     header {
       width: 100%;
       height: 44px;
@@ -300,7 +318,7 @@ export default {
             .list-text {
               font-size: 10px;
               margin-top: 10px;
-              overflow: hidden;
+              overflow: auto;
               text-align: center;
             }
           }
@@ -363,6 +381,26 @@ export default {
         font-size: 12px;
       }
     }
-
+  .footer {
+    display: flex;
+    width: 100%;
+    height: 49px;
+    position: fixed;
+    bottom: 0;
+    line-height: 49px;
+    background: #7BBB62;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    div {
+      flex: 1;
+      height: 100%;
+    }
+    .wantstudy {
+    }
+    .wantbuy {
+    }
+  }
   }
 </style>
