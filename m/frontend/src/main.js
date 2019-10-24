@@ -25,7 +25,7 @@ import {
 
 import 'swiper/dist/css/swiper.min.css';
 // 全局配置 lrz，上传图片压缩，不要删了
-import lrz from 'lrz';
+// import lrz from 'lrz';
 
 // import VConsole from 'vconsole';
 

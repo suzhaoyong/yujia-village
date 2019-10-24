@@ -10,7 +10,11 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+
 const PrerenderSpaPlugin = require('prerender-spa-plugin') // prerender-spa-plugin
+const Renderer = PrerenderSPAPlugin.PuppeteerRenderer;
+const path = require('path');
+
 
 const env = require('../config/prod.env')
 
@@ -34,20 +38,20 @@ const webpackConfig = merge(baseWebpackConfig, {
       'process.env': env
     }),
     // 单页seo配置
-    new PrerenderSpaPlugin(
+    new PrerenderSpaPlugin({
       //将渲染的文件放到dist目录下
-          path.join(__dirname, '../dist'),
+          staticDir: path.join(__dirname, '../dist'),
           //需要预渲染的路由信息
-          [ '/index','/cultivate' ],
-          {
-          //在一定时间后再捕获页面信息，使得页面数据信息加载完成
-            captureAfterTime: 50000,
-            //忽略打包错误
-            ignoreJSErrors: true,
-            phantomOptions: '--web-security=false',
-            maxAttempts: 10,
-          },
-    ),
+          routes: [ '/index','/cultivate' ],
+          renderer: new Renderer ({
+            inject: {
+              foo: 'bar'
+            },
+            headless: false,
+            renderAfterDocumentEvent: 'render-event'
+          }),
+    }),
+
     new UglifyJsPlugin({
       uglifyOptions: {
         compress: {
