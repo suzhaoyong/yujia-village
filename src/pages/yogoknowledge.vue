@@ -66,7 +66,7 @@
 import Banner from "../components/banner";
 export default {
   metaInfo: {
-    title: '瑜伽名师-瑜伽知识-学瑜伽注意事项-中国瑜伽村知识科普', 
+    title: '瑜伽知识-学瑜伽注意事项-中国瑜伽村知识科普', 
     meta: [{
         name: 'keyWords',
         content: '瑜伽知识，瑜伽注意事项，学瑜伽要注意什么'

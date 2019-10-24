@@ -170,7 +170,7 @@ import Banner from "../components/banner";
 import { swiper, swiperSlide } from "vue-awesome-swiper";
 export default {
   metaInfo: {
-    title: '中国瑜伽村-瑜伽培训-瑜伽咨询-瑜伽综合平台', // set a title
+    title: '中国瑜伽村-瑜伽培训-瑜伽咨询-瑜伽综合资讯平台', // set a title
     meta: [{       // set meta
       name: 'keyWords',
       content: '瑜伽培训，瑜伽咨询平台，瑜伽教练培训，瑜伽培训中心，中国瑜伽村'
