@@ -463,6 +463,10 @@ export default {
       height: 44px;
       font-size: 12px;
       background: white;
+      opacity: 1;
+      position: fixed;
+      top: 0;
+      z-index: 10;
       li {
         position: relative;
         margin-left: 18px;
@@ -536,7 +540,6 @@ export default {
         .types-container {
           height: 220px;
           display: flex;
-          padding-bottom: 49px;
           flex-wrap: wrap;
           justify-content: space-around;
           overflow: auto;
@@ -578,6 +581,7 @@ export default {
     &-container {
       flex: 1;
       height: 100%;
+      padding-top: 45px;
       overflow: auto;
       &-list {
         width: 100%;

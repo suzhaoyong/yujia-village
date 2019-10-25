@@ -397,10 +397,10 @@ export default {
       flex: 1;
       height: 100%;
     }
-    .wantstudy {
-    }
-    .wantbuy {
-    }
+    // .wantstudy {
+    // }
+    // .wantbuy {
+    // }
   }
   }
 </style>
