@@ -351,13 +351,14 @@ export default {
     }
   },
   mounted() {
-    if (this.isUserNeedLogin) {
-      Bus.$emit('login', true);
-      return;
-    }
+    
     
     this.getPersonal()
     .then(() => {
+        if (this.isUserNeedLogin) {
+        Bus.$emit('login', true);
+        return;
+      }
       this.followTrain()
       this.teacherThumbsUp()
       this.userCollect()

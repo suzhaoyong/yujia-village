@@ -9,71 +9,69 @@
             <van-icon name='arrow-up' v-show="priceFlag"/> <van-icon name='arrow-down' v-show="!priceFlag"/>
           <!-- </span> -->
         </li>
-        <li class="head-list" is-link @click="showPopup">筛选</li>
+        <li class="head-list" is-link @click="isShow = true">筛选</li>
         <!-- <li>价格 ∨</li> -->
       </ul>
-      <van-popup
+      <!-- <van-popup
         v-model="show"
         position="right"
         round
-        :style="{ width: '85%', height: '100%' }"
-      >
-      <div class="popup">
-        <p>理想价格</p>
-        <div class="popup-price"> <input type="text" v-model="minprice" @click="changeminprice" ref="input1"> — <input type="text" v-model="maxprice" @click="changemaxprice" ref="input2"></div>
-        <div class="popup-diff">
-          <p>难度</p>
-          <ul class="popup-diff-list">
-            <!-- <li
-              v-for="(list, index) in 5" 
-              :key="index" 
-              @click="selected(list, index)" 
-              :class="{'bgcolor':categoryIndex == index}"
-            >{{ index + 1 }}星</li> -->
-            <li>
-              <van-rate
-                v-model='stardiff'
-                :size="20"
-                color='#58B708'
-                void-icon="star"
-                void-color="#eee"
-              />
-            </li>
-          </ul>
-        </div>
+        :style="{ width: '85%',height: '100%'}"
+      > -->
+      <div class="shade-layer" v-show="isShow" @click="isShow = false">
+        <div class="right-box" @click.stop="">
+          <div class="popup">
+            <p>理想价格</p>
+            <div class="popup-price"> <input type="text" v-model="minprice" @click="changeminprice" ref="input1"> — <input type="text" v-model="maxprice" @click="changemaxprice" ref="input2"></div>
+            <div class="popup-diff">
+              <p>难度</p>
+              <ul class="popup-diff-list">
+                
+                <li>
+                  <van-rate
+                    v-model='stardiff'
+                    :size="20"
+                    color='#58B708'
+                    void-icon="star"
+                    void-color="#eee"
+                  />
+                </li>
+              </ul>
+            </div>
 
-        <div class="area">
-        <p>地区选择</p>
-        <div class="area-box" @click="areashow">
-          <div is-link  class="area-select">{{ selectArea.province || '请选择'}}</div>-
-          <div is-link  class="area-select">{{ selectArea.city || '请选择'}}</div>-
-          <div is-link  class="area-select">{{ selectArea.area || '请选择'}}</div>
+            <div class="area">
+              <p>地区选择</p>
+              <div class="area-box" @click="areashow">
+                <div is-link  class="area-select">{{ selectArea.province || '请选择'}}</div>-
+                <div is-link  class="area-select">{{ selectArea.city || '请选择'}}</div>-
+                <div is-link  class="area-select">{{ selectArea.area || '请选择'}}</div>
+              </div>
+            </div>
+            <div class="types">
+              <p>适用类别</p>
+              <ul class="types-container">
+                <li 
+                  v-for="(list, index) in classfly" 
+                  :key="list.id" 
+                  @click="selected2(list ,index)"
+                  :class="{'bgcolor':spanIndex2.indexOf(index)>-1}"
+                >{{ list.name }}</li>
+              </ul>
+            </div>
+          </div>
+          <div class="button">
+              <div class="reset" @click="resetlist">重置</div>
+              <div class="sure" @click="searchResult">确定</div>
+          </div>
         </div>
-        </div>
-        <div class="types">
-          <p>适用类别</p>
-          <ul class="types-container">
-            <li 
-              v-for="(list, index) in classfly" 
-              :key="list.id" 
-              @click="selected2(list ,index)"
-              :class="{'bgcolor':spanIndex2.indexOf(index)>-1}"
-            >{{ list.name }}</li>
-          </ul>
-        </div>
-        <div class="button">
-          <div class="reset" @click="resetlist">重置</div>
-          <div class="sure" @click="searchResult">确定</div>
-        </div>
-      </div>
-        </van-popup>
-        <van-popup v-model="areaisOpen" position="bottom" :style="{ height: '40%' }">
-          <van-area
-            :area-list="list"
-            @confirm="changeArea" 
-            @cancel="areaisOpen = false"
-          />
-        </van-popup>
+      </div>  
+      <van-popup v-model="areaisOpen" position="bottom" :style="{ height: '40%' }">
+        <van-area
+          :area-list="list"
+          @confirm="changeArea" 
+          @cancel="areaisOpen = false"
+        />
+      </van-popup>
       <div class="message-main-container">
           <div class="message-main-container-list" v-if="messageLists.length > 0" >
             <div class="message-main-container-list-count" v-for="list in messageLists" :key="list.id" @click="viewdetail(list.id)">
@@ -145,7 +143,7 @@ export default {
       pages: 1,
       stardiff: 0,
       isLoading: false,
-      show: false,
+      isShow: false,
       fruit: {
         data: []
       },
@@ -180,10 +178,6 @@ export default {
     changemaxprice () {
       this.maxprice = ''
       this.$refs.input2.style.color = 'black'
-    },
-    // 点击弹出遮罩层
-    showPopup() {
-      this.show = true;
     },
     // 地址遮罩层
     areashow (e) {
@@ -485,61 +479,98 @@ export default {
         margin-right: 16px;
       }
     }
-    .popup {
-      font-size: 14px;
+    .shade-layer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1024;
       height: 100%;
-      margin-left: 23px;
-      padding-top: 32px;
-      position: relative;
-      z-index: 99;
-      &-price {
-        float: left;
-        input {
-          width: 88px;
-          height: 29px;
-          border: 1px solid #E5E5E5;
-          border-radius: 15px;
-          text-align: center;
-          font-size: 12px;
-          color: #c2bfbf;
-        }
-      }
-      .popup-diff {
-        margin-top:40px;
-        &-list {
-          font-size: 12px;
-          margin-top:20px;
-          .van-rate .van-icon {
-            font-size: 12px !important;
-          }
-          li {
+      background-color: rgba(0,0,0,.7);
+      .right-box {
+        width: 335px;
+        height: 100%;
+        margin-left: 40px;
+        border-radius: 20px 0px 0px 20px;
+        background-color: #fff;
+        overflow: hidden;
+        .popup {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          z-index: 999;
+          overflow: scroll;
+          font-size: 14px;
+          padding-left: 23px;
+          padding-top: 32px;
+          padding-bottom: 60px;
+          &-price {
             float: left;
-            margin-right: 20px;
+            input {
+              width: 88px;
+              height: 29px;
+              border: 1px solid #E5E5E5;
+              border-radius: 15px;
+              text-align: center;
+              font-size: 12px;
+              color: #c2bfbf;
+            }
+          }
+          .popup-diff {
+            margin-top:40px;
+            &-list {
+              font-size: 12px;
+              margin-top:20px;
+              .van-rate .van-icon {
+                font-size: 12px !important;
+              }
+              li {
+                float: left;
+                margin-right: 20px;
+              }
+            }
+          }
+          .area {
+            margin-top: 60px;
+            font-size: 12px;
+            .area-box {
+              display: flex;
+              justify-content: space-around;
+            }
+            .area-select {
+              width: 89px;
+              height: 29px;
+              border: 1px solid #E5E5E5;
+              border-radius: 15px;
+              text-align: center;
+              line-height: 29px;
+            }
+          }
+          .types {
+            width: 100%;
+            margin-top: 30px;
+            .types-container {
+              display: flex;
+              // padding-bottom: 49px;
+              flex-wrap: wrap;
+              justify-content: space-around;
+              overflow: auto;
+              li {
+                width: 89px;
+                height: 29px;
+                border: 1px solid #E5E5E5;
+                border-radius: 15px;
+                text-align: center;
+                line-height: 29px;
+                margin-top:10px;
+                font-size: 11px;
+              }
+            }
           }
         }
-      }
-      .area {
-        margin-top: 60px;
-        font-size: 12px;
-        .area-box {
+        .button {
+          width: 100%;
           display: flex;
-          justify-content: space-around;
-        }
-        .area-select {
-          width: 89px;
-          height: 29px;
-          border: 1px solid #E5E5E5;
-          border-radius: 15px;
-          text-align: center;
-          line-height: 29px;
-        }
-      }
-      .types {
-        width: 100%;
-        margin-top: 30px;
-        .types-container {
-          height: 220px;
-          display: flex;
+<<<<<<< HEAD
           flex-wrap: wrap;
           justify-content: space-around;
           overflow: auto;
@@ -548,36 +579,31 @@ export default {
             height: 29px;
             border: 1px solid #E5E5E5;
             border-radius: 15px;
+=======
+          position: absolute;
+          bottom: 0;
+          z-index: 2000;
+          div {
+            width: 167.5px;
+            height: 49px;
+>>>>>>> tth
             text-align: center;
-            line-height: 29px;
-            margin-top:10px;
-            font-size: 11px;
+            line-height: 49px;
+            font-size: 14px;
+          }
+          .reset {
+            background: #FFFFFF;
+            color: #999999;
+            border-radius: 0px 0px 0px 20px;
+          }
+          .sure {
+            background: #B3D465;
+            color: white;
           }
         }
       }
-      .button {
-        width: 100%;
-        display: flex;
-        position: absolute;
-        bottom: 0;
-        div {
-          width: 49%;
-          height: 49px;
-          text-align: center;
-          line-height: 49px;
-          font-size: 14px;
-        }
-        .reset {
-          background: #FFFFFF;
-          color: #999999;
-          flex: 1;
-        }
-        .sure {
-          background: #B3D465;
-          color: white;
-        }
-      }
     }
+    
     &-container {
       flex: 1;
       height: 100%;

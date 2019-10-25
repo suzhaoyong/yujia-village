@@ -19,12 +19,12 @@
             </div>
             <div class="send">
               当前已成功邀请
-              <span style="color:#5EB131;">{{listData.length}} 位</span>
+              <span style="color:#5EB131;">{{listData.total}} 位</span>
             </div>
             <div class="member">
-              <vue-seamless :data="listData" :class-option="optionSingleHeight" class="warp">
+              <vue-seamless :data="listData.data" :class-option="optionSingleHeight" class="warp">
                 <ul class="item">
-                  <li v-for="item in listData">
+                  <li v-for="item in listData.data">
                     <span class="name">{{item.name}}</span>
                     <span class="num">{{tel(item.tel)}}</span>
                     <span class="date">{{item.created_at}}</span>
@@ -62,8 +62,10 @@ export default {
         wechatQrcodeHelper:
           "<p>微信里点“发现”，扫一下</p><p>二维码便可将本文分享至朋友圈。</p>"
       },
-      listData: [
-      ]
+      listData: {
+        data: [],
+        total: 0
+      }
     };
   },
   computed: {

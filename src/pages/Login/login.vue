@@ -359,8 +359,10 @@ export default {
         })
         .then(_ => {
           // this.getPersonal();
-          this.$router.push('/personal/index')
           // window.location.reload();
+          location.href =  window.location.origin + '/personal/index';
+          // this.$router.push('/personal/index')
+          
         })
         .catch(() => {
           this.isPostting = false;
