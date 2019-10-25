@@ -2,48 +2,45 @@
   <div class="message">
     <main class="message-main">
       <ul class="message-main-head">
+        <li :class="{'changeweight': isActive == '0' }"> 找到以下结果</li>
         <li @click="defaultRank('default')" :class="{'changeweight': isActive == '1' }"> 默认排序</li>
         <li @click="hostRank('host')" :class="{'changeweight': isActive == '2' }">热度</li>
         <li @click="priceRank('price')" :class="{'changeweight': isActive == '3' }">价格 
           <!-- <span> -->
-            <van-icon name='arrow-up' v-show="priceFlag"/> <van-icon name='arrow-down' v-show="!priceFlag"/>
+            <van-icon name='arrow-up' v-show="priceFlag "/>
+            <van-icon name='arrow-down' v-show="!priceFlag"/>
           <!-- </span> -->
         </li>
         <li class="head-list" is-link @click="isShow = true">筛选</li>
         <!-- <li>价格 ∨</li> -->
       </ul>
-      <!-- <van-popup
-        v-model="show"
-        position="right"
-        round
-        :style="{ width: '85%',height: '100%'}"
-      > -->
       <div class="shade-layer" v-show="isShow" @click="isShow = false">
         <div class="right-box" @click.stop="">
           <div class="popup">
             <p>理想价格</p>
-            <div class="popup-price"> <input type="text" v-model="minprice" @click="changeminprice" ref="input1"> — <input type="text" v-model="maxprice" @click="changemaxprice" ref="input2"></div>
-            <div class="popup-diff">
-              <p>难度</p>
-              <ul class="popup-diff-list">
-                
-                <li>
-                  <van-rate
-                    v-model='stardiff'
-                    :size="20"
-                    color='#58B708'
-                    void-icon="star"
-                    void-color="#eee"
-                  />
-                </li>
-              </ul>
+            <div class="popup-price"> 
+              <input type="number" v-model="minprice" placeholder="0"> — 
+              <input type="number" v-model="maxprice" placeholder="50000">
             </div>
-
+            <div class="popup-time">
+              <p>开课时间</p>  
+              <div class="choose-time"> 
+                <div is-link class="time-select" @click="showPopup('startTime')">{{ selectTime.startTime || '请选择'}}</div>
+                <span>-</span> 
+                <div is-link class="time-select" @click="showPopup('endTime')">{{ selectTime.endTime || '请选择'}}</div>
+              </div>     
+            </div>
+            <div class="popup-diff"> 
+              <p>难度</p>
+              <van-rate v-model='stardiff' color='#58B708' void-icon="star" void-color="#eee"/>
+            </div>
             <div class="area">
               <p>地区选择</p>
-              <div class="area-box" @click="areashow">
-                <div is-link  class="area-select">{{ selectArea.province || '请选择'}}</div>-
-                <div is-link  class="area-select">{{ selectArea.city || '请选择'}}</div>-
+              <div class="area-box" @click="showPopup('area')">
+                <div is-link  class="area-select">{{ selectArea.province || '请选择'}}</div>
+                <span>-</span>
+                <div is-link  class="area-select">{{ selectArea.city || '请选择'}}</div>
+                <span>-</span>
                 <div is-link  class="area-select">{{ selectArea.area || '请选择'}}</div>
               </div>
             </div>
@@ -61,15 +58,22 @@
           </div>
           <div class="button">
               <div class="reset" @click="resetlist">重置</div>
-              <div class="sure" @click="searchResult">确定</div>
+              <div class="sure" @click="searchResult('confirm')">确定</div>
           </div>
         </div>
       </div>  
-      <van-popup v-model="areaisOpen" position="bottom" :style="{ height: '40%' }">
-        <van-area
-          :area-list="list"
+      <van-popup v-model="isShowPopup" position="bottom" :style="{ height: '40%' }">
+        <van-datetime-picker v-if="timeOpen"
+          v-model="currentDate"
+          type="date"
+          :min-date="minDate"
+          @confirm="selectDate"
+          @cancel="isShowPopup = false"
+        />
+        <van-area v-if="areaisOpen"
+          :area-list="areaList"
           @confirm="changeArea" 
-          @cancel="areaisOpen = false"
+          @cancel="isShowPopup = false"
         />
       </van-popup>
       <div class="message-main-container">
@@ -81,11 +85,15 @@
               <div class="message-main-container-list-count-text">
                 <h6 class="p1">{{ list.theme }}</h6>
                 <p class="areap">{{ list.custom_address }}</p>
-                <p class="p2"><span class="pprice">￥{{ list.price }}</span><span class="pdiff">难度： {{ list.diff }}</span> </p>
-                <p class="p4">
-                  <span class="p4-hand">观看   {{ list.follow  }}</span>
-                  <span class="p4-eye">想学   {{ list.views }}</span>
+                <p class="p2">
+                  <span class="pprice">￥{{ list.price }}</span>
+                  <span class="pdiff">难度： {{ list.diff }}</span> 
                 </p>
+                <p class="time">{{list.startTime}}~{{list.endTime}}</p>
+                <div class="p4">
+                  <span class="p4-hand">观看   {{ list.views  }}</span>
+                  <span class="p4-eye">想学   {{ list.follow }}</span>
+                </div>
                 <button class="wantbtn" @click.stop="study(list.id)">想学</button>
               </div>
             </div>
@@ -122,7 +130,7 @@ import {
 export default {
   data() {
     return {
-      list: areaList,
+      areaList,
       messageLists: [],
       classfly: [],
       isActive: '1',
@@ -131,17 +139,30 @@ export default {
         city: "",
         area: ""
       },
+      selectTime: {
+        startTime: '',
+        endTime: ''
+      },
+      // 确定选择的时间选择框
+      word: '',
+      // 时间弹框的初始化时间
+      currentDate: new Date(),
+      minDate: new Date(),
+      // 弹出层的显示与否
+      isShowPopup: false,
+      timeOpen: false,
       areaisOpen: false,
-      value: 2,
-      minprice: 0,
-      maxprice: 50000,
+      // 筛选确定的状态字符
+      confirm: '',
+      minprice: '',
+      maxprice: '',
       selectTags: [],
       selectTtype: [],
       spanIndex: [],
       spanIndex2: [],
       page: 1,
       pages: 1,
-      stardiff: 0,
+      stardiff: '',
       isLoading: false,
       isShow: false,
       fruit: {
@@ -149,15 +170,10 @@ export default {
       },
       fruitclasslist: [],
       newList: [],
-      // 添加 fw 类 的判定状态
-      resultFw: false,
-      defaultFw: false,
-      hostFw: false,
-      priceFW: false,
       // 排序关键字
       keyWord: '',
       // 控制价格排序的 flag
-      priceFlag: true,
+      priceFlag: 1,
       aa: 100,
       categoryIndex: -1
     }
@@ -170,41 +186,48 @@ export default {
     this.PullUpReload()
   },
   methods: {
-    // changeprice (e) {
-    //   var target = e.target || window.target
-    //   if(target.nodeName === "INPUT") {
-    //     target.value *= ''
-    //     console.log(this.minprice, this.maxprice)
-    //   }
-    // },
-    changeminprice () {
-      this.minprice = ''
-      this.$refs.input1.style.color = 'black'
-    },
-    changemaxprice () {
-      this.maxprice = ''
-      this.$refs.input2.style.color = 'black'
-    },
     // 地址遮罩层
-    areashow (e) {
-      e = e || event
-      var target = e.target || e.srcElement
-      if (target.nodeName === "DIV") {
-        this.areaisOpen = true
+    showPopup (word) {
+      this.isShowPopup = true
+      if(word === 'area') {
+        this.areaisOpen = true;
+        this.timeOpen = false;
+      } else {
+        this.timeOpen = true;
+        this.areaisOpen = false;
+        this.word = word;
       }
     },
     // 重置按钮功能
     resetlist () {
-        this.selectArea.province = "",
-        this.selectArea.city = "",
-        this.selectArea.area = "",
-        this.stardiff = 0, // 难度,整数,小于10
-        this.selectTtype = [],
-        this.spanIndex2 = [],
-        this.minprice = 0,
-        this.maxprice = 50000,
-        this.$refs.input1.style.color = '#c2bfbf',
-        this.$refs.input2.style.color = '#c2bfbf'
+        this.selectArea.province = "";
+        this.selectArea.city = "";
+        this.selectArea.area = "";
+        this.stardiff = ''; // 难度,整数,小于10
+        this.selectTtype = [];
+        this.spanIndex2 = [];
+        this.minprice = '';
+        this.maxprice = '';
+        this.selectTime.startTime = '',
+        this.selectTime.endTime = ''
+    },
+    selectDate(value) {
+      const date = this.changDate(value);
+      if(this.word === 'startTime') {
+        this.selectTime.startTime = date;
+      } else {
+        this.selectTime.endTime = date; 
+      }
+      this.isShowPopup = false;
+    },
+    // 将日期格式 转化为 日期标准字符串
+    changDate(date) {
+      var y = date.getFullYear();  
+      var m = date.getMonth() + 1;  
+      m = m < 10 ? '0' + m : m;  
+      var d = date.getDate();  
+      d = d < 10 ? ('0' + d) : d;  
+      return y + '-' + m + '-' + d; 
     },
     // 地址选择
     changeArea (value) {
@@ -223,7 +246,7 @@ export default {
         isArray: false,
         name: `${this.selectArea.province} ${this.selectArea.city} ${this.selectArea.area}`
       };
-      this.areaisOpen = false
+      this.isShowPopup = false
       tag.val.length > 1 && this.selectedarea(tag);
     },
     selectedarea (item) {
@@ -239,17 +262,21 @@ export default {
     },
     // 获取列表
     messageList (page = 1) {
-      
       this.$request.get('trains?page=' + page).then((res) => {
-        console.log(res)
-        if (this.pages < res.last_page ) {
-            res.data.map((item) => {
-              this.messageLists.push(item);
-            })
+        // console.log(res);
+        this.fenye(this.pages, res);
+      })
+    },
+    fenye(page, res) {
+      if (page <= res.last_page ) {
+          res.data.map((item) => {
+            item.startTime = item.startTime.replace(/-/g,'.');
+            item.endTime = item.endTime.replace(/-/g,'.');
+            this.messageLists.push(item);
+          })
         } else {
           Toast('只有这么多了');
         }
-    })
     },
     messagetypeList () {
       this.$request.get('trains/type').then((res) => {
@@ -279,20 +306,28 @@ export default {
       var _this = this
       var isScroll = false  // 函数截流
       document.querySelector('.message-main-container').onscroll = function() {
-      if (isScroll) {
-        setTimeout(() => {
-          isScroll = false
-        }, 50)
-      } else {
-      let innerHeight = document.querySelector('.message-main-container').clientHeight // 容器高度
-      let outerHeight = document.querySelector('.message-main-container').scrollHeight // 容器高+滚动高
-      let scrollTop = document.querySelector('.message-main-container').scrollTop  // 滚动高
-      if (innerHeight + scrollTop >= outerHeight ) {
-        _this.pages++
-        _this.messageList(_this.pages)
-        isScroll = true
-      }
-      }
+        if (isScroll) {
+          setTimeout(() => {
+            isScroll = false
+          }, 50)
+        } else {
+          let innerHeight = document.querySelector('.message-main-container').clientHeight // 容器高度
+          let outerHeight = document.querySelector('.message-main-container').scrollHeight // 容器高+滚动高
+          let scrollTop = document.querySelector('.message-main-container').scrollTop  // 滚动高
+          if (innerHeight + scrollTop >= outerHeight ) {
+            _this.pages++
+            if(_this.keyWord !== '') {
+              // 排序
+              _this.getRank(_this.pages,_this.getRankParams(_this.keyWord));
+            } else if(_this.confirm === 'confirm') {
+              // 条件筛选
+              this.getConditiondata(_this.pages, _this.getFiltersParams())
+            } else {
+              _this.messageList(_this.pages);
+            }
+            isScroll = true
+          }
+        }
       }
     },
     
@@ -312,47 +347,25 @@ export default {
         this.spanIndex2.push(index)
       }
     },
-    // 选择排序功能
-    searchResult() {
-      postTrains(this.getFiltersParams()).then((res) => {
-        this.messageLists = res.data
-      })
-      this.show = false
+    // 条件筛选功能
+    searchResult(confirm, page = 1) {
+      this.confirm = confirm;
+      this.pages = 1;
+      this.messageLists = [];
+      this.getConditiondata(page, this.getFiltersParams());
+      this.isActive = '0';
+      this.isShow = false;
     },
-    postGetTrainsList(page = 1, params) {
-      postTrainsList(page, params).then((res) => {
-        this.messageLists = res.data
-      })
-    },
-    getTrainsList(page = 1) {
-      getTrains(page).then(data => {
-        this.messageLists.push(data.all.data)
-        // const mapClassfiy = array =>
-        //   array.map(item => {
-        //     item.type = "classfiy";
-        //     item.value = item.id;
-        //     item.isArray = true;
-        //     return item;
-        //   });
-        // // console.log(data);
-        // const { all, banner ,course_types} = data;
-        // 
-        // // console.log(this.fruit);
-        // if (page > 1) return;
-        // this.classfiy = mapClassfiy(course_types);
-        // // if (course_types.length > 8) {
-        // //   this.classfiy = mapClassfiy(course_types.slice(0, 8));
-        // //   this.moreClassfiy = mapClassfiy(course_types.slice(8));
-        // // }
-        // this.banner = banner;
-      });
+    // 获取条件筛选的数据
+    getConditiondata(page =1, params) {
+      this.conditionQuery(page, params);
     },
     getFiltersParams (params = {}) {
       params = {
-        tartTime: "",
-        endTime: "",
-        // minPrice: parseInt(this.minprice),
-        // maxPrice: parseInt(this.maxprice),
+        startTime: this.selectTime.startTime,
+        endTime: this.selectTime.endTime,
+        minPrice: parseInt(this.minprice),
+        maxPrice: parseInt(this.maxprice),
         province: this.selectArea.province || "",
         city: this.selectArea.city || "",
         area: this.selectArea.area || "",
@@ -362,16 +375,21 @@ export default {
       return params;
     },
     // 排序请求
-    getRank (params) {
-      postTrains(params).then((res => {
-        this.messageLists = res.data
-      }))
+    getRank (page, params) {
+      this.conditionQuery(page, params);
     },
+    // 课程筛选
+    conditionQuery(page, params) {
+      this.$request.post('/trains?page=' + page, params).then(res => {
+        this.fenye(page, res);
+      })
+    },
+    // 排序传递的参数
     getRankParams (keyWord, params = {}) {
       if (keyWord === 'host') {
-        params =Object.assign({}, params, {time: false})
+        params =Object.assign({}, params, {follow: false})
       } else if (keyWord === 'default') { 
-        params = Object.assign({}, params, {follow: false})
+        params = Object.assign({}, params, {time: false})
       } else {
         if(this.priceFlag) {
           params = Object.assign({}, params, {money: true})
@@ -382,36 +400,34 @@ export default {
       return params
     },
     // 价格排序
-    priceRank (keyWord) {
+    priceRank (keyWord, page = 1) {
       this.isActive = '3'
-      this.priceFW = true;
-      this.defaultFW = true;
-      this.hostFW = false;
-      this.resultFW = false;
       this.keyWord = keyWord;
-      this.getRank(this.getRankParams(keyWord))
-      this.priceFlag = !this.priceFlag
+      this.pages = 1;
+      this.messageLists = [];
+      if(this.priceFlag === 1) {
+        this.priceFlag = true;
+      } else {
+        this.priceFlag = !this.priceFlag
+      }
+      this.getRank(page, this.getRankParams(keyWord))
     },
     // 默认排序
-    defaultRank (keyWord) {
+    defaultRank (keyWord, page = 1) {
       this.isActive = '1'
-      this.hostFw = true
-      this.defaultFw = true;
-      this.priceFW = false;
-      this.resultFw = false;
       this.keyWord = keyWord;
-      this.getRank(this.getRankParams(keyWord))
+      this.pages = 1;
+      this.messageLists = [];
+      this.getRank(page, this.getRankParams(keyWord))
     },
     // 热度排序
-    hostRank (keyWord) {
+    hostRank (keyWord, page = 1) {
       this.isActive = '2'
-      this.hostFw = true
-      this.defaultFw = true;
-      this.priceFW = false;
-      this.resultFw = false;
       this.keyWord = keyWord;
-      this.getRank(this.getRankParams(keyWord))
-    }
+      this.pages = 1;
+      this.messageLists = [];
+      this.getRank(page, this.getRankParams(keyWord))
+    },
   }
 }
 </script>
@@ -486,8 +502,9 @@ export default {
       position: fixed;
       top: 0;
       left: 0;
+      bottom: 50px;
       z-index: 1024;
-      height: 100%;
+      // height: 100%;
       background-color: rgba(0,0,0,.7);
       .right-box {
         width: 335px;
@@ -500,14 +517,13 @@ export default {
           position: absolute;
           top: 0;
           bottom: 0;
-          z-index: 999;
+          z-index: 1025;
+          width: 335px;
           overflow: scroll;
           font-size: 14px;
-          padding-left: 23px;
-          padding-top: 32px;
-          padding-bottom: 60px;
+          margin: 32px 10px 60px 24px;
           &-price {
-            float: left;
+            margin-top: 10px;
             input {
               width: 88px;
               height: 29px;
@@ -515,29 +531,44 @@ export default {
               border-radius: 15px;
               text-align: center;
               font-size: 12px;
-              color: #c2bfbf;
             }
           }
+          &-time {
+            margin-top: 10px;
+            .choose-time {
+              display: flex;
+              align-items: center;
+              margin-top: 10px;
+              span {
+                padding: 0 5px;
+              }
+              .time-select {
+                width: 89px;
+                height: 29px;
+                border: 1px solid #E5E5E5;
+                border-radius: 15px;
+                text-align: center;
+                line-height: 29px;
+              }
+            }
+            
+          }
           .popup-diff {
-            margin-top:40px;
-            &-list {
-              font-size: 12px;
-              margin-top:20px;
-              .van-rate .van-icon {
-                font-size: 12px !important;
-              }
-              li {
-                float: left;
-                margin-right: 20px;
-              }
+            margin-top:10px;
+            p {
+              padding-bottom: 10px; 
             }
           }
           .area {
-            margin-top: 60px;
-            font-size: 12px;
+            margin-top: 10px;
+            font-size: 14px;
             .area-box {
               display: flex;
-              justify-content: space-around;
+              align-items: center;
+              margin-top: 10px;
+            }
+            span {
+              padding: 0 5px;
             }
             .area-select {
               width: 89px;
@@ -549,22 +580,20 @@ export default {
             }
           }
           .types {
-            width: 100%;
-            margin-top: 30px;
+            margin-top: 10px;
             .types-container {
+              width: 321px;
               display: flex;
-              // padding-bottom: 49px;
               flex-wrap: wrap;
-              justify-content: space-around;
-              overflow: auto;
               li {
                 width: 89px;
                 height: 29px;
+                margin-top:10px;
+                margin-right: 15px;
                 border: 1px solid #E5E5E5;
                 border-radius: 15px;
                 text-align: center;
                 line-height: 29px;
-                margin-top:10px;
                 font-size: 11px;
               }
             }
@@ -630,7 +659,7 @@ export default {
             position: relative;
             margin-left: 18px;
             .p1 {
-              margin-top: 12px;
+              margin-top: 5px;
               font-size: 14px;
               overflow:hidden;
               text-overflow:ellipsis;
@@ -639,10 +668,10 @@ export default {
             .areap {
               color: #999999;
               font-size: 12px;
-              margin-top: 10px;
+              margin-top: 5px;
             }
             .p2 {
-              margin-top: 15px;
+              margin-top: 10px;
               display: flex;
               justify-content: space-between;
               .pprice {
@@ -655,18 +684,16 @@ export default {
                 font-size: 12px;
               }
             }
+            .time {
+              margin-top: 7px;
+              color: #999;
+            }
             .p4 {
-              display: block;
-              width: 90%;
-              height: 16px;
-              line-height: 30px;
-              padding-top: 15px;
+              margin-top: 15px;
               font-size: 10px;
-              color: #999999;
+              color: #999;
               .p4-eye {
                 margin-left: 10px;
-              }
-              .p4-hand {
               }
             }
             .wantbtn {
