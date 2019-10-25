@@ -2,35 +2,42 @@
     <el-col :span="24">
         <div class="yogoteacher-main">
             <div class="yogoteacher-count-div1">
-                <div class="count-img">
-                    <div class="count-name">
-                        <span class="span1">瑜伽名师<span class="span2"> —{{teacher.name}}</span></span>
-                    </div>
-                    <div class="count-imgpic">
-                      <img :src="teacher.cover" class="count-name-img" :alt="teacher.name"/>
+                <h2><img src="../assets/yujia.png"/>个人简介</h2>
+                <p class="nav-text">Sometimes beauty is so simple</p>
+                <div class="border-left"></div>
+                <div class="border-right"></div>
+            </div>
+            <div class="yogoteacher-count-div3">
+                <img src="../assets/Yogavillage.png" class="count-name-img" alt/>
+                <div class="yogofigcaption-mian">
+                    <div class="yogofigcaption-img">
+                        <img :src="teacher.cover" class="count-name-imgpic" :alt="teacher.name"/>
                     </div>
                     <div class="share3" v-if="config.url">
                         <share :config="config"></share>
                     </div>
-                    <div class="Giveup">
-                        <img src="../assets/Give.png" class="Giveup_img" v-if="Giveupimg" @click="Giveuppraise"/>
-                        <img src="../assets/Givecolor.png" class="Giveup_img" v-if="Giveupimg1" @click="Giveuppraise"/>
-                        <span class="Giveup_num">{{teacher.praise}}</span>
+                    <div class="yogofigcaption">
+                        <div class="count-name">瑜伽名师：{{teacher.name}}</div>
+                        <div class="Giveup">
+                            <img src="../assets/Give2.png" class="Giveup_img" v-if="Giveupimg" @click="Giveuppraise"/>
+                            <img src="../assets/Givecolor.png" class="Giveup_img" v-if="Giveupimg1" @click="Giveuppraise"/>
+                            <span class="Giveup_num">{{teacher.praise}}</span>
+                        </div>
+                        <div class="Giveup-count">
+                            <div class="Giveup2">人气：{{teacher.praise}}</div>
+                            <div class="Giveup3">所在地：{{teacher.teacher_address}}</div>
+                        </div>
+                        <div class="Giveup4">教龄：{{teacher.num}}年</div>
                     </div>
                 </div>
             </div>
-            <div class="yogoteacher-count-div3">
-                <div class="yogofigcaption-mian">
-                <img src="../assets/bgimg20.png" class="count-name-imgpic"/>
-                <div class="yogofigcaption">
-                    <img src="../assets/image82.png" class="count-name-img3" alt="个人简介"/>
+            <div class="yogoteacher-count-div2">
+                <img src="../assets/yogaimg.png" class="yogoimg" alt/>
+                <div class="count-div2-count">
                     <div class="yogofigcaption-title">
-                        <h2>个人简介</h2>
-                        <p class="p1">Good at courses</p>
                         <p class="p2">擅长课程：<span>{{teacher.good_at}}</span></p>
                         <div class="p3">老师介绍：<div v-html="teacher.content" style="width: 88%;line-height: 20px;">{{teacher.content}}</div></div>
                     </div>
-                </div>
                 </div>
             </div>
             <div class="yogoteacher-count-div4">
@@ -154,138 +161,72 @@ export default {
     margin: 0 auto;
     overflow: hidden;
     .yogoteacher-count-div1{
-        width: 100%;
-        height: 730px;
+        width: 1200px;
+        height: 190px;
         margin: 0 auto;
-        background-color: #3E3E3E;
-        background-image: url('../assets/bgteacher.png');
-        background-repeat: no-repeat;
-        background-size: 100% 100%;
-        .count-img{
-            width: 1200px;
-            height: 100%;
-            position: relative;
-            margin: 0 auto;
-            cursor: pointer;
-            .count-name{
-                width: 46%;
-                margin: 0 auto;
-                border: 3px solid #43516A;
-                height: auto;
-                position: absolute;
-                bottom: 15%;
-                left: 2%;
-                transition: all .9s;
-                line-height: 40px;
-                text-align: center;
-                border-image: -webkit-linear-gradient(left, #AE8D66, #43516A) 30 30;
-                border-image: -moz-linear-gradient(left, #AE8D66, #43516A) 30 30;
-                border-image: linear-gradient( left,#AE8D66, #43516A) 30 30;
-                .span1{
-                    font-size:2rem;
-                    font-family:Gulim;
-                    font-weight:400;
-                    font-style:italic;
-                    color: #43516A;
-                    .span2{
-                        font-size:2rem;
-                        font-family:Gulim;
-                        font-weight:400;
-                        font-style:italic;
-                        color: #43516A;
-                    }
-                }
-            }
-            .count-imgpic{
-                width: 340px;
-                height: 374px;
-                position: absolute;
-                top: 10%;
-                left: 19%;
-                background-image: url('../assets/bgimg22.png');
-                background-repeat: no-repeat;
-                background-size: 100% 100%;
-                .count-name-img{
-                    width: 262px;
-                    height: 260px;
-                    position: absolute;
-                    top: 7%;
-                    left: 10%;
-                    object-fit: cover;
-                }
-            }
-            .share3{
-                width: 17%;
-                text-align: center;
-                position: absolute;
-                bottom: 40%;
-                left: 21%;
-           }
-           .Giveup{
-                position: absolute;
-                bottom: 41%;
-                left: 39%;
-                .Giveup_img{
-                    width: 22px;
-                    height: 22px;
-                    margin-bottom: 5px;
-                }
-                .Giveup_num{
-                    color: #fff;
-                   font-size: 14px;
-                   font-family:Microsoft YaHei;
-                   font-weight:400;
-                }
-           }
-        }
-    }
-    .yogoteacher-count-div3{
-        width: 100%;
-        height: auto;
-        background-color: #282828;
+        text-align: center;
+        background-color: #fff;
+        display: flow-root;
         position: relative;
-        .yogofigcaption-mian{
-            width: 100%;
-            margin: 0 auto;
-            height: 100%;
-            background-color: #282828;
-            display: inline-block;
-            .count-name-imgpic{
-                width: 100%;
-                height: 100%;
+            .border-left{
+                width: 20%;
+                height: 1px;
+                background-color: #DCDCDC;
                 position: absolute;
+                top: 41%;
+                left: 19%;
             }
-        .yogofigcaption{
+            .border-right{
+                width: 20%;
+                height: 1px;
+                background-color: #DCDCDC;
+                position: absolute;
+                right: 19%;
+                top: 41%;
+            }
+            .nav-text{
+                color: #999;
+                font-size: 14px;
+                margin-top: 8px;
+            }
+            h2{
+                color: #2C2C2C;
+                font-size: 1.3rem;
+                margin-top: 50px;
+                font-family:Microsoft YaHei;
+                font-weight:bold;
+                position: relative;
+                img{
+                    width: 28px;
+                    height: 28px;
+                    position: absolute;
+                    left: 42%;
+                    top:0%;
+                }
+            }
+    }
+    .yogoteacher-count-div2{
+        background: #fff;
+        height: 100%;
+        position: relative;
+        display: flex;
+        .yogoimg{
+            width: 510px;
+            height: 165px;
+            position: absolute;
+            left: 0px;
+            top: 20%;
+        }
+        .count-div2-count{
             width: 1200px;
             height: 100%;
-            margin:0 auto;
-            display: flex;
-            margin-bottom: 2%;
-            .count-name-img3{
-                width: 400px;
-                height: 520px;
-                margin-top: -5%;
-                margin-left: 26px;
-           }
-           .yogofigcaption-title{
-               width: 58%;
+            margin: 0 auto;
+            .yogofigcaption-title{
+               width:70%;
                height: 100%;
-               margin-left: 6%;
-               h2{
-                    font-size:1.7rem;
-                    font-family:Microsoft YaHei;
-                    font-weight:bold;
-                    color: #fff;
-                    margin-top: 10%;
-               }
-               .p1{
-                   color: #fff;
-                   font-size: 1.1rem;
-                   font-family:Myriad Pro;
-                   font-weight:400;
-               }
+               float: right;
                .p2{
-                   color: #fff;
+                   color: #2c2c2c;
                    font-size: 14px;
                    font-family:Microsoft YaHei;
                    margin-top: 6%;
@@ -293,7 +234,7 @@ export default {
                    margin-bottom: 7px;
                }
                .p3{
-                   color: #fff;
+                   color: #2c2c2c;
                    font-size: 14px;
                    font-family:Microsoft YaHei;
                    font-weight:400;
@@ -301,14 +242,120 @@ export default {
                }
            }
         }
+    }
+    .yogoteacher-count-div3{
+        width: 100%;
+        height: 320px;
+        background-color: #eeeeee;
+        position: relative;
+        .count-name-img{
+            position: absolute;
+            right: 0px;
+            width: 460px;
+            height: 200px;
+            top: 15%;
+        }
+        .yogofigcaption-mian{
+            width: 1200px;
+            height: 100%;
+            margin:0 auto;
+            position: relative;
+            .yogofigcaption-img{
+                width: 300px;
+                height: 320px;
+                position: absolute;
+                top: -70px;
+                .count-name-imgpic{
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+              }
+            }
+             .share3{
+                width: 17%;
+                text-align: center;
+                position: absolute;
+                bottom: 5%;
+                left: 0%;
+           }
+            .yogofigcaption{
+                width: 70%;
+                height: 100%;
+                float: right;
+                .count-name{
+                    font-size:1.3rem;
+                    font-family:Microsoft YaHei;
+                    font-weight:bold;
+                    color:rgba(0,0,0,1);
+                    margin-top: 5%;
+                }
+                .Giveup{
+                    width: 160px;
+                    height: 40px;
+                    border-radius: 20px;
+                    line-height: 42px;
+                    background: #fff;
+                    margin-top: 20px;
+                    text-indent: 30px;
+                    box-shadow:2px 1px 4px 0px rgba(0, 0, 0, 0.08);
+                    .Giveup_img{
+                    width: 22px;
+                    height: 22px;
+                    margin-bottom: 7px;
+                    cursor: pointer;
+                    }
+                    .Giveup_num{
+                    color: #2c2c2c;
+                    font-size: 14px;
+                    font-family:Microsoft YaHei;
+                    font-weight:400;
+                    }
+                }
+                .Giveup-count{
+                    display: flex;
+                    margin-top: 20px;
+                    .Giveup2{
+                        width: 155px;
+                        font-size: 14px;
+                        height: 40px;
+                        border-radius: 20px;
+                        line-height: 42px;
+                        background: #fff;
+                        text-indent: 30px;
+                        color: #999;
+                        box-shadow:2px 1px 4px 0px rgba(0, 0, 0, 0.08);
+                    }
+                    .Giveup3{
+                        width: auto;
+                        font-size: 14px;
+                        height: 40px;
+                        border-radius: 20px;
+                        line-height: 42px;
+                        background: #fff;
+                        color: #999;
+                        padding: 0px 30px;
+                        box-shadow:2px 1px 4px 0px rgba(0, 0, 0, 0.08);
+                        margin-left: 42px;
+                    }
+                }
+                .Giveup4{
+                    width: 150px;
+                    font-size: 14px;
+                    height: 40px;
+                    border-radius:20px;
+                    line-height: 42px;
+                    background: #fff;
+                    margin-top: 20px;
+                    text-indent: 30px;
+                    color: #999;
+                    box-shadow:2px 1px 4px 0px rgba(0, 0, 0, 0.08);
+                }
+            }
         }
     }
     .yogoteacher-count-div4{
         width: 100%;
         height: 100%;
-        background-image: url('../assets/bgimg21.png');
-        background-repeat: no-repeat;
-        background-size: 100% 100%;
         position: relative;
         display: inline-block;
         padding-bottom: 70px;
@@ -370,7 +417,8 @@ export default {
                 .showimg{
                     width: 100%;
                     height: 370px;
-                    background-color: #fff;
+                    background-color: #F6ECF7;
+                    box-shadow:5px 8px 5px 0px rgba(0, 0, 0, 0.08);
                     .showimg1{
                         width: 100%;
                         height: 100%;

@@ -10,76 +10,55 @@
                         </div>
                     </template>
                     <div class="aboutus-count">
-                        <!-- <div class="aboutus-count-div1">
-                            <h2><img src="../assets/yujia.png"/>瑜伽照片墙</h2>
-                            <p class="nav-text">Sometimes beauty is so simple</p>
-                            <div class="border-left"></div>
-                            <div class="border-right"></div>
-                        </div>
-                        <div class="aboutus-count-div2">
-                            <div class="Photowall-img1">
-                                <div class="Photowall-img1-bottom">
-                                    <img class="img1" :src="aboutUs.img1"/>
-                                    <img class="img2" :src="aboutUs.img2"/>
+                        <div class="aboutus-count-div6">
+                            <div class="count-div6-left">
+                                <div class="div6-left-top">
+                                    <h2>瑜伽村平台</h2>
+                                    <p class="nav-text">Sometimes beauty is so simple</p>
                                 </div>
-                                <div class="Photowall-img1-top">
-                                    <img class="img1" :src="aboutUs.img3"/>
-                                    <img class="img2" :src="aboutUs.img4"/>
-                                </div>
-                            </div>
-                            <div class="Photowall-img2">
-                                <img :src="aboutUs.img5"/>
-                            </div>
-                            <div class="Photowall-img3">
-                                <div class="Photowall-img3-bottom">
-                                    <img class="img1" :src="aboutUs.img6"/>
-                                    <img class="img2" :src="aboutUs.img7"/>
-                                </div>
-                                <div class="Photowall-img3-top">
-                                    <img class="img1" :src="aboutUs.img8"/>
-                                    <img class="img2" :src="aboutUs.img9"/>
+                                <div class="div6-left-bottom">
+                                    <img src="../assets/aboutbg.png" class="dim"/>
+                                    <div class="left-bottom-title">
+                                        <h2>简介</h2>
+                                        <p class="nav-text">Sometimes beauty is so simple</p>
+                                        <p class="abouts-p2">中国瑜伽村是全国培训信息最丰富的瑜伽行业平台。瑜伽村平台集合了全球瑜伽名师信息，瑜伽培训、大会信息等。</p>
+                                        <p class="abouts-p2">可通过课程类型、地域、时间、老师、价格等信息进行进准分类搜索，是目前中国培训信息最丰富、搜索最进准的瑜伽行业资讯平台。</p>
+                                        <p class="abouts-p2">我们的目标是要做到：在瑜伽村只有你想要，没有找不到。</p>
+                                        <p class="abouts-p2">目前有100多家培训机构进驻，1000多个知名导师展示，10000多条瑜伽培训、大会信息，三个月目标做到100000位注册瑜伽老师。</p>
+                                        <p class="abouts-p2">中国瑜伽村致力于打造内容最丰富，搜索最精准，注册瑜伽老师最多的的瑜伽行业平台。</p>
+                                        <p class="abouts-p2">只要注册成为中国瑜伽村村民，即可参与推荐分享积分活动，积分可兑换瑜伽培训课程及各种瑜伽活动等优惠礼遇。</p>
+                                        <p class="abouts-p2">详情请见中国瑜伽村积分规则。</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div> -->
-                        <div class="aboutus-count-div3">
-                            <h2><img src="../assets/yujia.png"/>瑜伽村平台简介</h2>
-                            <p class="nav-text">Sometimes beauty is so simple</p>
-                            <div class="border-left"></div>
-                            <div class="border-right"></div>
-                        </div>
-                         <div class="aboutus-count-div4">
-                             <p class="abouts-p">瑜伽村是隶属于上海一伽健身服务有限公司。</p>
-                             <p class="abouts-p">中国瑜伽村是全国培训信息最丰富的瑜伽行业平台。</p>
-                             <p class="abouts-p">瑜伽村平台集合了全球瑜伽名师信息，瑜伽培训、大会信息等。</p>
-                             <p class="abouts-p">可通过课程类型、地域、时间、老师、价格等信息进行进准分类搜索，</p>
-                             <p class="abouts-p">是目前中国培训信息最丰富、搜索最进准的瑜伽行业资讯平台。</p>
-                             <p class="abouts-p">我们的目标是要做到：在瑜伽村只有你想要，没有找不到。</p>
-                             <p class="abouts-p">目前有100多家培训机构进驻，1000多个知名导师展示，10000多条瑜伽培训、大会信息，三个月目标做到100000位注册瑜伽老师。</p>
-                             <p class="abouts-p">中国瑜伽村致力于打造内容最丰富，搜索最精准，注册瑜伽老师最多的的瑜伽行业平台。</p>
-                             <p class="abouts-p">只要注册成为中国瑜伽村村民，</p>
-                             <p class="abouts-p">即可参与推荐分享积分活动，积分可兑换瑜伽培训课程及各种瑜伽活动等优惠礼遇。</p>
-                             <p class="abouts-p">详情请见中国瑜伽村积分规则。</p>
-                        </div>
-                         <div class="aboutus-count-div5">
-                            <h2><img src="../assets/yujia.png"/>瑜伽村积分规则</h2>
-                            <p class="nav-text">Sometimes beauty is so simple</p>
-                            <div class="border-left"></div>
-                            <div class="border-right"></div>
-                        </div>
-                        <el-col :span="24" class="bg-img">
-                         <div class="aboutus-count-div6">
-                             <p class="abouts-p2">注册中国瑜伽村普通村民，即获得500积分；</p>
-                             <p class="abouts-p2">注册后完善个人资料，即获得300积分；</p>
-                             <p class="abouts-p2">邀请好友注册中国瑜伽村普通村民，每邀请注册一个好友，</p>
-                             <p class="abouts-p2">即获得300积分，以此叠加；</p>
-                             <p class="abouts-p2">您邀请的好友再邀请其他好友注册，每邀请注册一个好友，</p>
-                             <p class="abouts-p2">即获得100积分，以此叠加；</p>
-                             <p class="abouts-p2">在2020年1月1日前参与注册推荐积分活动，所有积分翻倍，</p>
-                             <p class="abouts-p2">例：</p>
-                             <p class="abouts-p2">注册获得500积分，现可获得1000积分；</p>
-                             <p class="abouts-p2">完善资料300积分，现可获得600积分；</p>
-                             <p class="abouts-p2">推荐好友300积分，现可获得600积分；</p>
-                             <p class="abouts-p2">以此类推，最终解释权归中国瑜伽村所有。</p>
+                            <div class="count-div6-right">
+                                <div class="div6-right-top">
+                                    <div class="title1">
+                                        <h2>什么是积分</h2>
+                                        <p class="abouts-p3">瑜伽村积分是通过瑜伽爱好者、教练、机构负责人等完成注册、完善信息及邀请注册等途径获得的积分奖励。</p>
+                                    </div>
+                                    <div class="title2">
+                                        <h2>积分的作用</h2>
+                                        <p class="abouts-p3">1.瑜伽老师/普通村民：积分可兑换瑜伽培训课程、瑜伽活动优惠，及抵用课程费用等优惠礼遇.</p>
+                                        <p class="abouts-p3">2.瑜伽名师/瑜伽机构：积分可兑换中国瑜伽村官网及手机端的广告位信息展示.</p>
+                                    </div>
+                                    <img src="../assets/aboutbg2.png" class="dim2"/>
+                                </div>
+                                <div class="div6-right-bottom">
+                                    <img src="../assets/aboutbg3.png" class="dim3"/>
+                                    <div class="right-bottom-title">
+                                        <h2>积分获取规则</h2>
+                                        <p class="nav-text">Sometimes beauty is so simple</p>
+                                        <p class="abouts-p4">注册中国瑜伽村普通村民，即获得500积分；注册后完善个人资料，即获得300积分；</p>
+                                        <p class="abouts-p4">邀请好友注册中国瑜伽村普通村民，每邀请注册一个好友，即获得300积分，以此叠加；</p>
+                                        <p class="abouts-p4">您邀请的好友再邀请其他好友注册，每邀请注册一个好友，即获得100积分，以此叠加；</p>
+                                        <p class="abouts-p4">在2020年1月1日前参与注册推荐积分活动，所有积分翻倍，</p>
+                                        <p class="abouts-p4">例：注册获得500积分，现可获得1000积分；完善资料300积分，现可获得600积分；</p>
+                                        <p class="abouts-p4">推荐好友300积分，现可获得600积分；以此类推，</p>
+                                        <p class="abouts-p4">最终解释权归中国瑜伽村所有。</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="aboutus-count-div7">
                             <h2><img src="../assets/yujia.png"/>瑜伽村网络板块</h2>
@@ -96,9 +75,8 @@
                                  </div>
                              </div>
                         </div>
-                        </el-col>
                         <el-col class="bg-div">
-                            <img class="bg-img2" src="../assets/image49.png"/>
+                        <img class="bg-img2" src="../assets/image49.png"/>
                         <div class="aboutus-count-div9">
                             <h2><img src="../assets/yujia.png"/>联系方式</h2>
                             <p class="nav-text">Sometimes beauty is so simple</p>
@@ -194,247 +172,141 @@ export default {
         height: 100%;
         display: inline-block;
         background: #FCFBF1;
-        .aboutus-count-div1{
-            width: 1200px;
-            height: 150px;
-            text-align: center;
-            margin: 0 auto;
-            position: relative;
-            .border-left{
-                width: 20%;
-                height: 1px;
-                background-color: #dcdcdc;
-                position: absolute;
-                left:19%;
-                top: 41%;
-            }
-            .border-right{
-                width: 20%;
-                height: 1px;
-                background-color: #dcdcdc;
-                position: absolute;
-                right: 19%;
-                top: 41%;
-            }
-            .nav-text{
-                color: #999999;
-                font-size: 14px;
-                margin-top: 8px;
-            }
-            h2{
-                color: #2c2c2c;
-                font-size: 1.4rem;
-                margin-top: 20px;
-                font-family:Microsoft YaHei;
-                font-weight:bold;
-                padding-top: 24px;
-                img{
-                    width: 28px;
-                    height: 28px;
-                    position: absolute;
-                    left: 41%;
-                    top: 18%;
-                }
-            }
-        }
-        .aboutus-count-div2{
+        .aboutus-count-div6{
             width: 100%;
             height: 100%;
-            margin: 0 auto;
             display: flex;
-            justify-content: center;
-            cursor: pointer;
-            .Photowall-img1{
-                .Photowall-img1-bottom{
-                    display: flex;
-                    .img1{
-                        width: 51%;
-                        height: 268px;
-                        margin-right: 5px;
-                        object-fit: cover;
-                    }
-                    .img2{
-                        width: 47%;
-                        height: 268px;
-                        margin-right: 7px;
-                        object-fit: cover;
-                    }
-                }
-                .Photowall-img1-top{
-                    display: flex;
-                    .img1{
-                        width:63%;
-                        height:268px;
-                        margin-right: 7px;
-                        margin-top: 5px;
-                        object-fit: cover;
-                    }
-                    .img2{
-                        width:34%;
-                        height:268px;
-                        margin-top: 5px;
-                        margin-right: 7px;
-                        object-fit: cover;
-                    }
-                }
-            }
-            .Photowall-img2{
-                img{
-                    width: 390px;
-                    height: 100%;
-                    margin-right: 7px;
-                    object-fit: cover;
-                }
-            }
-            .Photowall-img3{
-                .Photowall-img3-bottom{
-                    display: flex;
-                    .img1{
-                        width:64%;
-                        height:268px;
-                        margin-right: 5px;
-                        object-fit: cover;
-                    }
-                    .img2{
-                        width:35%;
-                        height:268px;
-                        object-fit: cover;
-                    }
-                }
-                .Photowall-img3-top{
-                    display: flex;
-                    .img1{
-                        width:51%;
-                        height:268px;
-                        margin-right: 5px;
-                        margin-top: 5px;
-                        object-fit: cover;
-                    }
-                    .img2{
-                        width: 48%;
-                        height: 268px;
-                        margin-top: 5px;
-                        object-fit: cover;
-                    }
-                }
-            }
-        }
-         .aboutus-count-div3{
-            width: 1200px;
-            height: 150px;
-            text-align: center;
-            margin: 0 auto;
-            margin-top: 30px;
-            position: relative;
-            .border-left{
-                width: 20%;
-                height: 1px;
-                background-color: #dcdcdc;
-                position: absolute;
-                left:18%;
-                top: 41%;
-            }
-            .border-right{
-                width: 20%;
-                height: 1px;
-                background-color: #dcdcdc;
-                position: absolute;
-                right: 18%;
-                top: 41%;
-            }
-            .nav-text{
-                color: #999999;
-                font-size: 14px;
-                margin-top: 8px;
-            }
-            h2{
-                color: #2c2c2c;
-                font-size: 1.4rem;
-                margin-top: 40px;
-                padding-top:24px;
-                font-family:Microsoft YaHei;
-                font-weight:bold;
-                img{
-                    width: 28px;
-                    height: 28px;
-                    position: absolute;
-                    left: 40%;
-                    top: 18%;
-                }
-            }
-        }
-        .aboutus-count-div4{
-            width: 1200px;
-            height: 470px;
-            margin: 0 auto;
-            line-height:40px;
             margin-bottom: 4%;
-            .abouts-p{
-                text-align: center;
-                font-size: 14px;
-                color: #2c2c2c;
-                width: 90%;
-                margin: 0 auto;
-            }
-        }
-        .aboutus-count-div5{
-            width: 1200px;
-            height: 150px;
-            text-align: center;
-            margin: 0 auto;
-            position: relative;
-            .border-left{
-                width: 20%;
-                height: 1px;
-                background-color: #dcdcdc;
-                position: absolute;
-                left:18%;
-                top: 41%;
-            }
-            .border-right{
-                width: 20%;
-                height: 1px;
-                background-color: #dcdcdc;
-                position: absolute;
-                right: 18%;
-                top: 41%;
-            }
-            .nav-text{
-                color: #999999;
-                font-size: 14px;
-                margin-top: 8px;
-            }
-            h2{
-                color: #2c2c2c;
-                font-size: 1.4rem;
-                font-family:Microsoft YaHei;
-                font-weight:bold;
-                padding-top: 24px;
-                img{
-                    width: 28px;
-                    height: 28px;
-                    position: absolute;
-                    left: 40%;
-                    top: 18%;
+            .count-div6-left{
+                width: 50%;
+                height: 100%;
+                .div6-left-top{
+                    text-indent: 25%;
+                    margin-top: 10%;
+                    margin-bottom: 5%;
+                    h2{
+                        color: #2c2c2c;
+                        font-size: 1.1rem;
+                        font-family:Microsoft YaHei;
+                        font-weight:bold;
+                    }
+                    .nav-text{
+                        color: #999999;
+                        font-size: 12px;
+                        margin-top: 8px;
+                    }
+                }
+                .div6-left-bottom{
+                    width:100%;
+                    height:551px;
+                    background:rgba(0,0,0,1);
+                    position: relative;
+                    .dim{
+                        opacity:0.6; filter: alpha(opacity=60);
+                        width:100%;
+                        height:100%;
+                        object-fit: cover;
+                    }
+                    .left-bottom-title{
+                        position: absolute;
+                        top: 40px;
+                        left: 42px;
+                        h2{
+                        color: #fff;
+                        font-size: 1.1rem;
+                        font-family:Microsoft YaHei;
+                        font-weight:bold;
+                        }
+                        .nav-text{
+                            color: #fff;
+                            font-size: 12px;
+                            margin-top: 8px;
+                            margin-bottom: 25px;
+                        }
+                        .abouts-p2{
+                            color: #fff;
+                            font-size: 12px;
+                            line-height: 12px;
+                        }
+                    }
                 }
             }
-        }
-        .bg-img{
-            background-image: url('../assets/image48.png');
-            background-repeat: no-repeat;
-            background-size: 100% 100%;
-        .aboutus-count-div6{
-            width: 1200px;
-            height: 500px;
-            margin: 0 auto;
-            line-height: 40px;
-            margin-bottom: 4%;
-            .abouts-p2{
-                text-align: center;
-                font-size: 14px;
-                color: #2c2c2c;
-                width: 90%;
-                margin: 0 auto;
+            .count-div6-right{
+                width: 50%;
+                height: 100%;
+                .div6-right-top{
+                    margin-bottom: 30px;
+                    position: relative;
+                    .title1{
+                        width: 60%;
+                        padding-top: 21%;
+                        padding-left: 5%;
+                        h2{
+                            color: #585858;
+                            font-size: 1rem;
+                            font-family:Microsoft YaHei;
+                            font-weight:bold;
+                        }
+                        .abouts-p3{
+                            color: #585858;
+                            font-size: 12px;
+                        }
+                    }
+                    .title2{
+                        width: 60%;
+                        padding-left: 5%;
+                        h2{
+                            color: #585858;
+                            font-size: 1rem;
+                            font-family:Microsoft YaHei;
+                            font-weight:bold;
+                        }
+                        .abouts-p3{
+                            color: #585858;
+                            font-size: 12px;
+                        }
+                    }
+                    .dim2{
+                        width: 290px;
+                        height: 300px;
+                        position:absolute;
+                        right: 0px;
+                        top: 17%;
+                    }
+                }
+                .div6-right-bottom{
+                    height: 340px;
+                    position: relative;
+                    width: 99%;
+                    float: right;
+                    .dim3{
+                        width:100%;
+                        height:100%;
+                        object-fit: cover;
+                    }
+                    .right-bottom-title{
+                        position: absolute;
+                        top: 40px;
+                        left: 33px;
+                        h2{
+                        color: #fff;
+                        font-size: 1rem;
+                        font-family:Microsoft YaHei;
+                        font-weight:bold;
+                        }
+                        .nav-text{
+                            color: #fff;
+                            font-size: 12px;
+                            margin-top: 8px;
+                            margin-bottom: 25px;
+                        }
+                        .abouts-p4{
+                            color: #fff;
+                            font-size: 12px;
+                            line-height: 12px;
+                        }
+                    }
+                }
             }
         }
         .aboutus-count-div7{
@@ -638,7 +510,6 @@ export default {
                 }
             }
         }
-    }
      .bg-div{
          position: relative;
          .bg-img2{
