@@ -570,23 +570,12 @@ export default {
         .button {
           width: 100%;
           display: flex;
-<<<<<<< HEAD
-          flex-wrap: wrap;
-          justify-content: space-around;
-          overflow: auto;
-          li {
-            width: 89px;
-            height: 29px;
-            border: 1px solid #E5E5E5;
-            border-radius: 15px;
-=======
           position: absolute;
           bottom: 0;
           z-index: 2000;
           div {
             width: 167.5px;
             height: 49px;
->>>>>>> tth
             text-align: center;
             line-height: 49px;
             font-size: 14px;
