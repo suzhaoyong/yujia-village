@@ -7,7 +7,7 @@ import router from './router'
 import request from '@/utils/request';
 import NotFound from '@/utils/not_found.js';
 import SessionTitle from '@/utils/session_title.js';
-import ElementUI from 'element-ui'
+import ELEMENT from 'element-ui'
 
 import MetaInfo from 'vue-meta-info'
 
@@ -24,7 +24,7 @@ import store from '@/store'
 Vue.use(NotFound)
 Vue.use(SessionTitle)
 Vue.use(Share)
-Vue.use(ElementUI)
+Vue.use(ELEMENT)
 Vue.use(VueAwesomeSwiper)
 Vue.use(Carousel)
 Vue.use(CarouselItem)
@@ -41,6 +41,6 @@ new Vue({
   components: { App },
   template: '<App/>',
   mounted() {
-    document.dispatchEvent(new Even('render-event'))
+    document.dispatchEvent(new Event('render-event'))
   },
 })

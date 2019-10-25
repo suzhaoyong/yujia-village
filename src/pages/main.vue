@@ -150,8 +150,6 @@
     </div>
 </template>
 <script>
-import Banner from "../components/banner";
-import { swiper, swiperSlide } from "vue-awesome-swiper";
 export default {
   metaInfo: {
     title: '中国瑜伽村-瑜伽培训-瑜伽咨询-瑜伽综合资讯平台', // set a title
@@ -164,9 +162,9 @@ export default {
     }]
   },
     components:{
-        Banner,
-        swiper,
-        swiperSlide
+        'banner': () => import("@/components/banner"),
+        'swiper': () => import('vue-awesome-swiper/src/swiper'),
+        'swiper-slide': () => import('vue-awesome-swiper/src/slide')
     },
   data() {
     return {
