@@ -8,7 +8,9 @@ import request from '@/utils/request';
 import NotFound from '@/utils/not_found.js';
 import SessionTitle from '@/utils/session_title.js';
 import ElementUI from 'element-ui'
+
 import MetaInfo from 'vue-meta-info'
+
 import 'element-ui/lib/theme-chalk/index.css'
 import {Carousel, CarouselItem} from 'element-ui'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
@@ -37,5 +39,8 @@ new Vue({
   router,
   store,
   components: { App },
-  template: '<App/>'
+  template: '<App/>',
+  mounted() {
+    document.dispatchEvent(new Even('render-event'))
+  },
 })
