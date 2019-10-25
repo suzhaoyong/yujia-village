@@ -251,7 +251,7 @@ export default {
   }
 };
 </script>
-<style lang="scss" scope>
+<style lang="scss" scoped>
 .test6{
     width: 100%;
     height: 100%;

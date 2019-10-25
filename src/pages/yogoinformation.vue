@@ -168,7 +168,7 @@ export default {
   }
 };
 </script>
-<style lang="scss" scope>
+<style lang="scss" scoped>
 .bg_img2 {
   width: 100%;
   height: 100%;
