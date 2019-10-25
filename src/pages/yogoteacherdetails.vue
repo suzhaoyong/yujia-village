@@ -154,7 +154,7 @@ export default {
   }
 };
 </script>
-<style lang="scss" scope>
+<style lang="scss" scoped>
 .yogoteacher-main{
     width: 100%;
     height: 100%;
