@@ -294,7 +294,8 @@ export default {
   margin: 0 auto;
   background: #e8f5db;
   height: 64px;
-  margin-left: 20%;
+  // margin-left: 20%;
+  float: right;
 }
 .routlink{
   text-decoration: none;
@@ -322,7 +323,7 @@ export default {
   height: 65px;
   font-size: 16px;
   color: #2c2c2c;
-  padding: 0 20px;
+  padding: 0 28px;
   cursor: pointer;
   -webkit-transition: border-color 0.3s, background-color 0.3s, color 0.3s;
   transition: border-color 0.3s, background-color 0.3s, color 0.3s;
@@ -384,7 +385,7 @@ export default {
       }
       .span2 {
         padding-right: 20px;
-        margin-left: 68%;
+        margin-left: 75%;
         color: #2c2c2c;
       }
     }
@@ -399,7 +400,7 @@ export default {
       .head-left {
         width: 15%;
         text-align: center;
-        margin-left: 5%;
+        // margin-left: 5%;
         height: 44px;
         line-height: 44px;
         img {
