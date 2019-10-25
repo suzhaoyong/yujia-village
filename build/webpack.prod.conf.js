@@ -14,7 +14,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 
 const env = require('../config/prod.env')
-
+const PrerenderSpaPlugin = require('prerender-spa-plugin') // prerender-spa-plugin
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
     rules: utils.styleLoaders({
@@ -35,15 +35,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       'process.env': env
     }),
     // 单页seo配置
-    new UglifyJsPlugin({
-      uglifyOptions: {
-        compress: {
-          warnings: false
-        }
-      },
-      sourceMap: config.build.productionSourceMap,
-      parallel: true
-    }),
+    
     // extract css into its own file
     new ExtractTextPlugin({
       filename: utils.assetsPath('css/[name].[contenthash].css'),
