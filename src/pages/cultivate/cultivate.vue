@@ -831,7 +831,7 @@ img {
         margin-top: 1.3rem;
 
         .cultivate1-one {
-          width: 100%;
+          // width: 100%;
           height: 4.1rem;
           line-height: 4.1rem;
           padding-left: 3rem;
@@ -858,7 +858,7 @@ img {
           }
         }
         .cultivate1-two {
-          width: 100%;
+          // width: 100%;
           height: 4.1rem;
           line-height: 4.1rem;
           padding-left: 3rem;
@@ -908,7 +908,7 @@ img {
           }
         }
         .cultivate1-three {
-          width: 100%;
+          // width: 100%;
           height: 4.1rem;
           padding-left: 3rem;
           line-height: 4.1rem;
@@ -933,7 +933,7 @@ img {
           }
         }
         .cultivate1-four {
-          width: 100%;
+          // width: 100%;
           height: 4.1rem;
           padding-left: 3rem;
           line-height: 4.1rem;
@@ -971,7 +971,7 @@ img {
           }
         }
         .cultivate1-five {
-          width: 100%;
+          // width: 100%;
           min-height: 3.1rem;
           line-height: 3.1rem;
           padding-left: 3rem;
@@ -1014,7 +1014,7 @@ img {
           }
         }
         .cultivate1-six {
-          width: 100%;
+          // width: 100%;
           min-height: 4.1rem;
           line-height: 4.1rem;
           padding-left: 3rem;
@@ -1100,16 +1100,15 @@ img {
             // align-items: center;
             width: 90%;
             margin: 0 auto;
-            margin-top: 1.5rem;
-            height: 1.7rem;
-            overflow: hidden !important;
-            -webkit-line-clamp: 2 !important;
-            text-overflow: ellipsis !important;
-            display: -webkit-box !important;
-            -webkit-box-orient: vertical;
+            // margin-top: 1.5rem;
+            height: 4em;
             cursor: pointer;
             h4 {
-              font-size: 1.3rem;
+              overflow: hidden !important;
+              -webkit-line-clamp: 2 !important;
+              text-overflow: ellipsis !important;
+              display: -webkit-box !important;
+              -webkit-box-orient: vertical;
               color: #2c2c2c;
             }
           }
@@ -1134,7 +1133,7 @@ img {
           .list-eye {
             position: relative;
             width: 90%;
-            height: 3rem;
+            height: 1.6rem;
             padding: 10px 5px;
             margin: 0 auto;
             border-top: 1px solid rgba(229, 229, 229, 1);
@@ -1280,16 +1279,14 @@ img {
           // align-items: center;
           width: 90%;
           margin: 0 auto;
-          margin-top: 1.5rem;
-          height: 1.7rem;
-          overflow: hidden !important;
-          -webkit-line-clamp: 2 !important;
-          text-overflow: ellipsis !important;
-          display: -webkit-box !important;
-          -webkit-box-orient: vertical;
+          height: 4em;
           cursor: pointer;
           h4 {
-            font-size: 1.3rem;
+            overflow: hidden !important;
+            -webkit-line-clamp: 2 !important;
+            text-overflow: ellipsis !important;
+            display: -webkit-box !important;
+            -webkit-box-orient: vertical;
             color: #2c2c2c;
           }
           .list-eye {
