@@ -314,7 +314,6 @@ export default {
     height: 10px!important;
     border-radius: 50% !important;
     display: inline-block !important;
-    border-radius: 100% !important;
     background: #000 !important;
     opacity: .2 !important;
 }
@@ -1115,7 +1114,6 @@ export default {
             width: 100%;
             height: 100%;
             margin: 0 auto;
-            margin-top: 10px;
             margin-bottom: 10%;
             .explain4{
                 width: 1200px;
@@ -1127,23 +1125,17 @@ export default {
                     float: left;
                     width: 110px;
                     height: 100px;
-                    border: 1px solid;
                     background-color: #fff;
                     margin-right: 10px;
                     margin-bottom: 7px;
                 .nav-div7-img{
                     width: 100%;
                     height: 100%;
-                    margin-right: 5px;
-                    margin-top: 5px;
                     transition: all 1s;
-                    // object-fit: cover;
                 }
                 .nav-div7-img:hover{
                     width: 100%;
                     height: 100%;
-                    margin-right: 5px;
-                    margin-top: 5px;
                     transform: scale(.9);
                 }
                 }
