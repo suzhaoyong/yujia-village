@@ -6,7 +6,7 @@
           <!-- <span class="liList" v-for="(item,index) in liList" :key="index" v-on:click="addClass(index)" :class="{ischeck:index==current}">{{item}}</span> -->
           <!-- <div class="stylelist"></div> -->
         <!-- </div> -->
-        <van-tabs title-active-color="#8FCD71" color="#8FCD71" v-model="current" line-width="70px" sticky>
+        <van-tabs title-active-color="#8FCD71" color="#8FCD71" v-model="current" line-width="70px" sticky @click="getPullUpReload">
         <van-tab title="培训机构">
         <div class="list_teacher">
             <div class="list_banner" :style="{backgroundImage: 'url('+banner+')'}"></div>
@@ -15,7 +15,7 @@
                 <div class="club_house_title">
                     <span class="items" v-for="(item,index) in items" @click="clicktext(index)" :key="index" :class="{active:index==curritem}">{{item}}</span>
                         <van-dropdown-menu active-color="#7BBB62">
-                        <van-dropdown-item v-model="value1" :options="option1" title="热门城市" @change="dropdownchange"/>
+                        <van-dropdown-item v-model="value1" :options="option1" :title="value1?value1:'热门城市'" @change="dropdownchange"/>
                        </van-dropdown-menu>
                 </div>
                 <div class="club_house_inquiry">
@@ -44,46 +44,23 @@
             </van-list>
         </div>
         </van-tab>
-        <van-tab title="瑜伽名师">
+        <van-tab title="瑜伽名师" >
         <div class="list_clubhouse">
             <div class="list_banner" :style="{backgroundImage: 'url('+banner2+')'}"></div>
-            <div class="list_house">
-                <div class="list_house_title">
-                    <div class="list_house_div" @click.stop="isOpen2 = true">
-                        <span class="house_title_tips">选择城市</span>
-                        <img src="../../assets/teacherclub/launch.png" class="house_title_img"/>
-                    </div>
-                    <div class="list_house_div" @click.stop="isOpen3 = true">
-                        <span class="house_title_tips">最小资历</span>
-                        <img src="../../assets/teacherclub/launch.png" class="house_title_img"/>
-                    </div>
-                     <div class="list_house_div" @click.stop="isOpen = true">
-                        <span class="house_title_tips">最大资历</span>
-                        <img src="../../assets/teacherclub/launch.png" class="house_title_img"/>
-                    </div>
-                    <div class="list_house_div" @click="toggle">
-                        <span class="house_title_tips">擅长类型</span>
-                        <img src="../../assets/teacherclub/launch.png" class="house_title_img" v-if="launch"/>
-                        <img src="../../assets/teacherclub/top.png" class="house_title_img2" v-else/>
-                    </div>
-                </div>
-            </div>
             <transition name="fade">
-            <div class="list_house_type" v-if="visible">
-                <div class="house_type">
-                    <div class="house_type_one" @click="chooseClassify(item,index)" v-for="(item,index) in houseType" :key="index">
-                        <span class="house_type_name" :class="{selected: isActive == index}">{{item.name}}</span>
-                    </div>
-                </div>
-            </div>
-            </transition>
-            <div class="searchtext">
 
+            </transition>
+            <div class="list_exhibition">
+                <div class="list_exhibition_page">
+                    <img src="../../assets/teacherclub/yujia.png"/>
+                    <span class="tips">名师精选</span>
+                </div>
+                <div class="list_exhibition_staff">Guild staff profile</div>
             </div>
             <div class="club_items" v-if="exhibitionBox2.length > 0" v-show="Box2">
                 <div class="news-swiper"> 
                     <div class="swiper-container swiper2">
-                        <div class="swiper-wrapper" :style="this.$route.query.current == 1? 'overflow: initial':'overflow: auto'">
+                        <div class="swiper-wrapper" :style="this.$route.query.current == 1? 'overflow: initial':'overflow: auto'" ref="box">
                             <div class="swiper-slide" v-for="(item,index) in exhibitionBox2" :key="index">
                                 <div class="club_items_img" @click="exhibition(item)">
                                     <img :src="item.first_img" :alt="item.name"/>
@@ -117,6 +94,42 @@
                     <span class="tips">瑜伽名师展</span>
                 </div>
                 <div class="list_exhibition_staff">Guild staff profile</div>
+            </div>
+            <div class="list_house">
+                <div class="list_house_title">
+                    <div class="list_house_div" @click.stop="isOpen2 = true">
+                        <span class="house_title_tips">选择城市</span>
+                        <img src="../../assets/teacherclub/launch.png" class="house_title_img"/>
+                    </div>
+                    <div class="list_house_div" @click.stop="isOpen3 = true">
+                        <span class="house_title_tips">选择资历</span>
+                        <img src="../../assets/teacherclub/launch.png" class="house_title_img"/>
+                    </div>
+                     <!-- <div class="list_house_div" @click.stop="isOpen = true">
+                        <span class="house_title_tips">最大资历</span>
+                        <img src="../../assets/teacherclub/launch.png" class="house_title_img"/>
+                    </div> -->
+                    <div class="list_house_div" @click="toggle">
+                        <span class="house_title_tips">擅长类型</span>
+                        <img src="../../assets/teacherclub/launch.png" class="house_title_img" v-if="launch"/>
+                        <img src="../../assets/teacherclub/top.png" class="house_title_img2" v-else/>
+                    </div>
+                </div>
+            </div>
+            <div class="list_house_type" v-if="visible">
+                <div class="house_type">
+                    <div class="house_type_one" @click="chooseClassify(item,index)" v-for="(item,index) in houseType" :key="index">
+                        <span class="house_type_name" :class="{selected: isActive == index}">{{item.name}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="searchtext" v-show="area || city || province || record || num || ids">
+                <span>已选：</span>
+                <ul class="searchtext-count">
+                    <li v-if="area || city || province" @click="deselect('area')">{{ area || city || province }}</li>
+                    <li v-if="record" @click="deselect('record')">{{ record }} - {{ num }}</li>
+                    <li v-if="ids" @click="deselect('ids')">{{ ids }} </li>
+                </ul>
             </div>
             <van-list v-model="loading2" :offset="30" :finished="finished2" finished-text="没有更多了" @load="onLoad2">
                 <div class="exhibition_items" v-if="exhibitionBox.length > 0">
@@ -221,8 +234,17 @@ export default {
         value:"",
         ids:"",
         areaList:areaList,
-        actions:[],
-        change:[],
+        actions:[
+        { name: '0-20' },
+        { name: '10-30' },
+        { name: '20-30' },
+        { name: '20-40' },
+        { name: '20-50' },
+        { name: '20-60' },
+        { name: '30-50' },
+        { name: '30-60' },
+        { name: '40-70' },
+        ],
         houseType:[],
         exhibitionBox:[],
         exhibitionBox2:[],
@@ -237,7 +259,8 @@ export default {
         total2:'',
         id:0,
         id2:0,
-        routecurrent:''
+        routecurrent:'',
+        isupdate: false
     };
   },
    computed: {
@@ -252,6 +275,9 @@ export default {
           this.routecurrent = this.$route.query.current;
       }
   },
+//   updated () {
+//       this.PullUpReload()
+//   },
   mounted() {
     if (this.isUserNeedLogin) {
       this.choiceness();
@@ -259,6 +285,7 @@ export default {
     } else {
       this.getChoicenessPrais()
       this.getTeachersPrais()
+      
     }
     const { current } = this.$route.query;
     if (typeof current != 'undefined') {
@@ -314,13 +341,21 @@ export default {
         })
       },
       //热门城市
-      dropdownchange(page){
-          let params = {
-              hot: this.value1
-          }
-        this.$request.post(`/clubs/search/hot/club?page=${page}`,params).then(res => {
-            console.log(res)
-            this.clubBox = res.data;
+      dropdownchange(){
+          this.name = ''
+          this.current_page = 1
+          this.clubBox = []
+          this.postHotCity()
+          
+      },
+      postHotCity() {
+        let params = {
+            hot: this.value1
+        }
+        this.$request.post(`/clubs/search/hot/club?page=${this.current_page}`,params).then(res => {
+             res.data.map((item) => {
+                 this.clubBox.push(item)
+            })
             this.current_page = res.current_page;
             this.last_page = res.last_page;
             this.total = res.total;
@@ -340,13 +375,15 @@ export default {
       onLoad() {
         setTimeout(() => {
             this.current_page++;
-            this.onLoadlist(this.current_page);
-            if(this.value1) this.dropdownchange(this.current_page)
+            if(this.value1) this.postHotCity()
+            else if(this.name) {this.postGuildList()}
+            else {this.onLoadlist(this.current_page)}
             this.loading = false;
             // 数据全部加载完成
             if (this.clubBox.length >= this.total) {
                 this.finished = true;
             }
+          
         }, 500);
     },   
     //名师
@@ -373,7 +410,6 @@ export default {
         if(page == 1) {
           this.exhibitionBox = res.teachers.data;
           this.houseType = res.course_types;
-          this.actions = res.year;
           this.banner2 = res.banner;
           this.current_page2 = res.teachers.current_page;
           this.last_page2 = res.teachers.last_page;
@@ -392,7 +428,6 @@ export default {
         this.$request.get(`/teachers?page=${this.current_page2}`).then(res => {
             this.exhibitionBox = res.teachers.data;
             this.houseType = res.course_types;
-            this.actions = res.year;
             this.banner2 = res.banner;
             this.current_page2 = res.teachers.current_page;
             this.last_page2 = res.teachers.last_page;
@@ -537,7 +572,6 @@ export default {
             message:`${obj[identity_auth].message}`, 
             title: '温馨提示'
           })
-        // obj[identity_auth] && this.$message(obj[identity_auth])
       }else{
         this.$router.push('/login')
       }
@@ -546,6 +580,8 @@ export default {
         this.current=index;
     },
     clicktext:function(index){
+        this.value1 = '';
+        this.name = '';
         this.curritem = index;
         switch(index) {
             case 0:
@@ -561,9 +597,12 @@ export default {
      changeArea(val) {
       this.change = val;
       this.isOpen2 = false;
-      this.province = val[0].name;
-      this.city = val[1].name;
-      this.area = val[2].name;
+      this.province = val[0].name?val[0].name: '';
+      this.city = val[1]?val[1].name: '';
+      this.area = val[2]?val[2].name: '';
+      this.postTeachers()
+    },
+    postTeachers () {
       let params = {
                 name:"",//老师名字
                 good_at:this.ids,//擅长
@@ -589,32 +628,15 @@ export default {
      // 工作资历
      onSelect(item) {
       this.isOpen = false;
-      this.num = item.name;
-      let params = {
-                name:"",//老师名字
-                good_at:this.ids,//擅长
-                min_num:this.record,//最小资历
-                max_num:this.num,//最大资历
-                city:this.city,//城市
-                province:this.province,//省
-                area:this.area//区
-            }
-        this.$request.post(`/teachers`, params)
-        .then(res => {
-            this.exhibitionBox2 = res.data;
-            this.Box2 = true;
-        })
-        .catch(error => {
-            this.$message({
-                message: '找不到你要的数据',
-                type: "error"
-            });
-            return;
-        });
+      this.record = Number(item.name.split('-')[0])
+      this.num = Number(item.name.split('-')[1])
+      this.postTeachers()
     },
     onSelect3(item){
         this.isOpen3 = false;
-        this.record = item.name;
+        this.record = Number(item.name.split('-')[0])
+        this.num = Number(item.name.split('-')[1])
+        console.log(this.record, this.num )
     },
     // 选择分类
     chooseClassify(item,index) {
@@ -649,28 +671,76 @@ export default {
             return;
         });
     },
+    // 名师取消选择项
+    deselect(type) {
+        if(type == 'area') {
+            this.province = '';
+            this.city = '';
+            this.area = '';
+        } else if (type === 'record') {
+            this.record = '',
+            this.num = ''
+        } else if (type === 'ids') {
+            this.ids = ''
+        }
+        this.postTeachers()
+    },
+    getPullUpReload (name, title) {
+        console.log(name, title)
+        if (title === '瑜伽名师') this.PullUpReload()
+    },
+    // 右拉加载更多
+    PullUpReload () {
+      var _this = this
+      var isScroll = false  // 函数截流
+      setTimeout(() => {
+        this.$refs.box.onscroll = function() {
+            if (isScroll) {
+            setTimeout(() => {
+                isScroll = false
+            }, 50)
+            } else {
+              let innerHeight = document.querySelector('.news-swiper').clientWidth  // 
+              let outerHeight = document.querySelector('.swiper-wrapper').scrollLeft // 
+              let scrollTop = document.querySelector('.swiper-wrapper').offsetWidth   // 
+              console.log(innerHeight, outerHeight, scrollTop)
+              if (innerHeight + scrollTop >= outerHeight ) {
+                isScroll = true
+              }
+            }
+        }
+      }, 1000)
+
+    },
     //机构名称查询
     seekclick(){
         if (this.name) {
-            let params = {
-                    name:this.name,//老师名字
-                    isNew:false,
-                }
-            this.$request.post(`/clubs/showClubListMobile`, params)
-            .then(res => {
-                this.clubBox = res.data;
-            })
-            .catch(error => {
-                this.$message({
-                    message: '找不到你要的数据',
-                    type: "error"
-                });
-                return;
-            });
+            this.value1 = ''
+            this.current_page = 1
+            this.clubBox = []
+            this.postGuildList()
         } else if(this.name == '') {
             Toast('请输入机构名称')
         }
-
+    },
+    postGuildList() {
+        let params = {
+            name:this.name,//老师名字
+            isNew:false,
+        }
+        this.$request.post(`/clubs/showClubListMobile${this.current_page}`, params)
+        .then(res => {
+            res.data.map((item) => {
+                this.clubBox.push(item)
+            })
+        })
+        .catch(error => {
+            this.$message({
+                message: '找不到你要的数据',
+                type: "error"
+            });
+            return;
+        });
     },
     clubBoxItem(item){
         this.$router.push({
@@ -1124,6 +1194,34 @@ input:-ms-input-placeholder{
                   }
             }
         }
+        .searchtext {
+            width: 100%;
+            height: 30px;
+            border-bottom: 1px solid #f1f1ff;
+            font-size: 14px;
+            padding: 0 0 0 13px;
+            line-height: 30px;
+            overflow: auto;
+            transition: 0.5s;
+            ul {
+                display: flex;
+                width: 80%;
+                align-items: center;
+                float: right;
+                height: 30px;
+                font-size: 12px;
+                li {
+                    height: 25px;
+                    line-height: 25px;
+                    border-radius: 10px;
+                    padding: 0 6px;
+                    background: rgb(143, 205, 113);
+                    color: white;
+                    transition: 0.5s;
+                    margin-right: 10px;
+                }
+            }
+        }
         .list_house_type{
             width: 100%;
             height: auto;
@@ -1133,13 +1231,13 @@ input:-ms-input-placeholder{
                 width: 93%;
                 height: 100%;
                 margin: 0 auto;
-                display: flow-root;
+                display: flex;
+                flex-wrap: wrap;
                 margin-bottom: 10px;
                 .house_type_one{
                     width: 60px;
                     height: 60px;
                     border-radius: 50%;
-                    // line-height: 42px;
                     text-align: center;
                     background-color: #ffffff;
                     margin-top: 10px;
