@@ -20,7 +20,8 @@
                 </div>
                 <div class="club_house_inquiry">
                     <input type="text" class="club_house_inquiry_input" v-model="name" placeholder="输入机构名称"/>
-                    <img src="../../assets/teacherclub/seek.png" class="seek" @click="seekclick"/>
+                    <img src="../../assets/teacherclub/seek.png" class="seek" />
+                    <div class="search" @click.stop="seekclick">搜索</div>
                 </div>
             </div>
             <van-list v-model="loading" :finished="finished" :offset="30" finished-text="没有更多了" @load="onLoad">
@@ -76,6 +77,9 @@
                 </div>
             </div>
             </transition>
+            <div class="searchtext">
+
+            </div>
             <div class="club_items" v-if="exhibitionBox2.length > 0" v-show="Box2">
                 <div class="news-swiper"> 
                     <div class="swiper-container swiper2">
@@ -152,7 +156,7 @@
         <van-action-sheet v-model="isOpen3" :actions="actions" @select="onSelect3" cancel-text="取消"/>
         <!-- 省市区 -->
         <van-popup v-model="isOpen2" position="bottom">
-        <van-area :area-list="areaList" @confirm="changeArea" @cancel="isOpen2 = false"/>
+        <van-area :area-list="areaList" @confirm="changeArea" @cancel="isOpen2 = false" :columns-placeholder="['请选择', '请选择', '请选择']"/>
         </van-popup>
     </div>
 </div>
@@ -162,14 +166,14 @@
 import areaList from "../../assets/js/area.js";
 import Vue from 'vue';
 import Bus from "@/utils/Bus";
-import { mapGetters } from "vuex"
+import { mapGetters } from "vuex";
 import Swiper from 'swiper';
 import { Notify, Dialog, Toast, Tab, Tabs, List} from "vant";
 import { DropdownMenu, DropdownItem } from 'vant';
 Vue.use(List);
 Vue.use(DropdownMenu).use(DropdownItem);
 Vue.use(Tab).use(Tabs);
-Vue.use(Notify)
+Vue.use(Notify);
 Vue.use(Dialog);
 Vue.use(Toast);
 export default {
@@ -310,11 +314,12 @@ export default {
         })
       },
       //热门城市
-      dropdownchange(){
-         let params2 = {
-            hot:this.value1,
-        }
-        this.$request.post(`/clubs/search/hot/club?page=${this.current_page}`,params2).then(res => {
+      dropdownchange(page){
+          let params = {
+              hot: this.value1
+          }
+        this.$request.post(`/clubs/search/hot/club?page=${page}`,params).then(res => {
+            console.log(res)
             this.clubBox = res.data;
             this.current_page = res.current_page;
             this.last_page = res.last_page;
@@ -336,6 +341,7 @@ export default {
         setTimeout(() => {
             this.current_page++;
             this.onLoadlist(this.current_page);
+            if(this.value1) this.dropdownchange(this.current_page)
             this.loading = false;
             // 数据全部加载完成
             if (this.clubBox.length >= this.total) {
@@ -380,7 +386,7 @@ export default {
             this.total2 = res.teachers.total;
         }
       })
-    },   
+    },
       //名师列表
       exhibitionList(){
         this.$request.get(`/teachers?page=${this.current_page2}`).then(res => {
@@ -645,21 +651,26 @@ export default {
     },
     //机构名称查询
     seekclick(){
-        let params = {
-                name:this.name,//老师名字
-                isNew:false,
-            }
-        this.$request.post(`/clubs/showClubListMobile`, params)
-        .then(res => {
-            this.clubBox = res.data;
-        })
-        .catch(error => {
-            this.$message({
-                message: '找不到你要的数据',
-                type: "error"
+        if (this.name) {
+            let params = {
+                    name:this.name,//老师名字
+                    isNew:false,
+                }
+            this.$request.post(`/clubs/showClubListMobile`, params)
+            .then(res => {
+                this.clubBox = res.data;
+            })
+            .catch(error => {
+                this.$message({
+                    message: '找不到你要的数据',
+                    type: "error"
+                });
+                return;
             });
-            return;
-        });
+        } else if(this.name == '') {
+            Toast('请输入机构名称')
+        }
+
     },
     clubBoxItem(item){
         this.$router.push({
@@ -818,8 +829,11 @@ input:-ms-input-placeholder{
             .club_house_title{
                 width: 50%;
                 height: 50px;
-                line-height: 40px;
+                line-height: 50px;
                 display: flex;
+                .van-dropdown-menu {
+                    margin-top: 5px;
+                }
                 .items{
                     font-size:14px;
                     font-family:Microsoft YaHei;
@@ -836,25 +850,38 @@ input:-ms-input-placeholder{
             }
             .club_house_inquiry{
                 width: 50%;
-                height: 50px;
+                height: 30px;
                 position: relative;
+                border-radius: 13px;
+                color: #999;
+                top: 9px;
+                border-radius: 13px;
+                border: 1px solid rgb(216, 212, 212);
+                font-size: 12px;
+                line-height: 28px;
+                overflow: hidden;
                 .club_house_inquiry_input{
                     background-color: #fff;
-                    border-radius: 13px;
-                    height: 30px;
+                    height: 100%;
                     width: 70%;
-                    float: right;
+                    float: left;
                     font-size: 12px;
                     color: #999;
-                    text-indent: 15px;
-                    margin-top: 10px;
+                    text-indent: 25px;
+                    overflow: hidden;
                 }
-                .seek{
+               .seek {
                     position: absolute;
                     width: 10px;
                     height: 11px;
-                    right: 18px;
-                    top: 20px;
+                    right: 88%;
+                    top: 33%;
+                }
+                .search {
+                    padding: 0 3px;
+                    float: right;
+                    width: 24%;
+                    height: 28px;
                 }
             }
         }
