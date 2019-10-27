@@ -14,6 +14,10 @@
     <div class="main_wrap">
       <!-- 顶部 logo -->
       <h1><img class="img" src="../assets/img/yujia_logo.png" alt="瑜伽村"></h1>
+      <div class="prompt">
+        <img src="../assets/img/sz3.gif" alt="">
+        <van-icon name="question-o" color="#fff" @click="gotoPage('explain')"/>
+      </div>
       <!-- 轮播图 -->
       <div class="bg_imgs-wrap">
         <div class="bgc-color" style="background:#8FCD71; width:100%;"></div>
@@ -172,6 +176,7 @@ export default {
         yogaknowledge: '/yogaknowledge',
         aboutUs: '/aboutUs',
         club: '/teacherClub/list?current=0',
+        explain: '/explain'
       }
       path[type] && this.$router.push(path[type])
     },
@@ -206,12 +211,28 @@ img{
     // log 图标
     h1 {
       position: absolute;
-      top: 12px;
+      top: 10px;
       left: 16px;
       z-index: 10;
       .img {
         width: 70px;
         height: 25px;
+      }
+    }
+    .prompt {
+      position: absolute;
+      top: 7px;
+      right: 16px;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      img {
+        width: 50px;
+        height: 30px;
+        margin-bottom: 2px;
+      }
+      .van-icon {
+        font-size: 24px;
       }
     } 
     // 轮播图

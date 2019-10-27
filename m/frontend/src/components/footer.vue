@@ -48,22 +48,17 @@ export default {
       ...mapGetters(['isUserNeedLogin', 'lastLogin'])
     },
     watch: {
-      '$route'(to, from){
-        const { header_name } = to.meta
-        this.active = header_name;
-        console.log(this.active);
-        
-        // 防止 路由变化之后的 刷新 tabbar 高亮错误
-        window.sessionStorage.setItem('tabbar', header_name);
-      }
+        '$route': 'getMeta'
     },
     created() {
-        this.refresh()
+        this.refresh();
     },
     methods: {
+        getMeta() {
+            const { header_name } = this.$route.meta;
+            this.active = header_name;
+        },
         onChange(active) {            
-            // console.log(active);
-            window.sessionStorage.setItem('tabbar',active);
             // 切换 tabbar 路由跳转
             if(active === 'personal' && !window.sessionStorage.getItem('access')) {
                 this.$router.push('/login');
@@ -73,10 +68,7 @@ export default {
             }
         },
         refresh() {
-            if( window.sessionStorage.getItem('tabbar') ) {
-                // 防止刷新 tabbar 切换
-                this.active = window.sessionStorage.getItem('tabbar');
-            }
+            this.getMeta();
         }
     }
 }

@@ -36,21 +36,16 @@
       </div>
     </main>
   </div>
-  <Footer></Footer>
 </div>
 
 </template>
 <script>
 import Vue from 'vue';
-import Footer from '../../components/footer'
 import { Button, Toast } from 'vant';
 import { setInterval } from 'timers';
 
 Vue.use(Button).use(Toast);
 export default {
-  components: {
-    Footer
-  },
   data() {
     return {
       classifyLists: [],
@@ -231,7 +226,6 @@ export default {
   width: 100%;
   margin-top: 45px;
   overflow: auto;
-  margin-bottom: 50px;
   &-banner {
     width: 100%;
     height: 170px;
