@@ -4,7 +4,7 @@
             <div class="nav-main">
                 <template>
                     <div class="bg_img">
-                       <el-carousel height="500px" :interval="3000" arrow="hover" trigger="click" direction="horizontal" :autoplay="true">
+                       <el-carousel height="500px" :interval="4000" arrow="hover" trigger="click" direction="horizontal" :autoplay="true">
                             <el-carousel-item v-for="item in bannerArray" :key="item">
                                 <img :src="item" alt/>
                             </el-carousel-item>
@@ -21,7 +21,7 @@
                     <el-col :span="24" class="bg-pic">
                     <div class="nav-contunt-div2">
                         <div class="carousel">
-                        <el-carousel :interval="3000" type="card" trigger="click" height="580px" direction="horizontal" :autoplay="true">
+                        <el-carousel :interval="4000" type="card" trigger="click" height="580px" direction="horizontal" :autoplay="true">
                             <el-carousel-item v-for="item in dataimg" :key="item.id">
                             <div class="contunt2">
                                 <div class="carousel-explain" @click="Learnmore(item)">
@@ -107,7 +107,7 @@
                     <el-col :span="24" class="bg-pic7">
                     <div class="nav-contunt-div6">
                         <div class="navcount">
-                        <el-carousel height="590px" :interval="3000" arrow="hover" trigger="click" direction="horizontal" :autoplay="true">
+                        <el-carousel height="590px" :interval="4000" arrow="hover" trigger="click" direction="horizontal" :autoplay="true">
                         <el-carousel-item v-for="item in newtrains" :key="item.id">
                             <div class="explain3">
                             <div class="explain3-border">

@@ -10,20 +10,17 @@
                         </div>
                     </template>
                     <div class="aboutus-count">
-                        <div class="aboutus-count-div5">
-                            <h2><img src="../assets/yujia.png"/>瑜伽村平台</h2>
-                            <p class="nav-text">Sometimes beauty is so simple</p>
-                            <div class="border-left"></div>
-                            <div class="border-right"></div>
-                        </div>
                         <div class="aboutus-count-div6">
                             <div class="count-div6-left">
+                                <div class="div6-left-top">
+                                    <h2>瑜伽村平台</h2>
+                                    <p class="nav-text">Sometimes beauty is so simple</p>
+                                </div>
                                 <div class="div6-left-bottom">
                                     <img src="../assets/aboutbg.png" class="dim"/>
                                     <div class="left-bottom-title">
                                         <h2>简介</h2>
                                         <p class="nav-text">Sometimes beauty is so simple</p>
-                                        <p class="abouts-p2">瑜伽村隶属于上海一伽健身服务有限公司。</p>
                                         <p class="abouts-p2">中国瑜伽村是全国培训信息最丰富的瑜伽行业平台。瑜伽村平台集合了全球瑜伽名师信息，瑜伽培训、大会信息等。</p>
                                         <p class="abouts-p2">可通过课程类型、地域、时间、老师、价格等信息进行进准分类搜索，是目前中国培训信息最丰富、搜索最进准的瑜伽行业资讯平台。</p>
                                         <p class="abouts-p2">我们的目标是要做到：在瑜伽村只有你想要，没有找不到。</p>
@@ -175,49 +172,6 @@ export default {
         height: 100%;
         display: inline-block;
         background: #FCFBF1;
-        .aboutus-count-div5{
-            width: 1200px;
-            height: 150px;
-            margin: 0 auto;
-            text-align: center;
-            position: relative;
-            .border-left{
-                width: 20%;
-                height: 1px;
-                background-color: #dcdcdc;
-                position: absolute;
-                left:17%;
-                top: 41%;
-            }
-            .border-right{
-                width: 20%;
-                height: 1px;
-                background-color: #dcdcdc;
-                position: absolute;
-                right: 17%;
-                top: 41%;
-            }
-            .nav-text{
-                color: #999999;
-                font-size: 14px;
-                margin-top: 8px;
-            }
-            h2{
-                color: #2c2c2c;
-                font-size: 1.4rem;
-                margin-top: 40px;
-                font-family:Microsoft YaHei;
-                font-weight:bold;
-                padding-top: 24px;
-                img{
-                    width: 28px;
-                    height: 28px;
-                    position: absolute;
-                    left: 41%;
-                    top: 18%;
-                }
-            }
-        }
         .aboutus-count-div6{
             width: 100%;
             height: 100%;
@@ -225,10 +179,26 @@ export default {
             margin-bottom: 4%;
             .count-div6-left{
                 width: 50%;
-                height: 550px;
+                height: 100%;
+                .div6-left-top{
+                    text-indent: 25%;
+                    margin-top: 10%;
+                    margin-bottom: 5%;
+                    h2{
+                        color: #2c2c2c;
+                        font-size: 1.1rem;
+                        font-family:Microsoft YaHei;
+                        font-weight:bold;
+                    }
+                    .nav-text{
+                        color: #999999;
+                        font-size: 12px;
+                        margin-top: 8px;
+                    }
+                }
                 .div6-left-bottom{
                     width:100%;
-                    height:100%;
+                    height:551px;
                     background:rgba(0,0,0,1);
                     position: relative;
                     .dim{
@@ -263,14 +233,13 @@ export default {
             }
             .count-div6-right{
                 width: 50%;
-                height: 550px;
+                height: 100%;
                 .div6-right-top{
-                    // margin-bottom: 25px;
-                    height: 210px;
+                    margin-bottom: 30px;
                     position: relative;
                     .title1{
                         width: 60%;
-                        // padding-top: 21%;
+                        padding-top: 21%;
                         padding-left: 5%;
                         h2{
                             color: #585858;
@@ -302,7 +271,7 @@ export default {
                         height: 300px;
                         position:absolute;
                         right: 0px;
-                        top: -55%;
+                        top: 17%;
                     }
                 }
                 .div6-right-bottom{
@@ -318,7 +287,7 @@ export default {
                     .right-bottom-title{
                         position: absolute;
                         top: 40px;
-                        left: 35px;
+                        left: 33px;
                         h2{
                         color: #fff;
                         font-size: 1rem;
