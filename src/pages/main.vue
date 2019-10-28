@@ -1123,9 +1123,12 @@ export default {
             height: 100%;
             margin: 0 auto;
 <<<<<<< HEAD
+<<<<<<< HEAD
             margin-top: 10px;
 =======
 >>>>>>> master
+=======
+>>>>>>> lqc
             margin-bottom: 10%;
             .explain4{
                 width: 1200px;
@@ -1138,15 +1141,19 @@ export default {
                     width: 110px;
                     height: 100px;
 <<<<<<< HEAD
+<<<<<<< HEAD
                     border: 1px solid;
 =======
 >>>>>>> master
+=======
+>>>>>>> lqc
                     background-color: #fff;
                     margin-right: 10px;
                     margin-bottom: 7px;
                 .nav-div7-img{
                     width: 100%;
                     height: 100%;
+<<<<<<< HEAD
 <<<<<<< HEAD
                     margin-right: 5px;
                     margin-top: 5px;
@@ -1155,15 +1162,21 @@ export default {
 =======
                     transition: all 1s;
 >>>>>>> master
+=======
+                    transition: all 1s;
+>>>>>>> lqc
                 }
                 .nav-div7-img:hover{
                     width: 100%;
                     height: 100%;
 <<<<<<< HEAD
+<<<<<<< HEAD
                     margin-right: 5px;
                     margin-top: 5px;
 =======
 >>>>>>> master
+=======
+>>>>>>> lqc
                     transform: scale(.9);
                 }
                 }
