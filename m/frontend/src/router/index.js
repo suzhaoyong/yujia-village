@@ -46,15 +46,20 @@ const router = new Router({
       component: Home,
       children: [{
         path: '/yogaknowledge',
-        meta: {
-          header_name: 'yogaknowledge',
-          keepAlive: false
-        },
         component: () => import('@/pages/homepage/yogaknowledge')
+      },
+      {
+        path: '/yagainformation',
+        name: 'yagainformation',
+        component: () => import('@/pages/homepage/yogaInForMation'),
       },
       {
         path: '/aboutUs',
         component: () => import('@/pages/homepage/aboutUs')
+      },
+      {
+        path: '/explain',
+        component: () => import('@/pages/homepage/explain')
       }]
     },
     // 首页
@@ -272,12 +277,7 @@ const router = new Router({
       name: 'clubhouseDetails',
       component: () => import('@/pages/teacherClub/clubhouseDetails')
     },
-    {
-      path: '/yagainformation',
-      name: 'yagainformation',
-      component: Home,
-      component: () => import('@/pages/homepage/yogaInForMation.vue'),
-    },
+    
     {
       path: '/informationdetail/:id',
       name: 'informationdetail',
