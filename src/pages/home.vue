@@ -17,15 +17,12 @@
   </div>
 </template>
 <script>
-import Header from "../components/header";
-import Footer from "../components/footer";
-import Main from "../pages/main";
 export default {
   name: "home",
   components:{
-    Header,
-    Footer,
-    Main
+    'Header': () => import('@/components/header'),
+    'Footer': () => import('@/components/footer'),
+    'Main': () => import('@/pages/main')
   },
   data() {
     return {

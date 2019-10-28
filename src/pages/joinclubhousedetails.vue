@@ -213,7 +213,7 @@ export default {
   }
 };
 </script>
-<style lang="scss" scope>
+<style lang="scss" scoped>
 .swiper-pagination-bullet-active {
     opacity: 1;
     background: #2c2c2c;

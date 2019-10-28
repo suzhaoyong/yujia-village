@@ -4,7 +4,7 @@
             <div class="nav-main">
                 <template>
                     <div class="bg_img">
-                       <el-carousel height="500px" :interval="4000" arrow="hover" trigger="click" direction="horizontal" :autoplay="true">
+                       <el-carousel height="500px" :interval="3000" arrow="hover" trigger="click" direction="horizontal" :autoplay="true">
                             <el-carousel-item v-for="item in bannerArray" :key="item">
                                 <img :src="item" alt/>
                             </el-carousel-item>
@@ -21,7 +21,7 @@
                     <el-col :span="24" class="bg-pic">
                     <div class="nav-contunt-div2">
                         <div class="carousel">
-                        <el-carousel :interval="4000" type="card" trigger="click" height="580px" direction="horizontal" :autoplay="true">
+                        <el-carousel :interval="3000" type="card" trigger="click" height="580px" direction="horizontal" :autoplay="true">
                             <el-carousel-item v-for="item in dataimg" :key="item.id">
                             <div class="contunt2">
                                 <div class="carousel-explain" @click="Learnmore(item)">
@@ -107,7 +107,7 @@
                     <el-col :span="24" class="bg-pic7">
                     <div class="nav-contunt-div6">
                         <div class="navcount">
-                        <el-carousel height="590px" :interval="4000" arrow="hover" trigger="click" direction="horizontal" :autoplay="true">
+                        <el-carousel height="590px" :interval="3000" arrow="hover" trigger="click" direction="horizontal" :autoplay="true">
                         <el-carousel-item v-for="item in newtrains" :key="item.id">
                             <div class="explain3">
                             <div class="explain3-border">
@@ -150,8 +150,6 @@
     </div>
 </template>
 <script>
-import Banner from "../components/banner";
-import { swiper, swiperSlide } from "vue-awesome-swiper";
 export default {
   metaInfo: {
     title: '中国瑜伽村-瑜伽培训-瑜伽咨询-瑜伽综合资讯平台', // set a title
@@ -164,9 +162,9 @@ export default {
     }]
   },
     components:{
-        Banner,
-        swiper,
-        swiperSlide
+        'banner': () => import("@/components/banner"),
+        'swiper': () => import('vue-awesome-swiper/src/swiper'),
+        'swiper-slide': () => import('vue-awesome-swiper/src/slide')
     },
   data() {
     return {
@@ -324,7 +322,6 @@ export default {
     height: 10px!important;
     border-radius: 50% !important;
     display: inline-block !important;
-    border-radius: 100% !important;
     background: #000 !important;
     opacity: .2 !important;
 }
@@ -1125,7 +1122,10 @@ export default {
             width: 100%;
             height: 100%;
             margin: 0 auto;
+<<<<<<< HEAD
             margin-top: 10px;
+=======
+>>>>>>> master
             margin-bottom: 10%;
             .explain4{
                 width: 1200px;
@@ -1137,23 +1137,33 @@ export default {
                     float: left;
                     width: 110px;
                     height: 100px;
+<<<<<<< HEAD
                     border: 1px solid;
+=======
+>>>>>>> master
                     background-color: #fff;
                     margin-right: 10px;
                     margin-bottom: 7px;
                 .nav-div7-img{
                     width: 100%;
                     height: 100%;
+<<<<<<< HEAD
                     margin-right: 5px;
                     margin-top: 5px;
                     transition: all 1s;
                     // object-fit: cover;
+=======
+                    transition: all 1s;
+>>>>>>> master
                 }
                 .nav-div7-img:hover{
                     width: 100%;
                     height: 100%;
+<<<<<<< HEAD
                     margin-right: 5px;
                     margin-top: 5px;
+=======
+>>>>>>> master
                     transform: scale(.9);
                 }
                 }

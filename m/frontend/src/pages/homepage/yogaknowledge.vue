@@ -13,26 +13,26 @@
                 </van-collapse-item>
             </van-collapse>
         </div>
-            <div class="knowledge-box">
-                <van-list v-model="loading" :offset="30" :finished="finished" finished-text="没有更多了" @load="onLoad">
-                    <div class="knowledge-item" v-for="(item,index) in knowledgeList" :key="index" @click="goInfoDetail(item.id)">
-                        <div class="left-box">
-                            <div class="img" :style="{backgroundImage: 'url('+item.icon_url+')'}"></div>                               
-                        </div>
-                        <div class="right-box">
-                            <div class="title">{{item.headline}}</div>
-                            <div class="author">
-                                <div>
-                                    <img class="eye" src="../../assets/img/eye.png">
-                                    <span class="number">{{item.views || 100}}</span>
-                                </div>
-                                <span>{{item.updated_at}}</span>
-                            </div>
-                            <div class="description">{{item.summary}}</div>
-                        </div>
+        <div class="knowledge-box">
+            <van-list v-model="loading" :offset="30" :finished="finished" finished-text="没有更多了" @load="onLoad">
+                <div class="knowledge-item" v-for="(item,index) in knowledgeList" :key="index" @click="goInfoDetail(item.id)">
+                    <div class="left-box">
+                        <div class="img" :style="{backgroundImage: 'url('+item.icon_url+')'}"></div>                               
                     </div>
-                </van-list>  
-            </div>
+                    <div class="right-box">
+                        <div class="title">{{item.headline}}</div>
+                        <div class="author">
+                            <div>
+                                <img class="eye" src="../../assets/img/eye.png">
+                                <span class="number">{{item.views || 100}}</span>
+                            </div>
+                            <span>{{item.updated_at}}</span>
+                        </div>
+                        <div class="description">{{item.summary}}</div>
+                    </div>
+                </div>
+            </van-list>  
+        </div>
     </div>
 </template>
 <script>

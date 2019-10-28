@@ -7,8 +7,8 @@ import router from './router'
 import request from '@/utils/request';
 import NotFound from '@/utils/not_found.js';
 import SessionTitle from '@/utils/session_title.js';
+// import ELEMENT from 'element-ui'
 import ElementUI from 'element-ui'
-
 import MetaInfo from 'vue-meta-info'
 
 import 'element-ui/lib/theme-chalk/index.css'
@@ -24,6 +24,7 @@ import store from '@/store'
 Vue.use(NotFound)
 Vue.use(SessionTitle)
 Vue.use(Share)
+// Vue.use(ELEMENT)
 Vue.use(ElementUI)
 Vue.use(VueAwesomeSwiper)
 Vue.use(Carousel)
@@ -41,6 +42,6 @@ new Vue({
   components: { App },
   template: '<App/>',
   mounted() {
-    document.dispatchEvent(new Even('render-event'))
+    document.dispatchEvent(new Event('render-event'))
   },
 })
