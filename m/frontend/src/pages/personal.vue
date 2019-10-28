@@ -37,21 +37,24 @@
                 <div class="asset-item">
                     <div class="item-title">金币</div>
                     <div>
-                        <span class="number">{{personalData.money}}</span>
+                        <!-- <span class="number">{{personalData.money}}</span> -->
+                        <span class="number">0</span>
                         <span>可用</span>
                     </div>
                 </div>
                 <div class="asset-item">
                     <div class="item-title">现金券</div>
                     <div>
-                        <span class="number">{{personalData.cashCount}}</span>
+                        <!-- <span class="number">{{personalData.cashCount}}</span> -->
+                        <span class="number">0</span>
                         <span>张可用</span>
                     </div>
                 </div>
                 <div class="asset-item">
                     <div class="item-title">优惠券</div>
                     <div>
-                        <span class="number">{{personalData.couponCount}}</span>
+                        <!-- <span class="number">{{personalData.couponCount}}</span> -->
+                        <span class="number">0</span>
                         <span>张可用</span>
                     </div>
                 </div>
