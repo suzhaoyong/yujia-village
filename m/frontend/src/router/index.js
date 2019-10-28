@@ -24,7 +24,6 @@ const router = new Router({
   },
   routes: [{
       path: '/',
-      component: Home,
       redirect: '/main'
     },
     {
