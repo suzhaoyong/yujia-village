@@ -69,8 +69,8 @@ module.exports = {
   },
 
 externals: {//module 同目录加上此配置，打包的时候忽略这些
-  'vue': 'Vue',
-  'element-ui': 'ELEMENT',
+  // 'vue': 'Vue',
+  // 'element-ui': 'ELEMENT',
 },
   node: {
     // prevent webpack from injecting useless setImmediate polyfill because Vue
