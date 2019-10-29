@@ -14,8 +14,8 @@
         <div class="title">成功邀请</div>
         <div class="success-invitation">
             <van-list v-model="loading" :offset="30" :finished="finished" finished-text="没有更多了" @load="onLoad">
-                <van-collapse v-model="activeName" accordion @change="getMyShareBelow">
-                    <van-collapse-item :border="false" :name="item.id" value="他的邀请" 
+                <van-collapse v-model="activeName" accordion >
+                    <van-collapse-item :border="false" :name="item.id" :value="'他的邀请('+item.sub_level.length+')'" 
                     v-for="(item,index) in userInfo" :key="index">
                         <div class="invitation-people" slot="title">
                             <div class="img" :style="{backgroundImage: 'url('+ item.icon +')'}"></div>
@@ -25,14 +25,10 @@
                             </div>
                             <div class="time">{{item.created_at[0]}}</div>
                         </div>
-                        <div :class="info.length > 5 ? 'second-box' : '' ">
-                            <van-list v-model="loading" :offset="30" :finished="finishedSecond" @load="onLoadSecond">
-                                <div class="invitation-people second" v-for="(item,index) in info" :key="index">
-                                    <div class="img" :style="{backgroundImage: 'url('+ item.icon +')'}"></div>
-                                    <div class="nickname">{{item.name}}</div>
-                                    <div class="time">{{item.created_at[0]}}</div>
-                                </div>
-                            </van-list>
+                        <div class="invitation-people second" v-for="(item,index) in item.sub_level" :key="index">
+                            <div class="img" :style="{backgroundImage: 'url('+ item.icon +')'}"></div>
+                            <div class="nickname">{{item.name}}</div>
+                            <div class="time">{{item.created_at[0]}}</div>
                         </div>
                     </van-collapse-item>
                 </van-collapse>
@@ -66,16 +62,10 @@ export default {
             pic_img: '',
             // 我邀请的用户信息
             userInfo: [],
-            // 我邀请的用户,再次邀请的用户信息
-            info: [],
             loading: false,
             finished: false,
-            finishedSecond: false,
             page: 1,
-            page2: 1,
             total: '',
-            totalSecond: '',
-            id: ''
         }
     },
     created() {
@@ -100,27 +90,12 @@ export default {
                 // 加载状态结束
             }, 500);
         }, 
-        onLoadSecond() {
-            // 异步更新数据
-            setTimeout(() => {
-                this.page2++;
-                this.loading = false;
-                // 数据全部加载完成
-                if (this.info.length >= this.totalSecond) {
-                    this.finishedSecond = true;
-                    return
-                }
-                this.getMyShareBelow(this.id, this.page2);
-                // 加载状态结束
-            }, 500);
-        }, 
         immediatelyInvitation() {
             this.show = true;
             const userId = JSON.parse(window.sessionStorage.getItem('user')).id;
             this.inviteInfo.userId = userId;   
             this.inviteInfo.id = userId;
             this.$request.post('/show/share/photo',this.inviteInfo).then(data => {
-                // console.log(data);
                 this.pic_img = data;
             })
             if(this.pic_img !== '') {
@@ -130,7 +105,6 @@ export default {
         // 获取积分信息
         getIntegral() {
             this.$request.get('/personal/fractioRecord').then(data => {
-                // console.log(data);
                 data.in.forEach(item => {
                     this.integralTotal += item.num;
                 });
@@ -142,26 +116,6 @@ export default {
                 this.userInfo = this.dealingData( data.data, this.userInfo);
                 this.total = data.total;
             })
-        },
-        // 获取 我邀请的用户，再次邀请的用户
-        getMyShareBelow(id, page=1) {
-            if(this.id !== id) {
-                this.info =[];
-                this.finishedSecond = false;
-                this.page2 = 1;
-            }
-            this.id = id;
-            if(id !== '') {
-                this.$request.post('/personal/myShareBelow/'+id+'?page='+page ).then(data => {
-                    console.log(data);
-                    this.info = this.dealingData( data.data, this.info);
-                    this.totalSecond = data.total;
-                })
-            } else {
-                this.info = [];
-                this.finishedSecond = false;
-                this.page2 = 1;
-            }
         },
         // 处理 获取的 电话号码 和时间 数据
         dealingData(data, userInfo) {
@@ -267,10 +221,6 @@ export default {
     }
     /deep/ .van-collapse-item__content {
         padding: 0;
-    }
-    .second-box {
-        height: 300px;
-        overflow: scroll;
     }
     .second {
         height: 60px;
