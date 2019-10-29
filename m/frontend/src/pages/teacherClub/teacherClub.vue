@@ -144,26 +144,20 @@
         <van-action-sheet v-model="isOpen3" :actions="actions" @select="onSelect3" cancel-text="取消"/>
         <!-- 省市区 -->
         <van-popup v-model="isOpen2" position="bottom">
-            <van-area :area-list="areaList" @confirm="changeArea" @cancel="isOpen2 = false"/>
+            <van-area :area-list="areaList" @confirm="changeArea" @cancel="isOpen2 = false" :columns-placeholder="['请选择', '请选择', '请选择']" />
         </van-popup>
     </div>
 </div>
 </template>
 <script>
 /* eslint-disable */
-import areaList from "../../assets/js/area.js";
+import areaList from "../../assets/js/area";
 import Vue from 'vue';
 import Bus from "@/utils/Bus";
 import { mapGetters } from "vuex";
 import Swiper from 'swiper';
-import { Notify, Dialog, Toast, Tab, Tabs, List} from "vant";
-import { DropdownMenu, DropdownItem } from 'vant';
-Vue.use(List);
-Vue.use(DropdownMenu).use(DropdownItem);
-Vue.use(Tab).use(Tabs);
+import { Notify} from "vant";
 Vue.use(Notify);
-Vue.use(Dialog);
-Vue.use(Toast);
 export default {
     data() {
     return {
@@ -207,17 +201,16 @@ export default {
         change:[],
         value:"",
         ids:"",
-        areaList:areaList,
+        areaList,
         actions:[
-        { name: '0-20' },
-        { name: '10-30' },
+        { name: '不限'},
+        { name: '0-5' },
+        { name: '5-10' },
+        { name: '10-15' },
+        { name: '15-20' },
         { name: '20-30' },
-        { name: '20-40' },
-        { name: '20-50' },
-        { name: '20-60' },
-        { name: '30-50' },
-        { name: '30-60' },
-        { name: '40-70' },
+        { name: '30-40' },
+        { name: '40以上' },
         ],
         houseType:[],
         exhibitionBox:[],
@@ -307,7 +300,8 @@ export default {
       // 名师列表
       onLoadlist2(){
           this.$request.get(`/teachers?page=${this.current_page2}`).then(res => {
-             const info2 = res.teachers.data;
+            this.houseType = res.course_types;
+            const info2 = res.teachers.data;
             info2.forEach(item => {
                 this.exhibitionBox.push(item);
             });
@@ -386,8 +380,6 @@ export default {
     getTeachersPrais(page = 1) {
       this.$request.get(`/teachers/list/prais?page=${page}`)
       .then(res => {
-            console.log(res);
-
         if(page == 1) {
           this.exhibitionBox = res.teachers.data;
           this.houseType = res.course_types;
@@ -508,6 +500,7 @@ export default {
         this.area = val[2]?val[2].name: '';
         this.exhibitionBox = [];
         this.current_page2 = 1;
+        this.finished2 = false;
         this.isLogin();
         this.isOpen2 = false;
     },
@@ -524,11 +517,11 @@ export default {
         let params = {
             name:"",//老师名字
             good_at:this.ids,//擅长
-            min_num:this.record,//最小资历
-            max_num:this.num,//最大资历
-            city:this.city,//城市
-            province:this.province,//省
-            area:this.area//区
+            min_num: this.record,//最小资历
+            max_num: this.num,//最大资历
+            city: this.city,//城市
+            province: this.province,//省
+            area: this.area//区
         }
         return params;
     },
@@ -554,7 +547,6 @@ export default {
     postTeachersLogin(page =1) {
         this.$request.post('teachers/store/prais?page='+page,this.postParams())
         .then(res => {
-            console.log(res);
             const that = this;
             res.data.forEach(item => {
                 that.exhibitionBox.push(item);
@@ -571,11 +563,22 @@ export default {
     },
      // 选择工作资历
     onSelect3(item){
-        this.record = Number(item.name.split('-')[0]);
-        this.num = Number(item.name.split('-')[1]);
-        this.seniority = this.record + '-' + this.num;
+        if(item.name === '不限') {
+            this.seniority = item.name;
+            this.record = '';
+            this.num = '';
+        } else if(item.name === '40以上') {
+            this.record = 40;
+            this.num = 100;
+            this.seniority = item.name;
+        } else {
+            this.record = Number(item.name.split('-')[0]);
+            this.num = Number(item.name.split('-')[1]);
+            this.seniority = this.record + '-' + this.num;
+        }
         this.exhibitionBox = [];
         this.current_page2 = 1;
+        this.finished2 = false;
         this.isLogin();
         this.isOpen3 = false;
     },
@@ -586,6 +589,7 @@ export default {
         this.ids = name;
         this.exhibitionBox = [];
         this.current_page2 = 1;
+        this.finished2 = false;
         this.isLogin();
     },
     //机构名称查询
