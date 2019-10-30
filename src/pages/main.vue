@@ -181,12 +181,20 @@ export default {
           spaceBetween: 30,
           pagination: {
             el: '.swiper-pagination',
-            clickable: true
+            clickable: true,
+            renderBullet: function (index, className) {
+            return '<span class="' + className + '">' + (index + 1) + '</span>';
+            },
           },
-          loop: true,
+          loop: false,
+          loopFillGroupWithBlank: true,
+          autoplay: false,
         },
         swiperOptionData: {
-          pagination: ".swiper-pagination",
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: false,
+          },
           autoplay: false,
           loopFillGroupWithBlank: true,
           loop: true,
@@ -303,10 +311,6 @@ export default {
     height: 13px !important;
     border-radius: 50% !important;
 }
-.swiper-pagination-bullet-active {
-    opacity: 1;
-    background: #2c2c2c !important;
-}
 .el-carousel__arrow--right{
     right: 28px !important;
 }
@@ -316,14 +320,6 @@ export default {
 .el-carousel__arrow{
     position: absolute;
     right: 28px;
-}
-.swiper-pagination-bullet{
-    width: 10px !important;
-    height: 10px!important;
-    border-radius: 50% !important;
-    display: inline-block !important;
-    background: #000 !important;
-    opacity: .2 !important;
 }
 .bg_img {
   width: 100%;
