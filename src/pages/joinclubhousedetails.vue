@@ -79,11 +79,13 @@
                                         <img :src="item.teacher_img" :alt="item.theme"/>
                                     </div>
                                     <div class="clubhouse-swiper-name">
-                                        <p class="name-p1">{{item.theme}}<span class="name-span">{{item.name}}</span></p>
+                                        <p class="name-p1">{{item.theme}}</p>
+                                    </div>
+                                    <div class="clubhouse-swiper-name2">
+                                        <p class="name-p1">{{item.name}}</p>
                                         <p class="name-p2">￥{{item.price}}</p>
                                     </div>
-                                    <el-rate :value="item.diff" disabled disabled-void-color="#c0c4cc" :colors="['#58B708']"></el-rate>
-                                    <p class="name-p3">电话:{{item.tel}}</p>
+                                    <!-- <el-rate :value="item.diff" disabled disabled-void-color="#ccc" :colors="['#58B708']"></el-rate> -->
                                 </div>
                             </swiper-slide>
                         </swiper>
@@ -114,6 +116,7 @@ export default {
           slidesPerView: 3,
           spaceBetween: 30,
           slidesPerGroup: 3,
+          autoplay: true,
           loop: true,
           loopFillGroupWithBlank: true,
           navigation: {
@@ -125,9 +128,14 @@ export default {
           spaceBetween: 30,
           pagination: {
             el: '.swiper-pagination',
-            clickable: true
+            clickable: true,
+            renderBullet: function (index, className) {
+            return '<span class="' + className + '">' + (index + 1) + '</span>';
+            },
           },
-          loop: true,
+          loop: false,
+          loopFillGroupWithBlank: true,
+          autoplay: false,
         },
         swiperList:[],
         famousteach:[],
@@ -214,15 +222,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.swiper-pagination-bullet-active {
-    opacity: 1;
-    background: #2c2c2c;
-}
-.swiper-pagination-bullet{
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-}
 .joinclubdetails-main{
     width: 100%;
     height: 100%;
@@ -304,17 +303,19 @@ export default {
                 }
                 .clubhouse-swiper-name{
                     width: 90%;
-                    height: 30px;
-                    line-height: 16px;
-                    display: flex;
+                    height: 23px;
+                    line-height: 22px;
                     margin: 0 auto;
-                    justify-content: space-between;
                     margin-top: 20px;
+                    display: -webkit-box !important;
+                    -webkit-box-orient: vertical !important;
+                    -webkit-line-clamp:1 !important;// 限制快级元素的文本行数
+                    overflow: hidden !important;
                     .name-p1{
                         font-size: 20px;
                         color: #2c2c2c;
                         font-family:Source Han Sans CN;
-                        font-weight:400;
+                        font-weight:bold;
                         .name-span{
                             font-size: 14px;
                             color: #2c2c2c;
@@ -329,12 +330,40 @@ export default {
                          line-height: 25px;
                     }
                 }
+                .clubhouse-swiper-name2{
+                    width: 90%;
+                    height: 27px;
+                    line-height: 20px;
+                    display: flex;
+                    margin: 0 auto;
+                    justify-content: space-between;
+                    margin-top: 20px;
+                    .name-p1{
+                        font-size:14px;
+                        font-family:MicrosoftYaHei-Bold;
+                        font-weight:400;
+                        color: #2c2c2c;
+                        height: 22px;
+                        display: -webkit-box !important;
+                        -webkit-box-orient: vertical !important;
+                        -webkit-line-clamp:1 !important;// 限制快级元素的文本行数
+                        overflow: hidden !important;
+                    }
+                    .name-p2{
+                        font-size:14px;
+                        font-family:MicrosoftYaHei-Bold;
+                        font-weight:bold;
+                         color: #DA1111;
+                         line-height: 25px;
+                    }
+                }
                 .el-rate{
-                    margin-left: 20px;
+                    margin-left: 15px;
+                    margin-top: 5px;
                 }
                 .name-p3{
                     width: 90%;
-                    text-align: right;
+                    text-align: left;
                     margin: 0 auto;
                     font-size: 14px;
                     color: #2c2c2c;

@@ -1108,7 +1108,7 @@ img {
             div {
               font-size: 0.9rem;
               overflow: hidden !important;
-              -webkit-line-clamp: 2 !important;
+              -webkit-line-clamp: 1 !important;
               text-overflow: ellipsis !important;
               display: -webkit-box !important;
               -webkit-box-orient: vertical;
@@ -1282,13 +1282,14 @@ img {
           // align-items: center;
           width: 90%;
           margin: 0 auto;
-          height: 4em;
+          height: 3em;
+          margin-top: 1rem;
           cursor: pointer;
           padding-top: 0.4rem;
           div {
             font-size: 0.9rem;
             overflow: hidden !important;
-            -webkit-line-clamp: 2 !important;
+            -webkit-line-clamp: 1 !important;
             text-overflow: ellipsis !important;
             display: -webkit-box !important;
             -webkit-box-orient: vertical;

@@ -10,6 +10,54 @@
                         </div>
                     </template>
                     <div class="yogo-count">
+                        <el-col :span="24" class="bg-tupian1">
+                        <div class="yogo-cont-div1">
+                            <h2><img src="../assets/yujia.png"/>名师推荐</h2>
+                            <p class="nav-text">Sometimes beauty is so simple</p>
+                            <div class="border-left"></div>
+                            <div class="border-right"></div>
+                       </div>
+                       <div class="yogo-cont-div2">
+                           <img src="../assets/image79.png" class="yogo-img"/>
+                           <el-col v-if="this.iconList.length > 0">
+                           <div class="yogocontunt">
+                               <swiper :options="swiperOption" style="height:440px;width:1200px;">
+                                <swiper-slide v-for="(page,index) of pages" :key="index">
+                                    <div class="yogocontunt-swiper" v-for="(item,idx) in page" :key="idx" @click="yogolink(item)">
+                                    <figure class="test5">
+                                        <img :src="item.first_img" class="yogocontunt2-img" :alt="item.name"/>
+                                        <div class="test5-title2">
+                                            <h4>{{item.name}}</h4>
+                                            <p class="p1">教龄：{{item.num}}年</p>
+                                        </div>
+                                        <figcaption>
+                                            <p class="pgood">私教擅长：{{item.good_at}}</p>
+                                            <p class="p2">瑜伽历程：{{item.info}}</p>
+                                            <div class="div01"></div>
+                                            <div class="div02"></div>
+                                        </figcaption>
+                                    </figure>
+                                    </div>
+                                </swiper-slide>
+                                <div class="swiper-pagination" slot="pagination"></div>
+                                </swiper>
+                           </div>
+                           </el-col>
+                           <div class="Default-page4" v-else>
+                                <div class="Default-main3">
+                                <img src="../assets/default.png"/>
+                                <span class="page-span3">我寻寻觅觅却找不到您的踪迹~</span>
+                                </div>
+                            </div>
+                       </div>
+                       <el-col class="bg-tupian5">
+                       <div class="yogo-cont-div4">
+                            <h2><img src="../assets/yujia.png"/>瑜伽名师展</h2>
+                            <p class="nav-text">Sometimes beauty is so simple</p>
+                            <div class="border-left"></div>
+                            <div class="border-right"></div>
+                       </div>
+                       </el-col>
                         <div class="yogo-search">
                             <el-col class="yogo-lan">
                             <div class="search-left">
@@ -36,62 +84,7 @@
                             </div>
                             </el-col>
                         </div>
-                        <el-col :span="24" class="bg-tupian1">
-                        <div class="yogo-cont-div1">
-                            <h2><img src="../assets/yujia.png"/>名师精选</h2>
-                            <p class="nav-text">Sometimes beauty is so simple</p>
-                            <div class="border-left"></div>
-                            <div class="border-right"></div>
-                       </div>
-                       <div class="yogo-cont-div2">
-                           <img src="../assets/image79.png" class="yogo-img"/>
-                           <div class="yogocontunt">
-                               <swiper :options="swiperOption" style="height:850px;width:1200px;">
-                                <swiper-slide v-for="(page,index) of pages" :key="index">
-                                    <div class="yogocontunt-swiper">
-                                        <div class="yogoswiper-img">
-                                            <div class="rhomb1">
-                                                <img :src="namelist.first_img" alt="名师头像"/>
-                                            </div>
-                                            <div class="rhomb2"></div>
-                                            <div class="rhomb3"></div>
-                                            <div class="rhomb4"></div>
-                                        </div>
-                                        <div class="yogoswiper-text">
-                                            <h3 @click="namelistItem(namelist)">{{namelist.name}}</h3>
-                                            <p class="p1">{{namelist.info}}</p>
-                                            <p class="p3">从业时间: {{namelist.num}}年</p>
-                                            <p class="p2">擅长：{{namelist.good_at}}</p>
-                                            <p class="p4">地址：{{namelist.club_address}}</p>
-                                            <div class="yogoswiper-butt">
-                                            <el-button type="text" @click="namelistItem(namelist)">详情</el-button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="margin-auto">
-                                    <div class="icon" v-for="(item,idx) of page" :key="item.id" :class="activeClass == idx ? 'active':''" @click="selectItem(item,idx)">
-                                    <!-- <div class="icon-img"> -->
-                                    <div class="icon-img" :style="{ 'background-image': 'url(' + item.first_img + ')','background-repeat':'no-repeat','background-size':'cover', 'background-position': 'center center' }">
-                                        <!-- <img class="icon-img-content" :src="item.path"> -->
-                                    </div>
-                                    <h3>{{item.name}}</h3>
-                                    <p class="icon-desc">从业时间：{{item.num}}年</p>
-                                    <p class="icon-desc2">{{item.info}}</p>
-                                    </div>
-                                    </div>
-                                </swiper-slide>
-                                 <div class="swiper-button-prev1" slot="button-prev" @click="buttonprev(pages)"></div>
-                                 <div class="swiper-button-next1" slot="button-next" @click="buttonnext(pages)"></div>
-                                </swiper>
-                           </div>
-                       </div>
                        <el-col :span="24" class="bg-tupian2">
-                       <div class="yogo-cont-div4">
-                            <h2><img src="../assets/yujia.png"/>瑜伽名师展</h2>
-                            <p class="nav-text">The customer's excellent experience is our goal from beginning to end.</p>
-                            <div class="border-left"></div>
-                            <div class="border-right"></div>
-                       </div>
                        <div class="yogo-cont-div3">
                            <div class="yogocontunt2" v-if="this.yogolist.length > 0">
                                <div class="yogocontunt2-list" v-for="(item, index) in yogolist" :key="index" @mouseenter="onMouseOver(index)" @click="yogolink(item)">
@@ -104,10 +97,6 @@
                                         <figcaption>
                                             <p class="pgood">私教擅长：{{item.good_at}}</p>
                                             <p class="p2">瑜伽历程：{{item.info}}</p>
-                                            <!-- <div class="telimg">
-                                                <img src="../assets/market/like.png" class="tel-img"/>
-                                                <span class="telpp">{{item.tel}}</span>
-                                            </div> -->
                                             <div class="div01"></div>
                                             <div class="div02"></div>
                                         </figcaption>
@@ -181,8 +170,14 @@ export default {
         yogolist:[],
         iconList: [],
         swiperOption: {
-          pagination: ".swiper-pagination",
-          autoplay: false,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+            renderBullet: function (index, className) {
+            return '<span class="' + className + '">' + (index + 1) + '</span>';
+            },
+          },
+          autoplay: true,
           loopFillGroupWithBlank: true,
           loop: true,
           navigation: {
@@ -314,7 +309,7 @@ export default {
         this.activeClass = idx;
     },
     buttonprev(m){ 
-         this.namelist=m[this.i-1][0];
+         this.iconList=m[this.i-1][0];
          this.i--;
       },
     buttonnext(m){
@@ -351,6 +346,10 @@ export default {
     background: #E2DBC8;
     margin-top: -38px;
 }
+.test5 .test5-title2{
+    background: #F6F4EE;
+    margin-top: -38px;
+}
 .test5 .test5-title h4{
     opacity: 1;
     font-size: 18px;
@@ -368,6 +367,31 @@ export default {
     padding-top: 10px;
 }
 .test5 .test5-title .p1{
+    text-align: center;
+    font-size:14px;
+    font-family:Microsoft YaHei;
+    font-weight:400;
+    opacity: 1;
+    color: #2c2c2c;
+    padding-bottom: 15px;
+}
+.test5 .test5-title2 h4{
+    opacity: 1;
+    font-size: 18px;
+    font-family: Microsoft YaHei; 
+    font-weight: bold;
+    margin: 0 auto;
+    text-align: center;
+    margin-top: 38px;
+    width: 86%;
+    line-height: 40px;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 1 !important;
+    overflow: hidden !important;
+    padding-top: 10px;
+}
+.test5 .test5-title2 .p1{
     text-align: center;
     font-size:14px;
     font-family:Microsoft YaHei;
@@ -517,57 +541,6 @@ export default {
     height: 100%;
     margin: 0 auto;
     overflow: hidden;
-    .yogo-search{
-        width: 100%;
-        height: 70px;
-        display: flex;
-        background-color: #E2DBC8;
-        .yogo-lan{
-            width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            height: 100%;
-        .search-left{
-            line-height: 72px;
-            display: -webkit-box;
-            display: -ms-flexbox;
-            display: flex;
-            .el-select{
-                width: 140px;
-                height: 40px;
-                margin-right:5px;
-            }
-            .el-input--suffix .el-input__inner{
-                background-color: #fff;
-                height: 40px !important;
-            }
-            .el-select__tags{
-                position: absolute;
-                line-height: normal;
-                white-space: normal;
-                z-index: 1;
-                top: 83%;
-                -webkit-transform: translateY(-50%);
-                transform: translateY(-50%);
-                display: -webkit-box;
-                display: -ms-flexbox;
-                display: flex;
-                -webkit-box-align: center;
-                -ms-flex-align: center;
-                align-items: center;
-                -ms-flex-wrap: wrap;
-                flex-wrap: wrap;
-            }
-        }
-        .search-right{
-             padding-top: 15px;
-             .el-input{
-                 width: 275px;
-             }
-        }
-        }
-    }
     .yogo-count{
         width: 100%;
         margin: 0 auto;
@@ -623,308 +596,155 @@ export default {
             width: 100%;
             height: 100%;
             margin: 0 auto;
-            margin-top: 20px;
             position: relative;
+            display: inline-block;
+            .Default-page4{
+                width: 100%;
+                height: 500px;
+                margin: 0 auto;
+                text-align: center;
+                line-height: 400px;
+                background-color: #F6F4EE;
+                .Default-main3{
+                    width: 1200px;
+                    height: 100%;
+                    margin: 0 auto;
+                img{
+                    width: 500px;
+                    height: 300px;
+                }
+                .page-span3{
+                    font-size:22px;
+                    font-family:PingFang SC;
+                    font-weight:500;
+                    color: #999;
+                }
+                }
+            }
             .yogo-img{
                 position: absolute;
                 right: 0%;
-                width: 185px;
+                width: 180px;
                 height: 330px;
-                bottom: 80%;
+                top: 15%;
             }
             .yogocontunt{
                 width: 1200px;
-                height: 100%;
+                height: 440px;
                 margin: 0 auto;
                 margin-bottom: 50px;
                 position: relative;
-                // cursor: pointer;
-                .margin-auto{
-                    width: 100%;
-                    margin:0 auto;
-                    display: flex;
-                    justify-content: center;
-                    height: auto;
-                .icon{
-                    // float: left;
-                    width: 22%;
-                    height: 426px;
-                    margin-top: 25px;
-                    margin-left: 27px;
-                    box-shadow: 1px 1px 6px 0px rgba(36, 36, 36, 0.2);
-                    background-color: #fff;
-                    transition: all .9s;
-                    .icon-img{
-                        width: 100%;
-                        height: 270px;
-                        overflow: hidden;
-                        // .icon-img-content{
-                        // }
-                    }
-                    h3{
-                        text-align: center;
-                        color: #2c2c2c;
-                        margin: 0 auto;
-                        margin-top: 15px;
-                        margin-bottom: 10px;
-                        width: 92%;
-                        font-size:18px;
-                        font-family:Microsoft YaHei;
-                        font-weight:bold;
-                        display: -webkit-box !important;
-                        -webkit-box-orient: vertical !important;
-                        -webkit-line-clamp: 1 !important;// 限制快级元素的文本行数
-                        overflow: hidden !important;
-                    }
-                    .icon-desc{
-                        text-align: center;
-                        color: #2c2c2c;
-                        font-size: 14px;
-                        }
-                    .icon-desc2{
-                        text-align: center;
-                        width: 92%;
-                        margin: 0 auto;
-                        color: #2c2c2c;
-                        font-size: 14px;
-                        display: -webkit-box !important;
-                        -webkit-box-orient: vertical !important;
-                        -webkit-line-clamp: 2 !important;// 限制快级元素的文本行数
-                        overflow: hidden !important;
-                    }
-                }
-                .icon:hover{
-                    float: left;
-                    width: 22%;
-                    height: 440px;
-                    margin-top: 25px;
-                    margin-left: 27px;
-                    box-shadow:2px 7px 9px 0px rgba(36,36,36,0.2);
-                    background-color: #fff;
-                    transform: scale(.98);
-                }
-                .active {
-                    box-shadow:2px 7px 9px 0px rgba(36,36,36,0.2);
-                    height: 450px;
-                    }
-                }
                 .yogocontunt-swiper{
-                    width: 100%;
-                    height: 350px;
-                    margin: 0 auto;
+                    width: 270px;
+                    height: 279px;
+                    background-color: #E2DBC8;
+                    margin: 14px;
+                    float: left;
+                    cursor: pointer;
+                    position: relative;
+                }
+            }
+        }
+        .bg-tupian5{
+            width: 100%;
+            background: #fff;
+           .yogo-cont-div4{
+            width: 1200px;
+            height: 150px;
+            text-align: center;
+            margin: 0 auto;
+            position: relative;
+            .border-left{
+                width: 20%;
+                height: 1px;
+                background-color: #F1EDE3;
+                position: absolute;
+                left:19%;
+                top: 41%;
+            }
+            .border-right{
+                width: 20%;
+                height: 1px;
+                background-color: #F1EDE3;
+                position: absolute;
+                right: 19%;
+                top: 41%;
+            }
+            .nav-text{
+                color: #999999;
+                font-size: 14px;
+                margin-top: 8px;
+            }
+            h2{
+                color: #2c2c2c;
+                font-size: 1.4rem;
+                margin-top: 40px;
+                font-family:Microsoft YaHei;
+                font-weight:bold;
+                padding-top: 24px;
+                img{
+                    width: 28px;
+                    height: 28px;
+                    position: absolute;
+                    left: 41%;
+                    top: 18%;
+                }
+            }
+        }
+        }
+        .yogo-search{
+            width: 100%;
+            height: 70px;
+            display: flex;
+            background-color: #fff;
+            border: 1px solid #E2DBC8;
+            .yogo-lan{
+                width: 1175px;
+                margin: 0 auto;
+                display: flex;
+                justify-content: space-between;
+                height: 100%;
+            .search-left{
+                line-height: 72px;
+                display: -webkit-box;
+                display: -ms-flexbox;
+                display: flex;
+                .el-select{
+                    width: 140px;
+                    height: 40px;
+                    margin-right:5px;
+                    ::placeholder{
+                    color: #464a4c;
+                    }
+                }
+                .el-input--suffix .el-input__inner{
+                    background-color: #fff;
+                    height: 40px !important;
+                }
+                .el-select__tags{
+                    position: absolute;
+                    line-height: normal;
+                    white-space: normal;
+                    z-index: 1;
+                    top: 83%;
+                    -webkit-transform: translateY(-50%);
+                    transform: translateY(-50%);
+                    display: -webkit-box;
+                    display: -ms-flexbox;
                     display: flex;
-                    .yogoswiper-img{
-                        width: 50%;
-                        height: 100%;
-                        position: relative;
-                        .rhomb1{
-                            width: 290px;
-                            height: 275px;
-                            background-color: #E2DBC8;
-                            -webkit-transform: rotate(0deg);
-                            transform: rotate(0deg);
-                            position: absolute;
-                            right: 44%;
-                            top: 10%;
-                            overflow: hidden;
-                            img{
-                                width: 100%;
-                                height: 100%;
-                                max-width: 100%;
-                                // transform:rotate(-45deg)scale(1.42);
-                                object-fit: cover;
-                            }
-                        }
-                        .rhomb2{
-                            width: 245px;
-                            height: 245px;
-                            border: 7px solid #E2DBC8;
-                            -webkit-transform: rotate(45deg);
-                            transform: rotate(45deg);
-                            position: absolute;
-                            right: 25%;
-                            top: 15%;
-                            border-left: #fff;
-                            border-bottom: #fff;
-                        }
-                        .rhomb2:before{
-                            content: "";
-                            position: absolute;
-                            left: -7%;
-                            top: 4%;
-                            width: 18%;
-                            height: 7px;
-                            background-color: #E2DBC8;
-                            transform: rotate(89deg);
-                        }
-                        .rhomb2:after{
-                            content: "";
-                            position: absolute;
-                            left: 83%;
-                            top: 97%;
-                            width: 20%;
-                            height: 7px;
-                            background-color: #E2DBC8;
-                            transform: rotate(0deg);
-                        }
-                        .rhomb3{
-                            width: 55px;
-                            height: 55px;
-                            border: 4px solid #E2DBC8;
-                            transform:rotate(45deg);
-                            position: absolute;
-                            right: 12%;
-                            top: 5%;
-                        }
-                        .rhomb4{
-                            width: 90px;
-                            height: 90px;
-                            border: 4px solid #E2DBC8;
-                            transform:rotate(45deg);
-                            position: absolute;
-                            right: 5%;
-                            top:62%;
-                        }
-                    }
-                    .yogoswiper-text{
-                        width: 46%;
-                        height: 100%;
-                        margin-left: 35px;
-                        // cursor: pointer;
-                        .yogoswiper-butt{
-                            width: 120px;
-                            border: 1px solid #e2dbc8;
-                            background: #e2dbc8;
-                            text-align: center;
-                            margin-top:9%;
-                            transition: all 1s;
-                            .el-button--text{
-                                color: #2c2c2c;
-                                background: 0 0;
-                                padding-left: 0;
-                                padding-right: 0;
-                                width: 100%;
-                            }
-                        }
-                        .yogoswiper-butt:hover{
-                            width: 120px;
-                            border: 1px solid #e2dbc8;
-                            background: #e2dbc8;
-                            text-align: center;
-                            margin-top:9%;
-                            border-radius: 5px;
-                            transform: scale(.95);
-                            .el-button--text{
-                                color: #2c2c2c;
-                                background: 0 0;
-                                padding-left: 0;
-                                padding-right: 0;
-                            }
-                        }
-                        h3{
-                            text-align: left;
-                            line-height: 45px;
-                            font-family:Microsoft YaHei;
-                            font-weight:bold;
-                            font-size: 18px;
-                            color: #2c2c2c;
-                            display: -webkit-box !important;
-                            -webkit-box-orient: vertical !important;
-                            -webkit-line-clamp: 1 !important;// 限制快级元素的文本行数
-                            overflow: hidden !important;
-                            cursor: pointer;
-                        }
-                        .p1{
-                            color: #2c2c2c;
-                            font-size: 14px;
-                            display: -webkit-box !important;
-                            -webkit-box-orient: vertical !important;
-                            -webkit-line-clamp: 1 !important;// 限制快级元素的文本行数
-                            overflow: hidden !important;
-                        }
-                        .p2{
-                            color: #999999;
-                            font-size: 14px;
-                            margin-top:13%;
-                        }
-                        .p3{
-                            color: #2c2c2c;
-                            font-size: 14px;
-                        }
-                        .p4{
-                            color: #999999;
-                            font-size: 14px;
-                        }
-                    }
+                    -webkit-box-align: center;
+                    -ms-flex-align: center;
+                    align-items: center;
+                    -ms-flex-wrap: wrap;
+                    flex-wrap: wrap;
                 }
-                .swiper-button-prev1{
-                        position: absolute;
-                        left: 88%;
-                        top: 36%;
-                        width: 32px;
-                        height: 32px;
-                        border: 1px solid #e2dbc8;
-                        border-radius: 50%;
-                        z-index: 10;
-                        background-size: 24px 24px;
-                        transition: all .7s;
-                        background-color: #fff;
-                        background-image: url('../assets/left.png');
-                        background-position: center;
-                        cursor: pointer;
+            }
+            .search-right{
+                padding-top: 15px;
+                .el-input{
+                    width: 260px;
                 }
-                .swiper-button-prev1:hover{
-                        position: absolute;
-                        left: 88%;
-                        top: 36%;
-                        width: 32px;
-                        height: 32px;
-                        border: 1px solid #e2dbc8;
-                        border-radius: 50%;
-                        z-index: 10;
-                        background-size: 24px 24px;
-                        transform: scale(.95);
-                        background-color: #e2dbc8;
-                        background-image: url('../assets/left.png');
-                        background-position: center;
-                }
-                .swiper-button-prev1:focus{
-                        outline: 0;
-                }
-                .swiper-button-next1{
-                        position: absolute;
-                        right: 2%;
-                        top: 36%;
-                        width: 32px;
-                        height: 32px;
-                        border: 1px solid #e2dbc8;
-                        border-radius: 50%;
-                        z-index: 10;
-                        transition: all .7s;
-                        background-size: 24px 24px;
-                        background-color: #fff;
-                        background-image: url('../assets/right.png');
-                        background-position: center;
-                        cursor: pointer;
-                }
-                .swiper-button-next1:hover{
-                        position: absolute;
-                        right: 2%;
-                        top: 36%;
-                        width: 32px;
-                        height: 32px;
-                        border: 1px solid #e2dbc8;
-                        border-radius: 50%;
-                        z-index: 10;
-                        background-size: 24px 24px;
-                        transform: scale(.95);
-                        background-color: #e2dbc8;
-                        background-image: url('../assets/right.png');
-                        background-position: center;
-                }
-                .swiper-button-next1:focus{
-                        outline: 0;
-                }
+            }
             }
         }
         .bg-tupian2{
@@ -935,7 +755,7 @@ export default {
             width: 100%;
             height: 100%;
             margin: 0 auto;
-            margin-top: 10px;
+            margin-top: 5%;
             margin-bottom: 50px;
             .yogocontunt2{
                 width: 1200px;
@@ -998,49 +818,6 @@ export default {
                     font-weight:500;
                     color: #999;
                 }
-                }
-            }
-        }
-        .yogo-cont-div4{
-            width: 1200px;
-            height: 150px;
-            text-align: center;
-            margin: 0 auto;
-            position: relative;
-            .border-left{
-                width: 20%;
-                height: 1px;
-                background-color: #F1EDE3;
-                position: absolute;
-                left:19%;
-                top: 41%;
-            }
-            .border-right{
-                width: 20%;
-                height: 1px;
-                background-color: #F1EDE3;
-                position: absolute;
-                right: 19%;
-                top: 41%;
-            }
-            .nav-text{
-                color: #999999;
-                font-size: 14px;
-                margin-top: 8px;
-            }
-            h2{
-                color: #2c2c2c;
-                font-size: 1.4rem;
-                margin-top: 40px;
-                font-family:Microsoft YaHei;
-                font-weight:bold;
-                padding-top: 24px;
-                img{
-                    width: 28px;
-                    height: 28px;
-                    position: absolute;
-                    left: 41%;
-                    top: 18%;
                 }
             }
         }
