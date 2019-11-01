@@ -54,3 +54,17 @@ export function postTrainsRank(page=2, args) {
 export function getTrainsById(id) {
   return request(`/trains/${id}`)
 }
+
+/* 新增订单-培训信息 */
+export function postTrainsOrder(args) {
+  let params = {
+    id: '',
+    cashId: '',
+    cashMoney: '',
+    couponId: '',
+    fraction: '',
+    discountId: ''  
+  }
+  params = Object.assign({}, params, args)
+  return request.post(`/trains/new/order`, params)
+}

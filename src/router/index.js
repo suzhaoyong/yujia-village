@@ -211,6 +211,13 @@ const router = new Router({
           },
           component: () => import('@/pages/cultivate/detail')
         }, //培训信息-----详情
+        {
+          path: '/cultivate/order/:id',
+          meta: {
+            header_name: 'cultivate'
+          },
+          component: () => import('@/pages/cultivate/order')
+        }
       ]
     },
     {

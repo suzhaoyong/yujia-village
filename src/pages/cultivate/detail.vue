@@ -35,7 +35,7 @@
                 <div class="kecheng_rh">
                   <div class="kecheng_price">￥{{train.price}}</div>
                   <div class="kecheng_change" v-if="isJifen">
-                    <div v-for="(item, index) in train.train_discount" :key="index"><span>{{item.consume}}</span> {{item.type}}，课程仅需 <span>{{train.price - item.deduction}}</span> 元</div>
+                    <div v-for="(item, index) in train_discount['积分']" :key="index"><span>{{item.consume}}</span> {{item.type}}，课程仅需 <span>{{item.deduction}}</span> 元</div>
                   </div>
                 </div>
               </div>
@@ -164,15 +164,17 @@ export default {
       changedImg: '',
       changeCount: 0,
       value2: 4,
-      train: {}
+      train: {},
+      train_discount: {}
     };
   },
   mounted() {
     const { id } = this.$route.params;
     getTrainsById(id)
       .then(data => {
-        this.train = data;
-        this.changedImg = data.train_old_image[0] && data.train_old_image[0].url || data.teacher_img
+        this.train = data.train;
+        this.train_discount = data.train_discount
+        this.changedImg = data.train.train_old_image[0] && data.train.train_old_image[0].url || data.train.teacher_img
         // const content = data.content.split("\n").filter(item => item);
         // const crowd = data.crowd.split(/；/).filter(item => item);
         // this.train.content = content;
@@ -185,7 +187,7 @@ export default {
   computed: {
     ...mapGetters(['info', 'isUserNeedLogin']),
     isJifen() {
-      return this.train.train_discount && this.train.train_discount.length > 0
+      return this.train_discount['积分'] && this.train_discount['积分'].length > 0
     }
   },
   methods: {
@@ -194,6 +196,8 @@ export default {
         Bus.$emit('login', true);
         return;
       }
+      const { id } = this.$route.params;
+      this.$router.push(`/cultivate/order/${id}`)
     },
     changeImg() {
       this.changeCount += 1
