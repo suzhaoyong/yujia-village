@@ -21,8 +21,9 @@
                            <img src="../assets/image79.png" class="yogo-img"/>
                            <el-col v-if="this.iconList.length > 0">
                            <div class="yogocontunt">
-                               <swiper :options="swiperOption" style="height:440px;width:1200px;">
-                                <swiper-slide v-for="(page,index) of pages" :key="index">
+                               <swiper :options="swiperOption" style="position:relative;height:440px;width:1200px;">
+                                <div class="swiper-pagination" slot="pagination" style="position:absolute;top:3px;right:18px;width:98%;height:40px;text-align:right;"></div>
+                                <swiper-slide v-for="(page,index) of pages" :key="index" style="margin-top:40px">
                                     <div class="yogocontunt-swiper" v-for="(item,idx) in page" :key="idx" @click="yogolink(item)">
                                     <figure class="test5">
                                         <img :src="item.first_img" class="yogocontunt2-img" :alt="item.name"/>
@@ -39,7 +40,6 @@
                                     </figure>
                                     </div>
                                 </swiper-slide>
-                                <div class="swiper-pagination" slot="pagination"></div>
                                 </swiper>
                            </div>
                            </el-col>
@@ -630,7 +630,7 @@ export default {
             }
             .yogocontunt{
                 width: 1200px;
-                height: 440px;
+                height: 460px;
                 margin: 0 auto;
                 margin-bottom: 50px;
                 position: relative;
@@ -694,7 +694,7 @@ export default {
         }
         .yogo-search{
             width: 100%;
-            height: 70px;
+            height: 75px;
             display: flex;
             background-color: #fff;
             border: 1px solid #E2DBC8;
