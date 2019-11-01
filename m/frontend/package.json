@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
+    "build-dev": "cross-env NODE_ENV=development env_config=dev vue-cli-service build",
+    "build-prod": "cross-env NODE_ENV=production env_config=prod vue-cli-service build",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
