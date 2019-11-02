@@ -146,7 +146,7 @@ const router = new Router({
           component: () => import('@/pages/personalCenter/share')
         },
         {
-          path: 'order/thankYouPage',
+          path: 'order/thankYouPage/:orderId',
           name: 'thank you page',
           meta: {
             header_name: 'personal'

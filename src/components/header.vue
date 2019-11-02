@@ -52,7 +52,7 @@
                   <el-menu-item index="login">请先登录</el-menu-item>
                 </div>
                 <div v-show="info.user.name">
-                  <el-menu-item index="personal">个人中心</el-menu-item>
+                  <el-menu-item index="personal index">个人中心</el-menu-item>
                   <!-- <el-menu-item index="identity">个人信息</el-menu-item> -->
                   <!-- <el-menu-item index="recode">订单中心</el-menu-item> -->
                   <el-menu-item

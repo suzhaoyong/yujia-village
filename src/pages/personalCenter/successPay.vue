@@ -21,7 +21,7 @@ export default {
   },
   methods: {
     viewOrder() {
-      // this.$router.push({ name: 'personal recode'})
+      this.$router.push({ name: 'personal index'})
     },
     back() {
       this.$router.push('/main')
