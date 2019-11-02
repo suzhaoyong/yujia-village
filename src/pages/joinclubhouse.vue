@@ -37,7 +37,7 @@
                                     <p class="p2">{{item.custom_address}}</p>
                                     <figcaption>
                                         <div class="telimg">
-                                            <span v-html="item.content" class="telpp">{{item.content}}</span>
+                                            <span v-html="item.content" :title="item.content" class="telpp">{{item.content}}</span>
                                         </div>
                                     </figcaption>
                                 </figure>
