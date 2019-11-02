@@ -440,8 +440,8 @@ export default {
     width: 40rem;
     min-height: 17rem;
     height: 22rem;
-    overflow-y: auto;
-    overflow-x: hidden;
+    // overflow-y: auto;
+    // overflow-x: hidden;
     border-top:10px solid #EEEEEE;
     /* 设置滚动条的样式 */
     &.scorll::-webkit-scrollbar {
@@ -486,6 +486,9 @@ export default {
       padding-top: 1rem;
       padding-right: 12rem;
       font-size: 0.7rem;
+      height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
     }
   }
 }
