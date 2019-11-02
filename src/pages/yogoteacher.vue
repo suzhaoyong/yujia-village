@@ -64,13 +64,10 @@
                                 <el-select v-model="value" placeholder="擅长类型" @change="changecoure">
                                     <el-option v-for="item in coursetypes" :key="item.id" :label="item.name" :value="item.name"></el-option>
                                 </el-select>
-                                <el-select v-model="value2" placeholder="最小资历" @change="yearchange" style="width:105px">
+                                <el-select v-model="value2" placeholder="工作资历" @change="yearchange" style="width:140px">
                                     <el-option v-for="item in yearlist" :key="item.id" :label="item.name" :value="item.id"></el-option>
                                 </el-select>
-                                <el-select v-model="value3" placeholder="最大资历" @change="yearchange" style="width:105px">
-                                    <el-option v-for="item in yearlist" :key="item.id" :label="item.name" :value="item.id"></el-option>
-                                </el-select>
-                                <v-distpicker :province="province" :city="city" :area="area" @selected="onSelected"></v-distpicker>
+                                <v-distpicker :province="province" :city="city" :area="area" @province="onChangeProvince" @city="onChangeCity" @area="onchangearea"></v-distpicker>
                             </div>
                             <div class="search-right">
                                 <el-form :inline="true" :model="formInline" class="demo-form-inline" @submit.native.prevent>
@@ -152,7 +149,8 @@ export default {
           user: '',
         },
         coursetypes: [],
-        yearlist:[],
+        yearlist:[{id:0,name:'不限'},{id:1,name:'0-5'},{id:2,name:'5-10'},{id:3,name:'10-15'},{id:4,name:'15-20'},{id:5,name:'20-30'},
+        {id:6,name:'30-40'},{id:7,name:'40以上'}],
         currentPage:1,
         pagesize: 0,
         total:0,
@@ -163,7 +161,8 @@ export default {
         city:'',
         area:'',
         value2: '',
-        value3: '',
+        minnum: '',
+        maxnum: '',
         activeClass: 0,
         namelist:[],
         current:'',
@@ -227,7 +226,7 @@ export default {
         this.$request(`/teachers?page=${_this.currentPage}`).then(res => {
             _this.yogolist = res.teachers.data;
             _this.coursetypes = res.course_types;
-            _this.yearlist = res.year;
+            // _this.yearlist = res.year;
             _this.banner = res.banner;
             _this.total = res.teachers.total;
             _this.currentPage = res.teachers.current_page;
@@ -249,8 +248,8 @@ export default {
            let params = {
                 name:this.formInline.user,//老师名字
                 good_at:this.value,//擅长
-                min_num:this.value2,//最小资历
-                max_num:this.value3,//最大资历
+                min_num:this.minnum,//最小资历
+                max_num:this.maxnum,//最大资历
                 city:this.city,//城市
                 province:this.province,//省
                 area:this.area//区
@@ -295,14 +294,52 @@ export default {
             }
         });
       },
-      onSelected(data) {
-        this.province = data.province.value;
-        this.city = data.city.value;
-        this.area = data.area.value;
-     },
+      onChangeProvince(data) {
+      this.province = data.value;
+    },
+     onChangeCity(data) {
+      this.city = data.value;
+    },
+    onchangearea(data){
+     this.area = data.value;
+    },
      changecoure(val){
      },
      yearchange(val){
+         switch(val){
+            case 0:
+                this.minnum = 0;
+                this.maxnum = 100;
+                break;
+            case 1:
+                this.minnum = 0;
+                this.maxnum = 5;
+                break;
+            case 2:
+                this.minnum = 5;
+                this.maxnum = 10;
+                break;
+            case 3:
+                this.minnum = 10;
+                this.maxnum = 15;
+                break;
+            case 4:
+                this.minnum = 15;
+                this.maxnum = 20;
+                break;
+            case 5:
+                this.minnum = 20;
+                this.maxnum = 30;
+                break;
+            case 6:
+                this.minnum = 30;
+                this.maxnum = 40;
+                break;
+            case 7:
+                this.minnum = 40;
+                this.maxnum = 100;
+                break;
+         }
      },
     selectItem(item,idx){
         this.namelist = item;
