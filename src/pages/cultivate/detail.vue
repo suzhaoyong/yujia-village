@@ -8,7 +8,7 @@
             <div :class="`${train.train_image && train.train_image.length > 0 ? 'count-div2-img scorll' : 'count-div2-img'}`" style="cursor: pointer;">
               <img
                 v-if="train.train_image && train.train_image.length > 0"
-                @click="train.teacher_img = item.path"
+                @click="changeTrainImage(item)"
                 v-for="(item, index) in train.train_image"
                 :key="index"
                 class="img1"
@@ -16,7 +16,7 @@
               />
             </div>
             <div class="count-div2-imgpic">
-              <img class="img1" :src="train.teacher_img" :alt="train.theme"/>
+              <img class="img1" :src="train.themeImg" :alt="train.theme"/>
             </div>
             <div class="count-div2-text">
               <h4><span class="jifen" v-if="isJifen">积</span>{{train.theme}}</h4>
@@ -35,7 +35,7 @@
                 <div class="kecheng_rh">
                   <div class="kecheng_price">￥{{train.price}}</div>
                   <div class="kecheng_change" v-if="isJifen">
-                    <div v-for="(item, index) in train_discount['积分']" :key="index"><span>{{item.consume}}</span> {{item.type}}，课程仅需 <span>{{item.deduction}}</span> 元</div>
+                    <div v-for="(item, index) in train_discount['积分']" :key="index"><span>{{item.consume}}</span> {{item.type}}，课程仅需 <span>{{(train.price - item.deduction).toFixed(2)}}</span> 元</div>
                   </div>
                 </div>
               </div>
@@ -68,7 +68,8 @@
                 <div class="info">
                   <div class="name">授 课 老 师： {{train.name}}</div>
                   <div class="berif">
-                    <pre v-html="train.intro"></pre>
+                    <!-- <pre v-html="train.intro"></pre> -->
+                    <div class="berif-line" v-for="(item, index) in getIntroList" :key="index">{{item+item+item}}</div>
                   </div>
                 </div>
               </div>
@@ -80,12 +81,21 @@
             </div>
             <div class="program-content">
               <div class="program-bg"></div>
-              <div class="program-html" v-html="train.outline"></div>
+              <div class="program-html">
+                <div class="program-lint" v-for="(item, index) in getOutlineList" :key="index">{{item}}</div>
+              </div>
             </div>
           </div>
           <div class="traning-wrap">
             <div class="traning">
-              <div class="traning-content" v-html="train.crowd"></div>
+              <div class="traning-content">
+                <span class="traning-title">适合人群</span>
+                <ul>
+                  <li v-for="(item, index) in getCrowdList" :key="index">
+                    {{item}}
+                  </li>
+                </ul>
+              </div>
               <div class="traning-img" :style="`background-image: url('${changedImg}')`">
               </div>
               <div class="change" :style="`transform: rotate(${360 * changeCount}deg);`" @click="changeImg"></div>
@@ -164,7 +174,9 @@ export default {
       changedImg: '',
       changeCount: 0,
       value2: 4,
-      train: {},
+      train: {
+        themeImg: ''
+      },
       train_discount: {}
     };
   },
@@ -172,7 +184,7 @@ export default {
     const { id } = this.$route.params;
     getTrainsById(id)
       .then(data => {
-        this.train = data.train;
+        this.train = Object.assign({} ,data.train, {themeImg: data.train.teacher_img});
         this.train_discount = data.train_discount
         this.changedImg = data.train.train_old_image[0] && data.train.train_old_image[0].url || data.train.teacher_img
         // const content = data.content.split("\n").filter(item => item);
@@ -188,6 +200,15 @@ export default {
     ...mapGetters(['info', 'isUserNeedLogin']),
     isJifen() {
       return this.train_discount['积分'] && this.train_discount['积分'].length > 0
+    },
+    getCrowdList() {
+      return  this.train.crowd && this.train.crowd.split(/[\n|\·|\；]/).filter(item => (item)) || []
+    },
+    getOutlineList() {
+      return  this.train.outline && this.train.outline.split(/[\n|\r|\·]/).filter(item => (item)) || []
+    },
+    getIntroList() {
+      return this.train.intro && this.train.intro.split(/[\n|\r|\·]/).filter(item => (item)) || []
     }
   },
   methods: {
@@ -198,6 +219,9 @@ export default {
       }
       const { id } = this.$route.params;
       this.$router.push(`/cultivate/order/${id}`)
+    },
+    changeTrainImage(item) {
+      this.train.themeImg = item.path
     },
     changeImg() {
       this.changeCount += 1
@@ -239,6 +263,9 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+*{
+  box-sizing: border-box;
+}
 .jifen{
   display: inline-block;
   width: 1.1rem;
@@ -374,12 +401,18 @@ export default {
           
           font-size: 0.7rem;
           height: 100%;
+          width: 100%;
           text-align: center;
           padding: 1rem;
+          box-sizing: border-box;
+          padding-left: 5rem;
           display: -webkit-box !important;
           -webkit-box-orient: vertical !important;
           // -webkit-line-clamp:3 !important;// 限制快级元素的文本行数
           overflow: hidden !important;
+          .berif-line {
+            font-size: 0.85rem
+          }
         }
       }
     }
@@ -406,7 +439,27 @@ export default {
     margin-left: 15rem;
     width: 40rem;
     min-height: 17rem;
+    height: 22rem;
+    overflow-y: auto;
+    overflow-x: hidden;
     border-top:10px solid #EEEEEE;
+    /* 设置滚动条的样式 */
+    &.scorll::-webkit-scrollbar {
+      width: 0.1rem;
+    }
+    /* 滚动槽 */
+    &.scorll::-webkit-scrollbar-track {
+      background: #dcdcdc;
+      border-radius: 0.15rem;
+    }
+    /* 滚动条滑块 */
+    &.scorll::-webkit-scrollbar-thumb {
+      background: #88bc37;
+      border-radius: 0.15rem;
+    }
+    &.scorll::-webkit-scrollbar-thumb {
+      background: #88bc37;
+    }
     position: relative;
     &::before{
       content: '';
@@ -467,25 +520,59 @@ export default {
   padding: 2rem 0;
   .traning{
     position: relative;
-    width: 50rem;
+    width: 56rem;
     height: 33rem;
     margin: 0 auto;
     background-image: url('~@/assets/trains/traning.png');
     background-size: 100% 100%;
     background-repeat: no-repeat;
+    .traning-title{
+      position: relative;
+      margin-left: 1rem;
+      font-weight: bolder;
+      font-size: 0.9rem;
+      &::after{
+        font-size: 0.7rem;
+        content: 'suitable crowd';
+        width: 10em;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        text-transform : uppercase;
+      }
+    }
     .traning-content{
       padding-top: 6rem;
       width: 14rem;
       height: 25rem;
       font-size: 0.7rem;
-      margin-left: 10rem;
+      margin-left: 9rem;
       overflow: hidden;
+      ul {
+        padding-top: 2rem;
+        list-style-type: none;
+        margin: 0;
+        li{
+          position: relative;
+          &::before{
+            content:'';
+            width: 0.4rem;
+            height: 0.4rem;
+            background: #B4DC81;
+            border-radius: 50%;
+            position: absolute;
+            left: -2em;
+            top: 50%;
+            transform: translateY(-100%);
+          }
+        }
+      }
     }
     .traning-img{
       position: absolute;
       bottom: 5.2rem;
       right: 6.6rem;
-      width: 14rem;
+      width: 16.5rem;
       height: 21.8rem;
       background-repeat: no-repeat;
       background-size: cover;
@@ -561,6 +648,7 @@ export default {
     display: flex;
     font-size: 0.7rem;
     padding-bottom: 4rem;
+    position: relative;
     .count-div2-img {
       flex-shrink: 0;
       width: 5.8rem;
@@ -604,7 +692,7 @@ export default {
     }
     .count-div2-imgpic {
       flex-shrink: 0;
-      width: 18rem;
+      width: 20rem;
       margin-left: 1.5rem;
       margin-top: 1rem;
       height: 20rem;
@@ -691,10 +779,10 @@ export default {
     }
     .count-div2-fixdbg {
       background: url('/static/img/rectangle.png') no-repeat;
-      position: fixed;
+      position: absolute;
       z-index: 100;
-      right: 1rem;
-      top: 345px;
+      right: 0rem;
+      top: 0px;
       &-ul {
         width: 100%;
         height: 80px;

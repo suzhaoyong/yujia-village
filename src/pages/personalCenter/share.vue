@@ -24,10 +24,11 @@
             <div class="member">
               <vue-seamless :data="listData.data" :class-option="optionSingleHeight" class="warp">
                 <ul class="item">
-                  <li v-for="item in listData.data">
+                  <li v-for="item in listData.data" @click="viewShare(item)" :key="item.id">
                     <span class="name">{{item.name}}</span>
                     <span class="num">{{tel(item.tel)}}</span>
                     <span class="date">{{item.created_at}}</span>
+                    <span class="date">已邀请{{item.sub_level.length}}人</span>
                   </li>
                 </ul>
               </vue-seamless>
@@ -39,6 +40,7 @@
   </div>
 </template>
 <script>
+import Bus from '@/utils/Bus.js'
 import SessionTitle from "./SessionTitle";
 import vueSeamless from "vue-seamless-scroll";
 import { mapGetters } from "vuex";
@@ -92,6 +94,9 @@ export default {
     });
   },
   methods: {
+    viewShare(item) {
+      console.log(item);
+    },
     initSocialConfig() {
       if (this.info.user.name) {
         const params = {
@@ -193,6 +198,9 @@ export default {
         padding-top: 3rem;
         padding-bottom: 3rem;
         text-align: center;
+      }
+      .member {
+        width: 20rem;
       }
     }
   }

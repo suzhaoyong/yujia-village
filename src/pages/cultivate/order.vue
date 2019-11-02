@@ -1,6 +1,6 @@
 <template>
   <div class="order-wrap">
-    <div class="order">
+    <div class="order" v-show="!playcode.show">
       <session-title name="填写订单" brief="The customer's excellent experience is our goal from beginning to end." :line="false"></session-title>
       <div class="goods">
         <div class="goods-title"><span>商品信息</span></div>
@@ -10,7 +10,7 @@
               <img :src="train.teacher_img" :alt="train.theme">
             </div>
             <span class="goods-name">{{train.theme}}</span>
-            <span class="goods-price">￥{{train.price}}</span>
+            <span class="goods-price">￥{{train.price ? train.price.toFixed(2) : ''}}</span>
           </div>
         </div>
         <div class="jifen" v-show="!isPayWay">
@@ -21,7 +21,7 @@
               :max="1">
               <div class="jifen-box" v-for="(item, index) in train_discount['积分']">
                 <el-checkbox :label="item" :key="item.deduction" :disabled="item.consume > info.user.fraction" class="jifen-checkbox">
-                  <span>{{item.consume}}</span>积分 课程仅需<span>{{train.price - item.deduction}}</span>元
+                  <span>{{item.consume}}</span>积分 课程仅需<span>{{(train.price - item.deduction) >= 0 ? (train.price - item.deduction).toFixed(2) : ''}}</span>元
                 </el-checkbox>
               </div>
             </el-checkbox-group>
@@ -29,7 +29,7 @@
         </div>
         <div class="count" v-show="!isPayWay">
           <div class="sum_price">
-            <span style="color: #FF4400;">1</span> <span>件商品，总商品金额</span> <span style="margin-left:2rem;color: #FF4400;">{{train.price}}</span>元
+            <span style="color: #FF4400;">1</span> <span>件商品，总商品金额</span> <span style="margin-left:2rem;color: #FF4400;">{{train.price ? train.price.toFixed(2) : ''}}</span>元
           </div>
           <div class="tips">
             <span style="font-size: 0.6rem;">{{usedDiscount?'已使用积分抵扣':' '}}</span>
@@ -47,7 +47,7 @@
             <div class="pay-way-box">
               <el-radio-group v-model="pay.type">
                 <el-radio label="alipay"><div class="pay-icon alipay"></div></el-radio>
-                <!-- <el-radio label="wechat"><div class="pay-icon wechat"></div></el-radio> -->
+                <el-radio label="wechat"><div class="pay-icon wechat"></div></el-radio>
               </el-radio-group>
               
             </div>
@@ -63,6 +63,9 @@
         </div>
       </div>
     </div>
+    <div class="payway" v-if="playcode.show">
+      <payway v-if="playcode.show" :order="playcode.order"></payway>
+    </div>
   </div>
 </template>
 <script>
@@ -70,7 +73,11 @@ import { getTrainsById, postTrainsOrder } from "@/api/trains";
 import { postAlipayOrder } from "@/api/market";
 
 import { mapGetters } from 'vuex'
+import Payway from "./payway";
 export default {
+  components: {
+    Payway
+  },
   data() {
     return {
       train: {},
@@ -92,7 +99,16 @@ export default {
       isPayWay: false,
       pay: {
         type: ''
-      }
+      },
+      playcode: {
+        show: false,
+        order: {
+          body: "",
+          totalPrice: "",
+          out_trade_no: ""
+        },
+        count: 0
+      },
     }
   },
   computed: {
@@ -102,9 +118,9 @@ export default {
     },
     payPrice() {
       if(this.checkedDiscount.length === 0){
-        return this.train.price
+        return this.train.price >= 0 ? this.train.price.toFixed(2) : ''
       }
-      return this.train.price - this.checkedDiscount[0].deduction
+      return (this.train.price - this.checkedDiscount[0].deduction) >=0 ? (this.train.price - this.checkedDiscount[0].deduction).toFixed(2) : '';
     },
     usedDiscount() {
       return this.checkedDiscount.length > 0
@@ -149,9 +165,16 @@ export default {
         let url = `${'http://testapi.aomengyujia.com'}/api/alipay/web`;
         this.$request.post('/alipay/web', { out_trade_no: out_trade_no})
           .then(response => {
-            document.write(`${response}`);    
-            document.alipay_submit.submit();  
+            // let form = response.substring(0,5) + ' target="_blank"' + response.substring(5)            
+            document.write(`${response}`);
+            // document.alipay_submit.submit();  
           })
+      }
+      if(this.pay.type === 'wechat') {
+        const { body, out_trade_no, total_fee } = this.form
+        this.$router.push(`/cultivate/order/pay/${out_trade_no}`)
+        // this.playcode.order = { out_trade_no, body, totalPrice: total_fee }
+        // this.playcode.show = true;
       }
     },
   }
