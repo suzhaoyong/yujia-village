@@ -309,6 +309,12 @@ const router = new Router({
       component: () => import('@/pages/informationpage/messageDetail.vue')
     },
     {
+      // 课程订单页面
+      path: '/payorder',
+      name: 'payorder',
+      component: () => import('@/pages/informationpage/payorder')
+    },
+    {
       path: '/fillorder',
       name: 'fillorder',
       component: () => import('@/pages/market/fillOrder.vue')
