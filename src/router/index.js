@@ -153,6 +153,14 @@ const router = new Router({
           },
           component: () => import('@/pages/personalCenter/successPay')
         },
+        {
+          path: 'contactway',
+          name: 'contactway',
+          meta: {
+            header_name: 'personal'
+          },
+          component: () => import('@/pages/personalCenter/contactway')
+        },
       ]
     },
     {
