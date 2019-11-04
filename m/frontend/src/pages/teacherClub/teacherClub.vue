@@ -89,7 +89,7 @@
                     <div class="list_house">
                         <div class="list_house_title">
                             <div class="list_house_div" @click.stop="isOpen2 = true;isKey = 'city'">
-                                <span class="house_title_tips">{{area ===''?'选择城市':area}}</span>
+                                <span class="house_title_tips">{{region ===''?'选择城市':region}}</span>
                                 <img src="../../assets/teacherclub/launch.png" class="house_title_img"/>
                             </div>
                             <div class="list_house_div" @click.stop="isOpen3 = true;isKey = 'seniority'">
@@ -198,7 +198,6 @@ export default {
         seniority: '',
         items:["全部"],
         clubBox:[],
-        change:[],
         value:"",
         ids:"",
         areaList,
@@ -218,6 +217,8 @@ export default {
         province:"",
         city:"",
         area:"",
+        // 选择的城市
+        region: '',
         current_page:1,
         last_page: 2,
         total:'',
@@ -494,10 +495,27 @@ export default {
      },
      //省市区
      changeArea(val) {
-        this.change = val;
-        this.province = val[0].name?val[0].name: '';
-        this.city = val[1]?val[1].name: '';
-        this.area = val[2]?val[2].name: '';
+        console.log(val);
+        if(val[0].name === '') {
+            this.isOpen2 = false;
+            return
+        }
+        if(val[1].name === '') {
+            this.province = val[0].name;
+            this.city = "";
+            this.area = "";
+            this.region = this.province;
+        } else if(val[2].name === '') {
+            this.province = val[0].name;
+            this.city = val[1].name;
+            this.area = "";
+            this.region = this.city;
+        } else if(val[2].name !== '') {
+             this.province = val[0].name;
+            this.city = val[1].name;
+            this.area = val[2].name;
+            this.region = this.area;
+        }   
         this.exhibitionBox = [];
         this.current_page2 = 1;
         this.finished2 = false;

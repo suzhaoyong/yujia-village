@@ -61,6 +61,7 @@ export default {
         onChange(active) {            
             // 切换 tabbar 路由跳转
             if(active === 'personal' && !window.sessionStorage.getItem('access')) {
+                window.sessionStorage.setItem('personal',active);
                 this.$router.push('/login');
             } 
             else {

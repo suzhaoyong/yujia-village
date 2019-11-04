@@ -68,13 +68,13 @@
             </div>
         </div>
         <div class="cell">
-            <!-- <van-cell is-link to="/buycourse">
+            <van-cell is-link :border="false" to="/buycourse">
                 <template slot="title">
-                    <img class="icon" src="../assets/img/courses.png" alt="">
-                    <span class="custom-title">我购买的课程</span>
+                    <img class="icon" src="../assets/img/pay-course.png" alt="">
+                    <span class="custom-title">课程订单</span>
                 </template>
-            </van-cell> -->
-            <van-cell is-link :border="false" class="rz-center" to="/authenticationcenter">
+            </van-cell>
+            <van-cell is-link :border="false" to="/authenticationcenter">
                 <template slot="title">
                     <img class="icon" src="../assets/img/certification.png" alt="">
                     <span class="custom-title">认证中心</span>
@@ -183,10 +183,7 @@ export default {
         logout() {
             // console.log('退出');
             store.dispatch("INFO", { user: {} });
-            sessionStorage.removeItem('user data');
-            window.sessionStorage.removeItem('access');
-            window.sessionStorage.removeItem('user');
-            window.sessionStorage.removeItem('tabbar');
+            window.sessionStorage.clear();
             // 退出回到首页
             window.open(`${window.location.origin}`, "_self");
         },

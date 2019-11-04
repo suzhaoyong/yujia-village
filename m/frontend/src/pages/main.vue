@@ -15,6 +15,7 @@
       <!-- 顶部 logo -->
       <h1><img class="img" src="../assets/img/yujia_logo.png" alt="瑜伽村"></h1>
       <div class="prompt">
+        <h2>收藏网址</h2>
         <img src="../assets/img/sz3.gif" alt="">
         <van-icon name="question-o" color="#fff" @click="gotoPage('explain')"/>
       </div>
@@ -226,6 +227,11 @@ img{
       z-index: 10;
       display: flex;
       align-items: center;
+      h2 {
+        margin-right: 5px;
+        font-size: 14px;
+        color: #fff;
+      }
       img {
         width: 50px;
         height: 30px;
