@@ -23,23 +23,23 @@
               <div class="jifen_tips" v-if="isJifen">【积分可兑换该课程或减免课程费用】</div>
               <div class="kecheng_box">
                 <div class="kecheng_lf">
-                  <div class="kecheng_item">
+                  <div class="kecheng_item" style="padding-bottom:0.95rem;">
                   <span class="kecheng_title">难度级别：</span>
                   <div class="kecheng_value"><el-rate :colors="['#58B708','#58B708','#58B708']" disabled :value="train.diff"></el-rate></div>
                   </div>
                   <div class="kecheng_item">
-                  <span class="kecheng_title">培训老师：</span>
-                  <div class="kecheng_value">{{train.name}}</div>
+                  <span class="kecheng_title" style="font-size: 0.7rem;font-weight: bolder;">培训老师：</span>
+                  <div class="kecheng_value"  style="font-size: 0.7rem;font-weight: bolder;">{{train.name}}</div>
                   </div>
                 </div>
                 <div class="kecheng_rh">
-                  <div class="kecheng_price">￥{{train.price}}</div>
-                  <div class="kecheng_change" v-if="isJifen">
-                    <div v-for="(item, index) in train_discount['积分']" :key="index"><span>{{item.consume}}</span> {{item.type}}，课程仅需 <span>{{(train.price - item.deduction).toFixed(2)}}</span> 元</div>
+                  <div class="kecheng_price" style="padding-bottom:0.95rem;">￥{{train.price}}</div>
+                  <div class="kecheng_change"  style="font-size: 0.7rem;font-weight: bolder;color:#999999;" v-if="isJifen">
+                    <div style="margin-bottom: 0.3rem;" v-for="(item, index) in train_discount['积分']" :key="index"><span>{{item.consume}}</span> {{item.type}}，课程仅需 <span>{{(train.price - item.deduction).toFixed(2)}}</span> 元</div>
                   </div>
                 </div>
               </div>
-              <div class="cultivate-text1">培训时间：{{train.startTime}} / {{train.endTime}}</div>
+              <div class="cultivate-text1">培训时间：<span style="font-size: 0.8rem;font-weight: bolder;">{{train.startTime}} / {{train.endTime}}</span></div>
               <div class="cultivate-text2">培训地址：{{train.address}}</div>
               <div class="cultivate-button">
                 <div class="button" @click="buyTrain">立即购买</div>
@@ -51,10 +51,10 @@
               <!-- <img class="imgpic2" src="../../assets/image70.png" /> -->
             </div>
             <div class="count-div2-fixdbg">
-              <ul class="count-div2-fixdbg-ul">
+              <!-- <ul class="count-div2-fixdbg-ul"> -->
                 <li><a href="javascript:;"><img src="/static/img/apply.png" title="我想学" @click="wantToStudy(train.id)"></a></li>
                 <li @click="callTel"><a href="javascript:;"><img src="/static/img/phone.png" title="咨询电话"></a></li>
-              </ul>
+              <!-- </ul> -->
             </div>
           </div>
           <div class="teacher-wrap">
@@ -69,7 +69,7 @@
                   <div class="name">授 课 老 师： {{train.name}}</div>
                   <div class="berif">
                     <!-- <pre v-html="train.intro"></pre> -->
-                    <div class="berif-line" v-for="(item, index) in getIntroList" :key="index">{{item+item+item}}</div>
+                    <div class="berif-line" style="margin-bottom:0.4em;" v-for="(item, index) in getIntroList" :key="index">{{item}}</div>
                   </div>
                 </div>
               </div>
@@ -81,7 +81,7 @@
             </div>
             <div class="program-content">
               <div class="program-bg"></div>
-              <div class="program-html">
+              <div class="program-html scorll">
                 <div class="program-lint" v-for="(item, index) in getOutlineList" :key="index">{{item}}</div>
               </div>
             </div>
@@ -91,7 +91,7 @@
               <div class="traning-content">
                 <span class="traning-title">适合人群</span>
                 <ul>
-                  <li v-for="(item, index) in getCrowdList" :key="index">
+                  <li style="line-height: 1.2rem;" v-for="(item, index) in getCrowdList" :key="index">
                     {{item}}
                   </li>
                 </ul>
@@ -184,13 +184,11 @@ export default {
     const { id } = this.$route.params;
     getTrainsById(id)
       .then(data => {
-        this.train = Object.assign({} ,data.train, {themeImg: data.train.teacher_img});
+        const themeImg = data.train.train_image && data.train.train_image.length > 0 && data.train.train_image[0].path ? data.train.train_image[0].path : data.train.teacher_img 
+        console.log(themeImg,data);
+        this.train = Object.assign({} ,data.train, {themeImg: themeImg});
         this.train_discount = data.train_discount
-        this.changedImg = data.train.train_old_image[0] && data.train.train_old_image[0].url || data.train.teacher_img
-        // const content = data.content.split("\n").filter(item => item);
-        // const crowd = data.crowd.split(/；/).filter(item => item);
-        // this.train.content = content;
-        // this.train.crowd = crowd;
+        this.changedImg = data.train.train_old_image[0] && data.train.train_old_image[0].url ||  data.train.teacher_img
       })
       .then(_ => {
         this.initSocialConfig();
@@ -202,7 +200,7 @@ export default {
       return this.train_discount['积分'] && this.train_discount['积分'].length > 0
     },
     getCrowdList() {
-      return  this.train.crowd && this.train.crowd.split(/[\n|\·|\；]/).filter(item => (item)) || []
+      return  this.train.crowd && this.train.crowd.split(/[\；]/).filter(item => (item)) || []
     },
     getOutlineList() {
       return  this.train.outline && this.train.outline.split(/[\n|\r|\·]/).filter(item => (item)) || []
@@ -287,6 +285,7 @@ export default {
   background: #eee;
   margin-left: -2.7rem;
   padding: 1.3rem 2.7rem;
+  padding-bottom: 0.6rem;
   .kecheng_lf{
     flex-basis: 50%;
     .kecheng_item{
@@ -298,6 +297,7 @@ export default {
   .kecheng_rh{
     .kecheng_price{
       font-weight: bolder;
+      font-size: 0.9rem;
     }
     .kecheng_change{
       span{
@@ -336,8 +336,8 @@ export default {
       }
     .teacher-img{
       .img{
-        width: 21rem;
-        height: 24rem;
+        width: 21.8rem;
+        height: 24.5rem;
         background: #ccc;
         position: relative;
         left: -2.5rem;
@@ -443,23 +443,7 @@ export default {
     // overflow-y: auto;
     // overflow-x: hidden;
     border-top:10px solid #EEEEEE;
-    /* 设置滚动条的样式 */
-    &.scorll::-webkit-scrollbar {
-      width: 0.1rem;
-    }
-    /* 滚动槽 */
-    &.scorll::-webkit-scrollbar-track {
-      background: #dcdcdc;
-      border-radius: 0.15rem;
-    }
-    /* 滚动条滑块 */
-    &.scorll::-webkit-scrollbar-thumb {
-      background: #88bc37;
-      border-radius: 0.15rem;
-    }
-    &.scorll::-webkit-scrollbar-thumb {
-      background: #88bc37;
-    }
+    
     position: relative;
     &::before{
       content: '';
@@ -484,11 +468,28 @@ export default {
     }
     .program-html{
       padding-top: 1rem;
-      padding-right: 12rem;
+      margin-right: 10rem;
       font-size: 0.7rem;
       height: 100%;
       overflow-y: auto;
       overflow-x: hidden;
+      /* 设置滚动条的样式 */
+      &.scorll::-webkit-scrollbar {
+        width: 0.1rem;
+      }
+      /* 滚动槽 */
+      &.scorll::-webkit-scrollbar-track {
+        background: #dcdcdc;
+        border-radius: 0.15rem;
+      }
+      /* 滚动条滑块 */
+      &.scorll::-webkit-scrollbar-thumb {
+        background: #88bc37;
+        border-radius: 0.15rem;
+      }
+      &.scorll::-webkit-scrollbar-thumb {
+        background: #88bc37;
+      }
     }
   }
 }
@@ -533,13 +534,15 @@ export default {
       position: relative;
       margin-left: 1rem;
       font-weight: bolder;
-      font-size: 0.9rem;
+      font-size: 1.3rem;
+      font-family: 'MicrosoftYaHei';
       &::after{
         font-size: 0.7rem;
         content: 'suitable crowd';
         width: 10em;
         position: absolute;
-        top: 100%;
+        // top: 100%;
+        bottom: -2em;
         left: 0;
         text-transform : uppercase;
       }
@@ -552,11 +555,12 @@ export default {
       margin-left: 9rem;
       overflow: hidden;
       ul {
-        padding-top: 2rem;
+        padding-top: 3.4rem;
         list-style-type: none;
         margin: 0;
         li{
           position: relative;
+          display: inline-block;
           &::before{
             content:'';
             width: 0.4rem;
@@ -565,8 +569,8 @@ export default {
             border-radius: 50%;
             position: absolute;
             left: -2em;
-            top: 50%;
-            transform: translateY(-100%);
+            top: 0.3rem;
+            // transform: translateY(-100%);
           }
         }
       }
@@ -710,7 +714,7 @@ export default {
       // height: 20rem;
       flex-grow: 1;
       padding-left: 2.7rem;
-      margin-top: 3rem;
+      margin-top: 2.4rem;
       position: relative;
       h4 {
         font-size: 18px;
@@ -748,6 +752,7 @@ export default {
         position: absolute;
         bottom: 0;
         left: 2.7rem;
+        font-size: 0.8rem;font-weight: bolder;
         .button {
           text-align: center;
           width: 5.4rem;
@@ -781,27 +786,26 @@ export default {
       }
     }
     .count-div2-fixdbg {
-      background: url('/static/img/rectangle.png') no-repeat;
       position: absolute;
       z-index: 100;
       right: 0rem;
-      top: 0px;
-      &-ul {
-        width: 100%;
-        height: 80px;
-        list-style: none;
+      top: 1rem;
+      list-style: none;
+      background: url('/static/img/rectangle.png') no-repeat;
+      background-size: 100% 100%;
+      // height: 80px;
+      padding: 5px 10px;
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
+        justify-content: space-evenly;
         align-items: center;
-        position: relative;
-        left: -33px;
-        top: 15px;
         li {
-          width: 100%; 
+          width: 28px;
+          margin: 0 auto; 
           height: 28px;
+          display: inline-block;
+          margin-top: 1rem;
         }
-      }
     }
   }
   .detail-count-div3 {
