@@ -16,27 +16,27 @@
                     <div class="contactway_bg2">
                         <div class="contactway_bg2_left">
                             <div class="left_li">
-                                <el-radio-group v-model="radio" @change="change">
-                                 <el-radio :label="3">允许向我邀请的好友展示联系方式</el-radio>
-                                 </el-radio-group>
+                                <el-checkbox-group  v-model="checked" @change="change" :disabled="this.checked==1">
+                                    <el-checkbox v-for="i in cities" :label="i" :key="i">允许向我邀请的好友展示联系方式</el-checkbox>
+                                </el-checkbox-group>
                                  <img src="../../assets/personal/interro.png" class="img" @click="showCont"/>
                                  <div class="bubble" v-if="show">
                                      <p class="p2">例如：您邀请了张三、李四、王五、则他们可以看到您的联系方式，否则，隐藏信息。</p>
                                  </div>
                             </div>
                             <div class="left_li">
-                                <el-radio-group v-model="radio" @change="change">
-                                 <el-radio :label="2">允许向推荐人展示联系方式</el-radio>
-                                 </el-radio-group>
+                                  <el-checkbox-group  v-model="checked" @change="change" :disabled="this.checked==1">
+                                    <el-checkbox v-for="i in cities2" :label="i" :key="i">允许向推荐人展示联系方式</el-checkbox>
+                                </el-checkbox-group>
                                  <img src="../../assets/personal/interro.png" class="img" @click="showCont2"/>
                                  <div class="bubble2" v-if="show2">
                                      <p class="p2">例如：您的邀请人是张三，如果勾选，他将可以看到您的联系方式，否则，隐藏信息。</p>
                                  </div>
                             </div>
                             <div class="left_li">
-                                <el-radio-group v-model="radio" @change="change">
-                                 <el-radio :label="1">我是一个高冷的人，拒绝“抛头露面”</el-radio>
-                                 </el-radio-group>
+                                 <el-checkbox-group  v-model="checked" @change="change" :disabled="this.disabled">
+                                    <el-checkbox v-for="i in cities3" :label="i" :key="i">我是一个高冷的人，拒绝“抛头露面”</el-checkbox>
+                                </el-checkbox-group>
                                  <img src="../../assets/personal/interro.png" class="img" @click="showCont3"/>
                                  <div class="bubble3" v-if="show3">
                                      <p class="p2">如果勾选，您的信息将始终隐藏。</p>
@@ -72,13 +72,17 @@ import Bus from "@/utils/Bus";
 export default {
     data(){
         return{
-             radio: '',
+             checked: [],
              show:false,
              show2:false,
              show3:false,
              useridweixin: '',
              useridtel:'',
              useridqq:'',
+             cities:[3],
+             cities2:[2],
+             cities3:[1],
+             disabled:false
         }
     },
     computed:{
@@ -90,7 +94,7 @@ export default {
     methods:{
         currentevent(){
             let params = {
-                type:this.radio,
+                type:this.checked,
                 content:'微信:'+this.useridweixin+';'+'tel:'+this.useridtel+';'+'qq:'+this.useridqq
             }
             this.$request.post(`/personal/updateContact`,params).then(data => {
@@ -101,7 +105,13 @@ export default {
             });
         },
         change(val){
-            console.log(val);
+            this.disabled=false;
+            for(var i=0;i<this.checked.length;i++){
+               if(this.checked[i]==3 || this.checked[i]==2){
+                   this.disabled=true;
+               }
+            }
+            this.currentevent();
         },
         getFullweixin(val) {
             this.currentevent();
@@ -132,7 +142,8 @@ export default {
                 this.useridweixin = data.weixin;
                 this.useridtel = data.tel;
                 this.useridqq = data.qq;
-                this.radio = data.type;
+                this.checked = data.type;
+                this.disabled=true;
             });
         }
     }
@@ -233,6 +244,16 @@ export default {
                         font-weight:bold;
                         color: #2c2c2c;
                         font-size: 14px;
+                     }
+                     .el-checkbox-group{
+                        display: inline-block;
+                        .el-checkbox{
+                            margin-right: 10px;
+                            font-family:Microsoft YaHei;
+                            font-weight:bold;
+                            color: #2c2c2c;
+                            font-size: 14px;
+                        }
                      }
                      .img{
                         width: 18px;
