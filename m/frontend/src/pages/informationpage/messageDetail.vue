@@ -53,7 +53,7 @@
       <div class="integral" v-if="train_discount.积分.length!==0">
         <div class="box"> 
           <div v-for="(item,index) in train_discount.积分" :key="index">
-            花费<span>{{item.consume}}</span> 积分，课程仅需 <span>{{item.deduction}}</span> 元
+            花费<span>{{item.consume}}</span> 积分，价格减免： <span>{{item.deduction}}</span> 元
           </div>
         </div>
       </div>
@@ -76,7 +76,7 @@
         <div class="border-top"></div>
         <div class="border-left"></div>
         <div class="title"></div>
-        <div class="kecheng">课程大纲</div>
+        <div class="kecheng">课程简介</div>
         <div class="outline-content" v-html="outline"></div>
       </div>
       <div class="suitable-crowd">
@@ -166,6 +166,7 @@ export default {
       this.$request.get('trains/' + id).then((res) => {
         this.detailData = res.train;
         this.train_discount = res.train_discount;
+        console.log(res.train_discount)
         this.time = this.detailData.startTime.replace(/\-/g, '\.')+'-'+this.detailData.startTime.replace(/\-/g, '\.');
         this.intro = this.detailData.intro.replace(/\r\n/g,'<br />');
         this.outline = this.detailData.outline.replace(/\r\n/g,'<br />');
@@ -189,7 +190,7 @@ export default {
       var params = {
           id: this.$route.params.id,
           identity:'train',
-          userId: '',
+          userId:  JSON.parse(sessionStorage.getItem('user')).id || '',
           responseType: 'arraybuffer'
       }
       this.$request.post(`/show/share/photo`,params).then(res => {

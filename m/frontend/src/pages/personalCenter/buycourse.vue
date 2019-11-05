@@ -96,7 +96,7 @@ export default {
                 console.log(res);
                 this.courseOrderAll = res.all;
                 this.courseOrderSuccess = res.success;
-                // this.courseOrderWaitpay = res.waitpay;
+                this.courseOrderWaitpay = res.waitpay;
             })
         },
         // 跳转详情页

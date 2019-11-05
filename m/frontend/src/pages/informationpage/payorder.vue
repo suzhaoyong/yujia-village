@@ -18,7 +18,7 @@
                     <van-radio name="no" checked-color="#8FCD71" @click="noUse">不使用积分</van-radio>
                     <van-radio :name="index" checked-color="#8FCD71" :disabled="fraction>=item.consume? false: true"
                     v-for="(item,index) in courseParams.train_discount.积分" :key="index"
-                    @click="getId(index, item.id)">
+                    @click="getId(index, item)">
                         花费{{item.consume}}积分，价格减免：{{item.deduction}}
                     </van-radio>
                 </van-radio-group>
@@ -47,6 +47,7 @@
     </div>
 </template>
 <script>
+import { Toast } from 'vant';
 export default {
     data() {
         return {
@@ -77,11 +78,14 @@ export default {
             this.$router.go(-1);
         },
         // 选择积分抵扣，折扣价格
-        getId (index, id) {
-            this.name = id;
-            const train_discount = this.courseParams.train_discount.积分;
-            this.discountPrice = (this.courseParams.price - train_discount[index].deduction).toFixed(2);
-            this.consume = train_discount[index].consume;
+        getId (index, item) {
+            if(this.fraction>=item.consume){
+                this.name = item.id;
+                const train_discount = this.courseParams.train_discount.积分;
+                this.discountPrice = (this.courseParams.price - train_discount[index].deduction).toFixed(2);
+                this.consume = train_discount[index].consume;
+            } else {Toast('您的积分不足，快去分享赚积分吧！')}
+            
         },
         // 不使用积分的价格
         noUse() {
@@ -112,7 +116,7 @@ export default {
                     this.payMoney(res.out_trade_no);
                 } else {
                     this.$toast({
-                        message: '订单创建失败',
+                        message: '课程已购买，请不要重复购买',
                     });
                 }
             })
