@@ -460,18 +460,6 @@ export default {
 }
 .message {
   width: 100%;
-  header {
-    height: 44px;
-    text-align: center;
-    font-size: 16px;
-    font-weight: 700;
-    background: white;
-    overflow: hidden;
-    span {
-      display: block;
-      margin-top: 17px;
-    }
-  }
   &-main {
     width: 100%;
     height: 100%;

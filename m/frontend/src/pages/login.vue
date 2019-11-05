@@ -418,7 +418,13 @@ export default {
         .then(data => {
           sessionStorage.setItem("access", JSON.stringify(data));
           Notify({ message: "登录成功", type: "success" });
-          this.$router.push("/personal");
+          // this.$router.push("/personal");
+          // 判断用户从什么页面登录的
+          if(window.sessionStorage.getItem('personal')) {
+            this.$router.push("/personal");
+          } else {
+            this.$router.go(-1);  // 登录之后返回登陆之前的页面
+          }
         })
         .catch(err => {
           Notify(err);

@@ -67,4 +67,26 @@ body {
   font-size: inherit !important;
   font-weight: inherit !important;
 }
+.distpicker-address-wrapper select{
+    width: 145px !important;
+    padding: 0px 4px !important;
+    font-size: 14px !important;
+}
+.swiper-pagination-bullet-active {
+    opacity: 1 !important;
+    color:#ACD589 !important;
+    background: #ebebeb  !important;
+}
+.swiper-pagination-bullet{
+    margin: 0 5px !important;
+    width: 27px !important;
+    height: 27px !important;
+    line-height: 27px !important;
+    background: #ECE9E2 !important;
+    border-radius: 0px !important;
+    font-size: 14px !important;
+    text-align: center !important;
+    opacity: 1 !important;
+    display: inline-block !important;
+}
 </style>

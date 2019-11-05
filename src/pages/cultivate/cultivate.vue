@@ -144,7 +144,7 @@
                       <!-- <img :src="item.teacher_img" /> -->
                     </div>
                     <div class="fruit-list-li-text"  @click="selectItem(item)">
-                      <h4>{{item.theme}}</h4>
+                      <div>{{item.theme}}</div>
                     </div>
                     <div class="fruit-list-li-text2">
                       <el-rate :colors="['#58B708','#58B708','#58B708']" disabled :value="item.diff"></el-rate>
@@ -187,7 +187,7 @@
                   <!-- <img :src="item.teacher_img" /> -->
                   </div>
                   <div class="fruit-list-li-text" @click="selectItem(item)">
-                    <h4>{{item.theme}}</h4>
+                    <div>{{item.theme}}</div>
                   </div>
                   <div class="fruit-list-li-text2">
                     <el-rate :colors="['#58B708','#58B708','#58B708']" disabled :value="item.diff"></el-rate>
@@ -1101,11 +1101,14 @@ img {
             width: 90%;
             margin: 0 auto;
             // margin-top: 1.5rem;
+            padding-top: 0.4rem;
+            
             height: 4em;
             cursor: pointer;
-            h4 {
+            div {
+              font-size: 0.9rem;
               overflow: hidden !important;
-              -webkit-line-clamp: 2 !important;
+              -webkit-line-clamp: 1 !important;
               text-overflow: ellipsis !important;
               display: -webkit-box !important;
               -webkit-box-orient: vertical;
@@ -1279,11 +1282,14 @@ img {
           // align-items: center;
           width: 90%;
           margin: 0 auto;
-          height: 4em;
+          height: 3em;
+          margin-top: 1rem;
           cursor: pointer;
-          h4 {
+          padding-top: 0.4rem;
+          div {
+            font-size: 0.9rem;
             overflow: hidden !important;
-            -webkit-line-clamp: 2 !important;
+            -webkit-line-clamp: 1 !important;
             text-overflow: ellipsis !important;
             display: -webkit-box !important;
             -webkit-box-orient: vertical;
