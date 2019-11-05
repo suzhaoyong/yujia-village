@@ -51,11 +51,11 @@
                                 </div>
                                 <div class="from_item">
                                     <div class="from_item_title">电话 / PHONE</div>
-                                    <el-input v-model="useridtel" placeholder="请输入电话" maxlength="11" @change="getFulltel"></el-input>
+                                    <el-input v-model.number="useridtel" placeholder="请输入电话" maxlength="11" @change="getFulltel" onKeyUp="value=value.replace(/\D/g,'')" onafterpaste="value=value.replace(/\D/g,'')" ></el-input>
                                 </div>
                                 <div class="from_item">
                                     <div class="from_item_title">QQ</div>
-                                    <el-input v-model="useridqq" placeholder="请输入QQ" maxlength="30" @change="getFullqq"></el-input>
+                                    <el-input v-model.number="useridqq" placeholder="请输入QQ" maxlength="11" @change="getFullqq" onKeyUp="value=value.replace(/\D/g,'')" onafterpaste="value=value.replace(/\D/g,'')" ></el-input>
                                 </div>
                             </div>
                         </div>
@@ -76,13 +76,13 @@ export default {
              show:false,
              show2:false,
              show3:false,
-             useridweixin: '',
-             useridtel:'',
-             useridqq:'',
              cities:[3],
              cities2:[2],
              cities3:[1],
-             disabled:false
+             disabled:false,
+             useridweixin: '',
+             useridtel:'',
+             useridqq:'',
         }
     },
     computed:{
