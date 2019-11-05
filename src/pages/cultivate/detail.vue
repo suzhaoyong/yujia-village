@@ -371,15 +371,15 @@ export default {
     .teacher-info{
       flex-grow: 1;
       height: 100%;
-      
       .info{
         height: 24rem;
         .name{
           height: 4.5rem;
-          line-height: 4.5rem;
-          font-size: 1.2rem;
+          // line-height: 4.5rem;
+          font-size: 1rem;
           font-weight: bolder;
           text-align: center;
+          padding-top: 1.4rem;
           background: #B9D19C;
           background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(185,209,156,1) 100%);
           position: relative;
