@@ -54,3 +54,35 @@ export function postTrainsRank(page=2, args) {
 export function getTrainsById(id) {
   return request(`/trains/${id}`)
 }
+
+/* 新增订单-培训信息 */
+export function postTrainsOrder(args) {
+  let params = {
+    id: '',
+    cashId: '',
+    cashMoney: '',
+    couponId: '',
+    fraction: '',
+    discountId: ''  
+  }
+  params = Object.assign({}, params, args)
+  return request.post(`/trains/new/order`, params)
+}
+
+/* 微信二维码展示 */
+export function postGetWechatpayCode(args = {}) {
+  let params = {
+    out_trade_no: "", // 统一订单编号
+  }
+  params = Object.assign({}, params, args)
+  return request.post(`/wechatpay`, params)
+}
+
+/* 微信查询订单支付状态  */
+export function postGetWechatOrder(args = {}) {
+  let params = {
+    out_trade_no: "", // 统一订单编号
+  }
+  params = Object.assign({}, params, args)
+  return request.post(`/getWechatOrder`, params)
+}

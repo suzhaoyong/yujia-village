@@ -78,11 +78,12 @@ const router = new Router({
     },
     {
       path: '/personal',
-      name: 'personal',
+      name: 'personal index',
       component: Home,
+      redirect: '/personal/index',
       children: [{
           path: 'index',
-          name: 'personal',
+          name: 'personal index',
           meta: {
             header_name: 'personal'
           },
@@ -90,7 +91,7 @@ const router = new Router({
         },
         {
           path: 'recode',
-          name: 'recode',
+          name: 'personal recode',
           meta: {
             header_name: 'personal'
           },
@@ -143,6 +144,14 @@ const router = new Router({
             header_name: 'personal'
           },
           component: () => import('@/pages/personalCenter/share')
+        },
+        {
+          path: 'order/thankYouPage/:orderId',
+          name: 'thank you page',
+          meta: {
+            header_name: 'personal'
+          },
+          component: () => import('@/pages/personalCenter/successPay')
         },
         {
           path: 'contactway',
@@ -219,6 +228,20 @@ const router = new Router({
           },
           component: () => import('@/pages/cultivate/detail')
         }, //培训信息-----详情
+        {
+          path: '/cultivate/order/:id',
+          meta: {
+            header_name: 'cultivate'
+          },
+          component: () => import('@/pages/cultivate/order')
+        },
+        {
+          path: '/cultivate/order/pay/:orderId',
+          meta: {
+            header_name: 'cultivate'
+          },
+          component: () => import('@/pages/cultivate/payway')
+        }
       ]
     },
     {

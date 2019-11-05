@@ -191,6 +191,16 @@ export function postGetAlipayCode(args = {}) {
   params = Object.assign({}, params, args)
   return request.post(`/alipay`, params)
 }
+/* 支付宝 web 支付  */
+export function postAlipayOrder(args = {}) {
+  let params = {
+    out_trade_no: "", // 统一订单编号
+    body: "", // 订单商品名称
+    total_fee: "", // 总价格
+  }
+  params = Object.assign({}, params, args)
+  return request.post(`/alipay/web`, params)
+}
 
 /* 支付宝查询订单支付状态  */
 export function postGetAlipayOrder(args = {}) {

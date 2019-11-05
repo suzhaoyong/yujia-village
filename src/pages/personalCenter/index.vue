@@ -1,6 +1,47 @@
 <template>
   <div>
     <div class="personal">
+      <!-- <session-title name="已购买的课程"></session-title>
+      <cloud :arr="[1,2,3,4, 5]"></cloud> -->
+      <div class="my-class" v-show="false">
+        <div
+          class="goods-box"
+          @click="viewWantDetail(item)"
+          v-for="(item, index) in want.data"
+          :key="index"
+        >
+          <div class="pic">
+            <img :src="item.teacher_img" alt />
+          </div>
+          <div class="teacher-content">
+            <div class="teacher_theme" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{item.theme}}</div>
+            <div class="teacher_theme" style="font-size:14px;">￥{{item.price}}</div>
+            <div class="teacher_name">培训老师：<span style="color:#22ac38;">{{item.name}}</span></div>
+            <div class="teacher_name">培训时间：{{item.startTime}}/{{item.endTime}}</div>
+            <div class="price-views-collenct">
+              <div class="price"></div>
+              <div class="views-collenct">
+                <!-- <div class="views">{{item.views}}</div>
+                <div class="collenct" @click="addCollect">收藏</div>-->
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="pages">
+          <el-pagination
+            background
+            :hide-on-single-page="true"
+            layout="prev, pager, next, jumper"
+            :page-size="want.per_page"
+            @current-change="changeWantPage"
+            :current-page="want.current_page"
+            :total="want.total"
+          ></el-pagination>
+        </div>
+      </div>
+      <div>
+        <not-found v-if="want.data.length === 0" type="not-fond" msg="我寻寻觅觅却找不见您想学的课程"></not-found>
+      </div>
       <session-title name="我想学的课程"></session-title>
       <cloud :arr="[1,2,3,4, 5]"></cloud>
       <div class="my-class">
@@ -43,6 +84,7 @@
         <not-found v-if="want.data.length === 0" type="not-fond" msg="我寻寻觅觅却找不见您想学的课程"></not-found>
       </div>
       <session-title name="已收藏商品"></session-title>
+      <cloud :arr="[1,2,3,4, 5]"></cloud>
       <div class="my-class">
         <div
           class="goods-box"
@@ -80,7 +122,11 @@
       <div>
         <not-found v-if="collect.data.length === 0" type="not-fond_2" msg="我寻寻觅觅却找不见您收藏的踪迹"></not-found>
       </div>
-      <session-title name="我点赞的老师"></session-title>
+      <div style="position:relative;overflow:hidden;">
+        <session-title name="我点赞的老师"></session-title>
+        <cloud :arr="[1,3,4, 5]"></cloud>
+      </div>
+      
       <div class="my-class">
         <div
           class="goods-box"

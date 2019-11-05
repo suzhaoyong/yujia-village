@@ -105,6 +105,19 @@
         <van-popup v-model="show">
             <img :src="base64img"/>
             <div class="textbase">长按图片，保存或发送给朋友</div>
+            <div class="bgc">
+                <img src="../../assets/img/fxwenan.png" alt="" @click="getWenan">
+            </div>
+        </van-popup>
+        <van-popup class="popup" v-model="wenanIsShow" round closeable position="bottom"
+        :style="{ height: '80%' }">
+            <div class="wenan-title">选择分享文案</div>
+            <div class="wenan-box">
+                <div class="wenan-box-item" v-for="(item,index) in wenanData" :key="index" 
+                @click="selectItem(item.content)">{{item.content}}</div>
+            </div>
+            <button id="copy" v-clipboard:copy="copy_content" 
+                v-clipboard:success="onCopy"  v-clipboard:error="onError">一键复制</button>
         </van-popup>
     </div>
 </template>
@@ -125,7 +138,13 @@ export default {
         clubItems:[],
         personnelItem:[],
         show: false,
-        base64img:""
+        base64img:"",
+        // 是否展示文案
+            wenanIsShow: false,
+            // 文案数据
+            wenanData: [],
+            // 复制的内容
+            copy_content: ''
     };
   },
   created(){
@@ -211,15 +230,32 @@ export default {
     clubdetail(id){
         this.$router.push('/messagedetail/'+id);
     },
-      goback(){
+    goback(){
         this.$router.go(-1);
-      },
+    },
+    // 获取文案
+    getWenan() {
+        this.wenanIsShow = true;
+        this.$request.get('/personal/share/word/3').then(res => {
+            this.wenanData = res;
+        })
+    },
+    // 选中文案
+    selectItem(copy_content) {
+        this.copy_content = copy_content;
+    },
+    // 复制成功
+    onCopy:function(e){
+        this.$toast("复制成功！");
+    },
+    onError:function(e){
+        this.$toast("复制失败！");
+    },
   }
 };
 </script>
 <style lang="scss" scope>
 .van-nav-bar .van-icon {
-    color: #2c2c2c !important;
     vertical-align: middle;
 }
 .van-nav-bar--fixed{
@@ -228,21 +264,25 @@ export default {
     left: 0;
     width: 100%;
     z-index: 99 !important;
-    background-color: #8FCD71 !important;
 }
 .share_img{
     line-height: 0px;
     margin-top: -34px;
-  .share{
-      width: 22px;
-      height: 22px;
-  }
+    .share{
+        width: 22px;
+        height: 22px;
+    }
   }
   .van-popup--center{
-      width: 87%;
-      height: 85%;
+      width: 100%;
+          height: 90%;
+
+      border-radius: 15px;
+      img {
+          width: 100%;
+      }
   }
-   .textbase{
+    .textbase{
       width: 100%;
       height: 60px;
       background: #fff;
@@ -251,6 +291,17 @@ export default {
       text-align: center;
       line-height: 50px;
   }
+   .bgc {
+        width: 100%;
+        height: 58px;
+        background-color: #fff;
+        text-align: center;
+        img {
+        width: 79px;
+        height: 58px;
+        vertical-align: top;
+        }
+    }
 .clubhouse_main{
     width: 100%;
     height: 100%;
@@ -561,5 +612,57 @@ export default {
             color: #999;
         }
     }
+}
+.popup {
+  /deep/ .van-icon {
+      position: absolute;
+      top: 12px;
+      font-size: 18px;
+      color: #2c2c2c;
+  }
+  .wenan-title {
+      margin: 10px 0;
+      font-size: 16px;
+      font-weight: 600;
+      text-align: center;
+  }
+  .wenan-box {
+      position: absolute;
+      top: 41px;
+      left: 16px;
+      bottom: 64px;
+      width: 343px;
+      padding: 10px;
+      background-color: #eee;
+      overflow: scroll;
+      &-item {
+          width: 100%;
+          padding: 8px 10px;
+          margin-bottom: 13px;
+          background-color: #ddd;
+          border-radius: 5px;
+          font-size: 14px;
+          font-weight: 600;
+      }
+      &-item:hover {
+          box-sizing: border-box;
+          background-color: #eefaed;
+          border: 1px solid #7BBB62;
+      }
+  }
+  #copy {
+      position: absolute;
+      left: 16px;
+      bottom: 10px;
+      width: 343px;
+      height: 44px;
+      line-height: 44px;
+      background-color: #7BBB62;
+      border-radius: 22px;
+      border: none;
+      text-align: center;
+      font-size: 16px;
+      color: #fff;
+  }
 }
 </style>

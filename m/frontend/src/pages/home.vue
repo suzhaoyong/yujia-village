@@ -37,7 +37,10 @@ export default {
       }
     },
     computed: {
-      ...mapGetters(["info", "isUserNeedLogin"]),
+      isUserNeedLogin() {
+        const isUserLogin = !window.sessionStorage.getItem('access');
+        return isUserLogin;
+      }
     }
 }
 </script>

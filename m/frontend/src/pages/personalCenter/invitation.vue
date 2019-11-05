@@ -14,8 +14,8 @@
         <div class="title">成功邀请</div>
         <div class="success-invitation">
             <van-list v-model="loading" :offset="30" :finished="finished" finished-text="没有更多了" @load="onLoad">
-                <van-collapse v-model="activeName" accordion @change="getMyShareBelow">
-                    <van-collapse-item :border="false" :name="item.id" value="他的邀请" 
+                <van-collapse v-model="activeName" accordion >
+                    <van-collapse-item :border="false" :name="item.id" :value="'他的邀请('+item.sub_level.length+')'" 
                     v-for="(item,index) in userInfo" :key="index">
                         <div class="invitation-people" slot="title">
                             <div class="img" :style="{backgroundImage: 'url('+ item.icon +')'}"></div>
@@ -25,14 +25,10 @@
                             </div>
                             <div class="time">{{item.created_at[0]}}</div>
                         </div>
-                        <div :class="info.length > 5 ? 'second-box' : '' ">
-                            <van-list v-model="loading" :offset="30" :finished="finishedSecond" @load="onLoadSecond">
-                                <div class="invitation-people second" v-for="(item,index) in info" :key="index">
-                                    <div class="img" :style="{backgroundImage: 'url('+ item.icon +')'}"></div>
-                                    <div class="nickname">{{item.name}}</div>
-                                    <div class="time">{{item.created_at[0]}}</div>
-                                </div>
-                            </van-list>
+                        <div class="invitation-people second" v-for="(item,index) in item.sub_level" :key="index">
+                            <div class="img" :style="{backgroundImage: 'url('+ item.icon +')'}"></div>
+                            <div class="nickname">{{item.name}}</div>
+                            <div class="time">{{item.created_at[0]}}</div>
                         </div>
                     </van-collapse-item>
                 </van-collapse>
@@ -43,9 +39,25 @@
         </div>
         <div class="overlay" v-if="show" @click="show = false">
             <van-loading v-if="isShow" type="spinner" class="loading" color="#fff" vertical>加载中...</van-loading>
-            <div  class="invite-pic" @click.stop="">
+            <div class="invite-pic" @click.stop="">
                 <img :src="pic_img" alt/>
-            </div>
+                <div v-show="isWenanBox">
+                    <div class="text">长按图片保存</div>
+                    <div class="bgc">
+                        <img class="wenan-img" src="../../assets/img/fxwenan.png" alt="" @click="getWenan">
+                    </div>
+                </div>
+                <van-popup v-model="wenanIsShow" round closeable position="bottom"
+                :style="{ height: '80%' }">
+                    <div class="wenan-title">选择分享文案</div>
+                    <div class="wenan-box">
+                        <div class="wenan-box-item" v-for="(item,index) in wenanData" :key="index" 
+                        @click="selectItem(item.content)">{{item.content}}</div>
+                    </div>
+                    <button id="copy" v-clipboard:copy="copy_content" 
+                        v-clipboard:success="onCopy"  v-clipboard:error="onError">一键复制</button>
+                </van-popup>
+            </div>  
         </div>
     </div>
 </template>
@@ -66,16 +78,18 @@ export default {
             pic_img: '',
             // 我邀请的用户信息
             userInfo: [],
-            // 我邀请的用户,再次邀请的用户信息
-            info: [],
             loading: false,
             finished: false,
-            finishedSecond: false,
             page: 1,
-            page2: 1,
             total: '',
-            totalSecond: '',
-            id: ''
+            // 
+            isWenanBox: false,
+            // 是否展示文案
+            wenanIsShow: false,
+            // 文案数据
+            wenanData: [],
+            // 复制的内容
+            copy_content: ''
         }
     },
     created() {
@@ -100,37 +114,40 @@ export default {
                 // 加载状态结束
             }, 500);
         }, 
-        onLoadSecond() {
-            // 异步更新数据
-            setTimeout(() => {
-                this.page2++;
-                this.loading = false;
-                // 数据全部加载完成
-                if (this.info.length >= this.totalSecond) {
-                    this.finishedSecond = true;
-                    return
-                }
-                this.getMyShareBelow(this.id, this.page2);
-                // 加载状态结束
-            }, 500);
-        }, 
         immediatelyInvitation() {
             this.show = true;
             const userId = JSON.parse(window.sessionStorage.getItem('user')).id;
             this.inviteInfo.userId = userId;   
             this.inviteInfo.id = userId;
             this.$request.post('/show/share/photo',this.inviteInfo).then(data => {
-                // console.log(data);
                 this.pic_img = data;
+                if(this.pic_img !== '') {
+                    this.isShow = false;
+                    this.isWenanBox = true;
+                }
             })
-            if(this.pic_img !== '') {
-                this.isShow = false;
-            }
+        },
+        // 获取文案
+        getWenan() {
+            this.wenanIsShow = true;
+            this.$request.get('/personal/share/word/1').then(res => {
+                this.wenanData = res;
+            })
+        },
+        // 选中文案
+        selectItem(copy_content) {
+            this.copy_content = copy_content;
+        },
+        // 复制成功
+        onCopy:function(e){
+            this.$toast("复制成功！");
+        },
+        onError:function(e){
+            this.$toast("复制失败！");
         },
         // 获取积分信息
         getIntegral() {
             this.$request.get('/personal/fractioRecord').then(data => {
-                // console.log(data);
                 data.in.forEach(item => {
                     this.integralTotal += item.num;
                 });
@@ -139,34 +156,18 @@ export default {
         // 获取 我成功邀请的用户信息
         myShare(page = 1) {
             this.$request.get('/personal/myShare?page=' + page).then(data => {
+                console.log(data);
                 this.userInfo = this.dealingData( data.data, this.userInfo);
                 this.total = data.total;
             })
-        },
-        // 获取 我邀请的用户，再次邀请的用户
-        getMyShareBelow(id, page=1) {
-            if(this.id !== id) {
-                this.info =[];
-                this.finishedSecond = false;
-                this.page2 = 1;
-            }
-            this.id = id;
-            if(id !== '') {
-                this.$request.post('/personal/myShareBelow/'+id+'?page='+page ).then(data => {
-                    console.log(data);
-                    this.info = this.dealingData( data.data, this.info);
-                    this.totalSecond = data.total;
-                })
-            } else {
-                this.info = [];
-                this.finishedSecond = false;
-                this.page2 = 1;
-            }
         },
         // 处理 获取的 电话号码 和时间 数据
         dealingData(data, userInfo) {
             const info = data;
             info.forEach(item  => {
+                if(item.name === item.tel) {
+                    item.name = item.name.substr(0,3) + '****' + item.name.substr(7,4);
+                }
                 item.tel = item.tel.substr(0,3) + '****' + item.tel.substr(7,4);
                 item.created_at = item.created_at.split(' ');
                 userInfo.push(item);
@@ -268,10 +269,6 @@ export default {
     /deep/ .van-collapse-item__content {
         padding: 0;
     }
-    .second-box {
-        height: 300px;
-        overflow: scroll;
-    }
     .second {
         height: 60px;
         padding: 5px 0;
@@ -329,12 +326,87 @@ export default {
     }
 }
 .invite-pic {
-    position: relative;
+    position: absolute;
+    top: 0;
+    bottom: 0;
     display: block;
     width: 100%;
-    height: 500px;
     margin-top: 60px;
-    border-radius: 10px;
-    overflow: hidden;
+    border-radius: 10px 10px 0 0;
+    overflow: scroll;
+    img {
+        width: 100%;
+        vertical-align: top;
+    }
+    .text {
+        margin-top: -40px; 
+        text-align: center;
+        font-size: 14px;
+    }
+    .bgc {
+        width: 100%;
+        height: 58px;
+        margin-top: 21px;
+        background-color: #fff;
+        text-align: center;
+        .wenan-img {
+            width: 79px;
+            height: 58px;
+            vertical-align: top;
+        }
+    }
+    .van-popup {
+        /deep/ .van-icon {
+            position: absolute;
+            top: 12px;
+            font-size: 18px;
+            color: #2c2c2c;
+        }
+        .wenan-title {
+            margin: 10px 0;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+        }
+        .wenan-box {
+            position: absolute;
+            top: 41px;
+            left: 16px;
+            bottom: 64px;
+            width: 343px;
+            padding: 10px;
+            background-color: #eee;
+            overflow: scroll;
+            &-item {
+                width: 100%;
+                padding: 8px 10px;
+                margin-bottom: 13px;
+                background-color: #ddd;
+                border-radius: 5px;
+                font-size: 14px;
+                font-weight: 600;
+            }
+            &-item:hover {
+                box-sizing: border-box;
+                background-color: #eefaed;
+                border: 1px solid #7BBB62;
+            }
+        }
+        #copy {
+            position: absolute;
+            left: 16px;
+            bottom: 10px;
+            width: 343px;
+            height: 44px;
+            line-height: 44px;
+            background-color: #7BBB62;
+            border-radius: 22px;
+            border: none;
+            text-align: center;
+            font-size: 16px;
+            color: #fff;
+        }
+    }
+    
 }
 </style>

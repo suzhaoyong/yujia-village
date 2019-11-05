@@ -1118,6 +1118,7 @@ export default {
             width: 100%;
             height: 100%;
             margin: 0 auto;
+            margin-top: 10px;
             margin-bottom: 10%;
             .explain4{
                 width: 1200px;
@@ -1129,17 +1130,24 @@ export default {
                     float: left;
                     width: 110px;
                     height: 100px;
+                    border: 1px solid;
                     background-color: #fff;
                     margin-right: 10px;
                     margin-bottom: 7px;
                 .nav-div7-img{
                     width: 100%;
                     height: 100%;
+                    margin-right: 5px;
+                    margin-top: 5px;
+                    transition: all 1s;
+                    // object-fit: cover;
                     transition: all 1s;
                 }
                 .nav-div7-img:hover{
                     width: 100%;
                     height: 100%;
+                    margin-right: 5px;
+                    margin-top: 5px;
                     transform: scale(.9);
                 }
                 }
