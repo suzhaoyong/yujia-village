@@ -4,7 +4,7 @@
       <van-icon slot="right" name="star-o" @click="study(detailData.id)"></van-icon>
       <van-icon slot="right" name="share" @click="shareMessage"></van-icon>
     </van-nav-bar>
-    <main class="messagedetail-main">
+    <main class="messagedetail-main" style="-webkit-overflow-scrolling:touch">
       <div class="banner-train-img">
         <img :src="detailData.train_image.length === 0 ? detailData.teacher_img : detailData.train_image[0].path" alt="" @click="showPic('banner')">
         <div v-if="detailData.train_image.length > 1" class="totle">共{{detailData.train_image.length}}张</div>
@@ -166,13 +166,14 @@ export default {
       this.$request.get('trains/' + id).then((res) => {
         this.detailData = res.train;
         this.train_discount = res.train_discount;
-        console.log(res.train_discount)
         this.time = this.detailData.startTime.replace(/\-/g, '\.')+'-'+this.detailData.startTime.replace(/\-/g, '\.');
         this.intro = this.detailData.intro.replace(/\r\n/g,'<br />');
         this.outline = this.detailData.outline.replace(/\r\n/g,'<br />');
         // 处理数据的分号，中英文区别
         const crowd = this.detailData.crowd.replace(/；/g, ';');
         this.crowds = crowd.split(";");
+        this.crowds[this.crowds.length - 1]? this.crowds : this.crowds.pop();
+
       }) 
     },
     // 
@@ -356,9 +357,10 @@ export default {
     width: 100%;
     height: auto;
     background: white;
-    overflow: auto;
+    overflow-y: auto;
     margin-top: 46px;
-    margin-bottom: 50px;
+    padding-bottom: 50px;
+    -webkit-overflow-scrolling: touch;
     .banner-train-img {
       position: relative;
       width: 100%;
@@ -607,7 +609,7 @@ export default {
             margin-top: 7px;
             margin-right: 5px;
             border-radius: 3px;
-            background-color: #B4DC81;
+            background-color: #7BBB62;
           }
         }
     }
