@@ -4,7 +4,7 @@
       <van-icon slot="right" name="star-o" @click="study(detailData.id)"></van-icon>
       <van-icon slot="right" name="share" @click="shareMessage"></van-icon>
     </van-nav-bar>
-    <main class="messagedetail-main">
+    <main class="messagedetail-main" style="-webkit-overflow-scrolling:touch">
       <div class="banner-train-img">
         <img :src="detailData.train_image.length === 0 ? detailData.teacher_img : detailData.train_image[0].path" alt="" @click="showPic('banner')">
         <div v-if="detailData.train_image.length > 1" class="totle">共{{detailData.train_image.length}}张</div>
@@ -53,7 +53,7 @@
       <div class="integral" v-if="train_discount.积分.length!==0">
         <div class="box"> 
           <div v-for="(item,index) in train_discount.积分" :key="index">
-            花费<span>{{item.consume}}</span> 积分，课程仅需 <span>{{item.deduction}}</span> 元
+            花费<span>{{item.consume}}</span> 积分，价格减免： <span>{{item.deduction}}</span> 元
           </div>
         </div>
       </div>
@@ -76,7 +76,7 @@
         <div class="border-top"></div>
         <div class="border-left"></div>
         <div class="title"></div>
-        <div class="kecheng">课程大纲</div>
+        <div class="kecheng">课程简介</div>
         <div class="outline-content" v-html="outline"></div>
       </div>
       <div class="suitable-crowd">
@@ -172,6 +172,8 @@ export default {
         // 处理数据的分号，中英文区别
         const crowd = this.detailData.crowd.replace(/；/g, ';');
         this.crowds = crowd.split(";");
+        this.crowds[this.crowds.length - 1]? this.crowds : this.crowds.pop();
+
       }) 
     },
     // 
@@ -189,7 +191,7 @@ export default {
       var params = {
           id: this.$route.params.id,
           identity:'train',
-          userId: '',
+          userId:  JSON.parse(sessionStorage.getItem('user')).id || '',
           responseType: 'arraybuffer'
       }
       this.$request.post(`/show/share/photo`,params).then(res => {
@@ -355,9 +357,10 @@ export default {
     width: 100%;
     height: auto;
     background: white;
-    overflow: auto;
+    overflow-y: auto;
     margin-top: 46px;
-    margin-bottom: 50px;
+    padding-bottom: 50px;
+    -webkit-overflow-scrolling: touch;
     .banner-train-img {
       position: relative;
       width: 100%;
@@ -606,7 +609,7 @@ export default {
             margin-top: 7px;
             margin-right: 5px;
             border-radius: 3px;
-            background-color: #B4DC81;
+            background-color: #7BBB62;
           }
         }
     }

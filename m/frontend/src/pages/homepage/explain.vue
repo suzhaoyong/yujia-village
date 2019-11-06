@@ -1,6 +1,6 @@
 <template>
     <div>
-        <van-nav-bar title="网站快捷访问设置" left-arrow @click-left="onClickLeft">
+        <van-nav-bar title="网站添加至手机桌面设置" left-arrow @click-left="onClickLeft">
         </van-nav-bar>
         <div class="content">
             <van-tabs v-model="activeName" color="#93D57B">

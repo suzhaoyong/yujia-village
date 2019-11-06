@@ -27,7 +27,7 @@
                         </div>
                         <div class="invitation-people second" v-for="(item,index) in item.sub_level" :key="index">
                             <div class="img" :style="{backgroundImage: 'url('+ item.icon +')'}"></div>
-                            <div class="nickname">{{item.name}}</div>
+                            <div class="nickname">{{item.name === item.tel ? item.name.substr(0,3) + '****' + item.name.substr(7,4): item.name }} </div>
                             <div class="time">{{item.created_at[0]}}</div>
                         </div>
                     </van-collapse-item>
@@ -169,8 +169,10 @@ export default {
                     item.name = item.name.substr(0,3) + '****' + item.name.substr(7,4);
                 }
                 item.tel = item.tel.substr(0,3) + '****' + item.tel.substr(7,4);
+
                 item.created_at = item.created_at.split(' ');
                 userInfo.push(item);
+
             })
             return userInfo;
         } 

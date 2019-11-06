@@ -18,7 +18,7 @@
                     <van-radio name="no" checked-color="#8FCD71" @click="noUse">不使用积分</van-radio>
                     <van-radio :name="index" checked-color="#8FCD71" :disabled="fraction>=item.consume? false: true"
                     v-for="(item,index) in courseParams.train_discount.积分" :key="index"
-                    @click="getId(index, item.id)">
+                    @click="getId(index, item)">
                         花费{{item.consume}}积分，价格减免：{{item.deduction}}
                     </van-radio>
                 </van-radio-group>
@@ -47,6 +47,7 @@
     </div>
 </template>
 <script>
+import { Toast } from 'vant';
 export default {
     data() {
         return {
@@ -77,11 +78,14 @@ export default {
             this.$router.go(-1);
         },
         // 选择积分抵扣，折扣价格
-        getId (index, id) {
-            this.name = id;
-            const train_discount = this.courseParams.train_discount.积分;
-            this.discountPrice = (this.courseParams.price - train_discount[index].deduction).toFixed(2);
-            this.consume = train_discount[index].consume;
+        getId (index, item) {
+            if(this.fraction>=item.consume){
+                this.name = item.id;
+                const train_discount = this.courseParams.train_discount.积分;
+                this.discountPrice = (this.courseParams.price - train_discount[index].deduction).toFixed(2);
+                this.consume = train_discount[index].consume;
+            } else {Toast('您的积分不足，快去分享赚积分吧！')}
+            
         },
         // 不使用积分的价格
         noUse() {
@@ -90,29 +94,43 @@ export default {
         },
         // 参数处理
         paramsDeal(params) {
-            if(this.name === '') {
-                params = {
-                    id: this.courseParams.id,
-                }
-                return params
-            } else {
+            // if(this.name === '') {
+            //     params = {
+            //         id: this.courseParams.id,
+            //     }
+            //     return params
+            // } else {
                 params = {
                     id: this.courseParams.id,
                     fraction: this.consume,
                     discountId: this.name
                 }
                 return params
-            }
+            // }
         },
         // 创建订单
         creatOrder() {
             const orderParams = this.paramsDeal();
             this.$request.post('/trains/new/order', orderParams).then(res => {
+                console.log(res)
+                
+                //   if(res.code === 200) {
+                //     if (this.fraction === 0) {
+                //         Toast("课程已购买")
+                //     } else {
+                //         this.payMoney(res.out_trade_no);
+                //     }
+                // } 
                 if(res.msg === 'OK') {
-                    this.payMoney(res.out_trade_no);
-                } else {
+                    if (this.fraction === 0 || res.code === 200) {
+                        Toast('恭喜您，课程购买成功');
+                    } else {
+                        this.payMoney(res.out_trade_no);
+                    }
+                } 
+                else {
                     this.$toast({
-                        message: '订单创建失败',
+                        message: res.msg,
                     });
                 }
             })
