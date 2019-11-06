@@ -25,13 +25,13 @@
             <div class="icon">
               <img :src="icon.tel" alt />
             </div>
-            <input class="input tel" type="tel" v-model="ruleForm.tel" placeholder="请输入手机号码" />
+            <input class="input tel" type="tel" v-model="ruleForm.tel" placeholder="请输入手机号码" ref="ruleFormkeytel"/>
           </div>
           <div class="input-box flex line">
             <div class="icon key">
               <img :src="icon.key" alt />
             </div>
-            <input class="input key" type="password" v-model="ruleForm.password" placeholder="请输入密码" />
+            <input class="input key" type="password" v-model="ruleForm.password" placeholder="请输入密码" ref="ruleFormkeypwd"/>
           </div>
           <div class="input-box flex" v-show="false">
             <input class="input captcha" type="tel" v-model="ruleForm.captcha" placeholder="请输入验证码" />
@@ -342,6 +342,7 @@ export default {
     // this.getVerificationCode();
     this.loadFile("sy");
     this.loadFile("ys");
+    this.keyEvents()
   },
   methods: {
     // 返回主页
@@ -679,7 +680,24 @@ export default {
         .catch(err => {
           Notify(err);
         });
-    }
+    },
+    /* 按键验证 */
+    // keyEvents () {
+    //   var regex = /^1[3|4|5|6|7|8]\d{9}$/;
+    //   var regexpwd = /^(?=.*[a-zA-Z]+)(?=.*[0-9]+)[a-zA-Z0-9]+$/;
+    //   this.$refs.ruleFormkeytel.onkeydown = () => {
+    //     if (!regex.test(this.ruleForm.tel)) {
+    //         console.log("请录入正确的手机号码！");
+    //         this.$refs.ruleFormkeytel.style.color = 'red'
+    //     } else {this.$refs.ruleFormkeytel.style.color = ''}
+    //   }
+    //   this.$refs.ruleFormkeypwd.onkeydown =() => {
+    //     if (regexpwd.test(this.ruleForm.password)) {
+    //         console.log("111");
+    //     }
+    //   }
+    // }
+     
   }
 };
 </script>
@@ -745,6 +763,7 @@ export default {
 }
 .van-button.van-button--default.van-button--large.van-dialog__confirm {
   width: 100%;
+
 }
 .sms {
   position: absolute;

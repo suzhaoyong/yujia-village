@@ -270,6 +270,9 @@ const router = new Router({
         }, //加盟机构
         {
           path: '/joinclubhouse/joinclubhousedetails',
+          meta: {
+            header_name: 'joinclubhouse'
+          },
           component: Joinclubhousedetails
         } //加盟机构----详情
       ]

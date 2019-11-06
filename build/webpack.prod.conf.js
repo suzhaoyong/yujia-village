@@ -14,7 +14,8 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 
 // const env = require('../config/prod.env')
-const env = require('../config/' + process.env.env_config + '.env')
+const env = require('../config/' + (process.env.env_config || 'prod') + '.env')
+console.log(env);
 const PrerenderSpaPlugin = require('prerender-spa-plugin') // prerender-spa-plugin
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
