@@ -169,7 +169,7 @@ export default {
         captcha: "",
         key: ""
       },
-      loginWay: "message",
+      loginWay: "account",
       isPostting: false,
       verification: {
         code_img: "",
@@ -406,9 +406,12 @@ export default {
           this.$emit("close", "");
         })
         .then(_ => {
-          this.$router.push('/personal/index')
-          // this.getPersonal();
+          // this.$router.push('/personal/index')
+          return this.getPersonal();
           // window.location.reload();
+        })
+        .then(() => {
+          this.fullPath && this.$router.replace(this.fullPath)
         })
         .catch(() => {
           this.isPostting = false;
@@ -438,8 +441,6 @@ export default {
           // this.$router.push('/personal/index')
         })
         .then(() => {
-
-          console.log(this.fullPath)
           this.fullPath && this.$router.replace(this.fullPath)
         })
         .catch(() => {
@@ -719,7 +720,7 @@ input:focus {
     background: #fff;
     z-index: 101;
     display: flex;
-    border-radius: 0.5vw;
+    border-radius: 0.5rem;
     overflow: hidden;
     // height: 21rem;
     &-icon {
@@ -739,11 +740,11 @@ input:focus {
       &_title {
         display: flex;
         font-family: MicrosoftYaHei;
-        font-size: 0.9vw;
+        font-size: 0.6rem;
         font-weight: normal;
         font-stretch: normal;
-        // line-height: 0.2vw;
-        letter-spacing: 0vw;
+        // line-height: 0.2rem;
+        letter-spacing: 0rem;
         color: #2c2c2c;
         cursor: pointer;
         &-item {
@@ -765,7 +766,7 @@ input:focus {
             // color: #7FB36B;
           }
         }
-        margin-bottom: 1.2vw;
+        margin-bottom: 1.2rem;
         border-bottom: 1px solid #ccc;
         text-align: center;
         .border {
@@ -913,16 +914,16 @@ input:focus {
             width: 100%;
             padding-top: 13px;
             // background: #e6f1d9;
-            border-radius: 0.5vw;
+            border-radius: 0.5rem;
             border: none;
             background-color: #F6FCF3;
             border-bottom: 1px solid #ccc;
             font-family: MicrosoftYaHei;
-            font-size: 0.8vw;
+            font-size: 0.8rem;
             font-weight: normal;
             font-stretch: normal;
-            // line-height: 0.2vw;
-            letter-spacing: 0vw;
+            // line-height: 0.2rem;
+            letter-spacing: 0rem;
             color: #2c2c2c;
           }
         }
@@ -1109,15 +1110,15 @@ input:focus {
             height: 3rem;
             padding-top: 13px;
             background-color: #F6FCF3;
-            border-radius: 0.5vw;
+            border-radius: 0.5rem;
             border: none;
             border-bottom: 1px solid #ccc;
             font-family: MicrosoftYaHei;
-            font-size: 0.8vw;
+            font-size: 0.8rem;
             font-weight: normal;
             font-stretch: normal;
-            // line-height: 0.2vw;
-            letter-spacing: 0vw;
+            // line-height: 0.2rem;
+            letter-spacing: 0rem;
             color: #2c2c2c;
           }
         }
@@ -1149,11 +1150,11 @@ input:focus {
         display: flex;
         justify-content: space-between;
         font-family: MicrosoftYaHei;
-        font-size: 0.8vw;
+        font-size: 0.8rem;
         font-weight: normal;
         font-stretch: normal;
-        // line-height: 0.2vw;
-        letter-spacing: 0vw;
+        // line-height: 0.2rem;
+        letter-spacing: 0rem;
         color: #2c2c2c;
         .auto_login {
           display: flex;
