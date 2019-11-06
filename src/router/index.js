@@ -350,6 +350,11 @@ const router = new Router({
         } //关于我们
       ]
     },
+    {
+      path: '/pay/new_wechat_pay',
+      name: 'wechat pay',
+      component: () => import('@/pages/pay/wechatPay')
+    },
   ]
 })
 router.beforeEach((to, from, next) => {

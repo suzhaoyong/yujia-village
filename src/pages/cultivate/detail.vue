@@ -33,9 +33,9 @@
                   </div>
                 </div>
                 <div class="kecheng_rh">
-                  <div class="kecheng_price" style="padding-bottom:0.95rem;">￥{{train.price}}</div>
+                  <div class="kecheng_price" style="padding-bottom:0.95rem;">￥{{train.price > 0 ? train.price: '0.00'}}</div>
                   <div class="kecheng_change"  style="font-size: 0.7rem;font-weight: bolder;color:#999999;" v-if="isJifen">
-                    <div style="margin-bottom: 0.3rem;" v-for="(item, index) in train_discount['积分']" :key="index"><span>{{item.consume}}</span> {{item.type}}，课程仅需 <span>{{(train.price - item.deduction).toFixed(2)}}</span> 元</div>
+                    <div style="margin-bottom: 0.3rem;" v-for="(item, index) in train_discount['积分']" :key="index"><span>{{item.consume}}</span> {{item.type}}，课程仅需 <span>{{getCountPrice(item)}}</span> 元</div>
                   </div>
                 </div>
               </div>
@@ -196,6 +196,14 @@ export default {
   },
   computed: {
     ...mapGetters(['info', 'isUserNeedLogin']),
+    getCountPrice() {
+      return (item) => {
+        if(item.deduction > this.train.price) {
+          return '0.00';
+        }
+        return (this.train.price - item.deduction).toFixed(2)
+      }
+    },
     isJifen() {
       return this.train_discount['积分'] && this.train_discount['积分'].length > 0
     },
