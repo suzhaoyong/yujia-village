@@ -32,7 +32,10 @@
             </div>
             <div class="popup-diff"> 
               <p>难度</p>
-              <van-rate v-model='stardiff' color='#58B708' void-icon="star" void-color="#eee"/>
+              <div class="diff">
+                <van-rate v-model='stardiff' color='#58B708' void-icon="star" void-color="#eee"/>
+              </div>
+              
             </div>
             <div class="area">
               <p>地区选择</p>
@@ -112,7 +115,7 @@ import Vue from 'vue';
 import Bus from '../../utils/Bus'
 import areaList from '../market/goods/area_list'
 import { Rate, Popup, Area, PullRefresh, Toast  } from 'vant';
-import { mapGetters } from "vuex";
+// import { mapGetters } from "vuex";
 
 Vue.use(Rate).use(Popup).use(Area).use(PullRefresh).use(Toast);
 import {
@@ -549,6 +552,9 @@ export default {
             margin-top:10px;
             p {
               padding-bottom: 10px; 
+            }
+            .diff {
+              height: 20px;
             }
           }
           .area {

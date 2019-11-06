@@ -47,9 +47,9 @@
                 </van-popup>
                 <van-field v-model="ownerAndCoachList.address" clearable input-align="right" label="详细地址" placeholder="街道门牌等" />
                 <div class="upload-license">
-                    <div class="license">请上传营业执照以及瑜伽毕业证书</div>
+                    <div class="license">请上传您的证书</div>
                     <div class="upload">
-                        <van-uploader v-model="fileList3" :after-read="afterRead" :max-count="2" multiple
+                        <van-uploader v-model="fileList3" :after-read="afterRead" :max-count="1" multiple
                         :max-size="4096000" @oversize="overSize" @delete="onDel"/>
                     </div>
                 </div>
