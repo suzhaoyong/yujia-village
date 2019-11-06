@@ -94,29 +94,43 @@ export default {
         },
         // 参数处理
         paramsDeal(params) {
-            if(this.name === '') {
-                params = {
-                    id: this.courseParams.id,
-                }
-                return params
-            } else {
+            // if(this.name === '') {
+            //     params = {
+            //         id: this.courseParams.id,
+            //     }
+            //     return params
+            // } else {
                 params = {
                     id: this.courseParams.id,
                     fraction: this.consume,
                     discountId: this.name
                 }
                 return params
-            }
+            // }
         },
         // 创建订单
         creatOrder() {
             const orderParams = this.paramsDeal();
             this.$request.post('/trains/new/order', orderParams).then(res => {
+                console.log(res)
+                
+                //   if(res.code === 200) {
+                //     if (this.fraction === 0) {
+                //         Toast("课程已购买")
+                //     } else {
+                //         this.payMoney(res.out_trade_no);
+                //     }
+                // } 
                 if(res.msg === 'OK') {
-                    this.payMoney(res.out_trade_no);
-                } else {
+                    if (this.fraction === 0 || res.code === 200) {
+                        Toast('恭喜您，课程购买成功');
+                    } else {
+                        this.payMoney(res.out_trade_no);
+                    }
+                } 
+                else {
                     this.$toast({
-                        message: '课程已购买，请不要重复购买',
+                        message: res.msg,
                     });
                 }
             })
