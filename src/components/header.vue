@@ -110,7 +110,7 @@ export default {
   },
   data() {
     return {
-      activeIndex: "main",
+      activeIndex: "",
       username: "",
       account: {
         type: ""
@@ -140,15 +140,15 @@ export default {
     }
   },
   watch: {
-    $route: "fetchData"
+    '$route': "fetchData"
   },
   mounted() {
     // this.changenav();
     Bus.$on("login", () => {
       this.account.type = "login";
     });
-    this.activeIndex = this.$route.name || this.$route.path || "main";
-    this.getPersonal();
+    this.activeIndex = this.$route.name || this.$route.meta.header_name || "main";
+    // this.getPersonal();
   },
   created() {
     this.fetchData();

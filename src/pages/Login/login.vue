@@ -136,6 +136,7 @@ import store from "@/store";
 export default {
   data() {
     return {
+      fullPath: '',
       getCodepass:false,
       checked: false,
       icon: {
@@ -198,6 +199,7 @@ export default {
     sessionStorage.removeItem("access");
   },
   mounted() {
+    this.fullPath = this.$route.fullPath
     this.getVerificationCode();
     this.getCookie();
   },
@@ -384,9 +386,10 @@ export default {
     },
     /** 个人信息 */
     getPersonal() {
-      this.$request("/personal/home").then(data => {
+      return this.$request("/personal/home").then(data => {
         sessionStorage.setItem("user", JSON.stringify(data));
-        window.location.reload();
+        store.dispatch("INFO", data)
+        // window.location.reload();
         this.$emit("suc", data.user.name);
       });
     },
@@ -429,11 +432,15 @@ export default {
           this.$emit("close", "");
         })
         .then(_ => {
-          // this.getPersonal();
+          return this.getPersonal();
           // window.location.reload();
-          location.href =  window.location.origin + '/personal/index';
+          // location.href =  window.location.origin + '/personal/index';
           // this.$router.push('/personal/index')
-          
+        })
+        .then(() => {
+
+          console.log(this.fullPath)
+          this.fullPath && this.$router.replace(this.fullPath)
         })
         .catch(() => {
           this.isPostting = false;
