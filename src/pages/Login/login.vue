@@ -19,23 +19,25 @@
               <input
                 class="input"
                 v-model.trim="accountRuleForm.tel"
+                @blur="blurRuleForm('tel', 'accountRuleForm', 'accountErrorRule')"
                 type="text"
-                placeholder="请输入手机号"
+                placeholder="请输入您的手机号"
                 style="outline:none;"
               />
-              <div class="form_input-tips">{{accountErrorRule.tel.show?accountErrorRule.tel.msg:''}}</div>
+              <div class="form_input-tips">{{blurInputError('tel', 'accountRuleForm', 'accountErrorRule')}}</div>
             </div>
             <div class="form_input">
               <input
                 class="input"
                 v-model.trim="accountRuleForm.password"
+                @blur="blurRuleForm('password', 'accountRuleForm', 'accountErrorRule')"
                 type="password"
-                placeholder="请输入密码"
+                placeholder="请输入 6-18 位数字或英文的密码"
                 style="outline:none;"
               />
               <div
                 class="form_input-tips"
-              >{{accountErrorRule.password.show?accountErrorRule.password.msg:''}}</div>
+              >{{blurInputError('password', 'accountRuleForm', 'accountErrorRule')}}</div>
             </div>
             <div class="form_input">
               <div class="item" style="align-items: flex-end;">
@@ -47,11 +49,12 @@
                   <div class="item-box-input">
                     <input
                       type="text"
-                      placeholder="请输入图形验证码"
+                      placeholder="请输入图形验证码中4位数字"
                       v-model.trim="accountRuleForm.captcha"
+                      @blur="blurRuleForm('captcha', 'accountRuleForm', 'accountErrorRule')"
                     />
                   </div>
-                  <div class="item-box-tips">{{isError('captcha')}}</div>
+                  <div class="item-box-tips">{{blurInputError('captcha', 'accountRuleForm', 'accountErrorRule')}}</div>
                 </div>
               </div>
             </div>
@@ -65,21 +68,23 @@
                 class="input"
                 type="text"
                 v-model.trim="messageRuleForm.tel"
-                placeholder="请输入手机号"
+                @blur="blurRuleForm('tel', 'messageRuleForm', 'messageErrorRule')"
+                placeholder="请输入您的手机号"
               />
-              <div class="form_input-tips">{{messageErrorRule.tel.show?messageErrorRule.tel.msg:''}}</div>
+              <div class="form_input-tips">{{blurInputError('tel', 'messageRuleForm', 'messageErrorRule')}}</div>
             </div>
             <div class="form_input">
               <input
                 class="input"
                 type="text"
                 v-model.trim="messageRuleForm.verification_code"
-                placeholder="请输入验证码"
+                @blur="blurRuleForm('verification_code', 'messageRuleForm', 'messageErrorRule')"
+                placeholder="请输入您收到的短信验证码中6位数字"
               />
               <div class="get_code" @click="getCodeMessage">{{codeTips.msg}}</div>
               <div
                 class="form_input-tips"
-              >{{messageErrorRule.verification_code.show?messageErrorRule.verification_code.msg:''}}</div>
+              >{{blurInputError('verification_code', 'messageRuleForm', 'messageErrorRule')}}</div>
             </div>
             <div class="form_btn">
               <button @click.stop="submitForm('message')" :disabled="isPostting">登录</button>
@@ -111,7 +116,7 @@
           <input
             type="text"
             v-model="messageRuleForm.captcha"
-            placeholder="请输入图形验证码"
+            placeholder="请输入图形验证码中4位数字"
           />
         </div>
         <div class="box-tips">{{isError('captcha')}}</div>
@@ -141,9 +146,9 @@ export default {
         count: 0
       },
       accountErrorRule: {
-        tel: { show: false, msg: "请输入正确的手机号" },
-        password: { show: false, msg: "请输入正确的密码" },
-        captcha: { show: false, msg: "请输入正确的验证码" }
+        tel: { show: false, msg: "" },
+        password: { show: false, msg: "" },
+        captcha: { show: false, msg: "" }
       },
       accountRuleForm: {
         tel: "",
@@ -152,9 +157,9 @@ export default {
         key: ""
       },
       messageErrorRule: {
-        tel: { show: false, msg: "请输入正确的手机号" },
-        verification_code: { show: false, msg: "请输入验证码" },
-        captcha: { show: false, msg: "请输入正确的验证码" }
+        tel: { show: false, msg: "" },
+        verification_code: { show: false, msg: "" },
+        captcha: { show: false, msg: "" }
       },
       messageRuleForm: {
         tel: "",
@@ -163,7 +168,7 @@ export default {
         captcha: "",
         key: ""
       },
-      loginWay: "account",
+      loginWay: "message",
       isPostting: false,
       verification: {
         code_img: "",
@@ -180,6 +185,11 @@ export default {
         }
         return "";
       };
+    },
+    blurInputError() {
+      return (key, ruleName, errorName) => {
+        return this[errorName][key].show?this.validatorBlurRuleForm(key, ruleName):''
+      }
     }
   },
   created() {
@@ -192,6 +202,67 @@ export default {
     this.getCookie();
   },
   methods: {
+    blurRuleForm(item, ruleName, errorName) {
+      let error = this.validatorBlurRuleForm(item, ruleName)
+      if (error.length === 0){
+        this[errorName][item].show = false;
+      } else {
+        this[errorName][item].show = true;
+        this[errorName][item].msg = error;
+      }
+    },
+    validatorBlurRuleForm(key, ruleName) {
+      let rules = {
+          tel: [{
+              strategy: 'isNonEmpty',
+              errorMsg: '手机号码不能为空！'
+            }, {
+              strategy: 'isMoblie',
+              errorMsg: '手机号码格式不正确！'
+            }],
+          verification_code: [{
+                strategy: 'isNonEmpty',
+                errorMsg: '短信验证码不能为空！'
+            }, {
+                strategy: 'minLength:6',
+                errorMsg: '短信验证码长度不能小于 6 位！'
+            }, {
+                strategy: 'maxLength:6',
+                errorMsg: '短信验证码长度不能大于 6 位！'
+            }],
+            captcha: [{
+                strategy: 'isNonEmpty',
+                errorMsg: '图形验证码不能为空！'
+              }, {
+                  strategy: 'minLength:4',
+                  errorMsg: '图形验证码不能小于 4 位！'
+              }, {
+                  strategy: 'maxLength:4',
+                  errorMsg: '图形验证码不能大于 4 位！'
+              }],
+            password: [{
+                  strategy: 'isNonEmpty',
+                  errorMsg: '密码不能为空！'
+              }, {
+                  strategy: 'minLength:6',
+                  errorMsg: '密码长度不能小于 6 位！'
+              }, {
+                  strategy: 'maxLength:18',
+                  errorMsg: '密码长度不能大于 18 位！'
+              }]
+        }
+      const validatorFunc = () => {
+        let validator = new Validator();
+        validator.add(this[ruleName][key], rules[key])
+        let errorMsg = validator.start()
+        return errorMsg
+      }
+      let errorMsg = validatorFunc()
+      if(errorMsg) {
+        return errorMsg;
+      }
+      return '';
+    },
     submitForm(name) {
       // let isPass = this.formVaildent(name);
       if (name === "message") {
@@ -418,11 +489,11 @@ export default {
       return is_pass;
     },
     getCodeMessage(){
-      if (!this.validatorRegisterTel()) {
-        // this.messageErrorRule.tel.show = true;
-        this.getCodepass = false;
-      }else{
+      if (this.validatorBlurRuleForm('tel', 'messageRuleForm').length === 0) {
         this.getCodepass = true;
+      } else {
+        this.blurRuleForm('tel', 'messageRuleForm', 'messageErrorRule')
+        this.getCodepass = false;
       }
     },
     validatorRegisterTel() {
