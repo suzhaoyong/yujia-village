@@ -229,6 +229,10 @@ import refresh from "@/assets/img/refresh.png";
 import Validator from '@/utils/Validator.js'
 import Pdfh5 from "pdfh5";
 import Vue from "vue";
+
+import { mapGetters } from 'vuex'
+import store from "@/store";
+
 import { Field, Button, Notify, Dialog, Icon, Toast } from "vant";
 Vue.use(Field)
   .use(Button)
@@ -310,7 +314,8 @@ export default {
         code_img: "",
         code_key: "",
         is_tap: false
-      }
+      },
+      personalData: {},
     };
   },
   computed: {
@@ -426,6 +431,10 @@ export default {
           } else {
             this.$router.go(-1);  // 登录之后返回登陆之前的页面
           }
+        }).then(() => {
+          this.$nextTick(() => {
+            this.getPersonalData()
+          })
         })
         .catch(err => {
           Notify(err);
@@ -697,7 +706,30 @@ export default {
     //     }
     //   }
     // }
-     
+    // 积分显示
+     getPersonalData() {
+      this.$request.get('/personal/home').then(data => {
+          // console.log(data);
+          store.dispatch("INFO", data);
+          sessionStorage.setItem('user data',JSON.stringify(data));
+          const { fraction, icon, name, identity_auth, reason,cashCount,couponCount } = data.user;
+          window.sessionStorage.setItem('user',JSON.stringify(data.user));
+          const index = data.user.money.indexOf(".");
+          const money = data.user.money.substring(index,0);
+          // 获取 金币和积分
+          const personal = {
+              money,
+              fraction,
+              icon,
+              name,
+              identity_auth,
+              reason,
+              cashCount,
+              couponCount
+          }
+          this.personalData = personal;
+      })
+    },
   }
 };
 </script>
