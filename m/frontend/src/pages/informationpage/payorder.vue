@@ -48,6 +48,7 @@
 </template>
 <script>
 import { Toast } from 'vant';
+
 export default {
     data() {
         return {
@@ -65,7 +66,7 @@ export default {
             // 选中折扣的编号
             name: '',
             // 支付宝提交的表单数据
-            form: '',
+            form: ''
         }
     },
     created() {
@@ -124,6 +125,9 @@ export default {
                 if(res.msg === 'OK') {
                     if (this.fraction === 0 || res.code === 200) {
                         Toast('恭喜您，课程购买成功');
+                        setTimeout(() => {
+                            this.$router.go(-1)
+                        }, 2000)
                     } else {
                         this.payMoney(res.out_trade_no);
                     }
@@ -132,6 +136,9 @@ export default {
                     this.$toast({
                         message: res.msg,
                     });
+                    setTimeout(() => {
+                            this.$router.go(-1)
+                        }, 2000)
                 }
             })
         },
@@ -143,7 +150,7 @@ export default {
                     document.forms['alipaysubmit'].submit() //渲染支付宝支付页面
                 })
             })
-        }
+        },
     }
 }
 </script>
