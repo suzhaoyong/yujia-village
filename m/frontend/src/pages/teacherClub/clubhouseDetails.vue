@@ -237,7 +237,7 @@ export default {
         this.$router.push('/messagedetail/'+id);
     },
     goback(){
-        this.$router.go(-1);
+        this.$router.back('teacherClub/list');
     },
     // 获取文案
     getWenan() {
