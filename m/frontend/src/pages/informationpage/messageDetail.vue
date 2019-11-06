@@ -18,7 +18,10 @@
       </div>
       <!-- 分享 -->
       <van-popup class="fenxiang" v-model="show">
-        <div class="sharepopup">
+         <div v-show="!shareimg" class="loading">
+            <van-loading color="#7BBB62" size="24px" vertical>加载中...</van-loading>
+        </div>
+        <div class="sharepopup" v-show="shareimg">
           <img :src="shareimg">
           <div class="sharetext">长按图片，保存或发送给朋友</div>
           <div class="bgc">
@@ -123,8 +126,7 @@
 <script>
 import Vue from 'vue';
 import '../../dist/swiper.css'
-import { Rate, Popup, NavBar} from 'vant'
-Vue.use(Rate).use(NavBar).use(Popup)
+
 export default {
   data () {
     return {
@@ -188,13 +190,15 @@ export default {
     // 分享图片
     shareMessage() {
       this.show = true
+      console.log(this.$route.params.id)
       var params = {
           id: this.$route.params.id,
           identity:'train',
-          userId:  JSON.parse(sessionStorage.getItem('user')).id || '',
+          userId:  sessionStorage.getItem('user')? JSON.parse(sessionStorage.getItem('user')).id : '',
           responseType: 'arraybuffer'
       }
       this.$request.post(`/show/share/photo`,params).then(res => {
+        console.log(res)
         this.shareimg = res;
       })
     },
@@ -265,7 +269,13 @@ export default {
 // 分享样式
 .fenxiang {
   width: 100%;
+  min-height: 80%;
   border-radius: 15px;
+  .loading {
+    width: 60px;
+    height: 30px;
+    margin: 49% auto;
+  }
 }
 .sharepopup {
   width: 100%;

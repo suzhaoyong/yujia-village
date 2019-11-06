@@ -49,11 +49,17 @@
             </div>
         </div>
         <van-popup v-model="show">
-            <img :src="base64img"/>
-            <div class="textbase">长按图片，保存或发送给朋友</div>
-            <div class="bgc">
-                <img src="../../assets/img/fxwenan.png" alt="" @click="getWenan">
+            <div v-show="!base64img" class="loading">
+                <van-loading color="#7BBB62" size="24px" vertical>加载中...</van-loading>
             </div>
+            <div v-show="base64img">
+                <img :src="base64img"/>
+                <div class="textbase">长按图片，保存或发送给朋友</div>
+                <div class="bgc">
+                    <img src="../../assets/img/fxwenan.png" alt="" @click="getWenan">
+                </div>
+            </div>
+
         </van-popup>
         <van-popup class="popup" v-model="wenanIsShow" round closeable position="bottom"
         :style="{ height: '80%' }">
@@ -72,8 +78,7 @@ import Vue from 'vue';
 import Bus from "@/utils/Bus";
 import { mapGetters } from "vuex"
 import Swiper from 'swiper';
-import { Popup} from 'vant';
-Vue.use(Popup);
+
 export default {
   data() {
     return {
@@ -183,9 +188,13 @@ export default {
   }
   .van-popup--center{
       width: 100%;
-          height: 90%;
-
+      height: 90%;
       border-radius: 15px;
+        .loading {
+            width: 60px;
+            height: 30px;
+            margin: 52% auto;
+        }
       img {
           width: 100%;
       }

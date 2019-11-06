@@ -301,6 +301,7 @@ export default {
       // 名师列表
       onLoadlist2(){
           this.$request.get(`/teachers?page=${this.current_page2}`).then(res => {
+            this.banner2 = res.banner
             this.houseType = res.course_types;
             const info2 = res.teachers.data;
             info2.forEach(item => {
@@ -355,7 +356,6 @@ export default {
           
         }, 500);
     },   
-    // 名师上拉加载更多
     onLoad2() {
         setTimeout(() => {
             this.current_page2++;
@@ -381,6 +381,7 @@ export default {
     getTeachersPrais(page = 1) {
       this.$request.get(`/teachers/list/prais?page=${page}`)
       .then(res => {
+          console.log(res)
         if(page == 1) {
           this.exhibitionBox = res.teachers.data;
           this.houseType = res.course_types;
@@ -1195,13 +1196,16 @@ input:-ms-input-placeholder{
             .exhibition_content{
                 width: 93%;
                 height: 100%;
-                display: flow-root;
+                // display: flow-root;
                 margin: 0 auto;
                 margin-top: 10px;
+                // 改变的样式
+                display: flex;
+                flex-wrap: wrap;
                 .exhibition_box{
                     width: 48%;
                     height: 100%;
-                    float: left;
+                    // float: left;
                     border-radius:7px;
                     margin-bottom: 8px;
                     .exhibition_img{

@@ -4,7 +4,7 @@
             <van-icon name="question-o" slot="right" @click="question"/>
         </van-nav-bar>
         <div class="bgc">
-            <div class="my-jf">您的积分</div>
+            <div class="my-jf">可用积分</div>
             <div class="number">{{integral}}</div>
             <div class="explain">2019年12月31日前注册及邀请注册可获双倍积分哟！</div>
         </div>
