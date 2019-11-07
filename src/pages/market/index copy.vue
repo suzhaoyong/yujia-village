@@ -59,7 +59,7 @@
                   class="goods hvr-underline-from-left"
                   style="cursor: pointer;"
                   @click="viewGoodsDetail(item)"
-                  v-for="(item,index) in discount.double.list"
+                  v-for="item in discount.double.list"
                   :key="item.id"
                 >
                   <div class="goods-img">
@@ -94,7 +94,7 @@
                   class="goods bg hvr-underline-from-left"
                   style="cursor: pointer;"
                   @click="viewGoodsDetail(item)"
-                  v-for="(item,index) in discount.single.list"
+                  v-for="item in discount.single.list"
                   :key="item.id"
                 >
                   <div class="goods-img bg">

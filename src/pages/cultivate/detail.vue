@@ -61,7 +61,7 @@
             <div class="teacher-box">
               <div class="teacher-img">
                 <div class="img">
-                  <img style="width:100%;height:100%; position: relative;z-index: 10;" :src="train.teacher_img" :alt="train.theme"/>
+                  <img style="width:100%;height:100%; position: relative;z-index: 10;object-fit: cover;" :src="train.teacher_img" :alt="train.theme"/>
                 </div>
               </div>
               <div class="teacher-info">
@@ -578,12 +578,12 @@ export default {
     .traning-img{
       position: absolute;
       bottom: 5.2rem;
-      right: 6.6rem;
+      right: 6.7rem;
       width: 16.5rem;
       height: 21.8rem;
       background-repeat: no-repeat;
       background-size: cover;
-      transform: skewx(-9deg);
+      transform: skewx(-10deg);
       transition: 1s all;
     }
     .change{

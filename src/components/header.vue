@@ -41,7 +41,7 @@
               <el-menu-item index="cultivate">培训信息</el-menu-item>
               <el-menu-item index="yogoknowledge">瑜伽知识</el-menu-item>
               <el-menu-item index="yogoinformation">瑜伽资讯</el-menu-item>
-              <!-- <el-menu-item index="market">商城</el-menu-item> -->
+              <el-menu-item index="market">商城</el-menu-item>
               <el-menu-item index="aboutus">关于我们</el-menu-item>
               <el-submenu index="personal">
                 <template slot="title">
@@ -291,7 +291,7 @@ export default {
   }
 }
 .el-menu {
-  width: 80%;
+  width: 82%;
   margin: 0 auto;
   background: #e8f5db;
   height: 64px;
@@ -324,7 +324,7 @@ export default {
   height: 65px;
   font-size: 16px;
   color: #2c2c2c;
-  padding: 0 28px;
+  padding: 0 24px;
   cursor: pointer;
   -webkit-transition: border-color 0.3s, background-color 0.3s, color 0.3s;
   transition: border-color 0.3s, background-color 0.3s, color 0.3s;
