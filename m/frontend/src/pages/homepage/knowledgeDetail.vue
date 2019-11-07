@@ -14,7 +14,10 @@
         round
         :style="{ height: '70%', width: '80%' }"
       >
-        <div class="sharepopup">
+        <div v-show="!shareimg" class="loading">
+            <van-loading color="#7BBB62" size="24px" vertical>加载中...</van-loading>
+        </div>
+        <div class="sharepopup" v-show="shareimg">
           <img :src="shareimg">
           <div class="sharetext">长按图片，保存或发送给朋友</div>
         </div>
@@ -23,7 +26,7 @@
       <div class="infordetail-count">
         <div class="infordetail-count-title">
           <p class="titlep">{{ detailLists.headline }}</p>
-          <p class="infordetail-count-title-subhead">{{  }}</p>
+          <!-- <p class="infordetail-count-title-subhead">{{  }}</p> -->
           <div class="infordetail-count-title-remarks"><span><img src="../../../static/img/eye.png"> {{detailLists.views}}</span> <span>{{ createddate }}</span></div>
         </div>
       </div>
@@ -63,22 +66,19 @@ export default {
     // 分享图片
     shareMessage() {
       this.show = true
-      console.log(this.$route.params.id)
       const params = {
           id: this.$route.params.id,
           identity:'knowledge',
-          userId:"",
+          userId: sessionStorage.getItem('user')? JSON.parse(sessionStorage.getItem('user')).id : '',
           responseType: 'arraybuffer'
       }
       this.$request.post(`/show/share/photo`,params).then(res => {
-        console.log(res)
         this.shareimg = res;
       })
     },
     yujiamation () {
       const id = this.$route.params.id
       this.$request.get('knowledgeInfo/' + id).then((res) => {
-        console.log(res)
         this.detailLists = res
         this.createddate = res.created_at.substr(0, 10)
       })
@@ -108,6 +108,11 @@ export default {
     height: 86%;
     overflow: hidden;
     overflow: auto;
+   .loading {
+    width: 60px;
+    height: 30px;
+    margin: 49% auto;
+  }
   }
   .share-component {
     margin: 30px auto;

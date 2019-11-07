@@ -2,9 +2,7 @@
     <div>
         <div class="details_main">
             <van-nav-bar title="名师详情" left-arrow @click-left="goback" fixed>
-                <div class="share_img" slot="right" @click="handleShareGoods">
-                    <img class="share" src="../../assets/teacherclub/share.png" />
-                </div>
+                <van-icon slot="right" name="share" @click="handleShareGoods"></van-icon>
             </van-nav-bar>
             <div class="details_head">
                 <div class="count-img">

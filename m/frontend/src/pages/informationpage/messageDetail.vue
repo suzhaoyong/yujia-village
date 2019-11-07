@@ -126,6 +126,7 @@
 <script>
 import Vue from 'vue';
 import '../../dist/swiper.css'
+import { getFollowTrain } from '../../../api/personal'
 
 export default {
   data () {
@@ -248,7 +249,7 @@ export default {
       console.log(id)
       if (!JSON.parse(sessionStorage.getItem("user"))) {
         this.$router.push('/login')
-        Toast('请登录')
+        this.$toast('请登录')
         return;
       }
       this.wantStudy(id)
@@ -258,7 +259,8 @@ export default {
       // 调用我想学接口
       getFollowTrain(id)
         .then(data => {
-          Toast('已添加至我的收藏');
+          // console.log(data)
+          this.$toast(data.msg);
         })
     },
   }

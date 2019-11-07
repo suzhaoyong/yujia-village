@@ -2,9 +2,10 @@
     <div>
         <div class="clubhouse_main">
             <van-nav-bar title="机构详情" left-arrow @click-left="goback" fixed>
-                 <div class="share_img" slot="right" @click="handleShareGoods">
+                 <!-- <div class="share_img" slot="right" @click="handleShareGoods">
                     <img class="share" src="../../assets/teacherclub/share.png" />
-                </div>
+                </div> -->
+                <van-icon slot="right" name="share" @click="handleShareGoods"></van-icon>
             </van-nav-bar>
             <div class="list_clubhouse">
                 <div class="list_clubhouse_page">
@@ -23,7 +24,8 @@
                                 </div>
                                 <div class="club_items_title">
                                     <h3 class="van-ellipsis">{{item.theme}}</h3>
-                                    <van-rate v-model="item.diff" readonly size="10px" gutter="2px" color="#58B708" void-color="#58B708"/>
+                                    <!-- <van-rate v-model="item.diff" readonly size="10px" color="#58B708" void-color="#58B708"/> -->
+                                    <div class="diff"> 难度：{{ item.diff }} </div>
                                     <div class="club_items_title_its">
                                         <div class="club_price">￥{{item.price}}</div>
                                         <div class="club_prict" @click="study(item.id)">
@@ -37,6 +39,7 @@
                     </div>
                 </div>
             </div>
+            
              <div class="Default-page3" v-else>
                 <span class="page-span3">我寻寻觅觅却找不到您的踪迹~</span>
             </div>
@@ -308,6 +311,11 @@ export default {
         vertical-align: top;
         }
     }
+    .loading {
+        width: 60px;
+        height: 30px;
+        margin: 52% auto;
+    }
 .clubhouse_main{
     width: 100%;
     height: 100%;
@@ -368,6 +376,10 @@ export default {
                 height: 63px;
                 width: 92%;
                 margin: 0 auto;
+                .diff {
+                    font-size: 12px;
+                    color: #7BBB62;
+                }
                 h3{
                     font-family:PingFang SC;
                     font-weight:bold;

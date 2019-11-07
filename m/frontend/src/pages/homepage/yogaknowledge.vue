@@ -94,14 +94,12 @@ export default {
         // 获取瑜伽知识分类
         getKnowledgeClassify() {
             this.$request.get('/KnowledgeClassify').then(data => {
-                // console.log(data);
                 this.knowledgeClassify = data;
             })
         },
         // 瑜伽知识列表
         getKnowledgeList(page =1) {
             this.$request.get('/knowledgeList/0?page='+ page).then(data => {
-                console.log(data);
                 this.knowledgeList = data.data;
                 this.total = data.total;
             })
@@ -112,14 +110,12 @@ export default {
             this.id = id;
             this.page = 1;
             this.$request.get('/knowledgeList/'+ this.id +'?page='+ page).then(data => {
-                console.log(data);
                 this.knowledgeList = data.data;
                 this.total = data.total;
             })
         },
         onLoadClassify(id, page) {
             this.$request.get('/knowledgeList/'+ this.id +'?page='+ page).then(data => {
-                console.log(data);
                 const info = data.data;
                 info.forEach(item => {
                     this.knowledgeList.push(item);

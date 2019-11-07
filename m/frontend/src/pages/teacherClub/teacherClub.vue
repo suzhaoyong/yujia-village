@@ -153,11 +153,11 @@
 /* eslint-disable */
 import areaList from "../../assets/js/area";
 import Vue from 'vue';
-import Bus from "@/utils/Bus";
+// import Bus from "@/utils/Bus";
 import { mapGetters } from "vuex";
 import Swiper from 'swiper';
-import { Notify} from "vant";
-Vue.use(Notify);
+import { Notify, Toast } from "vant";
+Vue.use(Notify).use(Toast);
 export default {
     data() {
     return {
@@ -381,7 +381,6 @@ export default {
     getTeachersPrais(page = 1) {
       this.$request.get(`/teachers/list/prais?page=${page}`)
       .then(res => {
-          console.log(res)
         if(page == 1) {
           this.exhibitionBox = res.teachers.data;
           this.houseType = res.course_types;
@@ -496,7 +495,6 @@ export default {
      },
      //省市区
      changeArea(val) {
-        console.log(val);
         if(val[0].name === '') {
             this.isOpen2 = false;
             return
@@ -620,6 +618,7 @@ export default {
             this.postGuildList()
         } else if(this.name == '') {
             Toast('请输入机构名称')
+            // Toast('提示内容');
         }
     },
     postGuildList() {
