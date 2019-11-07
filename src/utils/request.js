@@ -159,12 +159,12 @@ function handleResponeseErr(err) {
   } else if (status >= 500) {
     message = '服务器错误';
     if (data.url == '/api/auth/refresh') {
-      Bus.$emit('login', true)
-      sessionStorage.removeItem('user')
-      sessionStorage.removeItem('access')
-      store.dispatch("INFO", {
-        user: {}
-      });
+      // Bus.$emit('login', true)
+      // sessionStorage.removeItem('user')
+      // sessionStorage.removeItem('access')
+      // store.dispatch("INFO", {
+      //   user: {}
+      // });
     }
   }
 

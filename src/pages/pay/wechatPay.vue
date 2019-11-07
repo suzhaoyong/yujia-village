@@ -1,7 +1,7 @@
 <template >
   <div class="pay-wrap">
     <div class="pay">
-      <div class="pay_title">微信支付 <span v-show="false">￥500.00</span></div>
+      <div class="pay_title">微信支付 <span>￥{{total_fee}}</span></div>
       <div class="pay_waiting">
         <div class="pay_code">
           <el-image :src="payway.src" class="qrcode"></el-image>
@@ -30,6 +30,7 @@ export default {
       order: {
         out_trade_no: ''
       },
+      total_fee: '',
       payway: {
         show: false,
         success: false,
@@ -46,6 +47,7 @@ export default {
   created() {
     const { orderId } = this.$route.query
     this.order.out_trade_no = orderId
+    this.total_fee = sessionStorage.getItem('total_fee') || '0.00'
   },
   mounted() {
     const loading = this.$loading({
@@ -60,6 +62,7 @@ export default {
     this.changePayWay();
   },
   beforeDestroy() {
+    sessionStorage.removeItem('total_fee')
     timer && clearInterval(timer);
   },
   methods: {

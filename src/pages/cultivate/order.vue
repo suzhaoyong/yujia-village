@@ -191,7 +191,7 @@ export default {
       }
       if(this.pay.type === 'wechat') {
         const { body, out_trade_no, total_fee } = this.form
-        Bus.$emit('total_fee', total_fee)
+        sessionStorage.setItem('total_fee', total_fee)
         this.$router.push({
           name: 'wechat pay',
           query: {
