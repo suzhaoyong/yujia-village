@@ -33,7 +33,7 @@
             <div class="popup-diff"> 
               <p>难度</p>
               <div class="diff">
-                <van-rate v-model='stardiff' color='#58B708' void-icon="star" void-color="#eee"/>
+                <van-rate v-model='stardiff' color='#58B708' void-icon="star" void-color="#eee" :count="5" touchable/>
               </div>
               
             </div>
@@ -112,21 +112,12 @@
 
 <script>
 import Vue from 'vue';
-import Bus from '../../utils/Bus'
 import areaList from '../market/goods/area_list'
-import { Rate, Popup, Area, PullRefresh, Toast  } from 'vant';
+import { PullRefresh  } from 'vant';
 // import { mapGetters } from "vuex";
 
-Vue.use(Rate).use(Popup).use(Area).use(PullRefresh).use(Toast);
-import {
-  getTrains,
-  postTrainsList,
-  getOrderByTrains,
-  postTrains,
-  getTrainsById,
-  postTrainsRank,
-  followTrain
-} from "../../../api/trains";
+Vue.use(PullRefresh)
+
 import {
   getFollowTrain
 } from "../../../api/personal";
@@ -161,7 +152,6 @@ export default {
       maxprice: '',
       selectTags: [],
       selectTtype: [],
-      spanIndex: [],
       spanIndex2: [],
       page: 1,
       pages: 1,
@@ -555,6 +545,18 @@ export default {
             }
             .diff {
               height: 20px;
+              .van-rate {
+                .van-rate__item {
+                  margin: 0;
+                  padding: 0;
+                  border: 0;
+                  font-weight: normal;
+                  vertical-align: baseline;
+                  list-style: none;
+                  cursor: pointer;
+                  padding-right: 8px;
+                }
+              }
             }
           }
           .area {

@@ -144,7 +144,7 @@ export default {
     })
     },
       goback() {
-        this.$router.back('teacherClub/list');
+        this.$router.replace('/teacherClub/list');
       },
       // 获取文案
     getWenan() {
