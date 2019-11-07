@@ -162,7 +162,7 @@ export default {
   },
   methods: {
     goback () {
-      this.$router.back('/yogamessage/list')
+      this.$router.replace('/yogamessage/list')
     },
     getmessageDetail(id) {
       this.$request.get('trains/' + id).then((res) => {
