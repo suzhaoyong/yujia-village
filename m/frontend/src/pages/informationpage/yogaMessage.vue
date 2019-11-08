@@ -23,7 +23,7 @@
               <input type="number" v-model="maxprice" placeholder="50000">
             </div>
             <div class="popup-time">
-              <p>开课时间</p>  
+              <p>开课时间</p>
               <div class="choose-time"> 
                 <div is-link class="time-select" @click="showPopup('startTime')">{{ selectTime.startTime || '请选择'}}</div>
                 <span>-</span> 
@@ -32,8 +32,22 @@
             </div>
             <div class="popup-diff"> 
               <p>难度</p>
-              <div class="diff">
-                <van-rate v-model='stardiff' color='#58B708' void-icon="star" void-color="#eee" :count="5" touchable/>
+              <div style="width = 100%">
+                <!-- <van-rate v-model='stardiff' color='#58B708' void-icon="star" void-color="#eee" :count="5" touchable/> -->
+                <!-- <van-radio-group v-model="stardiff">
+                  <van-radio name="1" checked-color="#07c160">1</van-radio>
+                  <van-radio name="2" checked-color="#07c160">2</van-radio>
+                  <van-radio name="3" checked-color="#07c160">3</van-radio>
+                  <van-radio name="4" checked-color="#07c160">4</van-radio>
+                  <van-radio name="5" checked-color="#07c160">5</van-radio>
+                </van-radio-group> -->
+                <ul class="diff">
+                  <li :class="{'diffbg': stardiff == 1 }" @click="changediff('1')">1级</li>
+                  <li :class="{'diffbg': stardiff == 2 }" @click="changediff('2')">2级</li>
+                  <li :class="{'diffbg': stardiff == 3 }" @click="changediff('3')">3级</li>
+                  <li :class="{'diffbg': stardiff == 4 }" @click="changediff('4')">4级</li>
+                  <li :class="{'diffbg': stardiff == 5 }" @click="changediff('5')">5级</li>
+                </ul>
               </div>
               
             </div>
@@ -50,7 +64,7 @@
             <div class="types">
               <p>适用类别</p>
               <ul class="types-container">
-                <li 
+                <li
                   v-for="(list, index) in classfly" 
                   :key="list.id" 
                   @click="selected2(list ,index)"
@@ -113,9 +127,11 @@
 <script>
 import Vue from 'vue';
 import areaList from '../market/goods/area_list'
-import { PullRefresh  } from 'vant';
-// import { mapGetters } from "vuex";
+import { PullRefresh, RadioGroup, Radio   } from 'vant';
 
+Vue.use(RadioGroup);
+Vue.use(Radio);
+// import { mapGetters } from "vuex";
 Vue.use(PullRefresh)
 
 import {
@@ -191,6 +207,10 @@ export default {
         this.word = word;
       }
     },
+    // 选择难度
+    changediff (num) {
+      this.stardiff = num
+    },
     // 重置按钮功能
     resetlist () {
         this.selectArea.province = "";
@@ -224,8 +244,9 @@ export default {
     },
     // 地址选择
     changeArea (value) {
+      console.log(value)
       this.selectArea = {
-        province: value[0].name,
+        province:  value[0].name,
         city: value[1].name,
         area: value[2].name
       }
@@ -545,18 +566,31 @@ export default {
             }
             .diff {
               height: 20px;
-              .van-rate {
-                .van-rate__item {
-                  margin: 0;
-                  padding: 0;
-                  border: 0;
-                  font-weight: normal;
-                  vertical-align: baseline;
-                  list-style: none;
-                  cursor: pointer;
-                  padding-right: 8px;
-                }
+              display: flex;
+              font-size: 12px;
+              .diffbg {
+                color: #7BBB62;
               }
+              li {
+                margin-right: 20px;
+              }
+              // .van-radio-group {
+              //   display: flex;
+              //   position: relative;
+              //   .van-radio {
+              //     margin-right: 10px;
+              //     .van-radio__label {
+              //       position: absolute;
+              //       margin-left: 6px;
+              //     }
+              //     .van-icon {
+              //       top: 0;
+              //     }
+              //   }
+              // }
+              // .van-radio__icon--checked {
+              //   z-index: 99;
+              // }
             }
           }
           .area {
