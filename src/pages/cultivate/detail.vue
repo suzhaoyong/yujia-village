@@ -61,7 +61,7 @@
             <div class="teacher-box">
               <div class="teacher-img">
                 <div class="img">
-                  <img style="width:100%;height:100%; position: relative;z-index: 10;" :src="train.teacher_img" :alt="train.theme"/>
+                  <img style="width:100%;height:100%; position: relative;z-index: 10;object-fit: cover;" :src="train.teacher_img" :alt="train.theme"/>
                 </div>
               </div>
               <div class="teacher-info">
