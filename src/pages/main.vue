@@ -4,7 +4,7 @@
             <div class="nav-main">
                 <template>
                     <div class="bg_img">
-                       <el-carousel height="500px" :interval="3000" arrow="hover" trigger="click" direction="horizontal" :autoplay="true">
+                       <el-carousel :height="bannerHeight+'px'" :interval="3000" arrow="hover" trigger="click" direction="horizontal" :autoplay="true">
                             <el-carousel-item v-for="item in bannerArray" :key="item">
                                 <img :src="item" alt/>
                             </el-carousel-item>
@@ -168,6 +168,8 @@ export default {
     },
   data() {
     return {
+        bannerHeight:566,
+        screenWidth :0,
         dataimg:[],
         newtrains:[],
         famousteach:[],
@@ -205,6 +207,16 @@ export default {
         },
     };
   },
+  mounted(){
+        // 首次加载时,需要调用一次
+        this.screenWidth =  window.innerWidth;
+        this.setSize();
+        // 窗口大小发生改变时,调用一次
+        window.onresize = () =>{
+        this.screenWidth =  window.innerWidth;
+        this.setSize();
+    }
+  },
    computed: {
       pages(){
         const pages = []; // pages是为二维数组
@@ -233,6 +245,9 @@ export default {
         this.listhomedata();
     },
     methods:{
+        setSize:function () {
+            this.bannerHeight = 566 / 1920 * this.screenWidth;
+          },
         selectItem(item,idx){
           this.namelist = item;
           this.activeClass = idx;
