@@ -9,7 +9,7 @@
               <div class="identity" >
                 <img :src="info.user.icon" style="border-radius:50%;" alt="头像" />
               </div>
-              <span class="span1" style="line-height: 40px;">{{info.user.name}}</span>
+              <span class="span1" style="line-height: 40px;font-size: 0.3rem;margin-right: 2rem;">{{info.user.name}}</span>
             </div>
             <div style="display:inline-block;" v-else>
               <el-button type="text" class="span1" @click="account.type='login'">登录</el-button>
@@ -45,7 +45,8 @@
               <el-menu-item index="aboutus">关于我们</el-menu-item>
               <el-submenu index="personal">
                 <template slot="title">
-                  <div class="submenu"><router-link to="/personal/index" class="routlink">个人中心</router-link></div>
+                  <!-- <div class="submenu"><router-link to="/personal/index" class="routlink">个人中心</router-link></div> -->
+                  <div class="submenu" @click="gotoPersonal">个人中心</div>
                 </template>
                 <!-- <el-menu-item index="personal">收藏的课程</el-menu-item> -->
                 <div v-show="!info.user.name">
@@ -124,7 +125,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["info"]),
+    ...mapGetters(["info", "isUserNeedLogin"]),
     showTopTitle() {
       const show = this.$route.fullPath.startsWith("/personal");
       return show;
@@ -152,6 +153,10 @@ export default {
   },
   created() {
     this.fetchData();
+    let info = sessionStorage.getItem('user')
+    if(info) {
+      store.dispatch("INFO", JSON.parse(info))
+    }
   },
   beforeUpdate() {
     // this.changenav();
@@ -160,6 +165,13 @@ export default {
     Bus.$off("login");
   },
   methods: {
+    gotoPersonal() {
+      if(this.isUserNeedLogin) {
+        this.account.type = 'login';
+        return;
+      }
+      this.$router.push('/personal/index')
+    },
     successInfo() {
       this.$on("success", name => {
         this.username = name;

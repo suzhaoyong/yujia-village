@@ -319,7 +319,7 @@ export default {
   padding-top: 2rem;
   .teacher-box{
     width: 50rem;
-    height: 32rem;
+    height: 29.3rem;
     margin: 0 auto;
     // background: #eee;
     display: flex;
@@ -345,7 +345,7 @@ export default {
     .teacher-img{
       .img{
         width: 21.8rem;
-        height: 24.5rem;
+        height: 21.8rem;
         background: #ccc;
         position: relative;
         left: -2.5rem;
@@ -586,13 +586,13 @@ export default {
     .traning-img{
       position: absolute;
       bottom: 5.2rem;
-      right: 6.6rem;
-      width: 16.5rem;
+      right: 7.2rem;
+      width: 15.6rem;
       height: 21.8rem;
       background-repeat: no-repeat;
       background-size: cover;
-      transform: skewx(-9deg);
-      transition: 1s all;
+      transform: skewx(-10.5deg);
+      transition: 1s all
     }
     .change{
       cursor: pointer;
