@@ -67,7 +67,7 @@
               <div class="teacher-info">
                 <div class="info">
                   <div class="name">授 课 老 师： {{train.name}}</div>
-                  <div class="berif">
+                  <div class="berif scorll">
                     <!-- <pre v-html="train.intro"></pre> -->
                     <div class="berif-line" style="margin-bottom:0.4em;" v-for="(item, index) in getIntroList" :key="index">{{item}}</div>
                   </div>
@@ -90,7 +90,7 @@
             <div class="traning">
               <div class="traning-content">
                 <span class="traning-title">适合人群</span>
-                <ul>
+                <ul class="scorll">
                   <li style="line-height: 1.2rem;" v-for="(item, index) in getCrowdList" :key="index">
                     {{item}}
                   </li>
@@ -408,7 +408,7 @@ export default {
         .berif{
           
           font-size: 0.7rem;
-          height: 100%;
+          height: calc(100% - 2rem);
           width: 100%;
           text-align: center;
           padding: 1rem;
@@ -417,7 +417,25 @@ export default {
           display: -webkit-box !important;
           -webkit-box-orient: vertical !important;
           // -webkit-line-clamp:3 !important;// 限制快级元素的文本行数
-          overflow: hidden !important;
+          overflow-y: auto;
+          overflow-x: hidden;
+          /* 设置滚动条的样式 */
+          &.scorll::-webkit-scrollbar {
+            width: 0.1rem;
+          }
+          /* 滚动槽 */
+          &.scorll::-webkit-scrollbar-track {
+            background: #dcdcdc;
+            border-radius: 0.15rem;
+          }
+          /* 滚动条滑块 */
+          &.scorll::-webkit-scrollbar-thumb {
+            background: #88bc37;
+            border-radius: 0.15rem;
+          }
+          &.scorll::-webkit-scrollbar-thumb {
+            background: #88bc37;
+          }
           .berif-line {
             font-size: 0.85rem
           }
@@ -540,6 +558,8 @@ export default {
     background-repeat: no-repeat;
     .traning-title{
       position: relative;
+      display: inline-block;
+      margin-bottom: 3.4rem;
       margin-left: 1rem;
       font-weight: bolder;
       font-size: 1.3rem;
@@ -554,6 +574,7 @@ export default {
         left: 0;
         text-transform : uppercase;
       }
+      
     }
     .traning-content{
       padding-top: 6rem;
@@ -561,11 +582,31 @@ export default {
       height: 25rem;
       font-size: 0.7rem;
       margin-left: 9rem;
-      overflow: hidden;
+      // overflow: hidden;
       ul {
-        padding-top: 3.4rem;
+        height: calc(100% - 3rem);
         list-style-type: none;
         margin: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+        /* 设置滚动条的样式 */
+        &.scorll::-webkit-scrollbar {
+          width: 0.1rem;
+        }
+        /* 滚动槽 */
+        &.scorll::-webkit-scrollbar-track {
+          background: #dcdcdc;
+          border-radius: 0.15rem;
+        }
+        /* 滚动条滑块 */
+        &.scorll::-webkit-scrollbar-thumb {
+          background: #88bc37;
+          border-radius: 0.15rem;
+        }
+        &.scorll::-webkit-scrollbar-thumb {
+          background: #88bc37;
+        }
+      
         li{
           position: relative;
           display: inline-block;
