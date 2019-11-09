@@ -127,6 +127,7 @@
 import Vue from 'vue';
 import '../../dist/swiper.css'
 import { getFollowTrain } from '../../../api/personal'
+import { mapGetters } from "vuex";
 
 export default {
   data () {
@@ -161,6 +162,9 @@ export default {
   },
   mounted () {
   },
+  computed: {
+    ...mapGetters(["info", "isUserNeedLogin"]),
+  },
   methods: {
     goback () {
       this.$router.replace('/yogamessage/list')
@@ -190,6 +194,11 @@ export default {
     },
     // 分享图片
     shareMessage() {
+      if(this.isUserNeedLogin) {
+        this.$router.push('/login')
+        this.$toast('请登录')
+        return;
+      }
       this.show = true
       console.log(this.$route.params.id)
       var params = {
@@ -216,15 +225,15 @@ export default {
         },
         // 复制成功
         onCopy:function(e){
-            this.$toast("复制成功！");
+            this.$this.$toast("复制成功！");
         },
         onError:function(e){
-            this.$toast("复制失败！");
+            this.$this.$toast("复制失败！");
         },
     // 购买跳到支付页面
     buyCourse() {
       if(!window.sessionStorage.getItem('access')) {
-        this.$toast('请登录');
+        this.$this.$toast('请登录');
         this.$router.push('/login');
         return;
       }
@@ -249,7 +258,7 @@ export default {
       console.log(id)
       if (!JSON.parse(sessionStorage.getItem("user"))) {
         this.$router.push('/login')
-        this.$toast('请登录')
+        this.$this.$toast('请登录')
         return;
       }
       this.wantStudy(id)
@@ -260,7 +269,7 @@ export default {
       getFollowTrain(id)
         .then(data => {
           // console.log(data)
-          this.$toast(data.msg);
+          this.$this.$toast(data.msg);
         })
     },
   }
@@ -282,7 +291,7 @@ export default {
 .sharepopup {
   width: 100%;
   .sharetext {
-    margin-top: -90px;
+    // margin-top: -20px;
     text-align: center;
     font-size: 12px;
   }
@@ -296,6 +305,7 @@ export default {
       width: 79px;
       height: 58px;
       vertical-align: top;
+      padding: 0;
     }
   }
 }

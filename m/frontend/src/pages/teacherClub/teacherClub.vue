@@ -69,8 +69,8 @@
                                         <div class="Rotation_zan">
                                         <div class="Rotation_zan_items">教龄：{{item.num}}年</div>
                                         <div class="Rotation_zan_tips">
-                                            <img src="../../assets/teacherclub/Give.png" v-if="item.is_prais == 0" @click="Giveuppraise2(item,index)"/>
-                                            <img src="../../assets/teacherclub/Give2.png" v-if="item.is_prais == 1" @click="Giveuppraise2(item,index)"/>
+                                            <img src="../../assets/teacherclub/Give.png" v-if="item.is_prais == 0" @click="Giveuppraise(item,index, 'teacher2')"/>
+                                            <img src="../../assets/teacherclub/Give2.png" v-if="item.is_prais == 1" @click="Giveuppraise(item,index, 'teacher2')"/>
                                             <span class="span">{{item.praise}}</span>
                                         </div>
                                         </div>
@@ -124,8 +124,8 @@
                                     <div class="exhibition_zan">
                                     <div class="exhibition_zan_items">教龄：{{item.num}}年</div>
                                     <div class="exhibition_zan_tips">
-                                        <img src="../../assets/teacherclub/Give.png" v-if="item.is_prais == 0" @click="Giveuppraise(item,index)"/>
-                                        <img src="../../assets/teacherclub/Give2.png" v-if="item.is_prais == 1" @click="Giveuppraise(item,index)"/>
+                                        <img src="../../assets/teacherclub/Give.png" v-if="item.is_prais == 0" @click="Giveuppraise(item,index, 'teacher')"/>
+                                        <img src="../../assets/teacherclub/Give2.png" v-if="item.is_prais == 1" @click="Giveuppraise(item,index, 'teacher')"/>
                                         <span class="span">{{item.praise}}</span>
                                     </div>
                                 </div>
@@ -245,7 +245,6 @@ export default {
       }
   },
   mounted() {
-    
     if (this.isUserNeedLogin) {
       this.choiceness();
       this.onLoadlist2();
@@ -400,6 +399,7 @@ export default {
     // 登录之后的点赞
     getChoicenessPrais() {
         this.$request.get(`/teachers/elites/prais`).then(res => {
+          console.log(res)
           this.exhibitionBox2 = res;
           this.$nextTick(function() {
               this.swiperInit();
@@ -426,18 +426,34 @@ export default {
         });
     },
       //点赞
-      Giveuppraise(item,index){
-        if(this.isUserNeedLogin || item.is_prais == 1) return;
-          this.id=item.id;
+      Giveuppraise(item,index, type){
+        if (this.isUserNeedLogin) {
+            this.$router.push('/login')
+             Toast('请登录')
+             return;
+        } else if (item.is_prais == 1) {
+            Toast('已经赞过啦')
+            // 点赞后取消
+            // const { praise } = type === 'teacher'?this.exhibitionBox[index] : this.exhibitionBox2[index]
+            // if (type === 'teacher') {
+            //     this.$set(this.exhibitionBox, index, {...this.exhibitionBox[index], is_prais: 0, praise: praise - 1 })
+            // } else {
+            //     this.$set(this.exhibitionBox2, index, {...this.exhibitionBox2[index], is_prais: 0, praise: praise - 1 })
+            // }
+            return  }
         let params ={
             id:item.id
         }
         this.$request.post(`/teachers/thumbsUp`,params).then(data => {
-            this.msg = data.msg;
-            if(this.msg == "OK"){
+            // this.msg = data.msg;
+            if(data.msg == "OK"){
             Notify({ message: "点赞成功", type: "success" });
-            const { praise } = this.exhibitionBox[index]
-            this.$set(this.exhibitionBox, index, {...this.exhibitionBox[index], is_prais: 1, praise: praise + 1 })
+            const { praise } = type === 'teacher'?this.exhibitionBox[index] : this.exhibitionBox2[index]
+            if (type === 'teacher') {
+                this.$set(this.exhibitionBox, index, {...this.exhibitionBox[index], is_prais: 1, praise: praise + 1 })
+            } else {
+                this.$set(this.exhibitionBox2, index, {...this.exhibitionBox2[index], is_prais: 1, praise: praise + 1 })
+            }
             }
         })
         .catch(error => {
@@ -618,7 +634,6 @@ export default {
             this.postGuildList()
         } else if(this.name == '') {
             Toast('请输入机构名称')
-            // Toast('提示内容');
         }
     },
     postGuildList() {
