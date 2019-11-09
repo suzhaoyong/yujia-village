@@ -152,7 +152,7 @@ export default {
     this.$nextTick(() => {
       setTimeout(() => {
         this.waterFall(this.$refs.box)
-      }, 30)
+      }, 100)
       
     })
   })
@@ -307,7 +307,7 @@ export default {
             justify-content: space-between;
             .eyeimg {
               width: 15px;
-              height: 11px;
+              height: 12px;
             }
             span {
               font-size: 12px;

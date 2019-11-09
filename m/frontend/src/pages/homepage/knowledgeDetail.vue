@@ -6,7 +6,8 @@
       @click-left="onClickLeft"
       @click-right="shareMessage"
     >
-      <van-icon slot="right" ><img src="../../../static/img/share.svg"></van-icon>
+      <!-- <van-icon slot="right" ><img src="../../../static/img/share.svg"></van-icon> -->
+      <van-icon slot="right" name="share"></van-icon>
     </van-nav-bar></header>
     <section>
       <van-popup 
