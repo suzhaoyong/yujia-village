@@ -143,12 +143,14 @@ export default {
   watch: {
     '$route': "fetchData"
   },
+  created() {
+    this.activeIndex = this.$route.name || this.$route.meta.header_name || "main";
+  },
   mounted() {
     // this.changenav();
     Bus.$on("login", () => {
       this.account.type = "login";
     });
-    this.activeIndex = this.$route.name || this.$route.meta.header_name || "main";
     // this.getPersonal();
   },
   created() {
