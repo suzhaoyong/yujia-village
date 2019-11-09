@@ -19,12 +19,12 @@
                     <div class="yogofigcaption">
                         <div class="count-name">瑜伽名师：{{teacher.name}}</div>
                         <div class="Giveup">
-                            <img src="../assets/Give2.png" class="Giveup_img" v-if="Giveupimg" @click="Giveuppraise"/>
-                            <img src="../assets/Givecolor.png" class="Giveup_img" v-if="Giveupimg1" @click="Giveuppraise"/>
-                            <span class="Giveup_num">{{teacher.praise}}</span>
+                            <img src="../assets/Give2.png" class="Giveup_img" v-if="Giveupimg" @click="Giveuppraise" :title="'人气:'+(teacher.praise||100)"/>
+                            <img src="../assets/Givecolor.png" class="Giveup_img" v-if="Giveupimg1" @click="Giveuppraise" :title="'人气:'+(teacher.praise||100)"/>
+                            <span class="Giveup_num">{{teacher.praise||100}}</span>
                         </div>
                         <div class="Giveup-count">
-                            <div class="Giveup2">人气：{{teacher.praise}}</div>
+                            <div class="Giveup2">人气：{{teacher.praise||100}}</div>
                             <div class="Giveup3">所在地：{{teacher.teacher_address}}</div>
                         </div>
                         <div class="Giveup4">教龄：{{teacher.num}}年</div>
@@ -47,7 +47,7 @@
                     <div class="border-left"></div>
                     <div class="border-right"></div>
                 </div>
-                <div class="yogo-cont-show" v-if="teacher.teacher_img.length > 0">
+                <div class="yogo-cont-show" v-if="teacher.teacher_img != null">
                     <div class="showlist" v-for="(item,index) in teacher.teacher_img" :key="index">
                         <div class="showlist-auto">
                         <div class="showimg">
@@ -69,7 +69,7 @@
 <script>
 import { getTrains, postTrains, getTrainsById } from "@/api/trains";
 import Bus from "@/utils/Bus";
-import { mapGetters } from "vuex"
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -90,8 +90,8 @@ export default {
       },
     };
   },
-    computed: {
-    ...mapGetters(["info"]),
+   computed: {
+    ...mapGetters(["info"])
   },
   created () {
     this.yogoteacherdata();
@@ -99,8 +99,7 @@ export default {
   methods:{
       Giveuppraise(){
         if(!this.info.user.name){
-        // Bus.$emit("login", true);
-        this.$message({type:'warning', message: '请先登录'})
+        Bus.$emit("login", true);
         return;
        }
         let _this = this;

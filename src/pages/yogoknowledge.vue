@@ -33,8 +33,8 @@
                                     </div>
                                     <div class="count-button-right">
                                         <!-- <img class="img1" src="../assets/share.png"/> -->
-                                        <img class="img2" src="../assets/eye.png"/>
-                                        <span class="img3">{{item.views}}</span>
+                                        <img class="img2" src="../assets/eye.png" :title="'点击率:'+(item.views||100)"/>
+                                        <span class="img3">{{item.views||100}}</span>
                                     </div>
                                 </div>
                             </div>
