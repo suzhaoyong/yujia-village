@@ -291,6 +291,7 @@ export default {
 
 .sharepopup {
   width: 100%;
+  z-index: 99 !important;
   .shareimg {
     height: 485px;
     margin: 0 auto;
