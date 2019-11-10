@@ -132,6 +132,11 @@
           </div>
         </div>
       </div>
+      <div class="advertising">
+        <router-link to="/advertisement">
+          <img src="../../static/img/wonderful.png" alt="">
+        </router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -474,6 +479,13 @@ img{
             -webkit-box-orient: vertical;
           }
         }
+      }
+    }
+    .advertising {
+      width: 100%;
+      padding: 4px 16px;
+      img {
+        width: 100%;
       }
     }
   }

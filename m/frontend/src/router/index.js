@@ -40,6 +40,11 @@ const router = new Router({
       }]
     },
     {
+      path: '/advertisement',
+      name: 'advertisement',
+      component: () => import('@/components/advertisement')
+    },
+    {
       path: '/homepage',
       name: 'homepage',
       component: Home,
