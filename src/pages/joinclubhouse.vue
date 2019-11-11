@@ -12,8 +12,12 @@
                     </div>
                 </template>
                 <div class="joinclub-cont">
-                    <div class="joinclub-cont-div5">
-                        <p class="nav-text2">中国瑜伽培训信息最丰富、信息搜索最方便（精准）的瑜伽行业网站！</p>
+                    <div class="subject2" v-show="isShow" @mouseover="mouseshow" @mouseleave="mousehide">
+                        <img src="../assets/subject/sub4.png"/>
+                        <div class="advertisement">广告</div>
+                        <div class="close" v-show="isClose" @click="closeclick">
+                            <img src="../assets/subject/close.png" class="closeimg"/>
+                        </div>
                     </div>
                     <div class="joinclub-cont-div6">
                         <div class="cont-div6-left">
@@ -88,6 +92,8 @@ export default {
     },
   data() {
     return {
+        isShow:true,
+        isClose:false,
         joinlist:[],
         banner:'',
         city:'',
@@ -127,6 +133,15 @@ export default {
           }
         });
       },
+    mouseshow(){
+        this.isClose = true;
+    },
+    mousehide(){
+        this.isClose = false;
+    },
+    closeclick(){
+        this.isShow = false;
+    },
      onChangeProvince(data) {
       this.province = data.value;
     },
@@ -592,6 +607,46 @@ export default {
                 font-size: 16px;
             }
         }
+        .subject2{
+            width: 1180px;
+            height: 60px;
+            margin: 0 auto;
+            margin-top: 3rem;
+            cursor: pointer;
+            position: relative;
+            img{
+                width: 100%;
+                height: 100%;
+            }
+            .close{
+                width: 17px;
+                height: 17px;
+                background-color: #391F2B;
+                position: absolute;
+                right: 0;
+                top: 0;
+                .closeimg{
+                width: 8px;
+                height: 8px;
+                position: absolute;
+                right: 5px;
+                top: 5px;
+                }
+            }
+            .advertisement{
+                width: 50px;
+                height: 20px;
+                line-height: 20px;
+                background-color: #351D27;
+                opacity: 0.8;
+                color: #fff;
+                font-size: 12px;
+                text-align: center;
+                position: absolute;
+                right: 0;
+                bottom: 0;
+            }
+        }
         .joinclub-cont-div6{
             width: 1180px;
             border-bottom: 1px solid #E5E5E5;
@@ -599,6 +654,7 @@ export default {
             margin: 0 auto;
             display: flex;
             justify-content: space-between;
+            margin-top: 5rem;
             .cont-div6-left{
                 display: flex;
                 margin-top: 14px;

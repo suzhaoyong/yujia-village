@@ -11,6 +11,13 @@
                     </template>
                     <div class="yogo-count">
                         <el-col :span="24" class="bg-tupian1">
+                        <div class="subject" v-show="isShow" @mouseover="mouseshow" @mouseleave="mousehide">
+                            <img src="../assets/subject/sub2.png"/>
+                            <div class="advertisement">广告</div>
+                            <div class="close" v-show="isClose" @click="closeclick">
+                                <img src="../assets/subject/close.png" class="closeimg"/>
+                            </div>
+                        </div>
                         <div class="yogo-cont-div1">
                             <h2><img src="../assets/yujia.png"/>名师推荐</h2>
                             <p class="nav-text">Sometimes beauty is so simple</p>
@@ -145,6 +152,8 @@ export default {
     },
   data() {
     return {
+        isShow:true,
+        isClose:false,
          formInline: {
           user: '',
         },
@@ -302,6 +311,15 @@ export default {
     },
     onchangearea(data){
      this.area = data.value;
+    },
+    mouseshow(){
+        this.isClose = true;
+    },
+    mousehide(){
+        this.isClose = false;
+    },
+    closeclick(){
+        this.isShow = false;
     },
      changecoure(val){
      },
@@ -585,6 +603,46 @@ export default {
         display: inline-block;
         .bg-tupian1{
             background-color: #F6F4EE;
+        .subject{
+            width: 1200px;
+            height: 126px;
+            margin: 0 auto;
+            margin-top: 2rem;
+            cursor: pointer;
+            position: relative;
+            img{
+                width: 100%;
+                height: 100%;
+            }
+            .close{
+                width: 17px;
+                height: 17px;
+                background-color: #391F2B;
+                position: absolute;
+                right: 0;
+                top: 0;
+                .closeimg{
+                width: 8px;
+                height: 8px;
+                position: absolute;
+                right: 5px;
+                top: 5px;
+                }
+            }
+            .advertisement{
+                width: 50px;
+                height: 20px;
+                line-height: 20px;
+                background-color: #351D27;
+                opacity: 0.8;
+                color: #fff;
+                font-size: 12px;
+                text-align: center;
+                position: absolute;
+                right: 0;
+                bottom: 0;
+            }
+        }
         .yogo-cont-div1{
             width: 1200px;
             height: 150px;
