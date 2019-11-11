@@ -2,10 +2,9 @@
     <div>
         <div class="clubhouse_main">
             <van-nav-bar title="机构详情" left-arrow @click-left="goback" fixed>
-                 <!-- <div class="share_img" slot="right" @click="handleShareGoods">
-                    <img class="share" src="../../assets/teacherclub/share.png" />
-                </div> -->
-                <van-icon slot="right" name="share" @click="handleShareGoods"></van-icon>
+                <share-ing slot="right"
+                    type="club"
+                ></share-ing>
             </van-nav-bar>
             <div class="list_clubhouse">
                 <div class="list_clubhouse_page">
@@ -105,7 +104,7 @@
                 <span class="page-span2">我寻寻觅觅却找不到您的踪迹~</span>
             </div>
         </div>
-        <van-popup v-model="show">
+        <!-- <van-popup v-model="show">
             <div v-show="!base64img" class="loading">
                 <van-loading color="#7BBB62" size="24px" vertical>加载中...</van-loading>
             </div>
@@ -127,17 +126,17 @@
             </div>
             <button id="copy" v-clipboard:copy="copy_content" 
                 v-clipboard:success="onCopy"  v-clipboard:error="onError">一键复制</button>
-        </van-popup>
+        </van-popup> -->
     </div>
 </template>
 <script>
 import Vue from 'vue';
 import Bus from '../../utils/Bus'
+import shareIng from '../../components/shareing'
 import { mapGetters } from "vuex";
 import Swiper from 'swiper';
-import { Notify,Popup } from "vant";
+import { Notify } from "vant";
 Vue.use(Notify);
-Vue.use(Popup);
 export default {
   data() {
     return {
@@ -146,15 +145,11 @@ export default {
         vanswipeItem:[],
         clubItems:[],
         personnelItem:[],
-        show: false,
         base64img:"",
-        // 是否展示文案
-            wenanIsShow: false,
-            // 文案数据
-            wenanData: [],
-            // 复制的内容
-            copy_content: ''
     };
+  },
+  components: {
+      shareIng
   },
   created(){
       this.joindatalist();
@@ -223,42 +218,24 @@ export default {
         });
     },
     // 分享商品
-    handleShareGoods() {
-    this.show = true;
-    const params = {
-        id:this.$route.query.id,
-        identity:'club',
-        userId:this.isUserNeedLogin ? "" : (this.info.user && this.info.user.id) || '',
-        responseType: 'arraybuffer'
-    }
-    this.$request.post(`/show/share/photo`,params)
-    .then(res => {
-        this.base64img = res;
-    })
-    },
+    // handleShareGoods() {
+    // this.show = true;
+    // const params = {
+    //     id:this.$route.query.id,
+    //     identity:'club',
+    //     userId:this.isUserNeedLogin ? "" : (this.info.user && this.info.user.id) || '',
+    //     responseType: 'arraybuffer'
+    // }
+    // this.$request.post(`/show/share/photo`,params)
+    // .then(res => {
+    //     this.base64img = res;
+    // })
+    // },
     clubdetail(id){
         this.$router.push('/messagedetail/'+id);
     },
     goback(){
         this.$router.replace('/teacherClub/list');
-    },
-    // 获取文案
-    getWenan() {
-        this.wenanIsShow = true;
-        this.$request.get('/personal/share/word/3').then(res => {
-            this.wenanData = res;
-        })
-    },
-    // 选中文案
-    selectItem(copy_content) {
-        this.copy_content = copy_content;
-    },
-    // 复制成功
-    onCopy:function(e){
-        this.$toast("复制成功！");
-    },
-    onError:function(e){
-        this.$toast("复制失败！");
     },
   }
 };
@@ -274,48 +251,46 @@ export default {
     width: 100%;
     z-index: 99 !important;
 }
-.share_img{
-    line-height: 0px;
-    margin-top: -34px;
-    .share{
-        width: 22px;
-        height: 22px;
-    }
-  }
-  .van-popup--center{
-      width: 100%;
-          height: 90%;
-
-      border-radius: 15px;
-      img {
-          width: 100%;
-      }
-  }
-    .textbase{
-      width: 100%;
-      height: 60px;
-      background: #fff;
-      font-size: 12px;
-      color: #2c2c2c;
-      text-align: center;
-      line-height: 50px;
-  }
-   .bgc {
-        width: 100%;
-        height: 58px;
-        background-color: #fff;
-        text-align: center;
-        img {
-        width: 79px;
-        height: 58px;
-        vertical-align: top;
-        }
-    }
-    .loading {
-        width: 60px;
-        height: 30px;
-        margin: 52% auto;
-    }
+// .share_img{
+//     line-height: 0px;
+//     margin-top: -34px;
+//     .share{
+//         width: 22px;
+//         height: 22px;
+//     }
+//   }
+//   .van-popup--center{
+//       width: 100%;
+//       border-radius: 15px;
+//       img {
+//           width: 100%;
+//       }
+//   }
+//     .textbase{
+//       width: 100%;
+//       height: 60px;
+//       background: #fff;
+//       font-size: 12px;
+//       color: #2c2c2c;
+//       text-align: center;
+//       line-height: 50px;
+//   }
+//    .bgc {
+//         width: 100%;
+//         height: 58px;
+//         background-color: #fff;
+//         text-align: center;
+//         img {
+//         width: 79px;
+//         height: 58px;
+//         vertical-align: top;
+//         }
+//     }
+//     .loading {
+//         width: 60px;
+//         height: 30px;
+//         margin: 52% auto;
+//     }
 .clubhouse_main{
     width: 100%;
     height: 100%;
@@ -631,56 +606,56 @@ export default {
         }
     }
 }
-.popup {
-  /deep/ .van-icon {
-      position: absolute;
-      top: 12px;
-      font-size: 18px;
-      color: #2c2c2c;
-  }
-  .wenan-title {
-      margin: 10px 0;
-      font-size: 16px;
-      font-weight: 600;
-      text-align: center;
-  }
-  .wenan-box {
-      position: absolute;
-      top: 41px;
-      left: 16px;
-      bottom: 64px;
-      width: 343px;
-      padding: 10px;
-      background-color: #eee;
-      overflow: scroll;
-      &-item {
-          width: 100%;
-          padding: 8px 10px;
-          margin-bottom: 13px;
-          background-color: #ddd;
-          border-radius: 5px;
-          font-size: 14px;
-          font-weight: 600;
-      }
-      &-item:hover {
-          box-sizing: border-box;
-          background-color: #eefaed;
-          border: 1px solid #7BBB62;
-      }
-  }
-  #copy {
-      position: absolute;
-      left: 16px;
-      bottom: 10px;
-      width: 343px;
-      height: 44px;
-      line-height: 44px;
-      background-color: #7BBB62;
-      border-radius: 22px;
-      border: none;
-      text-align: center;
-      font-size: 16px;
-      color: #fff;
-  }
-}
+// .popup {
+//   /deep/ .van-icon {
+//       position: absolute;
+//       top: 12px;
+//       font-size: 18px;
+//       color: #2c2c2c;
+//   }
+//   .wenan-title {
+//       margin: 10px 0;
+//       font-size: 16px;
+//       font-weight: 600;
+//       text-align: center;
+//   }
+//   .wenan-box {
+//       position: absolute;
+//       top: 41px;
+//       left: 16px;
+//       bottom: 64px;
+//       width: 343px;
+//       padding: 10px;
+//       background-color: #eee;
+//       overflow: scroll;
+//       &-item {
+//           width: 100%;
+//           padding: 8px 10px;
+//           margin-bottom: 13px;
+//           background-color: #ddd;
+//           border-radius: 5px;
+//           font-size: 14px;
+//           font-weight: 600;
+//       }
+//       &-item:hover {
+//           box-sizing: border-box;
+//           background-color: #eefaed;
+//           border: 1px solid #7BBB62;
+//       }
+//   }
+//   #copy {
+//       position: absolute;
+//       left: 16px;
+//       bottom: 10px;
+//       width: 343px;
+//       height: 44px;
+//       line-height: 44px;
+//       background-color: #7BBB62;
+//       border-radius: 22px;
+//       border: none;
+//       text-align: center;
+//       font-size: 16px;
+//       color: #fff;
+//   }
+// }
 </style>

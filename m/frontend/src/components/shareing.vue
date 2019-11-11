@@ -1,9 +1,10 @@
 <template>
-  <div>
+  <div class="shareing">
+    <van-icon name="share" @click="shareMessage"></van-icon>
     <van-popup
       v-model="show"
       round
-      :style="{ width: '100%' }"
+      :style="{ width: '100%', height: 'auto' }"
     >
       <div v-show="!shareimg" class="loading">
           <van-loading color="#7BBB62" size="24px" vertical>加载中...</van-loading>
@@ -33,11 +34,12 @@ import Vue from 'vue';
 import {  Toast, Popup } from 'vant';
 Vue.use(Toast).use(Popup);
 export default {
-  props: ['show'],
   name: 'shareing',
+  props: ['type'],
   data () {
     return {
-      // show: false,
+      shareimg: '',
+      show: false,
       // 是否展示文案
       wenanIsShow: false,
       // 文案数据
@@ -46,7 +48,32 @@ export default {
       copy_content: ''
     }
   },
+  updated() {
+      if (this.type === 'information' || 
+          this.type === 'knowledge') {
+        this.$emit('listenToShow', this.show)
+      }
+  },
   methods: {
+    shareMessage () {
+      // if(this.isUserNeedLogin) {
+      //   this.$router.push('/login')
+      //   this.$toast('请登录')
+      //   return;
+      // }
+      this.show = true
+      var params = {
+          id: this.$route.query.id || this.$route.params.id,
+          identity: this.type,
+          userId:  sessionStorage.getItem('user')? JSON.parse(sessionStorage.getItem('user')).id : '',
+          responseType: 'arraybuffer'
+      }
+      this.$request.post(`/show/share/photo`,params).then(res => {
+        this.shareimg = res;
+      })
+      // console.log(this.type)
+
+    },
     // 获取文案
     getWenan() {
         this.wenanIsShow = true;
@@ -69,81 +96,124 @@ export default {
 }
 </script>
 <style lang="scss" scope>
-  .sharepopup {
-    .shareimg {
-      height: 485px;
-      margin: 0 auto;
-      // margin-left: 27px;
-    }
-    .sharetext {
-      text-align: center;
-      margin-top: 25px;
-      font-size: 12px;
-    }
-    .bgc {
+.van-nav-bar .van-icon {
+    vertical-align: middle;
+}
+.share_img{
+  line-height: 0px;
+  margin-top: -34px;
+  .share{
+      width: 22px;
+      height: 22px;
+  }
+}
+.sharepopup {
+  .shareimg {
+    // height: 485px;
+    margin: 0 auto;
+    // margin-left: 27px;
+  }
+  .sharetext {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 12px;
+  }
+  .bgc {
     width: 100%;
     height: 58px;
     margin-top: 32px;
     background-color: #fff;
     text-align: center;
-     img {
-      width: 79px;
-      height: 58px;
-      vertical-align: top;
-      padding: 0;
+    img {
+    width: 79px;
+    height: 58px;
+    vertical-align: top;
+    padding: 0;
     }
   }
+}
+.van-popup--center{
+  width: 100%;
+  border-radius: 15px;
+  img {
+    width: 100%;
   }
-    .popup {
-  /deep/ .van-icon {
-      position: absolute;
-      top: 12px;
-      font-size: 18px;
-      color: #2c2c2c;
+}
+.textbase{
+  width: 100%;
+  height: 60px;
+  background: #fff;
+  font-size: 12px;
+  color: #2c2c2c;
+  text-align: center;
+  line-height: 50px;
+}
+.bgc {
+  width: 100%;
+  height: 58px;
+  background-color: #fff;
+  text-align: center;
+  img {
+  width: 79px;
+  height: 58px;
+  vertical-align: top;
   }
-  .wenan-title {
-      margin: 10px 0;
-      font-size: 16px;
-      font-weight: 600;
-      text-align: center;
+}
+.loading {
+  width: 60px;
+  height: 30px;
+  margin: 52% auto;
+}
+.popup {
+/deep/ .van-icon {
+  position: absolute;
+  top: 12px;
+  font-size: 18px;
+  color: #2c2c2c;
+}
+.wenan-title {
+  margin: 10px 0;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+}
+.wenan-box {
+  position: absolute;
+  top: 41px;
+  left: 16px;
+  bottom: 64px;
+  width: 343px;
+  padding: 10px;
+  background-color: #eee;
+  overflow: scroll;
+  &-item {
+    width: 100%;
+    padding: 8px 10px;
+    margin-bottom: 13px;
+    background-color: #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 600;
   }
-  .wenan-box {
-      position: absolute;
-      top: 41px;
-      left: 16px;
-      bottom: 64px;
-      width: 343px;
-      padding: 10px;
-      background-color: #eee;
-      overflow: scroll;
-      &-item {
-          width: 100%;
-          padding: 8px 10px;
-          margin-bottom: 13px;
-          background-color: #ddd;
-          border-radius: 5px;
-          font-size: 14px;
-          font-weight: 600;
-      }
-      &-item:hover {
-          box-sizing: border-box;
-          background-color: #eefaed;
-          border: 1px solid #7BBB62;
-      }
+  &-item:hover {
+    box-sizing: border-box;
+    background-color: #eefaed;
+    border: 1px solid #7BBB62;
   }
-  #copy {
-      position: absolute;
-      left: 16px;
-      bottom: 10px;
-      width: 343px;
-      height: 44px;
-      line-height: 44px;
-      background-color: #7BBB62;
-      border-radius: 22px;
-      border: none;
-      text-align: center;
-      font-size: 16px;
-      color: #fff;
-  }
+}
+#copy {
+  position: absolute;
+  left: 16px;
+  bottom: 10px;
+  width: 343px;
+  height: 44px;
+  line-height: 44px;
+  background-color: #7BBB62;
+  border-radius: 22px;
+  border: none;
+  text-align: center;
+  font-size: 16px;
+  color: #fff;
+}
 }
 </style>

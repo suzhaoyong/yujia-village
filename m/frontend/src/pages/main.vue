@@ -20,14 +20,14 @@
         <van-icon name="question-o" color="#fff" @click="gotoPage('explain')"/>
       </div>
       <!-- 轮播图 -->
-      <div class="bg_imgs-wrap">
+      <div class="bg_imgs-wrap" >
         <div class="bgc-color" style="background:#8FCD71; width:100%;"></div>
         <div class="imgs_box">
           <van-swipe :autoplay="5000" indicator-color="white">
-            <van-swipe-item v-for="(item, index) in main.banner" :key="index"><img :src="item" alt="商品"></van-swipe-item>
+            <!-- <van-swipe-item v-for="(item, index) in main.banner" :key="index"><img :src="item" alt="商品"></van-swipe-item> -->
+            <van-swipe-item v-for="(item, index) in banners.swiper" :key="index"><img :src="item.path" alt="商品" @click="goAdvertising(item.mold, item.relation_id)"></van-swipe-item>
           </van-swipe>
         </div>
-        
       </div>
       <!-- tab 导航 -->
       <div class="tab-wrap">
@@ -132,10 +132,10 @@
           </div>
         </div>
       </div>
-      <div class="advertising">
-        <router-link to="/advertisement">
-          <img src="../../static/img/wonderful.png" alt="">
-        </router-link>
+      <div class="advertising" v-if="banners.advertis2 > 0">
+        <div>
+          <img :src="banners.advertis2.path" >
+        </div>
       </div>
     </div>
   </div>
@@ -164,6 +164,10 @@ export default {
         teachers: [],
         clubs: []
       },
+      banners: {
+        swiper: [],
+        advertis2: []
+      }
     }
   },
   computed: {
@@ -173,8 +177,25 @@ export default {
     getMainDetail().then(response => {
       this.main = response
     })
+    this.getAdvertising()
   },
   methods: {
+    goAdvertising (mold, relation_id) {
+      if(mold === 2) { this.$router.push(`/teacherClub/clubhouseDetails?id=${relation_id}`) }
+      else if(mold === 3) {this.$router.push(`teacherClub/teacherDetails?id=${relation_id}`)}
+      else if(mold === 4) { this.$router.push(`/messagedetail/${relation_id}`) }
+      // else if(mold === 5) { this.$router.push(`/goods/detail/${relation_id}`) }
+      else if(mold === 6) { this.$router.push(`/yogamessage/list`) }
+      // else if(mold === 7) { 商品分类 }
+      // else if(mold === 1) { 自定义页面 }
+    },
+    getAdvertising () {
+      this.$request.get('/advertisement/data/1').then((res) => {
+        this.banners.swiper = res[0].advertisement
+        this.banners.advertis2 = res[1].advertisement
+        console.log(this.banners.swiper)
+      })
+    },
     gotoPage(type) {
       const path = {
         train: '/yogamessage/list',
