@@ -3,8 +3,17 @@
         <el-row>
             <el-col :span="24">
                 <div class="aboutus-main">
+                    <div class="sub_box7">
+                        <div class="subjects3">
+                            <el-carousel height="60px" :interval="5000" :autoplay="true" arrow="never">
+                                <el-carousel-item v-for="(item,index) in subjectbanner" :key="index">
+                                    <img :src="item.path" alt  @click="subclick(item)"/>
+                                    <div class="advertisement">广告</div>
+                                </el-carousel-item>
+                            </el-carousel>
+                        </div>
+                    </div>
                     <template>
-                       <!-- <Banner></Banner> -->
                        <div class="bg_img">
                          <img :src="banner" alt />
                         </div>
@@ -126,13 +135,76 @@ export default {
         aboutUs:"",
         aboutusmodel:[],
         imgpic:[],
-        banner:''
+        banner:'',
+        subjectbanner:[]
     };
   },
   created(){
       this.listhomedata();
+      this.classification();
   },
    methods:{
+       //根据页面查广告数据
+    classification(){
+      this.$request.get(`/advertisement/data/12`).then(data => {
+          for(let i = 0; i < data.length; i++){
+            if(data[i].position == 1){
+              this.subjectbanner = data[i].advertisement;
+            }
+          }
+      });
+    },
+    subclick(item){
+        switch(item.mold){
+             case 1:
+                this.$router.push({
+                    path: "/subjects",
+                    query: {
+                    id: item.relation_id
+                    }
+                });
+                break;
+            case 2:
+                this.$router.push({
+                    path: "/joinclubhouse/joinclubhousedetails",
+                    query: {
+                    id: item.relation_id
+                    }
+                });
+                break;
+            case 3:
+                this.$router.push({
+                    path: "/yogoteacher/yogoteacherdetails",
+                    query: {
+                    id: item.relation_id
+                    }
+                });
+                break;
+            case 4:
+               this.$router.push({
+                        path: `/cultivate/detail/${item.relation_id}`,
+                    });
+                break;
+            case 5:
+                this.$router.push({
+                    path: "/goods/detail",
+                    params: {
+                    id: item.relation_id
+                    }
+                });
+                break;
+            case 6:
+                this.$router.push({
+                    path: "/cultivate/index",
+                });
+                break;
+            case 7:
+                this.$router.push({
+                    path: "/market/detail",
+                });
+                break;
+        }
+      },
         listhomedata(){
         let _this = this;
         this.$request("/aboutUs").then(res => {
@@ -169,6 +241,50 @@ export default {
     height: 100%;
     margin:0 auto;
     overflow: hidden;
+    .sub_box7{
+    width: 100%;
+    position: fixed;
+    top: 0px;
+    z-index: 999;
+    .subjects3{
+        width: 100%;
+        height: 60px;
+        cursor: pointer;
+        position: relative;
+        img{
+            width: 100%;
+            height: 100%;
+        }
+        .close{
+            width: 17px;
+            height: 17px;
+            background-color: #391F2B;
+            position: absolute;
+            right: 0;
+            top: 0;
+            .closeimg{
+            width: 8px;
+            height: 8px;
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            }
+        }
+        .advertisement{
+            width: 40px;
+            height: 20px;
+            line-height: 20px;
+            background-color: #351D27;
+            opacity: 0.5;
+            color: #fff;
+            font-size: 12px;
+            text-align: center;
+            position: absolute;
+            right: 0;
+            bottom: 0;
+        }
+    }
+    }
     .aboutus-count{
         width: 100%;
         margin: 0 auto;

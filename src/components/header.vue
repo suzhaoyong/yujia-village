@@ -2,16 +2,7 @@
   <div>
     <el-col :span="24" id="header">
       <div class="header-main">
-        <div class="sub_box">
-        <div class="subjects3" v-show="isShow" @mouseover="mouseshow" @mouseleave="mousehide" @click="subclick">
-            <img :src="subjectimg"/>
-            <div class="advertisement">广告</div>
-            <div class="close" v-show="isClose" @click="closeclick">
-                <img src="../assets/subject/close.png" class="closeimg"/>
-            </div>
-        </div>
-      </div>
-        <div :class="[!isShow ? 'nikeHeader' : 'head-quan']">
+        <div class="head-quan">
           <div class="head-right">
             <el-button type="text" class="span2"></el-button>
             <div style="display:inline-block;" v-if="info.user.name">
@@ -119,9 +110,6 @@ export default {
   },
   data() {
     return {
-      subjectimg:require('../assets/subject/sub1.png'),
-      isShow:true,
-      isClose:false,
       activeIndex: "",
       username: "",
       account: {
@@ -164,7 +152,6 @@ export default {
   },
   created() {
     this.fetchData();
-    this.classification();
   },
   beforeUpdate() {
     // this.changenav();
@@ -173,15 +160,6 @@ export default {
     Bus.$off("login");
   },
   methods: {
-    mouseshow(){
-      this.isClose = true;
-      },
-      mousehide(){
-          this.isClose = false;
-      },
-      closeclick(){
-          this.isShow = false;
-      },
     successInfo() {
       this.$on("success", name => {
         this.username = name;
@@ -263,22 +241,6 @@ export default {
         this.$router.push("/market/index");
       } else {
         this.$router.push(`/${key}/index`);
-      };
-      switch(key){
-        case 'main':
-          this.subjectimg = require('../assets/subject/sub1.png');
-          break;
-        case 'joinclubhouse':
-          this.subjectimg = require('../assets/subject/sub3.png');
-          break;
-        case 'cultivate':
-          this.subjectimg = require('../assets/subject/sub5.png');
-          break;
-      }
-    },
-    subclick(){
-      if(this.activeIndex == 'main'){
-        this.$router.push("/subjects");
       }
     },
     /** 登出 */
@@ -290,11 +252,6 @@ export default {
         this.username = "";
         sessionStorage.removeItem("access");
         sessionStorage.removeItem("user");
-      });
-    },
-    //广告位分类
-    classification(){
-      this.$request.get("/advertisement/type").then(data => {
       });
     },
     /** 用户基本信息 */
@@ -404,50 +361,6 @@ export default {
   width: 100%;
   height: 100%;
   padding: 0;
-  .sub_box{
-    width: 100%;
-    position: fixed;
-    top: 0px;
-    z-index: 999;
-.subjects3{
-    width: 100%;
-    height: 60px;
-    cursor: pointer;
-    position: relative;
-    img{
-        width: 100%;
-        height: 100%;
-    }
-    .close{
-        width: 17px;
-        height: 17px;
-        background-color: #391F2B;
-        position: absolute;
-        right: 0;
-        top: 0;
-        .closeimg{
-        width: 8px;
-        height: 8px;
-        position: absolute;
-        right: 5px;
-        top: 5px;
-        }
-    }
-    .advertisement{
-        width: 50px;
-        height: 20px;
-        line-height: 20px;
-        background-color: #351D27;
-        opacity: 0.8;
-        color: #fff;
-        font-size: 12px;
-        text-align: center;
-        position: absolute;
-        right: 0;
-        bottom: 0;
-    }
-}
-}
 .nikeHeader{
   height: 40px;
   display: flex;
@@ -480,16 +393,17 @@ export default {
     }
 }
   .head-quan {
-    height: 40px;
+    height: 100px;
     display: flex;
     background: #fcfbf1;
     justify-content: flex-end;
-    margin-top: 60px;
     .head-right {
       width: 1200px;
       text-align: center;
       position: relative;
       margin: 0 auto;
+      height: 40px;
+      margin-top: 60px;
       .img {
         width: 30px;
         height: 28px;
