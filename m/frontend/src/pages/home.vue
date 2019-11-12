@@ -1,11 +1,9 @@
 <template>
     <div style="width:100%;height:100%;">
       <!-- 客服图标-注册图标 -->
+      <div class="kefu_fixed" @click="callShow = true" ref="kefuimg"></div>
       <div class="register_fixed-box">
-
         <div v-if="isUserNeedLogin" class="register_fixed" @click="() => { this.$router.push('/login?q_type=register')}">
-        </div>
-        <div class="kefu_fixed" @click="callShow = true">
         </div>
       </div>
       <van-popup class="call-center" v-model="callShow">
@@ -41,7 +39,52 @@ export default {
         const isUserLogin = !window.sessionStorage.getItem('access');
         return isUserLogin;
       }
-    }
+    },
+    mounted () {
+      this.darg()
+    },
+    methods: {
+      darg (kefuimg) {
+        var div1 = this.$refs.kefuimg
+        var maxW = document.body.clientWidth - div1.offsetWidth;
+        var maxH = document.body.clientHeight - div1.offsetHeight;
+        var oL;
+        var oT
+        div1.addEventListener('touchstart', function(e) {
+        var ev = e || window.event;
+        var touch = ev.targetTouches[0];
+        oL = touch.clientX - div1.offsetLeft;
+        oT = touch.clientY - div1.offsetTop;
+        });
+        div1.addEventListener('touchmove', function(e) {
+         var ev = e || window.event;
+         var touch = ev.targetTouches[0];
+         var oLeft = touch.clientX - oL;
+         var oTop = touch.clientY - oT;
+         if(oLeft < 0) {
+         oLeft = 0;
+         } else if(oLeft >= maxW) {
+         oLeft = maxW;
+         }
+         if(oTop < 0) {
+         oTop = 0;
+         } else if(oTop >= maxH) {
+         oTop = maxH;
+         }
+         div1.style.left = oLeft + 'px';
+         div1.style.top = oTop + 'px';
+        console.log(oLeft, oTop)
+        });
+        //触摸结束时的处理
+        div1.addEventListener('touchend', function() {
+         document.removeEventListener("touchmove", defaultEvent);
+        });
+        //阻止默认事件
+        function defaultEvent(e) {
+         e.preventDefault();
+        }
+      }
+    },
 }
 </script>
 <style lang="scss">
@@ -63,27 +106,37 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+    #app {
+      // position: relative;
+      .kefu_fixed{
+          background-image: url('~@/assets/img/kefu1.png');
+          background-size: 100% 100%;
+          background-repeat: no-repeat;
+          width: 50px;
+          height: 50px;
+          position: absolute;
+          z-index: 1000;
+          top: 520px;
+          left: 309px;
+
+          
+      }
+    }
+
   .register_fixed-box{
     position: fixed;
-    right: 16px;
-    bottom: 90px;
+    left: 309px;
+    top: 457px;
     width: 50px;
     height: 120px;
     z-index: 200;
     .register_fixed{
-        background-image: url('~@/assets/img/zhuce.png');
+        background-image: url('~@/assets/img/zhuce1.png');
         background-size: 100% 100%;
         background-repeat: no-repeat;
         width: 50px;
         height: 50px;
         margin-bottom: 20px;
-    }
-    .kefu_fixed{
-        background-image: url('~@/assets/img/kefu.png');
-        background-size: 100% 100%;
-        background-repeat: no-repeat;
-        width: 50px;
-        height: 50px;
     }
   }
   .call-center {

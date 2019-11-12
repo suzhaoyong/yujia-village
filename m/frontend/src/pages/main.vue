@@ -25,7 +25,10 @@
         <div class="imgs_box">
           <van-swipe :autoplay="5000" indicator-color="white">
             <!-- <van-swipe-item v-for="(item, index) in main.banner" :key="index"><img :src="item" alt="商品"></van-swipe-item> -->
-            <van-swipe-item v-for="(item, index) in banners.swiper" :key="index"><img :src="item.path" alt="商品" @click="goAdvertising(item.mold, item.relation_id)"></van-swipe-item>
+            <div v-if="swiper">
+              <van-swipe-item  v-for="(item, index) in swiper" :key="index"><img :src="item.path" alt="商品" @click="goAdvertising(item.mold, item.relation_id)"></van-swipe-item>
+            </div>
+            <van-swipe-item v-else v-for="(item, index) in main.banner" :key="index"><img :src="item" alt="商品"></van-swipe-item>
           </van-swipe>
         </div>
       </div>
@@ -62,6 +65,12 @@
             </div>
             <div class="tab_tips">关于我们</div>
           </div>
+        </div>
+      </div>
+      <!-- 广告位2 -->
+      <div class="advertising" v-show="advertis2">
+        <div>
+          <img :src="advertis2.path" @click="goAdvertising(advertis2.mold, advertis2.relation_id)">
         </div>
       </div>
       <!-- 培训信息 -->
@@ -132,9 +141,10 @@
           </div>
         </div>
       </div>
-      <div class="advertising" v-if="banners.advertis2 > 0">
+      <!-- 广告位3 -->
+      <div class="advertising" v-if="advertis3">
         <div>
-          <img :src="banners.advertis2.path" >
+          <img :src="advertis3.path" @click="goAdvertising(advertis3.mold, advertis3.relation_id)">
         </div>
       </div>
     </div>
@@ -164,10 +174,9 @@ export default {
         teachers: [],
         clubs: []
       },
-      banners: {
-        swiper: [],
-        advertis2: []
-      }
+      swiper: [], // 广告位1
+      advertis2: {}, // 广告位2
+      advertis3: {} // // 广告位2
     }
   },
   computed: {
@@ -187,14 +196,14 @@ export default {
       // else if(mold === 5) { this.$router.push(`/goods/detail/${relation_id}`) }
       else if(mold === 6) { this.$router.push(`/yogamessage/list`) }
       // else if(mold === 7) { 商品分类 }
-      // else if(mold === 1) { 自定义页面 }
+      else if(mold === 1) { this.$router.push('/advertisement') }
     },
     getAdvertising () {
-      this.$request.get('/advertisement/data/1').then((res) => {
-        this.banners.swiper = res[0].advertisement
-        this.banners.advertis2 = res[1].advertisement
-        console.log(this.banners.swiper)
-      })
+      return this.$request.get('/advertisement/data/' + 1).then((res) => {
+      this.swiper = res[0].advertisement
+      this.advertis2 = res[1].advertisement[0]
+      // this.advertis3 = res[2].advertisement[0]
+    })
     },
     gotoPage(type) {
       const path = {
@@ -503,6 +512,7 @@ img{
       }
     }
     .advertising {
+      margin-top: 15px;
       width: 100%;
       padding: 4px 16px;
       img {

@@ -11,7 +11,7 @@
             <van-tab title="培训机构">
                 <div class="list_teacher">
                     <div class="list_banner" :style="{backgroundImage: 'url('+banner+')'}"></div>
-                    <!-- <div class="league" @click="goto()">申请加盟</div> -->
+
                     <div class="club_house">
                         <div class="club_house_title">
                             <span class="items" v-for="(item,index) in items" @click="clicktext(index)" :key="index" :class="{active:index==curritem}">{{item}}</span>
@@ -48,7 +48,6 @@
             <van-tab title="瑜伽名师" >
                 <div class="list_clubhouse">
                     <div class="list_banner" :style="{backgroundImage: 'url('+banner2+')'}"></div>
-                    
                     <div class="list_exhibition">
                         <div class="list_exhibition_page">
                             <img src="../../assets/teacherclub/yujia.png"/>
@@ -156,8 +155,8 @@ import Vue from 'vue';
 // import Bus from "@/utils/Bus";
 import { mapGetters } from "vuex";
 import Swiper from 'swiper';
-import { Notify, Toast } from "vant";
-Vue.use(Notify).use(Toast);
+import { Notify, Toast, Swipe, SwipeItem } from "vant";
+Vue.use(Notify).use(Toast).use(Swipe).use(SwipeItem);
 export default {
     data() {
     return {
@@ -229,7 +228,8 @@ export default {
         id2:0,
         routecurrent:'',
         isupdate: false,
-        isKey: ''
+        isKey: '',
+        swiper: [], // 广告位1
     };
   },
    computed: {
@@ -259,6 +259,13 @@ export default {
     }
   },
   methods:{
+      // 广告位 
+    getAdvertising () {
+      return this.$request.get('/advertisement/data/' + 3).then((res) => {
+      this.swiper = res[0].advertisement
+      console.log(res)
+      })
+    },
       swiperInit() {
           new Swiper('.swiper-container', {
                 slidesPerView: 'auto',
@@ -675,6 +682,11 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.list_banner{
+    height: 170px;
+    background-size: cover;
+    background-position: center;
+}
 .distpicker-address-wrapper select{
     width: 70px !important;
     padding: 0px 4px !important;
@@ -732,11 +744,6 @@ input:-ms-input-placeholder{
         width: 100%;
         background: #eee !important;
         position: relative;
-        .list_banner{
-          height: 170px;
-          background-size: cover;
-          background-position: center;
-        }
         .league{
             width: 60px;
             height: 15px;
@@ -934,11 +941,6 @@ input:-ms-input-placeholder{
     .list_clubhouse{
         width: 100%;
         background: #fff !important;
-        .list_banner{
-          height: 170px;
-          background-size: cover;
-          background-position: center;
-        }
         .list_house{
             width: 100%;
             margin: 0 auto;

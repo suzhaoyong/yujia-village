@@ -65,6 +65,12 @@ export default {
         base64img:"",
     };
   },
+  beforeRouteLeave  (to, from, next) {
+      if(to.path === this.$route.path || to.path == '') {
+          this.$router.replace('/teacherClub/list')
+      }
+    next()
+  },
   components: {
       shareIng
   },
@@ -104,7 +110,7 @@ export default {
         });
       },
       goback() {
-        this.$router.replace('/teacherClub/list');
+          this.$router.go(-1)
       },
   }
 };

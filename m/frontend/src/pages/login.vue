@@ -347,7 +347,6 @@ export default {
     // this.getVerificationCode();
     this.loadFile("sy");
     this.loadFile("ys");
-    this.keyEvents()
   },
   methods: {
     // 返回主页
@@ -691,21 +690,7 @@ export default {
         });
     },
     /* 按键验证 */
-    // keyEvents () {
-    //   var regex = /^1[3|4|5|6|7|8]\d{9}$/;
-    //   var regexpwd = /^(?=.*[a-zA-Z]+)(?=.*[0-9]+)[a-zA-Z0-9]+$/;
-    //   this.$refs.ruleFormkeytel.onkeydown = () => {
-    //     if (!regex.test(this.ruleForm.tel)) {
-    //         console.log("请录入正确的手机号码！");
-    //         this.$refs.ruleFormkeytel.style.color = 'red'
-    //     } else {this.$refs.ruleFormkeytel.style.color = ''}
-    //   }
-    //   this.$refs.ruleFormkeypwd.onkeydown =() => {
-    //     if (regexpwd.test(this.ruleForm.password)) {
-    //         console.log("111");
-    //     }
-    //   }
-    // }
+
     // 积分显示
      getPersonalData() {
       this.$request.get('/personal/home').then(data => {

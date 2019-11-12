@@ -50,15 +50,24 @@ export default {
             finished: false,
             page: 1,
             total: '',
-            id: 0
+            id: 0,
+            advertis2: {}
         }
     },
     created() {
         this.getKnowledgeClassify();
         // 初始推荐知识列表
         this.getKnowledgeList();
+        this.getAdvertising()
     },
     methods: {
+        // 广告位
+        getAdvertising () {
+            return this.$request.get('/advertisement/data/' + 5).then((res) => {
+            // this.advertis2 = res[1].advertisement[0]
+            console.log(res)
+            })
+        },
           back() {
             this.$router.go(-1);
           },

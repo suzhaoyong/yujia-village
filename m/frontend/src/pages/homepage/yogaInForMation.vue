@@ -73,7 +73,8 @@ export default {
         {
           img: require('../../../static/img/mationclassfiy/hot.png')
         },
-      ]
+      ],
+      advertis2: {}, // 广告位2
     }
   },
   mounted () {
@@ -82,9 +83,16 @@ export default {
   },
   created() {
     this.InformationClassify()
-    
+    // this.getAdvertising()
   },
   methods: {
+    // 广告位
+    // getAdvertising () {
+    //   return this.$request.get('/advertisement/data/' + 4).then((res) => {
+    //   this.advertis2 = res[1].advertisement[0]
+    //   console.log(res)
+    // })
+    // },
     onClickLeft() {
       this.$router.go(-1);
     },

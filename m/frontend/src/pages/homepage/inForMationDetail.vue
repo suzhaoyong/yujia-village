@@ -23,6 +23,7 @@
       </main>
     </section>
     <Footer v-show="!childShow"></Footer>
+    <!-- <Footer></Footer> -->
   </div>
 </template>
 <script>

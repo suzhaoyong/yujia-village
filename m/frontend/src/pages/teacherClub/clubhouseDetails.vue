@@ -104,29 +104,6 @@
                 <span class="page-span2">我寻寻觅觅却找不到您的踪迹~</span>
             </div>
         </div>
-        <!-- <van-popup v-model="show">
-            <div v-show="!base64img" class="loading">
-                <van-loading color="#7BBB62" size="24px" vertical>加载中...</van-loading>
-            </div>
-            <div v-show="base64img">
-                <img :src="base64img"/>
-                <div class="textbase">长按图片，保存或发送给朋友</div>
-                <div class="bgc">
-                    <img src="../../assets/img/fxwenan.png" alt="" @click="getWenan">
-                </div>
-            </div>
-
-        </van-popup>
-        <van-popup class="popup" v-model="wenanIsShow" round closeable position="bottom"
-        :style="{ height: '80%' }">
-            <div class="wenan-title">选择分享文案</div>
-            <div class="wenan-box">
-                <div class="wenan-box-item" v-for="(item,index) in wenanData" :key="index" 
-                @click="selectItem(item.content)">{{item.content}}</div>
-            </div>
-            <button id="copy" v-clipboard:copy="copy_content" 
-                v-clipboard:success="onCopy"  v-clipboard:error="onError">一键复制</button>
-        </van-popup> -->
     </div>
 </template>
 <script>
@@ -217,20 +194,6 @@ export default {
             }
         });
     },
-    // 分享商品
-    // handleShareGoods() {
-    // this.show = true;
-    // const params = {
-    //     id:this.$route.query.id,
-    //     identity:'club',
-    //     userId:this.isUserNeedLogin ? "" : (this.info.user && this.info.user.id) || '',
-    //     responseType: 'arraybuffer'
-    // }
-    // this.$request.post(`/show/share/photo`,params)
-    // .then(res => {
-    //     this.base64img = res;
-    // })
-    // },
     clubdetail(id){
         this.$router.push('/messagedetail/'+id);
     },
