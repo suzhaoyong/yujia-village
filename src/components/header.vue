@@ -35,14 +35,14 @@
               mode="horizontal"
               @select="handleSelect"
             >
-              <el-menu-item index="main">首页</el-menu-item>
-              <el-menu-item index="joinclubhouse">培训机构</el-menu-item>
-              <el-menu-item index="yogoteacher">瑜伽名师</el-menu-item>
-              <el-menu-item index="cultivate">培训信息</el-menu-item>
-              <el-menu-item index="yogoknowledge">瑜伽知识</el-menu-item>
-              <el-menu-item index="yogoinformation">瑜伽资讯</el-menu-item>
+              <el-menu-item index="main"><a href="/main" onclick="return false;">首页</a></el-menu-item>
+              <el-menu-item index="joinclubhouse"><a href="/joinclubhouse" onclick="return false;">培训机构</a></el-menu-item>
+              <el-menu-item index="yogoteacher"><a href="/yogoteacher" onclick="return false;">瑜伽名师</a></el-menu-item>
+              <el-menu-item index="cultivate"><a href="/cultivate" onclick="return false;">培训信息</a></el-menu-item>
+              <el-menu-item index="yogoknowledge"><a href="/yogoknowledge" onclick="return false;">瑜伽知识</a></el-menu-item>
+              <el-menu-item index="yogoinformation"><a href="/yogoinformation" onclick="return false;">瑜伽资讯</a></el-menu-item>
               <!-- <el-menu-item index="market">商城</el-menu-item> -->
-              <el-menu-item index="aboutus">关于我们</el-menu-item>
+              <el-menu-item index="aboutus"><a href="/aboutus" onclick="return false;">关于我们</a></el-menu-item>
               <el-submenu index="personal">
                 <template slot="title">
                   <!-- <div class="submenu"><router-link to="/personal/index" class="routlink">个人中心</router-link></div> -->
@@ -295,6 +295,9 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+a:hover{
+  text-decoration:none;
+}
 .identity {
   display: inline-block;
   width: 30px;
