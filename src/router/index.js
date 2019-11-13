@@ -265,7 +265,7 @@ const router = new Router({
       children: [{
           path: '/subjects',
           meta: {
-            header_name: 'subjects'
+            header_name: 'main'
           },
           component: Subjects
         }

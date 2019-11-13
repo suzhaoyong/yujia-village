@@ -2,14 +2,7 @@
     <div>
         <el-col :span="24" >
             <div class="subject_main">
-                <img src="../assets/subject/sub6.png"/>
-                <img src="../assets/subject/sub7.png"/>
-                <img src="../assets/subject/sub8.png"/>
-                <img src="../assets/subject/sub9.png"/>
-                <img src="../assets/subject/sub10.png"/>
-                <img src="../assets/subject/sub11.png"/>
-                <img src="../assets/subject/sub12.png"/>
-                <img src="../assets/subject/sub13.png"/>
+                <img :src="item" v-for="item in sub" :key="item"/>
                 <transition name="el-fade-in">
                 <div class="up"><a href="#header">返回顶部</a></div>
                 </transition>
@@ -21,9 +14,18 @@
 export default {
   data() {
     return {
+        sub:[]
     }
   },
+  created () {
+       this.classificcustom();
+  },
   methods:{
+       classificcustom(){
+         this.$request.get(`/advertisement/customize/${this.$route.query.id}`).then(data => {
+            this.sub = data.images;
+      });
+    },
   }
 };
 </script>
