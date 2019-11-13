@@ -286,6 +286,7 @@ export default {
     },
     //根据页面查广告数据
     classification(classid){
+      this.subjectbanner = [];
       this.$request.get(`/advertisement/data/${this.classid}`).then(data => {
           for(let i = 0; i < data.length; i++){
             if(data[i].position == 1){
