@@ -2,11 +2,21 @@
   <div>
     <el-col :span="24" id="header">
       <div class="header-main">
+         <div class="sub_box">
+            <div :class="this.subjectbanner.length > 0 ? 'subjects3':'info'" v-show="this.subjectbanner.length > 0">
+                <el-carousel height="60px" :interval="5000" :autoplay="true" arrow="never">
+                    <el-carousel-item v-for="(item,index) in subjectbanner" :key="index">
+                        <img :src="item.path" alt  @click="subclick(item)"/>
+                        <div class="advertisement">广告</div>
+                    </el-carousel-item>
+                </el-carousel>
+            </div>
+        </div>
         <div class="head-quan">
           <div class="head-right">
             <el-button type="text" class="span2"></el-button>
             <div style="display:inline-block;" v-if="info.user.name">
-              <div class="identity" >
+              <div class="identity">
                 <img :src="info.user.icon" style="border-radius:50%;" alt="头像" />
               </div>
               <span class="span1" style="line-height: 40px;">{{info.user.name}}</span>
@@ -54,13 +64,13 @@
                 <div v-show="info.user.name">
                   <el-menu-item index="personal index">个人中心</el-menu-item>
                   <!-- <el-menu-item index="identity">个人信息</el-menu-item> -->
-                  <!-- <el-menu-item index="recode">订单中心</el-menu-item> -->
+                  <el-menu-item index="personal recode">订单中心</el-menu-item>
                   <el-menu-item
                     v-show="info.user.identity_auth === '认证导师中' || info.user.identity_auth === '认证机构负责人中'"
                     index="hell"
                   >机构信息</el-menu-item>
                   <el-menu-item index="safety-center">个人信息与安全</el-menu-item>
-                  <el-menu-item index="contactway">联系方式设置</el-menu-item>
+                  <!-- <el-menu-item index="contactway">联系方式设置</el-menu-item> -->
                   <el-menu-item index="share">分享邀请好友</el-menu-item>
                   <el-menu-item index="out" @click="logout">退出</el-menu-item>
                 </div>
@@ -111,7 +121,9 @@ export default {
   data() {
     return {
       activeIndex: "",
+      classid:"",
       username: "",
+      subjectbanner:[],
       account: {
         type: ""
       },
@@ -148,6 +160,28 @@ export default {
       this.account.type = "login";
     });
     this.activeIndex = this.$route.name || this.$route.meta.header_name || "main";
+    switch(this.activeIndex){
+      case 'main':
+        this.classification(this.classid = 11);
+        break;
+      case 'joinclubhouse':
+        this.classification(this.classid = 7);
+        break;
+      case 'yogoteacher':
+        this.classification(this.classid = 8);
+        break;
+      case 'yogoknowledge':
+        this.classification(this.classid = 9);
+        break;
+      case 'yogoinformation':
+        this.classification(this.classid = 10);
+        break;
+      case 'aboutus':
+        this.classification(this.classid = 12);
+        break;
+      case 'cultivate':
+        this.classification(this.classid = 6);
+    }
     // this.getPersonal();
   },
   created() {
@@ -182,8 +216,8 @@ export default {
       let currNav = path.substring(endIndex + 1, path.length);
       this.activeIndex = currNav;
     },
-    fetchData() {
-      this.activeIndex = this.$route.meta.header_name || "main";
+    fetchData() { 
+      this.activeIndex = this.$route.meta.header_name || "main" ;
       return;
       if (this.$route.name == "main") {
         this.activeIndex = "main";
@@ -225,24 +259,92 @@ export default {
       }
       if ("main" === key) {
         this.$router.push("/main");
+        this.classification(this.classid = 11);
       } else if ("joinclubhouse" === key) {
         this.$router.push("/joinclubhouse");
+        this.classification(this.classid = 7);
       } else if ("yogoteacher" === key) {
         this.$router.push("/yogoteacher");
+        this.classification(this.classid = 8);
       } else if ("yogoknowledge" === key) {
         this.$router.push("/yogoknowledge");
+        this.classification(this.classid = 9);
       } else if ("yogoinformation" === key) {
         this.$router.push("/yogoinformation");
+        this.classification(this.classid = 10);
       } else if ("aboutus" === key) {
         this.$router.push("/aboutus");
+        this.classification(this.classid = 12);
       } else if ("cultivate" === key) {
         this.$router.push("/cultivate/index");
+        this.classification(this.classid = 6);
       } else if ("market/index" === key) {
         this.$router.push("/market/index");
       } else {
         this.$router.push(`/${key}/index`);
-      }
+      };
     },
+    //根据页面查广告数据
+    classification(classid){
+      this.$request.get(`/advertisement/data/${this.classid}`).then(data => {
+          for(let i = 0; i < data.length; i++){
+            if(data[i].position == 1){
+              this.subjectbanner = data[i].advertisement;
+            }
+          }
+      });
+    },
+    subclick(item){
+        switch(item.mold){
+             case 1:
+                this.$router.push({
+                    path: "/subjects",
+                    query: {
+                    id: item.relation_id
+                    }
+                });
+                break;
+            case 2:
+                this.$router.push({
+                    path: "/joinclubhouse/joinclubhousedetails",
+                    query: {
+                    id: item.relation_id
+                    }
+                });
+                break;
+            case 3:
+                this.$router.push({
+                    path: "/yogoteacher/yogoteacherdetails",
+                    query: {
+                    id: item.relation_id
+                    }
+                });
+                break;
+            case 4:
+               this.$router.push({
+                        path: `/cultivate/detail/${item.relation_id}`,
+                    });
+                break;
+            case 5:
+                this.$router.push({
+                    path: "/goods/detail",
+                    params: {
+                    id: item.relation_id
+                    }
+                });
+                break;
+            case 6:
+                this.$router.push({
+                    path: "/cultivate/index",
+                });
+                break;
+            case 7:
+                this.$router.push({
+                    path: "/market/detail",
+                });
+                break;
+        }
+      },
     /** 登出 */
     logout() {
       this.$request.post("/auth/logout").then(data => {
@@ -361,6 +463,85 @@ export default {
   width: 100%;
   height: 100%;
   padding: 0;
+   .sub_box{
+    width: 100%;
+    .info{
+        width: 100%;
+        height: 0px;
+        cursor: pointer;
+        position: relative;
+        img{
+            width: 100%;
+            height: 100%;
+        }
+        .close{
+            width: 17px;
+            height: 17px;
+            background-color: #391F2B;
+            position: absolute;
+            right: 0;
+            top: 0;
+            .closeimg{
+            width: 8px;
+            height: 8px;
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            }
+        }
+        .advertisement{
+            width: 40px;
+            height: 20px;
+            line-height: 20px;
+            background-color: #351D27;
+            opacity: 0.5;
+            color: #fff;
+            font-size: 12px;
+            text-align: center;
+            position: absolute;
+            right: 0;
+            bottom: 0;
+        }
+    }
+    .subjects3{
+        width: 100%;
+        height: 60px;
+        cursor: pointer;
+        position: relative;
+        img{
+            width: 100%;
+            height: 100%;
+        }
+        .close{
+            width: 17px;
+            height: 17px;
+            background-color: #391F2B;
+            position: absolute;
+            right: 0;
+            top: 0;
+            .closeimg{
+            width: 8px;
+            height: 8px;
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            }
+        }
+        .advertisement{
+            width: 40px;
+            height: 20px;
+            line-height: 20px;
+            background-color: #351D27;
+            opacity: 0.5;
+            color: #fff;
+            font-size: 12px;
+            text-align: center;
+            position: absolute;
+            right: 0;
+            bottom: 0;
+        }
+    }
+    }
 .nikeHeader{
   height: 40px;
   display: flex;
@@ -393,7 +574,7 @@ export default {
     }
 }
   .head-quan {
-    height: 100px;
+    height: 40px;
     display: flex;
     background: #fcfbf1;
     justify-content: flex-end;
@@ -402,8 +583,8 @@ export default {
       text-align: center;
       position: relative;
       margin: 0 auto;
-      height: 40px;
-      margin-top: 60px;
+      // height: 40px;
+      // margin-top: 60px;
       .img {
         width: 30px;
         height: 28px;
