@@ -157,7 +157,7 @@ export default {
     if(info) {
       store.dispatch("INFO", JSON.parse(info))
     }
-    this.classification();
+    // this.classification();
   },
   beforeUpdate() {
     // this.changenav();
