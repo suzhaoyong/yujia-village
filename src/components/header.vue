@@ -41,7 +41,7 @@
               <el-menu-item index="cultivate">培训信息</el-menu-item>
               <el-menu-item index="yogoknowledge">瑜伽知识</el-menu-item>
               <el-menu-item index="yogoinformation">瑜伽资讯</el-menu-item>
-              <!-- <el-menu-item index="market">商城</el-menu-item> -->
+              <el-menu-item index="market">商城</el-menu-item>
               <el-menu-item index="aboutus">关于我们</el-menu-item>
               <el-submenu index="personal">
                 <template slot="title">
