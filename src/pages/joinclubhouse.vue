@@ -2,16 +2,6 @@
     <div>
         <el-col :span="24">
             <div class="joinclub-main">
-                <div class="sub_box2">
-                <div class="subjects3">
-                    <el-carousel height="60px" :interval="5000" :autoplay="true" arrow="never">
-                        <el-carousel-item v-for="(item,index) in subjectbanner" :key="index">
-                            <img :src="item.path" alt  @click="subclick(item)"/>
-                            <div class="advertisement">广告</div>
-                        </el-carousel-item>
-                    </el-carousel>
-                </div>
-            </div>
                 <template>
                     <div class="bg_img2" v-if="cationbanner.length > 0">
                         <img :src="cationbanner[0].path" alt @click="cationclick(cationbanner[0].mold)"/>
@@ -101,7 +91,6 @@ export default {
     return {
         joinlist:[],
         cationmoad:[],
-        subjectbanner:[],
         cationbanner:[],
         banner:'',
         city:'',
@@ -139,66 +128,12 @@ export default {
             if(data[i].position == 0){
               this.cationbanner = data[i].advertisement;
             }
-            else if(data[i].position == 1){
-              this.subjectbanner = data[i].advertisement;
-            }
             else if(data[i].position == 2){
               this.cationmoad = data[i].advertisement;
             }
           }
       });
     },
-     subclick(item){
-        switch(item.mold){
-             case 1:
-                this.$router.push({
-                    path: "/subjects",
-                    query: {
-                    id: item.relation_id
-                    }
-                });
-                break;
-            case 2:
-                this.$router.push({
-                    path: "/joinclubhouse/joinclubhousedetails",
-                    query: {
-                    id: item.relation_id
-                    }
-                });
-                break;
-            case 3:
-                this.$router.push({
-                    path: "/yogoteacher/yogoteacherdetails",
-                    query: {
-                    id: item.relation_id
-                    }
-                });
-                break;
-            case 4:
-               this.$router.push({
-                        path: `/cultivate/detail/${item.relation_id}`,
-                    });
-                break;
-            case 5:
-                this.$router.push({
-                    path: "/goods/detail",
-                    params: {
-                    id: item.relation_id
-                    }
-                });
-                break;
-            case 6:
-                this.$router.push({
-                    path: "/cultivate/index",
-                });
-                break;
-            case 7:
-                this.$router.push({
-                    path: "/market/detail",
-                });
-                break;
-        }
-      },
       cationclick(cationbanner){
         switch(this.cationbanner[0].mold){
             case 1:
@@ -560,50 +495,6 @@ export default {
     height: 100%;
     margin: 0 auto;
     overflow: hidden;
-    .sub_box2{
-    width: 100%;
-    position: fixed;
-    top: 0px;
-    z-index: 999;
-    .subjects3{
-        width: 100%;
-        height: 60px;
-        cursor: pointer;
-        position: relative;
-        img{
-            width: 100%;
-            height: 100%;
-        }
-        .close{
-            width: 17px;
-            height: 17px;
-            background-color: #391F2B;
-            position: absolute;
-            right: 0;
-            top: 0;
-            .closeimg{
-            width: 8px;
-            height: 8px;
-            position: absolute;
-            right: 5px;
-            top: 5px;
-            }
-        }
-        .advertisement{
-            width: 40px;
-            height: 20px;
-            line-height: 20px;
-            background-color: #351D27;
-            opacity: 0.5;
-            color: #fff;
-            font-size: 12px;
-            text-align: center;
-            position: absolute;
-            right: 0;
-            bottom: 0;
-        }
-    }
-    }
     .joinclub-cont{
         width: 100%;
         margin: 0 auto;
