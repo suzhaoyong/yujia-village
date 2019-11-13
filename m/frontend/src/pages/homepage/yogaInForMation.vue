@@ -4,7 +4,8 @@
   </van-nav-bar>
   <div class="information">
     <div class="information-banner">
-      <img :src="classifyLists.banner" />
+      <img :src="classifyLists.banner" v-if="!swiper"/>
+      <img :src="swiper? swiper.path: ''" v-else  @click="goAdvertising(swiper.mold, swiper.relation_id)">
     </div>
     <div class="information-nav">
       <ul class="information-nav-list">
@@ -74,6 +75,7 @@ export default {
           img: require('../../../static/img/mationclassfiy/hot.png')
         },
       ],
+      swiper: {},
       advertis2: {}, // 广告位2
     }
   },
@@ -83,16 +85,24 @@ export default {
   },
   created() {
     this.InformationClassify()
-    // this.getAdvertising()
+    this.getAdvertising()
   },
   methods: {
     // 广告位
-    // getAdvertising () {
-    //   return this.$request.get('/advertisement/data/' + 4).then((res) => {
-    //   this.advertis2 = res[1].advertisement[0]
-    //   console.log(res)
-    // })
-    // },
+    goAdvertising (mold, relation_id) {
+      if(mold === 2) { this.$router.push(`/teacherClub/clubhouseDetails?id=${relation_id}`) }
+      else if(mold === 3) {this.$router.push(`teacherClub/teacherDetails?id=${relation_id}`)}
+      else if(mold === 4) { this.$router.push(`/messagedetail/${relation_id}`) }
+      // else if(mold === 5) { this.$router.push(`/goods/detail/${relation_id}`) }
+      else if(mold === 6) { this.$router.push(`/yogamessage/list`) }
+      // else if(mold === 7) { 商品分类 }
+      else if(mold === 1) { this.$router.push('/advertisement') }
+    },
+    getAdvertising () {
+      return this.$request.get('/advertisement/data/' + 4).then((res) => {
+      this.swiper = res.filter(((item) => item.position === 0))[0].advertisement[0]
+    })
+    },
     onClickLeft() {
       this.$router.go(-1);
     },

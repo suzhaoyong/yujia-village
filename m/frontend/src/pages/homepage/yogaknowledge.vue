@@ -2,8 +2,10 @@
     <div class="knowledge">
         <van-nav-bar title="瑜伽知识" left-arrow @click-left="back" fixed>
         </van-nav-bar>
-        <div class="banner" :style="{backgroundImage: 'url('+knowledgeClassify.banner+')'}" >
+        <div class="banner" :style="{backgroundImage: 'url('+knowledgeClassify.banner+')'}" v-if="!swiper">
         </div>
+        <div class="banner" :style="{backgroundImage: 'url('+swiper?swiper.path: ''+')'}" v-else  @click="goAdvertising (swiper.mold, swiper.relation_id)"></div>
+
         <div class="recommended">
             <van-collapse v-model="activeNames" @change="onChange">
                 <van-collapse-item title="推荐" :value="label" name="1" accordion :border="false">
@@ -51,6 +53,7 @@ export default {
             page: 1,
             total: '',
             id: 0,
+            swiper: {},
             advertis2: {}
         }
     },
@@ -64,8 +67,9 @@ export default {
         // 广告位
         getAdvertising () {
             return this.$request.get('/advertisement/data/' + 5).then((res) => {
-            // this.advertis2 = res[1].advertisement[0]
-            console.log(res)
+            this.swiper = res.filter(((item) => item.position === 0))[0].advertisement[0]
+            console.log(this.swiper)
+
             })
         },
           back() {

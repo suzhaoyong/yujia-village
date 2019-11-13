@@ -142,7 +142,7 @@
         </div>
       </div>
       <!-- 广告位3 -->
-      <div class="advertising" v-if="advertis3">
+      <div class="advertising" v-show="advertis3">
         <div>
           <img :src="advertis3.path" @click="goAdvertising(advertis3.mold, advertis3.relation_id)">
         </div>
@@ -200,9 +200,11 @@ export default {
     },
     getAdvertising () {
       return this.$request.get('/advertisement/data/' + 1).then((res) => {
-      this.swiper = res[0].advertisement
-      this.advertis2 = res[1].advertisement[0]
-      // this.advertis3 = res[2].advertisement[0]
+      this.swiper = res.filter(((item) => item.position === 0))[0] ? res.filter(((item) => item.position === 0))[0].advertisement : []
+      this.advertis2 = res.filter(((item) => item.position === 1))[0] ? res.filter(((item) => item.position === 1))[0].advertisement[0] : []
+      this.advertis3 = res.filter(((item) => item.position === 2))[0] ? res.filter(((item) => item.position === 2))[0].advertisement[0] : []
+      console.log(this.swiper)
+
     })
     },
     gotoPage(type) {

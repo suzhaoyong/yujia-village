@@ -73,7 +73,6 @@ export default {
          }
          div1.style.left = oLeft + 'px';
          div1.style.top = oTop + 'px';
-        console.log(oLeft, oTop)
         });
         //触摸结束时的处理
         div1.addEventListener('touchend', function() {

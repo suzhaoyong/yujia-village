@@ -10,7 +10,10 @@
         <van-tabs title-active-color="#8FCD71" color="#8FCD71" v-model="current" line-width="70px" sticky>
             <van-tab title="培训机构">
                 <div class="list_teacher">
-                    <div class="list_banner" :style="{backgroundImage: 'url('+banner+')'}"></div>
+                    <div>
+                        <div class="list_banner" :style="{backgroundImage: 'url('+banner+')'}" v-if="!swiper"></div>
+                        <div class="list_banner" :style="{backgroundImage: 'url('+swiper.path+')'}" v-else  @click="goAdvertising(swiper.mold, swiper.relation_id)"></div>
+                    </div>
 
                     <div class="club_house">
                         <div class="club_house_title">
@@ -47,7 +50,8 @@
             </van-tab>
             <van-tab title="瑜伽名师" >
                 <div class="list_clubhouse">
-                    <div class="list_banner" :style="{backgroundImage: 'url('+banner2+')'}"></div>
+                    <div class="list_banner" :style="{backgroundImage: 'url('+banner2+')'}" v-if="!swiper"></div>
+                    <div class="list_banner" :style="{backgroundImage: 'url('+swiper.path+')'}" v-else  @click="goAdvertising(swiper.mold, swiper.relation_id)"></div>
                     <div class="list_exhibition">
                         <div class="list_exhibition_page">
                             <img src="../../assets/teacherclub/yujia.png"/>
@@ -238,6 +242,7 @@ export default {
   created(){
       this.joindata();
       // this.exhibitionList();
+      this.getAdvertising()
   },
   watch:{
       '$route'(to,from){
@@ -259,11 +264,20 @@ export default {
     }
   },
   methods:{
-      // 广告位 
+      // 广告位
+    goAdvertising (mold, relation_id) {
+      if(mold === 2) { this.$router.push(`/teacherClub/clubhouseDetails?id=${relation_id}`) }
+      else if(mold === 3) {this.$router.push(`teacherClub/teacherDetails?id=${relation_id}`)}
+      else if(mold === 4) { this.$router.push(`/messagedetail/${relation_id}`) }
+      // else if(mold === 5) { this.$router.push(`/goods/detail/${relation_id}`) }
+      else if(mold === 6) { this.$router.push(`/yogamessage/list`) }
+      // else if(mold === 7) { 商品分类 }
+      else if(mold === 1) { this.$router.push('/advertisement') }
+    },
     getAdvertising () {
       return this.$request.get('/advertisement/data/' + 3).then((res) => {
-      this.swiper = res[0].advertisement
-      console.log(res)
+      this.swiper = res.filter(((item) => item.position === 0))[0].advertisement[0]
+      console.log(this.swiper)
       })
     },
       swiperInit() {
