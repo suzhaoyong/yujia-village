@@ -54,3 +54,4 @@ export function postTrainsRank(page=2, args) {
 export function getTrainsById(id) {
   return request(`/trains/${id}`)
 }
+

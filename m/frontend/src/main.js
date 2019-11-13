@@ -84,5 +84,5 @@ Object.defineProperty(Vue.prototype, '$request', { value: request });
 new Vue({
   render: h => h(App),
   store,
-  router
+  router,
 }).$mount('#app')

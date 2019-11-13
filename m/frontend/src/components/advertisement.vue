@@ -47,7 +47,6 @@ header {
 
   .advertmian {
     display: inline-block;
-    overflow: hidden;
     margin-top: 44px;
     width: 100%;
     img {

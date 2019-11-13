@@ -10,8 +10,11 @@
         <van-tabs title-active-color="#8FCD71" color="#8FCD71" v-model="current" line-width="70px" sticky>
             <van-tab title="培训机构">
                 <div class="list_teacher">
-                    <div class="list_banner" :style="{backgroundImage: 'url('+banner+')'}"></div>
-                    <!-- <div class="league" @click="goto()">申请加盟</div> -->
+                    <div>
+                        <div class="list_banner" :style="{backgroundImage: 'url('+banner+')'}" v-if="!swiper"></div>
+                        <div class="list_banner" :style="{backgroundImage: 'url('+swiper.path+')'}" v-else  @click="goAdvertising(swiper.mold, swiper.relation_id)"></div>
+                    </div>
+
                     <div class="club_house">
                         <div class="club_house_title">
                             <span class="items" v-for="(item,index) in items" @click="clicktext(index)" :key="index" :class="{active:index==curritem}">{{item}}</span>
@@ -47,8 +50,8 @@
             </van-tab>
             <van-tab title="瑜伽名师" >
                 <div class="list_clubhouse">
-                    <div class="list_banner" :style="{backgroundImage: 'url('+banner2+')'}"></div>
-                    
+                    <div class="list_banner" :style="{backgroundImage: 'url('+banner2+')'}" v-if="!swiper"></div>
+                    <div class="list_banner" :style="{backgroundImage: 'url('+swiper.path+')'}" v-else  @click="goAdvertising(swiper.mold, swiper.relation_id)"></div>
                     <div class="list_exhibition">
                         <div class="list_exhibition_page">
                             <img src="../../assets/teacherclub/yujia.png"/>
@@ -156,8 +159,8 @@ import Vue from 'vue';
 // import Bus from "@/utils/Bus";
 import { mapGetters } from "vuex";
 import Swiper from 'swiper';
-import { Notify, Toast } from "vant";
-Vue.use(Notify).use(Toast);
+import { Notify, Toast, Swipe, SwipeItem } from "vant";
+Vue.use(Notify).use(Toast).use(Swipe).use(SwipeItem);
 export default {
     data() {
     return {
@@ -229,7 +232,8 @@ export default {
         id2:0,
         routecurrent:'',
         isupdate: false,
-        isKey: ''
+        isKey: '',
+        swiper: [], // 广告位1
     };
   },
    computed: {
@@ -238,6 +242,7 @@ export default {
   created(){
       this.joindata();
       // this.exhibitionList();
+      this.getAdvertising()
   },
   watch:{
       '$route'(to,from){
@@ -259,6 +264,22 @@ export default {
     }
   },
   methods:{
+      // 广告位
+    goAdvertising (mold, relation_id) {
+      if(mold === 2) { this.$router.push(`/teacherClub/clubhouseDetails?id=${relation_id}`) }
+      else if(mold === 3) {this.$router.push(`teacherClub/teacherDetails?id=${relation_id}`)}
+      else if(mold === 4) { this.$router.push(`/messagedetail/${relation_id}`) }
+      // else if(mold === 5) { this.$router.push(`/goods/detail/${relation_id}`) }
+      else if(mold === 6) { this.$router.push(`/yogamessage/list`) }
+      // else if(mold === 7) { 商品分类 }
+      else if(mold === 1) { this.$router.push('/advertisement') }
+    },
+    getAdvertising () {
+      return this.$request.get('/advertisement/data/' + 3).then((res) => {
+      this.swiper = res.filter(((item) => item.position === 0))[0].advertisement[0]
+      console.log(this.swiper)
+      })
+    },
       swiperInit() {
           new Swiper('.swiper-container', {
                 slidesPerView: 'auto',
@@ -675,6 +696,11 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.list_banner{
+    height: 170px;
+    background-size: cover;
+    background-position: center;
+}
 .distpicker-address-wrapper select{
     width: 70px !important;
     padding: 0px 4px !important;
@@ -732,11 +758,6 @@ input:-ms-input-placeholder{
         width: 100%;
         background: #eee !important;
         position: relative;
-        .list_banner{
-          height: 170px;
-          background-size: cover;
-          background-position: center;
-        }
         .league{
             width: 60px;
             height: 15px;
@@ -934,11 +955,6 @@ input:-ms-input-placeholder{
     .list_clubhouse{
         width: 100%;
         background: #fff !important;
-        .list_banner{
-          height: 170px;
-          background-size: cover;
-          background-position: center;
-        }
         .list_house{
             width: 100%;
             margin: 0 auto;
