@@ -51,11 +51,11 @@
           </div>
         </div>
         <div class="tab-box">
-          <div href="" @click="gotoPage('club')">
+          <div href="" @click="gotoPage('goods')">
             <div class="tab_pic">
               <img :src="icon.jigou" alt="图标">
             </div>
-            <div class="tab_tips">机构</div>
+            <div class="tab_tips">商城</div>
           </div>
         </div>
         <div class="tab-box">
@@ -213,7 +213,7 @@ export default {
         yagainformation: '/yagainformation',
         yogaknowledge: '/yogaknowledge',
         aboutUs: '/aboutUs',
-        club: '/teacherClub/list?current=0',
+        goods: '/store',
         explain: '/explain'
       }
       path[type] && this.$router.push(path[type])
