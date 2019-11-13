@@ -145,11 +145,10 @@ export default {
                         price: item.sell_price,
                         pic: item.url,
                         num: item.num,
-                        check: true 
+                        check: true
                     }
                     this.shoppingBagList.push(cart);
                 });
-
                 console.table(this.shoppingBagList);
                 
             }) 
@@ -157,8 +156,6 @@ export default {
         //  数量改变
         numChange(val) {
             console.log(val);
-            
-
         }
     }
 }

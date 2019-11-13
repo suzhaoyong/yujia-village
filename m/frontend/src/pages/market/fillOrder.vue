@@ -90,7 +90,7 @@
               <span class="custom-title">积分：</span>
               <van-tag>标签</van-tag>
             </template>
-          </van-cell>-->
+          </van-cell> -->
         </van-cell-group>
         <div class="freight">
           <van-cell-group>
@@ -163,6 +163,7 @@
         </div>
       </div>
     </van-popup>
+    <div v-html="form"></div>
   </div>
 </template>
 
@@ -210,7 +211,8 @@ export default {
       userMessage: "",
       goods: [],
       url: "",
-      newWin: null // 新窗口的引用
+      newWin: null, // 新窗口的引用
+      form: '' ,  // 支付宝提交的表单数据
     };
   },
   watch: {
@@ -324,43 +326,47 @@ export default {
       }
     },
     // 直接下单
-    directGoodsOrder(params = {}) {
-      let _this = this;
-      // 先打开一个空的新窗口，再请求
-      this.newWin = window.open();
-      postDirectGoodOrder(params).then(response => {
-        let { out_trade_no, body, totalPrice } = response;
-        let url = `http://testapi.aomengyujia.com/api/alipay/wappay/get?out_trade_no=${out_trade_no}&body=${body}&totalPrice=${totalPrice}`;
-        _this.url = url || "";
-      });
-    },
-    // 订单下单
-    goodsOrder(params) {
-      let _this = this;
-      // 先打开一个空的新窗口，再请求
-      this.newWin = window.open();
-      postGoodOrder(params).then(response => {
-        let { out_trade_no, body, totalPrice } = response;
-        let url = `http://testapi.aomengyujia.com/api/alipay/wappay/get?out_trade_no=${out_trade_no}&body=${body}&totalPrice=${totalPrice}`;
-        _this.url = url || "";
-      });
+    // directGoodsOrder(params = {}) {
+    //   let _this = this;
+    //   // 先打开一个空的新窗口，再请求
+    //   this.newWin = window.open();
+    //   postDirectGoodOrder(params).then(response => {
+    //     let { out_trade_no, body, totalPrice } = response;
+    //     let url = `http://testapi.aomengyujia.com/api/alipay/wappay/get?out_trade_no=${out_trade_no}&body=${body}&totalPrice=${totalPrice}`;
+    //     _this.url = url || "";
+    //   });
+    // },
+    // // 订单下单
+    // goodsOrder(params) {
+    //   let _this = this;
+    //   // 先打开一个空的新窗口，再请求
+    //   this.newWin = window.open();
+    //   postGoodOrder(params).then(response => {
+    //     let { out_trade_no, body, totalPrice } = response;
+    //     let url = `http://testapi.aomengyujia.com/api/alipay/wappay/get?out_trade_no=${out_trade_no}&body=${body}&totalPrice=${totalPrice}`;
+    //     _this.url = url || "";
+    //   });
+    // },
+
+    // 创建订单
+    creatOrder() {
+        const orderParams = this.paramsDeal();
+
     },
     // 支付
     pay() {
-      if (!this.isAllowPay) return;
-      if (this.payway.value === "微信") {
-        Toast("暂不支持该支付方式");
-        return;
-      }
+      if (!this.isAllowPay) return
+      const buyGoods = sessionStorage.getItem("buy goods");
+      const { type } = this.$route.query;
+      console.log(this.goods)
+
 
       const ids = this.goods.map(item => item.id);
-      const goodsIds = this.goods.map(item => item.goodListId);
+      const goodsIds = this.goods.map(item => item.goodListId) ;
       const nums = this.goods.map(item => item.num);
       const { tel, address, area, city, province, name } = this.selectAddress;
       const { id: couponId } = this.coupon.value;
       const { id: cashId, use_val, surplus } = this.cash.value;
-      // console.log(couponId);
-      // return;
       let params = {
         id: ids,
         lid: goodsIds,
@@ -379,9 +385,8 @@ export default {
         couponId: couponId || "", //优惠券编号
         fraction: "" //使用积分
       };
+      console.log(params)
 
-      const buyGoods = sessionStorage.getItem("buy goods");
-      const { type } = this.$route.query;
       if (buyGoods && type == 1) {
         const m_params = {
           id: ids,
@@ -394,13 +399,61 @@ export default {
           couponId: couponId || "", //优惠券编号
           fraction: "" //	使用积分
         };
-        this.directGoodsOrder(m_params);
-      } else {
-        this.goodsOrder(params);
       }
-
-      // return;
+      // 支付宝支付
+        this.$request.post('/goodOrder', params).then(res => {
+          //   if(res.code === 200) {
+          //     if (this.fraction === 0) {
+          //         Toast("已购买")
+          //     } else {
+          //         this.payMoney(res.out_trade_no);
+          //     }
+          // } 
+          if(res.msg === 'OK') {
+              if (this.fraction === 0 || res.code === 200) {
+                  Toast('恭喜您，课程购买成功');
+                  setTimeout(() => {
+                      this.$router.go(-1)
+                  }, 2000)
+              } else {
+                  this.payMoney(res.out_trade_no);
+              }
+          } 
+          else {
+              this.$toast({
+                  message: res.msg,
+              });
+              // setTimeout(() => {
+              //         this.$router.go(-1)
+              //     }, 2000)
+          }
+      })
+      if (this.payway.value === "微信") {
+        if (isWeiXin) {
+        }
+      }
     },
+    isWeiXin () {
+      var ua = window.navigator.userAgent.toLowerCase();
+      if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+          return true;
+      }else{
+          return false;
+      }
+    },
+    // 获取支付宝接口
+    payMoney(orderId) {
+        this.$request.get('/alipay/wappay/get?out_trade_no='+orderId).then(res => {
+          this.form = res;
+          this.$nextTick(() => {
+              document.forms['alipaysubmit'].submit() //渲染支付宝支付页面
+          })
+        })
+    },
+    // payForWexin (orderId) {
+    //   this.$request.get('/alipay/wechat/jsapi/test/', orderId ).then(() => {
+    //   })
+    // },
     // 返回
     back() {
       this.$router.go(-1);
@@ -412,7 +465,6 @@ export default {
     },
     getAddress() {
       this.$request.get("/goodOrder/create").then(data => {
-        // console.table(data.address);
         const { type } = this.$route.query;
         if (!type) {
           sessionStorage.setItem("roder good", JSON.stringify(data.goods));
