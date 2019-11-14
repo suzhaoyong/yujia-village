@@ -4,7 +4,7 @@
             <el-col :span="24">
                 <div class="yogo-main">
                     <template>
-                       <div class="bg_img2" v-if="cationbanner.length > 0">
+                    <div class="bg_img2" v-if="cationbanner.length > 0">
                          <img :src="item.path" alt v-for="(item,index) in cationbanner" :key="index" @click="cationclick(item)"/>
                         <div class="advertisement">广告</div>
                     </div>

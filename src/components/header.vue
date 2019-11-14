@@ -19,7 +19,7 @@
               <div class="identity">
                 <img :src="info.user.icon" style="border-radius:50%;" alt="头像" />
               </div>
-              <span class="span1" style="line-height: 40px;font-size: 0.3rem;margin-right: 2rem;">{{info.user.name}}</span>
+              <span class="span1" style="line-height: 40px;font-size: 0.9rem;margin-right: 2rem;">{{info.user.name}}</span>
             </div>
             <div style="display:inline-block;" v-else>
               <el-button type="text" class="span1" @click="account.type='login'">登录</el-button>
@@ -207,15 +207,6 @@ export default {
       }
       this.$router.push('/personal/index')
     },
-    mouseshow(){
-      this.isClose = true;
-      },
-      mousehide(){
-          this.isClose = false;
-      },
-      closeclick(){
-          this.isShow = false;
-      },
     successInfo() {
       this.$on("success", name => {
         this.username = name;
