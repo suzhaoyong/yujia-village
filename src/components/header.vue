@@ -3,7 +3,7 @@
     <el-col :span="24" id="header">
       <div class="header-main">
          <div class="sub_box">
-            <div :class="this.subjectbanner.length > 0 ? 'subjects3':'info'" v-show="this.subjectbanner.length > 0">
+            <div class="subjects3" v-if="subjectbanner.length > 0">
                 <el-carousel height="60px" :interval="5000" :autoplay="true" arrow="never">
                     <el-carousel-item v-for="(item,index) in subjectbanner" :key="index">
                         <img :src="item.path" alt  @click="subclick(item)"/>
