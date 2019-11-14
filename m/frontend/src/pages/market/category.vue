@@ -18,16 +18,16 @@
       <!-- 每日推荐 -->
       <section class="daily" v-show="kinds.curIndex === -1">
         <!-- 新品 -->
-        <div class="news" @click="viewGoods(goodsRecomment.new)">
+        <div class="news" @click="viewGoods(goodsRecomment.new[0])">
           <div class="news_title">新品推荐</div>
           <div class="news_content">
             <div
               class="news_goods_img"
-              :style="`background-image:url(${goodsRecomment.new.new_url_one})`"
+              :style="`background-image:url(${goodsRecomment.new[0] ? goodsRecomment.new[0].url_one : ''})`"
             >
               <!-- <img :src="goodsRecomment.new.new_url_one" alt=""> -->
             </div>
-            <div class="news_goods_name">{{goodsRecomment.new.describe}}</div>
+            <div class="news_goods_name">{{goodsRecomment.new[0] ? goodsRecomment.new[0].describe : ''}}</div>
           </div>
         </div>
         <!-- 限时优惠 -->
@@ -35,13 +35,12 @@
           <div class="sales_title">限时优惠</div>
           <div
             class="sales_content"
-            v-for="(item, index) in goodsRecomment.discount.double[cur_discount_index]"
+            v-for="(item, index) in goodsRecomment.discount"
             @click="viewGoods(item)"
             :key="index"
           >
-            <!-- <div class="sales_goods_img" :style="`background-image:url(${item.discount_url})`"></div> -->
             <div class="sales_goods_img">
-              <img :src="item.discount_url" alt />
+              <img :src="item.url_one" alt />
             </div>
 
             <div class="sales_goods_name">{{item.describe}}</div>
@@ -52,12 +51,12 @@
           <div class="hot_title">热销</div>
           <div
             class="hot_content"
-            v-for="(item, index) in goodsRecomment.discount.double[cur_discount_index]"
+            v-for="(item, index) in goodsRecomment.discount"
             @click="viewGoods(item)"
             :key="index"
           >
             <div class="hot_goods_img">
-              <img :src="item.discount_url" alt />
+              <img :src="item.url_one" alt />
             </div>
             <div class="hot_goods_name">{{item.describe}}</div>
           </div>
@@ -393,7 +392,6 @@ export default {
     });
     getGoodsFilter().then(response => {
       this.kinds.list = response.sort.splice(0);
-
       const mapTag = (tag, name) =>
         tag.map(item => {
           item.type = name;

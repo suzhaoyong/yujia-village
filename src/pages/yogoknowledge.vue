@@ -24,7 +24,7 @@
                             <div class="count-desc">
                                 <div class="circle"></div>
                                 <h4>{{item.headline}}</h4>
-                                <p class="span-title">{{item.updated_at}}</p>
+                                <p class="span-title">{{item.created_at}}</p>
                                 <p class="p-title">关键字：{{item.keyword}}</p>
                                 <p class="p-desc">{{item.summary}}</p>
                                 <div class="count-button">
@@ -88,7 +88,7 @@ export default {
         banner:'',
         navLists:[],
         changeRed:0,
-        listids:0
+        listids:0,
     };
   },
   created(){

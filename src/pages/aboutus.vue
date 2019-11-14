@@ -4,7 +4,6 @@
             <el-col :span="24">
                 <div class="aboutus-main">
                     <template>
-                       <!-- <Banner></Banner> -->
                        <div class="bg_img">
                          <img :src="banner" alt />
                         </div>
@@ -126,7 +125,7 @@ export default {
         aboutUs:"",
         aboutusmodel:[],
         imgpic:[],
-        banner:''
+        banner:'',
     };
   },
   created(){

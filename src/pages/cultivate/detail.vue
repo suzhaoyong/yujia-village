@@ -494,7 +494,7 @@ export default {
     }
     .program-html{
       padding-top: 1rem;
-      margin-right: 10rem;
+      margin-right: 11rem;
       font-size: 0.7rem;
       height: 100%;
       overflow-y: auto;

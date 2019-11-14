@@ -113,8 +113,6 @@ export default {
         creatOrder() {
             const orderParams = this.paramsDeal();
             this.$request.post('/trains/new/order', orderParams).then(res => {
-                console.log(res)
-                
                 //   if(res.code === 200) {
                 //     if (this.fraction === 0) {
                 //         Toast("课程已购买")
@@ -145,6 +143,7 @@ export default {
         // 获取支付宝接口
         payMoney(orderId) {
             this.$request.get('/alipay/wappay/get?out_trade_no='+orderId).then(res => {
+                console.log(res)
                 this.form = res;
                 this.$nextTick(() => {
                     document.forms['alipaysubmit'].submit() //渲染支付宝支付页面

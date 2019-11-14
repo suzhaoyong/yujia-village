@@ -5,7 +5,7 @@
                 <div class="yogoknowledgedetails-cont-div1">
                     <h3>{{knowinfo.headline}}</h3>
                     <div class="yogoknow">
-                        <span class="span1">{{knowinfo.updated_at}}</span>
+                        <span class="span1">{{knowinfo.created_at}}</span>
                         <img class="img2" src="../assets/eye.png" :title="'点击率:'+(knowinfo.views||100)"/>
                         <span class="span2">{{knowinfo.views||100}}</span>
                         <img class="img3" src="../assets/market/like.png"/>

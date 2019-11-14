@@ -20,7 +20,6 @@ import 'vue-social-share/dist/client.css';
 import '../static/style/theme/index.css';
 import '../static/style/hover.css';
 import store from '@/store'
-
 Vue.use(NotFound)
 Vue.use(SessionTitle)
 Vue.use(Share)

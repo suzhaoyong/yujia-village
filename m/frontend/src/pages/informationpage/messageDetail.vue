@@ -22,7 +22,7 @@
             <van-loading color="#7BBB62" size="24px" vertical>加载中...</van-loading>
         </div>
         <div class="sharepopup" v-show="shareimg">
-          <img :src="shareimg">
+          <img :src="shareimg" class="shareimg">
           <div class="sharetext">长按图片，保存或发送给朋友</div>
           <div class="bgc">
             <img src="../../assets/img/fxwenan.png" alt="" @click="getWenan">
@@ -156,6 +156,12 @@ export default {
       copy_content: ''
     }
   },
+  beforeRouteLeave  (to, from, next) {
+    if(to.path === this.$route.path || to.path == '') {
+        this.$router.replace('/yogamessage/list')
+    }
+    next()
+  },
   created() {
     this.courseId = this.$route.params.id;
     this.getmessageDetail(this.courseId);
@@ -167,7 +173,7 @@ export default {
   },
   methods: {
     goback () {
-      this.$router.replace('/yogamessage/list')
+      this.$router.go(-1)
     },
     getmessageDetail(id) {
       this.$request.get('trains/' + id).then((res) => {
@@ -288,8 +294,15 @@ export default {
     margin: 49% auto;
   }
 }
+
 .sharepopup {
   width: 100%;
+  z-index: 99 !important;
+  .shareimg {
+    height: 485px;
+    margin: 0 auto;
+    // margin-left: 27px;
+  }
   .sharetext {
     // margin-top: -20px;
     text-align: center;
@@ -301,7 +314,7 @@ export default {
     margin-top: 32px;
     background-color: #fff;
     text-align: center;
-    img {
+     img {
       width: 79px;
       height: 58px;
       vertical-align: top;

@@ -4,26 +4,13 @@
       title="瑜伽资讯"
       left-arrow
       @click-left="onClickLeft"
-      @click-right="shareMessage"
     >
-      <!-- <van-icon slot="right" ><img src="../../../static/img/share.svg"></van-icon> -->
-      <van-icon slot="right" name="share"></van-icon>
+      <share-ing slot="right"
+        type="information"
+        @listenToShow="getChildShow"
+      ></share-ing>
     </van-nav-bar></header>
     <section>
-      <van-popup 
-        v-model="show"
-        round
-        :style="{ height: '70%', width: '80%' }"
-      >
-        <div v-show="!shareimg" class="loading">
-            <van-loading color="#7BBB62" size="24px" vertical>加载中...</van-loading>
-        </div>
-        <div class="sharepopup" v-show="shareimg">
-          <img :src="shareimg">
-          <div class="sharetext">长按图片，保存或发送给朋友</div>
-        </div>
-      </van-popup>
-
       <div class="infordetail-count">
         <div class="infordetail-count-title">
           <p class="titlep">{{ detailLists.headline }}</p>
@@ -35,46 +22,41 @@
         <div v-html="detailLists.content"></div>
       </main>
     </section>
-
-    <Footer></Footer>
+    <Footer v-show="!childShow"></Footer>
+    <!-- <Footer></Footer> -->
   </div>
 </template>
 <script>
 import Vue from 'vue';
+import shareIng from '../../components/shareing'
 import Footer from '../../components/footer'
-import { NavBar, Toast, Popup } from 'vant';
-Vue.use(NavBar).use(Toast).use(Popup);
+import { NavBar, Toast } from 'vant';
+Vue.use(NavBar).use(Toast);
 export default {
   data() {
     return {
       detailLists: [],
       createddate: '',
-      show: false,
-      shareimg: ''
+      childShow: false
     }
   },
   components: {
-    Footer
+    Footer,
+    shareIng
   },
   created() {
     this.yujiamation()
   },
+  watch: {
+    immediate: true,
+    getChildShow () {}
+  },
   methods: {
+    getChildShow (data) {
+      this.childShow = data
+    },
     onClickLeft() {
       this.$router.back()
-    },
-    // 分享图片
-    shareMessage() {
-      this.show = true
-      const params = {
-          id: this.$route.params.id,
-          identity:'information',
-          userId: sessionStorage.getItem('user')? JSON.parse(sessionStorage.getItem('user')).id : '',
-          responseType: 'arraybuffer'
-      }
-      this.$request.post(`/show/share/photo`,params).then(res => {
-        this.shareimg = res;
-      })
     },
     yujiamation () {
       const id = this.$route.params.id
@@ -92,27 +74,17 @@ export default {
     .van-nav-bar {
       background: #FFFFFF;
       border-bottom: 2px solid #EEEEEE;
-      img {
-        width: 15px;
-        height: 15px;
-      }
     }
   }
-  // 分享样式
-  .loading {
-    width: 60px;
-    height: 30px;
-    margin: 49% auto;
+// 调整分享图片样式
+  .van-popup--center img {
+    height: 420px;
   }
-  .sharepopup {
-    img {
-      padding: 16px;
-    }
-    .sharetext {
-      text-align: center;
-      margin-top: 25px;
-      font-size: 12px;
-    }
+  .sharepopup .bgc {
+    margin-top: 0;
+  }
+  .sharepopup .sharetext {
+    margin-top: 0;
   }
   section {
     width: 100%;

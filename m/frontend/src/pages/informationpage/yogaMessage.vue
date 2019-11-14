@@ -1,19 +1,24 @@
 <template>
   <div class="message">
     <main class="message-main">
-      <ul class="message-main-head">
-        <li :class="{'changeweight': isActive == '0' }"> 找到以下结果</li>
-        <li @click="defaultRank('default')" :class="{'changeweight': isActive == '1' }"> 默认排序</li>
-        <li @click="hostRank('host')" :class="{'changeweight': isActive == '2' }">热度</li>
-        <li @click="priceRank('price')" :class="{'changeweight': isActive == '3' }">价格 
-          <!-- <span> -->
-            <van-icon name='arrow-up' v-show="priceFlag "/>
-            <van-icon name='arrow-down' v-show="!priceFlag"/>
-          <!-- </span> -->
-        </li>
-        <li class="head-list" is-link @click="isShow = true">筛选</li>
-        <!-- <li>价格 ∨</li> -->
-      </ul>
+      <div class="message-head">
+        <div class="advertising" v-if="swiper">
+          <img :src="swiper.path" @click="goAdvertising(swiper.mold, swiper.relation_id)">
+        </div>
+        <ul class="message-main-head">
+          <li :class="{'changeweight': isActive == '0' }"> 找到以下结果</li>
+          <li @click="defaultRank('default')" :class="{'changeweight': isActive == '1' }"> 默认排序</li>
+          <li @click="hostRank('host')" :class="{'changeweight': isActive == '2' }">热度</li>
+          <li @click="priceRank('price')" :class="{'changeweight': isActive == '3' }">价格 
+            <!-- <span> -->
+              <van-icon name='arrow-up' v-show="priceFlag "/>
+              <van-icon name='arrow-down' v-show="!priceFlag"/>
+            <!-- </span> -->
+          </li>
+          <li class="head-list" is-link @click="isShow = true">筛选</li>
+          <!-- <li>价格 ∨</li> -->
+        </ul>
+      </div>
       <div class="shade-layer" v-show="isShow" @click="isShow = false">
         <div class="right-box" @click.stop="">
           <div class="popup">
@@ -34,13 +39,6 @@
               <p>难度</p>
               <div style="width = 100%">
                 <!-- <van-rate v-model='stardiff' color='#58B708' void-icon="star" void-color="#eee" :count="5" touchable/> -->
-                <!-- <van-radio-group v-model="stardiff">
-                  <van-radio name="1" checked-color="#07c160">1</van-radio>
-                  <van-radio name="2" checked-color="#07c160">2</van-radio>
-                  <van-radio name="3" checked-color="#07c160">3</van-radio>
-                  <van-radio name="4" checked-color="#07c160">4</van-radio>
-                  <van-radio name="5" checked-color="#07c160">5</van-radio>
-                </van-radio-group> -->
                 <ul class="diff">
                   <li :class="{'diffbg': stardiff == 1 }" @click="changediff('1')">1级</li>
                   <li :class="{'diffbg': stardiff == 2 }" @click="changediff('2')">2级</li>
@@ -93,7 +91,7 @@
           @cancel="isShowPopup = false"
         />
       </van-popup>
-      <div class="message-main-container">
+      <div class="message-main-container" :style="swiper? 'padding-top: 80px': 'padding-top: 40px'">
           <div class="message-main-container-list" v-if="messageLists.length > 0" >
             <div class="message-main-container-list-count" v-for="list in messageLists" :key="list.id" @click="viewdetail(list.id)">
               <div class="message-main-container-list-count-img" :style="{ 'background-image': 'url(' + list.teacher_img + ')','background-repeat':'no-repeat','background-size':'cover' }">
@@ -127,10 +125,8 @@
 <script>
 import Vue from 'vue';
 import areaList from '../market/goods/area_list'
-import { PullRefresh, RadioGroup, Radio   } from 'vant';
+import { PullRefresh } from 'vant';
 
-Vue.use(RadioGroup);
-Vue.use(Radio);
 // import { mapGetters } from "vuex";
 Vue.use(PullRefresh)
 
@@ -183,8 +179,10 @@ export default {
       keyWord: '',
       // 控制价格排序的 flag
       priceFlag: 1,
-      aa: 100,
-      categoryIndex: -1
+      categoryIndex: -1,
+      swiper: [], // 广告位1
+      advertis2: {}, // 广告位2
+      advertis3: {} // // 广告位2
     }
   },
   created() {
@@ -193,8 +191,25 @@ export default {
   },
   mounted () {
     this.PullUpReload()
+    this.getAdvertising()
   },
   methods: {
+    // 广告位
+    goAdvertising (mold, relation_id) {
+      if(mold === 2) { this.$router.push(`/teacherClub/clubhouseDetails?id=${relation_id}`) }
+      else if(mold === 3) {this.$router.push(`teacherClub/teacherDetails?id=${relation_id}`)}
+      else if(mold === 4) { this.$router.push(`/messagedetail/${relation_id}`) }
+      // else if(mold === 5) { this.$router.push(`/goods/detail/${relation_id}`) }
+      else if(mold === 6) { this.$router.push(`/yogamessage/list`) }
+      // else if(mold === 7) { 商品分类 }
+      else if(mold === 1) { this.$router.push('/advertisement') }
+    },
+    getAdvertising () {
+      return this.$request.get('/advertisement/data/' + 2).then((res) => {
+      this.swiper = res[0].advertisement[0]
+      console.log(res)
+    })
+    },
     // 地址遮罩层
     showPopup (word) {
       this.isShowPopup = true
@@ -462,7 +477,7 @@ export default {
   margin-top: 160px;
   img {
     width: 100%;
-    height: 100%;
+    height: 40px;
   }
   span {
     position: relative;
@@ -473,6 +488,24 @@ export default {
   }
 }
 .message {
+  // 广告位
+  .message-head {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    opacity: 1;
+    z-index: 10;
+  }
+  .advertising { 
+    width: 100%;
+    opacity: 1;
+    z-index: 20;
+    top: 0;
+    height: 39.38px;
+    img {
+      width: 100%;
+    }
+  }
   width: 100%;
   &-main {
     width: 100%;
@@ -482,10 +515,6 @@ export default {
       height: 44px;
       font-size: 12px;
       background: white;
-      opacity: 1;
-      position: fixed;
-      top: 0;
-      z-index: 10;
       li {
         position: relative;
         margin-left: 18px;
@@ -574,23 +603,6 @@ export default {
               li {
                 margin-right: 20px;
               }
-              // .van-radio-group {
-              //   display: flex;
-              //   position: relative;
-              //   .van-radio {
-              //     margin-right: 10px;
-              //     .van-radio__label {
-              //       position: absolute;
-              //       margin-left: 6px;
-              //     }
-              //     .van-icon {
-              //       top: 0;
-              //     }
-              //   }
-              // }
-              // .van-radio__icon--checked {
-              //   z-index: 99;
-              // }
             }
           }
           .area {
@@ -662,7 +674,7 @@ export default {
     &-container {
       flex: 1;
       height: 100%;
-      padding-top: 45px;
+      padding-top: 40px;
       overflow: auto;
       &-list {
         width: 100%;

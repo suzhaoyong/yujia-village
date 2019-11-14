@@ -19,7 +19,25 @@
                             </div>
                         </van-list>
                     </div>
-                    <div class="empty" v-else></div>
+                    <div v-else>
+                        <div class="empty"></div>
+                        <!-- 没数据时广告位 -->
+                        <!-- <div class="recommend">
+                            <div class="course" v-for="(item,index) in courseList" :key="index" @click="toCourseDetail(item.id)">
+                                <div class="img" :style="{backgroundImage:'url('+ item.teacher_img +')'}"></div>
+                                <span class="ad">广告</span>
+                                <div class="info">
+                                    <div class="title">{{item.theme}}</div>
+                                    <van-rate v-model="item.diff" :size="5" color="#7BBB62" void-color="#7BBB62" readonly />
+                                    <div class="price">￥{{item.price}}</div>
+                                    <div class="address">{{item.custom_address}}</div>
+                                    <div class="time">{{item.startTime}}~{{item.endTime}}</div>
+                                </div>
+                                <div class="advisory" @click.stop="show = true">咨询</div>
+                            </div>
+                        </div> -->
+                    </div>
+                    
                 </van-tab>
                 <van-tab title="商品" name="commodity">
                     <div v-if="goodsList.length > 0">
@@ -165,7 +183,6 @@ export default {
 .empty {
     width: 100%;
     height: 193px;
-    margin-top: 90px;
     padding: 0 16px;
     background: url('../../assets/img/empty.jpg');
     background-size: cover;
@@ -178,6 +195,19 @@ export default {
     margin-bottom: 7px;
     background-color: #fff;
     box-shadow: 0px 3px 3px #c8c8c8;
+    .ad {
+        width: 24px;
+        height: 15px;
+        opacity: 0.6;
+        text-align: center;
+        line-height: 15px;
+        font-size: 12px;
+        background: #000000;
+        color: white;
+        position: absolute;
+        bottom: 15px;
+        left: 100px;
+    }
     .img {
         width: 108px;
         height: 108px;

@@ -20,14 +20,16 @@
         <van-icon name="question-o" color="#fff" @click="gotoPage('explain')"/>
       </div>
       <!-- 轮播图 -->
-      <div class="bg_imgs-wrap">
+      <div class="bg_imgs-wrap" >
         <div class="bgc-color" style="background:#8FCD71; width:100%;"></div>
         <div class="imgs_box">
           <van-swipe :autoplay="5000" indicator-color="white">
-            <van-swipe-item v-for="(item, index) in main.banner" :key="index"><img :src="item" alt="商品"></van-swipe-item>
+            <div v-if="swiper">
+              <van-swipe-item  v-for="(item, index) in swiper" :key="index"><img :src="item.path" alt="商品"   @click="goAdvertising(item.mold, item.relation_id)"></van-swipe-item>
+            </div>
+            <van-swipe-item v-for="(item, index) in main.banner" :key="index" v-else ><img :src="item" alt="商品" ></van-swipe-item>
           </van-swipe>
         </div>
-        
       </div>
       <!-- tab 导航 -->
       <div class="tab-wrap">
@@ -48,11 +50,11 @@
           </div>
         </div>
         <div class="tab-box">
-          <div href="" @click="gotoPage('club')">
+          <div href="" @click="gotoPage('goods')">
             <div class="tab_pic">
               <img :src="icon.jigou" alt="图标">
             </div>
-            <div class="tab_tips">机构</div>
+            <div class="tab_tips">商城</div>
           </div>
         </div>
         <div class="tab-box">
@@ -62,6 +64,12 @@
             </div>
             <div class="tab_tips">关于我们</div>
           </div>
+        </div>
+      </div>
+      <!-- 广告位2 -->
+      <div class="advertising" v-if="advertis2">
+        <div>
+          <img :src="advertis2.path" @click="goAdvertising(advertis2.mold, advertis2.relation_id)">
         </div>
       </div>
       <!-- 培训信息 -->
@@ -132,6 +140,12 @@
           </div>
         </div>
       </div>
+      <!-- 广告位3 -->
+      <div class="advertising" v-if="advertis3">
+        <div>
+          <img :src="advertis3.path" @click="goAdvertising(advertis3.mold, advertis3.relation_id)">
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -159,6 +173,9 @@ export default {
         teachers: [],
         clubs: []
       },
+      swiper: [], // 广告位1
+      advertis2: {}, // 广告位2
+      advertis3: {} // // 广告位2
     }
   },
   computed: {
@@ -168,15 +185,34 @@ export default {
     getMainDetail().then(response => {
       this.main = response
     })
+    this.getAdvertising()
   },
   methods: {
+    goAdvertising (mold, relation_id) {
+      if(mold === 2) { this.$router.push(`/teacherClub/clubhouseDetails?id=${relation_id}`) }
+      else if(mold === 3) {this.$router.push(`teacherClub/teacherDetails?id=${relation_id}`)}
+      else if(mold === 4) { this.$router.push(`/messagedetail/${relation_id}`) }
+      // else if(mold === 5) { this.$router.push(`/goods/detail/${relation_id}`) }
+      else if(mold === 6) { this.$router.push(`/yogamessage/list`) }
+      // else if(mold === 7) { 商品分类 }
+      else if(mold === 1) { this.$router.push('/advertisement') }
+    },
+    getAdvertising () {
+      return this.$request.get('/advertisement/data/' + 1).then((res) => {
+      this.swiper = res.filter(((item) => item.position === 0))[0] ? res.filter(((item) => item.position === 0))[0].advertisement : []
+      this.advertis2 = res.filter(((item) => item.position === 1))[0] ? res.filter(((item) => item.position === 1))[0].advertisement[0] : []
+      this.advertis3 = res.filter(((item) => item.position === 2))[0] ? res.filter(((item) => item.position === 2))[0].advertisement[0] : []
+      console.log(this.swiper)
+
+    })
+    },
     gotoPage(type) {
       const path = {
         train: '/yogamessage/list',
         yagainformation: '/yagainformation',
         yogaknowledge: '/yogaknowledge',
         aboutUs: '/aboutUs',
-        club: '/teacherClub/list?current=0',
+        goods: '/store',
         explain: '/explain'
       }
       path[type] && this.$router.push(path[type])
@@ -474,6 +510,14 @@ img{
             -webkit-box-orient: vertical;
           }
         }
+      }
+    }
+    .advertising {
+      margin-top: 15px;
+      width: 100%;
+      padding: 4px 16px;
+      img {
+        width: 100%;
       }
     }
   }
