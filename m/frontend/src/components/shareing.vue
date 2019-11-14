@@ -31,6 +31,7 @@
 </template>
 <script>
 import Vue from 'vue';
+import { mapGetters } from "vuex";
 import {  Toast, Popup } from 'vant';
 Vue.use(Toast).use(Popup);
 export default {
@@ -48,6 +49,9 @@ export default {
       copy_content: ''
     }
   },
+  computed: {
+    ...mapGetters(["info", "isUserNeedLogin"]),
+  },
   updated() {
       if (this.type === 'information' || 
           this.type === 'knowledge') {
@@ -56,7 +60,7 @@ export default {
   },
   methods: {
     shareMessage () {
-      // if(this.isUserNeedLogin) {
+      // if(this.isUserNeedLogin && this.type == 'good') {
       //   this.$router.push('/login')
       //   this.$toast('请登录')
       //   return;

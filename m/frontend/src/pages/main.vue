@@ -175,9 +175,9 @@ export default {
         teachers: [],
         clubs: []
       },
-      swiper: [], // 广告位1
-      advertis2: {}, // 广告位2
-      advertis3: {} // // 广告位2
+      swiper: false, // 广告位1
+      advertis2: false, // 广告位2
+      advertis3: false // // 广告位2
     }
   },
   computed: {
@@ -201,9 +201,11 @@ export default {
     },
     getAdvertising () {
       return this.$request.get('/advertisement/data/' + 1).then((res) => {
-      this.swiper = res.filter(((item) => item.position === 0))[0] ? res.filter(((item) => item.position === 0))[0].advertisement : []
-      this.advertis2 = res.filter(((item) => item.position === 1))[0] ? res.filter(((item) => item.position === 1))[0].advertisement[0] : []
-      this.advertis3 = res.filter(((item) => item.position === 2))[0] ? res.filter(((item) => item.position === 2))[0].advertisement[0] : []
+      if (res[0]) {
+        this.swiper = res.filter(((item) => item.position === 0))[0] ? res.filter(((item) => item.position === 0))[0].advertisement : []
+        this.advertis2 = res.filter(((item) => item.position === 1))[0] ? res.filter(((item) => item.position === 1))[0].advertisement[0] : []
+        this.advertis3 = res.filter(((item) => item.position === 2))[0] ? res.filter(((item) => item.position === 2))[0].advertisement[0] : []
+      }
     })
     },
     gotoPage(type) {

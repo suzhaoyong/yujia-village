@@ -233,7 +233,7 @@ export default {
         routecurrent:'',
         isupdate: false,
         isKey: '',
-        swiper: [], // 广告位1
+        swiper: '', // 广告位1
     };
   },
    computed: {
@@ -276,8 +276,8 @@ export default {
     },
     getAdvertising () {
       return this.$request.get('/advertisement/data/' + 3).then((res) => {
-      this.swiper = res.filter(((item) => item.position === 0))[0].advertisement[0]
-      console.log(this.swiper)
+      var reswiper = res.filter(((item) => item.position === 0))[0]
+      this.swiper = reswiper? reswiper.advertisement[0] :''
       })
     },
       swiperInit() {

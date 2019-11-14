@@ -67,9 +67,8 @@ export default {
         // 广告位
         getAdvertising () {
             return this.$request.get('/advertisement/data/' + 5).then((res) => {
-            this.swiper = res.filter(((item) => item.position === 0))[0].advertisement[0]
-            console.log(this.swiper)
-
+            var reswiper = res.filter(((item) => item.position === 0))[0]
+            this.swiper = reswiper? reswiper.advertisement[0] :''
             })
         },
           back() {
