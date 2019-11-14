@@ -4,10 +4,10 @@
             <el-col :span="24">
                 <div class="aboutus-main">
                     <template>
-                    <div class="bg_img3" v-if="cationbanner.length > 0">
+                        <div class="bg_img3" v-if="cationbanner.length > 0">
                          <img :src="item.path" alt v-for="(item,index) in cationbanner" :key="index" @click="cationclick(item)"/>
                         <div class="advertisement">广告</div>
-                    </div>
+                       </div>
                        <div class="bg_img" v-else>
                          <img :src="banner" alt />
                         </div>
@@ -130,7 +130,7 @@ export default {
         aboutusmodel:[],
         imgpic:[],
         banner:'',
-        cationbanner:[],
+        cationbanner:[]
     };
   },
   created(){

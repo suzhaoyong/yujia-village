@@ -609,7 +609,7 @@ export default {
       
         li{
           position: relative;
-          display: inline-block;
+          display: block;
           &::before{
             content:'';
             width: 0.4rem;

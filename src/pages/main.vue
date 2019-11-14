@@ -33,10 +33,14 @@
                             <el-carousel-item v-for="item in dataimg" :key="item.id">
                             <div class="contunt2">
                                 <div class="carousel-explain" @click="Learnmore(item)">
+                                  <a :href="`/cultivate/detail/${item.id}`" onclick="return false;">
                                     <img :src="item.teacher_img" class="img1" :alt="item.theme"/>
+                                  </a>
                                 </div>
                                  <div class="carousel-text" @click="Learnmore(item)">
+                                  <a :href="`/cultivate/detail/${item.id}`" onclick="return false;">
                                     <div class="textss">{{item.theme}}</div>
+                                  </a>
                                 </div>
                             </div>
                             </el-carousel-item>
@@ -92,11 +96,13 @@
                         <swiper class="carousel5" :options="swiperOption" style="height:707px;width:1200px;">
                             <swiper-slide class="carousel5-item" v-for="(page,index) of pages" :key="index">
                             <div class="carousel-explain2" v-for="item of page" :key="item.id" @click="carouselswiper(item)">
+                              <a :href='`/yogoteacher/yogoteacherdetails/${item.id}`' onclick="return false;" style="display: flex;">
                                 <img :src="item.first_img" alt="头像"/>
                                 <div class="explain2-div">
                                     <h3>{{item.name}}</h3>
                                     <span class="explain2-span2">{{item.good_at}}</span>
                                 </div>
+                              </a>
                             </div>
                             </swiper-slide>
                             <div class="swiper-pagination" slot="pagination"></div>
@@ -117,6 +123,7 @@
                         <div class="navcount">
                         <el-carousel height="590px" :interval="3000" arrow="hover" trigger="click" direction="horizontal" :autoplay="true">
                         <el-carousel-item v-for="item in newtrains" :key="item.id">
+                          <a :href="`/cultivate/detail/${item.id}`" onclick="return false;">
                             <div class="explain3">
                             <div class="explain3-border">
                                 <img :src="item.teacher_img" class="bg-border-img" :alt="item.theme">
@@ -134,6 +141,7 @@
                                 </div>
                             </div>
                             </div>
+                          </a>
                         </el-carousel-item>
                         </el-carousel>
                         </div>
@@ -147,7 +155,9 @@
                     <div class="nav-contunt-div11">
                         <div class="explain4">
                             <div class="explain4-img" v-for="(item,index) in clubInfo" :key="index">
-                              <img class="nav-div7-img" :src="item.logo" @click="ImgItem(item)" :alt="item.club_name"/>
+                              <a :href="`/joinclubhouse/joinclubhousedetails/${item.id}`" onclick="return false;">
+                                <img class="nav-div7-img" :src="item.logo" @click="ImgItem(item)" :alt="item.club_name"/>
+                              </a>
                             </div>
                         </div>
                     </div>
@@ -391,6 +401,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+a:hover{
+  text-decoration:none;
+}
+a{
+  // display: inline-block;
+}
 @import "swiper/dist/css/swiper.css";
 .el-carousel__button{
     width: 13px !important;
@@ -836,6 +852,7 @@ export default {
                     float: left;
                     width: 50%;
                     display: flex;
+                    a{
                     img{
                         width: 160px;
                         height: 160px;
@@ -857,7 +874,7 @@ export default {
                         height: 100%;
                         padding-top: 35px;
                         padding-left: 13px;
-                        width: 55%;
+                        width: 70%;
                         text-align: left;
                         h3{
                             font-size: 14px;
@@ -874,12 +891,14 @@ export default {
                                 color: #000;
                             }
                     }
+                }
               }
               .carousel-explain2:nth-child(2n){
                     height: 227px;
                     float: left;
                     width: 50%;
                     display: flex;
+                    a{
                     img{
                         width: 160px;
                         height: 160px;
@@ -893,10 +912,10 @@ export default {
                         height: 100%;
                         padding-top: 35px;
                         text-align: right;
-                        width: 55%;
-                        padding-right: 13px;
-                        margin-left: 18%;
-                        padding-left: 0px;
+                        width: 36%;
+                        margin-right: 16px;
+                        position: absolute;
+                        right: 13%;
                         h3{
                             font-size: 14px;
                             color: #000;
@@ -908,10 +927,11 @@ export default {
                             }
                         }
                         .explain2-span2{
-                                font-size: 12px;
-                                color: #000;
-                            }
+                            font-size: 12px;
+                            color: #000;
+                        }
                     }
+                }
               }
             }
         }

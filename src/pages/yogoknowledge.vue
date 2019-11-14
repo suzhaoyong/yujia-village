@@ -9,7 +9,7 @@
                         </div>
                     </div>
                     <template>
-                       <div class="bg_img3" v-if="cationbanner.length > 0">
+                       <div class="bg_img2" v-if="cationbanner.length > 0">
                          <img :src="item.path" alt v-for="(item,index) in cationbanner" :key="index" @click="cationclick(item)"/>
                         <div class="advertisement">广告</div>
                        </div>
@@ -92,7 +92,7 @@ export default {
         navLists:[],
         changeRed:0,
         listids:0,
-        cationbanner:[]
+        cationbanner:[],
     };
   },
   created(){
@@ -101,7 +101,7 @@ export default {
       this.classification();
   },
   methods:{
-    //根据页面查广告数据
+       //根据页面查广告数据
     classification(){
       this.$request.get(`/advertisement/data/9`).then(data => {
           for(let i = 0; i < data.length; i++){
@@ -111,7 +111,7 @@ export default {
           }
       });
     },
-      cationclick(item){
+    cationclick(item){
         switch(item.mold){
             case 1:
                 this.$router.push({
@@ -240,7 +240,7 @@ export default {
       height: 100%;
   }
 }
-.bg_img3{
+.bg_img2{
   width: 100%;
   height: 100%;
   position: relative;

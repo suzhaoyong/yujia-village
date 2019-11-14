@@ -114,7 +114,7 @@ export default {
       this.classification();
   },
   methods:{
-      //根据页面查广告数据
+    //根据页面查广告数据
     classification(){
       this.$request.get(`/advertisement/data/10`).then(data => {
           for(let i = 0; i < data.length; i++){
