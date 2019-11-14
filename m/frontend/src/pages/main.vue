@@ -67,7 +67,7 @@
         </div>
       </div>
       <!-- 广告位2 -->
-      <div class="advertising" v-show="advertis2">
+      <div class="advertising" v-if="advertis2">
         <div>
           <img :src="advertis2.path" @click="goAdvertising(advertis2.mold, advertis2.relation_id)">
         </div>
@@ -141,7 +141,7 @@
         </div>
       </div>
       <!-- 广告位3 -->
-      <div class="advertising" v-show="advertis3">
+      <div class="advertising" v-if="advertis3">
         <div>
           <img :src="advertis3.path" @click="goAdvertising(advertis3.mold, advertis3.relation_id)">
         </div>
