@@ -388,11 +388,9 @@ export default {
   },
   mounted() {
     getGoodRecomment().then(response => {
-      // console.log(response)
       this.goodsRecomment = response;
     });
     getGoodsFilter().then(response => {
-      // console.log(response)
       this.kinds.list = response.sort.splice(0);
       const mapTag = (tag, name) =>
         tag.map(item => {
@@ -526,7 +524,6 @@ export default {
     },
 
     viewGoods(goods) {
-      console.log(goods);
       this.$router.push({
         name: "detail",
         params: {

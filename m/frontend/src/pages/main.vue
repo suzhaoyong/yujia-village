@@ -24,11 +24,10 @@
         <div class="bgc-color" style="background:#8FCD71; width:100%;"></div>
         <div class="imgs_box">
           <van-swipe :autoplay="5000" indicator-color="white">
-            <!-- <van-swipe-item v-for="(item, index) in main.banner" :key="index"><img :src="item" alt="商品"></van-swipe-item> -->
             <div v-if="swiper">
-              <van-swipe-item  v-for="(item, index) in swiper" :key="index"><img :src="item.path" alt="商品" @click="goAdvertising(item.mold, item.relation_id)"></van-swipe-item>
+              <van-swipe-item  v-for="(item, index) in swiper" :key="index"><img :src="item.path" alt="商品"   @click="goAdvertising(item.mold, item.relation_id)"></van-swipe-item>
             </div>
-            <van-swipe-item v-else v-for="(item, index) in main.banner" :key="index"><img :src="item" alt="商品"></van-swipe-item>
+            <van-swipe-item v-for="(item, index) in main.banner" :key="index" v-else ><img :src="item" alt="商品" ></van-swipe-item>
           </van-swipe>
         </div>
       </div>

@@ -156,6 +156,12 @@ export default {
       copy_content: ''
     }
   },
+  beforeRouteLeave  (to, from, next) {
+    if(to.path === this.$route.path || to.path == '') {
+        this.$router.replace('/yogamessage/list')
+    }
+    next()
+  },
   created() {
     this.courseId = this.$route.params.id;
     this.getmessageDetail(this.courseId);
@@ -167,7 +173,7 @@ export default {
   },
   methods: {
     goback () {
-      this.$router.replace('/yogamessage/list')
+      this.$router.go(-1)
     },
     getmessageDetail(id) {
       this.$request.get('trains/' + id).then((res) => {
