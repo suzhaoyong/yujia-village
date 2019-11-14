@@ -2,10 +2,7 @@
     <div style="width:100%;height:100%;">
       <!-- 客服图标-注册图标 -->
       <div class="kefu_fixed" @click="callShow = true" ref="kefuimg"></div>
-      <div class="register_fixed-box">
-        <div v-if="isUserNeedLogin" class="register_fixed" @click="() => { this.$router.push('/login?q_type=register')}">
-        </div>
-      </div>
+      <div v-if="isUserNeedLogin" class="register_fixed" @click="() => { this.$router.push('/login?q_type=register')}" ref="registerimg"></div>
       <van-popup class="call-center" v-model="callShow">
         <div class="hint">客服微信：ChinaYogaVillage</div>
         <div class="phone-img"></div>
@@ -41,11 +38,16 @@ export default {
       }
     },
     mounted () {
-      this.darg()
+      this.dargimg()
     },
     methods: {
-      darg (kefuimg) {
-        var div1 = this.$refs.kefuimg
+      dargimg () {
+        var kefuimg = this.$refs.kefuimg
+        var registerimg = this.$refs.registerimg 
+        this.darg(kefuimg)
+        this.darg(registerimg)
+      },
+      darg (div1) {
         var maxW = document.body.clientWidth - div1.offsetWidth;
         var maxH = document.body.clientHeight - div1.offsetHeight;
         var oL;
@@ -108,36 +110,29 @@ export default {
     #app {
       // position: relative;
       .kefu_fixed{
-          background-image: url('~@/assets/img/kefu1.png');
-          background-size: 100% 100%;
-          background-repeat: no-repeat;
-          width: 50px;
-          height: 50px;
-          position: absolute;
-          z-index: 1000;
-          top: 520px;
-          left: 309px;
-
-          
-      }
-    }
-
-  .register_fixed-box{
-    position: fixed;
-    left: 309px;
-    top: 457px;
-    width: 50px;
-    height: 120px;
-    z-index: 200;
-    .register_fixed{
-        background-image: url('~@/assets/img/zhuce1.png');
+        background-image: url('~@/assets/img/kefu1.png');
         background-size: 100% 100%;
         background-repeat: no-repeat;
         width: 50px;
         height: 50px;
-        margin-bottom: 20px;
+        position: absolute;
+        z-index: 299;
+        top: 520px;
+        left: 309px;
+      }
     }
-  }
+    .register_fixed{
+      position: fixed;
+      left: 309px;
+      top: 457px;
+      z-index: 200;
+      background-image: url('~@/assets/img/zhuce1.png');
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      width: 50px;
+      height: 50px;
+      margin-bottom: 20px;
+    }
   .call-center {
     width: 285px;
     height: 132px;

@@ -156,8 +156,8 @@
 /* eslint-disable */
 import areaList from "../../assets/js/area";
 import Vue from 'vue';
-// import Bus from "@/utils/Bus";
 import { mapGetters } from "vuex";
+import { goAdvertingApi } from '@/api/main'
 import Swiper from 'swiper';
 import { Notify, Toast, Swipe, SwipeItem } from "vant";
 Vue.use(Notify).use(Toast).use(Swipe).use(SwipeItem);
@@ -266,6 +266,7 @@ export default {
   methods:{
       // 广告位
     goAdvertising (mold, relation_id) {
+        // goAdvertingApi(mold, relation_id)
       if(mold === 2) { this.$router.push(`/teacherClub/clubhouseDetails?id=${relation_id}`) }
       else if(mold === 3) {this.$router.push(`teacherClub/teacherDetails?id=${relation_id}`)}
       else if(mold === 4) { this.$router.push(`/messagedetail/${relation_id}`) }
@@ -420,7 +421,6 @@ export default {
     // 登录之后的点赞
     getChoicenessPrais() {
         this.$request.get(`/teachers/elites/prais`).then(res => {
-          console.log(res)
           this.exhibitionBox2 = res;
           this.$nextTick(function() {
               this.swiperInit();
