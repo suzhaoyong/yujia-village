@@ -128,6 +128,12 @@ export default {
   components: {
       shareIng
   },
+  beforeRouteLeave  (to, from, next) {
+    if(to.path === this.$route.path || to.path == '') {
+        this.$router.replace('/teacherClub/list');
+    }
+    next()
+  },
   created(){
       this.joindatalist();
   },
@@ -198,7 +204,7 @@ export default {
         this.$router.push('/messagedetail/'+id);
     },
     goback(){
-        this.$router.replace('/teacherClub/list');
+        this.$router.go(-1)
     },
   }
 };

@@ -1,8 +1,8 @@
 <template>
   <div class="message">
     <main class="message-main">
-      <div>
-        <div class="advertising">
+      <div class="message-head">
+        <div class="advertising" v-if="swiper">
           <img :src="swiper.path" @click="goAdvertising(swiper.mold, swiper.relation_id)">
         </div>
         <ul class="message-main-head">
@@ -91,7 +91,7 @@
           @cancel="isShowPopup = false"
         />
       </van-popup>
-      <div class="message-main-container">
+      <div class="message-main-container" :style="swiper? 'padding-top: 80px': 'padding-top: 40px'">
           <div class="message-main-container-list" v-if="messageLists.length > 0" >
             <div class="message-main-container-list-count" v-for="list in messageLists" :key="list.id" @click="viewdetail(list.id)">
               <div class="message-main-container-list-count-img" :style="{ 'background-image': 'url(' + list.teacher_img + ')','background-repeat':'no-repeat','background-size':'cover' }">
@@ -489,13 +489,19 @@ export default {
 }
 .message {
   // 广告位
-  .advertising { 
+  .message-head {
     width: 100%;
     position: fixed;
+    top: 0;
     opacity: 1;
     z-index: 10;
+  }
+  .advertising { 
+    width: 100%;
+    opacity: 1;
+    z-index: 20;
     top: 0;
-    // padding: 4px 16px;
+    height: 39.38px;
     img {
       width: 100%;
     }
@@ -509,10 +515,6 @@ export default {
       height: 44px;
       font-size: 12px;
       background: white;
-      opacity: 1;
-      position: fixed;
-      top: 39.38px;
-      z-index: 10;
       li {
         position: relative;
         margin-left: 18px;
@@ -672,7 +674,7 @@ export default {
     &-container {
       flex: 1;
       height: 100%;
-      padding-top: 80px;
+      padding-top: 40px;
       overflow: auto;
       &-list {
         width: 100%;

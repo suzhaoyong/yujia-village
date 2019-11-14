@@ -383,6 +383,7 @@ export default {
       }
       this.clock = true;
       const { tree } = this.sku;
+
       const s1_spec = tree
         .map(item => {
           if (item.k === "颜色") {
@@ -391,8 +392,8 @@ export default {
         })
         .filter(item => item)[0]
         .filter(item => item.id == selectedSkuComb.s1);
-
       const { goods_id } = this.$route.params;
+
       if (s1_spec[0]) {
         params.color = s1_spec[0].name;
       }
@@ -400,6 +401,9 @@ export default {
       params.num = selectedNum;
       params.size = selectedSkuComb.s2;
       params.id = goods_id;
+      var sizedata = this.goods_copy.color_size.filter((item) => item.name === params.color)[0].data
+      var sizedata = sizedata.filter((item) => item.size === selectedSkuComb.s2)[0]
+      params.goodListId = sizedata.lid
       return params;
     },
     // 查看列表
@@ -413,9 +417,10 @@ export default {
         this.$router.push("/login");
         return;
       }
-      const { describe, discount, sell_price, cover } = this.goods_copy;
+      const { describe, discount, sell_price, cover, color_size } = this.goods_copy;
       const params = {
         ...this.getSelectParams(),
+        // goodList: color_size[0].data,
         describe,
         discount,
         sell_price,
