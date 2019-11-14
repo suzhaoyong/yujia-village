@@ -405,7 +405,7 @@ a:hover{
   text-decoration:none;
 }
 a{
-  display: inline-block;
+  // display: inline-block;
 }
 @import "swiper/dist/css/swiper.css";
 .el-carousel__button{
