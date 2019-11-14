@@ -24,10 +24,12 @@
         <div class="bgc-color" style="background:#8FCD71; width:100%;"></div>
         <div class="imgs_box">
           <van-swipe :autoplay="5000" indicator-color="white">
-            <div v-if="swiper">
+            <div v-if="swiper[0]">
               <van-swipe-item  v-for="(item, index) in swiper" :key="index"><img :src="item.path" alt="商品"   @click="goAdvertising(item.mold, item.relation_id)"></van-swipe-item>
             </div>
-            <van-swipe-item v-for="(item, index) in main.banner" :key="index" v-else ><img :src="item" alt="商品" ></van-swipe-item>
+            <div v-else>
+              <van-swipe-item  v-for="(item, index) in main.banner" :key="index"  ><img :src="item" alt="商品" ></van-swipe-item>
+            </div>
           </van-swipe>
         </div>
       </div>
@@ -202,8 +204,6 @@ export default {
       this.swiper = res.filter(((item) => item.position === 0))[0] ? res.filter(((item) => item.position === 0))[0].advertisement : []
       this.advertis2 = res.filter(((item) => item.position === 1))[0] ? res.filter(((item) => item.position === 1))[0].advertisement[0] : []
       this.advertis3 = res.filter(((item) => item.position === 2))[0] ? res.filter(((item) => item.position === 2))[0].advertisement[0] : []
-      console.log(this.swiper)
-
     })
     },
     gotoPage(type) {
