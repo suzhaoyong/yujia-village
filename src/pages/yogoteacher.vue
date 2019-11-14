@@ -5,7 +5,7 @@
                 <div class="yogo-main">
                     <template>
                        <div class="bg_img2" v-if="cationbanner.length > 0">
-                        <img :src="cationbanner[0].path" alt @click="cationclick(cationbanner[0].mold)"/>
+                         <img :src="item.path" alt v-for="(item,index) in cationbanner" :key="index" @click="cationclick(item)"/>
                         <div class="advertisement">广告</div>
                     </div>
                     <div class="bg_img" v-else>
@@ -14,8 +14,8 @@
                     </template>
                     <div class="yogo-count">
                         <el-col :span="24" class="bg-tupian1">
-                        <div class="subject">
-                            <img :src="cationmoad[0].path" @click="cationclick2(cationmoad[0].mold)"/>
+                        <div class="subject" v-if="cationmoad.length > 0">
+                            <img :src="item.path" v-for="(item,index) in cationmoad" :key="index" @click="cationclick(item)"/>
                             <div class="advertisement">广告</div>
                         </div>
                         <div class="yogo-cont-div1">
@@ -227,13 +227,13 @@ export default {
           }
       });
     },
-      cationclick(cationbanner){
-        switch(this.cationbanner[0].mold){
+      cationclick(item){
+        switch(item.mold){
             case 1:
                 this.$router.push({
                     path: "/subjects",
                     query: {
-                    id: this.cationbanner[0].relation_id
+                    id: item.relation_id
                     }
                 });
                 break;
@@ -241,7 +241,7 @@ export default {
                 this.$router.push({
                     path: "/joinclubhouse/joinclubhousedetails",
                     query: {
-                    id: this.cationbanner[0].relation_id
+                    id: item.relation_id
                     }
                 });
                 break;
@@ -249,71 +249,20 @@ export default {
                 this.$router.push({
                     path: "/yogoteacher/yogoteacherdetails",
                     query: {
-                    id: this.cationbanner[0].relation_id
+                    id: item.relation_id
                     }
                 });
                 break;
             case 4:
                this.$router.push({
-                        path: `/cultivate/detail/${this.cationbanner[0].relation_id}`,
+                        path: `/cultivate/detail/${item.relation_id}`,
                     });
                 break;
             case 5:
                 this.$router.push({
                     path: "/goods/detail",
                     params: {
-                    id: this.cationbanner[0].relation_id
-                    }
-                });
-                break;
-            case 6:
-                this.$router.push({
-                    path: "/cultivate/index",
-                });
-                break;
-            case 7:
-                this.$router.push({
-                    path: "/market/detail",
-                });
-                break;
-        }
-      },
-      cationclick2(cationmoad){
-        switch(this.cationmoad[0].mold){
-            case 1:
-                this.$router.push({
-                    path: "/subjects",
-                    query: {
-                    id: this.cationmoad[0].relation_id
-                    }
-                });
-                break;
-            case 2:
-                this.$router.push({
-                    path: "/joinclubhouse/joinclubhousedetails",
-                    query: {
-                    id: this.cationmoad[0].relation_id
-                    }
-                });
-                break;
-            case 3:
-                this.$router.push({
-                    path: "/yogoteacher/yogoteacherdetails",
-                    query: {
-                    id: this.cationmoad[0].relation_id
-                    }
-                });
-                break;
-            case 4:
-               this.$router.push({
-                        path: `/cultivate/detail/${this.cationmoad[0].relation_id}`,
-                    });
-                break;
-            case 5:
-                this.$router.push({
-                    path: "/goods/detail",
-                    params: {
-                    id: this.cationmoad[0].relation_id
+                    id: item.relation_id
                     }
                 });
                 break;
