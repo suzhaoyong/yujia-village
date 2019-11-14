@@ -1,9 +1,15 @@
 <template>
   <div class="warp" style>
     <van-nav-bar title="商品" left-arrow @click-left="back" fixed>
+
       <div class="" slot="right" @click="handleShareGoods">
         <img class="icon" src="../../../assets/teacherclub/share.png" />
       </div>
+      <!-- <share-ing slot="right"
+        type="good"
+        @listenToShow="getChildShow"
+      ></share-ing> -->
+
     </van-nav-bar>
     <van-skeleton v-if="goods_copy.picture === ''" avatar avatar-shape="square" avatar-size="100" />
     <van-skeleton v-if="goods_copy.describe === ''" title title-width="100" :row="6" />
@@ -154,12 +160,14 @@
 </template>
 <script>
 import logo from "@/assets/img/logo.png";
+import shareIng from '@/components/shareing'
 import { mapGetters } from "vuex";
 import { Area, Popup, Sku, Skeleton, Toast } from "vant";
 import area_list from "./area_list.js";
 import { getGoodsById, postUserCart } from "@/api/category.js";
 export default {
   components: {
+    shareIng,
     [Area.name]: Area,
     [Popup.name]: Popup,
     [Sku.name]: Sku,

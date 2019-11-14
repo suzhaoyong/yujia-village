@@ -100,7 +100,8 @@ export default {
     },
     getAdvertising () {
       return this.$request.get('/advertisement/data/' + 4).then((res) => {
-      this.swiper = res.filter(((item) => item.position === 0))[0].advertisement[0]
+      var reswiper = res.filter(((item) => item.position === 0))[0]
+      this.swiper = reswiper? reswiper.advertisement[0] :''
     })
     },
     onClickLeft() {

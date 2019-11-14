@@ -180,7 +180,7 @@ export default {
       // 控制价格排序的 flag
       priceFlag: 1,
       categoryIndex: -1,
-      swiper: [], // 广告位1
+      swiper: false, // 广告位1
       advertis2: {}, // 广告位2
       advertis3: {} // // 广告位2
     }
@@ -206,8 +206,9 @@ export default {
     },
     getAdvertising () {
       return this.$request.get('/advertisement/data/' + 2).then((res) => {
-      this.swiper = res[0].advertisement[0]
-      console.log(res)
+      if (res[0]) {
+        this.swiper = res[0].advertisement[0]
+      }
     })
     },
     // 地址遮罩层
