@@ -88,11 +88,13 @@
                         <swiper class="carousel5" :options="swiperOption" style="height:707px;width:1200px;">
                             <swiper-slide class="carousel5-item" v-for="(page,index) of pages" :key="index">
                             <div class="carousel-explain2" v-for="item of page" :key="item.id" @click="carouselswiper(item)">
+                              <a :href='`/yogoteacher/yogoteacherdetails/${item.id}`' onclick="return false;">
                                 <img :src="item.first_img" alt="头像"/>
                                 <div class="explain2-div">
                                     <h3>{{item.name}}</h3>
                                     <span class="explain2-span2">{{item.good_at}}</span>
                                 </div>
+                              </a>
                             </div>
                             </swiper-slide>
                             <div class="swiper-pagination" slot="pagination"></div>
