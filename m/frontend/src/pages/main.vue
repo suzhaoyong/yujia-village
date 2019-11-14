@@ -154,7 +154,7 @@
 <script>
 import Vue from 'vue';
 import { mapGetters } from "vuex";
-import { getMainDetail } from '@/api/main.js'
+import { getMainDetail, goAdvertingApi } from '@/api/main.js'
 import { Swipe, SwipeItem, Overlay } from 'vant';
 Vue.use(Swipe).use(SwipeItem).use(Overlay);
 export default {
@@ -184,6 +184,7 @@ export default {
   ...mapGetters(["info", "isUserNeedLogin"]),
   },
   mounted() {
+    console.log(this)
     getMainDetail().then(response => {
       this.main = response
     })
@@ -191,13 +192,7 @@ export default {
   },
   methods: {
     goAdvertising (mold, relation_id) {
-      if(mold === 2) { this.$router.push(`/teacherClub/clubhouseDetails?id=${relation_id}`) }
-      else if(mold === 3) {this.$router.push(`teacherClub/teacherDetails?id=${relation_id}`)}
-      else if(mold === 4) { this.$router.push(`/messagedetail/${relation_id}`) }
-      // else if(mold === 5) { this.$router.push(`/goods/detail/${relation_id}`) }
-      else if(mold === 6) { this.$router.push(`/yogamessage/list`) }
-      // else if(mold === 7) { 商品分类 }
-      else if(mold === 1) { this.$router.push('/advertisement') }
+      goAdvertingApi(mold, relation_id)
     },
     getAdvertising () {
       return this.$request.get('/advertisement/data/' + 1).then((res) => {

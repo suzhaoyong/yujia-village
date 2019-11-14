@@ -17,7 +17,7 @@
 export default {
   methods: {
     goback(){
-        this.$router.replace('/');
+        this.$router.go(-1)
     },
   },
 }
