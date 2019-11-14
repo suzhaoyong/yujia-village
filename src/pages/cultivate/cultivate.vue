@@ -5,7 +5,7 @@
         <div class="cultivate-main">
           <template>
             <div class="bg_img2" v-if="cationbanner.length > 0">
-                <img :src="cationbanner[0].path" alt @click="cationclick(cationbanner[0].mold)"/>
+                <img :src="item.path" alt v-for="(item,index) in cationbanner" :key="index" @click="cationclick(item)"/>
                 <div class="advertisement">广告</div>
             </div>
             <div class="bg_img" v-else>
@@ -446,13 +446,13 @@ export default {
           }
       });
     },
-      cationclick(cationbanner){
-        switch(this.cationbanner[0].mold){
+     cationclick(item){
+        switch(item.mold){
             case 1:
                 this.$router.push({
                     path: "/subjects",
                     query: {
-                    id: this.cationbanner[0].relation_id
+                    id: item.relation_id
                     }
                 });
                 break;
@@ -460,7 +460,7 @@ export default {
                 this.$router.push({
                     path: "/joinclubhouse/joinclubhousedetails",
                     query: {
-                    id: this.cationbanner[0].relation_id
+                    id: item.relation_id
                     }
                 });
                 break;
@@ -468,20 +468,20 @@ export default {
                 this.$router.push({
                     path: "/yogoteacher/yogoteacherdetails",
                     query: {
-                    id: this.cationbanner[0].relation_id
+                    id: item.relation_id
                     }
                 });
                 break;
             case 4:
                this.$router.push({
-                        path: `/cultivate/detail/${this.cationbanner[0].relation_id}`,
+                        path: `/cultivate/detail/${item.relation_id}`,
                     });
                 break;
             case 5:
                 this.$router.push({
                     path: "/goods/detail",
                     params: {
-                    id: this.cationbanner[0].relation_id
+                    id: item.relation_id
                     }
                 });
                 break;
