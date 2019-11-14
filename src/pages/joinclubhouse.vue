@@ -33,6 +33,7 @@
                        <div class="clubhouse2" v-if="this.joinlist.length > 0">
                             <div class="clubhouse2-list" v-for="(item, index) in joinlist" :key="index" @click="selectItem(item)">
                                 <figure class="test6">
+                                    <a :href='`/joinclubhouse/joinclubhousedetails?id=${item.id}`' onclick="return false;">
                                     <img :src="item.first_img" class="yogocontunt2-img" :alt="item.club_name"/>
                                     <p class="p1">{{item.club_name}}</p>
                                     <p class="p2">{{item.custom_address}}</p>
@@ -41,6 +42,7 @@
                                             <span v-html="item.content" :title="item.content" class="telpp">{{item.content}}</span>
                                         </div>
                                     </figcaption>
+                                    </a>
                                 </figure>
                             </div>
                             <div class="block">
@@ -320,6 +322,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+a:hover{
+  text-decoration:none;
+}
 .test6{
     width: 100%;
     height: 100%;

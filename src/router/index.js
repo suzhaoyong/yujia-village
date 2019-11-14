@@ -33,8 +33,10 @@ const router = new Router({
   routes: [{
       path: '/',
       name: 'main',
-      component: Home,
-      redirect: '/main'
+      meta: {
+        header_name: 'main'
+      },
+      component: () => import('@/pages/index.vue'),
     },
     {
       path: '/login',
