@@ -141,6 +141,7 @@ export default {
     shareIng
   },
   beforeRouteLeave  (to, from, next) {
+    console.log(to, from, next)
     if(to.path === this.$route.path || to.path == '') {
         this.$router.replace('/yogamessage/list')
     }
@@ -167,7 +168,6 @@ export default {
     },
     getmessageDetail(id) {
       this.$request.get('trains/' + id).then((res) => {
-        console.log(res)
         this.detailData = res.train;
         this.train_discount = res.train_discount;
         this.time = this.detailData.startTime.replace(/\-/g, '\.')+'-'+this.detailData.startTime.replace(/\-/g, '\.');
@@ -214,7 +214,6 @@ export default {
     },
     // 我想学的操作
     study(id) {
-      console.log(id)
       if (!JSON.parse(sessionStorage.getItem("user"))) {
         this.$router.push('/login')
         this.$this.$toast('请登录')
@@ -227,7 +226,6 @@ export default {
       // 调用我想学接口
       getFollowTrain(id)
         .then(data => {
-          // console.log(data)
           this.$this.$toast(data.msg);
         })
     },

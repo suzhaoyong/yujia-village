@@ -66,10 +66,10 @@ export default {
     };
   },
   beforeRouteLeave  (to, from, next) {
+    //   console.log(to, from, next)
       if(to.path === this.$route.path || to.path == '') {
-          this.$router.replace('/teacherClub/list')
+        //   this.$router.replace('/teacherClub/list')
       }
-    next()
   },
   components: {
       shareIng
@@ -110,8 +110,7 @@ export default {
         });
       },
       goback() {
-        //   this.$router.go(-1)
-          this.$router.replace('/teacherClub/list')
+        this.$router.replace('/teacherClub/list')
       },
   }
 };
