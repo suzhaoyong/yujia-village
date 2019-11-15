@@ -418,6 +418,7 @@ export default {
       return true;
     },
     postLogin({ tel = "", password = "" }) {
+                      console.log(this.registerForm.invitation_id)
       this.$request
         .post("/auth/auth", {tel, password})
         .then(data => {
@@ -427,6 +428,8 @@ export default {
           // 判断用户从什么页面登录的
           if(window.sessionStorage.getItem('personal')) {
             this.$router.push("/personal");
+          } else if (this.registerForm.invitation_id) {
+            this.$router.push('/')
           } else {
             this.$router.go(-1);  // 登录之后返回登陆之前的页面
           }

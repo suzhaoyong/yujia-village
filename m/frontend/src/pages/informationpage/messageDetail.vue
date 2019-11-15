@@ -106,7 +106,7 @@
 <script>
 // import Vue from 'vue';
 import shareIng from '../../components/shareing'
-// import '../../dist/swiper.css'
+import '../../dist/swiper.css'
 import { getFollowTrain } from '../../../api/personal'
 import { mapGetters } from "vuex";
 
@@ -162,10 +162,12 @@ export default {
       this.childShow = data
     },
     goback () {
-      this.$router.go(-1)
+      // this.$router.go(-1)
+      this.$router.replace('/yogamessage/list')
     },
     getmessageDetail(id) {
       this.$request.get('trains/' + id).then((res) => {
+        console.log(res)
         this.detailData = res.train;
         this.train_discount = res.train_discount;
         this.time = this.detailData.startTime.replace(/\-/g, '\.')+'-'+this.detailData.startTime.replace(/\-/g, '\.');
