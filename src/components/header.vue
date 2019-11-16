@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-col :span="24" id="header">
+    <el-col :span="24">
       <div class="header-main">
          <div class="sub_box">
             <div class="subjects3" v-if="subjectbanner.length > 0">

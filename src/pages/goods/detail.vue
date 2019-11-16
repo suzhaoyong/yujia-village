@@ -1,14 +1,13 @@
 <template>
   <div style="padding-bottom:5rem;">
     <div class="goods-box">
-      <!-- <div class="navs">
+      <div class="navs">
         <el-breadcrumb separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item>首页</el-breadcrumb-item>
-          <el-breadcrumb-item>活动管理</el-breadcrumb-item>
-          <el-breadcrumb-item>活动列表</el-breadcrumb-item>
-          <el-breadcrumb-item>活动详情</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/market/index' }">商城</el-breadcrumb-item>
+          <el-breadcrumb-item>{{goods.good_sort}}</el-breadcrumb-item>
+          <el-breadcrumb-item>{{goods.describe}}</el-breadcrumb-item>
         </el-breadcrumb>
-      </div>-->
+      </div>
       <div class="goods">
         <div class="info">
           <div class="imgs">
@@ -331,6 +330,7 @@ img {
   width: 60rem;
   margin: 0 auto;
   .navs {
+    margin-top: 3rem;
   }
   .goods {
     padding-top: 2.4rem;

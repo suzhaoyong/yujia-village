@@ -3,7 +3,7 @@
         <el-col :span="24">
             <div class="joinclubdetails-main">
                 <div class="joinclubdetails-cont-div6">
-                    <span><router-link to="/personal/index" style="color:#2c2c2c;text-decoration: none;">培训机构</router-link></span>
+                    <span><router-link to="/joinclubhouse" style="color:#2c2c2c;text-decoration: none;">培训机构</router-link></span>
                     <span>/ &nbsp;&nbsp;</span>
                     <span style="color:#999;">{{club.club_name}}</span>
                 </div>
