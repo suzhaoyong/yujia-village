@@ -500,7 +500,7 @@ export default {
     wantStudy(id) {
       getFollowTrain(id)
         .then(data => {
-          this.$message({type:'success', message: '操作成功'})
+          this.$message({type:'success', message: '已为您收藏至个人中心'})
         })
     },
     //类型和banner
@@ -710,6 +710,7 @@ export default {
       this.selectArea.province = "";
       this.selectArea.city = "";
       this.selectArea.area = "";
+      this.getTrainsList();
     },
     resetTime() {
       this.time = {
@@ -722,6 +723,7 @@ export default {
         isArray: false,
         name: ""
       };
+      this.getTrainsList();
     },
     resetPrice() {
       this.priceInput = {
@@ -1158,7 +1160,7 @@ img {
         margin: 0 auto;
         .fruit-list-li {
           width: 19.2rem;
-          height: 28.5rem;
+          height: 29rem;
           // height: 100%;
           // padding-bottom: 1rem;
           background-color: #ffffff;
@@ -1191,12 +1193,12 @@ img {
             width: 90%;
             margin: 0 auto;
             // margin-top: 1.5rem;
-            padding-top: 0.4rem;
+            padding-top: 0.8rem;
             
             height: 4em;
             cursor: pointer;
             div {
-              font-size: 0.9rem;
+              font-size: 1.3rem;
               overflow: hidden !important;
               -webkit-line-clamp: 1 !important;
               text-overflow: ellipsis !important;
@@ -1219,7 +1221,7 @@ img {
           }
           .fruit-detail {
             width: 90%;
-            height: 40px;
+            height: 57px;
             margin: 0 auto;
             margin-top: 1rem;
           }
@@ -1340,7 +1342,7 @@ img {
       margin: 0 auto;
       .fruit-list-li {
         width: 19.2rem;
-        height: 28.5rem;
+        height: 29rem;
         // height: 100%;
         // padding-bottom: 1rem;
         background-color: #ffffff;
@@ -1377,7 +1379,7 @@ img {
           cursor: pointer;
           padding-top: 0.4rem;
           div {
-            font-size: 0.9rem;
+            font-size: 1.3rem;
             overflow: hidden !important;
             -webkit-line-clamp: 1 !important;
             text-overflow: ellipsis !important;
@@ -1422,7 +1424,7 @@ img {
         }
         .fruit-detail {
           width: 90%;
-          height: 40px;
+          height: 57px;
           margin: 0 auto;
           margin-top: 1rem;
         }
