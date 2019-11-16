@@ -3,8 +3,16 @@
         <el-col :span="24">
             <div class="nav-main">
                 <template>
-                    <div class="bg_img">
-                       <el-carousel height="500px" :interval="3000" arrow="hover" trigger="click" direction="horizontal" :autoplay="true">
+                    <div class="bg_img2" v-if="cationbanner.length > 0">
+                        <el-carousel :height="bannerHeight+'px'" :interval="3000" arrow="hover" trigger="click" direction="horizontal" :autoplay="true">
+                            <el-carousel-item v-for="(item2,index) in cationbanner" :key="index">
+                                <img :src="item2.path" alt @click="cationclick(item2)"/>
+                                <div class="advertisement">广告</div>
+                            </el-carousel-item>
+                        </el-carousel>
+                    </div>
+                    <div class="bg_img" v-else>
+                       <el-carousel :height="bannerHeight+'px'" :interval="3000" arrow="hover" trigger="click" direction="horizontal" :autoplay="true">
                             <el-carousel-item v-for="item in bannerArray" :key="item">
                                 <img :src="item" alt/>
                             </el-carousel-item>
@@ -25,10 +33,14 @@
                             <el-carousel-item v-for="item in dataimg" :key="item.id">
                             <div class="contunt2">
                                 <div class="carousel-explain" @click="Learnmore(item)">
+                                  <a :href="`/cultivate/detail/${item.id}`" onclick="return false;">
                                     <img :src="item.teacher_img" class="img1" :alt="item.theme"/>
+                                  </a>
                                 </div>
                                  <div class="carousel-text" @click="Learnmore(item)">
+                                  <a :href="`/cultivate/detail/${item.id}`" onclick="return false;">
                                     <div class="textss">{{item.theme}}</div>
+                                  </a>
                                 </div>
                             </div>
                             </el-carousel-item>
@@ -84,11 +96,13 @@
                         <swiper class="carousel5" :options="swiperOption" style="height:707px;width:1200px;">
                             <swiper-slide class="carousel5-item" v-for="(page,index) of pages" :key="index">
                             <div class="carousel-explain2" v-for="item of page" :key="item.id" @click="carouselswiper(item)">
+                              <a :href='`/yogoteacher/yogoteacherdetails/${item.id}`' onclick="return false;" style="display: flex;">
                                 <img :src="item.first_img" alt="头像"/>
                                 <div class="explain2-div">
                                     <h3>{{item.name}}</h3>
                                     <span class="explain2-span2">{{item.good_at}}</span>
                                 </div>
+                              </a>
                             </div>
                             </swiper-slide>
                             <div class="swiper-pagination" slot="pagination"></div>
@@ -109,6 +123,7 @@
                         <div class="navcount">
                         <el-carousel height="590px" :interval="3000" arrow="hover" trigger="click" direction="horizontal" :autoplay="true">
                         <el-carousel-item v-for="item in newtrains" :key="item.id">
+                          <a :href="`/cultivate/detail/${item.id}`" onclick="return false;">
                             <div class="explain3">
                             <div class="explain3-border">
                                 <img :src="item.teacher_img" class="bg-border-img" :alt="item.theme">
@@ -126,6 +141,7 @@
                                 </div>
                             </div>
                             </div>
+                          </a>
                         </el-carousel-item>
                         </el-carousel>
                         </div>
@@ -139,7 +155,9 @@
                     <div class="nav-contunt-div11">
                         <div class="explain4">
                             <div class="explain4-img" v-for="(item,index) in clubInfo" :key="index">
-                              <img class="nav-div7-img" :src="item.logo" @click="ImgItem(item)" :alt="item.club_name"/>
+                              <a :href="`/joinclubhouse/joinclubhousedetails/${item.id}`" onclick="return false;">
+                                <img class="nav-div7-img" :src="item.logo" @click="ImgItem(item)" :alt="item.club_name"/>
+                              </a>
                             </div>
                         </div>
                     </div>
@@ -168,6 +186,8 @@ export default {
     },
   data() {
     return {
+        bannerHeight:566,
+        screenWidth :0,
         dataimg:[],
         newtrains:[],
         famousteach:[],
@@ -175,6 +195,7 @@ export default {
         info:[],
         namelist:[],
         bannerArray:[],
+        cationbanner:[],
         activeClass: 0,
         i:0,
         swiperOption: {
@@ -205,6 +226,16 @@ export default {
         },
     };
   },
+  mounted(){
+        // 首次加载时,需要调用一次
+        this.screenWidth =  window.innerWidth;
+        this.setSize();
+        // 窗口大小发生改变时,调用一次
+        window.onresize = () =>{
+        this.screenWidth =  window.innerWidth;
+        this.setSize();
+    }
+  },
    computed: {
       pages(){
         const pages = []; // pages是为二维数组
@@ -231,8 +262,12 @@ export default {
   },
     created(){
         this.listhomedata();
+        this.classification();
     },
     methods:{
+        setSize:function () {
+            this.bannerHeight = 566 / 1920 * this.screenWidth;
+          },
         selectItem(item,idx){
           this.namelist = item;
           this.activeClass = idx;
@@ -267,6 +302,67 @@ export default {
         this.namelist=m[this.i+1][0];
         this.i++;
       },
+      cationclick(item2){
+        switch(item2.mold){
+            case 1:
+                this.$router.push({
+                    path: "/subjects",
+                    query: {
+                    id: item2.relation_id
+                    }
+                });
+                break;
+            case 2:
+                this.$router.push({
+                    path: "/joinclubhouse/joinclubhousedetails",
+                    query: {
+                    id: item2.relation_id
+                    }
+                });
+                break;
+            case 3:
+                this.$router.push({
+                    path: "/yogoteacher/yogoteacherdetails",
+                    query: {
+                    id: item2.relation_id
+                    }
+                });
+                break;
+            case 4:
+               this.$router.push({
+                        path: `/cultivate/detail/${item2.relation_id}`,
+                    });
+                break;
+            case 5:
+                this.$router.push({
+                    path: "/goods/detail",
+                    params: {
+                    id: item2.relation_id
+                    }
+                });
+                break;
+            case 6:
+                this.$router.push({
+                    path: "/cultivate/index",
+                });
+                break;
+            case 7:
+                this.$router.push({
+                    path: "/market/detail",
+                });
+                break;
+        }
+      },
+    //根据页面查广告数据
+    classification(){
+      this.$request.get(`/advertisement/data/11`).then(data => {
+          for(let i = 0; i < data.length; i++){
+            if(data[i].position == 0){
+              this.cationbanner = data[i].advertisement;
+            }
+          }
+      });
+    },
       explaindetail(item){
           this.$router.push({
             path: `/cultivate/detail/${item.id}`,
@@ -305,6 +401,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+a:hover{
+  text-decoration:none;
+}
+a{
+  // display: inline-block;
+}
 @import "swiper/dist/css/swiper.css";
 .el-carousel__button{
     width: 13px !important;
@@ -321,13 +423,35 @@ export default {
     position: absolute;
     right: 28px;
 }
+.bg_img2 {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  cursor: pointer;
+  .advertisement{
+        width: 40px;
+        height: 20px;
+        line-height: 20px;
+        background-color: #351D27;
+        opacity: 0.5;
+        color: #fff;
+        font-size: 12px;
+        text-align: center;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+    }
+  img{
+      width: 100%;
+      height: 100%;
+  }
+}
 .bg_img {
   width: 100%;
   height: 100%;
   img{
       width: 100%;
       height: 100%;
-      object-fit: cover;
   }
 }
 .nav-main{
@@ -728,6 +852,7 @@ export default {
                     float: left;
                     width: 50%;
                     display: flex;
+                    a{
                     img{
                         width: 160px;
                         height: 160px;
@@ -749,7 +874,7 @@ export default {
                         height: 100%;
                         padding-top: 35px;
                         padding-left: 13px;
-                        width: 55%;
+                        width: 70%;
                         text-align: left;
                         h3{
                             font-size: 14px;
@@ -766,12 +891,14 @@ export default {
                                 color: #000;
                             }
                     }
+                }
               }
               .carousel-explain2:nth-child(2n){
                     height: 227px;
                     float: left;
                     width: 50%;
                     display: flex;
+                    a{
                     img{
                         width: 160px;
                         height: 160px;
@@ -785,10 +912,10 @@ export default {
                         height: 100%;
                         padding-top: 35px;
                         text-align: right;
-                        width: 55%;
-                        padding-right: 13px;
-                        margin-left: 18%;
-                        padding-left: 0px;
+                        width: 36%;
+                        margin-right: 16px;
+                        position: absolute;
+                        right: 13%;
                         h3{
                             font-size: 14px;
                             color: #000;
@@ -800,10 +927,11 @@ export default {
                             }
                         }
                         .explain2-span2{
-                                font-size: 12px;
-                                color: #000;
-                            }
+                            font-size: 12px;
+                            color: #000;
+                        }
                     }
+                }
               }
             }
         }

@@ -5,7 +5,7 @@ import {
   Message,
   Loading
 } from 'element-ui'
-let loadingInstance = ""
+// let loadingInstance = ""
 const CancelToken = axios.CancelToken;
 let  source 
 // 处理非 get data 传参
@@ -13,12 +13,12 @@ function handleRequest(config) {
   if (config.url.search("getAlipayOrder") != -1 || config.url.search("getWechatOrder") != -1) {
 
   } else {
-    loadingInstance = Loading.service({
-      lock: true,
-      text: 'Loading',
-      spinner: 'el-icon-loading',
-      background: 'rgba(0, 0, 0, 0)'
-    });
+    // loadingInstance = Loading.service({
+    //   lock: true,
+    //   text: 'Loading',
+    //   spinner: 'el-icon-loading',
+    //   background: 'rgba(0, 0, 0, 0)'
+    // });
   }
   const {
     method,
@@ -58,7 +58,7 @@ function handleRequestErr(err) {
 
 // // 处理 responese 报错
 function handleResponeseErr(err) {
-  loadingInstance && loadingInstance.close();
+  // loadingInstance && loadingInstance.close();
   const {
     response = {}
   } = err;
@@ -159,12 +159,12 @@ function handleResponeseErr(err) {
   } else if (status >= 500) {
     message = '服务器错误';
     if (data.url == '/api/auth/refresh') {
-      Bus.$emit('login', true)
-      sessionStorage.removeItem('user')
-      sessionStorage.removeItem('access')
-      store.dispatch("INFO", {
-        user: {}
-      });
+      // Bus.$emit('login', true)
+      // sessionStorage.removeItem('user')
+      // sessionStorage.removeItem('access')
+      // store.dispatch("INFO", {
+      //   user: {}
+      // });
     }
   }
 
@@ -181,7 +181,7 @@ function handleResponeseErr(err) {
 
 // 处理分页接口中的 meta ,element 分页组件，需要 number 类型
 function handleResponse(response) {
-  loadingInstance && loadingInstance.close();
+  // loadingInstance && loadingInstance.close();
   const {
     status,
     data

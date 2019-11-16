@@ -3,17 +3,18 @@
         <el-col :span="24">
             <div class="joinclub-main">
                 <template>
-                    <!-- <Banner></Banner> -->
-                    <div class="bg_img">
+                    <div class="bg_img2" v-if="cationbanner.length > 0">
+                        <img :src="item.path" alt v-for="(item,index) in cationbanner" :key="index" @click="cationclick(item)"/>
+                        <div class="advertisement">广告</div>
+                    </div>
+                    <div class="bg_img" v-else>
                         <img :src="banner" alt />
-                        <!-- <div class="banner_button">
-                            <el-button type="text" class="butt" @click="goto()">申请联盟</el-button>
-                        </div> -->
                     </div>
                 </template>
                 <div class="joinclub-cont">
-                    <div class="joinclub-cont-div5">
-                        <p class="nav-text2">中国瑜伽培训信息最丰富、信息搜索最方便（精准）的瑜伽行业网站！</p>
+                    <div class="subject2" v-if="cationmoad.length > 0">
+                        <img :src="item.path" v-for="(item,index) in cationmoad" :key="index" @click="cationclick(item)"/>
+                        <div class="advertisement">广告</div>
                     </div>
                     <div class="joinclub-cont-div6">
                         <div class="cont-div6-left">
@@ -32,6 +33,7 @@
                        <div class="clubhouse2" v-if="this.joinlist.length > 0">
                             <div class="clubhouse2-list" v-for="(item, index) in joinlist" :key="index" @click="selectItem(item)">
                                 <figure class="test6">
+                                    <a :href='`/joinclubhouse/joinclubhousedetails?id=${item.id}`' onclick="return false;">
                                     <img :src="item.first_img" class="yogocontunt2-img" :alt="item.club_name"/>
                                     <p class="p1">{{item.club_name}}</p>
                                     <p class="p2">{{item.custom_address}}</p>
@@ -40,6 +42,7 @@
                                             <span v-html="item.content" :title="item.content" class="telpp">{{item.content}}</span>
                                         </div>
                                     </figcaption>
+                                    </a>
                                 </figure>
                             </div>
                             <div class="block">
@@ -89,6 +92,8 @@ export default {
   data() {
     return {
         joinlist:[],
+        cationmoad:[],
+        cationbanner:[],
         banner:'',
         city:'',
         area:'',
@@ -115,17 +120,72 @@ export default {
   },
   created(){
       this.joindata();
+      this.classification();
   },
   methods:{
-      submitForm(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            alert('submit!');
-          } else {
-            alert('error submit!!');
-            return false;
+      //根据页面查广告数据
+    classification(){
+      this.$request.get(`/advertisement/data/7`).then(data => {
+          for(let i = 0; i < data.length; i++){
+            if(data[i].position == 0){
+              this.cationbanner = data[i].advertisement;
+            }
+            else if(data[i].position == 2){
+              this.cationmoad = data[i].advertisement;
+            }
           }
-        });
+      });
+    },
+      cationclick(item){
+        switch(item.mold){
+            case 1:
+                this.$router.push({
+                    path: "/subjects",
+                    query: {
+                    id: item.relation_id
+                    }
+                });
+                break;
+            case 2:
+                this.$router.push({
+                    path: "/joinclubhouse/joinclubhousedetails",
+                    query: {
+                    id: item.relation_id
+                    }
+                });
+                break;
+            case 3:
+                this.$router.push({
+                    path: "/yogoteacher/yogoteacherdetails",
+                    query: {
+                    id: item.relation_id
+                    }
+                });
+                break;
+            case 4:
+               this.$router.push({
+                        path: `/cultivate/detail/${item.relation_id}`,
+                    });
+                break;
+            case 5:
+                this.$router.push({
+                    path: "/goods/detail",
+                    params: {
+                    id: item.relation_id
+                    }
+                });
+                break;
+            case 6:
+                this.$router.push({
+                    path: "/cultivate/index",
+                });
+                break;
+            case 7:
+                this.$router.push({
+                    path: "/market/detail",
+                });
+                break;
+        }
       },
      onChangeProvince(data) {
       this.province = data.value;
@@ -262,6 +322,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+a:hover{
+  text-decoration:none;
+}
 .test6{
     width: 100%;
     height: 100%;
@@ -347,6 +410,29 @@ export default {
       font-weight:bold;
       color: #FFFFFF;
     }
+  }
+}
+.bg_img2{
+  width: 100%;
+  height: 100%;
+  position: relative;
+  cursor: pointer;
+   .advertisement{
+        width: 40px;
+        height: 20px;
+        line-height: 20px;
+        background-color: #351D27;
+        opacity: 0.5;
+        color: #fff;
+        font-size: 12px;
+        text-align: center;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+    }
+  img{
+      width: 100%;
+      height: 100%;
   }
 }
 .el-select-dropdown__item.selected {
@@ -592,6 +678,31 @@ export default {
                 font-size: 16px;
             }
         }
+        .subject2{
+            width: 1180px;
+            height: 60px;
+            margin: 0 auto;
+            margin-top: 3rem;
+            cursor: pointer;
+            position: relative;
+            img{
+                width: 100%;
+                height: 100%;
+            }
+            .advertisement{
+                width: 40px;
+                height: 20px;
+                line-height: 20px;
+                background-color: #351D27;
+                opacity: 0.5;
+                color: #fff;
+                font-size: 12px;
+                text-align: center;
+                position: absolute;
+                right: 0;
+                bottom: 0;
+            }
+        }
         .joinclub-cont-div6{
             width: 1180px;
             border-bottom: 1px solid #E5E5E5;
@@ -599,6 +710,7 @@ export default {
             margin: 0 auto;
             display: flex;
             justify-content: space-between;
+            margin-top: 5rem;
             .cont-div6-left{
                 display: flex;
                 margin-top: 14px;

@@ -9,8 +9,11 @@
                         </div>
                     </div>
                     <template>
-                       <!-- <Banner></Banner> -->
-                        <div class="bg_img2">
+                       <div class="bg_img3" v-if="cationbanner.length > 0">
+                         <img :src="item.path" alt v-for="(item,index) in cationbanner" :key="index" @click="cationclick(item)"/>
+                        <div class="advertisement">广告</div>
+                       </div>
+                        <div class="bg_img2" v-else>
                          <img :src="banner" alt />
                         </div>
                     </template>
@@ -22,7 +25,7 @@
                             <div class="count-img">
                                <div class="border"></div>
                                <h4>{{item.headline}}</h4>
-                                <p class="span-title">{{item.updated_at}}</p>
+                                <p class="span-title">{{item.created_at}}</p>
                                 <p class="p-title">关键字：{{item.keyword}}</p>
                                 <p class="p-desc">{{item.summary}}</p>
                                 <div class="count-button-but">
@@ -31,8 +34,8 @@
                                 <div class="border2"></div>
                                 <div class="count-button-right">
                                     <!-- <img class="img1" src="../assets/share.png"/> -->
-                                    <img class="img2" src="../assets/eye.png"/>
-                                    <span class="span3">{{item.views}}</span>
+                                    <img class="img2" src="../assets/eye.png" :title="'点击率:'+(item.views||100)"/>
+                                    <span class="span3">{{item.views||100}}</span>
                                 </div>
                             </div>
                             <div class="count-desc">
@@ -101,14 +104,77 @@ export default {
         banner:'',
         navLists:[],
         changeRed:0,
-        listid:0
+        listid:0,
+        cationbanner:[]
     };
   },
   created(){
       this.mationdata();
       this.yujiarmation();
+      this.classification();
   },
   methods:{
+    //根据页面查广告数据
+    classification(){
+      this.$request.get(`/advertisement/data/10`).then(data => {
+          for(let i = 0; i < data.length; i++){
+            if(data[i].position == 0){
+              this.cationbanner = data[i].advertisement;
+            }
+          }
+      });
+    },
+      cationclick(item){
+        switch(item.mold){
+            case 1:
+                this.$router.push({
+                    path: "/subjects",
+                    query: {
+                    id: item.relation_id
+                    }
+                });
+                break;
+            case 2:
+                this.$router.push({
+                    path: "/joinclubhouse/joinclubhousedetails",
+                    query: {
+                    id: item.relation_id
+                    }
+                });
+                break;
+            case 3:
+                this.$router.push({
+                    path: "/yogoteacher/yogoteacherdetails",
+                    query: {
+                    id: item.relation_id
+                    }
+                });
+                break;
+            case 4:
+               this.$router.push({
+                        path: `/cultivate/detail/${item.relation_id}`,
+                    });
+                break;
+            case 5:
+                this.$router.push({
+                    path: "/goods/detail",
+                    params: {
+                    id: item.relation_id
+                    }
+                });
+                break;
+            case 6:
+                this.$router.push({
+                    path: "/cultivate/index",
+                });
+                break;
+            case 7:
+                this.$router.push({
+                    path: "/market/detail",
+                });
+                break;
+        }
+      },
       yujiarmation(){
           let _this = this;
         this.$request(`/InformationClassify`).then(res => {
@@ -182,6 +248,29 @@ export default {
 .bg_img2 {
   width: 100%;
   height: 100%;
+  img{
+      width: 100%;
+      height: 100%;
+  }
+}
+.bg_img3{
+  width: 100%;
+  height: 100%;
+  position: relative;
+  cursor: pointer;
+   .advertisement{
+        width: 40px;
+        height: 20px;
+        line-height: 20px;
+        background-color: #351D27;
+        opacity: 0.5;
+        color: #fff;
+        font-size: 12px;
+        text-align: center;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+    }
   img{
       width: 100%;
       height: 100%;

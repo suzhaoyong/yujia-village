@@ -33,9 +33,9 @@
                   </div>
                 </div>
                 <div class="kecheng_rh">
-                  <div class="kecheng_price" style="padding-bottom:0.95rem;">￥{{train.price}}</div>
+                  <div class="kecheng_price" style="padding-bottom:0.95rem;">￥{{train.price > 0 ? train.price: '0.00'}}</div>
                   <div class="kecheng_change"  style="font-size: 0.7rem;font-weight: bolder;color:#999999;" v-if="isJifen">
-                    <div style="margin-bottom: 0.3rem;" v-for="(item, index) in train_discount['积分']" :key="index"><span>{{item.consume}}</span> {{item.type}}，课程仅需 <span>{{(train.price - item.deduction).toFixed(2)}}</span> 元</div>
+                    <div style="margin-bottom: 0.3rem;" v-for="(item, index) in train_discount['积分']" :key="index"><span>{{item.consume}}</span> {{item.type}}，课程仅需 <span>{{getCountPrice(item)}}</span> 元</div>
                   </div>
                 </div>
               </div>
@@ -61,13 +61,13 @@
             <div class="teacher-box">
               <div class="teacher-img">
                 <div class="img">
-                  <img style="width:100%;height:100%; position: relative;z-index: 10;" :src="train.teacher_img" :alt="train.theme"/>
+                  <img style="width:100%;height:100%; position: relative;z-index: 10;object-fit: cover;" :src="train.teacher_img" :alt="train.theme"/>
                 </div>
               </div>
               <div class="teacher-info">
                 <div class="info">
                   <div class="name">授 课 老 师： {{train.name}}</div>
-                  <div class="berif">
+                  <div class="berif scorll">
                     <!-- <pre v-html="train.intro"></pre> -->
                     <div class="berif-line" style="margin-bottom:0.4em;" v-for="(item, index) in getIntroList" :key="index">{{item}}</div>
                   </div>
@@ -90,7 +90,7 @@
             <div class="traning">
               <div class="traning-content">
                 <span class="traning-title">适合人群</span>
-                <ul>
+                <ul class="scorll">
                   <li style="line-height: 1.2rem;" v-for="(item, index) in getCrowdList" :key="index">
                     {{item}}
                   </li>
@@ -196,6 +196,14 @@ export default {
   },
   computed: {
     ...mapGetters(['info', 'isUserNeedLogin']),
+    getCountPrice() {
+      return (item) => {
+        if(item.deduction > this.train.price) {
+          return '0.00';
+        }
+        return (this.train.price - item.deduction).toFixed(2)
+      }
+    },
     isJifen() {
       return this.train_discount['积分'] && this.train_discount['积分'].length > 0
     },
@@ -311,7 +319,7 @@ export default {
   padding-top: 2rem;
   .teacher-box{
     width: 50rem;
-    height: 32rem;
+    height: 29.3rem;
     margin: 0 auto;
     // background: #eee;
     display: flex;
@@ -337,7 +345,7 @@ export default {
     .teacher-img{
       .img{
         width: 21.8rem;
-        height: 24.5rem;
+        height: 21.8rem;
         background: #ccc;
         position: relative;
         left: -2.5rem;
@@ -371,15 +379,15 @@ export default {
     .teacher-info{
       flex-grow: 1;
       height: 100%;
-      
       .info{
         height: 24rem;
         .name{
           height: 4.5rem;
-          line-height: 4.5rem;
-          font-size: 1.2rem;
+          // line-height: 4.5rem;
+          font-size: 1rem;
           font-weight: bolder;
           text-align: center;
+          padding-top: 1.4rem;
           background: #B9D19C;
           background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(185,209,156,1) 100%);
           position: relative;
@@ -400,7 +408,7 @@ export default {
         .berif{
           
           font-size: 0.7rem;
-          height: 100%;
+          height: calc(100% - 2rem);
           width: 100%;
           text-align: center;
           padding: 1rem;
@@ -409,7 +417,25 @@ export default {
           display: -webkit-box !important;
           -webkit-box-orient: vertical !important;
           // -webkit-line-clamp:3 !important;// 限制快级元素的文本行数
-          overflow: hidden !important;
+          overflow-y: auto;
+          overflow-x: hidden;
+          /* 设置滚动条的样式 */
+          &.scorll::-webkit-scrollbar {
+            width: 0.1rem;
+          }
+          /* 滚动槽 */
+          &.scorll::-webkit-scrollbar-track {
+            background: #dcdcdc;
+            border-radius: 0.15rem;
+          }
+          /* 滚动条滑块 */
+          &.scorll::-webkit-scrollbar-thumb {
+            background: #88bc37;
+            border-radius: 0.15rem;
+          }
+          &.scorll::-webkit-scrollbar-thumb {
+            background: #88bc37;
+          }
           .berif-line {
             font-size: 0.85rem
           }
@@ -468,7 +494,7 @@ export default {
     }
     .program-html{
       padding-top: 1rem;
-      margin-right: 10rem;
+      margin-right: 11rem;
       font-size: 0.7rem;
       height: 100%;
       overflow-y: auto;
@@ -532,6 +558,8 @@ export default {
     background-repeat: no-repeat;
     .traning-title{
       position: relative;
+      display: inline-block;
+      margin-bottom: 3.4rem;
       margin-left: 1rem;
       font-weight: bolder;
       font-size: 1.3rem;
@@ -546,6 +574,7 @@ export default {
         left: 0;
         text-transform : uppercase;
       }
+      
     }
     .traning-content{
       padding-top: 6rem;
@@ -553,14 +582,34 @@ export default {
       height: 25rem;
       font-size: 0.7rem;
       margin-left: 9rem;
-      overflow: hidden;
+      // overflow: hidden;
       ul {
-        padding-top: 3.4rem;
+        height: calc(100% - 3rem);
         list-style-type: none;
         margin: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+        /* 设置滚动条的样式 */
+        &.scorll::-webkit-scrollbar {
+          width: 0.1rem;
+        }
+        /* 滚动槽 */
+        &.scorll::-webkit-scrollbar-track {
+          background: #dcdcdc;
+          border-radius: 0.15rem;
+        }
+        /* 滚动条滑块 */
+        &.scorll::-webkit-scrollbar-thumb {
+          background: #88bc37;
+          border-radius: 0.15rem;
+        }
+        &.scorll::-webkit-scrollbar-thumb {
+          background: #88bc37;
+        }
+      
         li{
           position: relative;
-          display: inline-block;
+          display: block;
           &::before{
             content:'';
             width: 0.4rem;
@@ -578,13 +627,13 @@ export default {
     .traning-img{
       position: absolute;
       bottom: 5.2rem;
-      right: 6.6rem;
-      width: 16.5rem;
+      right: 7.2rem;
+      width: 15.6rem;
       height: 21.8rem;
       background-repeat: no-repeat;
       background-size: cover;
-      transform: skewx(-9deg);
-      transition: 1s all;
+      transform: skewx(-10.5deg);
+      transition: 1s all
     }
     .change{
       cursor: pointer;

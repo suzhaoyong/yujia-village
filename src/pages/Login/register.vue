@@ -12,9 +12,13 @@
             <div class="item">
               <div class="item-box left">
                 <div class="item-box-input">
-                  <input type="text" placeholder="电话/PHONE" v-model.trim="ruleForm.tel" />
+                  <input 
+                    type="text"
+                    placeholder="电话/PHONE" 
+                    @blur="blurRuleForm('tel', 'ruleForm', 'ruleFormErrorRule')"
+                    v-model.trim="ruleForm.tel" />
                 </div>
-                <div class="item-box-tips">{{isError('tel')}}</div>
+                <div class="item-box-tips">{{blurInputError('tel', 'ruleForm', 'ruleFormErrorRule')}}</div>
               </div>
             </div>
             <div class="item" style="align-items: flex-end;">
@@ -24,10 +28,11 @@
                     type="text"
                     placeholder="请输入短信验证码"
                     v-model.trim="ruleForm.verification_code"
+                    @blur="blurRuleForm('verification_code', 'ruleForm', 'ruleFormErrorRule')"
                   />
                   <div class="get_code" @click="getCodeMessage">发送验证码</div>
                 </div>
-                <div class="item-box-tips">{{isError('verification_code')}}</div>
+                <div class="item-box-tips">{{blurInputError('verification_code', 'ruleForm', 'ruleFormErrorRule')}}</div>
               </div>
             </div>
             <div class="item">
@@ -38,9 +43,10 @@
                     style="height:1.5rem;width:100%;"
                     placeholder="设置密码/PASSWORD"
                     v-model.trim="ruleForm.password"
+                    @blur="blurRuleForm('password', 'ruleForm', 'ruleFormErrorRule')"
                   />
                 </div>
-                <div class="item-box-tips">{{isError('password')}}</div>
+                <div class="item-box-tips">{{blurInputError('password', 'ruleForm', 'ruleFormErrorRule')}}</div>
               </div>
               <!-- <div class="item-box right">
                 <div
@@ -59,9 +65,10 @@
                     style="height:1.5rem;width:100%;"
                     placeholder="确认密码/PASSWORD"
                     v-model.trim="ruleForm.password2"
+                    @blur="blurRuleForm('password2', 'ruleForm', 'ruleFormErrorRule')"
                   />
                 </div>
-                <div class="item-box-tips">{{isError('password2')}}</div>
+                <div class="item-box-tips">{{blurInputError('password2', 'ruleForm', 'ruleFormErrorRule')}}</div>
               </div>
               <!-- <div class="item-box right">
                 <div
@@ -74,9 +81,14 @@
             <div class="item">
               <div class="item-box left">
                 <div class="item-box-input">
-                  <input type="text" placeholder="邀请码/INVITATION" v-model.trim="ruleForm.invitation_id" />
+                  <input
+                    type="text"
+                    placeholder="邀请码/INVITATION"
+                    v-model.trim="ruleForm.invitation_id"
+                    @blur="blurRuleForm('invitation_id', 'ruleForm', 'ruleFormErrorRule')"
+                    />
                 </div>
-                <div class="item-box-tips"></div>
+                <div class="item-box-tips">{{blurInputError('invitation_id', 'ruleForm', 'ruleFormErrorRule')}}</div>
               </div>
             </div>
           </div>
@@ -175,11 +187,12 @@ export default {
       },
       ruleFormErrorRule: {
         // name: { show: false, msg: "请输入用户名" },
-        tel: { show: false, msg: "请输入电话" },
-        captcha: { show: false, msg: "请输入验证码" },
-        verification_code: { show: false, msg: "请输入验证码" },
-        password: { show: false, msg: "请输入密码" },
-        password2: { show: false, msg: "请输入密码" }
+        tel: { show: false, msg: "" },
+        captcha: { show: false, msg: "" },
+        verification_code: { show: false, msg: "" },
+        password: { show: false, msg: "" },
+        password2: { show: false, msg: "" },
+        invitation_id: { show: false, msg: "" }
       },
       ruleFormCheckErrorRule: {
         // name: { show: false, msg: "用户昵称已占用" },
@@ -208,6 +221,11 @@ export default {
         }
         return "";
       };
+    },
+    blurInputError() {
+      return (key, ruleName, errorName) => {
+        return this[errorName][key].show?this.validatorBlurRuleForm(key, ruleName):''
+      }
     }
   },
   mounted() {
@@ -221,6 +239,87 @@ export default {
     //     this.querenxiazai = false;
     //   }
     // },
+    blurRuleForm(item, ruleName, errorName) {
+      let error = this.validatorBlurRuleForm(item, ruleName)
+      if (error.length === 0){
+        this[errorName][item].show = false;
+      } else {
+        this[errorName][item].show = true;
+        this[errorName][item].msg = error;
+      }
+    },
+    validatorBlurRuleForm(key, ruleName) {
+      let rules = {
+          tel: [{
+              strategy: 'isNonEmpty',
+              errorMsg: '手机号码不能为空！'
+            }, {
+              strategy: 'isMoblie',
+              errorMsg: '手机号码格式不正确！'
+            }],
+          verification_code: [{
+                strategy: 'isNonEmpty',
+                errorMsg: '短信验证码不能为空！'
+            }, {
+                strategy: 'minLength:6',
+                errorMsg: '短信验证码长度不能小于 6 位！'
+            }, {
+                strategy: 'maxLength:6',
+                errorMsg: '短信验证码长度不能大于 6 位！'
+            }],
+            captcha: [{
+                strategy: 'isNonEmpty',
+                errorMsg: '图形验证码不能为空！'
+              }, {
+                  strategy: 'minLength:4',
+                  errorMsg: '图形验证码不能小于 4 位！'
+              }, {
+                  strategy: 'maxLength:4',
+                  errorMsg: '图形验证码不能大于 4 位！'
+              }],
+            password: [{
+                  strategy: 'isNonEmpty',
+                  errorMsg: '密码不能为空！'
+              }, {
+                  strategy: 'minLength:6',
+                  errorMsg: '密码长度不能小于 6 位！'
+              }, {
+                  strategy: 'maxLength:18',
+                  errorMsg: '密码长度不能大于 18 位！'
+              }],
+            password2: [{
+                  strategy: 'isNonEmpty',
+                  errorMsg: '密码不能为空！'
+              }, {
+                  strategy: 'minLength:6',
+                  errorMsg: '密码长度不能小于 6 位！'
+              }, {
+                  strategy: 'maxLength:18',
+                  errorMsg: '密码长度不能大于 18 位！'
+              }],
+            invitation_id: [{
+                  strategy: 'isNonEmpty',
+                  errorMsg: '邀请码不能为空！'
+              }, {
+                  strategy: 'minLength:4',
+                  errorMsg: '邀请码长度不能小于 4 位！'
+              }, {
+                  strategy: 'maxLength:4',
+                  errorMsg: '邀请码长度不能大于 4 位！'
+              }]
+        }
+      const validatorFunc = () => {
+        let validator = new Validator();
+        validator.add(this[ruleName][key], rules[key])
+        let errorMsg = validator.start()
+        return errorMsg
+      }
+      let errorMsg = validatorFunc()
+      if(errorMsg) {
+        return errorMsg;
+      }
+      return '';
+    },
     /* 图形验证码 */
     getVerificationCode() {
       this.$request("/verificationCode").then(data => {
@@ -239,13 +338,12 @@ export default {
           .then(data => {});
     },
     getCodeMessage(){
-        if (!this.validatorRegisterTel()) {
-        // this.ruleFormErrorRule.tel.show = true;
-          this.getCodepass = false;
-        
-        }else{
-          this.getCodepass = true;
-        }
+      if (this.validatorBlurRuleForm('tel', 'ruleForm').length === 0) {
+        this.getCodepass = true;
+      } else {
+        this.blurRuleForm('tel', 'ruleForm', 'ruleFormErrorRule')
+        this.getCodepass = false;
+      }
     },
     validatorRegisterTel() {
       const validatorFunc = () => {
@@ -517,7 +615,7 @@ input:focus {
     background: #fff;
     z-index: 101;
     display: flex;
-    border-radius: 0.5vw;
+    border-radius: 0.5rem;
     overflow: hidden;
     // height: 22rem;
     &-icon {
@@ -672,8 +770,8 @@ input:focus {
         font-size: 0.7rem;
         font-weight: normal;
         font-stretch: normal;
-        // line-height: 0.2vw;
-        letter-spacing: 0vw;
+        // line-height: 0.2rem;
+        letter-spacing: 0rem;
         color: #2c2c2c;
         .auto_login {
           display: flex;
