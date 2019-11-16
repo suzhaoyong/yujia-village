@@ -21,20 +21,26 @@
           <div class="logo" v-if="false">
             <img :src="icon.welcome" alt />
           </div>
-          <div class="input-box flex line">
+          <div class="input-box flex line ">
             <div class="icon">
               <img :src="icon.tel" alt />
             </div>
-            <input class="input tel" type="tel" v-model="ruleForm.tel" placeholder="请输入手机号码" ref="ruleFormkeytel"/>
+            <input class="input tel" type="tel" v-model="ruleForm.tel" placeholder="请输入手机号码" ref="ruleFormkeytel" @change="Verificationinput('tel', ruleForm.tel)"/>
+          </div>
+          <div class="verifymessage">
+            {{ messagetel }}
           </div>
           <div class="input-box flex line">
             <div class="icon key">
               <img :src="icon.key" alt />
             </div>
-            <input class="input key" type="password" v-model="ruleForm.password" placeholder="请输入密码" ref="ruleFormkeypwd"/>
+            <input class="input key" type="password" v-model="ruleForm.password" placeholder="请输入密码" ref="ruleFormkeypwd" @change="Verificationinput('pwd', ruleForm.password)"/>
+          </div>
+          <div class="verifymessage">
+            {{ messagepwd }}
           </div>
           <div class="input-box flex" v-show="false">
-            <input class="input captcha" type="tel" v-model="ruleForm.captcha" placeholder="请输入验证码" />
+            <input class="input captcha" type="tel" v-model="ruleForm.captcha" placeholder="请输入验证码"/>
             <div class="code">
               <div class="img">
                 <img :src="verification.code_img" alt />
@@ -59,7 +65,10 @@
         </div>
         <div class="form register" v-show="form.type === 'register'">
           <div class="input-box reg tel">
-            <van-field type="tel" v-model="registerForm.tel" placeholder />
+            <van-field type="tel" v-model="registerForm.tel" placeholder @change="Verificationinput('tel', registerForm.tel)"/>
+          </div>
+          <div class="verifymessage">
+            {{ messagetel }}
           </div>
           <van-dialog
             title="请输入下方图形验证码"
@@ -96,6 +105,7 @@
               center
               clearable
               placeholder
+              @change="Verificationinput('dxcode',registerForm.verification_code)"
             ></van-field>
             <van-button
               class="sms"
@@ -104,12 +114,20 @@
               type="primary"
             >{{codeTips.msg}}</van-button>
           </div>
-
+          <div class="verifymessage">
+            {{ messagecode }}
+          </div>
           <div class="input-box reg pwd">
-            <van-field v-model="registerForm.password" type="password" placeholder />
+            <van-field v-model="registerForm.password" type="password" placeholder @change="Verificationinput('pwd', registerForm.password)"/>
+          </div>
+          <div class="verifymessage">
+            {{ messagepwd }}
           </div>
           <div class="input-box reg nvitation_id">
-            <van-field type="text" v-model="registerForm.invitation_id" placeholder />
+            <van-field type="text" v-model="registerForm.invitation_id" placeholder @change="Verificationinput('nvitation_id',registerForm.invitation_id)"/>
+          </div>
+          <div class="verifymessage">
+            {{ messageid }}
           </div>
           <div class="input-btn">
             <van-button type="default" @click="register">注册</van-button>
@@ -121,7 +139,10 @@
         </div>
         <div class="form reset" v-show="form.type === 'reset'">
           <div class="input-box reg re_tel">
-            <van-field type="tel" v-model="reset.tel" placeholder />
+            <van-field type="tel" v-model="reset.tel" placeholder @change="Verificationinput('tel',reset.tel)"/>
+          </div>
+          <div class="verifymessage">
+            {{ messagetel }}
           </div>
           <van-dialog
             title="请输入下方图形验证码"
@@ -132,9 +153,8 @@
           >
           <div class="input-box flex">
             <div class="reg-captch">
-              <van-field type="tel" v-model="reset.captcha" placeholder />
+              <van-field type="tel" v-model="reset.captcha" placeholder/>
             </div>
-
             <div class="code">
               <div class="img">
                 <img :src="verification.code_img" alt />
@@ -151,7 +171,7 @@
           </div>
           </van-dialog>
           <div class="input-box reg ver_code">
-            <van-field type="tel" v-model="reset.verification_code" center clearable placeholder></van-field>
+            <van-field type="tel" v-model="reset.verification_code" center clearable placeholder @change="Verificationinput('dxcode',reset.verification_code)"></van-field>
             <van-button
               class="sms"
               size="small"
@@ -159,10 +179,15 @@
               type="primary"
             >{{codeTips.msg}}</van-button>
           </div>
-          <div class="input-box reg pwd">
-            <van-field v-model="reset.password" type="password" placeholder />
+          <div class="verifymessage">
+            {{ messagecode }}
           </div>
-
+          <div class="input-box reg pwd">
+            <van-field v-model="reset.password" type="password" placeholder @change="Verificationinput('pwd',reset.password)"/>
+          </div>
+          <div class="verifymessage">
+            {{ messagepwd }}
+          </div>
           <div class="input-btn">
             <van-button type="default" @click="resetPwd">更改</van-button>
             <div class="reg-tips" v-show="false">
@@ -316,6 +341,10 @@ export default {
         is_tap: false
       },
       personalData: {},
+      messagetel: '',    // 账号输入错误提示
+      messagepwd: '',     // 密码输入提示
+      messagecode: '',   // 短信验证提示
+      messageid: '',     // 邀请码验证提示
     };
   },
   computed: {
@@ -349,6 +378,18 @@ export default {
     this.loadFile("ys");
   },
   methods: {
+    // 登录验证验证输入框
+    Verificationinput (type, value) {
+      if(type === 'tel') {
+        /^1[0-9]{10}$/.test(value)? this.messagetel = '' : this.messagetel = '手机号码格式不正确！'
+      } else if (type === 'pwd') {
+        if (value.length > 18 || value.length < 6 || /[^0-9a-zA-Z_]/.test(value) ) {this.messagepwd = '格式大于或等于6位小于18位且不含特殊字符'} else { this.messagepwd = '' }
+      } else if (type === 'dxcode') {
+        if (value.length > 6 || value.length < 4) { this.messagecode = '格式大于或等于4位小于6位' } else { this.messagecode = '' }
+      } else if (type === 'nvitation_id') {
+        if (value.length > 6 || value.length < 4) { this.messageid = '格式大于或等于4位小于6位' } else { this.messageid = '' }
+      }
+    },
     // 返回主页
     goHome() {
       this.$router.replace("/main");
@@ -381,9 +422,7 @@ export default {
       return getAllUrlParam(str);
     },
     login() {
-      
       if (!this.validatorLogin()) return;
-
       const params = Object.assign({}, this.ruleForm);
       this.postLogin(params)
     },
@@ -391,7 +430,6 @@ export default {
       const validatorFunc = () => {
         const { tel, password} = this.ruleForm
         let validator = new Validator();
-
         validator.add(tel, [{
             strategy: 'isNonEmpty',
             errorMsg: '手机号码不能为空！'
@@ -413,12 +451,13 @@ export default {
       let errorMsg = validatorFunc()
       if(errorMsg) {
         Notify({ message: errorMsg, type: "warning" });
+        this.message = errorMsg
         return false;
       }
       return true;
     },
+
     postLogin({ tel = "", password = "" }) {
-                      console.log(this.registerForm.invitation_id)
       this.$request
         .post("/auth/auth", {tel, password})
         .then(data => {
@@ -983,7 +1022,7 @@ img {
 .input-box {
   width: 260px;
   margin: 0 auto;
-  margin-bottom: 40px;
+  // margin-bottom: 40px;
   position: relative;
   .icon {
     width: 16px;
@@ -1010,6 +1049,16 @@ img {
       border-right: 1px solid #fff;
     }
   }
+}
+// 提示框样式
+.verifymessage {
+  width: 250px;
+  height: 40px;
+  color: red;
+  overflow-x: auto;
+  white-space: nowrap;
+  font-size: 12px;
+  opacity: 0.5;
 }
 .reg-captch {
   background-image: url("../assets/img/box.png");
