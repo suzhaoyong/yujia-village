@@ -39,6 +39,12 @@ const router = new Router({
         component: () => import('@/pages/main')
       }]
     },
+    // 微信支付页面
+    {
+      path: '/payforwx',
+      name: 'payforwx',
+      component: () => import('@/components/payForwx')
+    },
     {
       path: '/advertisement',
       name: 'advertisement',
