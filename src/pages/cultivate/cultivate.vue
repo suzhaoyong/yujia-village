@@ -127,8 +127,8 @@
                 </div>
               </div>
               <div class="fruit">
-                <span :class="resultFw ? 'fw':'' ">找到下列结果</span>
-                <span class="fruit-item" :class="defaultFw ? '':'fw' " @click="defaultRank('default')">默认排序</span>
+                <span :class="resultFw ? 'fw':'fw' ">找到下列结果</span>
+                <span class="fruit-item" :class="defaultFw ? 'fw':'' " @click="defaultRank('default')">默认排序</span>
                 <span class="fruit-item" :class="hostFw ? 'fw':'' " @click="hostRank('host')">热度</span>
                 <span class="fruit-item" :class="priceFW ? 'fw':'' " @click="priceRank('price')">价格</span>
                 <span>
@@ -506,7 +506,15 @@ export default {
     //类型和banner
     maintype(){
       this.$request.get(`/trains/type`).then(res => {
-            this.classfiy = res.course_types;
+            const mapClassfiy = array =>
+              array.map(item => {
+                item.type = "classfiy";
+                item.value = item.id;
+                item.isArray = true;
+                return item;
+              });
+            this.classfiy = mapClassfiy(res.course_types);
+            // this.classfiy = res.course_types;
             this.banner = res.banner;
         })
     },
@@ -532,6 +540,7 @@ export default {
     },
     searchResult(page = 1) {
       page = parseInt(page) || 1
+      
       postTrains(page, this.getFiltersParams()).then(data => {
         this.fruit = data.data;
         this.per_page = data.per_page;
@@ -539,8 +548,6 @@ export default {
         this.total = data.total;
         // this.getTrainsList();
       });
-      this.resultFw = true;
-      this.defaultFw = true;
       this.hostFw = false;
       this.priceFW = false;
     },
@@ -554,30 +561,18 @@ export default {
     },
     getTrainsList(page = this.current_page) {
       getTrains(page).then(data => {
-        const mapClassfiy = array =>
-          array.map(item => {
-            item.type = "classfiy";
-            item.value = item.id;
-            item.isArray = true;
-            return item;
-          });
         this.fruit = data.data;
         this.per_page = data.per_page;
         this.current_page = data.current_page;
         this.total = data.total;
         if (page > 1) return;
-        // this.classfiy = mapClassfiy(course_types);
-        // if (course_types.length > 8) {
-        //   this.classfiy = mapClassfiy(course_types.slice(0, 8));
-        //   this.moreClassfiy = mapClassfiy(course_types.slice(8));
-        // }
       });
     },
     getRankParams(keyWord, params = {}) {
       if(keyWord === 'default') {
-        params = Object.assign({}, params, { time: false });
+        params = Object.assign({}, params, { time: true });
       } else if(keyWord === 'host') {
-        params = Object.assign({}, params, { follow: false });
+        params = Object.assign({}, params, { follow: true });
       } else {
         if(this.priceFlag) {
           params = Object.assign({}, params, { money: true });
@@ -597,7 +592,7 @@ export default {
     },
     // 排序请求
     getRank(params) {
-      postTrains(params).then(data => {
+      postTrains(1, params).then(data => {
         this.fruit = data.data;
         this.per_page = data.per_page;
         this.current_page = data.current_page;
@@ -614,34 +609,35 @@ export default {
     },
     // 默认排序
     defaultRank(keyWord) {
-      this.defaultFw = false;
+      this.defaultFw = true;
       this.hostFw = false;
       this.priceFW = false;
       this.resultFw = false;
       this.keyWord = keyWord;
-      if(this.selectTags.length > 0) {
-        this.searchResult();
-      } else {
-        this.getTrainsList();
-      }
+      this.getRank(this.getRankParams(keyWord, this.getFiltersParams()))
+      // if(this.selectTags.length > 0) {
+      //   this.searchResult();
+      // } else {
+      //   this.getTrainsList();
+      // }
     },
     // 热度排序
     hostRank(keyWord) {
       this.hostFw = true
-      this.defaultFw = true;
+      this.defaultFw = false;
       this.priceFW = false;
       this.resultFw = false;
       this.keyWord = keyWord;
-      this.getRank(this.getRankParams(keyWord))
+      this.getRank(this.getRankParams(keyWord, this.getFiltersParams()))
     },
     // 价格排序
     priceRank(keyWord) {
       this.priceFW = true;
-      this.defaultFw = true;
+      this.defaultFw = false;
       this.hostFw = false;
       this.resultFw = false;
       this.keyWord = keyWord;
-      this.getRank(this.getRankParams(keyWord))
+      this.getRank(this.getRankParams(keyWord, this.getFiltersParams()))
       this.priceFlag = !this.priceFlag
     },
     study(id) {
@@ -749,6 +745,7 @@ export default {
       this.selectTags = this.selectTags.filter(item => item.type !== type);
     },
     selected(item) {
+      console.log(item)
       if (item.isArray) {
         this.selectTags.push(item);
         return;
