@@ -12,6 +12,14 @@ const strategies = {
     return value.length > length ?
         errorMsg : void 0
   },
+  equailPassword(newPassword, oldPassword, errorMsg) {
+    return newPassword !== oldPassword ?
+        errorMsg : void 0;
+  },
+  isPasswordHaveNumberAndAlphabet(value, errorMsg) {
+      return !/^[A-Za-z0-9]+$/.test(value) ?
+          errorMsg : void 0
+  },
   isMoblie(value, errorMsg) {
       return !/^1[0-9]{10}$/.test(value) ?
           errorMsg : void 0
