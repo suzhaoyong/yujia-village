@@ -201,6 +201,7 @@ export default {
     },
     getAdvertising () {
       return this.$request.get('/advertisement/data/' + 2).then((res) => {
+        console.log(res)
       if (res[0]) {
         this.swiper = res[0].advertisement[0]
       }
