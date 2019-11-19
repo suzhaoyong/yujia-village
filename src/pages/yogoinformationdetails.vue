@@ -58,9 +58,9 @@ export default {
       this.listdatadetails();
   },
   methods:{
-      listdatadetails(){
+      async listdatadetails(){
         let _this = this;
-        this.$request(`/informationInfo/${_this.$route.query.id}`).then(res => {
+        await this.$request(`/informationInfo/${_this.$route.query.id}`).then(res => {
           this.pageMeta.title = res.headline
           this.pageMeta.meta = [ {name: 'keyWords', content: res.keyword}, {name: 'description', content: res.summary}]
             _this.knowinfo = res;
