@@ -47,7 +47,6 @@
                   <li :class="{'diffbg': stardiff == 5 }" @click="changediff('5')">5级</li>
                 </ul>
               </div>
-              
             </div>
             <div class="area">
               <p>地区选择</p>
@@ -188,11 +187,12 @@ export default {
   },
   created() {
     this.messageList()
-    this.messagetypeList()
+    
   },
   mounted () {
     this.PullUpReload()
     this.getAdvertising()
+    this.messagetypeList()
   },
   methods: {
     // 广告位
@@ -201,7 +201,6 @@ export default {
     },
     getAdvertising () {
       return this.$request.get('/advertisement/data/' + 2).then((res) => {
-        console.log(res)
       if (res[0]) {
         this.swiper = res[0].advertisement[0]
       }
@@ -307,7 +306,14 @@ export default {
     messagetypeList () {
       this.$request.get('trains/type').then((res) => {
         this.classfly = res.course_types
+
+       if(this.$route.query.id) {
+        this.classfly.map((item, index) =>{if(item.id == this.$route.query.id){ this.spanIndex2.push(index)} })
+        this.selectTtype.push(this.$route.query.id)
+        this.searchResult()
+      }
       })
+
     },
     // 我想学的操作
     study(id) {
