@@ -163,6 +163,8 @@
         </div>
       </div>
     </van-popup>
+    <div>
+    </div>
     <div v-html="form"></div>
   </div>
 </template>
@@ -429,8 +431,8 @@ export default {
         // Toast('暂未开通微信支付')
       //   console.log(1)
         if (this.isWeiXin) {
-          this.payForWexin(res.out_trade_no)
-          // this.payForWexinw(res.out_trade_no)
+          // this.payForWexin(res.out_trade_no)
+          this.payForWexinw(res.out_trade_no)
         } else {
           this.payForWexinw(res.out_trade_no)
         }
@@ -457,9 +459,10 @@ export default {
     },
     // 获取微信外部接口
     payForWexinw (orderId) {
-      this.$request.get('/alipay/wechat/h/test?out_trade_no=' + orderId ).then((res) => {
-        console.log(res)
-        let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res }});
+      this.$request.get('/alipay/wechat/h5?out_trade_no=' + orderId ).then((res) => {
+        // window.location.href = res.mweb_url
+        // this.wxhref =  res.mweb_url
+        let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res.mweb_url }});
         window.open(routeData.href, '_blank')
         // console.log(res.innerHTML)
         // window.location.href = res
@@ -470,7 +473,10 @@ export default {
       // window.location.href = 'http://testapi.aomengyujia.com/api/alipay/wechat/h5?out_trade_no=' + orderId
       // console.log(window.location.href)
       // this.$request.get('/alipay/wechat/h5?out_trade_no=' + orderId )
-      this.$request.get('/alipay/wechat/h/test?out_trade_no=' + orderId ).catch((error) => {
+      this.$request.get('/alipay/wechat/h/test?out_trade_no=' + orderId ).then((res) => {
+        let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res.mweb_url }});
+        window.open(routeData.href, '_blank')
+      }).catch((error) => {
         Toast(error)
       })
       // window.location.href = 'http://testapi.aomengyujia.com/api/alipay/wechat/h5?out_trade_no=' + orderId 
