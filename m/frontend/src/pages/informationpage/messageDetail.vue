@@ -109,6 +109,7 @@ import shareIng from '../../components/shareing'
 import '../../dist/swiper.css'
 import { getFollowTrain } from '../../../api/personal'
 import { mapGetters } from "vuex";
+import { Toast } from 'vant';
 
 export default {
   data () {
@@ -192,7 +193,8 @@ export default {
     // 购买跳到支付页面
     buyCourse() {
       if(!window.sessionStorage.getItem('access')) {
-        this.$this.$toast('请登录');
+        // this.$this.$toast('请登录');
+        Toast('请登录')
         this.$router.push('/login');
         return;
       }
@@ -216,7 +218,8 @@ export default {
     study(id) {
       if (!JSON.parse(sessionStorage.getItem("user"))) {
         this.$router.push('/login')
-        this.$this.$toast('请登录')
+        // this.$this.$toast('请登录')
+        Toast('请登录')
         return;
       }
       this.wantStudy(id)
@@ -226,7 +229,8 @@ export default {
       // 调用我想学接口
       getFollowTrain(id)
         .then(data => {
-          this.$this.$toast(data.msg);
+          // this.$this.$toast(data.msg);
+          Toast(data.msg)
         })
     },
   }

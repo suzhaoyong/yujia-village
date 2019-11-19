@@ -460,9 +460,7 @@ export default {
     // 获取微信外部接口
     payForWexinw (orderId) {
       this.$request.get('/alipay/wechat/h5?out_trade_no=' + orderId ).then((res) => {
-        // window.location.href = res.mweb_url
-        // this.wxhref =  res.mweb_url
-        let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res.mweb_url }});
+        let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res, body: res.body, id: res.out_trade_no }});
         window.open(routeData.href, '_blank')
         // console.log(res.innerHTML)
         // window.location.href = res
@@ -470,9 +468,6 @@ export default {
     },
     // 获取微信浏览器接口
     payForWexin (orderId) {
-      // window.location.href = 'http://testapi.aomengyujia.com/api/alipay/wechat/h5?out_trade_no=' + orderId
-      // console.log(window.location.href)
-      // this.$request.get('/alipay/wechat/h5?out_trade_no=' + orderId )
       this.$request.get('/alipay/wechat/h/test?out_trade_no=' + orderId ).then((res) => {
         let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res.mweb_url }});
         window.open(routeData.href, '_blank')
