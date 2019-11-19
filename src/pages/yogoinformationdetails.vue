@@ -31,9 +31,22 @@
 <script>
 import { getTrains, postTrains, getTrainsById } from "@/api/trains";
 export default {
-    inject: ["reload"],
+  metaInfo() {
+    return { ...this.pageMeta }
+  },
+  inject: ["reload"],
   data() {
     return {
+        pageMeta: {
+          title: '', 
+          meta: [{
+              name: 'keyWords',
+              content: '瑜伽知识，瑜伽注意事项，学瑜伽要注意什么'
+          },{
+              name: 'description',
+              content: '学习瑜伽是一件说简单但是又不简单的事情，学习瑜伽是一条漫漫长路，不仅要学习各种瑜伽的知识还要了解学习瑜伽过程中的注意事项，这些内容中国瑜伽村都给大家一一整理了出来。'
+          }]
+        },
         knowinfo:{},
         config: {
         url: "",
@@ -54,6 +67,7 @@ export default {
       listdatadetails(){
         let _this = this;
         this.$request(`/informationInfo/${_this.$route.query.id}`).then(res => {
+          this.pageMeta.title = res.headline
             _this.knowinfo = res;
             // const content = res.content.split("\n").filter(item => item);
             // _this.knowinfo.content = content;
