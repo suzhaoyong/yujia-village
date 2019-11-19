@@ -163,6 +163,8 @@
         </div>
       </div>
     </van-popup>
+    <div>
+    </div>
     <div v-html="form"></div>
   </div>
 </template>
@@ -188,7 +190,7 @@ export default {
     return {
       payway: {
         show: false,
-        columns: ["支付宝"],
+        columns: ["支付宝", '微信'],
         value: ""
       },
       coupon: {
@@ -358,9 +360,6 @@ export default {
       if (!this.isAllowPay) return
       const buyGoods = sessionStorage.getItem("buy goods");
       const { type } = this.$route.query;
-      console.log(this.goods)
-
-
       const ids = this.goods.map(item => item.id);
       const goodsIds = this.goods.map(item => item.goodListId) ;
       const nums = this.goods.map(item => item.num);
@@ -385,8 +384,6 @@ export default {
         couponId: couponId || "", //优惠券编号
         fraction: "" //使用积分
       };
-      console.log(params)
-
       if (buyGoods && type == 1) {
         const m_params = {
           id: ids,
@@ -402,6 +399,8 @@ export default {
       }
       // 支付宝支付
         this.$request.post('/goodOrder', params).then(res => {
+          console.log(res)
+          if (this.payway.value === "支付宝") {
           //   if(res.code === 200) {
           //     if (this.fraction === 0) {
           //         Toast("已购买")
@@ -427,11 +426,19 @@ export default {
               //         this.$router.go(-1)
               //     }, 2000)
           }
-      })
+          }
       if (this.payway.value === "微信") {
-        if (isWeiXin) {
+        // Toast('暂未开通微信支付')
+      //   console.log(1)
+        if (this.isWeiXin) {
+          // this.payForWexin(res.out_trade_no)
+          this.payForWexinw(res.out_trade_no)
+        } else {
+          this.payForWexinw(res.out_trade_no)
         }
       }
+      })
+
     },
     isWeiXin () {
       var ua = window.navigator.userAgent.toLowerCase();
@@ -443,17 +450,47 @@ export default {
     },
     // 获取支付宝接口
     payMoney(orderId) {
-        this.$request.get('/alipay/wappay/get?out_trade_no='+orderId).then(res => {
+        this.$request.get('/alipay/wappay/get?out_trade_no=' + orderId).then(res => {
           this.form = res;
           this.$nextTick(() => {
               document.forms['alipaysubmit'].submit() //渲染支付宝支付页面
           })
         })
     },
-    // payForWexin (orderId) {
-    //   this.$request.get('/alipay/wechat/jsapi/test/', orderId ).then(() => {
-    //   })
-    // },
+    // 获取微信外部接口
+    payForWexinw (orderId) {
+      this.$request.get('/alipay/wechat/h5?out_trade_no=' + orderId ).then((res) => {
+        // window.location.href = res.mweb_url
+        // this.wxhref =  res.mweb_url
+        let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res.mweb_url }});
+        window.open(routeData.href, '_blank')
+        // console.log(res.innerHTML)
+        // window.location.href = res
+      })
+    },
+    // 获取微信浏览器接口
+    payForWexin (orderId) {
+      // window.location.href = 'http://testapi.aomengyujia.com/api/alipay/wechat/h5?out_trade_no=' + orderId
+      // console.log(window.location.href)
+      // this.$request.get('/alipay/wechat/h5?out_trade_no=' + orderId )
+      this.$request.get('/alipay/wechat/h/test?out_trade_no=' + orderId ).then((res) => {
+        let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res.mweb_url }});
+        window.open(routeData.href, '_blank')
+      }).catch((error) => {
+        Toast(error)
+      })
+      // window.location.href = 'http://testapi.aomengyujia.com/api/alipay/wechat/h5?out_trade_no=' + orderId 
+      // .then((res) => {
+      //   // if(res.msg === 'ok') {
+      //   //   let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res }});
+      //   //   window.open(routeData.href, '_blank')
+      //   //   // console.log(res.innerHTML)
+      //   //   // window.location.href = res
+      //   // } else {
+      //   //   Toast(res.msg)
+      //   // }
+      // })
+    },
     // 返回
     back() {
       this.$router.go(-1);
@@ -470,6 +507,7 @@ export default {
           sessionStorage.setItem("roder good", JSON.stringify(data.goods));
           this.goods = data.goods;
         }
+
 
         this.coupon.columns = data.coupon;
         this.cash.columns = data.cash.map(item => {

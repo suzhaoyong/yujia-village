@@ -1,9 +1,10 @@
 <template>
   <div class="warp" style>
     <van-nav-bar title="商品" left-arrow @click-left="back" fixed>
-      <div class="" slot="right" @click="handleShareGoods">
-        <img class="icon" src="../../../assets/teacherclub/share.png" />
-      </div>
+      <share-ing slot="right"
+        type="good"
+        @listenToShow="getChildShow"
+      ></share-ing>
     </van-nav-bar>
     <van-skeleton v-if="goods_copy.picture === ''" avatar avatar-shape="square" avatar-size="100" />
     <van-skeleton v-if="goods_copy.describe === ''" title title-width="100" :row="6" />
@@ -126,7 +127,7 @@
       </template>
     </van-sku>
     <!-- 加入购物车，立即购买 -->
-    <footer class="car">
+    <footer class="car" v-show="!childShow">
       <div class="car_lf">
         <!-- <div class="car_lf_icon"></div>
         <div class="car_lf_icon"></div>-->
@@ -146,20 +147,18 @@
         >立即购买</div>
       </div>
     </footer>
-    <van-popup v-model="showShareImg">
-      <img :src="base64img" />
-      <div class="textbase">长按图片，保存或发送给朋友</div>
-    </van-popup>
   </div>
 </template>
 <script>
 import logo from "@/assets/img/logo.png";
+import shareIng from '@/components/shareing'
 import { mapGetters } from "vuex";
 import { Area, Popup, Sku, Skeleton, Toast } from "vant";
 import area_list from "./area_list.js";
 import { getGoodsById, postUserCart } from "@/api/category.js";
 export default {
   components: {
+    shareIng,
     [Area.name]: Area,
     [Popup.name]: Popup,
     [Sku.name]: Sku,
@@ -167,8 +166,7 @@ export default {
   },
   data() {
     return {
-      showShareImg: false,
-      base64img: "",
+      childShow: false,  // 显示隐藏购物车
       clock: false,
       shoppingBagNumber: 0,
       icon: {
@@ -211,9 +209,13 @@ export default {
         list: [],
         price: "0.00", // 默认价格（单位元）
         stock_num: 0, // 商品总库存
-        hide_stock: false // 是否隐藏剩余库存
+        hide_stock: false, // 是否隐藏剩余库存
       }
     };
+  },
+  watch: {
+    immediate: true,
+    getChildShow () {}
   },
   computed: {
     ...mapGetters(["info", "isUserNeedLogin"]),
@@ -244,6 +246,9 @@ export default {
     });
   },
   methods: {
+    getChildShow (data) {
+      this.childShow = data
+    },
     // 查看商品详情
     viewGoods() {
       const { goods_id } = this.$route.params;
@@ -323,24 +328,6 @@ export default {
         }, 0);
         this.sku.price = (sell_price - discount).toFixed(2);
         this.goods = { title: describe, picture: cover };
-      });
-    },
-    // 分享商品
-    // handleShareGoods() {
-    //   const { goods_id } = this.$route.params;
-    //   this.$router.push(`/share?type=goods&goodsId=${goods_id}`)
-    // },
-    // 分享商品
-    handleShareGoods() {
-      this.showShareImg = true;
-      const params = {
-        id: this.$route.params.goods_id,
-        identity: "good",
-        userId: this.isUserNeedLogin ? "" : (this.info.user && this.info.user.id) || '',
-        responseType: "arraybuffer"
-      };
-      this.$request.post(`/show/share/photo`, params).then(res => {
-        this.base64img = res;
       });
     },
     // 获取购物袋数据

@@ -162,7 +162,7 @@ export default {
         .then(response => {
           console.log(response);
           const { body, out_trade_no = '' } = response
-          
+
           if(out_trade_no == '') {
             this.$message({type:'warning', message: response.msg})
           } else {

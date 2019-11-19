@@ -27,7 +27,7 @@
             <p>{{ list.headline }}</p>
             <div>
               <span>{{ list.type }}</span>
-              <span><img src="../../../static/img/eye.png" class="eyeimg"><span>{{ list.views }}</span></span>
+              <span class="eyebox"><img src="../../../static/img/eye.png" class="eyeimg"><span>{{ list.views }}</span></span>
             </div>
           </div>
         </div>
@@ -44,6 +44,7 @@
 import Vue from 'vue';
 import { Button, Toast } from 'vant';
 import { setInterval } from 'timers';
+import { goAdvertingApi } from '@/api/main'
 
 Vue.use(Button).use(Toast);
 export default {
@@ -90,17 +91,12 @@ export default {
   methods: {
     // 广告位
     goAdvertising (mold, relation_id) {
-      if(mold === 2) { this.$router.push(`/teacherClub/clubhouseDetails?id=${relation_id}`) }
-      else if(mold === 3) {this.$router.push(`teacherClub/teacherDetails?id=${relation_id}`)}
-      else if(mold === 4) { this.$router.push(`/messagedetail/${relation_id}`) }
-      // else if(mold === 5) { this.$router.push(`/goods/detail/${relation_id}`) }
-      else if(mold === 6) { this.$router.push(`/yogamessage/list`) }
-      // else if(mold === 7) { 商品分类 }
-      else if(mold === 1) { this.$router.push('/advertisement') }
+      goAdvertingApi(mold, relation_id)
     },
     getAdvertising () {
       return this.$request.get('/advertisement/data/' + 4).then((res) => {
-      this.swiper = res.filter(((item) => item.position === 0))[0].advertisement[0]
+      var reswiper = res.filter(((item) => item.position === 0))[0]
+      this.swiper = reswiper? reswiper.advertisement[0] :''
     })
     },
     onClickLeft() {
@@ -323,14 +319,24 @@ export default {
             margin-top: 12px;
             display: flex;
             justify-content: space-between;
-            .eyeimg {
-              width: 15px;
-              height: 12px;
-            }
             span {
               font-size: 12px;
               color: #999999;
+              float: left;
             }
+            .eyebox {
+              height: 16px;
+              line-height: 16px;
+              .eyeimg {
+                display: block;
+                width: 15px;
+                height: 12px;
+                margin-top: 2px;
+                margin-right: 4px;
+                float: left;
+              }
+            }
+
           }
         }
       }
