@@ -6,7 +6,7 @@
       <p>名称</p>
       <p>订单编号</p>
     </div>
-    <van-button type="primary" size="large"><a :href="hes">支付</a></van-button>
+    <van-button type="primary" size="large" :url="hes" ></van-button>
   </div>
 </template>
 <script>
@@ -18,6 +18,7 @@ export default {
   },
   created () {
       this.hes = this.$route.query.htmls;
+      console.log(this.hes)
   },
 
   mounted () {
@@ -26,6 +27,11 @@ export default {
     // var he = wxhref.split( "=", -1)
     // this.hes =  he[1] + he[2] + he[3] + he[4]
     // console.log(this.hes)
+  },
+  methods: {
+    goback () {
+      this.$router.push('fillorder?type=1')
+    }
   },
 }
 </script>
