@@ -295,7 +295,10 @@ export default {
         validator.add(password, [{
             strategy: 'isNonEmpty',
             errorMsg: '密码不能为空！'
-        }, {
+        },{
+            strategy: 'isPasswordHaveNumberAndAlphabet',
+            errorMsg: '密码只能是数字和字母的组合，不能包含特殊字符'
+        },{
             strategy: 'minLength:6',
             errorMsg: '密码长度不能小于 6 位！'
         }, {
