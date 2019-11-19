@@ -344,6 +344,9 @@ export default {
             case 6:
                 this.$router.push({
                     path: "/cultivate/index",
+                    query: {
+                    id: item2.relation_id
+                    }
                 });
                 break;
             case 7:
@@ -909,7 +912,7 @@ a{
                         background-color: #DCD9CC;
                     }
                     .explain2-div{
-                        height: 100%;
+                        height: auto;
                         padding-top: 35px;
                         text-align: right;
                         width: 36%;
