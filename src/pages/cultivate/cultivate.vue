@@ -226,7 +226,6 @@
                     <div class="list-eye">￥{{item.price}}</div>
                   </div>
                   <el-rate :value="item.diff" :colors="['#58B708','#58B708','#58B708']" disabled></el-rate>
-                  <!-- <div class="li-text2">适用人群：{{crowdList(item.crowd)}}</div> -->
                   <div class="li-text2">
                     适用人群：
                     <pre>{{item.crowd}}</pre>
@@ -401,9 +400,6 @@ export default {
   },
   computed: {
     ...mapGetters(["info"]),
-    crowdList() {
-      return item => item.split("●");
-    },
     isTagActive() {
       return item => {
         const select = this.selectTags.filter(tag => tag.name == item.name)[0];
@@ -421,19 +417,6 @@ export default {
       this.newList = data.new;
       this.fruitclasslist = data.hot;
     });
-  },
-  activated() {
-    // isUseCache 为false时才重新刷新获取数据
-    // 因为对 list 使用 keep-alive 来缓存组件，所以默认是会使用缓存数据的
-    // if (!this.$route.meta.isUseCache) {
-    //   this.getTrainsList();
-    //   getOrderByTrains().then(data => {
-    //     this.newList = data.new.data;
-    //     this.fruitclasslist = data.hot.data;
-    //   });
-    //   // 通过这个控制刷新
-    //   this.$route.meta.isUseCache = false;
-    // }
   },
   methods: {
       //根据页面查广告数据
@@ -585,14 +568,16 @@ export default {
     changePage(val){
       this.current_page = val;
       if(this.selectTags.length > 0) {
-        this.searchResult(val);
+        // this.searchResult(val);
+        this.getRank(this.getRankParams(this.keyWord, this.getFiltersParams()), val)
       } else {
-        this.getTrainsList();
+        this.getRank(this.getRankParams(this.keyWord, this.getFiltersParams()), val)
+        // this.getTrainsList();
       }
     },
     // 排序请求
-    getRank(params) {
-      postTrains(1, params).then(data => {
+    getRank(params, page = 1) {
+      postTrains(page, params).then(data => {
         this.fruit = data.data;
         this.per_page = data.per_page;
         this.current_page = data.current_page;
@@ -632,13 +617,14 @@ export default {
     },
     // 价格排序
     priceRank(keyWord) {
+      this.priceFlag = !this.priceFlag;
       this.priceFW = true;
       this.defaultFw = false;
       this.hostFw = false;
       this.resultFw = false;
       this.keyWord = keyWord;
       this.getRank(this.getRankParams(keyWord, this.getFiltersParams()))
-      this.priceFlag = !this.priceFlag
+      // this.priceFlag = !this.priceFlag
     },
     study(id) {
       if (!this.info.user.name) {
