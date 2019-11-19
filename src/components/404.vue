@@ -1,33 +1,43 @@
 <template>
   <div class="not_fond-wrap">
-    <div class="back_home" @click="() => {this.$router.push('/main');}">返回主页</div>
-    <not-found type="not-fond" msg="我寻寻觅觅却找不到该网页"></not-found>  
+    <img src="../assets/warning/nothing_3.png"/>
+    <div class="back_home" @click="() => {this.$router.push('/main');}">返回首页</div>
+    <!-- <not-found type="not-fond" msg="我寻寻觅觅却找不到该网页"></not-found>   -->
   </div>
 </template>
 <script>
-
 export default {
-  
+  data(){
+    return{
+
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
   .not_fond-wrap {
     margin: 0px;
     position: relative;
+    img{
+      width: 100%;
+      height: 100%;
+    }
     .back_home{
       position: absolute;
-      top: 2rem;
-      left: 2rem;
-      width: 7rem;
-      height: 3rem;
-      line-height: 3rem;
+      right: 5.5%;
+      top: 54%;
+      width: 7.8rem;
+      height: 2.8rem;
+      line-height: 2.7rem;
       color: #fff;
       text-align: center;
-      background: #68B75B;
       display: inline-block;
       cursor: pointer;
-      border-radius: 0.2rem;
+      border: 2px solid #fff;
+      border-radius: 23px;
       font-size: 0.9rem;
+      font-family:Microsoft YaHei;
+      font-weight:bold;
     }
     /deep/ .type_4 {
       height: 100vh;
