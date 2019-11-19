@@ -397,6 +397,7 @@ export default {
       }
       // 支付宝支付
         this.$request.post('/goodOrder', params).then(res => {
+          console.log(res)
           if (this.payway.value === "支付宝") {
           //   if(res.code === 200) {
           //     if (this.fraction === 0) {
@@ -425,13 +426,14 @@ export default {
           }
           }
       if (this.payway.value === "微信") {
-        Toast('暂未开通微信支付')
+        // Toast('暂未开通微信支付')
       //   console.log(1)
-      //   if (this.isWeiXin) {
-      //     this.payForWexin(res.out_trade_no)
-      //   } else {
-      //     this.payForWexinw(res.out_trade_no)
-      //   }
+        if (this.isWeiXin) {
+          this.payForWexin(res.out_trade_no)
+          // this.payForWexinw(res.out_trade_no)
+        } else {
+          this.payForWexinw(res.out_trade_no)
+        }
       }
       })
 
@@ -456,21 +458,32 @@ export default {
     // 获取微信外部接口
     payForWexinw (orderId) {
       this.$request.get('/alipay/wechat/h/test?out_trade_no=' + orderId ).then((res) => {
-        // let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res }});
-        // window.open(routeData.href, '_blank')
-        // console.log(res.innerHTML)
-        window.location.href = res
-      })
-    },
-    // 获取微信浏览器接口
-    payForWexin (orderId) {
-      this.$request.get('/alipay/wechat/h5?out_trade_no=' + orderId ).then((res) => {
         console.log(res)
         let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res }});
         window.open(routeData.href, '_blank')
         // console.log(res.innerHTML)
         // window.location.href = res
       })
+    },
+    // 获取微信浏览器接口
+    payForWexin (orderId) {
+      // window.location.href = 'http://testapi.aomengyujia.com/api/alipay/wechat/h5?out_trade_no=' + orderId
+      // console.log(window.location.href)
+      // this.$request.get('/alipay/wechat/h5?out_trade_no=' + orderId )
+      this.$request.get('/alipay/wechat/h/test?out_trade_no=' + orderId ).catch((error) => {
+        Toast(error)
+      })
+      // window.location.href = 'http://testapi.aomengyujia.com/api/alipay/wechat/h5?out_trade_no=' + orderId 
+      // .then((res) => {
+      //   // if(res.msg === 'ok') {
+      //   //   let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res }});
+      //   //   window.open(routeData.href, '_blank')
+      //   //   // console.log(res.innerHTML)
+      //   //   // window.location.href = res
+      //   // } else {
+      //   //   Toast(res.msg)
+      //   // }
+      // })
     },
     // 返回
     back() {
@@ -488,6 +501,7 @@ export default {
           sessionStorage.setItem("roder good", JSON.stringify(data.goods));
           this.goods = data.goods;
         }
+
 
         this.coupon.columns = data.coupon;
         this.cash.columns = data.cash.map(item => {

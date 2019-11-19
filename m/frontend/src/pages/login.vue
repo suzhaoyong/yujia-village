@@ -390,6 +390,13 @@ export default {
         if (value.length > 6 || value.length < 4) { this.messageid = '格式大于或等于4位小于6位' } else { this.messageid = '' }
       }
     },
+    // 换页面重置提示信息
+    validationtips () {
+      this.messagetel = ''
+      this.messagepwd = ''
+      this.messagecode = ''
+      this.messageid = ''
+    },
     // 返回主页
     goHome() {
       this.$router.replace("/main");
@@ -626,6 +633,7 @@ export default {
     changeType(type) {
       this.form.type = type;
       this.resetCode();
+      this.validationtips();
     },
     resetCode() {
       this.ruleForm = {
@@ -731,7 +739,6 @@ export default {
           Notify(err);
         });
     },
-    /* 按键验证 */
 
     // 积分显示
      getPersonalData() {

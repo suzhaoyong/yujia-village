@@ -12,8 +12,7 @@
       敬请期待!
     </div>
     </div>
-
-
+    
   </div>
 </template>
 <script>
