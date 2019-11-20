@@ -6,24 +6,39 @@
       </div>
       <div class="identity" v-show="step.type === 'identity'">
         <div class="box">
-          <div class="img">
-            <img :src="icon.identity_1" alt />
-          </div>
-          <div class="type" @click="myIdentity('2')">我是机构负责人</div>
+          <figure>
+            <div class="img">
+              <img :src="icon.identity_1" alt />
+            </div>
+              <figcaption>
+                <p>机构负责人主要是负责整个</p>
+              </figcaption>
+            <div class="type" @click="myIdentity('2')">我是机构负责人</div>
+          </figure>
         </div>
 
         <div class="box id2">
-          <div class="img">
-            <img :src="icon.identity_2" alt />
-          </div>
-          <div class="type" @click="myIdentity('7')">机构负责人&amp;教练</div>
+          <figure>
+            <div class="img">
+              <img :src="icon.identity_2" alt />
+            </div>
+            <figcaption>
+              <p>机构负责人主要是负责整个机构负责人主要是负责整个机构负责人主要是负责整个机构负责人主要是负责整个机构负责人主要是负责整个</p>
+            </figcaption>
+            <div class="type" @click="myIdentity('7')">机构负责人&amp;教练</div>
+          </figure>
         </div>
 
         <div class="box id3">
-          <div class="img">
-            <img :src="icon.identity_3" alt />
-          </div>
-          <div class="type" @click="myIdentity('4')">我是教练</div>
+          <figure>
+            <div class="img">
+              <img :src="icon.identity_3" alt />
+            </div>
+            <figcaption>
+              <p>教练主要是负责整个</p>
+            </figcaption>
+            <div class="type" @click="myIdentity('4')">我是教练</div>
+          </figure>
         </div>
       </div>
       <div class="to-certification" v-show="step.type === 'certification'">
@@ -423,7 +438,38 @@ export default {
 <style lang="scss" scoped>
 * {
   font-size: 0.7rem;
+  box-sizing: border-box;
 }
+
+.box{
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transition: all 1s ease;
+  }
+.box:hover{
+  transition: all 1s ease;
+}
+.box:hover figcaption{
+  background-color: rgba(0, 0, 0, 0.3);
+  color: #fff;
+  // background-color: rgba(255, 255, 255, 0.6);
+  display: block;
+  transition: background-color 0.75s ease-in;
+  // transition: all 1s ease;
+  // height: 15rem;
+  height: 100%;
+}
+.box figcaption{
+      width:100%;
+      height: 100%;
+      padding: 2rem;
+      position: absolute;
+      top: 0%;
+      display: none;
+    }       
+
+
 img {
   width: 100%;
   height: 100%;
@@ -486,6 +532,8 @@ img {
       line-height: 3rem;
       text-align: center;
       background: #fff;
+      position: relative;
+      z-index: 1000;
     }
   }
 }

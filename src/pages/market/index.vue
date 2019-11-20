@@ -78,7 +78,7 @@
             <div class="menu">
               <div
                 :class="['menu-item', recommend_menu.select.sort_id == item.sort_id ? 'active' : '']"
-                style="cursor: pointer;"
+                style="cursor: pointer;border-top: 0.1px solid #fff; border-bottom: 0.1px solid #fff;"
                 v-for="(item, index) in good_recomment.comment"
                 :key="index"
                 @click="selectRecommendMenuType(item)"

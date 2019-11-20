@@ -19,7 +19,7 @@
               <input
                 class="input"
                 v-model.trim="accountRuleForm.tel"
-                @blur="blurRuleForm('tel', 'accountRuleForm', 'accountErrorRule')"
+                @input="blurRuleForm('tel', 'accountRuleForm', 'accountErrorRule')"
                 type="text"
                 placeholder="请输入您的手机号"
                 style="outline:none;"
@@ -30,7 +30,7 @@
               <input
                 class="input"
                 v-model.trim="accountRuleForm.password"
-                @blur="blurRuleForm('password', 'accountRuleForm', 'accountErrorRule')"
+                @input="blurRuleForm('password', 'accountRuleForm', 'accountErrorRule')"
                 type="password"
                 placeholder="请输入 6-18 位数字或英文的密码"
                 style="outline:none;"
@@ -51,7 +51,7 @@
                       type="text"
                       placeholder="请输入图形验证码中4位数字"
                       v-model.trim="accountRuleForm.captcha"
-                      @blur="blurRuleForm('captcha', 'accountRuleForm', 'accountErrorRule')"
+                      @input="blurRuleForm('captcha', 'accountRuleForm', 'accountErrorRule')"
                     />
                   </div>
                   <div class="item-box-tips">{{blurInputError('captcha', 'accountRuleForm', 'accountErrorRule')}}</div>
@@ -68,7 +68,7 @@
                 class="input"
                 type="text"
                 v-model.trim="messageRuleForm.tel"
-                @blur="blurRuleForm('tel', 'messageRuleForm', 'messageErrorRule')"
+                @input="blurRuleForm('tel', 'messageRuleForm', 'messageErrorRule')"
                 placeholder="请输入您的手机号"
               />
               <div class="form_input-tips">{{blurInputError('tel', 'messageRuleForm', 'messageErrorRule')}}</div>
@@ -78,7 +78,7 @@
                 class="input"
                 type="text"
                 v-model.trim="messageRuleForm.verification_code"
-                @blur="blurRuleForm('verification_code', 'messageRuleForm', 'messageErrorRule')"
+                @input="blurRuleForm('verification_code', 'messageRuleForm', 'messageErrorRule')"
                 placeholder="请输入您收到的短信验证码中6位数字"
               />
               <div class="get_code" @click="getCodeMessage">{{codeTips.msg}}</div>
@@ -245,7 +245,10 @@ export default {
             password: [{
                   strategy: 'isNonEmpty',
                   errorMsg: '密码不能为空！'
-              }, {
+              },{
+                  strategy: 'isPasswordHaveNumberAndAlphabet',
+                  errorMsg: '密码只能是数字和字母的组合，不能包含特殊字符'
+              },{
                   strategy: 'minLength:6',
                   errorMsg: '密码长度不能小于 6 位！'
               }, {
@@ -292,7 +295,10 @@ export default {
         validator.add(password, [{
             strategy: 'isNonEmpty',
             errorMsg: '密码不能为空！'
-        }, {
+        },{
+            strategy: 'isPasswordHaveNumberAndAlphabet',
+            errorMsg: '密码只能是数字和字母的组合，不能包含特殊字符'
+        },{
             strategy: 'minLength:6',
             errorMsg: '密码长度不能小于 6 位！'
         }, {

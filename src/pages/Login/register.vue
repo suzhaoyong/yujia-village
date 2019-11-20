@@ -15,7 +15,7 @@
                   <input 
                     type="text"
                     placeholder="电话/PHONE" 
-                    @blur="blurRuleForm('tel', 'ruleForm', 'ruleFormErrorRule')"
+                    @input="blurRuleForm('tel', 'ruleForm', 'ruleFormErrorRule')"
                     v-model.trim="ruleForm.tel" />
                 </div>
                 <div class="item-box-tips">{{blurInputError('tel', 'ruleForm', 'ruleFormErrorRule')}}</div>
@@ -28,7 +28,7 @@
                     type="text"
                     placeholder="请输入短信验证码"
                     v-model.trim="ruleForm.verification_code"
-                    @blur="blurRuleForm('verification_code', 'ruleForm', 'ruleFormErrorRule')"
+                    @input="blurRuleForm('verification_code', 'ruleForm', 'ruleFormErrorRule')"
                   />
                   <div class="get_code" @click="getCodeMessage">发送验证码</div>
                 </div>
@@ -43,7 +43,7 @@
                     style="height:1.5rem;width:100%;"
                     placeholder="设置密码/PASSWORD"
                     v-model.trim="ruleForm.password"
-                    @blur="blurRuleForm('password', 'ruleForm', 'ruleFormErrorRule')"
+                    @input="blurRuleForm('password', 'ruleForm', 'ruleFormErrorRule')"
                   />
                 </div>
                 <div class="item-box-tips">{{blurInputError('password', 'ruleForm', 'ruleFormErrorRule')}}</div>
@@ -65,7 +65,7 @@
                     style="height:1.5rem;width:100%;"
                     placeholder="确认密码/PASSWORD"
                     v-model.trim="ruleForm.password2"
-                    @blur="blurRuleForm('password2', 'ruleForm', 'ruleFormErrorRule')"
+                    @input="blurRuleForm('password2', 'ruleForm', 'ruleFormErrorRule')"
                   />
                 </div>
                 <div class="item-box-tips">{{blurInputError('password2', 'ruleForm', 'ruleFormErrorRule')}}</div>
@@ -85,7 +85,7 @@
                     type="text"
                     placeholder="邀请码/INVITATION"
                     v-model.trim="ruleForm.invitation_id"
-                    @blur="blurRuleForm('invitation_id', 'ruleForm', 'ruleFormErrorRule')"
+                    @input="blurRuleForm('invitation_id', 'ruleForm', 'ruleFormErrorRule')"
                     />
                 </div>
                 <div class="item-box-tips">{{blurInputError('invitation_id', 'ruleForm', 'ruleFormErrorRule')}}</div>
@@ -280,22 +280,31 @@ export default {
             password: [{
                   strategy: 'isNonEmpty',
                   errorMsg: '密码不能为空！'
-              }, {
+              },{
+                  strategy: 'isPasswordHaveNumberAndAlphabet',
+                  errorMsg: '密码只能是数字和字母的组合，不能包含特殊字符'
+              },{
                   strategy: 'minLength:6',
                   errorMsg: '密码长度不能小于 6 位！'
               }, {
                   strategy: 'maxLength:18',
                   errorMsg: '密码长度不能大于 18 位！'
-              }],
+              },],
             password2: [{
                   strategy: 'isNonEmpty',
                   errorMsg: '密码不能为空！'
-              }, {
+              },{
+                  strategy: 'isPasswordHaveNumberAndAlphabet',
+                  errorMsg: '密码只能是数字和字母的组合，不能包含特殊字符'
+              },{
                   strategy: 'minLength:6',
                   errorMsg: '密码长度不能小于 6 位！'
               }, {
                   strategy: 'maxLength:18',
                   errorMsg: '密码长度不能大于 18 位！'
+              },{
+                  strategy: `equailPassword:${this[ruleName]['password']}`,
+                  errorMsg: '两次密码不一致，请再次确认是否正确输入。'
               }],
             invitation_id: [{
                   strategy: 'isNonEmpty',

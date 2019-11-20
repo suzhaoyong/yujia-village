@@ -123,12 +123,13 @@
                     :type="tag.type"
                     class="tag"
                   >{{tag.name}}</el-tag>
-                  <el-button v-show="selectTags.length>0" @click="searchResult" class="search">搜索</el-button>
+                  <el-button v-show="selectTags.length>0" 
+                    @click="searchResult" class="search">搜索</el-button>
                 </div>
               </div>
               <div class="fruit">
-                <span :class="resultFw ? 'fw':'' ">找到下列结果</span>
-                <span class="fruit-item" :class="defaultFw ? '':'fw' " @click="defaultRank('default')">默认排序</span>
+                <span :class="resultFw ? 'fw':'fw' ">找到下列结果</span>
+                <span class="fruit-item" :class="defaultFw ? 'fw':'' " @click="defaultRank('default')">默认排序</span>
                 <span class="fruit-item" :class="hostFw ? 'fw':'' " @click="hostRank('host')">热度</span>
                 <span class="fruit-item" :class="priceFW ? 'fw':'' " @click="priceRank('price')">价格</span>
                 <span>
@@ -226,7 +227,6 @@
                     <div class="list-eye">￥{{item.price}}</div>
                   </div>
                   <el-rate :value="item.diff" :colors="['#58B708','#58B708','#58B708']" disabled></el-rate>
-                  <!-- <div class="li-text2">适用人群：{{crowdList(item.crowd)}}</div> -->
                   <div class="li-text2">
                     适用人群：
                     <pre>{{item.crowd}}</pre>
@@ -279,6 +279,7 @@ export default {
   },
   data() {
     return {
+      classfiyIds: '',
       banner: "",
       moreClassfiy: [],
       value2: "",
@@ -395,15 +396,11 @@ export default {
       keyWord: '',
       // 控制价格排序的 flag
       priceFlag: true,
-      aa: 100,
       position:'',
     };
   },
   computed: {
     ...mapGetters(["info"]),
-    crowdList() {
-      return item => item.split("●");
-    },
     isTagActive() {
       return item => {
         const select = this.selectTags.filter(tag => tag.name == item.name)[0];
@@ -412,28 +409,19 @@ export default {
     },
   },
   created(){
+    const { ids = '' } = this.$route.query
+    this.classfiyIds = ids
     this.maintype();
     this.classification();
   },
   mounted() {
-    this.getTrainsList();
+    if(this.classfiyIds === '') {
+      this.getTrainsList();
+    }
     getOrderByTrains().then(data => {
       this.newList = data.new;
       this.fruitclasslist = data.hot;
     });
-  },
-  activated() {
-    // isUseCache 为false时才重新刷新获取数据
-    // 因为对 list 使用 keep-alive 来缓存组件，所以默认是会使用缓存数据的
-    // if (!this.$route.meta.isUseCache) {
-    //   this.getTrainsList();
-    //   getOrderByTrains().then(data => {
-    //     this.newList = data.new.data;
-    //     this.fruitclasslist = data.hot.data;
-    //   });
-    //   // 通过这个控制刷新
-    //   this.$route.meta.isUseCache = false;
-    // }
   },
   methods: {
       //根据页面查广告数据
@@ -506,8 +494,25 @@ export default {
     //类型和banner
     maintype(){
       this.$request.get(`/trains/type`).then(res => {
-            this.classfiy = res.course_types;
+            const mapClassfiy = array =>
+              array.map(item => {
+                item.type = "classfiy";
+                item.value = item.id;
+                item.isArray = true;
+                return item;
+              });
+            this.classfiy = mapClassfiy(res.course_types);
+            // this.classfiy = res.course_types;
             this.banner = res.banner;
+            return this.classfiy;
+        })
+        .then(classfiy => {
+          const selectIds = this.classfiyIds.split(',').map(item => parseInt(item))
+          const selectClassfiy = classfiy.filter(item => selectIds.indexOf(parseInt(item.id)) >= 0)
+          this.selectTags = [...this.selectTags, ...selectClassfiy]
+        })
+        .then(() => {
+          this.searchResult()
         })
     },
     getFiltersParams(params = {}) {
@@ -532,6 +537,7 @@ export default {
     },
     searchResult(page = 1) {
       page = parseInt(page) || 1
+      
       postTrains(page, this.getFiltersParams()).then(data => {
         this.fruit = data.data;
         this.per_page = data.per_page;
@@ -539,8 +545,6 @@ export default {
         this.total = data.total;
         // this.getTrainsList();
       });
-      this.resultFw = true;
-      this.defaultFw = true;
       this.hostFw = false;
       this.priceFW = false;
     },
@@ -554,30 +558,18 @@ export default {
     },
     getTrainsList(page = this.current_page) {
       getTrains(page).then(data => {
-        const mapClassfiy = array =>
-          array.map(item => {
-            item.type = "classfiy";
-            item.value = item.id;
-            item.isArray = true;
-            return item;
-          });
         this.fruit = data.data;
         this.per_page = data.per_page;
         this.current_page = data.current_page;
         this.total = data.total;
         if (page > 1) return;
-        // this.classfiy = mapClassfiy(course_types);
-        // if (course_types.length > 8) {
-        //   this.classfiy = mapClassfiy(course_types.slice(0, 8));
-        //   this.moreClassfiy = mapClassfiy(course_types.slice(8));
-        // }
       });
     },
     getRankParams(keyWord, params = {}) {
       if(keyWord === 'default') {
-        params = Object.assign({}, params, { time: false });
+        params = Object.assign({}, params, { time: true });
       } else if(keyWord === 'host') {
-        params = Object.assign({}, params, { follow: false });
+        params = Object.assign({}, params, { follow: true });
       } else {
         if(this.priceFlag) {
           params = Object.assign({}, params, { money: true });
@@ -590,14 +582,16 @@ export default {
     changePage(val){
       this.current_page = val;
       if(this.selectTags.length > 0) {
-        this.searchResult(val);
+        // this.searchResult(val);
+        this.getRank(this.getRankParams(this.keyWord, this.getFiltersParams()), val)
       } else {
-        this.getTrainsList();
+        this.getRank(this.getRankParams(this.keyWord, this.getFiltersParams()), val)
+        // this.getTrainsList();
       }
     },
     // 排序请求
-    getRank(params) {
-      postTrains(params).then(data => {
+    getRank(params, page = 1) {
+      postTrains(page, params).then(data => {
         this.fruit = data.data;
         this.per_page = data.per_page;
         this.current_page = data.current_page;
@@ -614,35 +608,37 @@ export default {
     },
     // 默认排序
     defaultRank(keyWord) {
-      this.defaultFw = false;
+      this.defaultFw = true;
       this.hostFw = false;
       this.priceFW = false;
       this.resultFw = false;
       this.keyWord = keyWord;
-      if(this.selectTags.length > 0) {
-        this.searchResult();
-      } else {
-        this.getTrainsList();
-      }
+      this.getRank(this.getRankParams(keyWord, this.getFiltersParams()))
+      // if(this.selectTags.length > 0) {
+      //   this.searchResult();
+      // } else {
+      //   this.getTrainsList();
+      // }
     },
     // 热度排序
     hostRank(keyWord) {
       this.hostFw = true
-      this.defaultFw = true;
+      this.defaultFw = false;
       this.priceFW = false;
       this.resultFw = false;
       this.keyWord = keyWord;
-      this.getRank(this.getRankParams(keyWord))
+      this.getRank(this.getRankParams(keyWord, this.getFiltersParams()))
     },
     // 价格排序
     priceRank(keyWord) {
+      this.priceFlag = !this.priceFlag;
       this.priceFW = true;
-      this.defaultFw = true;
+      this.defaultFw = false;
       this.hostFw = false;
       this.resultFw = false;
       this.keyWord = keyWord;
-      this.getRank(this.getRankParams(keyWord))
-      this.priceFlag = !this.priceFlag
+      this.getRank(this.getRankParams(keyWord, this.getFiltersParams()))
+      // this.priceFlag = !this.priceFlag
     },
     study(id) {
       if (!this.info.user.name) {
@@ -749,6 +745,7 @@ export default {
       this.selectTags = this.selectTags.filter(item => item.type !== type);
     },
     selected(item) {
+      console.log(item)
       if (item.isArray) {
         this.selectTags.push(item);
         return;

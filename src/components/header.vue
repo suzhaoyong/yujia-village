@@ -37,7 +37,7 @@
         <div class="head">
           <div class="head-mu">
             <div class="head-left">
-              <img src="../assets/logo.png" />
+              <h1><img src="../assets/logo.png" /></h1>
             </div>
             <el-menu
               :default-active="activeIndex"
@@ -51,7 +51,7 @@
               <el-menu-item index="cultivate"><a href="/cultivate" onclick="return false;">培训信息</a></el-menu-item>
               <el-menu-item index="yogoknowledge"><a href="/yogoknowledge" onclick="return false;">瑜伽知识</a></el-menu-item>
               <el-menu-item index="yogoinformation"><a href="/yogoinformation" onclick="return false;">瑜伽资讯</a></el-menu-item>
-              <!-- <el-menu-item index="market">商城</el-menu-item> -->
+              <el-menu-item index="market">商城</el-menu-item>
               <el-menu-item index="aboutus"><a href="/aboutus" onclick="return false;">关于我们</a></el-menu-item>
               <el-submenu index="personal">
                 <template slot="title">
@@ -640,7 +640,7 @@ a:hover{
         img {
           width: 140px;
           position: relative;
-          top: 8px;
+          top: 0px;
         }
       }
     }
