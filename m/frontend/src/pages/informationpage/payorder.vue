@@ -119,7 +119,7 @@ export default {
                 //     } else {
                 //         this.payMoney(res.out_trade_no);
                 //     }
-                // } 
+                // }
                 if(res.msg === 'OK') {
                     if (this.fraction === 0 || res.code === 200) {
                         Toast('恭喜您，课程购买成功');
@@ -128,8 +128,9 @@ export default {
                         }, 2000)
                     } else {
                         this.payMoney(res.out_trade_no);
+                        // this.payForWexinw(res.out_trade_no)
                     }
-                } 
+                }
                 else {
                     this.$toast({
                         message: res.msg,
@@ -148,6 +149,12 @@ export default {
                 this.$nextTick(() => {
                     document.forms['alipaysubmit'].submit() //渲染支付宝支付页面
                 })
+            })
+        },
+        payForWexinw (orderId) {
+            this.$request.get('/alipay/wechat/h5?out_trade_no=' + orderId ).then((res) => {
+                let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res, body: res.body, id: res.out_trade_no }});
+                window.open(routeData.href, '_blank')
             })
         },
     }

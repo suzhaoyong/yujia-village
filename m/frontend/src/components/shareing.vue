@@ -63,8 +63,9 @@ export default {
   },
   methods: {
     shareMessage () {
-      if(this.isUserNeedLogin && 
-        this.type == 'good'  || this.type === "train"
+      // console.log()
+      if(!JSON.parse(sessionStorage.getItem("user")) &&
+       (this.type == 'good'  || this.type === "train")
       ) {
         this.$router.push('/login')
         this.$toast('请登录')
@@ -77,11 +78,9 @@ export default {
           userId:  sessionStorage.getItem('user')? JSON.parse(sessionStorage.getItem('user')).id : '',
           responseType: 'arraybuffer'
       }
-      this.$request.post(`/show/share/photo`,params).then(res => {
+      this.$request.post(`/show/share/photo`, params).then(res => {
         this.shareimg = res;
       })
-      // console.log(this.type)
-
     },
     // 获取文案
     getWenan() {

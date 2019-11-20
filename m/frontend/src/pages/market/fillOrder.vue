@@ -462,8 +462,6 @@ export default {
       this.$request.get('/alipay/wechat/h5?out_trade_no=' + orderId ).then((res) => {
         let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res, body: res.body, id: res.out_trade_no }});
         window.open(routeData.href, '_blank')
-        // console.log(res.innerHTML)
-        // window.location.href = res
       })
     },
     // 获取微信浏览器接口
@@ -474,17 +472,6 @@ export default {
       }).catch((error) => {
         Toast(error)
       })
-      // window.location.href = 'http://testapi.aomengyujia.com/api/alipay/wechat/h5?out_trade_no=' + orderId 
-      // .then((res) => {
-      //   // if(res.msg === 'ok') {
-      //   //   let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res }});
-      //   //   window.open(routeData.href, '_blank')
-      //   //   // console.log(res.innerHTML)
-      //   //   // window.location.href = res
-      //   // } else {
-      //   //   Toast(res.msg)
-      //   // }
-      // })
     },
     // 返回
     back() {

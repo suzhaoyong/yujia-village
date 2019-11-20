@@ -184,7 +184,6 @@ export default {
   ...mapGetters(["info", "isUserNeedLogin"]),
   },
   mounted() {
-    console.log(this)
     getMainDetail().then(response => {
       this.main = response
     })
@@ -196,7 +195,6 @@ export default {
     },
     getAdvertising () {
       return this.$request.get('/advertisement/data/' + 1).then((res) => {
-        console.log(res)
       if (res[0]) {
         this.swiper = res.filter(((item) => item.position === 0))[0] ? res.filter(((item) => item.position === 0))[0].advertisement : []
         this.advertis2 = res.filter(((item) => item.position === 1))[0] ? res.filter(((item) => item.position === 1))[0].advertisement[0] : []

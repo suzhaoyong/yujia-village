@@ -35,9 +35,9 @@ export default {
     }
   },
   created () {
-    this.body = this.$route.query.body
+    this.body = this.$route.query.body || ''
     this.hes = this.$route.query.htmls;
-    this.id = this.$route.query.id
+    this.id = this.$route.query.id || ''
     console.log(this.body, this.hes, this.id)
   },
   methods: {
