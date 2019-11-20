@@ -123,7 +123,8 @@
                     :type="tag.type"
                     class="tag"
                   >{{tag.name}}</el-tag>
-                  <el-button v-show="selectTags.length>0" @click="searchResult" class="search">搜索</el-button>
+                  <el-button v-show="selectTags.length>0" 
+                    @click="searchResult" class="search">搜索</el-button>
                 </div>
               </div>
               <div class="fruit">
@@ -278,6 +279,7 @@ export default {
   },
   data() {
     return {
+      classfiyIds: '',
       banner: "",
       moreClassfiy: [],
       value2: "",
@@ -394,7 +396,6 @@ export default {
       keyWord: '',
       // 控制价格排序的 flag
       priceFlag: true,
-      aa: 100,
       position:'',
     };
   },
@@ -408,11 +409,15 @@ export default {
     },
   },
   created(){
+    const { ids = '' } = this.$route.query
+    this.classfiyIds = ids
     this.maintype();
     this.classification();
   },
   mounted() {
-    this.getTrainsList();
+    if(this.classfiyIds === '') {
+      this.getTrainsList();
+    }
     getOrderByTrains().then(data => {
       this.newList = data.new;
       this.fruitclasslist = data.hot;
@@ -499,6 +504,15 @@ export default {
             this.classfiy = mapClassfiy(res.course_types);
             // this.classfiy = res.course_types;
             this.banner = res.banner;
+            return this.classfiy;
+        })
+        .then(classfiy => {
+          const selectIds = this.classfiyIds.split(',').map(item => parseInt(item))
+          const selectClassfiy = classfiy.filter(item => selectIds.indexOf(parseInt(item.id)) >= 0)
+          this.selectTags = [...this.selectTags, ...selectClassfiy]
+        })
+        .then(() => {
+          this.searchResult()
         })
     },
     getFiltersParams(params = {}) {
