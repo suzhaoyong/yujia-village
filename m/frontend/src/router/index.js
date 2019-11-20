@@ -43,8 +43,9 @@ const router = new Router({
     {
       path: '/payforwx',
       name: 'payforwx',
-      component: () => import('@/components/payForwx')
+      component: () => import('@/components/payForwx'),
     },
+    // 自定义广告页
     {
       path: '/advertisement',
       name: 'advertisement',

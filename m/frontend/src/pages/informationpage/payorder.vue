@@ -27,13 +27,13 @@
         <div class="pay-way">
             <div class="pay-way-text">支付方式</div>
             <van-radio-group v-model="pay">
-                <van-radio name="1" checked-color="#8FCD71">
+                <van-radio name="1" checked-color="#8FCD71" @click="payway = '支付宝' ">
                     <img class="pay-way-img" src="../../assets/img/zfb.png" alt="">
                 </van-radio>
                 <!-- 微信支付 -->
-                <!-- <van-radio name="2" checked-color="#8FCD71">
+                <van-radio name="2" checked-color="#8FCD71" @click="payway = '微信' ">
                     <img class="pay-way-img" src="../../assets/img/wx.png" alt="">
-                </van-radio> -->
+                </van-radio>
             </van-radio-group>
         </div>
         <div class="footer">
@@ -66,7 +66,9 @@ export default {
             // 选中折扣的编号
             name: '',
             // 支付宝提交的表单数据
-            form: ''
+            form: '',
+            // 支付方式
+            payway: '',
         }
     },
     created() {
@@ -127,8 +129,15 @@ export default {
                             this.$router.go(-1)
                         }, 2000)
                     } else {
-                        this.payMoney(res.out_trade_no);
-                        // this.payForWexinw(res.out_trade_no)
+                        if(this.payway === '支付宝') {
+                            this.payMoney(res.out_trade_no);
+                        } else if(this.payway === '微信') {
+                            if (this.isWeiXin()) {
+                                this.payForWexin(res.out_trade_no)
+                            } else {
+                                this.payForWexinw(res.out_trade_no)
+                            }
+                        }
                     }
                 }
                 else {
@@ -144,16 +153,34 @@ export default {
         // 获取支付宝接口
         payMoney(orderId) {
             this.$request.get('/alipay/wappay/get?out_trade_no='+orderId).then(res => {
-                console.log(res)
                 this.form = res;
                 this.$nextTick(() => {
                     document.forms['alipaysubmit'].submit() //渲染支付宝支付页面
                 })
             })
         },
+        // 判断是否是微信浏览器
+        isWeiXin () {
+            var ua = window.navigator.userAgent.toLowerCase();
+            if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+                return true;
+            }else{
+                return false;
+            }
+        },
+        // 获取微信浏览器接口
+        payForWexin (orderId) {
+            this.$request.get('/alipay/wechat/jsapi/test?out_trade_no=' + orderId ).then((res) => {
+                let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res.mweb_url }});
+                window.open(routeData.href, '_blank')
+            }).catch((error) => {
+                Toast(error)
+            })
+        },
+        // 外部浏览器微信支付
         payForWexinw (orderId) {
-            this.$request.get('/alipay/wechat/h5?out_trade_no=' + orderId ).then((res) => {
-                let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res, body: res.body, id: res.out_trade_no }});
+            this.$request.get('/alipay/wechat/h/test?out_trade_no=' + orderId ).then((res) => {
+                let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res.mweb_url, body: res.body, id: res.out_trade_no }});
                 window.open(routeData.href, '_blank')
             })
         },

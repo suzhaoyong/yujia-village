@@ -8,7 +8,6 @@
         支付成功
       </div>
     </div>
-    <van-button type="primary" size="large" @click="shopback">返回商品页</van-button>
     </div>
 
     <div class="payon" v-show="true">
@@ -18,11 +17,6 @@
       <p>订单编号: {{id}}</p>
       <van-button type="primary" size="large" :url="hes" >立即支付</van-button>
     </div>
-    <!-- <div class="payfinish" v-show="false">
-      <div>已完成支付</div>
-      <div>支付遇到问题</div>
-      <div @click="queryOrder">查询订单</div>
-    </div> -->
   </div>
 </template>
 <script>
@@ -47,11 +41,7 @@ export default {
     shopback () {
       this.$router.push('/store/category')
     },
-    queryOrder () {
-      this.$request.post('/getWechatOrder', { 'out_trade_no': this.id }).then((res) => {
-        console.log(res)
-      })
-    }
+
   },
 }
 </script>

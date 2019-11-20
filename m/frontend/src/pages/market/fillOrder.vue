@@ -408,37 +408,31 @@ export default {
           //         this.payMoney(res.out_trade_no);
           //     }
           // } 
-          if(res.msg === 'OK') {
-              if (this.fraction === 0 || res.code === 200) {
-                  Toast('恭喜您，课程购买成功');
-                  setTimeout(() => {
-                      this.$router.go(-1)
-                  }, 2000)
-              } else {
-                  this.payMoney(res.out_trade_no);
-              }
-          } 
-          else {
-              this.$toast({
-                  message: res.msg,
-              });
-              // setTimeout(() => {
-              //         this.$router.go(-1)
-              //     }, 2000)
+            if(res.msg === 'OK') {
+                if (this.fraction === 0 || res.code === 200) {
+                    Toast('恭喜您，课程购买成功');
+                    setTimeout(() => {
+                        this.$router.go(-1)
+                    }, 2000)
+                } else {
+                    this.payMoney(res.out_trade_no);
+                }
+            } 
+            else {
+                Toast(res.msg)
+                // setTimeout(() => {
+                //         this.$router.go(-1)
+                //     }, 2000)
+            }
           }
+          if (this.payway.value === "微信") {
+            if (this.isWeiXin()) {
+              this.payForWexin(res.out_trade_no)
+            } else {
+              this.payForWexinw(res.out_trade_no)
+            }
           }
-      if (this.payway.value === "微信") {
-        // Toast('暂未开通微信支付')
-      //   console.log(1)
-        if (this.isWeiXin) {
-          // this.payForWexin(res.out_trade_no)
-          this.payForWexinw(res.out_trade_no)
-        } else {
-          this.payForWexinw(res.out_trade_no)
-        }
-      }
       })
-
     },
     isWeiXin () {
       var ua = window.navigator.userAgent.toLowerCase();
@@ -459,15 +453,17 @@ export default {
     },
     // 获取微信外部接口
     payForWexinw (orderId) {
-      this.$request.get('/alipay/wechat/h5?out_trade_no=' + orderId ).then((res) => {
-        let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res, body: res.body, id: res.out_trade_no }});
+      this.$request.get('/alipay/wechat/h/test?out_trade_no=' + orderId ).then((res) => {
+        let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res.mweb_url, body: res.body, id: res.out_trade_no }});
         window.open(routeData.href, '_blank')
+      }).catch((error) => {
+        Toast(error)
       })
     },
     // 获取微信浏览器接口
     payForWexin (orderId) {
-      this.$request.get('/alipay/wechat/h/test?out_trade_no=' + orderId ).then((res) => {
-        let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res.mweb_url }});
+      this.$request.get('/alipay/wechat/jsapi/test?out_trade_no=' + orderId ).then((res) => {
+        let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res.mweb_url, body: res.body, id: res.out_trade_no }});
         window.open(routeData.href, '_blank')
       }).catch((error) => {
         Toast(error)
@@ -489,8 +485,6 @@ export default {
           sessionStorage.setItem("roder good", JSON.stringify(data.goods));
           this.goods = data.goods;
         }
-
-
         this.coupon.columns = data.coupon;
         this.cash.columns = data.cash.map(item => {
           item.use_val = ''
