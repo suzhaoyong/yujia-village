@@ -64,7 +64,7 @@
                   v-for="(item, index) in sizeList"
                   :key="index"
                   @click="chooseSize(item)"
-                >{{item.size}}</div>
+                >{{item.size||'暂无'}}</div>
               </div>
               <div v-else class="size-list">暂无</div>
             </div>
@@ -408,10 +408,13 @@ img {
           margin-top: 1.75rem;
           display: flex;
           span {
+            flex-shrink: 0;
             padding-right: 1.15rem;
           }
           .size-list {
             display: flex;
+            width: 30rem;
+           flex-wrap: wrap;
             .item {
               margin-right: 0.3rem;
               padding: 0 1rem;

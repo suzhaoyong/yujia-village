@@ -27,6 +27,7 @@
               :class="['item', isTagActive(item) ? 'active' : '' ]"
               @click="chooseTagsFor('price', item)"
               v-for="(item, index) in tags.price.list"
+              :key="index"
             >{{item.name}}</div>
           </div>
           <div class="more" v-if="arrayNotEmpty(tags.price.more)">
@@ -83,16 +84,16 @@
             </div>
           </div>
         </div>
-        <div :class="['material', arrayNotEmpty(tags.material.more) ? 'more_active' : '']">
-          <div class="title">材质</div>
+        <div :class="['brand', arrayNotEmpty(tags.brand.more) ? 'more_active' : '']">
+          <div class="title">品牌</div>
           <div class="range">
             <div
               :class="['item', isTagActive(item) ? 'active' : '' ]"
-              @click="chooseTagsFor('material', item)"
-              v-for="(item, index) in tags.material.list"
+              @click="chooseTagsFor('brand', item)"
+              v-for="(item, index) in tags.brand.list"
             >{{item.name}}</div>
           </div>
-          <div class="more" v-if="arrayNotEmpty(tags.material.more)">
+          <div class="more" v-if="arrayNotEmpty(tags.brand.more)">
             <div class="dropdown show">
               <a
                 class="btn dropdown-toggle"
@@ -105,11 +106,11 @@
               >更多</a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                 <a
-                  v-for="(item, index) in tags.material.more"
+                  v-for="(item, index) in tags.brand.more"
                   class="dropdown-item"
                   :key="index"
                   :class="['dropdown-item', {'active': isTagActive(item)}]"
-                  @click="chooseTagsFor('material', item)"
+                  @click="chooseTagsFor('brand', item)"
                 >{{item.name}}</a>
               </div>
             </div>
@@ -151,6 +152,29 @@
         <div class="senior">
           <div class="title">高级选项</div>
           <div class="select-list">
+            <div class="select-box">
+              <div class="dropdown show">
+                <a
+                  class="btn dropdown-toggle"
+                  style="color: #2c2c2c; border:1px solid #bfbfbf;padding: 0.4rem 0.8rem 0.4rem 0.8rem;font-size: 14px;"
+                  href="#"
+                  role="button"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >材质</a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                  <a
+                    class="dropdown-item"
+                    v-for="(item, index) in tags.thickness.list"
+                    :key="index"
+                    :class="['dropdown-item', {'active': isTagActive(item)}]"
+                    @click="chooseTagsFor('thickness', item)"
+                    href="#"
+                  >{{item.name}}</a>
+                </div>
+              </div>
+            </div>
             <div class="select-box">
               <div class="dropdown show">
                 <a
@@ -226,24 +250,6 @@
       <div class="goods-list">
         <div class="sort">
           <div class="range">
-            <!-- <div class="select-box">
-              <div class="dropdown show">
-                <a
-                  class="btn dropdown-toggle"
-                  style="color: #2c2c2c; border:1px solid #bfbfbf;padding-left:0.5rem;padding-right:0.5rem;"
-                  href="#"
-                  role="button"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >价格</a>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                  <a class="dropdown-item" href="#">更多1</a>
-                  <a class="dropdown-item" href="#">更多1</a>
-                  <a class="dropdown-item" href="#">更多1</a>
-                </div>
-              </div>
-            </div>-->
           </div>
           <div class="tips">温馨提示： 如果选择困难，您可咨询馆内私人教练</div>
         </div>
@@ -343,7 +349,7 @@ export default {
           list: [],
           more: []
         },
-        material: {
+        brand: {
           list: [],
           more: []
         },
@@ -433,21 +439,24 @@ export default {
     },
     getMarketTags() {
       getGoods().then(data => {
-        let { color, material, person, price, season, sort, type } = data;
+        let { color = [], brand = [], person = [], price = [], season = [], sort = [], type = [], thickness = [] } = data;
+        console.log(color)
         price = getList(price, "price");
-        material = getList(material, "material");
+        brand = getList(brand, "brand");
         sort = getList(sort, "sort");
         type = getList(type, "type");
         color = getList(color, "color", false);
         season = getList(season, "season", false);
         person = getList(person, "person", false);
+        thickness = getList(thickness, "thickness", false);
 
         this.tags = Object.assign(
           {},
-          { color, material, person, price, season, sort, type }
+          { color, brand, person, price, season, sort, type, thickness }
         );
 
         function getList(tag, name, is_split = true) {
+          
           tag = tag.map(item => {
             item.type = name;
             return item;
@@ -474,7 +483,7 @@ export default {
     },
     chooseTagsFor(name, tag) {
       if (this.isTagActive(tag)) return;
-      if (tag.name === "不限") {
+      if (tag.name === "全部") {
         this.selected.tags = this.selected.tags.filter(
           item => item.type !== tag.type
         );
@@ -595,7 +604,7 @@ img {
 
     .price,
     .sort,
-    .material,
+    .brand,
     .use {
       display: flex;
       position: relative;
