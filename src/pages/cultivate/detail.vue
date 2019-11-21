@@ -5,9 +5,8 @@
         <div class="detail-main">
           <!-- <session-title name="课程介绍" brief="Sometimes beauty is so simple"></session-title> -->
           <div class="detail-count-div2">
-            <div :class="`${train.train_image && train.train_image.length > 0 ? 'count-div2-img scorll' : 'count-div2-img'}`" style="cursor: pointer;">
+            <div  v-if="train.train_image && train.train_image.length > 0" :class="`${train.train_image && train.train_image.length > 0 ? 'count-div2-img scorll' : 'count-div2-img'}`" style="cursor: pointer;">
               <img
-                v-if="train.train_image && train.train_image.length > 0"
                 @click="changeTrainImage(item)"
                 v-for="(item, index) in train.train_image"
                 :key="index"

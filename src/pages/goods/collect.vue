@@ -88,8 +88,8 @@ export default {
   },
   methods: {
     getColloct() {
-      getUserCollect().then(data => {
-        this.goods = data;
+      getUserCollect().then(response => {
+        this.goods = response.data;
       });
     },
     chooseGoods(goods, index) {
