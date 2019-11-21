@@ -12,6 +12,10 @@
                 </el-carousel>
             </div>
         </div>
+          <div class="notice" v-if="info.user.name">
+            <img class="icon-notice" src="../assets/notice.png"/>
+            <marquee :listData="listData"></marquee>
+          </div>
         <div class="head-quan">
           <div class="head-right">
             <el-button type="text" class="span2"></el-button>
@@ -112,12 +116,14 @@ import identity_g from "@/assets/order/identity_g.png";
 import identity_j from "@/assets/order/identity_j.png";
 import identity_gj from "@/assets/order/identity_gj.png";
 import identity_y from "@/assets/order/identity_y.png";
+import marquee from '@/components/marquee'
 export default {
   components: {
     Login,
     Register,
     Reset,
-    TopTitle
+    TopTitle,
+    marquee
   },
   data() {
     return {
@@ -128,6 +134,7 @@ export default {
       account: {
         type: ""
       },
+      listData:[],
       icon: {
         identity_g,
         identity_j,
@@ -190,9 +197,13 @@ export default {
   },
   created() {
     this.fetchData();
+    this.messcroll();
     let info = sessionStorage.getItem('user')
     if(info) {
       store.dispatch("INFO", JSON.parse(info))
+      setInterval(() => {
+        this.messcroll();
+      },50000)
     }
   },
   beforeUpdate() {
@@ -298,6 +309,12 @@ export default {
       } else {
         this.$router.push(`/${key}/index`);
       };
+    },
+    //消息滚动
+    messcroll(){
+      this.$request.get(`/message/overall_situation/20`).then(data => {
+          this.listData = data;
+      });
     },
     //根据页面查广告数据
     classification(classid){
@@ -560,7 +577,19 @@ a:hover{
             bottom: 0;
         }
     }
+  }
+  .notice{
+    padding:0rem 1rem;
+    font-size:15px;
+    color:#929292;
+    display: flex;
+    align-items: center;
+    .icon-notice {
+      width: 27px;
+      height: 27px;
+      margin-right:1rem;
     }
+  }
 .nikeHeader{
   height: 40px;
   display: flex;
