@@ -1,11 +1,17 @@
 <template>
   <div>
     <div class="car">
+      <div class="navs">
+        <el-breadcrumb separator-class="el-icon-arrow-right">
+          <el-breadcrumb-item :to="{ path: '/market/index' }">商城</el-breadcrumb-item>
+          <el-breadcrumb-item>购物车</el-breadcrumb-item>
+        </el-breadcrumb>
+      </div>
       <div class="header">
         <session-title name="购物车"></session-title>
       </div>
       <div class="body">
-        <div class="goods-box" style="min-height: 80vh;">
+        <div class="goods-box" style="min-height: 55vh;">
           <div class="goods" v-for="(item,index) in goods" :key="index">
             <div class="info" @click="chooseGoods(item, index)">
               <div :class="['select', {'active': item.select}]"></div>
@@ -215,12 +221,15 @@ img {
   padding-bottom:5rem;
   // background:#F1F1F1;
   @include no_select();
+  .navs {
+    width: 60rem;
+    padding: 3rem 0rem 0rem 0rem;
+    margin: 0 auto;
+  }
   .header {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #eee;
-    padding: 3rem 0;
   }
   .body {
     width: 60rem;
@@ -231,7 +240,7 @@ img {
         // border:1px solid #ccc;
         display: flex;
         margin-bottom: 0.95rem;
-        box-shadow: 0rem 0.05rem 0.1rem #ccc;
+        box-shadow:1px 1px 9px 1px rgba(92,92,92,0.28);
         .info {
           display: flex;
           flex-basis: 50%;

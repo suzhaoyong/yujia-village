@@ -10,6 +10,7 @@ import SessionTitle from '@/utils/session_title.js';
 // import ELEMENT from 'element-ui'
 import ElementUI from 'element-ui'
 import MetaInfo from 'vue-meta-info'
+import scroll from 'vue-seamless-scroll'
 
 import 'element-ui/lib/theme-chalk/index.css'
 import {Carousel, CarouselItem} from 'element-ui'
@@ -23,6 +24,7 @@ import store from '@/store'
 Vue.use(NotFound)
 Vue.use(SessionTitle)
 Vue.use(Share)
+Vue.use(scroll)
 // Vue.use(ELEMENT)
 Vue.use(ElementUI)
 Vue.use(VueAwesomeSwiper)
