@@ -203,7 +203,7 @@ export default {
       store.dispatch("INFO", JSON.parse(info))
       setInterval(() => {
         this.messcroll();
-      },50000)
+      },300000)
     }
   },
   beforeUpdate() {
