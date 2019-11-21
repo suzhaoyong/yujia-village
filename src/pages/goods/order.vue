@@ -1,6 +1,6 @@
 <template>
   <div style="padding-bottom:5rem;">
-    <div class="order-box" v-show="!playcode.show">
+    <div class="order-box" >
       <div class="navs">
         <el-breadcrumb separator-class="el-icon-arrow-right">
           <el-breadcrumb-item :to="{ path: '/market/index' }">商城</el-breadcrumb-item>
@@ -87,7 +87,7 @@
         <div class="payment_mode">
           <div class="mode_top"><span>支付方式</span></div>
           <div class="mode_bottom">
-            <div class="zhifubao">
+            <div class="zhifubao" @click="pay.way='alipay'">
               <img src="../../assets/order/alipay_active.png" class="zfb_img" />
               <span class="zfb_text">支付宝</span>
             </div>
@@ -138,27 +138,11 @@
         </div>
       </div>
     </div>
-    <div class="payway" v-if="playcode.show">
-      <payway v-if="playcode.show" :order="playcode.order"></payway>
-    </div>
-    <!-- <div class="pay-way" v-if="playcode.show" @click="playcode.show = false">
-      
-      <div class="pay-code">
-        <img :src="playcode.src" alt />
-      </div>
-    </div>-->
   </div>
 </template>
 <script>
 import VDistpicker from "v-distpicker";
 import backIcon from "@/assets/market/back.png";
-import alipayIcon from "@/assets/order/alipay.png";
-import wechatIcon from "@/assets/order/wechat.png";
-import alipayActiveIcon from "@/assets/order/alipay_active.png";
-import wechatActiveIcon from "@/assets/order/wechat_active.png";
-import bankIcon from "@/assets/order/bank.png";
-import SessionTitle from "./SessionTitle";
-import Payway from "./payway";
 import {
   getUserAddress,
   getUserOrder,
@@ -170,30 +154,32 @@ import {
 } from "@/api/market";
 export default {
   components: {
-    SessionTitle,
-    Payway,
     VDistpicker
   },
   data() {
     return {
       radio:'',
-      playcode: {
-        show: false,
-        order: {
-          body: "",
-          totalPrice: "",
-          out_trade_no: ""
-        },
-        count: 0
-      },
       icon: {
-        backIcon,
-        alipayIcon,
-        alipayActiveIcon,
-        wechatIcon,
-        wechatActiveIcon,
-        bankIcon
+        backIcon
       },
+      orderGoods: {
+        id: '',
+        cashId: '',
+        cashMoney: '',
+        couponId: '',
+        fraction: '',
+        discountId: ''
+      },
+      formGoods: {
+        out_trade_no: '',
+        body: '',
+        total_fee: ''
+      },
+      isPayWay: false,
+      pay: {
+        type: ''
+      },
+      good_discount: {积分: [], 金币: []},
       goods: [],
       address: [],
       addressActive: {},
@@ -219,9 +205,7 @@ export default {
   },
   computed: {
     getAllSelectNumberAndPrice() {
-      // let allGoods = this.goods.filter(item => item.select);
       let allGoods = this.goods;
-
       let allPrice = allGoods.reduce((pre, cur) => {
         return (
           parseFloat(pre) + parseInt(cur.num) * (cur.sell_price - cur.discount)
@@ -229,30 +213,39 @@ export default {
       }, 0);
       return { allPrice: allPrice.toFixed(2), allGoodsNumber: allGoods.length };
     },
-    statusActive() {
-      return type => {
-        return { active: this.ruleForm.status == type };
-      };
+    getCountPrice() {
+      return (item) => {
+        if(item.deduction > this.train.price) {
+          return '0.00';
+        }
+        return (this.train.price - item.deduction).toFixed(2)
+      }
     },
-    sendTimeActive() {
-      return type => {
-        return { active: this.ruleForm.sendTime == type };
-      };
+    isJifen() {
+      return this.train_discount['积分'] && this.train_discount['积分'].length > 0
     },
-    paymentActive() {
-      return type => {
-        return { active: this.ruleForm.payment == type };
-      };
+    payPrice() {
+      if (typeof this.train.price !== 'undefined' && this.train.price === 0) {
+        return '0.00'
+      }
+      if(this.checkedDiscount.length === 0){
+        return this.train.price >= 0 ? this.train.price.toFixed(2) : ''
+      }
+      return (this.train.price - this.checkedDiscount[0].deduction) >=0 ? (this.train.price - this.checkedDiscount[0].deduction).toFixed(2) : '';
     },
+    usedDiscount() {
+      return this.checkedDiscount.length > 0
+    },
+    forbidPay() {
+      return !this.pay.type
+    }
   },
   mounted() {
     getUserAddress().then(data => {
       this.address = data.address;
       if (data.address.length === 0) {
-        this.ruleForm.status = "1";
       } else {
         this.addressActive = data.address[data.address.length-1];
-        this.ruleForm.status = "0";
       }
       this.goods = data.goods;
     });
@@ -265,14 +258,12 @@ export default {
         city: city.value,
         area: area.value
       };
-      this.ruleForm = Object.assign({}, this.ruleForm, params);
     },
     back() {
       this.$router.go(-1);
     },
     submitForm() {
-      const { status } = this.ruleForm;
-      let params = Object.assign({}, this.ruleForm);
+      let params = Object.assign({},);
       if (parseInt(status) === 0) {
         if (this.address.length === 0) {
           this.$message({
@@ -323,11 +314,37 @@ export default {
       const lid = this.goods.map(item => item.goodListId);
       const num = this.goods.map(item => item.num);
       params = Object.assign({}, params, { id, lid, num });
-      postGoodOrder(params).then(data => {
-        const { out_trade_no, body, totalPrice } = data;
-        this.playcode.show = true;
-        this.playcode.order = { out_trade_no, body, totalPrice }
-      });
+    },
+    payMoney() {
+      if(this.forbidPay) {
+        return;
+      }
+      if(this.pay.type === 'alipay') {
+        const { body, out_trade_no, total_fee } = this.form
+        let url = `${window.location.origin}/api/alipay/web/get?out_trade_no=${out_trade_no}`;
+        if (process.env.NODE_ENV === 'development') {
+          url = `${'http://testapi.aomengyujia.com'}/api/alipay/web`;
+        }
+        this.$request.post('/alipay/web', { out_trade_no: out_trade_no})
+          .then(response => {
+            // let form = response.substring(0,5) + ' target="_blank"' + response.substring(5)            
+            document.write(`${response}`);
+            // document.alipay_submit.submit();  
+          })
+      }
+      if(this.pay.type === 'wechat') {
+        const { body, out_trade_no, total_fee } = this.form
+        sessionStorage.setItem('total_fee', total_fee)
+        this.$router.push({
+          name: 'wechat pay',
+          query: {
+            orderId: out_trade_no
+          }
+        })
+        // this.$router.push(`/cultivate/order/pay/${out_trade_no}`)
+        // this.playcode.order = { out_trade_no, body, totalPrice: total_fee }
+        // this.playcode.show = true;
+      }
     },
   }
 };
