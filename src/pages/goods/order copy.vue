@@ -1,51 +1,116 @@
 <template>
   <div style="padding-bottom:5rem;">
     <div class="order-box" v-show="!playcode.show">
-      <div class="navs">
+      <!-- <div class="navs">
         <el-breadcrumb separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item :to="{ path: '/market/index' }">商城</el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ path: '/goods/shopcar' }">购物车</el-breadcrumb-item>
-          <el-breadcrumb-item>订单确认</el-breadcrumb-item>
+          <el-breadcrumb-item>首页</el-breadcrumb-item>
+          <el-breadcrumb-item>活动管理</el-breadcrumb-item>
+          <el-breadcrumb-item>活动列表</el-breadcrumb-item>
+          <el-breadcrumb-item>活动详情</el-breadcrumb-item>
         </el-breadcrumb>
-      </div>
+      </div>-->
       <div class="order">
-        <session-title name="填写订单"></session-title>
+        <session-title name="订单详情"></session-title>
         <div class="take-delivery">
           <div class="delivery">
-            <div class="header"><span>收货人信息</span></div>
+            <div class="header">
+              <div class="title">收货信息</div>
+              <div class="tips">如下信息</div>
+            </div>
             <div class="body">
               <div class="personal">
-                <div class="personal_left">
-                  <div class="receiver_item">
-                  <span class="receiver">收&nbsp;&nbsp;货&nbsp;&nbsp;人：<span class="receiver_name">ivan</span></span>
-                  </div>
-                  <div class="receiver_item">
-                  <span class="receiver">联系电话：<span class="receiver_name">15211373093</span></span>
-                  </div>
-                  <div class="receiver_item">
-                  <span class="receiver">收获地址：<span class="receiver_name">chengdushisldfjasdlfjsdladsfjasdl</span></span>
-                  </div>
+                <div class="icon-name">
+                  <div class="icon" style="background:#fff;"></div>
+                  <div class="name"></div>
                 </div>
-                <div class="personal_right">
-                  <div class="dizhi">
-                  <img src="../../assets/order/adress.png"/>
-                  <span class="adress">默认地址</span>
+                <div style="align-self: flex-start; margin-left: 3.5rem;" v-if="address.length > 0">
+                  <div class="name-phone">{{`${addressActive.name} - ${addressActive.userAddress}`}}</div>
+                  <div class="address">{{addressActive.tel}}</div>
+
+                  <div
+                    :class="['currently-deliviery', statusActive('0')]"
+                    @click="ruleForm.status = '0'"
+                  >使用当前地址（默认）</div>
                 </div>
-                <div class="edit">修改</div>
-                </div>
+                <div v-else>暂无地址，快去添加一个吧～</div>
               </div>
-              <div class="deliviery">
-                <div class="deliviery_top">
-                  <img src="../../assets/order/switch.png"/>
-                  <span class="deliviery_adress">切换地址</span>
+              <div class="new-deliviery">
+                <div class="form">
+                  <div class="item">
+                    <div class="key">收货人</div>
+                    <div class="value">
+                      <el-input type="text" v-model="ruleForm.userName" placeholder="请输入收货人"></el-input>
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="key">联系电话</div>
+                    <div class="value">
+                      <el-input type="text" v-model="ruleForm.userTel" placeholder="请输入联系电话"></el-input>
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="key">所在区域</div>
+                    <div class="value">
+                      <v-distpicker @selected="selectAddress"></v-distpicker>
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="key">详细地址</div>
+                    <div class="value">
+                      <el-input type="text" v-model="ruleForm.userAddress" placeholder="请输入详细地址"></el-input>
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="key">留言</div>
+                    <div class="value">
+                      <el-input type="textarea" v-model="ruleForm.userMessage" placeholder="请输入留言"></el-input>
+                    </div>
+                  </div>
                 </div>
-                <div class="deliviery_bottom">
-                  <img src="../../assets/order/newly.png"/>
-                  <span class="deliviery_adress">新增地址</span>
-                </div>
+                <div
+                  :class="['new-deliviery-address', statusActive('1')]"
+                  @click="ruleForm.status = '1'"
+                >使用新地址</div>
               </div>
             </div>
           </div>
+          <!-- <div class="time-pay" v-show="false">
+            <div class="time">
+              <div class="header">
+                <div class="title">送货时间</div>
+                <div class="tips">如不选择按默认发货</div>
+              </div>
+              <div class="select">
+                <div
+                  :class="['item', sendTimeActive('1')]"
+                  @click="ruleForm.sendTime = '1'"
+                >送货时间不限(默认)</div>
+                <div :class="['item', sendTimeActive('2')]" @click="ruleForm.sendTime = '2'">仅周一周五送货</div>
+                <div
+                  :class="['item', sendTimeActive('3')]"
+                  @click="ruleForm.sendTime = '3'"
+                >仅节假日/周末送货</div>
+              </div>
+            </div>
+            <div class="pay">
+              <div class="header">
+                <div class="title">支付方式</div>
+                <div class="tips">pay way</div>
+              </div>
+              <div class="icon-box">
+                <div
+                  :class="['icon', paymentActive('2')]"
+                  :style="`background-image:url(${ruleForm.payment === '2'?icon.alipayActiveIcon : icon.alipayIcon})`"
+                  @click="ruleForm.payment = '2'"
+                ></div>
+                <div
+                  :class="['icon', paymentActive('3')]"
+                  :style="`background-image:url(${ruleForm.payment === '3'?icon.wechatActiveIcon:icon.wechatIcon})`"
+                  @click="ruleForm.payment = '3'"
+                ></div>
+              </div>
+            </div>
+          </div>-->
         </div>
         <div class="goods-box">
           <div class="header">
@@ -84,50 +149,11 @@
             <not-found v-if="goods.length === 0" type="not-fond_2" msg="我寻寻觅觅却找不见您购物车的踪迹"></not-found>
           </div>
         </div>
-        <div class="payment_mode">
-          <div class="mode_top"><span>支付方式</span></div>
-          <div class="mode_bottom">
-            <div class="zhifubao">
-              <img src="../../assets/order/alipay_active.png" class="zfb_img" />
-              <span class="zfb_text">支付宝</span>
-            </div>
-            <div class="weixin">
-              <img src="../../assets/order/wechat_active.png" class="wx_img" />
-              <span class="wx_text">微信支付</span>
-            </div>
-          </div>
-        </div>
-        <div class="Integraluse">
-          <div class="Integraluse_top"><span>积分使用</span></div>
-          <div class="Integraluse_bottom">
-            <div class="use_one">
-                <el-radio v-model="radio" :label="1">2000 积分 商品减免 0000 元</el-radio>
-            </div>
-            <div class="use_two">
-                <el-radio v-model="radio" :label="2">5000 积分 商品减免 0000 元</el-radio>
-            </div>
-            <div class="use_three">
-                <el-radio v-model="radio" :label="3">不使用积分</el-radio>
-            </div>
-            <div class="use_four">
-              <span class="span_use">1件商品，总商品金额</span>
-              <span class="span_uses">335元</span>
-            </div>
-            <div class="use_five">
-              <span class="span_use">运费</span>
-              <span class="span_uses">0.00元</span>
-            </div>
-            <div class="use_six">
-              <span class="span_use">商品优惠</span>
-              <span class="span_uses">225元</span>
-            </div>
-          </div>
-        </div>
         <div class="sum">
           <div class="back-shopcat" @click="back">
             <div class="img">
               <img :src="icon.backIcon" alt />
-            </div>返回购物车修改
+            </div>返回购物车
           </div>
           <div class="count">
             <span class="title">应付金额</span>
@@ -152,6 +178,7 @@
 <script>
 import VDistpicker from "v-distpicker";
 import backIcon from "@/assets/market/back.png";
+
 import alipayIcon from "@/assets/order/alipay.png";
 import wechatIcon from "@/assets/order/wechat.png";
 import alipayActiveIcon from "@/assets/order/alipay_active.png";
@@ -176,7 +203,6 @@ export default {
   },
   data() {
     return {
-      radio:'',
       playcode: {
         show: false,
         order: {
@@ -243,7 +269,7 @@ export default {
       return type => {
         return { active: this.ruleForm.payment == type };
       };
-    },
+    }
   },
   mounted() {
     getUserAddress().then(data => {
@@ -328,7 +354,7 @@ export default {
         this.playcode.show = true;
         this.playcode.order = { out_trade_no, body, totalPrice }
       });
-    },
+    }
   }
 };
 </script>
@@ -379,118 +405,132 @@ img {
   padding: 0;
 }
 .order-box {
-  width: 65rem;
+  width: 60rem;
   margin: 0 auto;
   @include no_select();
   .navs {
-      padding: 3rem 0rem 0rem 0rem;
   }
   .order {
+    padding-top: 5rem;
     .take-delivery {
+      padding-top: 4.45rem;
       display: flex;
       justify-content: space-between;
-      border: 1px solid #eeeeee;
+      margin-bottom: 0.75rem;
       .delivery {
         width: 100%;
+        box-shadow: 0rem 0.05rem 0.1rem #ccc;
+        // height: 23.85rem;
+        border: 1px solid #ccc;
         .header {
-        height: 53px;
-        background-color: #ACC794;
-        line-height: 53px;
-        span{
-          font-family:Microsoft YaHei;
-          font-weight:bold;
-          color:rgba(255,255,255,1);
-          font-size: 0.8rem;
-          padding-left: 3rem;
-        }
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          padding-top: 1.4rem;
+          padding-bottom: 2.6rem;
+          .title {
+            color: #2c2c2c;
+            font-size: 0.7rem;
+            font-weight: 800;
+          }
+          .tips {
+            color: #999;
+            font-size: 0.6rem;
+          }
         }
         .body {
           display: flex;
-          .personal{
-            width: 75%;
+          padding-bottom: 3.2rem;
+          .personal {
+            flex-shrink: 0;
+            flex-basis: 40%;
             display: flex;
-            .personal_left{
-              width: 80%;
-              .receiver_item{
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            .icon-name {
+              padding-bottom: 4.3rem;
+              .icon {
+                width: 4.25rem;
+                height: 4.25rem;
+                background: #ccc;
+                border-radius: 50%;
+                background-size: 100% 100%;
+              }
+              .name {
                 padding-top: 1rem;
-              .receiver{
-                color: #999;
-                font-size: 0.8rem;
-                padding-left: 3rem;
-                .receiver_name{
-                  color: #2c2c2c;
-                }
-              }
+                text-align: center;
               }
             }
-            .personal_right{
-              padding: 2rem;
-              width: 20%;
-              .dizhi{
-                margin-top: 1rem;
-              img{
-                width: 15px;
-                height: 17px;
-                cursor: pointer;
-              }
-              .adress{
-                color: #A2BE8C;
-                font-family:Microsoft YaHei;
-                font-weight:400;
-                font-size: 0.8rem;
-                cursor: pointer;
-              }
+            .name-phone {
+              // align-self: flex-start;
+              // margin-left: 3.5rem;
+              border-bottom: 1px solid #313131;
             }
-            .edit{
-              width: 61px;
-              height: 32px;
-              border: 1px solid #89B264;
-              border-radius:5px;
-              line-height: 32px;
-              text-align: center;
-              font-size: 0.8rem;
-              margin-top: 1rem;
-              margin-left: 0.8rem;
-              cursor: pointer;
+            .address {
+              // align-self: flex-start;
+              // margin-left: 3.5rem;
+              margin-top: 0.3rem;
+              margin-bottom: 1.6rem;
+              border-bottom: 1px solid #313131;
             }
+            .currently-deliviery {
+              width: 100%;
+              // margin-left: 3.5rem;
+              // padding-left: 3.5rem;
+              position: relative;
+              &.active::before {
+                content: "";
+                display: block;
+                position: absolute;
+                top: 50%;
+                left: -1rem;
+                transform: translateY(-50%);
+                width: 0.55rem;
+                height: 0.55rem;
+                border-radius: 50%;
+                background: #000;
+              }
             }
           }
-          .deliviery{
-            width:25%;
-            border-left: 2px solid #ACC794;
-            height: 100px;
-            margin-top: 2rem;
-            margin-bottom: 2rem;
-            .deliviery_top{
-              padding: 0.5rem 5rem;
-              img{
-                width: 19px;
-                height: 16px;
-                cursor: pointer;
+          .new-deliviery {
+            flex-shrink: 0;
+            flex-basis: 60%;
+            border-left: 1px solid #dcdcdc;
+            .form {
+              padding-bottom: 1.75rem;
+              .item {
+                display: flex;
+                padding: 0.4rem 0;
+                .key {
+                  width: 6rem;
+                  text-align: right;
+                  padding-right: 1rem;
+                  flex-shrink: 0;
                 }
-              .deliviery_adress{
-                font-family:Microsoft YaHei;
-                font-weight:400;
-                color:rgba(44,44,44,1);
-                font-size: 0.9rem;
-                padding-left: 0.5rem;
-                cursor: pointer;
+                .value {
+                  .input {
+                    padding-left: 0.5rem;
+                  }
+                }
               }
             }
-            .deliviery_bottom{
-              padding: 0.8rem 5rem;
-              img{
-                width: 19px;
-                height: 19px;
-                cursor: pointer;
-              }
-              .deliviery_adress{
-                font-family:Microsoft YaHei;
-                font-weight:400;
-                color:rgba(44,44,44,1);
-                font-size: 0.9rem;
-                padding-left: 0.5rem;
-                cursor: pointer;
+            &-address {
+              width: 100%;
+              // margin-left: 3.5rem;
+              padding-left: 3.5rem;
+              position: relative;
+              &.active::before {
+                content: "";
+                display: block;
+                position: absolute;
+                top: 50%;
+                left: 2.5rem;
+                transform: translateY(-50%);
+                width: 0.55rem;
+                height: 0.55rem;
+                border-radius: 50%;
+                background: #000;
               }
             }
           }
@@ -586,18 +626,15 @@ img {
       }
     }
     .goods-box {
-      border: 1px solid #eee;
+      box-shadow: 0rem 0.05rem 0.1rem #ccc;
+      border-bottom: 1px solid #ccc;
       border-top: none;
       overflow: hidden;
-      margin-top: 2rem;
       .header {
         display: flex;
         align-items: center;
-        height: 3.5rem;
-        background-color: #eee;
-        font-family:Microsoft YaHei;
-        font-weight:bold;
-        font-size: 0.9rem;
+        height: 3.7rem;
+        border: 1px solid #dcdcdc;
         .item {
           padding-left: 3rem;
           &:nth-child(1) {
@@ -613,6 +650,7 @@ img {
         }
       }
       .body {
+        border: 1px solid #ccc;
         border-top: none;
         border-bottom: none;
         .goods {
@@ -630,18 +668,15 @@ img {
             .img {
               width: 7rem;
               height: 8rem;
+              // background: #ccc;
             }
             .title-say {
               padding-left: 2.25rem;
               display: flex;
               flex-direction: column;
               justify-content: space-between;
-              font-family:Microsoft YaHei;
-              font-weight:400;
-              font-size: 0.9rem;
               .title {
                 text-align: left;
-                padding-top: 2rem;
               }
               .say {
                 width: 100%;
@@ -657,7 +692,6 @@ img {
             .key-value {
               color: #999;
               display: flex;
-              font-size: 0.9rem;
               .key {
               }
               .value {
@@ -681,163 +715,19 @@ img {
         }
       }
     }
-    .payment_mode{
-      border:1px solid rgba(238,238,238,1);
-      margin-top: 2rem;
-      .mode_top{
-        height: 53px;
-        background-color: #ACC794;
-        line-height: 53px;
-        span{
-          font-family:Microsoft YaHei;
-          font-weight:bold;
-          color:rgba(255,255,255,1);
-          font-size: 0.8rem;
-          padding-left: 3rem;
-        }
-      }
-      .mode_bottom{
-        display: flex;
-        margin: 2rem 0rem 2rem 4rem;
-        .zhifubao{
-          border: 1px solid #EEEEEE;
-          border-radius: 5px;
-          padding: 0.8rem 1.5rem;
-          cursor: pointer;
-          .zfb_img{
-            width: 21px;
-            height: 21px;
-          }
-          .zfb_text{
-            font-family:Microsoft YaHei;
-            font-weight:400;
-            font-size: 0.8rem;
-            color: #2c2c2c;
-          }
-        }
-        .weixin{
-          border: 1px solid #EEEEEE;
-          border-radius: 5px;
-          padding: 0.8rem 1.5rem;
-          margin-left: 2rem;
-          cursor: pointer;
-          .wx_img{
-            width: 21px;
-            height: 21px;
-          }
-          .wx_text{
-            font-family:Microsoft YaHei;
-            font-weight:400;
-            font-size: 0.8rem;
-            color: #2c2c2c;
-          }
-        }
-      }
-    }
-    .Integraluse{
-      border:1px solid rgba(238,238,238,1);
-      margin-top: 2rem;
-      .Integraluse_top{
-        height: 53px;
-        background-color: #eee;
-        line-height: 53px;
-        span{
-          font-family:Microsoft YaHei;
-          font-weight:bold;
-          color:#2c2c2c;
-          font-size: 0.8rem;
-          padding-left: 3rem;
-        }
-      }
-      .Integraluse_bottom{
-        background-color: #FAFAFA;
-        line-height: 2.3rem;
-        padding-left: 4rem;
-        padding-top: 1rem;
-        padding-bottom: 2rem;
-        .use_one{
-          font-family:Microsoft YaHei;
-          font-weight:400;
-          color:rgba(44,44,44,1);
-        }
-        .use_two{
-          font-family:Microsoft YaHei;
-          font-weight:400;
-          color:rgba(44,44,44,1);
-        }
-        .use_three{
-          font-family:Microsoft YaHei;
-          font-weight:400;
-          color:rgba(44,44,44,1);
-        }
-        .use_four{
-          text-align: end;
-          padding-top: 6rem;
-          .span_use{
-            font-family:Microsoft YaHei;
-            font-weight:400;
-            color:rgba(44,44,44,1);
-            padding-right: 3.5rem;
-            font-size: 0.9rem;
-          }
-          .span_uses{
-            font-family:Microsoft YaHei;
-            font-weight:400;
-            color:rgba(44,44,44,1);
-            padding-right: 2rem;
-            font-size: 0.9rem;
-          }
-        }
-        .use_five{
-          text-align: end;
-          .span_use{
-            font-family:Microsoft YaHei;
-            font-weight:400;
-            color:rgba(44,44,44,1);
-            padding-right: 3.5rem;
-            font-size: 0.9rem;
-          }
-          .span_uses{
-            font-family:Microsoft YaHei;
-            font-weight:400;
-            color:rgba(44,44,44,1);
-            padding-right: 2rem;
-            font-size: 0.9rem;
-          }
-        }
-        .use_six{
-          text-align: end;
-          .span_use{
-            font-family:Microsoft YaHei;
-            font-weight:400;
-            color:rgba(44,44,44,1);
-            padding-right: 3.5rem;
-            font-size: 0.9rem;
-          }
-          .span_uses{
-            font-family:Microsoft YaHei;
-            font-weight:400;
-            color:rgba(44,44,44,1);
-            padding-right: 2rem;
-            font-size: 0.9rem;
-          }
-        }
-      }
-    }
     .sum {
-      border: 1px solid #E5E5E5;
+      box-shadow: 0rem 0.05rem 0.1rem #ccc;
+      margin: 1.3rem 0;
+      border: 1px solid #ccc;
       display: flex;
       align-items: center;
       height: 3rem;
       position: relative;
-      background-color: #FAFAFA;
       .back-shopcat {
         color: #2c2c2c;
-        font-size: 0.8rem;
-        font-family:Microsoft YaHei;
-        font-weight:bold;
+        font-size: 0.7rem;
+        font-weight: 800;
         padding-left: 1.6rem;
-        cursor: pointer;
         .img {
           width: 1.3rem;
           height: 1rem;
@@ -858,9 +748,8 @@ img {
         }
         .title {
           color: #2c2c2c;
-          font-size: 0.8rem;
-          font-family:Microsoft YaHei;
-          font-weight:bold;
+          font-size: 0.7rem;
+          font-weight: 800;
         }
         .tips {
           height: 100%;
@@ -876,9 +765,7 @@ img {
           justify-content: center;
           align-items: center;
           padding-left: 0.3rem;
-          color: #CA231B;
-          font-family:Microsoft YaHei;
-          font-weight:bold;
+          color: #ff4400;
         }
       }
       .sumbit {
@@ -889,12 +776,9 @@ img {
         display: flex;
         justify-content: center;
         align-items: center;
-        font-size: 0.8rem;
         color: #fff;
-        background: #ACC794;
+        background: #ff4400;
         height: 100%;
-        font-weight:400;
-        cursor: pointer;
       }
     }
   }

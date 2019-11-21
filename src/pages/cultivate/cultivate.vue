@@ -12,6 +12,7 @@
                 <img :src="banner" alt />
             </div>
           </template>
+          <keep-alive>
           <div class="cultivate-count">
             <div class="cultivate-count-div1">
               <div class="cultivate1">
@@ -240,6 +241,7 @@
             </div>
             <not-found v-if="newList.length === 0" type="not-fond" msg="暂无相关信息"></not-found>
           </div>
+          </keep-alive>
         </div>
       </el-col>
     </el-row>
