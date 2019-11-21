@@ -281,14 +281,13 @@ const router = new Router({
     {
       path: '/teacherClub/teacherDetails',
       name: 'teacherDetails',
-      component: () => import('@/pages/teacherClub/teacherDetails')
+      component: () => import('@/pages/teacherClub/teacherDetails'),
     },
     {
       path: '/teacherClub/clubhouseDetails',
       name: 'clubhouseDetails',
       component: () => import('@/pages/teacherClub/clubhouseDetails')
     },
-    
     {
       path: '/informationdetail/:id',
       name: 'informationdetail',

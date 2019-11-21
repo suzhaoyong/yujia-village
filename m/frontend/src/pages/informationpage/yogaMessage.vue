@@ -480,11 +480,11 @@ export default {
   margin-top: 160px;
   img {
     width: 100%;
-    height: 40px;
+    height: 100%;
   }
   span {
     position: relative;
-    left: 56%;
+    left: 36%;
     top: -105%;
     font-size: 16px;
     color: #999999;

@@ -294,10 +294,12 @@ img{
           height: 100%;
           .van-swipe-item {
             width: 343px!important;
+            
           }
         }
         img{
           border-radius: 10px;
+          min-height: 142px;
         }
       }
     }
