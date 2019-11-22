@@ -12,10 +12,10 @@
                 </el-carousel>
             </div>
         </div>
-          <div class="notice" v-if="info.user.name">
+          <!-- <div class="notice" v-if="info.user.name">
             <img class="icon-notice" src="../assets/notice.png"/>
             <marquee :listData="listData"></marquee>
-          </div>
+          </div> -->
         <div class="head-quan">
           <div class="head-right">
             <el-button type="text" class="span2"></el-button>
@@ -134,7 +134,7 @@ export default {
       account: {
         type: ""
       },
-      listData:[],
+      // listData:[],
       icon: {
         identity_g,
         identity_j,
@@ -197,13 +197,13 @@ export default {
   },
   created() {
     this.fetchData();
-    this.messcroll();
+    // this.messcroll();
     let info = sessionStorage.getItem('user')
     if(info) {
       store.dispatch("INFO", JSON.parse(info))
-      setInterval(() => {
-        this.messcroll();
-      },300000)
+      // setInterval(() => {
+      //   this.messcroll();
+      // },300000)
     }
   },
   beforeUpdate() {
@@ -311,11 +311,11 @@ export default {
       };
     },
     //消息滚动
-    messcroll(){
-      this.$request.get(`/message/overall_situation/20`).then(data => {
-          this.listData = data;
-      });
-    },
+    // messcroll(){
+    //   this.$request.get(`/message/overall_situation/20`).then(data => {
+    //       this.listData = data;
+    //   });
+    // },
     //根据页面查广告数据
     classification(classid){
       this.subjectbanner = [];
