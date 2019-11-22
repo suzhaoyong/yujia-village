@@ -32,10 +32,10 @@
                   <div class="send">{{item.name}}</div>
                   <div class="g_money">
                     <div class="all">总额：¥{{good.num * good.sellPrice}}</div>
-                    <div style="color: #2c2c2c;">{{item.status === '待付款' ? '应付' : '实付'}}</div>
-                    <div
+                    <div style="color: #2c2c2c;">{{item.status === '待付款' ? '应付' : '实付'}} ¥{{good.num * (good.sellPrice - good.discount)}}</div>
+                    <!-- <div
                       style="padding-top:0.8rem;color: #2c2c2c;"
-                    >¥{{good.num * (good.sellPrice - good.discount)}}</div>
+                    ></div> -->
                   </div>
                   <div class="operate">
                     <!-- <div class="time">剩余23小时57分钟</div> -->
@@ -63,7 +63,7 @@
       </div>
     </div>
     <div class="payway" v-if="playcode.show">
-      <payway @close="payResult" v-if="playcode.show" :order="playcode.order"></payway>
+      <payway @close="payResult" @back="viewOrder" v-if="playcode.show" :order="playcode.order"></payway>
     </div>
     <el-dialog title="物流信息" :visible.sync="express.show" v-if="express.show">
       <div class="block">
@@ -143,6 +143,9 @@ export default {
     });
   },
   methods: {
+    viewOrder() {
+      this.playcode.show = false;
+    },
     payResult() {
       this.playcode.show = false;
       // this.getPersonal()

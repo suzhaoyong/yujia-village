@@ -4,7 +4,7 @@
       <div class="navs">
         <el-breadcrumb separator-class="el-icon-arrow-right">
           <el-breadcrumb-item :to="{ path: '/market/index' }">商城</el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ path: '/goods/shopcar' }">购物车</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/goods/shop-car/all' }">购物车</el-breadcrumb-item>
           <el-breadcrumb-item>订单确认</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
@@ -24,7 +24,7 @@
                   <span class="receiver">联系电话：<span class="receiver_name">{{getAddress.tel}}</span></span>
                   </div>
                   <div class="receiver_item">
-                  <span class="receiver">收获地址：<span class="receiver_name">{{getAddress.userAddress}}</span></span>
+                  <span class="receiver">收货地址：<span class="receiver_name">{{getAddress.userAddress}}</span></span>
                   </div>
                 </div>
                 <div class="personal_right">
@@ -219,7 +219,7 @@
                 </span>
               </span>
             </div>
-            <div class="receiver_item">
+            <div class="receiver_item" v-show="false">
               <span class="receiver">地区编码
                 <span class="receiver_name">
                   <el-input v-model="addressForm.areaCode" style="width:300px;" placeholder="请输入地区编码"></el-input>
@@ -346,7 +346,12 @@ export default {
         return  this.getDeductionArr.map(item => item.deduction).reduce((pre, cur) => pre + cur, 0)
     },
     getDiscountIds() {
-      return this.getDeductionArr.map(item => item.id)
+      return this.goods.filter(item => item.jifen)
+        .map(item => {
+          const jifen_id = item.jifen;
+          const jifen_select = item.good_discount['积分'].filter(item => item.id === jifen_id)
+          return jifen_select && jifen_select[0] || {id: 0}
+        }).map(item => item.id)
     },
     isDisableChooseChonsume() {
       return (item) => {
@@ -490,15 +495,28 @@ export default {
         .then(response => {
           this.$message.success('修改成功')
           this.isNewAddress = false;
+
+          const {userName, userTel, userAddress} = this.addressForm
+          this.addressActive = {...this.addressActive, ...{name: userName, tel: userTel, userAddress: userAddress}}
+          getUserAddress().then(response => {
+            this.address = response.address;
+           })
         })
       } else {
         this.$request.post(`/createAddress`, this.addressForm)
         .then(response => {
           this.$message.success('新增成功')
           this.isNewAddress = false;
+
+          // const {userName, userTel, userAddress} = this.addressForm
+          // this.addressActive = {...this.addressActive, ...{name: userName, tel: userTel, userAddress: userAddress}}
+           getUserAddress().then(response => {
+            this.address = response.address;
+           })
         })
       }
     },
+    
     createAddress() {
       this.isNewAddress = true
       this.addressForm = {
@@ -514,7 +532,7 @@ export default {
     },
     changeAddress() {
       this.isNewAddress = true;
-      this.addressForm = {...this.addressForm, ...this.getAddress, ...{userName: this.getAddress.name, userTel: this.getAddress.tel, isDefault: this.getAddress.is_default}}
+      this.addressForm = {...this.addressForm, ...this.getAddress, ...{userName: this.getAddress.name, userTel: this.getAddress.tel, isDefault: this.getAddress.is_default, userAddress: this.getAddress.address}}
     },
     chooseAddress(address, index) {
       this.addressListIndex = index
@@ -529,7 +547,8 @@ export default {
       this.addressForm = Object.assign({}, this.addressForm,  params);
     },
     back() {
-      this.$router.go(-1);
+      this.$router.push(`/goods/shop-car/all`);
+      // this.$router.go(-1);
     },
     submitForm() {
       if (this.pay.type === '') return;
@@ -596,13 +615,28 @@ export default {
       const id = this.goods.map(item => item.id);
       const lid = this.goods.map(item => item.goodListId);
       const num = this.goods.map(item => item.num);
-
-      params = Object.assign({}, params, { id, lid, num, discountId: this.getDiscountIds });
+      let discountId = 0;
+      if (this.getDiscountIds.length > 0) {
+        discountId = this.getDiscountIds
+      }
+      params = Object.assign({}, params, { id, lid, num, discountId });
+      console.log(params);
+      // return;
       this.$request.post(`/goodOrder`, params)
       .then(resopnse => {
         const {body = "", out_trade_no = "", totalPrice, msg = "" } = resopnse
         if (msg === 'OK') {
           this.payMoney({ body, out_trade_no, total_fee: totalPrice })
+        } else if (msg === '支付完成') {
+          this.$message.success(msg)
+          setTimeout(() => {
+           this.$router.push({
+             name: 'thank you page',
+             params: {
+               orderId: 1
+             }
+           }) 
+          }, 1000);
         } else {
           this.$message.error(msg)
         }
@@ -769,8 +803,15 @@ img {
             height: 100px;
             margin-top: 2rem;
             margin-bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
             .deliviery_top{
-              padding: 0.5rem 5rem;
+              // padding: 0.5rem 5rem;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              margin-bottom: 1.85rem  ;
               img{
                 width: 19px;
                 height: 16px;
@@ -786,7 +827,10 @@ img {
               }
             }
             .deliviery_bottom{
-              padding: 0.8rem 5rem;
+              // padding: 0.8rem 5rem;
+              display: flex;
+              align-items: center;
+              justify-content: center;
               img{
                 width: 19px;
                 height: 19px;
@@ -1291,7 +1335,7 @@ img {
     .address_dialog-footer{
       display: flex;
       justify-content: center;
-      margin-top: 8.4rem;
+      margin-top: 3.4rem;
       .address_dialog-botton{
         cursor: pointer;
         width: 5.6rem;

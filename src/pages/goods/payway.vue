@@ -1,8 +1,8 @@
 <template>
   <div style="padding-bottom:5rem;">
-    <div class="order">订单提交成功，请尽快付款！订单号：{{order.out_trade_no}}</div>
+    <div class="order"><span class="view-order" @click="viewOrder" style="">返回查看订单</span>订单提交成功，请尽快付款！订单号：{{order.out_trade_no}}</div>
     <div class="payway">
-      <div class="payway_money">
+      <div class="payway_money" v-show="false">
         <div class="title">金币支付</div>
         <div class="fee">
           支付
@@ -123,6 +123,9 @@ export default {
     timer && clearInterval(timer);
   },
   methods: {
+    viewOrder() {
+      this.$emit('back')
+    },
     submintPay() {
       let pwd = this.goldpay.password;
       if (pwd.length === 0 || pwd.length < 6) {
@@ -273,9 +276,16 @@ img {
 .order {
   width: 60rem;
   margin: 0 auto;
-  padding: 2rem 0 1rem 2rem;
+  padding: 2rem 0 1rem 0rem;
   font-size: 0.7rem;
   color: #2c2c2c;
+}
+.view-order{
+  background: #3a794b; width: 10rem; text-align: center; color: #fff;
+    border-top-right-radius: 1rem; border-bottom-right-radius: 1rem;
+    display: inline-block;
+    margin-right: 1rem;
+    cursor: pointer;
 }
 .payway {
   font-size: 0.7rem;
