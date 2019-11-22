@@ -1,6 +1,6 @@
 <template>
   <div style="padding-bottom:5rem;">
-    <div class="order-box" >
+    <div class="order-box">
       <div class="navs">
         <el-breadcrumb separator-class="el-icon-arrow-right">
           <el-breadcrumb-item :to="{ path: '/market/index' }">商城</el-breadcrumb-item>
@@ -14,32 +14,37 @@
           <div class="delivery">
             <div class="header"><span>收货人信息</span></div>
             <div class="body">
-              <div class="personal">
-                <div class="personal_left">
+              
+              <div class="personal" v-if="getAddress">
+                <div class="personal_left" >
                   <div class="receiver_item">
-                  <span class="receiver">收&nbsp;&nbsp;货&nbsp;&nbsp;人：<span class="receiver_name">ivan</span></span>
+                  <span class="receiver">收&nbsp;&nbsp;货&nbsp;&nbsp;人：<span class="receiver_name">{{getAddress.name}}</span></span>
                   </div>
                   <div class="receiver_item">
-                  <span class="receiver">联系电话：<span class="receiver_name">15211373093</span></span>
+                  <span class="receiver">联系电话：<span class="receiver_name">{{getAddress.tel}}</span></span>
                   </div>
                   <div class="receiver_item">
-                  <span class="receiver">收获地址：<span class="receiver_name">chengdushisldfjasdlfjsdladsfjasdl</span></span>
+                  <span class="receiver">收获地址：<span class="receiver_name">{{getAddress.userAddress}}</span></span>
                   </div>
                 </div>
                 <div class="personal_right">
-                  <div class="dizhi">
-                  <img src="../../assets/order/adress.png"/>
-                  <span class="adress">默认地址</span>
+                  <div class="dizhi" v-show="false">
+                    <img src="../../assets/order/adress.png"/>
+                    <span class="adress">默认地址</span>
+                  </div>
+                  <div class="edit" @click="changeAddress">修改</div>
                 </div>
-                <div class="edit">修改</div>
-                </div>
+              </div>
+              <div class="personal" v-else @click="createAddress" style="display:flex; align-items: center; justify-content: center; cursor: pointer;">
+                <img style="width: 19px; height: 19px; ;" src="../../assets/order/newly.png"/>
+                <span>&nbsp;请先新增地址</span>
               </div>
               <div class="deliviery">
                 <div class="deliviery_top">
                   <img src="../../assets/order/switch.png"/>
-                  <span class="deliviery_adress">切换地址</span>
+                  <span class="deliviery_adress" @click="isSelectAddress = true">切换地址</span>
                 </div>
-                <div class="deliviery_bottom">
+                <div class="deliviery_bottom" @click="createAddress">
                   <img src="../../assets/order/newly.png"/>
                   <span class="deliviery_adress">新增地址</span>
                 </div>
@@ -53,9 +58,9 @@
             <div class="item">颜色尺码</div>
             <div class="item">价格/数量</div>
           </div>
-          <div class="body">
-            <div v-if="goods.length>0">
-              <div class="goods" v-for="(item, index) in goods" :key="index">
+          <div class="body" v-if="goods.length>0">
+            <div v-for="(item, index) in goods" :key="index">
+              <div class="goods" >
                 <div class="info">
                   <div class="img">
                     <img :src="item.url" alt />
@@ -80,6 +85,19 @@
                   <div class="number">x{{item.num}}</div>
                 </div>
               </div>
+              <div class="Integraluse" style="margin-top:0; margin-bottom:0.2rem;" v-if="item.good_discount['积分'].length > 0">
+                <div class="Integraluse_top"><span>积分使用</span></div>
+                <div class="Integraluse_bottom">
+                  <el-radio-group v-model="goods[index].jifen" style="cursor: pointer;">
+                    <div class="use_one" v-for="(jifen, index) in item.good_discount['积分']" :key="index">
+                        <el-radio :label="jifen.id">{{`${jifen.consume}${jifen.remake}${jifen.deduction}元`}}</el-radio>
+                    </div>
+                    <div class="use_three">
+                        <el-radio :label="0">不使用积分</el-radio>
+                    </div>
+                  </el-radio-group>
+                </div>
+              </div>
             </div>
             <not-found v-if="goods.length === 0" type="not-fond_2" msg="我寻寻觅觅却找不见您购物车的踪迹"></not-found>
           </div>
@@ -87,31 +105,21 @@
         <div class="payment_mode">
           <div class="mode_top"><span>支付方式</span></div>
           <div class="mode_bottom">
-            <div class="zhifubao" @click="pay.way='alipay'">
+            <div :class="['zhifubao', pay.type === 'alipay' ? 'active': '']" @click="pay.type='alipay'">
               <img src="../../assets/order/alipay_active.png" class="zfb_img" />
               <span class="zfb_text">支付宝</span>
             </div>
-            <div class="weixin">
+            <div :class="['weixin', pay.type === 'wechat' ? 'active': '']" @click="pay.type='wechat'">
               <img src="../../assets/order/wechat_active.png" class="wx_img" />
               <span class="wx_text">微信支付</span>
             </div>
           </div>
         </div>
         <div class="Integraluse">
-          <div class="Integraluse_top"><span>积分使用</span></div>
           <div class="Integraluse_bottom">
-            <div class="use_one">
-                <el-radio v-model="radio" :label="1">2000 积分 商品减免 0000 元</el-radio>
-            </div>
-            <div class="use_two">
-                <el-radio v-model="radio" :label="2">5000 积分 商品减免 0000 元</el-radio>
-            </div>
-            <div class="use_three">
-                <el-radio v-model="radio" :label="3">不使用积分</el-radio>
-            </div>
             <div class="use_four">
-              <span class="span_use">1件商品，总商品金额</span>
-              <span class="span_uses">335元</span>
+              <span class="span_use">{{goods.length}}件商品，总商品金额</span>
+              <span class="span_uses">{{getAllSelectNumberAndPrice.allPrice}}元</span>
             </div>
             <div class="use_five">
               <span class="span_use">运费</span>
@@ -119,7 +127,7 @@
             </div>
             <div class="use_six">
               <span class="span_use">商品优惠</span>
-              <span class="span_uses">225元</span>
+              <span class="span_uses">{{getCountDiscount}}元</span>
             </div>
           </div>
         </div>
@@ -132,9 +140,67 @@
           <div class="count">
             <span class="title">应付金额</span>
             <span class="tips">(不含运费)</span>
-            <div class="price">¥{{getAllSelectNumberAndPrice.allPrice}}</div>
+            <div class="price">¥{{getRealCountPrice}}</div>
           </div>
-          <div class="sumbit" @click="submitForm">提交订单</div>
+          <div :class="['sumbit', {'bid': pay.type === ''}]" @click="submitForm">提交订单</div>
+        </div>
+      </div>
+    </div>
+    <!-- 选择地址 -->
+    <div class="address_dialog-wrap" v-show="isSelectAddress" @click.self="isSelectAddress = false">
+      <div class="shadow"></div>
+      <div class="address_dialog">
+        <div class="address_dialog-title">选择地址</div>
+        <div class="address-box-wrap">
+          <div :class="['address-box', {'active': addressListIndex === index}]" @click="chooseAddress(item, index)" style="cursor: pointer;" v-for="(item, index) in address" :key="index">
+            <div class="receiver_item">
+            <span class="receiver">收&nbsp;&nbsp;货&nbsp;&nbsp;人<span class="receiver_name">{{item.name}}</span></span>
+            </div>
+            <div class="receiver_item">
+            <span class="receiver">联系电话<span class="receiver_name">{{item.tel}}</span></span>
+            </div>
+            <div class="receiver_item">
+            <span class="receiver">收获地址<span class="receiver_name">{{item.userAddress}}</span></span>
+            </div>
+            <div class="default_address">默认地址</div>
+          </div>
+        </div>
+        <div class="address_dialog-footer">
+          <div class="address_dialog-botton" style="background:#ACC794; color:#fff;">确认</div>
+          <div class="address_dialog-botton" style="margin-left:1.35rem;" @click="isSelectAddress = false">取消</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 新增地址 -->
+    <div class="address_dialog-wrap" v-show="isNewAddress" @click.self="isNewAddress = false">
+      <div class="shadow"></div>
+      <div class="address_dialog" style="width:48rem;max-height:43rem;">
+        <div class="address_dialog-title">新增地址</div>
+        <div class="address-box-wrap" >
+          <div class="address-box active" style="width:40rem">
+            <div class="receiver_item">
+            <span class="receiver">收&nbsp;&nbsp;货&nbsp;&nbsp;人<span class="receiver_name"><el-input v-model="addressForm.userName" style="width:300px;" placeholder="请输入收货人"></el-input></span></span>
+            </div>
+            <div class="receiver_item">
+            <span class="receiver">联系电话<span class="receiver_name"><el-input v-model="addressForm.userTel" style="width:300px;" placeholder="请输入联系电话"></el-input></span></span>
+            </div>
+            <div class="receiver_item">
+            <span class="receiver">省/市/县<span class="receiver_name"><v-distpicker @selected="selectProvince" :province="addressForm.province" :city="addressForm.city" :area="addressForm.area" style="display: inline-block;"></v-distpicker></span></span> </div>
+            <div class="receiver_item">
+            <span class="receiver">详细地址<span class="receiver_name"><el-input v-model="addressForm.userAddress" style="width:300px;" placeholder="请输入详细地址"></el-input></span></span>
+            </div>
+            <div class="receiver_item">
+            <span class="receiver">地区编码<span class="receiver_name"><el-input v-model="addressForm.areaCode" style="width:300px;" placeholder="请输入地区编码"></el-input></span></span>
+            </div>
+            <div class="receiver_item">
+            <span class="receiver">是否默认地址<span class="receiver_name"><el-switch v-model="addressForm.isDefault" active-color="#13ce66" inactive-color="#ccc" :active-value="1" :inactive-value="0" active-text="是" inactive-text="否"> </el-switch></span></span>
+            </div>
+          </div>
+        </div>
+        <div class="address_dialog-footer">
+          <div @click="sureThisAddress" class="address_dialog-botton" style="background:#ACC794; color:#fff;">确认</div>
+          <div @click="isNewAddress = false" class="address_dialog-botton" style="margin-left:1.35rem;">取消</div>
         </div>
       </div>
     </div>
@@ -179,10 +245,22 @@ export default {
       pay: {
         type: ''
       },
-      good_discount: {积分: [], 金币: []},
       goods: [],
       address: [],
       addressActive: {},
+      isSelectAddress: false,
+      isNewAddress: false,
+      addressListIndex: 0,
+      addressForm : {
+        userName: '',
+        userTel: '',
+        city: '',
+        province: '',
+        area: '',
+        userAddress: '',
+        areaCode: '',
+        isDefault: 0,
+      },
       ruleForm: {
         id: "", // 购物车列表编号
         lid: "", // 商品副列表 编号
@@ -213,31 +291,31 @@ export default {
       }, 0);
       return { allPrice: allPrice.toFixed(2), allGoodsNumber: allGoods.length };
     },
-    getCountPrice() {
-      return (item) => {
-        if(item.deduction > this.train.price) {
-          return '0.00';
-        }
-        return (this.train.price - item.deduction).toFixed(2)
-      }
+    getCountDiscount() {
+      const deduction_arr = this.goods.filter(item => item.jifen)
+        .map(item => {
+          const jifen_id = item.jifen;
+          const jifen_select = item.good_discount['积分'].filter(item => item.id === jifen_id)
+          return jifen_select && jifen_select[0].deduction
+        }).filter(item => item)
+        return  deduction_arr.reduce((pre, cur) => pre + cur, 0)
     },
-    isJifen() {
-      return this.train_discount['积分'] && this.train_discount['积分'].length > 0
-    },
-    payPrice() {
-      if (typeof this.train.price !== 'undefined' && this.train.price === 0) {
+    getRealCountPrice() {
+      if(this.getCountDiscount > this.getAllSelectNumberAndPrice.allPrice) {
         return '0.00'
       }
-      if(this.checkedDiscount.length === 0){
-        return this.train.price >= 0 ? this.train.price.toFixed(2) : ''
+      return (this.getAllSelectNumberAndPrice.allPrice - this.getCountDiscount).toFixed(2)
+    },
+    getAddress() {
+      if (this.address.length === 0) {
+        return ''
       }
-      return (this.train.price - this.checkedDiscount[0].deduction) >=0 ? (this.train.price - this.checkedDiscount[0].deduction).toFixed(2) : '';
-    },
-    usedDiscount() {
-      return this.checkedDiscount.length > 0
-    },
-    forbidPay() {
-      return !this.pay.type
+      if (this.address.length === 1) {
+        return this.address[0]
+      }
+      const default_address = this.address.filter(item => parseInt(item.is_default) === 1)[0]
+
+      return default_address || this.address[0]
     }
   },
   mounted() {
@@ -251,21 +329,53 @@ export default {
     });
   },
   methods: {
-    selectAddress(data) {
+    sureThisAddress() {
+      
+    },
+    createAddress() {
+      this.isNewAddress = true
+      this.addressForm = {
+        userName: '',
+        userTel: '',
+        city: '',
+        province: '',
+        area: '',
+        userAddress: '',
+        areaCode: '',
+        isDefault: 0,
+      }
+    },
+    changeAddress() {
+      this.isNewAddress = true;
+      this.addressForm = {...this.addressForm, ...this.getAddress, ...{userName: this.getAddress.name, userTel: this.getAddress.tel, isDefault: this.getAddress.is_default}}
+    },
+    chooseAddress(address, index) {
+      this.addressListIndex = index
+    },
+    selectProvince(data) {
       const { area, city, province } = data;
       let params = {
         province: province.value,
         city: city.value,
         area: area.value
       };
+      this.addressForm = Object.assign({}, this.addressForm,  params);
     },
     back() {
       this.$router.go(-1);
     },
     submitForm() {
-      let params = Object.assign({},);
+      if (this.pay.type === '') return;
+      let status = ''
+      if(this.getAddress.id) {
+        status = 1 
+      } else {
+        status = 0
+      }
+    
+      let address_params = Object.assign({});
       if (parseInt(status) === 0) {
-        if (this.address.length === 0) {
+        if (!this.getAddress) {
           this.$message({
             type: "warning",
             message: "请先填写收货信息"
@@ -282,8 +392,8 @@ export default {
           tel,
           name,
           message
-        } = this.addressActive;
-        params = Object.assign({}, params, {
+        } = this.getAddress;
+        address_params = Object.assign({}, address_params, {
           province,
           area,
           city,
@@ -294,26 +404,32 @@ export default {
           userMessage: message,
           userTel: tel
         });
-      } else if (parseInt(status) === 1) {
-        if (params.userAddress === "") {
-          this.$message({
-            type: "warning",
-            message: "请先填写收货信息"
-          });
-          return;
-        }
+        console.log(address_params);
+      } 
+      let params = {
+        id: [],
+        lid: [],
+        num: [],
+        discountId: [],
+        status: 0,
+        userName: '',
+        userTel: '',
+        city: '',
+        province: '',
+        area: '',
+        address: '',
+        addressId: ''
       }
-      if (params.payment === "") {
-        this.$message({
-          type: "warning",
-          message: "请先选择付款方式"
-        });
-        return;
+      if(this.getAddress) {
+        const {address = "", area  = "", areaCode  = "", city  = "", created_at  = "",
+                id = "", is_default = 0, message = "", name  = "", province  = "", tel  = "", updated_at  = "",
+                userAddress  = "", user_id = '', zone = "" } = this.getAddress
+        params = Object.assign({}, ...params, {})
       }
       const id = this.goods.map(item => item.id);
       const lid = this.goods.map(item => item.goodListId);
       const num = this.goods.map(item => item.num);
-      params = Object.assign({}, params, { id, lid, num });
+      // params = Object.assign({}, params, { id, lid, num });
     },
     payMoney() {
       if(this.forbidPay) {
@@ -603,7 +719,7 @@ img {
       }
     }
     .goods-box {
-      border: 1px solid #eee;
+      // border: 1px solid #eee;
       border-top: none;
       overflow: hidden;
       margin-top: 2rem;
@@ -721,6 +837,9 @@ img {
           border-radius: 5px;
           padding: 0.8rem 1.5rem;
           cursor: pointer;
+          &.active {
+            background: #eaeaea;
+          }
           .zfb_img{
             width: 21px;
             height: 21px;
@@ -738,6 +857,9 @@ img {
           padding: 0.8rem 1.5rem;
           margin-left: 2rem;
           cursor: pointer;
+          &.active {
+            background: #eaeaea;
+          }
           .wx_img{
             width: 21px;
             height: 21px;
@@ -776,6 +898,7 @@ img {
           font-family:Microsoft YaHei;
           font-weight:400;
           color:rgba(44,44,44,1);
+          padding-bottom: 0.5rem;
         }
         .use_two{
           font-family:Microsoft YaHei;
@@ -789,7 +912,7 @@ img {
         }
         .use_four{
           text-align: end;
-          padding-top: 6rem;
+          padding-top: 1rem;
           .span_use{
             font-family:Microsoft YaHei;
             font-weight:400;
@@ -912,6 +1035,78 @@ img {
         height: 100%;
         font-weight:400;
         cursor: pointer;
+        &.bid{
+          cursor: not-allowed;
+          background: #eee;
+        }
+      }
+    }
+  }
+}
+
+.address_dialog-wrap{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 100;
+  .shadow{}
+  .address_dialog{
+    width: 36.85rem;
+    max-height: 37.7rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    box-shadow:1px -1px 10px 1px rgba(0, 0, 0, 0.18);
+    border-radius:10px;
+    padding: 3rem;
+    .address_dialog-title{
+      padding-bottom: 3.5rem;
+    }
+    .address-box-wrap{
+      .address-box{
+        width: 29rem;
+        border: 1px solid #eee;
+        padding-top: 1.85rem;
+        padding-left: 1.45rem;
+        padding-right: 1.45rem;
+        padding-bottom: 1.3rem;
+        background: #fff;
+        margin-bottom: 0.65rem;
+        position: relative;
+        &.active{
+          border: 1px solid #ACC794;
+        }
+        .receiver_item{
+          padding-bottom: 0.85rem;
+          .receiver{
+          }
+          .receiver_name{
+            margin-left: 2em;
+          }
+        }
+         .default_address{
+           position: absolute;
+           right: 1.05rem;
+           top: 1.45rem;
+        }
+      }
+    }
+    .address_dialog-footer{
+      display: flex;
+      justify-content: center;
+      margin-top: 8.4rem;
+      .address_dialog-botton{
+        cursor: pointer;
+        width: 5.6rem;
+        height: 2.5rem;
+        line-height: 2.5rem;
+        text-align: center;
+        background: #e5e5e5;
       }
     }
   }
