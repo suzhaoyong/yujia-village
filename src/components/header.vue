@@ -644,6 +644,7 @@ a:hover{
         position: absolute;
         top: 4px;
         right: 6%;
+        cursor: pointer;
       }
       .span1 {
         padding-right: 5px;
