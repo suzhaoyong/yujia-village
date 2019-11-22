@@ -125,7 +125,6 @@
               <span class="span_use">运费</span>
               <span class="span_uses">0.00元</span>
             </div>
-            {{getCountConsume}}
             <div class="use_six">
               <span class="span_use">商品优惠</span>
               <span class="span_uses">{{getCountDiscount}}元</span>
@@ -279,7 +278,7 @@ export default {
       pay: {
         type: ''
       },
-      fraction: 200,
+      fraction: 0,
       goods: [],
       address: [],
       addressActive: {},
@@ -353,13 +352,10 @@ export default {
         if(this.fraction < item.consume) {
           return true;
         }
-        console.log(this.getDiscountIds, item, item.id);
         const has_id = this.getDiscountIds.indexOf(item.id)
-        console.log(has_id, (this.fraction - this.getCountConsume), item.consume);
         if(has_id < 0 && (this.fraction - this.getCountConsume) < item.consume) {
           return true;
         }
-        // return has_id > -1
       }
     },
     getCountConsume() {
@@ -392,13 +388,14 @@ export default {
     }
   },
   mounted() {
-    getUserAddress().then(data => {
-      this.address = data.address;
-      if (data.address.length === 0) {
+    getUserAddress().then(response => {
+      this.address = response.address;
+      if (response.address.length === 0) {
       } else {
         // this.addressActive = data.address[data.address.length-1];
       }
-      this.goods = data.goods;
+      this.fraction = response.fraction
+      this.goods = response.goods;
     });
   },
   methods: {
@@ -581,15 +578,23 @@ export default {
         const {address = "", area  = "", areaCode  = "", city  = "", created_at  = "",
                 id = "", is_default = 0, message = "", name  = "", province  = "", tel  = "", updated_at  = "",
                 userAddress  = "", user_id = '', zone = "" } = this.getAddress
-        params = Object.assign({}, ...params, 
+        params = Object.assign({}, params, 
                   { userName: name, userTel: tel, city, province, area, address: userAddress, addressId: id })
       }
       const id = this.goods.map(item => item.id);
       const lid = this.goods.map(item => item.goodListId);
       const num = this.goods.map(item => item.num);
-      // const discountId 
-      params = Object.assign({}, params, { id, lid, num });
-      console.log(params);
+
+      params = Object.assign({}, params, { id, lid, num, discountId: this.getDiscountIds });
+      this.$request.post(`/goodOrder`, params)
+      .then(resopnse => {
+        const {body = "", out_trade_no = "", totalPrice, msg = "" } = resopnse
+        if (msg === 'OK') {
+          this.payMoney({ body, out_trade_no, total_fee: totalPrice })
+        } else {
+          this.$message.error(msg)
+        }
+      })
     },
     payMoney({body = '', out_trade_no = '', total_fee = ''}) {
       if(this.forbidPay) {
