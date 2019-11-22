@@ -658,6 +658,7 @@ export default {
 img {
   width: 100%;
   height: 100%;
+  object-fit: cover;
 }
 @mixin full-width($support-type: margin, $min-width: null) {
   @if $support-type == "margin" {
@@ -706,13 +707,13 @@ img {
   position: relative;
   .pages {
     position: absolute;
-    bottom: -2rem;
+    bottom: -3rem;
     left: 50%;
     transform: translateX(-50%);
   }
 
   .goods-box {
-    flex-basis: 23%;
+    flex-basis: 32%;
     margin: 0.3rem;
     width: 13.5rem;
     // height: 19.35rem;
@@ -720,6 +721,7 @@ img {
     padding-bottom: 1rem;
     // border:1px solid rgba(164, 164, 164, 0.39);
     border-radius: 6px;
+    box-shadow:2px 4px 5px 1px rgba(164,164,164,0.26);
     &:hover {
       box-shadow: 0.1rem 0.2rem 1.3rem 0.1rem rgba(164, 164, 164, 0.39);
       transition: box-shadow 0.75s;
@@ -729,7 +731,7 @@ img {
     }
     .pic {
       width: 100%;
-      height: 12.75rem;
+      height: 18rem;
     }
     .gtitle {
       padding: 1rem;

@@ -226,8 +226,9 @@ img {
     height: 4rem;
     line-height: 4rem;
     padding-left: 3rem;
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: border;
+    color: #7BB666;
   }
   .my_body {
     margin-top: 1.6rem;
@@ -240,11 +241,12 @@ img {
       display: flex;
       .tag {
         cursor: pointer;
-        color: #ccc;
+        color: #2C2C2C;
         font-weight: bolder;
         margin-right: 1.8rem;
         &.active {
-          color: #2c2c2c;
+          color: #7BB666;
+          border-bottom: 2px solid #94D17F;
         }
       }
     }

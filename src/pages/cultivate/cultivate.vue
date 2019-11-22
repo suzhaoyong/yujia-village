@@ -845,6 +845,12 @@ export default {
   border: none !important;
   background: #000;
 }
+.cultivate-main >>>.el-date-editor .el-range__icon{
+    line-height: 22px !important;
+  }
+ .cultivate-main >>>.el-date-editor .el-range-separator{
+   line-height: 22px !important;
+ }
 </style>
 <style lang="scss" scoped>
 .search {

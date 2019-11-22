@@ -4,6 +4,12 @@
       <el-col :span="24">
         <div class="detail-main">
           <!-- <session-title name="课程介绍" brief="Sometimes beauty is so simple"></session-title> -->
+          <div class="navs">
+                <el-breadcrumb separator="/">
+                <el-breadcrumb-item :to="{ path: '/cultivate/index' }">培训信息</el-breadcrumb-item>
+                <el-breadcrumb-item>{{this.themes}}</el-breadcrumb-item>
+                </el-breadcrumb>
+            </div>
           <div class="detail-count-div2">
             <div  v-if="train.train_image && train.train_image.length > 0" :class="`${train.train_image && train.train_image.length > 0 ? 'count-div2-img scorll' : 'count-div2-img'}`" style="cursor: pointer;">
               <img
@@ -173,6 +179,7 @@ export default {
       changedImg: '',
       changeCount: 0,
       value2: 4,
+      themes:'',
       train: {
         themeImg: ''
       },
@@ -184,8 +191,8 @@ export default {
     getTrainsById(id)
       .then(data => {
         const themeImg = data.train.train_image && data.train.train_image.length > 0 && data.train.train_image[0].path ? data.train.train_image[0].path : data.train.teacher_img 
-        console.log(themeImg,data);
         this.train = Object.assign({} ,data.train, {themeImg: themeImg});
+        this.themes = data.train.theme;
         this.train_discount = data.train_discount
         this.changedImg = data.train.train_old_image[0] && data.train.train_old_image[0].url ||  data.train.teacher_img
       })
@@ -657,6 +664,11 @@ export default {
   padding: 2rem 0;
   background: #fff;
   overflow: hidden;
+  .navs {
+    width: 100%;
+    margin: 0 auto;
+    padding: 1rem 0rem 3rem 0rem;
+    }
   .detail-count-div1 {
     width: 100%;
     height: 9.4rem;

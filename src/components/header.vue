@@ -12,16 +12,16 @@
                 </el-carousel>
             </div>
         </div>
-          <div class="notice" v-if="info.user.name">
+          <!-- <div class="notice" v-if="info.user.name">
             <img class="icon-notice" src="../assets/notice.png"/>
             <marquee :listData="listData"></marquee>
-          </div>
+          </div> -->
         <div class="head-quan">
           <div class="head-right">
             <el-button type="text" class="span2"></el-button>
             <div style="display:inline-block;" v-if="info.user.name">
               <div class="identity">
-                <img :src="info.user.icon" style="border-radius:50%;" alt="头像" />
+                <img :src="info.user.icon" style="border-radius:50%;" alt="头像" @click="lickimg"/>
               </div>
               <span class="span1" style="line-height: 40px;font-size: 0.9rem;margin-right: 2rem;">{{info.user.name}}</span>
             </div>
@@ -134,7 +134,7 @@ export default {
       account: {
         type: ""
       },
-      listData:[],
+      // listData:[],
       icon: {
         identity_g,
         identity_j,
@@ -197,13 +197,13 @@ export default {
   },
   created() {
     this.fetchData();
-    this.messcroll();
+    // this.messcroll();
     let info = sessionStorage.getItem('user')
     if(info) {
       store.dispatch("INFO", JSON.parse(info))
-      setInterval(() => {
-        this.messcroll();
-      },300000)
+      // setInterval(() => {
+      //   this.messcroll();
+      // },300000)
     }
   },
   beforeUpdate() {
@@ -219,6 +219,9 @@ export default {
         return;
       }
       this.$router.push('/personal/index')
+    },
+    lickimg(){
+      this.$router.push('/personal/safety-center')
     },
     successInfo() {
       this.$on("success", name => {
@@ -311,11 +314,11 @@ export default {
       };
     },
     //消息滚动
-    messcroll(){
-      this.$request.get(`/message/overall_situation/20`).then(data => {
-          this.listData = data;
-      });
-    },
+    // messcroll(){
+    //   this.$request.get(`/message/overall_situation/20`).then(data => {
+    //       this.listData = data;
+    //   });
+    // },
     //根据页面查广告数据
     classification(classid){
       this.subjectbanner = [];
@@ -426,6 +429,7 @@ a:hover{
   img {
     width: 100%;
     height: 100%;
+    cursor: pointer;
   }
 }
 .el-menu {
@@ -640,6 +644,7 @@ a:hover{
         position: absolute;
         top: 4px;
         right: 6%;
+        cursor: pointer;
       }
       .span1 {
         padding-right: 5px;
