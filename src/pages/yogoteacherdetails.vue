@@ -1,6 +1,12 @@
 <template>
     <el-col :span="24">
         <div class="yogoteacher-main">
+            <div class="navs">
+                <el-breadcrumb separator="/">
+                <el-breadcrumb-item :to="{ path: '/yogoteacher' }">瑜伽名师</el-breadcrumb-item>
+                <el-breadcrumb-item>{{teacher.name}}</el-breadcrumb-item>
+                </el-breadcrumb>
+            </div>
             <div class="yogoteacher-count-div1">
                 <h2><img src="../assets/yujia.png"/>个人简介</h2>
                 <p class="nav-text">Sometimes beauty is so simple</p>
@@ -159,6 +165,11 @@ export default {
     height: 100%;
     margin: 0 auto;
     overflow: hidden;
+    .navs {
+    width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 0rem 0rem 0rem;
+    }
     .yogoteacher-count-div1{
         width: 1200px;
         height: 190px;
