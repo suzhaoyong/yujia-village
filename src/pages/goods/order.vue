@@ -42,7 +42,7 @@
               <div class="deliviery">
                 <div class="deliviery_top">
                   <img src="../../assets/order/switch.png"/>
-                  <span class="deliviery_adress" @click="isSelectAddress = true">切换地址</span>
+                  <span class="deliviery_adress" @click="switcherAddress">切换地址</span>
                 </div>
                 <div class="deliviery_bottom" @click="createAddress">
                   <img src="../../assets/order/newly.png"/>
@@ -90,7 +90,7 @@
                 <div class="Integraluse_bottom">
                   <el-radio-group v-model="goods[index].jifen" style="cursor: pointer;">
                     <div class="use_one" v-for="(jifen, index) in item.good_discount['积分']" :key="index">
-                        <el-radio :label="jifen.id">{{`${jifen.consume}${jifen.remake}${jifen.deduction}元`}}</el-radio>
+                        <el-radio :disabled="isDisableChooseChonsume(jifen)" :label="jifen.id">{{`${jifen.consume}${jifen.remake}${jifen.deduction}元`}}</el-radio>
                     </div>
                     <div class="use_three">
                         <el-radio :label="0">不使用积分</el-radio>
@@ -125,6 +125,7 @@
               <span class="span_use">运费</span>
               <span class="span_uses">0.00元</span>
             </div>
+            {{getCountConsume}}
             <div class="use_six">
               <span class="span_use">商品优惠</span>
               <span class="span_uses">{{getCountDiscount}}元</span>
@@ -162,11 +163,11 @@
             <div class="receiver_item">
             <span class="receiver">收获地址<span class="receiver_name">{{item.userAddress}}</span></span>
             </div>
-            <div class="default_address">默认地址</div>
+            <div v-if="parseInt(item.is_default) === 1" class="default_address">默认地址</div>
           </div>
         </div>
         <div class="address_dialog-footer">
-          <div class="address_dialog-botton" style="background:#ACC794; color:#fff;">确认</div>
+          <div @click="sureThisAddress" class="address_dialog-botton" style="background:#ACC794; color:#fff;">确认</div>
           <div class="address_dialog-botton" style="margin-left:1.35rem;" @click="isSelectAddress = false">取消</div>
         </div>
       </div>
@@ -199,7 +200,7 @@
           </div>
         </div>
         <div class="address_dialog-footer">
-          <div @click="sureThisAddress" class="address_dialog-botton" style="background:#ACC794; color:#fff;">确认</div>
+          <div @click="sureCreateAddress" class="address_dialog-botton" style="background:#ACC794; color:#fff;">确认</div>
           <div @click="isNewAddress = false" class="address_dialog-botton" style="margin-left:1.35rem;">取消</div>
         </div>
       </div>
@@ -245,6 +246,7 @@ export default {
       pay: {
         type: ''
       },
+      fraction: 200,
       goods: [],
       address: [],
       addressActive: {},
@@ -291,14 +293,37 @@ export default {
       }, 0);
       return { allPrice: allPrice.toFixed(2), allGoodsNumber: allGoods.length };
     },
-    getCountDiscount() {
-      const deduction_arr = this.goods.filter(item => item.jifen)
+    getDeductionArr() {
+      return this.goods.filter(item => item.jifen)
         .map(item => {
           const jifen_id = item.jifen;
           const jifen_select = item.good_discount['积分'].filter(item => item.id === jifen_id)
-          return jifen_select && jifen_select[0].deduction
-        }).filter(item => item)
-        return  deduction_arr.reduce((pre, cur) => pre + cur, 0)
+          return jifen_select && jifen_select[0]
+        })
+        .filter(item => item)
+    },
+    getCountDiscount() {
+        return  this.getDeductionArr.map(item => item.deduction).reduce((pre, cur) => pre + cur, 0)
+    },
+    getDiscountIds() {
+      return this.getDeductionArr.map(item => item.id)
+    },
+    isDisableChooseChonsume() {
+      return (item) => {
+        if(this.fraction < item.consume) {
+          return true;
+        }
+        console.log(this.getDiscountIds, item, item.id);
+        const has_id = this.getDiscountIds.indexOf(item.id)
+        console.log(has_id, (this.fraction - this.getCountConsume), item.consume);
+        if(has_id < 0 && (this.fraction - this.getCountConsume) < item.consume) {
+          return true;
+        }
+        // return has_id > -1
+      }
+    },
+    getCountConsume() {
+        return  this.getDeductionArr.map(item => item.consume).reduce((pre, cur) => pre + cur, 0)
     },
     getRealCountPrice() {
       if(this.getCountDiscount > this.getAllSelectNumberAndPrice.allPrice) {
@@ -313,6 +338,9 @@ export default {
       if (this.address.length === 1) {
         return this.address[0]
       }
+      if (this.addressActive.id) {
+        return this.addressActive
+      }
       const default_address = this.address.filter(item => parseInt(item.is_default) === 1)[0]
 
       return default_address || this.address[0]
@@ -323,14 +351,30 @@ export default {
       this.address = data.address;
       if (data.address.length === 0) {
       } else {
-        this.addressActive = data.address[data.address.length-1];
+        // this.addressActive = data.address[data.address.length-1];
       }
       this.goods = data.goods;
     });
   },
   methods: {
+    switcherAddress() {
+      if (this.address.length === 0) return;
+      if(this.getAddress) {
+        this.addressListIndex = this.address.findIndex(item => item.id === this.getAddress.id)
+      }
+      this.isSelectAddress = true
+    },
     sureThisAddress() {
-      
+      const select_address = this.address[this.addressListIndex]
+      this.addressActive = select_address
+      this.isSelectAddress = false;
+    },
+    sureCreateAddress() {
+      this.$request.post(`/createAddress`, this.addressForm)
+      .then(response => {
+        this.$message.success('新增成功')
+        this.isNewAddress = false;
+      })
     },
     createAddress() {
       this.isNewAddress = true
@@ -404,7 +448,6 @@ export default {
           userMessage: message,
           userTel: tel
         });
-        console.log(address_params);
       } 
       let params = {
         id: [],
@@ -424,32 +467,33 @@ export default {
         const {address = "", area  = "", areaCode  = "", city  = "", created_at  = "",
                 id = "", is_default = 0, message = "", name  = "", province  = "", tel  = "", updated_at  = "",
                 userAddress  = "", user_id = '', zone = "" } = this.getAddress
-        params = Object.assign({}, ...params, {})
+        params = Object.assign({}, ...params, 
+                  { userName: name, userTel: tel, city, province, area, address: userAddress, addressId: id })
       }
       const id = this.goods.map(item => item.id);
       const lid = this.goods.map(item => item.goodListId);
       const num = this.goods.map(item => item.num);
-      // params = Object.assign({}, params, { id, lid, num });
+      // const discountId 
+      params = Object.assign({}, params, { id, lid, num });
+      console.log(params);
     },
-    payMoney() {
+    payMoney({body = '', out_trade_no = '', total_fee = ''}) {
       if(this.forbidPay) {
         return;
       }
+
+
       if(this.pay.type === 'alipay') {
-        const { body, out_trade_no, total_fee } = this.form
         let url = `${window.location.origin}/api/alipay/web/get?out_trade_no=${out_trade_no}`;
         if (process.env.NODE_ENV === 'development') {
           url = `${'http://testapi.aomengyujia.com'}/api/alipay/web`;
         }
         this.$request.post('/alipay/web', { out_trade_no: out_trade_no})
           .then(response => {
-            // let form = response.substring(0,5) + ' target="_blank"' + response.substring(5)            
             document.write(`${response}`);
-            // document.alipay_submit.submit();  
           })
       }
       if(this.pay.type === 'wechat') {
-        const { body, out_trade_no, total_fee } = this.form
         sessionStorage.setItem('total_fee', total_fee)
         this.$router.push({
           name: 'wechat pay',
