@@ -181,21 +181,53 @@
         <div class="address-box-wrap" >
           <div class="address-box active" style="width:40rem">
             <div class="receiver_item">
-            <span class="receiver">收&nbsp;&nbsp;货&nbsp;&nbsp;人<span class="receiver_name"><el-input v-model="addressForm.userName" style="width:300px;" placeholder="请输入收货人"></el-input></span></span>
+              <span class="receiver">收&nbsp;&nbsp;货&nbsp;&nbsp;人
+                <span class="receiver_name">
+                  <el-input v-model="addressForm.userName"
+                    @input="blurRuleForm('userName', 'addressForm', 'addressFormErrorRule')"
+                    style="width:300px;" placeholder="请输入收货人"></el-input>
+                  <span class="input_error-tips" style="color:#ce551a;">{{blurInputError('userName', 'addressForm', 'addressFormErrorRule')}}</span>
+                </span>
+              </span>
             </div>
             <div class="receiver_item">
-            <span class="receiver">联系电话<span class="receiver_name"><el-input v-model="addressForm.userTel" style="width:300px;" placeholder="请输入联系电话"></el-input></span></span>
+              <span class="receiver">联系电话
+                <span class="receiver_name">
+                  <el-input v-model="addressForm.userTel"
+                    @input="blurRuleForm('userTel', 'addressForm', 'addressFormErrorRule')"
+                    style="width:300px;" placeholder="请输入联系电话"></el-input>
+                  <span class="input_error-tips" style="color:#ce551a;">{{blurInputError('userTel', 'addressForm', 'addressFormErrorRule')}}</span>
+                </span>
+                </span>
+              </span>
             </div>
             <div class="receiver_item">
-            <span class="receiver">省/市/县<span class="receiver_name"><v-distpicker @selected="selectProvince" :province="addressForm.province" :city="addressForm.city" :area="addressForm.area" style="display: inline-block;"></v-distpicker></span></span> </div>
-            <div class="receiver_item">
-            <span class="receiver">详细地址<span class="receiver_name"><el-input v-model="addressForm.userAddress" style="width:300px;" placeholder="请输入详细地址"></el-input></span></span>
+              <span class="receiver">省/市/县
+                <span class="receiver_name">
+                  <v-distpicker @selected="selectProvince" :province="addressForm.province" :city="addressForm.city" :area="addressForm.area" style="display: inline-block;"></v-distpicker>
+                  <span class="input_error-tips" style="color:#ce551a;">{{blurInputError('city', 'addressForm', 'addressFormErrorRule')}}</span>
+                </span>
+              </span>
             </div>
             <div class="receiver_item">
-            <span class="receiver">地区编码<span class="receiver_name"><el-input v-model="addressForm.areaCode" style="width:300px;" placeholder="请输入地区编码"></el-input></span></span>
+              <span class="receiver">详细地址
+                <span class="receiver_name">
+                  <el-input v-model="addressForm.userAddress"
+                    @input="blurRuleForm('userAddress', 'addressForm', 'addressFormErrorRule')"
+                    style="width:300px;" placeholder="请输入详细地址"></el-input>
+                  <span class="input_error-tips" style="color:#ce551a;">{{blurInputError('userAddress', 'addressForm', 'addressFormErrorRule')}}</span>
+                </span>
+              </span>
             </div>
             <div class="receiver_item">
-            <span class="receiver">是否默认地址<span class="receiver_name"><el-switch v-model="addressForm.isDefault" active-color="#13ce66" inactive-color="#ccc" :active-value="1" :inactive-value="0" active-text="是" inactive-text="否"> </el-switch></span></span>
+              <span class="receiver">地区编码
+                <span class="receiver_name">
+                  <el-input v-model="addressForm.areaCode" style="width:300px;" placeholder="请输入地区编码"></el-input>
+                </span>
+              </span>
+            </div>
+            <div class="receiver_item">
+              <span class="receiver">是否默认地址<span class="receiver_name"><el-switch v-model="addressForm.isDefault" active-color="#13ce66" inactive-color="#ccc" :active-value="1" :inactive-value="0" active-text="是" inactive-text="否"> </el-switch></span></span>
             </div>
           </div>
         </div>
@@ -210,6 +242,7 @@
 <script>
 import VDistpicker from "v-distpicker";
 import backIcon from "@/assets/market/back.png";
+import Validator from '@/utils/Validator.js';
 import {
   getUserAddress,
   getUserOrder,
@@ -262,6 +295,13 @@ export default {
         userAddress: '',
         areaCode: '',
         isDefault: 0,
+      },
+      addressFormErrorRule: {
+        userName: { show: false, msg: "" },
+        userTel: { show: false, msg: "" },
+        city: { show: false, msg: "" },
+        userAddress: { show: false, msg: "" },
+        areaCode: { show: false, msg: "" }
       },
       ruleForm: {
         id: "", // 购物车列表编号
@@ -344,6 +384,11 @@ export default {
       const default_address = this.address.filter(item => parseInt(item.is_default) === 1)[0]
 
       return default_address || this.address[0]
+    },
+    blurInputError() {
+      return (key, ruleName, errorName) => {
+        return this[errorName][key].show?this.validatorBlurRuleForm(key, ruleName):''
+      }
     }
   },
   mounted() {
@@ -357,6 +402,56 @@ export default {
     });
   },
   methods: {
+    blurRuleForm(item, ruleName, errorName) {
+      let error = this.validatorBlurRuleForm(item, ruleName)
+      if (error.length === 0){
+        this[errorName][item].show = false;
+      } else {
+        this[errorName][item].show = true;
+        this[errorName][item].msg = error;
+      }
+    },
+    validatorBlurRuleForm(key, ruleName) {
+      let rules = {
+          userTel: [{
+              strategy: 'isNonEmpty',
+              errorMsg: '手机号码不能为空！'
+            }, {
+              strategy: 'isMoblie',
+              errorMsg: '手机号码格式不正确！'
+            }],
+          userName: [{
+                strategy: 'isNonEmpty',
+                errorMsg: '姓名不能为空！'
+            }, {
+                strategy: 'minLength:2',
+                errorMsg: '姓名长度不能小于 2 位！'
+            }, {
+                strategy: 'maxLength:10',
+                errorMsg: '姓名长度不能大于 10 位！'
+            }],
+            city: [{
+                strategy: 'isNonEmpty',
+                errorMsg: '城市不能为空！'
+              }],
+            userAddress: [{
+                  strategy: 'isNonEmpty',
+                  errorMsg: '详细地址不能为空！'
+              }]
+        }
+      if (!rules[key]) return '';
+      const validatorFunc = () => {
+        let validator = new Validator();
+        validator.add(this[ruleName][key], rules[key])
+        let errorMsg = validator.start()
+        return errorMsg
+      }
+      let errorMsg = validatorFunc()
+      if(errorMsg) {
+        return errorMsg;
+      }
+      return '';
+    },
     switcherAddress() {
       if (this.address.length === 0) return;
       if(this.getAddress) {
@@ -370,6 +465,25 @@ export default {
       this.isSelectAddress = false;
     },
     sureCreateAddress() {
+      for(let key in this.addressForm) {
+        if(this.addressFormErrorRule[key]) {
+          let error = this.validatorBlurRuleForm(key, 'addressForm')
+          if (error.length === 0){
+            this.addressFormErrorRule[key].show = false;
+          } else {
+            this.addressFormErrorRule[key].show = true;
+            this.addressFormErrorRule[key].msg = error;
+          }
+        }
+      }
+      let is_error = false
+      for(let key in this.addressFormErrorRule) {
+        if(this.addressFormErrorRule[key].show) {
+          is_error = true;
+        }
+      }
+      if(is_error) return;
+
       this.$request.post(`/createAddress`, this.addressForm)
       .then(response => {
         this.$message.success('新增成功')
