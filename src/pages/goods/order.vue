@@ -28,7 +28,7 @@
                   </div>
                 </div>
                 <div class="personal_right">
-                  <div class="dizhi" v-show="false">
+                  <div class="dizhi" @click="setDefaultAddress">
                     <img src="../../assets/order/adress.png"/>
                     <span class="adress">默认地址</span>
                   </div>
@@ -176,7 +176,8 @@
     <div class="address_dialog-wrap" v-show="isNewAddress" @click.self="isNewAddress = false">
       <div class="shadow"></div>
       <div class="address_dialog" style="width:48rem;max-height:43rem;">
-        <div class="address_dialog-title">新增地址</div>
+        <div class="address_dialog-title" v-if="addressForm.id">修改地址</div>
+        <div class="address_dialog-title" v-else>新增地址</div>
         <div class="address-box-wrap" >
           <div class="address-box active" style="width:40rem">
             <div class="receiver_item">
@@ -449,6 +450,10 @@ export default {
       }
       return '';
     },
+    setDefaultAddress() {
+      const default_address = this.address.filter(item => parseInt(item.is_default) === 1)[0]
+      default_address && (this.addressActive = default_address)
+    },
     switcherAddress() {
       if (this.address.length === 0) return;
       if(this.getAddress) {
@@ -480,12 +485,19 @@ export default {
         }
       }
       if(is_error) return;
-
-      this.$request.post(`/createAddress`, this.addressForm)
-      .then(response => {
-        this.$message.success('新增成功')
-        this.isNewAddress = false;
-      })
+      if(this.addressForm.id) {
+        this.$request.post(`/updateAddress/${this.addressForm.id}`, this.addressForm)
+        .then(response => {
+          this.$message.success('修改成功')
+          this.isNewAddress = false;
+        })
+      } else {
+        this.$request.post(`/createAddress`, this.addressForm)
+        .then(response => {
+          this.$message.success('新增成功')
+          this.isNewAddress = false;
+        })
+      }
     },
     createAddress() {
       this.isNewAddress = true
