@@ -152,7 +152,7 @@
       <div class="shadow"></div>
       <div class="address_dialog">
         <div class="address_dialog-title">选择地址</div>
-        <div class="address-box-wrap">
+        <div class="address-box-wrap scorll" style="height: 20rem; overflow: auto;">
           <div :class="['address-box', {'active': addressListIndex === index}]" @click="chooseAddress(item, index)" style="cursor: pointer;" v-for="(item, index) in address" :key="index">
             <div class="receiver_item">
             <span class="receiver">收&nbsp;&nbsp;货&nbsp;&nbsp;人<span class="receiver_name">{{item.name}}</span></span>
@@ -1226,6 +1226,23 @@ img {
       padding-bottom: 3.5rem;
     }
     .address-box-wrap{
+      /* 设置滚动条的样式 */
+      &.scorll::-webkit-scrollbar {
+        width: 0.1rem;
+      }
+      /* 滚动槽 */
+      &.scorll::-webkit-scrollbar-track {
+        background: #dcdcdc;
+        border-radius: 0.15rem;
+      }
+      /* 滚动条滑块 */
+      &.scorll::-webkit-scrollbar-thumb {
+        background: #88bc37;
+        border-radius: 0.15rem;
+      }
+      &.scorll::-webkit-scrollbar-thumb {
+        background: #88bc37;
+      }
       .address-box{
         width: 29rem;
         border: 1px solid #eee;
