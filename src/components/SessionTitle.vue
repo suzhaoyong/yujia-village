@@ -123,5 +123,8 @@ export default {
   margin-bottom: 0;
   padding: 3rem 0;
 }
+.title-en{
+  color: #999;
+}
 </style>
 

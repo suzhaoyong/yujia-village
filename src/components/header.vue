@@ -21,7 +21,7 @@
             <el-button type="text" class="span2"></el-button>
             <div style="display:inline-block;" v-if="info.user.name">
               <div class="identity">
-                <img :src="info.user.icon" style="border-radius:50%;" alt="头像" />
+                <img :src="info.user.icon" style="border-radius:50%;" alt="头像" @click="lickimg"/>
               </div>
               <span class="span1" style="line-height: 40px;font-size: 0.9rem;margin-right: 2rem;">{{info.user.name}}</span>
             </div>
@@ -219,6 +219,9 @@ export default {
         return;
       }
       this.$router.push('/personal/index')
+    },
+    lickimg(){
+      this.$router.push('/personal/safety-center')
     },
     successInfo() {
       this.$on("success", name => {
@@ -426,6 +429,7 @@ a:hover{
   img {
     width: 100%;
     height: 100%;
+    cursor: pointer;
   }
 }
 .el-menu {

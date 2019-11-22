@@ -954,7 +954,12 @@ export default {
     .btn {
       cursor: pointer;
       border: 1px solid #7d7d7d;
-      padding: 0.55rem 1.95rem;
+      padding: 0.4rem 1.7rem;
+      font-size: 0.9rem;
+    }
+    .btn:hover{
+      color: #62923E;
+      border: 1px solid #62923E;
     }
   }
 }
@@ -1066,10 +1071,15 @@ export default {
             .btn {
               cursor: pointer;
               border: 1px solid #7d7d7d;
-              padding: 0.55rem 1.95rem;
+              padding: 0.4rem 1.7rem;
+              font-size: 0.9rem;
               &:first-child {
                 margin-right: 2.45rem;
               }
+            }
+            .btn:hover{
+              color: #62923E;
+              border: 1px solid #62923E;
             }
           }
         }
