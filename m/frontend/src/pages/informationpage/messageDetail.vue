@@ -113,7 +113,7 @@ import shareIng from '../../components/shareing'
 import '../../dist/swiper.css'
 import { getFollowTrain } from '../../../api/personal'
 import { mapGetters } from "vuex";
-// import { Toast } from 'vant';
+import { Toast } from 'vant';
 
 export default {
   data () {

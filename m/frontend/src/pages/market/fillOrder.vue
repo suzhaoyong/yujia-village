@@ -191,6 +191,7 @@ export default {
       payway: {
         show: false,
         columns: ["支付宝", '微信'],
+        // columns: ["支付宝"],
         value: ""
       },
       coupon: {

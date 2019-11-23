@@ -57,32 +57,35 @@ export default {
         var touch = ev.targetTouches[0];
         oL = touch.clientX - div1.offsetLeft;
         oT = touch.clientY - div1.offsetTop;
+        return false
         });
         div1.addEventListener('touchmove', function(e) {
-         var ev = e || window.event;
-         var touch = ev.targetTouches[0];
-         var oLeft = touch.clientX - oL;
-         var oTop = touch.clientY - oT;
-         if(oLeft < 0) {
-         oLeft = 0;
-         } else if(oLeft >= maxW) {
-         oLeft = maxW;
-         }
-         if(oTop < 0) {
-         oTop = 0;
-         } else if(oTop >= maxH) {
-         oTop = maxH;
-         }
-         div1.style.left = oLeft + 'px';
-         div1.style.top = oTop + 'px';
+           var ev = e || window.event;
+           var touch = ev.targetTouches[0];
+           var oLeft = touch.clientX - oL;
+           var oTop = touch.clientY - oT;
+           if(oLeft < 0) {
+           oLeft = 0;
+           } else if(oLeft >= maxW) {
+           oLeft = maxW;
+           }
+           if(oTop < 0) {
+           oTop = 0;
+           } else if(oTop >= maxH) {
+           oTop = maxH;
+           }
+           div1.style.left = oLeft + 'px';
+           div1.style.top = oTop + 'px';
+          return false
         });
         //触摸结束时的处理
         div1.addEventListener('touchend', function() {
-         document.removeEventListener("touchmove", defaultEvent);
+          document.removeEventListener("touchmove", defaultEvent);
         });
         //阻止默认事件
-        function defaultEvent(e) {
-         e.preventDefault();
+        function defaultEvent() {
+          return false
+          // e.preventDefault();
         }
       }
     },

@@ -418,6 +418,7 @@ export default {
     },
     // 排序传递的参数
     getRankParams (keyWord, params = {}) {
+      params = this.getFiltersParams()
       if (keyWord === 'host') {
         params =Object.assign({}, params, {follow: false})
       } else if (keyWord === 'default') { 
