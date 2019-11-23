@@ -1,17 +1,18 @@
 <template>
   <div class="wrap">
-    <van-nav-bar title="成功结果"  fixed>
+    <van-nav-bar title="查看结果"  fixed>
       <!-- <div class="" slot="right" @click="handleShareGoods">
         <img class="icon" src="../../../assets/img/share.png" />
       </div>-->
       <div class="" slot="left" @click="handleBackHome">
-        <span>返回个人中心</span>
+        <span> <van-icon name="arrow-left"/> </span>
       </div>
     </van-nav-bar>
     <div class="order_body">
       <div class="pay_success">
         <div class="title">
-          <span>{{ msg }}</span>
+          <span class="title-msg">{{ msg }}</span>
+          <p class="title-integral"><span class="span1">40</span><span>积分</span> </p>
         </div>
         <span class="tips">{{ ordermsg }}</span>
         <div class="actions">
@@ -26,34 +27,42 @@
 export default {
   data() {
     return {
-      msg: '',
-      ordermsg: '',
+      msg: '支付成功',
+      ordermsg: '感谢您的光顾，宝贝一定准时送到府上！',
       orderid: '',
     };
+  },
+  beforeEnter: (to, from, next) => {
+    if(from.path === 'fillorder?type=1')
+    next(() => {
+      this.msg = '支付成功'
+    })
+    next()
   },
   mounted() {
     this.$store.commit('loadStatus', false)
   },
   created() {
-    try {
-      this.orderid = this.$router.query.id
-      if (this.orderid) {
-        this.$request.post('/getWechatOrder', { 'out_trade_no': this.orderid }).then((res) => {
-          this.msg = res.msg
-          if( res.msg === '支付成功' ) {
-            this.ordermsg = '感谢您的光顾，宝贝一定准时送到府上！'
-          } else if (res.msg === '支付失败') {
-            this.ordermsg = '失败了！请重新购买'
-          } else if (res.msg === '未支付') {
-            this.ordermsg = '去支付！'
-          }
-        })
-      }
-    }
-    catch {
-      this.msg = '无内容呢'
-      this.ordermsg = '未查询到结果'
-    }
+    // try {
+    //   this.orderid = this.$router.query.id
+    //   if (this.orderid) {
+    //     this.$request.post('/getWechatOrder', { 'out_trade_no': this.orderid }).then((res) => {
+    //       this.msg = res.msg
+    //       if( res.msg === '支付成功' ) {
+    //         this.ordermsg = '感谢您的光顾，宝贝一定准时送到府上！'
+    //       } else if (res.msg === '支付失败') {
+    //         this.ordermsg = '失败了！请重新购买'
+    //       } else if (res.msg === '未支付') {
+    //         this.ordermsg = '去支付！'
+    //       }
+    //     })
+    //   }
+    // }
+    // catch {
+    //   this.msg = '无内容呢'
+    //   this.ordermsg = '未查询到结果'
+    // }
+    console.log(window.location.href)
   },
   methods: {
     back() {},
@@ -85,21 +94,32 @@ export default {
     .pay_success {
       .title {
         width: 290px;
+        height: 85px;
         margin: 0 auto;
-        border: 3px solid #b3d465;
+        border: 3px solid #B3D465;
         padding: 20px 0;
-        span {
+        text-align: center;
+        .title-msg {
           width: 100%;
-          font-size: 30px;
+          font-size: 14px;
+          color: #2C2C2C;
           font-weight: bolder;
-          text-align: center;
           display: inline-block;
+        }
+        &-integral {
+          margin-top: 10px;
+          .span1 {
+            color: #B3D465;
+            font-size: 16px;
+          }
         }
       }
       .tips {
         padding-top: 10px;
         display: inline-block;
         width: 100%;
+        font-size: 12px;
+        color: #999999;
         text-align: center;
       }
       .actions {

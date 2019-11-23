@@ -31,9 +31,9 @@
                     <img class="pay-way-img" src="../../assets/img/zfb.png" alt="">
                 </van-radio>
                 <!-- 微信支付 -->
-                <!-- <van-radio name="2" checked-color="#8FCD71" @click="payway = '微信' ">
+                <van-radio name="2" checked-color="#8FCD71" @click="payway = '微信' ">
                     <img class="pay-way-img" src="../../assets/img/wx.png" alt="">
-                </van-radio> -->
+                </van-radio>
             </van-radio-group>
         </div>
         <div class="footer">
@@ -131,11 +131,11 @@ export default {
                         if(this.payway === '支付宝') {
                             this.payMoney(res.out_trade_no);
                         } else if(this.payway === '微信') {
-                            if (this.isWeiXin()) {
+                            // if (this.isWeiXin()) {
                                 this.payForWexin(res.out_trade_no)
-                            } else {
-                                this.payForWexinw(res.out_trade_no)
-                            }
+                            // } else {
+                            //     this.payForWexinw(res.out_trade_no)
+                            // }
                         }
                     }
                 }
@@ -169,39 +169,40 @@ export default {
         },
         // 获取微信浏览器接口
         payForWexin (orderId) {
-            this.$request.get('/alipay/wechat/jsapi/openid').then((res) => {
+            this.$request.get('alipay/wechat/jsapi/code?out_trade_no=' + orderId).then((res) => {
                 console.log(res)
-                // window.location.href = res.openid
-                var createCallbackName = function () {
-                    return `callback${(Math.random() * 1000000).toFixed(0)}`
-                }
-                var insertScript = function (url) {
-                    let script = document.createElement('script')
-                    script.type="text/javascript"
-                    // script.src = res.openid
-                    // script.onload = script.onerror = function () {
-                    //     document.body.removeChild(script)
-                    // }
-                    script.setAttribute('src', url)
-                    document.body.appendChild(script)
-                } 
-                var jsonp = function (url, config = {}) {
-                    let data = config.data || {}
-                    let timeout = config.timeout || 5000
-                    let timer
-                    let funcName = createCallbackName()
-                    data.callback = funcName
-                    return new Promise((resolve, reject) => {
-                         window[funcName] = function (res) {
-                             delete window[funcName]
-                             resolve(res)
-                         }
-                         insertScript(url)
-                    })
-                }
-                jsonp(res.openid).then((res) => {
-                    console.log(res)
-                })
+                return
+                window.location.href = res.codeUrl
+                // var createCallbackName = function () {
+                //     return `callback${(Math.random() * 1000000).toFixed(0)}`
+                // }
+                // var insertScript = function (url) {
+                //     let script = document.createElement('script')
+                //     script.type="text/javascript"
+                //     // script.src = res.openid
+                //     // script.onload = script.onerror = function () {
+                //     //     document.body.removeChild(script)
+                //     // }
+                //     script.setAttribute('src', url)
+                //     document.body.appendChild(script)
+                // } 
+                // var jsonp = function (url, config = {}) {
+                //     let data = config.data || {}
+                //     let timeout = config.timeout || 5000
+                //     let timer
+                //     let funcName = createCallbackName()
+                //     data.callback = funcName
+                //     return new Promise((resolve, reject) => {
+                //          window[funcName] = function (res) {
+                //              delete window[funcName]
+                //              resolve(res)
+                //          }
+                //          insertScript(url)
+                //     })
+                // }
+                // jsonp(res.openid, {data: callback}).then((res) => {
+                //     console.log(res)
+                // })
                     // setTimeout(() =>{
                     //     console.log(script.innerHTML)
                     // }, 3000)
