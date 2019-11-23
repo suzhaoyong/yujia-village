@@ -20,7 +20,7 @@
         </ul>
       </div>
       <div class="shade-layer" v-show="isShow" @click="isShow = false">
-        <div class="right-box" @click.stop="">
+        <div class="right-box" @click.stop="" >
           <div class="popup">
             <p>理想价格</p>
             <div class="popup-price"> 
@@ -543,7 +543,7 @@ export default {
       left: 0;
       bottom: 50px;
       z-index: 1024;
-      // height: 100%;
+      width: 100%;
       background-color: rgba(0,0,0,.7);
       .right-box {
         width: 335px;

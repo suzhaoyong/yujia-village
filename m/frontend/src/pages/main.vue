@@ -240,7 +240,6 @@ img{
   .main_wrap {
     position: relative;
     background: #fff;
-    padding-bottom: 20px;
     // log 图标
     h1 {
       position: absolute;

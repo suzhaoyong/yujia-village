@@ -1,6 +1,6 @@
 <template>
     <div>
-        <van-nav-bar title="我的订单" left-arrow @click-left="onClickLeft">
+        <van-nav-bar title="商品订单" left-arrow @click-left="onClickLeft">
         </van-nav-bar>
         <van-tabs v-model="activeName" color="#B3D465">
             <van-tab v-for="(item,index) in orderTitle" :key="index" :title="item" :name="item">
@@ -97,7 +97,12 @@ export default {
     },
     methods: {
         onClickLeft() {
-            this.$router.go(-1);
+            const {order} = this.$route.query;
+            if(order) {
+                this.$router.push('/personal');
+            } else {
+                this.$router.go(-1);
+            }
         },
         // 删除功能，暂时不做
         // deleted() {
