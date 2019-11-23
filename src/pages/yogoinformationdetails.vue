@@ -5,9 +5,9 @@
                 <div class="yogoknowledgedetails-cont-div1">
                     <h3>{{knowinfo.headline}}</h3>
                     <div class="yogoknow">
-                        <span class="span1">{{knowinfo.updated_at}}</span>
-                        <img class="img2" src="../assets/eye.png"/>
-                        <span class="span2">{{knowinfo.views}}</span>
+                        <span class="span1">{{knowinfo.created_at}}</span>
+                        <img class="img2" src="../assets/eye.png" :title="'点击率:'+(knowinfo.views||100)"/>
+                        <span class="span2">{{knowinfo.views||100}}</span>
                         <img class="img3" src="../assets/market/like.png"/>
                         <span class="span3">{{knowinfo.type}}</span>
                         <span class="span4">关键字：{{knowinfo.keyword}}</span>
@@ -31,9 +31,16 @@
 <script>
 import { getTrains, postTrains, getTrainsById } from "@/api/trains";
 export default {
-    inject: ["reload"],
+  metaInfo() {
+    return { ...this.pageMeta }
+  },
+  inject: ["reload"],
   data() {
     return {
+        pageMeta: {
+          title: '', 
+          meta: []
+        },
         knowinfo:{},
         config: {
         url: "",
@@ -51,9 +58,11 @@ export default {
       this.listdatadetails();
   },
   methods:{
-      listdatadetails(){
+      async listdatadetails(){
         let _this = this;
-        this.$request(`/informationInfo/${_this.$route.query.id}`).then(res => {
+        await this.$request(`/informationInfo/${_this.$route.query.id}`).then(res => {
+          this.pageMeta.title = res.headline
+          this.pageMeta.meta = [ {name: 'keyWords', content: res.keyword}, {name: 'description', content: res.summary}]
             _this.knowinfo = res;
             // const content = res.content.split("\n").filter(item => item);
             // _this.knowinfo.content = content;

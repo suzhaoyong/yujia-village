@@ -10,7 +10,7 @@
               <img :src="train.teacher_img" :alt="train.theme">
             </div>
             <span class="goods-name">{{train.theme}}</span>
-            <span class="goods-price">￥{{train.price ? train.price.toFixed(2) : ''}}</span>
+            <span class="goods-price">￥{{typeof train.price !== 'undefined' ? train.price.toFixed(2) : ''}}</span>
           </div>
         </div>
         <div class="jifen" v-show="!isPayWay">
@@ -21,7 +21,7 @@
               :max="1">
               <div class="jifen-box" v-for="(item, index) in train_discount['积分']">
                 <el-checkbox :label="item" :key="item.deduction" :disabled="item.consume > info.user.fraction" class="jifen-checkbox">
-                  <span>{{item.consume}}</span>积分 课程仅需<span>{{(train.price - item.deduction) >= 0 ? (train.price - item.deduction).toFixed(2) : ''}}</span>元
+                  <span>{{item.consume}}</span>积分 课程仅需<span>{{getCountPrice(item)}}</span>元
                 </el-checkbox>
               </div>
             </el-checkbox-group>
@@ -29,7 +29,7 @@
         </div>
         <div class="count" v-show="!isPayWay">
           <div class="sum_price">
-            <span style="color: #FF4400;">1</span> <span>件商品，总商品金额</span> <span style="margin-left:2rem;color: #FF4400;">{{train.price ? train.price.toFixed(2) : ''}}</span>元
+            <span style="color: #FF4400;">1</span> <span>件商品，总商品金额</span> <span style="margin-left:2rem;color: #FF4400;">{{typeof train.price !== 'undefined' ? train.price.toFixed(2) : ''}}</span>元
           </div>
           <div class="tips">
             <span style="font-size: 0.6rem;">{{usedDiscount?'已使用积分抵扣':' '}}</span>
@@ -74,6 +74,7 @@ import { postAlipayOrder } from "@/api/market";
 
 import { mapGetters } from 'vuex'
 import Payway from "./payway";
+import Bus from '@/utils/Bus.js'
 export default {
   components: {
     Payway
@@ -113,10 +114,21 @@ export default {
   },
   computed: {
     ...mapGetters(['info', 'isUserNeedLogin']),
+    getCountPrice() {
+      return (item) => {
+        if(item.deduction > this.train.price) {
+          return '0.00';
+        }
+        return (this.train.price - item.deduction).toFixed(2)
+      }
+    },
     isJifen() {
       return this.train_discount['积分'] && this.train_discount['积分'].length > 0
     },
     payPrice() {
+      if (typeof this.train.price !== 'undefined' && this.train.price === 0) {
+        return '0.00'
+      }
       if(this.checkedDiscount.length === 0){
         return this.train.price >= 0 ? this.train.price.toFixed(2) : ''
       }
@@ -148,10 +160,15 @@ export default {
       
       postTrainsOrder(this.orderTrain)
         .then(response => {
-          const { body, out_trade_no } = response
-          
-          this.form = { body, out_trade_no, total_fee: this.payPrice }
-          this.isPayWay = true
+          console.log(response);
+          const { body, out_trade_no = '' } = response
+
+          if(out_trade_no == '') {
+            this.$message({type:'warning', message: response.msg})
+          } else {
+            this.form = { body, out_trade_no, total_fee: this.payPrice }
+            this.isPayWay = true
+          }
         })
       
     },
@@ -161,8 +178,10 @@ export default {
       }
       if(this.pay.type === 'alipay') {
         const { body, out_trade_no, total_fee } = this.form
-        // let url = `${window.location.origin}/api/alipay/web/get?out_trade_no=${out_trade_no}`;
-        let url = `${'http://testapi.aomengyujia.com'}/api/alipay/web`;
+        let url = `${window.location.origin}/api/alipay/web/get?out_trade_no=${out_trade_no}`;
+        if (process.env.NODE_ENV === 'development') {
+          url = `${'http://testapi.aomengyujia.com'}/api/alipay/web`;
+        }
         this.$request.post('/alipay/web', { out_trade_no: out_trade_no})
           .then(response => {
             // let form = response.substring(0,5) + ' target="_blank"' + response.substring(5)            
@@ -172,7 +191,14 @@ export default {
       }
       if(this.pay.type === 'wechat') {
         const { body, out_trade_no, total_fee } = this.form
-        this.$router.push(`/cultivate/order/pay/${out_trade_no}`)
+        sessionStorage.setItem('total_fee', total_fee)
+        this.$router.push({
+          name: 'wechat pay',
+          query: {
+            orderId: out_trade_no
+          }
+        })
+        // this.$router.push(`/cultivate/order/pay/${out_trade_no}`)
         // this.playcode.order = { out_trade_no, body, totalPrice: total_fee }
         // this.playcode.show = true;
       }

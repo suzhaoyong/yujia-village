@@ -33,7 +33,7 @@
             <div class="dropdown show">
               <a
                 class="btn dropdown-toggle"
-                style="color: #7F8F58;"
+                style="color: #7F8F58;font-size: 14px;"
                 href="#"
                 role="button"
                 data-toggle="dropdown"
@@ -64,7 +64,7 @@
             <div class="dropdown show">
               <a
                 class="btn dropdown-toggle"
-                style="color: #7F8F58;"
+                style="color: #7F8F58;font-size: 14px;"
                 href="#"
                 role="button"
                 data-toggle="dropdown"
@@ -96,7 +96,7 @@
             <div class="dropdown show">
               <a
                 class="btn dropdown-toggle"
-                style="color: #7F8F58;"
+                style="color: #7F8F58;font-size: 14px;"
                 href="#"
                 role="button"
                 data-toggle="dropdown"
@@ -128,7 +128,7 @@
             <div class="dropdown show">
               <a
                 class="btn dropdown-toggle"
-                style="color: #7F8F58;"
+                style="color: #7F8F58;font-size: 14px;"
                 href="#"
                 role="button"
                 data-toggle="dropdown"
@@ -155,7 +155,7 @@
               <div class="dropdown show">
                 <a
                   class="btn dropdown-toggle"
-                  style="color: #2c2c2c; border:1px solid #bfbfbf;padding-left:0.5rem;padding-right:0.5rem;"
+                  style="color: #2c2c2c; border:1px solid #bfbfbf;padding: 0.4rem 0.8rem 0.4rem 0.8rem;font-size: 14px;"
                   href="#"
                   role="button"
                   data-toggle="dropdown"
@@ -178,7 +178,7 @@
               <div class="dropdown show">
                 <a
                   class="btn dropdown-toggle"
-                  style="color: #2c2c2c; border:1px solid #bfbfbf;padding-left:0.5rem;padding-right:0.5rem;"
+                  style="color: #2c2c2c; border:1px solid #bfbfbf;padding: 0.4rem 0.8rem 0.4rem 0.8rem;font-size: 14px;"
                   href="#"
                   role="button"
                   data-toggle="dropdown"
@@ -201,7 +201,7 @@
               <div class="dropdown show">
                 <a
                   class="btn dropdown-toggle"
-                  style="color: #2c2c2c; border:1px solid #bfbfbf;padding-left:0.5rem;padding-right:0.5rem;"
+                  style="color: #2c2c2c; border:1px solid #bfbfbf;padding: 0.4rem 0.8rem 0.4rem 0.8rem;font-size: 14px;"
                   href="#"
                   role="button"
                   data-toggle="dropdown"
@@ -602,6 +602,7 @@ img {
       z-index: 0;
       height: 2.5rem;
       margin-bottom: 0.5rem;
+      font-size: 14px;
       &.more_active {
         z-index: 1;
       }
@@ -644,6 +645,7 @@ img {
       position: relative;
       height: 2.5rem;
       margin-bottom: 0.5rem;
+      font-size: 14px;
       .title {
         width: 6rem;
         height: 100%;
@@ -683,6 +685,7 @@ img {
         // right: 0;
         // top: 0;
         color: #8f8f8f;
+        font-size: 14px;
       }
     }
     .column {
@@ -699,6 +702,7 @@ img {
         // border: 1px solid rgba(164, 164, 164, 0.39);
         padding-bottom: 1rem;
         border-radius: 4px;
+        box-shadow: 0px 1px 10px 0px rgba(143,143,143,0.32);
         &:hover {
           box-shadow: 0.1rem 0.2rem 1.3rem 0.1rem rgba(164, 164, 164, 0.39);
           transition: box-shadow 0.75s;
@@ -722,10 +726,10 @@ img {
           .price {
             display: flex;
             .old-price {
-              font-size: 0.6rem;
+              font-size: 0.7rem;
               color: #999;
               text-decoration: line-through;
-              margin-right: 0.1rem;
+              margin-right: 0.3rem;
             }
             .new-price {
               font-size: 0.7rem;
@@ -739,8 +743,8 @@ img {
             .views {
               cursor: pointer;
               position: relative;
-              padding-left: 0.4rem;
-              padding-right: 1.2rem;
+              padding-left: 0.5rem;
+              padding-right: 1.4rem;
               &::before {
                 content: "";
                 display: block;
@@ -763,10 +767,10 @@ img {
                 display: block;
                 position: absolute;
                 top: 50%;
-                left: -0.95rem;
+                left: -1.1rem;
                 transform: translateY(-50%);
-                width: 0.9rem;
-                height: 0.9rem;
+                width: 17px;
+                height: 17px;
                 background: pink;
                 background: url("../../assets/market/like.png") no-repeat;
                 background-size: 100% 100%;
@@ -886,8 +890,8 @@ img {
             .views {
               cursor: pointer;
               position: relative;
-              padding-left: 0.4rem;
-              padding-right: 1.2rem;
+              padding-left: 0.5rem;
+              padding-right: 1.4rem;
               &::before {
                 content: "";
                 display: block;
@@ -910,10 +914,10 @@ img {
                 display: block;
                 position: absolute;
                 top: 50%;
-                left: -0.95rem;
+                left: -1.1rem;
                 transform: translateY(-50%);
-                width: 0.9rem;
-                height: 0.9rem;
+                width: 17px;
+                height: 17px;
                 background: pink;
                 background: url("../../assets/market/like.png") no-repeat;
                 background-size: 100% 100%;

@@ -47,7 +47,6 @@
                   <li :class="{'diffbg': stardiff == 5 }" @click="changediff('5')">5级</li>
                 </ul>
               </div>
-              
             </div>
             <div class="area">
               <p>地区选择</p>
@@ -125,6 +124,7 @@
 <script>
 import Vue from 'vue';
 import areaList from '../market/goods/area_list'
+import { goAdvertingApi } from '@/api/main'
 import { PullRefresh } from 'vant';
 
 // import { mapGetters } from "vuex";
@@ -180,34 +180,30 @@ export default {
       // 控制价格排序的 flag
       priceFlag: 1,
       categoryIndex: -1,
-      swiper: [], // 广告位1
+      swiper: false, // 广告位1
       advertis2: {}, // 广告位2
       advertis3: {} // // 广告位2
     }
   },
   created() {
     this.messageList()
-    this.messagetypeList()
+    
   },
   mounted () {
     this.PullUpReload()
     this.getAdvertising()
+    this.messagetypeList()
   },
   methods: {
     // 广告位
     goAdvertising (mold, relation_id) {
-      if(mold === 2) { this.$router.push(`/teacherClub/clubhouseDetails?id=${relation_id}`) }
-      else if(mold === 3) {this.$router.push(`teacherClub/teacherDetails?id=${relation_id}`)}
-      else if(mold === 4) { this.$router.push(`/messagedetail/${relation_id}`) }
-      // else if(mold === 5) { this.$router.push(`/goods/detail/${relation_id}`) }
-      else if(mold === 6) { this.$router.push(`/yogamessage/list`) }
-      // else if(mold === 7) { 商品分类 }
-      else if(mold === 1) { this.$router.push('/advertisement') }
+      goAdvertingApi(mold, relation_id)
     },
     getAdvertising () {
       return this.$request.get('/advertisement/data/' + 2).then((res) => {
-      this.swiper = res[0].advertisement[0]
-      console.log(res)
+      if (res[0]) {
+        this.swiper = res[0].advertisement[0]
+      }
     })
     },
     // 地址遮罩层
@@ -310,7 +306,14 @@ export default {
     messagetypeList () {
       this.$request.get('trains/type').then((res) => {
         this.classfly = res.course_types
+
+       if(this.$route.query.id) {
+        this.classfly.map((item, index) =>{if(item.id == this.$route.query.id){ this.spanIndex2.push(index)} })
+        this.selectTtype.push(this.$route.query.id)
+        this.searchResult()
+      }
       })
+
     },
     // 我想学的操作
     study(id) {
@@ -415,6 +418,7 @@ export default {
     },
     // 排序传递的参数
     getRankParams (keyWord, params = {}) {
+      params = this.getFiltersParams()
       if (keyWord === 'host') {
         params =Object.assign({}, params, {follow: false})
       } else if (keyWord === 'default') { 
@@ -477,11 +481,11 @@ export default {
   margin-top: 160px;
   img {
     width: 100%;
-    height: 40px;
+    height: 100%;
   }
   span {
     position: relative;
-    left: 56%;
+    left: 36%;
     top: -105%;
     font-size: 16px;
     color: #999999;

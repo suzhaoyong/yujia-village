@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 const Home = resolve => require(['@/pages/home'], resolve) //首页
 const Main = resolve => require(['@/pages/main'], resolve) //首页
+const Subjects = resolve => require(['@/pages/subjects'], resolve) //专题页
 const Joinclubhouse = resolve => require(['@/pages/joinclubhouse'], resolve) //加盟机构
 const Joinclubhousedetails = resolve => require(['@/pages/joinclubhousedetails'], resolve) //加盟机构---详情
 const Yogoteacher = resolve => require(['@/pages/yogoteacher'], resolve) //瑜伽名师
@@ -31,9 +32,15 @@ const router = new Router({
   },
   routes: [{
       path: '/',
-      name: 'Home',
-      component: Home,
-      redirect: '/main'
+      name: 'main',
+      meta: {
+        header_name: 'main'
+      },
+      component: () => import('@/pages/index.vue'),
+    },
+    {
+      path: '/not_found_page',
+      component: () => import('@/components/404.vue')
     },
     {
       path: '/login',
@@ -258,6 +265,19 @@ const router = new Router({
       ]
     },
     {
+      path: '/subjects',
+      name: 'Subjects',
+      component: Home, //专题页
+      children: [{
+          path: '/subjects',
+          meta: {
+            header_name: 'main'
+          },
+          component: Subjects
+        }
+      ]
+    },
+    {
       path: '/joinclubhouse',
       name: 'Joinclubhouse',
       component: Home,
@@ -270,6 +290,9 @@ const router = new Router({
         }, //加盟机构
         {
           path: '/joinclubhouse/joinclubhousedetails',
+          meta: {
+            header_name: 'joinclubhouse'
+          },
           component: Joinclubhousedetails
         } //加盟机构----详情
       ]
@@ -347,6 +370,17 @@ const router = new Router({
         } //关于我们
       ]
     },
+    {
+      path: '/pay/new_wechat_pay',
+      name: 'wechat pay',
+      component: () => import('@/pages/pay/wechatPay')
+    },
+
+    // 404
+    {
+      path: '*',
+      redirect: '/not_found_page'
+    }
   ]
 })
 router.beforeEach((to, from, next) => {

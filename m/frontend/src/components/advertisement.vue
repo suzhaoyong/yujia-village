@@ -1,25 +1,42 @@
 <template>
   <div>
     <header>
-      <van-nav-bar title="" left-arrow @click-left="goback" fixed>
+      <van-nav-bar title="为您推荐" left-arrow @click-left="goback" fixed>
       </van-nav-bar>
     </header>
-    <div class="advertmian">
-      <img src="../../static/img/advertimg/1.jpg">
-      <img src="../../static/img/advertimg/2.jpg">
-      <img src="../../static/img/advertimg/3.jpg">
-      <img src="../../static/img/advertimg/4.jpg">
-      <img src="../../static/img/advertimg/5.jpg">
+    <div>
+    <div class="advertmian" v-if="imgs.length !== 0">
+      <img v-for="(img, index) in imgs" :key="index" :src="img">
     </div>
+    <div v-else class="advertmiantext">
+      敬请期待!
+    </div>
+    </div>
+    
   </div>
 </template>
 <script>
 export default {
+  data() {
+    return {
+      imgs: [],
+    }
+  },  
+    mounted() {
+      this.getadvertisementimg()
+    },
   methods: {
     goback(){
-        this.$router.replace('/');
+        this.$router.go(-1)
     },
-  },
+
+    getadvertisementimg() {
+      this.$request.get(`advertisement/customize/${this.$route.query.id}`).then((res) => {
+        this.imgs = res.images
+        // console.log(res)
+      })
+    },
+  }
 }
 </script>
 
@@ -28,7 +45,6 @@ body {
   border: 1px solid white;
 }
 header {
-  
   .van-nav-bar .van-icon {
       vertical-align: middle;
   }
@@ -44,7 +60,12 @@ header {
       z-index: 99 !important;
   }
 }
-
+.advertmiantext {
+  width: 100%;
+  font-size: 14px;
+  padding-top: 100px;
+  text-align: center;
+}
   .advertmian {
     display: inline-block;
     margin-top: 44px;
@@ -54,4 +75,5 @@ header {
       width: 100%;
     }
   }
+
 </style>

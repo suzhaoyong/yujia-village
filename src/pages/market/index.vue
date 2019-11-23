@@ -14,109 +14,63 @@
     </div>
     <div class="market">
       <div class="market_news">
-        <session-title name="新品推荐"></session-title>
-        <div class="market_news-content">
+        <session-title name="好物推荐"></session-title>
+        <div class="market_news-content" v-for="item in good_recomment.new" :key="item.id">
           <div class="market_news-content_box">
             <div class="market_news-content_box-lf">
               <div class="goods_img">
-                <img :src="good_recomment.new.url_one" alt="商品" />
-              </div>
-              <div class="goods_info">
-                <div class="goods_info-title">{{good_recomment.new.desc}}</div>
-                <div class="goods_info-tips">{{good_recomment.new.describe}}</div>
-                <div class="goods_info-price">￥{{good_recomment.new.sell_price}}</div>
-                <div class="goods_info-tags">新款来袭</div>
-                <div class="goods_info-time">{{good_recomment.new.new_date}}发售</div>
-                <div class="goods_info-logo">yoga</div>
+                <img :src="item.url_one" alt="商品" />
               </div>
             </div>
             <div class="market_news-content_box-rh">
               <div class="goods_subimg">
-                <img :src="good_recomment.new.url_two" alt="商品" />
+                <img :src="item.url_two" alt="商品" />
+              </div>
+              <div class="goods_info">
+                <div class="goods_info-title">{{item.desc}}</div>
+                <div class="goods_info-tips">{{item.describe}}</div>
+                <div class="goods_info-border"></div>
+                <div class="goods_info-price">{{item.sell_price}}<span class="rmb">RMB</span></div>
+                <div class="goods_buy-btn" style="cursor: pointer;" @click="viewGoodsDetail(item)" >立即购买</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="market_time">
+        <div class="market_time_pull">
+          <div class="time_title">时尚精品</div>
+          <div class="time_brief">Sometimes beauty is so simple</div>
+          <div class="time_border"></div>
+        </div>
+        <div class="market_time-content" v-for="item in good_recomment.discount" :key="item.id">
+          <div class="after"></div>
+          <div class="rhomb"></div>
+          <div class="market_time-content_box">
+            <div class="market_time-content_box-lf">
+              <div class="goods_img">
+                <img :src="item.url_one" alt="商品" />
+              </div>
+            </div>
+            <div class="market_time-content_box-rh">
+              <div class="goods_info">
+                <div class="goods_info-title">{{item.desc}}</div>
+                <div class="goods_info-tips">{{item.describe}}</div>
+                <div class="goods_info-border"></div>
+                <div class="goods_info-price">{{item.sell_price}}<span class="rmb">RMB</span></div>
+                <div class="goods_buy-btn" style="cursor: pointer;" @click="viewGoodsDetail(item)" >立即购买</div>
               </div>
               <div class="goods_subimg">
-                <img :src="good_recomment.new.url_three" alt="商品" />
+                <img :src="item.url_two" alt="商品" />
               </div>
-              <div
-                class="goods_buy-btn"
-                style="cursor: pointer;"
-                @click="viewGoodsDetail(good_recomment.new)"
-              >立即购买</div>
             </div>
           </div>
         </div>
       </div>
-      <div class="market_time">
-        <session-title name="限时优惠" :full="true" brief="Sometimes beauty is so simple"></session-title>
-        <div class="market_time-content">
-          <div class="market_time-content_box">
-            <div class="prev_btn-box">
-              <div class="prev_btn hvr-float-shadow" @click="changeDiscountsForu('double','prev')"></div>
-            </div>
-            <div class="goods_list">
-              <transition-group name="fade" tag="div" style="display: flex;">
-                <div
-                  class="goods hvr-underline-from-left"
-                  style="cursor: pointer;"
-                  @click="viewGoodsDetail(item)"
-                  v-for="(item,index) in discount.double.list"
-                  :key="item.id"
-                >
-                  <div class="goods-img">
-                    <img :src="item.discount_url" alt />
-                  </div>
-                  <div class="goods-title">{{item.describe}}</div>
-                  <div class="goods-price">
-                    <div class="goods-price-old">￥{{item.sell_price}}</div>
-                    <div class="goods-price-new">￥{{item.sell_price - item.discount}}</div>
-                  </div>
-
-                  <div class="add-shop-btn">查看详情</div>
-                </div>
-              </transition-group>
-            </div>
-            <div class="next_btn-box">
-              <div class="next_btn hvr-float-shadow" @click="changeDiscountsForu('double','next')"></div>
-            </div>
-          </div>
-        </div>
+      <div class="market_often-btn">
+        <div class="goods-detail-btn" @click="goMarketDetail">浏览更多</div>
       </div>
-      <div class="line"></div>
-      <div class="market_time">
-        <div class="market_time-content">
-          <div class="market_time-content_box">
-            <div class="prev_btn-box">
-              <div class="prev_btn hvr-float-shadow" @click="changeDiscountsForu('single','prev')"></div>
-            </div>
-            <div class="goods_list">
-              <transition-group name="fade" tag="div" style="display: flex;">
-                <div
-                  class="goods bg hvr-underline-from-left"
-                  style="cursor: pointer;"
-                  @click="viewGoodsDetail(item)"
-                  v-for="(item,index) in discount.single.list"
-                  :key="item.id"
-                >
-                  <div class="goods-img bg">
-                    <img :src="item.discount_url" alt />
-                  </div>
-                  <div class="goods-title">{{item.describe}}</div>
-                  <div class="goods-price">
-                    <div class="goods-price-old">￥{{item.sell_price}}</div>
-                    <div class="goods-price-new">￥{{item.sell_price - item.discount}}</div>
-                  </div>
-
-                  <div class="add-shop-btn">查看详情</div>
-                </div>
-              </transition-group>
-            </div>
-            <div class="next_btn-box">
-              <div class="next_btn hvr-float-shadow" @click="changeDiscountsForu('single','next')"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div class="market_often">
         <session-title name="常用推荐" brief="Sometimes beauty is so simple"></session-title>
         <div class="market_often-content">
@@ -124,12 +78,13 @@
             <div class="menu">
               <div
                 :class="['menu-item', recommend_menu.select.sort_id == item.sort_id ? 'active' : '']"
-                style="cursor: pointer;"
+                style="cursor: pointer;border-top: 0.1px solid #fff; border-bottom: 0.1px solid #fff;"
                 v-for="(item, index) in good_recomment.comment"
                 :key="index"
                 @click="selectRecommendMenuType(item)"
               >
                 <!-- <div class="menu-title-en">{{item.name}}</div> -->
+                <div class="menu-title-ens"><i class="el-icon-caret-right" style="font-size:18px;"></i>{{item.ename}}</div>
                 <div class="menu-title-zh">{{item.name}}</div>
               </div>
             </div>
@@ -169,9 +124,6 @@
             </div>
           </div>
         </div>
-        <div class="market_often-btn">
-          <div class="goods-detail-btn" @click="goMarketDetail">商品详细分类</div>
-        </div>
       </div>
     </div>
   </div>
@@ -186,21 +138,22 @@ export default {
   data() {
     return {
       good_recomment: {
-        new: { new_url_one: "" },
+        new:[],
         comment: [],
-        discount: {},
+        discount: [],
         discounts: {}
       },
-      discount: {
-        single: {
-          list: [],
-          cur_pointer: 0
-        },
-        double: {
-          list: [],
-          cur_pointer: 0
-        }
-      },
+      // discount: {
+      //   single: {
+      //     list: [],
+      //     cur_pointer: 0
+      //   },
+      //   double: {
+      //     list: [],
+      //     cur_pointer: 0
+      //   }
+      // },
+      // discount:[],
       market: {
         news_good: {}
       },
@@ -221,8 +174,9 @@ export default {
       this.good_recomment.new = data.new;
       this.good_recomment.comment = data.comment;
       this.good_recomment.discount = data.discount;
-      this.discount.double.list = data.discount.double[0];
-      this.discount.single.list = data.discount.single[0];
+      // this.discount = data.discount;
+      // this.discount.double.list = data.discount.double[0];
+      // this.discount.single.list = data.discount.single[0];
       this.recommend_main = data.comment[0].data[0];
       this.recommend_menu.select = data.comment[0];
       this.recommend_list = data.comment[0].data;
@@ -237,48 +191,48 @@ export default {
         }
       });
     },
-    changeDiscountsForu(type, option) {
-      const obj_temp = {
-        prev: this.getPrevDiscounts,
-        next: this.getNextDiscounts
-      };
-      obj_temp[option](type);
-    },
+    // changeDiscountsForu(type, option) {
+    //   const obj_temp = {
+    //     prev: this.getPrevDiscounts,
+    //     next: this.getNextDiscounts
+    //   };
+    //   obj_temp[option](type);
+    // },
     selectRecommendMenuType(item) {
       this.recommend_menu.select = item;
       this.recommend_list = item.data;
       this.recommend_main = item.data[0];
     },
-    getNextDiscounts(type) {
-      if (
-        this.discount[type].cur_pointer >=
-        this.good_recomment.discount[type].length - 1
-      ) {
-        this.discount[type].cur_pointer = 0;
-        this.discount[type].list = this.good_recomment.discount[type][
-          this.discount[type].cur_pointer
-        ];
-        return;
-      }
-      this.discount[type].cur_pointer += 1;
-      this.discount[type].list = this.good_recomment.discount[type][
-        this.discount[type].cur_pointer
-      ];
-    },
-    getPrevDiscounts(type) {
-      if (this.discount[type].cur_pointer <= 0) {
-        this.discount[type].cur_pointer =
-          this.good_recomment.discount[type].length - 1;
-        this.discount[type].list = this.good_recomment.discount[type][
-          this.discount[type].cur_pointer
-        ];
-        return;
-      }
-      this.discount[type].cur_pointer -= 1;
-      this.discount[type].list = this.good_recomment.discount[type][
-        this.discount[type].cur_pointer
-      ];
-    },
+    // getNextDiscounts(type) {
+    //   if (
+    //     this.discount[type].cur_pointer >=
+    //     this.good_recomment.discount[type].length - 1
+    //   ) {
+    //     this.discount[type].cur_pointer = 0;
+    //     this.discount[type].list = this.good_recomment.discount[type][
+    //       this.discount[type].cur_pointer
+    //     ];
+    //     return;
+    //   }
+    //   this.discount[type].cur_pointer += 1;
+    //   this.discount[type].list = this.good_recomment.discount[type][
+    //     this.discount[type].cur_pointer
+    //   ];
+    // },
+    // getPrevDiscounts(type) {
+    //   if (this.discount[type].cur_pointer <= 0) {
+    //     this.discount[type].cur_pointer =
+    //       this.good_recomment.discount[type].length - 1;
+    //     this.discount[type].list = this.good_recomment.discount[type][
+    //       this.discount[type].cur_pointer
+    //     ];
+    //     return;
+    //   }
+    //   this.discount[type].cur_pointer -= 1;
+    //   this.discount[type].list = this.good_recomment.discount[type][
+    //     this.discount[type].cur_pointer
+    //   ];
+    // },
     goMarketDetail() {
       this.$router.push("/market/detail");
     },
@@ -413,9 +367,9 @@ img {
     }
   }
 }
-.market {
+.market{
   width: 100%;
-  &_news {
+  &_news{
     &-title {
       height: 13.5rem;
       display: flex;
@@ -439,287 +393,526 @@ img {
           }
         }
       }
-      &_tips {
+       &_tips {
         padding-top: 1.85rem;
       }
     }
-    &-content {
+    .market_news-content:nth-child(2n+1){
       width: 100%;
       background: #eee;
-      &_box {
-        // height: 40rem;
+      margin-bottom: 3rem;
+      height: 40.1rem;
+      overflow: hidden;
+      .market_news-content_box{
         width: 60rem;
         margin: 0 auto;
         display: flex;
-        // border: 1px solid #ccc;
-        padding-top: 0.3rem;
-        padding-bottom: 1rem;
-        &-lf {
-          position: relative;
-          padding-bottom: 1rem;
-          flex-grow: 1;
+        justify-content: space-between;
+        position: relative;
+        height: 100%;
+        .market_news-content_box-lf{
+          position: absolute;
+          right: 0;
           .goods_img {
-            width: 19rem;
-            height: 100%;
-            // border: 1px solid #ccc;
-            position: relative;
-            z-index: 1;
-            &::before {
-              content: "SEX";
-              display: block;
-              position: absolute;
-              left: 22rem;
-              bottom: 16rem;
-              color: #dfdfdf;
-              z-index: 11;
-              line-height: 8rem;
-              font-size: 12rem;
-              font-family: -webkit-pictograph;
-              font-weight: 800;
-              transform: rotate(90deg);
-            }
-            &::after {
-              content: "SEX";
-              display: block;
-              position: absolute;
-              color: #dfdfdf;
-              z-index: -1;
-              bottom: 0;
-              left: 12rem;
-              padding: 0;
-              margin: 0;
-              line-height: 8rem;
-              font-size: 12rem;
-              font-family: -webkit-pictograph;
-              font-weight: 800;
-            }
-          }
-          .goods_info {
-            position: absolute;
-            z-index: 4;
-            top: 4rem;
-            right: 4rem;
-            width: 20rem;
-            height: 23rem;
-            display: flex;
-            flex-direction: column;
-            background: #fff;
-            // border: 1px solid #ccc;
-            border-top: 1.75rem solid #7d7d7d;
-            border-bottom: 1.75rem solid #7d7d7d;
-            border-left: 1.4rem solid #7d7d7d;
-            border-right: 1.4rem solid #7d7d7d;
-            padding: 1.15rem;
-            &-title {
-              color: #2c2c2c;
-            }
-            &-tips {
-              color: #999999;
-              font-size: 0.6rem;
-            }
-            &-price {
-              align-self: flex-end;
-              padding: 2rem 3rem 1rem 1rem;
-              // border: 1px solid #313131;
-              margin-right: -1.95rem;
-            }
-            &-tags {
-              color: #484848;
-              font-weight: 600;
-              font-family: MFLiHei_Noncommercial-Regular;
-            }
-            &-time {
-              font-size: 0.6rem;
-            }
-            &-logo {
-              padding-left: 2rem;
-              font-family: FZCCHJW--GB1-0;
-              font-weight: 800;
-              color: rgba(44, 44, 44, 1);
-              align-self: flex-end;
-              border-bottom: 0.2rem solid #313131;
+            width: 30rem;
+            height: 40rem;
+            background: #ccc;
+            img{
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
             }
           }
         }
-        &-rh {
-          width: 22rem;
+        .market_news-content_box-rh{
+          width: 24rem;
           height: 100%;
           display: flex;
           flex-direction: column;
           .goods_subimg {
-            &:nth-child(1) {
-              width: 21rem;
-              height: 19rem;
-              // border: 1px solid #ccc;
-              align-self: flex-end;
-            }
-            &:nth-child(2) {
-              margin-top: 1rem;
-              width: 16rem;
-              height: 15rem;
-              // border: 1px solid red;
-              align-self: flex-end;
+            width: 24rem;
+            height: 24rem;
+            align-self: flex-end;
+            background: #ccc;
+            img{
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
             }
           }
-          .goods_buy-btn {
-            background: #313131;
-            color: #fff;
-            margin-top: 1rem;
-            margin-right: 2rem;
+          .goods_info{
+            width: 24rem;
+            text-align: left;
+            padding: 68px 0px 0px;
+            .goods_info-title{
+              color: #2c2c2c;
+              font-size:18px;
+            }
+            .goods_info-tips{
+              color: #CACACA;
+              font-size:14px;
+              font-family:Microsoft YaHei;
+              font-weight:400;
+              padding: 5px 23px 10px 0px;
+            }
+            .goods_info-border{
+              height: 2px;
+              width: 95%;
+              background-color: #BFBFBF;
+            }
+            .goods_info-price{
+               align-self: flex-end;
+              font-size:24px;
+              font-family:FZChaoCuHei-M10S;
+              font-weight:bold;
+              color:#2C2C2C;
+              margin-top: 1rem;
+              .rmb{
+                font-size:16px;
+                font-family:FZChaoCuHei-M10S;
+                font-weight:bold;
+                color:#2C2C2C;
+              }
+            }
+            .goods_buy-btn{
+              background: #313131;
+              color: #fff;
+              align-self: flex-end;
+              cursor: default;
+              width: 6rem;
+              text-align: center;
+              padding: 0.3rem;
+              font-size: 14px;
+              border-radius: 15px;
+            }
+          }
+        }
+      }
+    }
+    .market_news-content:nth-child(2n+2){
+      width: 100%;
+      background: #fff;
+      margin-bottom: 3rem;
+      .market_news-content_box{
+        width: 60rem;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        .market_news-content_box-lf{
+          position: relative;
+          .goods_img {
+            width: 30rem;
+            height: 40rem;
+            background: #ccc;
+            img{
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
+          }
+        }
+        .market_news-content_box-rh{
+          width: 24rem;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          .goods_subimg {
+            width: 24rem;
+            height: 24rem;
             align-self: flex-end;
-            padding: 1rem 2rem;
-            // border: 1px solid #ccc;
-            cursor: default;
+            background: #ccc;
+            img{
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
+          }
+          .goods_info{
+            width: 24rem;
+            text-align: left;
+            padding: 68px 0px 0px;
+            .goods_info-title{
+              color: #2c2c2c;
+              font-size:18px;
+            }
+            .goods_info-tips{
+              color: #CACACA;
+              font-size:14px;
+              font-family:Microsoft YaHei;
+              font-weight:400;
+              padding: 5px 23px 10px 0px;
+            }
+            .goods_info-border{
+              height: 2px;
+              width: 95%;
+              background-color: #BFBFBF;
+            }
+            .goods_info-price{
+               align-self: flex-end;
+              font-size:24px;
+              font-family:FZChaoCuHei-M10S;
+              font-weight:bold;
+              color:#2C2C2C;
+              margin-top: 1rem;
+              .rmb{
+                font-size:16px;
+                font-family:FZChaoCuHei-M10S;
+                font-weight:bold;
+                color:#2C2C2C;
+              }
+            }
+            .goods_buy-btn{
+              background: #313131;
+              color: #fff;
+              align-self: flex-end;
+              cursor: default;
+              width: 6rem;
+              text-align: center;
+              padding: 0.3rem;
+              font-size: 14px;
+              border-radius: 15px;
+            }
           }
         }
       }
     }
   }
   &_time {
-    background: #eee;
-    width: 60rem;
-    margin: 0 auto;
-    position: relative;
-    &::before {
-      content: "";
-      position: absolute;
-      right: 100%;
-      bottom: 0;
-      width: 100vw;
-      height: 3rem;
-      background: #eee;
+    .market_time_pull{
+      text-align: right;
+      padding-bottom: 1rem;
+      padding-top: 5rem;
+      position: relative;
+      width: 60rem;
+      margin: 0 auto;
+      .time_title{
+        font-size:24px;
+        font-family:Microsoft YaHei;
+        font-weight:bold;
+        color:rgba(44,44,44,1);
+      }
+      .time_brief{
+        font-size:14px;
+        font-family:Microsoft YaHei;
+        font-weight:400;
+        color:#999;
+      }
+      .time_border{
+        height: 1px;
+        width: 8rem;
+        background: #BFBFBF;
+        position: absolute;
+        right: 6rem;
+        top: 6rem;
+      }
     }
-    &-content {
-      padding-bottom: 3rem;
+    .market_time-content:nth-child(2n+1){
+      width: 100%;
+      margin-bottom: 5rem;
+      height: 36.1rem;
       overflow: hidden;
-      &_box {
+      z-index: 1;
+      position: relative;
+      &::before {
+          content: "SEX";
+          display: block;
+          position: absolute;
+          right: -8rem;
+          bottom: 14rem;
+          color: #dfdfdf;
+          z-index: 11;
+          line-height: 8rem;
+          font-size: 13rem;
+          font-weight: 800;
+          transform: rotate(90deg);
+        }
+        &::after {
+          content: '';
+          display: block;
+          width: 0;
+          height: 0;
+          clear: both;
+        }
+        .after{
+          width:40%;
+          height:100%;
+          position:absolute;
+          right: 0;
+          border:75px solid;
+          border-top:none;
+          background-color: #f1f1f1;
+          border-color:#f1f1f1;
+          border-right-color:transparent;
+        }
+        .rhomb{
+          width: 33%;
+          height: 93%;
+          border: 2px solid #dcdcdc;
+          position: absolute;
+          right: 13%;
+          top: 4%;
+          border-left: #fff;
+          &::before{
+            content: "";
+            position: absolute;
+            left: -1%;
+            top: 1%;
+            width: 3%;
+            height: 2px;
+            background-color: #dcdcdc;
+            transform: rotate(90deg);
+          }
+          &::after{
+            content: "";
+            position: absolute;
+            left: -1%;
+            top: 99%;
+            width: 2%;
+            height: 2px;
+            background-color: #dcdcdc;
+            transform: rotate(90deg);
+          }
+        }
+      .market_time-content_box{
+        width: 60rem;
+        margin: 0 auto;
         display: flex;
-        justify-content: space-around;
-        .prev_btn-box {
-          margin-left: -7rem;
-          z-index: 20;
-          position: relative;
-          width: 13rem;
-          background: #fff;
-          transform: skewX(15deg);
-          .prev_btn {
-            width: 4rem;
-            height: 2rem;
-            transform: skewX(-15deg);
-            background: url(../../assets/market/prev.png) no-repeat;
-            background-size: 100% 100%;
-            position: absolute;
-            bottom: 2rem;
-            right: 1rem;
+        justify-content: space-between;
+        position: relative;
+        height: 100%;
+        .market_time-content_box-lf{
+          position: absolute;
+          right: 0;
+          .goods_img {
+            width: 30rem;
+            height: 31rem;
+            background: #ccc;
+            margin-top: 3rem;
+            img{
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
           }
         }
-        .next_btn-box {
-          background: #fff;
-          transform: skewX(15deg);
-          position: relative;
-          margin-right: -7rem;
-          width: 10rem;
-          // transform: skewx(10deg) translatex(150px);
-          // transform-origin: bottom left;
-          .next_btn {
-            width: 4rem;
-            height: 2rem;
-            transform: skewX(-15deg);
-            background: url(../../assets/market/next.png) no-repeat;
-            background-size: 100% 100%;
-            position: absolute;
-            left: 1rem;
-            top: 2rem;
-          }
-        }
-        .goods_list {
+        .market_time-content_box-rh{
+          width: 24rem;
+          height: 100%;
           display: flex;
-          width: 48rem;
-          justify-content: center;
-          height: 27.65rem;
-          .goods {
-            width: 14rem;
-            height: 100%;
-            overflow: visible;
-            // background: #fff;
-            transform: skewX(15deg);
-            padding: 0 1rem;
-            margin: 0 1rem;
-            flex-shrink: 0;
-            &.bg {
-              .goods-title {
-                color: #fff;
-              }
-              .goods-price-old {
-                color: #999999;
-              }
-              .goods-price-new {
-                color: #fff;
-              }
-              .add-shop-btn {
-                color: #2c2c2c;
-                &::before {
-                  background: #fcfcfc;
-                }
-              }
+          flex-direction: column;
+          position: relative;
+          .goods_subimg {
+            width: 24rem;
+            height: 19rem;
+            align-self: flex-end;
+            background: #ccc;
+            position: absolute;
+            top: 15rem;
+            img{
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
             }
-            div {
-              transform: skewX(-15deg);
-            }
-            &-title {
-              font-weight: 600;
-              margin-top: 1rem;
+          }
+          .goods_info{
+            width: 24rem;
+            text-align: left;
+            padding: 68px 0px 0px;
+            .goods_info-title{
               color: #2c2c2c;
-              padding: 0 0.3rem;
+              font-size:18px;
             }
-            &-price {
-              padding-top: 1.5rem;
-              padding-bottom: 1rem;
-              padding-left: 0.3rem;
-              display: flex;
-              &-old {
-                color: #999999;
-                text-decoration: line-through;
-              }
-              &-new {
-                color: #2c2c2c;
+            .goods_info-tips{
+              color: #CACACA;
+              font-size:14px;
+              font-family:Microsoft YaHei;
+              font-weight:400;
+              padding: 5px 23px 10px 0px;
+            }
+            .goods_info-border{
+              height: 2px;
+              width: 95%;
+              background-color: #BFBFBF;
+            }
+            .goods_info-price{
+               align-self: flex-end;
+              font-size:24px;
+              font-family:FZChaoCuHei-M10S;
+              font-weight:bold;
+              color:#2C2C2C;
+              margin-top: 1rem;
+              .rmb{
+                font-size:16px;
+                font-family:FZChaoCuHei-M10S;
+                font-weight:bold;
+                color:#2C2C2C;
               }
             }
-            position: relative;
-            .add-shop-btn {
-              position: absolute;
-              top: 10rem;
-              left: -0.4rem;
+            .goods_buy-btn{
+              background: #313131;
               color: #fff;
-              font-size: 0.7rem;
-              line-height: 2rem;
-              width: 5rem;
+              align-self: flex-end;
+              cursor: default;
+              width: 6rem;
               text-align: center;
-              &::before {
-                content: "";
-                transform: skewX(15deg);
-                width: 5rem;
-                height: 2rem;
-                background-color: #5a5a5a;
-                color: #fff;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                cursor: pointer;
-                position: absolute;
-                z-index: -1;
+              padding: 0.3rem;
+              font-size: 14px;
+              border-radius: 15px;
+            }
+          }
+        }
+      }
+    }
+    .market_time-content:nth-child(2n+2){
+      width: 100%;
+      background: #fff;
+      margin-bottom: 5rem;
+      height: 36.1rem;
+      z-index: 1;
+      position: relative;
+      &::before {
+          content: "SEX";
+          display: block;
+          position: absolute;
+          left: -8rem;
+          bottom: 14rem;
+          color: #dfdfdf;
+          z-index: 11;
+          line-height: 8rem;
+          font-size: 13rem;
+          font-weight: 800;
+          transform: rotate(90deg);
+        }
+        &::after {
+          content: '';
+          display: block;
+          width: 0;
+          height: 0;
+          clear: both;
+        }
+        .after{
+          width:40%;
+          height:100%;
+          position:absolute;
+          left: 0;
+          border:75px solid;
+          border-top:none;
+          background-color: #f1f1f1;
+          border-color:#f1f1f1;
+          border-right-color:transparent;
+        }
+        .rhomb{
+          width: 33%;
+          height: 93%;
+          border: 2px solid #dcdcdc;
+          position: absolute;
+          left: 13%;
+          top: 4%;
+          border-right: #fff;
+          &::before{
+            content: "";
+            position: absolute;
+            right: -2%;
+            top: 1%;
+            width: 3%;
+            height: 2px;
+            background-color: #dcdcdc;
+            transform: rotate(90deg);
+          }
+          &::after{
+            content: "";
+            position: absolute;
+            right: -1%;
+            top: 99%;
+            width: 2%;
+            height: 2px;
+            background-color: #dcdcdc;
+            transform: rotate(90deg);
+          }
+        }
+      .market_time-content_box{
+        width: 60rem;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        height: 100%;
+        .market_time-content_box-lf{
+          position: relative;
+          .goods_img {
+            width: 30rem;
+            height: 31rem;
+            background: #ccc;
+            margin-top: 3rem;
+            img{
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
+          }
+        }
+        .market_time-content_box-rh{
+          width: 24rem;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          position: relative;
+          .goods_subimg {
+            width: 24rem;
+            height: 19rem;
+            align-self: flex-end;
+            background: #ccc;
+            position: absolute;
+            top: 15rem;
+            img{
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
+          }
+          .goods_info{
+            width: 24rem;
+            text-align: left;
+            padding: 68px 0px 0px;
+            .goods_info-title{
+              color: #2c2c2c;
+              font-size:18px;
+            }
+            .goods_info-tips{
+              color: #CACACA;
+              font-size:14px;
+              font-family:Microsoft YaHei;
+              font-weight:400;
+              padding: 5px 23px 10px 0px;
+            }
+            .goods_info-border{
+              height: 2px;
+              width: 95%;
+              background-color: #BFBFBF;
+            }
+            .goods_info-price{
+               align-self: flex-end;
+              font-size:24px;
+              font-family:FZChaoCuHei-M10S;
+              font-weight:bold;
+              color:#2C2C2C;
+              margin-top: 1rem;
+              .rmb{
+                font-size:16px;
+                font-family:FZChaoCuHei-M10S;
+                font-weight:bold;
+                color:#2C2C2C;
               }
             }
-            &-img {
-              position: absolute;
-              &.bg {
-                position: absolute;
-              }
-              img {
-                transform: skewX(-6deg);
-                margin-left: -6rem;
-                width: 24rem;
-              }
+            .goods_buy-btn{
+              background: #313131;
+              color: #fff;
+              align-self: flex-end;
+              cursor: default;
+              width: 6rem;
+              text-align: center;
+              padding: 0.3rem;
+              font-size: 14px;
+              border-radius: 15px;
             }
           }
         }
@@ -760,6 +953,7 @@ img {
         width: 60rem;
         margin: 0 auto;
         display: flex;
+        margin-bottom: 10rem;
         .menu {
           flex-shrink: 0;
           &-item {
@@ -907,12 +1101,12 @@ img {
     }
     &-btn {
       margin-top: 5rem;
-      margin-bottom: 9rem;
+      margin-bottom: 5rem;
       .goods-detail-btn {
         cursor: pointer;
         width: 13rem;
         margin: 0 auto;
-        padding: 0.8rem 0.55rem 1.4rem 5.4rem;
+        padding: 0.8rem 0.55rem 1.4rem 6rem;
         background: url(../../assets/market/btn-bg.png) no-repeat;
         background-size: 100% 100%;
       }

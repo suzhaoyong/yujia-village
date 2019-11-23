@@ -1,6 +1,6 @@
 <template>
   <div class="wrap">
-    <van-nav-bar title="支付成功"  fixed>
+    <van-nav-bar title="成功结果"  fixed>
       <!-- <div class="" slot="right" @click="handleShareGoods">
         <img class="icon" src="../../../assets/img/share.png" />
       </div>-->
@@ -11,9 +11,9 @@
     <div class="order_body">
       <div class="pay_success">
         <div class="title">
-          <span>支付成功</span>
+          <span>{{ msg }}</span>
         </div>
-        <span class="tips">感谢您的光顾，宝贝一定准时送到府上！</span>
+        <span class="tips">{{ ordermsg }}</span>
         <div class="actions">
           <span class="see_order" @click="viewOrder">查看订单</span>
           <span class="go_on"  @click="goOn">继续逛</span>
@@ -25,10 +25,35 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      msg: '',
+      ordermsg: '',
+      orderid: '',
+    };
   },
   mounted() {
     this.$store.commit('loadStatus', false)
+  },
+  created() {
+    try {
+      this.orderid = this.$router.query.id
+      if (this.orderid) {
+        this.$request.post('/getWechatOrder', { 'out_trade_no': this.orderid }).then((res) => {
+          this.msg = res.msg
+          if( res.msg === '支付成功' ) {
+            this.ordermsg = '感谢您的光顾，宝贝一定准时送到府上！'
+          } else if (res.msg === '支付失败') {
+            this.ordermsg = '失败了！请重新购买'
+          } else if (res.msg === '未支付') {
+            this.ordermsg = '去支付！'
+          }
+        })
+      }
+    }
+    catch {
+      this.msg = '无内容呢'
+      this.ordermsg = '未查询到结果'
+    }
   },
   methods: {
     back() {},

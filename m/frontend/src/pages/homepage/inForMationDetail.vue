@@ -56,7 +56,8 @@ export default {
       this.childShow = data
     },
     onClickLeft() {
-      this.$router.back()
+      // this.$router.back()
+          this.$router.replace('/yagainformation')
     },
     yujiamation () {
       const id = this.$route.params.id

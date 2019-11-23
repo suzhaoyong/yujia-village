@@ -2,15 +2,20 @@
     <div>
         <el-col :span="24">
             <div class="joinclubdetails-main">
+                <div class="joinclubdetails-cont-div6">
+                    <span><router-link to="/joinclubhouse" style="color:#2c2c2c;text-decoration: none;">培训机构</router-link></span>
+                    <span>/ &nbsp;&nbsp;</span>
+                    <span style="color:#999;">{{club.club_name}}</span>
+                </div>
                 <div class="joinclubdetails-cont-div3">
                     <div class="joinclubdetails-div3-main">
                     <div class="joinclubdetails-left">
                         <div class="left1">
-                            <h2><img src="../assets/yujia.png"/>机构环境</h2>
+                            <h2><img src="../assets/yujia.png"/>{{club.club_name}}</h2>
                             <p class="nav-text">Sometimes beauty is so simple</p>
                             <img src="../assets/image18.png" class="bg-image4"/>
                         </div>
-                        <div class="left2" v-html="club.content">{{club.content}}</div>
+                        <div class="left2" v-html="club.content" :title="club.content">{{club.content}}</div>
                         <div class="left3">
                             <!-- 电话：{{club.club_tel}} -->
                         </div>
@@ -467,7 +472,7 @@ export default {
     }
     .joinclubdetails-cont-div3{
         width: 100%;
-        height: 543px;
+        height: 600px;
         display: inline-block;
         background-image: url('../assets/image50.png');
         background-repeat: no-repeat;
@@ -478,6 +483,7 @@ export default {
             height: 100%;
             display: flex;
             justify-content: space-between;
+            // margin-bottom: 30px;
              .joinclubdetails-left{
                 width: 40%;
                 height: 85%;
@@ -485,36 +491,35 @@ export default {
                 margin-left: 60px;
                  .left1{
                     width: 100%;
-                    height: 140px;
+                    height: 120px;
                     margin-top: 30px;
                     position: relative;
                     display: inline-block;
                     .bg-image4{
                         position: absolute;
-                        width: 270px;
-                        height: 90px;
-                        right: 15%;
+                        width: 100%;
+                        height: 55px;
+                        right: 0%;
                         top: 5%;
                     }
                     .nav-text{
                         color: #999999;
                         font-size: 14px;
                         margin-top: -8px;
-                        padding-right: 40px;
-                        text-align: center;
+                        text-indent: 35px;
                     }
                     h2{
                         color: #2c2c2c;
                         font-size: 24px;
                         margin-top: 40px;
-                        text-align: center;
+                        text-indent: 35px;
                         font-family:Microsoft YaHei;
                         font-weight:bold;
                         img{
                             width: 28px;
                             height: 28px;
                             position: absolute;
-                            left: 30%;
+                            left: 0;
                         }
                     }
                  }
@@ -524,10 +529,10 @@ export default {
                      font-size: 14px;
                      line-height: 30px;
                      width: 100%;
-                     margin-bottom: 90px;
+                     margin-bottom: 55px;
                      display: -webkit-box !important;
                     -webkit-box-orient: vertical !important;
-                    -webkit-line-clamp:5 !important;// 限制快级元素的文本行数
+                    -webkit-line-clamp:8 !important;// 限制快级元素的文本行数
                     overflow: hidden !important;
                  }
                  .left3{
@@ -545,7 +550,7 @@ export default {
                 height: 85%;
                 margin-top: 54px;
                 .imgpic{
-                    margin-top: 5px;
+                    margin-top: 25px;
                     .img1{
                         width: 300px;
                         height: 226px;
@@ -746,6 +751,12 @@ export default {
             }
          }
         }
+    }
+    .joinclubdetails-cont-div6{
+        font-size: 0.8rem;
+        width: 1150px;
+        margin: 0 auto;
+        padding: 20px 0px 20px;
     }
     .Default-page6{
         width: 100%;

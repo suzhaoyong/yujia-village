@@ -24,10 +24,12 @@
         <div class="bgc-color" style="background:#8FCD71; width:100%;"></div>
         <div class="imgs_box">
           <van-swipe :autoplay="5000" indicator-color="white">
-            <div v-if="swiper">
+            <div v-if="swiper[0]">
               <van-swipe-item  v-for="(item, index) in swiper" :key="index"><img :src="item.path" alt="商品"   @click="goAdvertising(item.mold, item.relation_id)"></van-swipe-item>
             </div>
-            <van-swipe-item v-for="(item, index) in main.banner" :key="index" v-else ><img :src="item" alt="商品" ></van-swipe-item>
+            <div v-else>
+              <van-swipe-item  v-for="(item, index) in main.banner" :key="index"  ><img :src="item" alt="商品" ></van-swipe-item>
+            </div>
           </van-swipe>
         </div>
       </div>
@@ -152,7 +154,7 @@
 <script>
 import Vue from 'vue';
 import { mapGetters } from "vuex";
-import { getMainDetail } from '@/api/main.js'
+import { getMainDetail, goAdvertingApi } from '@/api/main.js'
 import { Swipe, SwipeItem, Overlay } from 'vant';
 Vue.use(Swipe).use(SwipeItem).use(Overlay);
 export default {
@@ -173,9 +175,9 @@ export default {
         teachers: [],
         clubs: []
       },
-      swiper: [], // 广告位1
-      advertis2: {}, // 广告位2
-      advertis3: {} // // 广告位2
+      swiper: false, // 广告位1
+      advertis2: false, // 广告位2
+      advertis3: false // // 广告位2
     }
   },
   computed: {
@@ -189,21 +191,15 @@ export default {
   },
   methods: {
     goAdvertising (mold, relation_id) {
-      if(mold === 2) { this.$router.push(`/teacherClub/clubhouseDetails?id=${relation_id}`) }
-      else if(mold === 3) {this.$router.push(`teacherClub/teacherDetails?id=${relation_id}`)}
-      else if(mold === 4) { this.$router.push(`/messagedetail/${relation_id}`) }
-      // else if(mold === 5) { this.$router.push(`/goods/detail/${relation_id}`) }
-      else if(mold === 6) { this.$router.push(`/yogamessage/list`) }
-      // else if(mold === 7) { 商品分类 }
-      else if(mold === 1) { this.$router.push('/advertisement') }
+      goAdvertingApi(mold, relation_id)
     },
     getAdvertising () {
       return this.$request.get('/advertisement/data/' + 1).then((res) => {
-      this.swiper = res.filter(((item) => item.position === 0))[0] ? res.filter(((item) => item.position === 0))[0].advertisement : []
-      this.advertis2 = res.filter(((item) => item.position === 1))[0] ? res.filter(((item) => item.position === 1))[0].advertisement[0] : []
-      this.advertis3 = res.filter(((item) => item.position === 2))[0] ? res.filter(((item) => item.position === 2))[0].advertisement[0] : []
-      console.log(this.swiper)
-
+      if (res[0]) {
+        this.swiper = res.filter(((item) => item.position === 0))[0] ? res.filter(((item) => item.position === 0))[0].advertisement : []
+        this.advertis2 = res.filter(((item) => item.position === 1))[0] ? res.filter(((item) => item.position === 1))[0].advertisement[0] : []
+        this.advertis3 = res.filter(((item) => item.position === 2))[0] ? res.filter(((item) => item.position === 2))[0].advertisement[0] : []
+      }
     })
     },
     gotoPage(type) {
@@ -298,10 +294,12 @@ img{
           height: 100%;
           .van-swipe-item {
             width: 343px!important;
+            
           }
         }
         img{
           border-radius: 10px;
+          min-height: 142px;
         }
       }
     }

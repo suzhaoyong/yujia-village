@@ -31,6 +31,7 @@
 </template>
 <script>
 import Vue from 'vue';
+import { mapGetters } from "vuex";
 import {  Toast, Popup } from 'vant';
 Vue.use(Toast).use(Popup);
 export default {
@@ -48,31 +49,38 @@ export default {
       copy_content: ''
     }
   },
+  computed: {
+    ...mapGetters(["info", "isUserNeedLogin"]),
+  },
   updated() {
       if (this.type === 'information' || 
-          this.type === 'knowledge') {
+          this.type === 'knowledge'   ||
+          this.type === 'good'        ||
+          this.type === 'train'
+      ) {
         this.$emit('listenToShow', this.show)
       }
   },
   methods: {
     shareMessage () {
-      // if(this.isUserNeedLogin) {
-      //   this.$router.push('/login')
-      //   this.$toast('请登录')
-      //   return;
-      // }
+      // console.log()
+      if(!JSON.parse(sessionStorage.getItem("user")) &&
+       (this.type == 'good'  || this.type === "train")
+      ) {
+        this.$router.push('/login')
+        this.$toast('请登录')
+        return;
+      }
       this.show = true
       var params = {
-          id: this.$route.query.id || this.$route.params.id,
+          id: this.$route.query.id || this.$route.params.id || this.$route.params.goods_id,
           identity: this.type,
           userId:  sessionStorage.getItem('user')? JSON.parse(sessionStorage.getItem('user')).id : '',
           responseType: 'arraybuffer'
       }
-      this.$request.post(`/show/share/photo`,params).then(res => {
+      this.$request.post(`/show/share/photo`, params).then(res => {
         this.shareimg = res;
       })
-      // console.log(this.type)
-
     },
     // 获取文案
     getWenan() {
@@ -115,13 +123,11 @@ export default {
   }
   .sharetext {
     text-align: center;
-    margin-top: 25px;
     font-size: 12px;
   }
   .bgc {
     width: 100%;
     height: 58px;
-    margin-top: 32px;
     background-color: #fff;
     text-align: center;
     img {
@@ -147,17 +153,6 @@ export default {
   color: #2c2c2c;
   text-align: center;
   line-height: 50px;
-}
-.bgc {
-  width: 100%;
-  height: 58px;
-  background-color: #fff;
-  text-align: center;
-  img {
-  width: 79px;
-  height: 58px;
-  vertical-align: top;
-  }
 }
 .loading {
   width: 60px;

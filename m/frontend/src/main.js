@@ -81,8 +81,9 @@ var qs = require('querystringify');
 Vue.prototype.qs = qs;
 // 注册工具库至 Vue 原型
 Object.defineProperty(Vue.prototype, '$request', { value: request });
-new Vue({
+var vue = new Vue({
   render: h => h(App),
   store,
   router,
 }).$mount('#app')
+export default vue

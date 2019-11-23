@@ -39,6 +39,13 @@ const router = new Router({
         component: () => import('@/pages/main')
       }]
     },
+    // 微信支付页面
+    {
+      path: '/payforwx',
+      name: 'payforwx',
+      component: () => import('@/components/payForwx'),
+    },
+    // 自定义广告页
     {
       path: '/advertisement',
       name: 'advertisement',
@@ -274,14 +281,13 @@ const router = new Router({
     {
       path: '/teacherClub/teacherDetails',
       name: 'teacherDetails',
-      component: () => import('@/pages/teacherClub/teacherDetails')
+      component: () => import('@/pages/teacherClub/teacherDetails'),
     },
     {
       path: '/teacherClub/clubhouseDetails',
       name: 'clubhouseDetails',
       component: () => import('@/pages/teacherClub/clubhouseDetails')
     },
-    
     {
       path: '/informationdetail/:id',
       name: 'informationdetail',

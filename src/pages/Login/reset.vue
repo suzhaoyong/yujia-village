@@ -15,34 +15,48 @@
             <div class="item">
               <div class="item-content">
                 <div class="item-content-input">
-                  <input type="password" v-model.trim="ruleForm.tel" placeholder="请输入电话"/>
+                  <input 
+                    type="tel" 
+                    v-model.trim="ruleForm.tel"
+                    @input="blurRuleForm('tel', 'ruleForm', 'ruleFormErrorRule')"
+                    placeholder="请输入电话"/>
                 </div>
-                <div class="item-content-tips">{{isError('tel')}}</div>
+                <div class="item-content-tips">{{blurInputError('tel', 'ruleForm', 'ruleFormErrorRule')}}</div>
               </div>
             </div>
             <div class="item">
               <div class="item-content">
                 <div class="item-content-input">
-                  <input type="text" v-model.trim="ruleForm.verification_code" placeholder="请输入短信验证码"/>
+                  <input type="text" 
+                    v-model.trim="ruleForm.verification_code" 
+                    @input="blurRuleForm('verification_code', 'ruleForm', 'ruleFormErrorRule')"
+                    placeholder="请输入短信验证码"/>
                   <div class="get_code" @click="getCodeMessage">发送验证码</div>
                 </div>
-                <div class="item-content-tips">{{isError('verification_code')}}</div>
+                <div class="item-content-tips">{{blurInputError('verification_code', 'ruleForm', 'ruleFormErrorRule')}}</div>
               </div>
             </div>
             <div class="item">
               <div class="item-content">
                 <div class="item-content-input">
-                  <input type="password" v-model.trim="ruleForm.password" placeholder="新密码"/>
+                  <input type="password"
+                    v-model.trim="ruleForm.password"
+                    @input="blurRuleForm('password', 'ruleForm', 'ruleFormErrorRule')"
+                    placeholder="新密码"/>
                 </div>
-                <div class="item-content-tips">{{isError('password')}}</div>
+                <div class="item-content-tips">{{blurInputError('password', 'ruleForm', 'ruleFormErrorRule')}}</div>
               </div>
             </div>
             <div class="item">
               <div class="item-content">
                 <div class="item-content-input">
-                  <input type="password" v-model.trim="ruleForm.password2" placeholder="再次确认"/>
+                  <input 
+                    type="password" 
+                    v-model.trim="ruleForm.password2" 
+                    @input="blurRuleForm('password2', 'ruleForm', 'ruleFormErrorRule')"
+                    placeholder="再次确认"/>
                 </div>
-                <div class="item-content-tips">{{isError('password2')}}</div>
+                <div class="item-content-tips">{{blurInputError('password2', 'ruleForm', 'ruleFormErrorRule')}}</div>
               </div>
             </div>
             <div class="item">
@@ -131,12 +145,108 @@ export default {
         }
         return "";
       };
+    },
+    blurInputError() {
+      return (key, ruleName, errorName) => {
+        return this[errorName][key].show?this.validatorBlurRuleForm(key, ruleName):''
+      }
     }
   },
   mounted() {
     this.getVerificationCode();
   },
   methods: {
+    blurRuleForm(item, ruleName, errorName) {
+      let error = this.validatorBlurRuleForm(item, ruleName)
+      if (error.length === 0){
+        this[errorName][item].show = false;
+      } else {
+        this[errorName][item].show = true;
+        this[errorName][item].msg = error;
+      }
+    },
+    validatorBlurRuleForm(key, ruleName) {
+      let rules = {
+          tel: [{
+              strategy: 'isNonEmpty',
+              errorMsg: '手机号码不能为空！'
+            }, {
+              strategy: 'isMoblie',
+              errorMsg: '手机号码格式不正确！'
+            }],
+          verification_code: [{
+                strategy: 'isNonEmpty',
+                errorMsg: '短信验证码不能为空！'
+            }, {
+                strategy: 'minLength:6',
+                errorMsg: '短信验证码长度不能小于 6 位！'
+            }, {
+                strategy: 'maxLength:6',
+                errorMsg: '短信验证码长度不能大于 6 位！'
+            }],
+            captcha: [{
+                strategy: 'isNonEmpty',
+                errorMsg: '图形验证码不能为空！'
+              }, {
+                  strategy: 'minLength:4',
+                  errorMsg: '图形验证码不能小于 4 位！'
+              }, {
+                  strategy: 'maxLength:4',
+                  errorMsg: '图形验证码不能大于 4 位！'
+              }],
+            password: [{
+                  strategy: 'isNonEmpty',
+                  errorMsg: '密码不能为空！'
+              },{
+                  strategy: 'isPasswordHaveNumberAndAlphabet',
+                  errorMsg: '密码只能是数字和字母的组合，不能包含特殊字符'
+              },{
+                  strategy: 'minLength:6',
+                  errorMsg: '密码长度不能小于 6 位！'
+              }, {
+                  strategy: 'maxLength:18',
+                  errorMsg: '密码长度不能大于 18 位！'
+              },],
+            password2: [{
+                  strategy: 'isNonEmpty',
+                  errorMsg: '密码不能为空！'
+              },{
+                  strategy: 'isPasswordHaveNumberAndAlphabet',
+                  errorMsg: '密码只能是数字和字母的组合，不能包含特殊字符'
+              },{
+                  strategy: 'minLength:6',
+                  errorMsg: '密码长度不能小于 6 位！'
+              }, {
+                  strategy: 'maxLength:18',
+                  errorMsg: '密码长度不能大于 18 位！'
+              },{
+                  strategy: `equailPassword:${this[ruleName]['password']}`,
+                  errorMsg: '两次密码不一致，请再次确认是否正确输入。'
+              }],
+            invitation_id: [{
+                  strategy: 'isNonEmpty',
+                  errorMsg: '邀请码不能为空！'
+              }, {
+                  strategy: 'minLength:4',
+                  errorMsg: '邀请码长度不能小于 4 位！'
+              }, {
+                  strategy: 'maxLength:4',
+                  errorMsg: '邀请码长度不能大于 4 位！'
+              }]
+        }
+        console.log(this[ruleName]['password']);
+      const validatorFunc = () => {
+        let validator = new Validator();
+        validator.add(this[ruleName][key], rules[key])
+        let errorMsg = validator.start()
+        return errorMsg
+      }
+      let errorMsg = validatorFunc()
+      if(errorMsg) {
+        return errorMsg;
+      }
+      return '';
+    },
     /* 图形验证码 */
     getVerificationCode() {
       this.$request("/verificationCode").then(data => {
@@ -156,12 +266,12 @@ export default {
     },
     //发送验证码
     getCodeMessage(){
-        if (!this.validatorRegisterTel()) {
-        // this.ruleFormErrorRule.tel.show = true;
-          this.getCodepass = false;
-        }else{
-          this.getCodepass = true;
-        }
+      if (this.validatorBlurRuleForm('tel', 'ruleForm').length === 0) {
+        this.getCodepass = true;
+      } else {
+        this.blurRuleForm('tel', 'ruleForm', 'ruleFormErrorRule')
+        this.getCodepass = false;
+      }
     },
     validatorRegisterTel() {
       const validatorFunc = () => {
@@ -409,7 +519,7 @@ input:focus {outline: none;}
     background: #fff;
     z-index: 101;
     display: flex;
-    border-radius: 0.5vw;
+    border-radius: 0.5rem;
     overflow: hidden;
     // height: 21rem;
     &-icon{
@@ -521,8 +631,8 @@ input:focus {outline: none;}
         font-size:0.7rem;
         font-weight: normal;
         font-stretch: normal;
-        // line-height: 0.2vw;
-        letter-spacing: 0vw;
+        // line-height: 0.2rem;
+        letter-spacing: 0rem;
         color: #2c2c2c;
         cursor: pointer;
         .auto_login{

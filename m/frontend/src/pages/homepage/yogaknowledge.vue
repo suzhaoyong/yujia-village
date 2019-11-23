@@ -4,7 +4,7 @@
         </van-nav-bar>
         <div class="banner" :style="{backgroundImage: 'url('+knowledgeClassify.banner+')'}" v-if="!swiper">
         </div>
-        <div class="banner" :style="{backgroundImage: 'url('+swiper?swiper.path: ''+')'}" v-else  @click="goAdvertising (swiper.mold, swiper.relation_id)"></div>
+        <div class="banner" :style="{backgroundImage: 'url('+swiper?swiper.path: ''+')'}" v-else  @click="goAdvertising(swiper.mold, swiper.relation_id)"></div>
 
         <div class="recommended">
             <van-collapse v-model="activeNames" @change="onChange">
@@ -38,6 +38,7 @@
     </div>
 </template>
 <script>
+import { goAdvertingApi } from '@/api/main'
 export default {
     data() {
         return {
@@ -65,11 +66,13 @@ export default {
     },
     methods: {
         // 广告位
+        goAdvertising (mold, relation_id) {
+            goAdvertingApi(mold, relation_id)
+        },
         getAdvertising () {
             return this.$request.get('/advertisement/data/' + 5).then((res) => {
-            this.swiper = res.filter(((item) => item.position === 0))[0].advertisement[0]
-            console.log(this.swiper)
-
+            var reswiper = res.filter(((item) => item.position === 0))[0]
+            this.swiper = reswiper? reswiper.advertisement[0] :''
             })
         },
           back() {
