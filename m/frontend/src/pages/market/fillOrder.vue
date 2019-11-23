@@ -35,11 +35,11 @@
             <span class="color-span2">{{item.size}}</span>
           </div>
           <div class="price">
-            <span>￥ {{item.sell_price}}</span>
-            <!-- <span
+            <span>￥ {{item.price}}</span>
+            <span
               v-if="item.discount > 0"
               style="margin-left:10px;text-decoration:line-through;"
-            >￥ {{item.sell_price}}</span> -->
+            >￥ {{item.sell_price}}</span> 
           </div>
         </div>
         <div class="jifen-use">
@@ -491,7 +491,6 @@ export default {
     // 单件支付，创建订单
     singlePay(params) {
       this.$request.post('/goods/order/mobile', params).then(res => {
-        console.log(res);
         if(res.code === 200) {
           Toast("恭喜您，课程购买成功");
            setTimeout(() => {
@@ -499,8 +498,14 @@ export default {
             }, 2000);
         } else if(res.msg === 'OK'&&res.code===201) {
           this.payMoney(res.out_trade_no);
+        } 
+      }).catch(error => {
+        if(error.code === 403) {
+          Toast("订单生成失败，您的积分不足");
+        } else {
+          Toast("抱歉，网络出了点问题，请检查你的网络！");
         }
-      }) 
+      })
     },
     // 多件支付，创建订单
     manyPay(params) {
