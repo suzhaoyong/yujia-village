@@ -321,8 +321,6 @@ export default {
     
   },
   created() {
-  },
-  mounted() {
     const address = sessionStorage.getItem("select address");
     if (address) {
       this.selectAddress = JSON.parse(address);
@@ -344,6 +342,9 @@ export default {
         that.goods_integral.push(item.good_discount.积分);
       })
     }
+  },
+  mounted() {
+    
   },
   beforeDestroy() {
     sessionStorage.removeItem("select address");
@@ -437,34 +438,6 @@ export default {
         }
       }
     },
-    // 直接下单
-    // directGoodsOrder(params = {}) {
-    //   let _this = this;
-    //   // 先打开一个空的新窗口，再请求
-    //   this.newWin = window.open();
-    //   postDirectGoodOrder(params).then(response => {
-    //     let { out_trade_no, body, totalPrice } = response;
-    //     let url = `http://testapi.aomengyujia.com/api/alipay/wappay/get?out_trade_no=${out_trade_no}&body=${body}&totalPrice=${totalPrice}`;
-    //     _this.url = url || "";
-    //   });
-    // },
-    // // 订单下单
-    // goodsOrder(params) {
-    //   let _this = this;
-    //   // 先打开一个空的新窗口，再请求
-    //   this.newWin = window.open();
-    //   postGoodOrder(params).then(response => {
-    //     let { out_trade_no, body, totalPrice } = response;
-    //     let url = `http://testapi.aomengyujia.com/api/alipay/wappay/get?out_trade_no=${out_trade_no}&body=${body}&totalPrice=${totalPrice}`;
-    //     _this.url = url || "";
-    //   });
-    // },
-
-    // 创建订单
-    creatOrder() {
-        const orderParams = this.paramsDeal();
-
-    },
     // 支付
     pay() {
       if (!this.isAllowPay) return
@@ -516,46 +489,31 @@ export default {
         }
       }
     },
-    // 单件支付
+    // 单件支付，创建订单
     singlePay(params) {
       this.$request.post('/goods/order/mobile', params).then(res => {
         console.log(res);
         if(res.code === 200) {
           Toast("恭喜您，课程购买成功");
            setTimeout(() => {
-              // this.$router.go(-1);
+              this.$router.push('/order');
             }, 2000);
+        } else if(res.msg === 'OK'&&res.code===201) {
+          this.payMoney(res.out_trade_no);
         }
       }) 
     },
-    // Many items 
+    // 多件支付，创建订单
     manyPay(params) {
       this.$request.post('/goodOrder', params).then(res => {
         console.log(res);
-        
-      })
-    },
-    // 
-    zhifubao(params) {
-      // 支付宝支付
-      this.$request.post('/goodOrder', params).then(res => {
-        if(res.msg === 'OK') {
-            if (this.fraction === 0 || res.code === 200) {
-                // Toast('恭喜您，课程购买成功');
-                setTimeout(() => {
-                    this.$router.go(-1)
-                }, 2000)
-            } else {
-                // this.payMoney(res.out_trade_no);
-            }
-        } 
-        else {
-            this.$toast({
-                message: res.msg,
-            });
-            // setTimeout(() => {
-            //         this.$router.go(-1)
-            //     }, 2000)
+        if(res.code === 200) {
+          Toast("恭喜您，课程购买成功");
+           setTimeout(() => {
+              this.$router.push('/order');
+            }, 2000);
+        } else if(res.msg === 'OK'&&res.code===201) {
+          this.payMoney(res.out_trade_no);
         }
       })
     },
@@ -610,6 +568,11 @@ export default {
         // 多件商品时的数据
         if(!type) {
           this.goods = data.goods;
+          // 处理未支付，跳到订单页面
+          if(this.goods.length===0) {
+            this.$router.push('/myorder?order=1');
+            return
+          }
           sessionStorage.setItem("roder good", JSON.stringify(data.goods));
           // 处理积分规则数据
           let that = this;

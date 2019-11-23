@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="head-top">
+    <!-- <div class="head-top">
       <form action="/">
         <van-search
           placeholder="商品名称/关键词搜索"
@@ -11,7 +11,10 @@
       </form>
       <img class="search" src="../../assets/img/search.png" alt="">
       <img class="shopping-bag" src="../../assets/img/shopping.png" alt="">
-    </div>
+    </div> -->
+    <van-nav-bar title="商城" left-arrow @click-left="back" >
+      <img class="img" slot="right" src="../../assets/img/shopping.png" @click="goShopBag"/>
+    </van-nav-bar>
     <div class="content">
       <div class="goods">
         <div class="goods-classify">
@@ -271,6 +274,12 @@ export default {
     this.getRecommendData();
   },
   methods: {
+    back() {
+      this.$router.go(-1);
+    },
+    goShopBag() {
+      this.$router.push('/shoppingbag');
+    },
     goSearch() {
       this.$router.push('/searchgoods');
     },
@@ -467,6 +476,18 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.van-nav-bar {
+  .van-nav-bar__right {
+    display: flex;
+    align-items: center;
+    height: 44px;
+    bottom: 2px;
+  }
+  .img {
+    width: 22px;
+    height: 22px;
+  }
+}
 .head-top {
   position: fixed;
   top: 0;
@@ -510,7 +531,6 @@ export default {
   }
 }
 .content {
-  
   .goods {
     position: fixed;
     top: 47px;

@@ -122,10 +122,6 @@ export default {
           background-repeat: no-repeat;
           width: 50px;
           height: 50px;
-          position: absolute;
-          z-index: 1000;
-          top: 520px;
-          left: 309px;
         }
       }
       .register_fixed{
