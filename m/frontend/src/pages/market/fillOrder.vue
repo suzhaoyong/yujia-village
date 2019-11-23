@@ -519,6 +519,12 @@ export default {
         } else if(res.msg === 'OK'&&res.code===201) {
           this.payMoney(res.out_trade_no);
         }
+      }).catch(error => {
+        if(error.code === 403) {
+          Toast("订单生成失败，您的积分不足");
+        } else {
+          Toast("抱歉，网络出了点问题，请检查你的网络！");
+        }
       })
     },
     isWeiXin () {
