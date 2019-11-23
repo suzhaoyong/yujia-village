@@ -346,8 +346,9 @@ export default {
         return  this.getDeductionArr.map(item => item.deduction).reduce((pre, cur) => pre + cur, 0)
     },
     getDiscountIds() {
-      return this.goods.filter(item => item.jifen)
+      return this.goods
         .map(item => {
+          if(!item.jifen) return {id: 0}
           const jifen_id = item.jifen;
           const jifen_select = item.good_discount['积分'].filter(item => item.id === jifen_id)
           return jifen_select && jifen_select[0] || {id: 0}
@@ -615,7 +616,7 @@ export default {
       const id = this.goods.map(item => item.id);
       const lid = this.goods.map(item => item.goodListId);
       const num = this.goods.map(item => item.num);
-      let discountId = 0;
+      let discountId = [0];
       if (this.getDiscountIds.length > 0) {
         discountId = this.getDiscountIds
       }
