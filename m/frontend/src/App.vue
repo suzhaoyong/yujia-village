@@ -38,6 +38,11 @@ export default {
 
 <style lang="scss">
 #app {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch; /* 解决 ios 滑动不流畅问题 */
   background-color: #eee;
 }
 
@@ -63,12 +68,6 @@ export default {
     .van-icon {
         font-size: 20px;
         color: #2c2c2c;
-    }
-    .icon {
-        display: block;
-        width: 22px;
-        height: 22px;
-        margin-bottom: 12px;
     }
     .van-ellipsis {
       width: 100%;

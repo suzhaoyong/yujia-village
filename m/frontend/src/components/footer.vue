@@ -36,6 +36,12 @@ export default {
                     active: require('../assets/img/information-active.png')
                 },
                 {
+                    title: '商城',
+                    name: 'store',
+                    normal: require('../assets/img/mall-normal.png'),
+                    active: require('../assets/img/mall-active.png')
+                },
+                {
                     title: '个人中心',
                     name: 'personal',
                     normal: require('../assets/img/personal-normal.png'),

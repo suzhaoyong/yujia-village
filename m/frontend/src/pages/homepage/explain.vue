@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="add">
         <van-nav-bar title="网站添加至手机桌面设置" left-arrow @click-left="onClickLeft">
         </van-nav-bar>
         <div class="content">
@@ -88,9 +88,11 @@ export default {
 .van-nav-bar {
     position: fixed;
     top: 0;
+    left: 0;
+    z-index: 10 !important;
 }
 .content {
-    margin-top: 46px; 
+    padding-top: 46px; 
     background-color: #fff;
 }
 .van-tabs {

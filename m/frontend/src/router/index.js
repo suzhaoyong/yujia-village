@@ -207,6 +207,12 @@ const router = new Router({
         component: () => import('@/pages/market/category')
       }]
     },
+    // 商品搜索
+    {
+      path: '/searchgoods',
+      name: 'searchgoods',
+      component: () => import('@/pages/market/search')    
+    },
     // 商品
     {
       path: '/goods',

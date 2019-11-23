@@ -74,6 +74,26 @@
                     <span class="custom-title">课程订单</span>
                 </template>
             </van-cell>
+            <van-cell is-link :border="false" to="/myorder">
+                <template slot="title">
+                    <img class="icon" src="../assets/img/goods.png" alt="">
+                    <span class="custom-title">商品订单</span>
+                </template>
+            </van-cell>
+            <div class="cell-box">
+                <van-cell is-link :border="false" to="/shoppingbag">
+                    <template slot="title">
+                        <img class="icon" src="../assets/img/shopping_bag.png" alt="">
+                        <span class="custom-title">购物袋</span>
+                    </template>
+                </van-cell>
+                <van-cell is-link :border="false" to="/address">
+                    <template slot="title">
+                        <img class="icon" src="../assets/img/address.png" alt="">
+                        <span class="custom-title">收货地址</span>
+                    </template>
+                </van-cell>
+            </div>
             <van-cell is-link :border="false" to="/authenticationcenter">
                 <template slot="title">
                     <img class="icon" src="../assets/img/certification.png" alt="">
@@ -334,11 +354,15 @@ export default {
     .van-cell__title {
         display: flex;
         .icon {
-            width: 14px;
+            width: 15px;
             height: 16px;
             margin-top: 4px;
             margin-right: 9px;
         }
+    }
+    .cell-box {
+        margin: 4px 0;
+        box-shadow: -4px 2px 6px 1px rgba(0, 0, 0, 0.13);
     }
     .call-center {
         width: 285px;

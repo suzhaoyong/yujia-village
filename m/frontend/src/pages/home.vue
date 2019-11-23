@@ -14,7 +14,7 @@
         </a>
       </van-popup>
       <div class="main_content">
-        <router-view></router-view>
+        <router-view  @touchmove.prevent></router-view>
       </div>
       <Footer></Footer>
     </div>
@@ -92,13 +92,11 @@ export default {
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
-  padding-bottom: 50px;
+  bottom: 50px;
   overflow: hidden;
 }
 .main_content > div {
   height: 100%;
-  // padding-bottom: 50px;
   overflow-x: hidden;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
@@ -117,8 +115,6 @@ export default {
           z-index: 1000;
           top: 520px;
           left: 309px;
-
-          
       }
     }
 

@@ -21,7 +21,7 @@ import {
   Uploader ,Picker ,DatetimePicker, Swipe, SwipeItem,
   List, ActionSheet, Overlay, PasswordInput, NumberKeyboard,
   DropdownMenu, DropdownItem, Loading,
-  CountDown, RadioGroup, Radio } from 'vant';
+  CountDown, RadioGroup, Radio, Search } from 'vant';
 
 import 'swiper/dist/css/swiper.min.css';
 // 全局配置 lrz，上传图片压缩，不要删了
@@ -30,11 +30,11 @@ import lrz from 'lrz';
 import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
 
-import VConsole from 'vconsole';
+// import VConsole from 'vconsole';
 
-if (process.env.NODE_ENV !== 'production') {
-  new VConsole()
-}
+// if (process.env.NODE_ENV !== 'production') {
+//   new VConsole()
+// }
 // 全局注册
 Vue.use(Tab);
 Vue.use(Tabs);
@@ -72,7 +72,7 @@ Vue.use(CountDown);
 Vue.use(Loading);
 Vue.use(RadioGroup);
 Vue.use(Radio);
-
+Vue.use(Search);
 require('./mock')
 
 Object.defineProperty(Vue.prototype, '$request', { value: request })
