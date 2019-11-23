@@ -122,7 +122,7 @@
       <div>
         <not-found v-if="collect.data.length === 0" type="not-fond_2" msg="我寻寻觅觅却找不见您收藏的踪迹"></not-found>
       </div>
-      <div style="position:relative;overflow:hidden;">
+      <div style="position:relative;overflow:hidden; z-index:-1;">
         <session-title name="我点赞的老师"></session-title>
         <cloud :arr="[1,3,4, 5]"></cloud>
       </div>
