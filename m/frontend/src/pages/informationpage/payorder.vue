@@ -42,10 +42,6 @@
         <van-radio name="1" checked-color="#8FCD71">
           <img class="pay-way-img" src="../../assets/img/zfb.png" alt />
         </van-radio>
-        <!-- 微信支付 -->
-        <!-- <van-radio name="2" checked-color="#8FCD71">
-                    <img class="pay-way-img" src="../../assets/img/wx.png" alt="">
-        </van-radio>-->
       </van-radio-group>
     </div>
     <div class="footer">
@@ -81,7 +77,9 @@ export default {
       // 选中折扣的编号
       name: "",
       // 支付宝提交的表单数据
-      form: ""
+      form: "",
+      // 支付方式
+      payway: "支付宝"
     };
   },
   created() {
@@ -98,7 +96,9 @@ export default {
       if (this.fraction >= item.consume) {
         this.name = item.id;
         const train_discount = this.courseParams.train_discount.积分;
-        this.discountPrice = ( this.courseParams.price - train_discount[index].deduction ).toFixed(2);
+        this.discountPrice = (
+          this.courseParams.price - train_discount[index].deduction
+        ).toFixed(2);
         this.consume = train_discount[index].consume;
       } else {
         Toast("您的积分不足，快去分享赚积分吧！");
@@ -118,10 +118,51 @@ export default {
       };
       return params;
     },
+    // 选择积分抵扣，折扣价格
+    getId(index, item) {
+      if (this.fraction >= item.consume) {
+        this.name = item.id;
+        const train_discount = this.courseParams.train_discount.积分;
+        this.discountPrice = (
+          this.courseParams.price - train_discount[index].deduction
+        ).toFixed(2);
+        this.consume = train_discount[index].consume;
+      } else {
+        Toast("您的积分不足，快去分享赚积分吧！");
+      }
+    },
+    // 不使用积分的价格
+    noUse() {
+      this.name = "";
+      this.discountPrice = this.courseParams.price.toFixed(2);
+    },
+    // 参数处理
+    paramsDeal(params) {
+      // if(this.name === '') {
+      //     params = {
+      //         id: this.courseParams.id,
+      //     }
+      //     return params
+      // } else {
+      params = {
+        id: this.courseParams.id,
+        fraction: this.consume,
+        discountId: this.name
+      };
+      return params;
+      // }
+    },
     // 创建订单
     creatOrder() {
       const orderParams = this.paramsDeal();
       this.$request.post("/trains/new/order", orderParams).then(res => {
+        //   if(res.code === 200) {
+        //     if (this.fraction === 0) {
+        //         Toast("课程已购买")
+        //     } else {
+        //         this.payMoney(res.out_trade_no);
+        //     }
+        // }
         if (res.msg === "OK") {
           if (this.fraction === 0 || res.code === 200) {
             Toast("恭喜您，课程购买成功");
@@ -129,7 +170,15 @@ export default {
               this.$router.go(-1);
             }, 2000);
           } else {
-            this.payMoney(res.out_trade_no);
+            if (this.payway === "支付宝") {
+              this.payMoney(res.out_trade_no);
+            } else if (this.payway === "微信") {
+              if (this.isWeiXin()) {
+                this.payForWexin(res.out_trade_no);
+              } else {
+                this.payForWexinw(res.out_trade_no);
+              }
+            }
           }
         } else {
           this.$toast({
@@ -150,6 +199,80 @@ export default {
           this.$nextTick(() => {
             document.forms["alipaysubmit"].submit(); //渲染支付宝支付页面
           });
+        });
+    },
+    // 判断是否是微信浏览器
+    isWeiXin() {
+      var ua = window.navigator.userAgent.toLowerCase();
+      if (ua.match(/MicroMessenger/i) == "micromessenger") {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    // 获取微信浏览器接口
+    payForWexin(orderId) {
+      this.$request.get("/alipay/wechat/jsapi/openid").then(res => {
+        console.log(res);
+        // window.location.href = res.openid
+        var createCallbackName = function() {
+          return `callback${(Math.random() * 1000000).toFixed(0)}`;
+        };
+        var insertScript = function(url) {
+          let script = document.createElement("script");
+          script.type = "text/javascript";
+          // script.src = res.openid
+          // script.onload = script.onerror = function () {
+          //     document.body.removeChild(script)
+          // }
+          script.setAttribute("src", url);
+          document.body.appendChild(script);
+        };
+        var jsonp = function(url, config = {}) {
+          let data = config.data || {};
+          let timeout = config.timeout || 5000;
+          let timer;
+          let funcName = createCallbackName();
+          data.callback = funcName;
+          return new Promise((resolve, reject) => {
+            window[funcName] = function(res) {
+              delete window[funcName];
+              resolve(res);
+            };
+            insertScript(url);
+          });
+        };
+        jsonp(res.openid).then(res => {
+          console.log(res);
+        });
+        // setTimeout(() =>{
+        //     console.log(script.innerHTML)
+        // }, 3000)
+        // let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res.openid }});
+        // window.open(routeData.href, '_blank')
+
+        // this.$request.get('/alipay/wechat/jsapi/test?out_trade_no=' + orderId +'&openid='+ res.openid ).then((res) => {
+        //     console.log(res)
+        //     // let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res.mweb_url }});
+        //     // window.open(routeData.href, '_blank')
+        // })
+      });
+      return;
+      // this.$request.get('/alipay/wechat/jsapi/test?out_trade_no=' + orderId ).then((res) => {
+      //     let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res.mweb_url }});
+      //     window.open(routeData.href, '_blank')
+      // })
+    },
+    // 外部浏览器微信支付
+    payForWexinw(orderId) {
+      this.$request
+        .get("/alipay/wechat/h/test?out_trade_no=" + orderId)
+        .then(res => {
+          let routeData = this.$router.resolve({
+            path: "payforwx",
+            query: { htmls: res.mweb_url, body: res.body, id: res.out_trade_no }
+          });
+          window.open(routeData.href, "_blank");
         });
     }
   }

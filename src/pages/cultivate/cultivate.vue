@@ -3,19 +3,9 @@
     <el-row>
       <el-col :span="24">
         <div class="cultivate-main">
-          <div class="sub_box4">
-              <div class="subjects3">
-                  <el-carousel height="60px" :interval="5000" :autoplay="true" arrow="never">
-                      <el-carousel-item v-for="(item,index) in subjectbanner" :key="index">
-                          <img :src="item.path" alt  @click="subclick(item)"/>
-                          <div class="advertisement">广告</div>
-                      </el-carousel-item>
-                  </el-carousel>
-              </div>
-          </div>
           <template>
             <div class="bg_img2" v-if="cationbanner.length > 0">
-                <img :src="cationbanner[0].path" alt @click="cationclick(cationbanner[0].mold)"/>
+                <img :src="item.path" alt v-for="(item,index) in cationbanner" :key="index" @click="cationclick(item)"/>
                 <div class="advertisement">广告</div>
             </div>
             <div class="bg_img" v-else>
@@ -133,12 +123,13 @@
                     :type="tag.type"
                     class="tag"
                   >{{tag.name}}</el-tag>
-                  <el-button v-show="selectTags.length>0" @click="searchResult" class="search">搜索</el-button>
+                  <el-button v-show="selectTags.length>0" 
+                    @click="searchResult" class="search">搜索</el-button>
                 </div>
               </div>
               <div class="fruit">
-                <span :class="resultFw ? 'fw':'' ">找到下列结果</span>
-                <span class="fruit-item" :class="defaultFw ? '':'fw' " @click="defaultRank('default')">默认排序</span>
+                <span :class="resultFw ? 'fw':'fw' ">找到下列结果</span>
+                <span class="fruit-item" :class="defaultFw ? 'fw':'' " @click="defaultRank('default')">默认排序</span>
                 <span class="fruit-item" :class="hostFw ? 'fw':'' " @click="hostRank('host')">热度</span>
                 <span class="fruit-item" :class="priceFW ? 'fw':'' " @click="priceRank('price')">价格</span>
                 <span>
@@ -236,7 +227,6 @@
                     <div class="list-eye">￥{{item.price}}</div>
                   </div>
                   <el-rate :value="item.diff" :colors="['#58B708','#58B708','#58B708']" disabled></el-rate>
-                  <!-- <div class="li-text2">适用人群：{{crowdList(item.crowd)}}</div> -->
                   <div class="li-text2">
                     适用人群：
                     <pre>{{item.crowd}}</pre>
@@ -289,11 +279,11 @@ export default {
   },
   data() {
     return {
+      classfiyIds: '',
       banner: "",
       moreClassfiy: [],
       value2: "",
       value3: "",
-      subjectbanner:[],
       cationbanner:[],
       selectArea: {
         province: "",
@@ -406,15 +396,11 @@ export default {
       keyWord: '',
       // 控制价格排序的 flag
       priceFlag: true,
-      aa: 100,
       position:'',
     };
   },
   computed: {
     ...mapGetters(["info"]),
-    crowdList() {
-      return item => item.split("●");
-    },
     isTagActive() {
       return item => {
         const select = this.selectTags.filter(tag => tag.name == item.name)[0];
@@ -423,28 +409,19 @@ export default {
     },
   },
   created(){
+    const { ids = '' } = this.$route.query
+    this.classfiyIds = ids
     this.maintype();
     this.classification();
   },
   mounted() {
-    this.getTrainsList();
+    if(this.classfiyIds === '') {
+      this.getTrainsList();
+    }
     getOrderByTrains().then(data => {
       this.newList = data.new;
       this.fruitclasslist = data.hot;
     });
-  },
-  activated() {
-    // isUseCache 为false时才重新刷新获取数据
-    // 因为对 list 使用 keep-alive 来缓存组件，所以默认是会使用缓存数据的
-    // if (!this.$route.meta.isUseCache) {
-    //   this.getTrainsList();
-    //   getOrderByTrains().then(data => {
-    //     this.newList = data.new.data;
-    //     this.fruitclasslist = data.hot.data;
-    //   });
-    //   // 通过这个控制刷新
-    //   this.$route.meta.isUseCache = false;
-    // }
   },
   methods: {
       //根据页面查广告数据
@@ -454,15 +431,12 @@ export default {
             if(data[i].position == 0){
               this.cationbanner = data[i].advertisement;
             }
-            else if(data[i].position == 1){
-              this.subjectbanner = data[i].advertisement;
-            }
           }
       });
     },
-    subclick(item){
+     cationclick(item){
         switch(item.mold){
-             case 1:
+            case 1:
                 this.$router.push({
                     path: "/subjects",
                     query: {
@@ -511,68 +485,34 @@ export default {
                 break;
         }
       },
-      cationclick(cationbanner){
-        switch(this.cationbanner[0].mold){
-            case 1:
-                this.$router.push({
-                    path: "/subjects",
-                    query: {
-                    id: this.cationbanner[0].relation_id
-                    }
-                });
-                break;
-            case 2:
-                this.$router.push({
-                    path: "/joinclubhouse/joinclubhousedetails",
-                    query: {
-                    id: this.cationbanner[0].relation_id
-                    }
-                });
-                break;
-            case 3:
-                this.$router.push({
-                    path: "/yogoteacher/yogoteacherdetails",
-                    query: {
-                    id: this.cationbanner[0].relation_id
-                    }
-                });
-                break;
-            case 4:
-               this.$router.push({
-                        path: `/cultivate/detail/${this.cationbanner[0].relation_id}`,
-                    });
-                break;
-            case 5:
-                this.$router.push({
-                    path: "/goods/detail",
-                    params: {
-                    id: this.cationbanner[0].relation_id
-                    }
-                });
-                break;
-            case 6:
-                this.$router.push({
-                    path: "/cultivate/index",
-                });
-                break;
-            case 7:
-                this.$router.push({
-                    path: "/market/detail",
-                });
-                break;
-        }
-      },
     wantStudy(id) {
       getFollowTrain(id)
         .then(data => {
-          this.$message({type:'success', message: '操作成功'})
+          this.$message({type:'success', message: '已为您收藏至个人中心'})
         })
     },
     //类型和banner
     maintype(){
       this.$request.get(`/trains/type`).then(res => {
-            this.classfiy = res.course_types;
+            const mapClassfiy = array =>
+              array.map(item => {
+                item.type = "classfiy";
+                item.value = item.id;
+                item.isArray = true;
+                return item;
+              });
+            this.classfiy = mapClassfiy(res.course_types);
+            // this.classfiy = res.course_types;
             this.banner = res.banner;
+            return this.classfiy;
+        })
+        .then(classfiy => {
+          const selectIds = this.classfiyIds.split(',').map(item => parseInt(item))
+          const selectClassfiy = classfiy.filter(item => selectIds.indexOf(parseInt(item.id)) >= 0)
+          this.selectTags = [...this.selectTags, ...selectClassfiy]
+        })
+        .then(() => {
+          this.searchResult()
         })
     },
     getFiltersParams(params = {}) {
@@ -597,6 +537,7 @@ export default {
     },
     searchResult(page = 1) {
       page = parseInt(page) || 1
+      
       postTrains(page, this.getFiltersParams()).then(data => {
         this.fruit = data.data;
         this.per_page = data.per_page;
@@ -604,8 +545,6 @@ export default {
         this.total = data.total;
         // this.getTrainsList();
       });
-      this.resultFw = true;
-      this.defaultFw = true;
       this.hostFw = false;
       this.priceFW = false;
     },
@@ -619,30 +558,18 @@ export default {
     },
     getTrainsList(page = this.current_page) {
       getTrains(page).then(data => {
-        const mapClassfiy = array =>
-          array.map(item => {
-            item.type = "classfiy";
-            item.value = item.id;
-            item.isArray = true;
-            return item;
-          });
         this.fruit = data.data;
         this.per_page = data.per_page;
         this.current_page = data.current_page;
         this.total = data.total;
         if (page > 1) return;
-        // this.classfiy = mapClassfiy(course_types);
-        // if (course_types.length > 8) {
-        //   this.classfiy = mapClassfiy(course_types.slice(0, 8));
-        //   this.moreClassfiy = mapClassfiy(course_types.slice(8));
-        // }
       });
     },
     getRankParams(keyWord, params = {}) {
       if(keyWord === 'default') {
-        params = Object.assign({}, params, { time: false });
+        params = Object.assign({}, params, { time: true });
       } else if(keyWord === 'host') {
-        params = Object.assign({}, params, { follow: false });
+        params = Object.assign({}, params, { follow: true });
       } else {
         if(this.priceFlag) {
           params = Object.assign({}, params, { money: true });
@@ -655,14 +582,16 @@ export default {
     changePage(val){
       this.current_page = val;
       if(this.selectTags.length > 0) {
-        this.searchResult(val);
+        // this.searchResult(val);
+        this.getRank(this.getRankParams(this.keyWord, this.getFiltersParams()), val)
       } else {
-        this.getTrainsList();
+        this.getRank(this.getRankParams(this.keyWord, this.getFiltersParams()), val)
+        // this.getTrainsList();
       }
     },
     // 排序请求
-    getRank(params) {
-      postTrains(params).then(data => {
+    getRank(params, page = 1) {
+      postTrains(page, params).then(data => {
         this.fruit = data.data;
         this.per_page = data.per_page;
         this.current_page = data.current_page;
@@ -679,35 +608,37 @@ export default {
     },
     // 默认排序
     defaultRank(keyWord) {
-      this.defaultFw = false;
+      this.defaultFw = true;
       this.hostFw = false;
       this.priceFW = false;
       this.resultFw = false;
       this.keyWord = keyWord;
-      if(this.selectTags.length > 0) {
-        this.searchResult();
-      } else {
-        this.getTrainsList();
-      }
+      this.getRank(this.getRankParams(keyWord, this.getFiltersParams()))
+      // if(this.selectTags.length > 0) {
+      //   this.searchResult();
+      // } else {
+      //   this.getTrainsList();
+      // }
     },
     // 热度排序
     hostRank(keyWord) {
       this.hostFw = true
-      this.defaultFw = true;
+      this.defaultFw = false;
       this.priceFW = false;
       this.resultFw = false;
       this.keyWord = keyWord;
-      this.getRank(this.getRankParams(keyWord))
+      this.getRank(this.getRankParams(keyWord, this.getFiltersParams()))
     },
     // 价格排序
     priceRank(keyWord) {
+      this.priceFlag = !this.priceFlag;
       this.priceFW = true;
-      this.defaultFw = true;
+      this.defaultFw = false;
       this.hostFw = false;
       this.resultFw = false;
       this.keyWord = keyWord;
-      this.getRank(this.getRankParams(keyWord))
-      this.priceFlag = !this.priceFlag
+      this.getRank(this.getRankParams(keyWord, this.getFiltersParams()))
+      // this.priceFlag = !this.priceFlag
     },
     study(id) {
       if (!this.info.user.name) {
@@ -775,6 +706,7 @@ export default {
       this.selectArea.province = "";
       this.selectArea.city = "";
       this.selectArea.area = "";
+      this.getTrainsList();
     },
     resetTime() {
       this.time = {
@@ -787,6 +719,7 @@ export default {
         isArray: false,
         name: ""
       };
+      this.getTrainsList();
     },
     resetPrice() {
       this.priceInput = {
@@ -812,6 +745,7 @@ export default {
       this.selectTags = this.selectTags.filter(item => item.type !== type);
     },
     selected(item) {
+      console.log(item)
       if (item.isArray) {
         this.selectTags.push(item);
         return;
@@ -962,50 +896,6 @@ img {
   overflow: hidden;
   font-size: 0.7rem;
   background: rgba(244, 244, 244, 1);
-  .sub_box4{
-    width: 100%;
-    position: fixed;
-    top: 0px;
-    z-index: 999;
-    .subjects3{
-        width: 100%;
-        height: 60px;
-        cursor: pointer;
-        position: relative;
-        img{
-            width: 100%;
-            height: 100%;
-        }
-        .close{
-            width: 17px;
-            height: 17px;
-            background-color: #391F2B;
-            position: absolute;
-            right: 0;
-            top: 0;
-            .closeimg{
-            width: 8px;
-            height: 8px;
-            position: absolute;
-            right: 5px;
-            top: 5px;
-            }
-        }
-        .advertisement{
-            width: 40px;
-            height: 20px;
-            line-height: 20px;
-            background-color: #351D27;
-            opacity: 0.5;
-            color: #fff;
-            font-size: 12px;
-            text-align: center;
-            position: absolute;
-            right: 0;
-            bottom: 0;
-        }
-    }
-    }
   .cultivate-count {
     width: 60rem;
     margin: 0 auto;
@@ -1267,7 +1157,7 @@ img {
         margin: 0 auto;
         .fruit-list-li {
           width: 19.2rem;
-          height: 28.5rem;
+          height: 29rem;
           // height: 100%;
           // padding-bottom: 1rem;
           background-color: #ffffff;
@@ -1300,12 +1190,12 @@ img {
             width: 90%;
             margin: 0 auto;
             // margin-top: 1.5rem;
-            padding-top: 0.4rem;
+            padding-top: 0.8rem;
             
             height: 4em;
             cursor: pointer;
             div {
-              font-size: 0.9rem;
+              font-size: 1.3rem;
               overflow: hidden !important;
               -webkit-line-clamp: 1 !important;
               text-overflow: ellipsis !important;
@@ -1328,7 +1218,7 @@ img {
           }
           .fruit-detail {
             width: 90%;
-            height: 40px;
+            height: 57px;
             margin: 0 auto;
             margin-top: 1rem;
           }
@@ -1449,7 +1339,7 @@ img {
       margin: 0 auto;
       .fruit-list-li {
         width: 19.2rem;
-        height: 28.5rem;
+        height: 29rem;
         // height: 100%;
         // padding-bottom: 1rem;
         background-color: #ffffff;
@@ -1486,7 +1376,7 @@ img {
           cursor: pointer;
           padding-top: 0.4rem;
           div {
-            font-size: 0.9rem;
+            font-size: 1.3rem;
             overflow: hidden !important;
             -webkit-line-clamp: 1 !important;
             text-overflow: ellipsis !important;
@@ -1531,7 +1421,7 @@ img {
         }
         .fruit-detail {
           width: 90%;
-          height: 40px;
+          height: 57px;
           margin: 0 auto;
           margin-top: 1rem;
         }

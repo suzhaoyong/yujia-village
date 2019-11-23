@@ -11,12 +11,14 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
+const PrerenderSPAPlugin = require('prerender-spa-plugin')
+const Renderer = PrerenderSPAPlugin.PuppeteerRenderer
+
 
 
 // const env = require('../config/prod.env')
 const env = require('../config/' + (process.env.env_config || 'prod') + '.env')
 console.log(env);
-const PrerenderSpaPlugin = require('prerender-spa-plugin') // prerender-spa-plugin
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
     rules: utils.styleLoaders({
@@ -37,7 +39,37 @@ const webpackConfig = merge(baseWebpackConfig, {
       'process.env': env
     }),
     // 单页seo配置
-    
+    new PrerenderSPAPlugin({
+      // Required - The path to the webpack-outputted app to prerender.
+      staticDir: path.join(__dirname, '../dist'),
+      // Required - Routes to render.
+      routes: [
+        '/',
+      '/main', 
+      '/joinclubhouse', 
+      '/joinclubhouse/joinclubhousedetails',
+      '/yogoteacher', 
+      '/cultivate/index', 
+      '/yogoknowledge', 
+      '/yogoknowledge/yogoknowledgedetails',
+      '/yogoinformation', 
+      '/yogoinformation/yogoinformationdetails',
+      '/aboutus'],
+      renderer: new Renderer({
+        // Optional - Any values you'd like your app to have access to via `window.injectProperty`.
+        inject: {
+          foo: 'bar'
+        },
+        // Optional - Wait to render until the specified element is detected using `document.querySelector`
+        // renderer: new PrerenderSPAPlugin.PuppeteerRenderer({//这样写renderAfterTime生效了
+        //   renderAfterTime: 5000
+        // }),
+        renderAfterDocumentEvent: 'render-event',
+        // Other puppeteer options.
+        // (See here: https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#puppeteerlaunchoptions)
+        headless: false // Display the browser window when rendering. Useful for debugging.
+      })
+    }),
     // extract css into its own file
     new ExtractTextPlugin({
       filename: utils.assetsPath('css/[name].[contenthash].css'),
@@ -68,6 +100,7 @@ const webpackConfig = merge(baseWebpackConfig, {
         // more options:
         // https://github.com/kangax/html-minifier#options-quick-reference
       },
+      chunks: ['manifest', 'vendor', 'app'],
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency'
     }),
@@ -76,6 +109,12 @@ const webpackConfig = merge(baseWebpackConfig, {
     // enable scope hoisting
     new webpack.optimize.ModuleConcatenationPlugin(),
     // split vendor js into its own file
+    // extract webpack runtime and module manifest to its own file in order to
+    // prevent vendor hash from being updated whenever app bundle is updated
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'manifest',
+      minChunks: Infinity
+    }),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
       minChunks (module) {
@@ -89,12 +128,6 @@ const webpackConfig = merge(baseWebpackConfig, {
         )
       }
     }),
-    // extract webpack runtime and module manifest to its own file in order to
-    // prevent vendor hash from being updated whenever app bundle is updated
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'manifest',
-      minChunks: Infinity
-    }),
     // This instance extracts shared chunks from code splitted chunks and bundles them
     // in a separate chunk, similar to the vendor chunk
     // see: https://webpack.js.org/plugins/commons-chunk-plugin/#extra-async-commons-chunk
@@ -104,6 +137,11 @@ const webpackConfig = merge(baseWebpackConfig, {
       children: true,
       minChunks: 3
     }),
+    // new webpack.optimize.CommonsChunkPlugin(
+    //   {
+    //     name: 'vendor',
+    //     minChunks: Infinity
+    //   }),
 
     // copy custom static assets
     new CopyWebpackPlugin([

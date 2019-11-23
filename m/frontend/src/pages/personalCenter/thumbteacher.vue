@@ -27,7 +27,7 @@ export default {
             loading: false,
             finished: false,
             page: 1,
-            total: '',
+            last_page: '',
         }
     },
     created() {
@@ -45,7 +45,7 @@ export default {
                 // 加载状态结束
                 this.loading = false;
                 // 数据全部加载完成
-                if (this.thumbTeacherList.length >= this.total) {
+                if (this.page >= this.last_page) {
                     this.finished = true;
                 }
             }, 500);
@@ -56,10 +56,11 @@ export default {
             // console.log(data);
             const info = data.data;
             info.forEach(item => {
-                this.thumbTeacherList.push(item);
+                if(item) {
+                    this.thumbTeacherList.push(item);
+                }
             });
-            this.total = data.total;
-
+            this.last_page = data.last_page;
         },
         // 跳转 -> 老师详情页
         goTeacherDetail(id) {

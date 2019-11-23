@@ -32,9 +32,15 @@ const router = new Router({
   },
   routes: [{
       path: '/',
-      name: 'Home',
-      component: Home,
-      redirect: '/main'
+      name: 'main',
+      meta: {
+        header_name: 'main'
+      },
+      component: () => import('@/pages/index.vue'),
+    },
+    {
+      path: '/not_found_page',
+      component: () => import('@/components/404.vue')
     },
     {
       path: '/login',
@@ -369,6 +375,12 @@ const router = new Router({
       name: 'wechat pay',
       component: () => import('@/pages/pay/wechatPay')
     },
+
+    // 404
+    {
+      path: '*',
+      redirect: '/not_found_page'
+    }
   ]
 })
 router.beforeEach((to, from, next) => {

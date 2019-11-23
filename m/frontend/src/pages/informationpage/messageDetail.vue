@@ -1,8 +1,15 @@
 <template>
   <div class="messagedetail">
     <van-nav-bar title="课程详情" left-arrow @click-left="goback">
-      <van-icon slot="right" name="star-o" @click="study(detailData.id)"></van-icon>
-      <van-icon slot="right" name="share" @click="shareMessage"></van-icon>
+      <div slot="right" class="paralleling">
+        <van-icon  name="star-o" @click="study(detailData.id)">
+        </van-icon>
+        <share-ing
+          type="train"
+          @listenToShow="getChildShow"
+        ></share-ing>
+      </div>
+
     </van-nav-bar>
     <main class="messagedetail-main" style="-webkit-overflow-scrolling:touch">
       <div class="banner-train-img">
@@ -16,29 +23,6 @@
           </van-swipe>
         </van-popup>
       </div>
-      <!-- 分享 -->
-      <van-popup class="fenxiang" v-model="show">
-         <div v-show="!shareimg" class="loading">
-            <van-loading color="#7BBB62" size="24px" vertical>加载中...</van-loading>
-        </div>
-        <div class="sharepopup" v-show="shareimg">
-          <img :src="shareimg" class="shareimg">
-          <div class="sharetext">长按图片，保存或发送给朋友</div>
-          <div class="bgc">
-            <img src="../../assets/img/fxwenan.png" alt="" @click="getWenan">
-          </div>
-        </div>
-      </van-popup>
-      <van-popup class="popup" v-model="wenanIsShow" round closeable position="bottom"
-      :style="{ height: '80%' }">
-          <div class="wenan-title">选择分享文案</div>
-          <div class="wenan-box">
-              <div class="wenan-box-item" v-for="(item,index) in wenanData" :key="index" 
-              @click="selectItem(item.content)">{{item.content}}</div>
-          </div>
-          <button id="copy" v-clipboard:copy="copy_content" 
-              v-clipboard:success="onCopy"  v-clipboard:error="onError">一键复制</button>
-      </van-popup>
       <!-- 课程详情 -->
       <ul class="messagedetail-main-title">
         <li class="li-title">
@@ -116,7 +100,7 @@
         <div class="course-details-content" v-html="detailData.content"></div>
       </div>
     </main>
-  <footer class="footer">
+  <footer class="footer" v-show="!childShow">
     <!-- <div @click="study(detailData.id)">我想学</div> -->
     <div @click="buyCourse">立即购买</div>
   </footer>
@@ -124,10 +108,12 @@
 </template>
 
 <script>
-import Vue from 'vue';
+// import Vue from 'vue';
+import shareIng from '../../components/shareing'
 import '../../dist/swiper.css'
 import { getFollowTrain } from '../../../api/personal'
 import { mapGetters } from "vuex";
+import { Toast } from 'vant';
 
 export default {
   data () {
@@ -140,7 +126,7 @@ export default {
       outline: '',
       bannerShow: false,
       imgShow: false,
-      show: false,
+      childShow: false,
       time: '',
       shareimg: '',
       crowdimg: [
@@ -156,6 +142,9 @@ export default {
       copy_content: ''
     }
   },
+  components: {
+    shareIng
+  },
   beforeRouteLeave  (to, from, next) {
     if(to.path === this.$route.path || to.path == '') {
         this.$router.replace('/yogamessage/list')
@@ -166,14 +155,20 @@ export default {
     this.courseId = this.$route.params.id;
     this.getmessageDetail(this.courseId);
   },
-  mounted () {
+  watch: {
+    immediate: true,
+    getChildShow () {}
   },
   computed: {
     ...mapGetters(["info", "isUserNeedLogin"]),
   },
   methods: {
+    getChildShow (data) {
+      this.childShow = data
+    },
     goback () {
-      this.$router.go(-1)
+      // this.$router.go(-1)
+      this.$router.replace('/yogamessage/list')
     },
     getmessageDetail(id) {
       this.$request.get('trains/' + id).then((res) => {
@@ -198,48 +193,10 @@ export default {
       if(this.detailData.train_old_image.length === 0) return 
       this.imgShow = true;
     },
-    // 分享图片
-    shareMessage() {
-      if(this.isUserNeedLogin) {
-        this.$router.push('/login')
-        this.$toast('请登录')
-        return;
-      }
-      this.show = true
-      console.log(this.$route.params.id)
-      var params = {
-          id: this.$route.params.id,
-          identity:'train',
-          userId:  sessionStorage.getItem('user')? JSON.parse(sessionStorage.getItem('user')).id : '',
-          responseType: 'arraybuffer'
-      }
-      this.$request.post(`/show/share/photo`,params).then(res => {
-        console.log(res)
-        this.shareimg = res;
-      })
-    },
-    // 获取文案
-    getWenan() {
-        this.wenanIsShow = true;
-        this.$request.get('/personal/share/word/2').then(res => {
-            this.wenanData = res;
-        })
-    },
-     // 选中文案
-        selectItem(copy_content) {
-            this.copy_content = copy_content;
-        },
-        // 复制成功
-        onCopy:function(e){
-            this.$this.$toast("复制成功！");
-        },
-        onError:function(e){
-            this.$this.$toast("复制失败！");
-        },
     // 购买跳到支付页面
     buyCourse() {
       if(!window.sessionStorage.getItem('access')) {
-        this.$this.$toast('请登录');
+        Toast('请登录')
         this.$router.push('/login');
         return;
       }
@@ -261,10 +218,9 @@ export default {
     },
     // 我想学的操作
     study(id) {
-      console.log(id)
       if (!JSON.parse(sessionStorage.getItem("user"))) {
         this.$router.push('/login')
-        this.$this.$toast('请登录')
+        Toast('请登录')
         return;
       }
       this.wantStudy(id)
@@ -274,8 +230,7 @@ export default {
       // 调用我想学接口
       getFollowTrain(id)
         .then(data => {
-          // console.log(data)
-          this.$this.$toast(data.msg);
+          Toast(data.msg)
         })
     },
   }
@@ -283,97 +238,6 @@ export default {
 </script>
 
 <style lang="scss" scope>
-// 分享样式
-.fenxiang {
-  width: 100%;
-  min-height: 80%;
-  border-radius: 15px;
-  .loading {
-    width: 60px;
-    height: 30px;
-    margin: 49% auto;
-  }
-}
-
-.sharepopup {
-  width: 100%;
-  z-index: 99 !important;
-  .shareimg {
-    height: 485px;
-    margin: 0 auto;
-    // margin-left: 27px;
-  }
-  .sharetext {
-    // margin-top: -20px;
-    text-align: center;
-    font-size: 12px;
-  }
-  .bgc {
-    width: 100%;
-    height: 58px;
-    margin-top: 32px;
-    background-color: #fff;
-    text-align: center;
-     img {
-      width: 79px;
-      height: 58px;
-      vertical-align: top;
-      padding: 0;
-    }
-  }
-}
-.popup {
-  /deep/ .van-icon {
-      position: absolute;
-      top: 12px;
-      font-size: 18px;
-      color: #2c2c2c;
-  }
-  .wenan-title {
-      margin: 10px 0;
-      font-size: 16px;
-      font-weight: 600;
-      text-align: center;
-  }
-  .wenan-box {
-      position: absolute;
-      top: 41px;
-      left: 16px;
-      bottom: 64px;
-      width: 343px;
-      padding: 10px;
-      background-color: #eee;
-      overflow: scroll;
-      &-item {
-          width: 100%;
-          padding: 8px 10px;
-          margin-bottom: 13px;
-          background-color: #ddd;
-          border-radius: 5px;
-          font-size: 14px;
-          font-weight: 600;
-      }
-      &-item:hover {
-          box-sizing: border-box;
-          background-color: #eefaed;
-          border: 1px solid #7BBB62;
-      }
-  }
-  #copy {
-      position: absolute;
-      left: 16px;
-      bottom: 10px;
-      width: 343px;
-      height: 44px;
-      line-height: 44px;
-      background-color: #7BBB62;
-      border-radius: 22px;
-      border: none;
-      text-align: center;
-      font-size: 16px;
-      color: #fff;
-  }
-}
 .messagedetail {
   width: 100%;
   height: 100%;
@@ -381,11 +245,12 @@ export default {
   .van-nav-bar {
     position: fixed;
     top: 0;
-    .van-icon {
-      margin-left: 8px;
-    }
-    .van-icon:nth-child(1) {
-      margin-bottom: 5px;
+    .paralleling {
+      width: 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      
     }
   }
   &-main {

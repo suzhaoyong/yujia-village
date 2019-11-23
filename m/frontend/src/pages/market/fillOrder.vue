@@ -212,6 +212,7 @@ export default {
     return {
       payway: {
         show: false,
+        // columns: ["支付宝", '微信'],
         columns: ["支付宝"],
         value: ""
       },
@@ -568,17 +569,31 @@ export default {
     },
     // 获取支付宝接口
     payMoney(orderId) {
-        this.$request.get('/alipay/wappay/get?out_trade_no='+orderId).then(res => {
+        this.$request.get('/alipay/wappay/get?out_trade_no=' + orderId).then(res => {
           this.form = res;
           this.$nextTick(() => {
               document.forms['alipaysubmit'].submit() //渲染支付宝支付页面
           })
         })
     },
-    // payForWexin (orderId) {
-    //   this.$request.get('/alipay/wechat/jsapi/test/', orderId ).then(() => {
-    //   })
-    // },
+    // 获取微信外部接口
+    payForWexinw (orderId) {
+      this.$request.get('/alipay/wechat/h/test?out_trade_no=' + orderId ).then((res) => {
+        let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res.mweb_url, body: res.body, id: res.out_trade_no }});
+        window.open(routeData.href, '_blank')
+      }).catch((error) => {
+        Toast(error)
+      })
+    },
+    // 获取微信浏览器接口
+    payForWexin (orderId) {
+      this.$request.get('/alipay/wechat/jsapi/test?out_trade_no=' + orderId ).then((res) => {
+        let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res.mweb_url, body: res.body, id: res.out_trade_no }});
+        window.open(routeData.href, '_blank')
+      }).catch((error) => {
+        Toast(error)
+      })
+    },
     // 返回
     back() {
       this.$router.go(-1);
