@@ -102,6 +102,7 @@ export default {
           const { id, num, size, color } = item;
           postAddUserCart({ id: [id], num: [num] }).then(data => {
             this.$message({ type: "success", message: "添加成功" });
+            // this.goods = this.goods.filter(sitem => sitem.id !== item.id);
           });
         },
         deleteGoods: item => {

@@ -33,13 +33,16 @@
             <div class="price" style="font-weight:800;">
               {{goods.describe}}
             </div>
-            <div class="price">
+            <div class="price" style="margin-top:0.2rem;">
               吊牌价：
               <span>￥{{goods.sell_price}}</span>
             </div>
             <div class="preferential">
               折扣价：
               <span>￥{{(goods.sell_price - goods.discount).toFixed(2)}}</span>
+            </div>
+            <div style="margin-bottom: 0.3rem;" v-for="(sitem, index) in goods.good_discount['积分']" :key="index">
+              <span>{{sitem.consume}}</span> {{sitem.type}}，商品仅需 <span>{{getCountPrice(sitem)}}</span> 元
             </div>
             <div class="colors">
               <span>颜色:</span>
@@ -164,6 +167,14 @@ export default {
         const [name, value] = Object.entries(item)[0];
         return enums[name];
       };
+    },
+    getCountPrice() {
+      return (item) => {
+        if(item.deduction > this.goods.sell_price) {
+          return '0.00';
+        }
+        return (this.goods.sell_price - item.deduction).toFixed(2)
+      }
     },
     getParamsValue() {
       return item => {
@@ -380,7 +391,7 @@ img {
           }
         }
         .colors {
-          margin-top: 2rem;
+          margin-top: 0.3rem;
           display: flex;
           align-items: flex-end;
           span {

@@ -31,7 +31,7 @@
                 <div class="goods_info-tips">{{item.describe}}</div>
                 <div class="goods_info-border"></div>
                 <div class="goods_info-price">{{item.sell_price}}<span class="rmb">RMB</span></div>
-                <div class="goods_buy-btn" style="cursor: pointer;" @click="viewGoodsDetail(item)" >立即购买</div>
+                <div class="goods_buy-btn" style="cursor: pointer;" @click="viewGoodsDetail(item)" >查看详情</div>
               </div>
             </div>
           </div>
@@ -59,7 +59,7 @@
                 <div class="goods_info-tips">{{item.describe}}</div>
                 <div class="goods_info-border"></div>
                 <div class="goods_info-price">{{item.sell_price}}<span class="rmb">RMB</span></div>
-                <div class="goods_buy-btn" style="cursor: pointer;" @click="viewGoodsDetail(item)" >立即购买</div>
+                <div class="goods_buy-btn" style="cursor: pointer;" @click="viewGoodsDetail(item)" >查看详情</div>
               </div>
               <div class="goods_subimg">
                 <img :src="item.url_two" alt="商品" />

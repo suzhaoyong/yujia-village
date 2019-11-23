@@ -144,11 +144,11 @@ export default {
         },
         moveToCollect: () => {
           let selectGoods = this.goods.filter(item => item.select);
-          // this.goods = this.goods.filter(item => !item.select);
           const id = selectGoods.map(item => item.id);
           const num = selectGoods.map(item => item.num);
           postAddUserCollect({ id: id, num: num }).then(data => {
             this.$message({ type: "success", message: "添加成功" });
+            this.goods = this.goods.filter(item => !item.select);
           });
         }
       };
