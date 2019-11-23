@@ -33,16 +33,21 @@
             <div class="price" style="font-weight:800;">
               {{goods.describe}}
             </div>
-            <div class="price" style="margin-top:0.2rem;">
-              吊牌价：
-              <span>￥{{goods.sell_price}}</span>
+            <div style="background:#F6F6F6;padding:0.6rem;margin-left:-0.6rem;">
+              <div class="price" style="margin-top:0.2rem;">
+                吊牌价：
+                <span>￥{{goods.sell_price}}</span>
+              </div>
+              <div class="preferential">
+                优惠价：
+                <span>￥{{(goods.sell_price - goods.discount).toFixed(2)}}</span>
+              </div>
             </div>
-            <div class="preferential">
-              折扣价：
-              <span>￥{{(goods.sell_price - goods.discount).toFixed(2)}}</span>
-            </div>
-            <div style="margin-bottom: 0.3rem;" v-for="(sitem, index) in goods.good_discount['积分']" :key="index">
-              <span>{{sitem.consume}}</span> {{sitem.type}}，商品仅需 <span>{{getCountPrice(sitem)}}</span> 元
+            <div class="preferential" style="margin-top:0.4rem;">
+              积分使用：
+              <div style="margin-bottom: 0.3rem; border:1px solid #EEEEEE;display:inline-block; padding:0.2rem 0.4rem;margin-right:0.3rem;" v-for="(sitem, index) in goods.good_discount['积分']" :key="index">
+                <span>{{sitem.consume}}</span> {{sitem.type}}*减免<span>{{sitem.deduction}}</span> 元
+              </div>
             </div>
             <div class="colors">
               <span>颜色:</span>
