@@ -12,7 +12,7 @@
       <div class="pay_success">
         <div class="title">
           <span class="title-msg">{{ msg }}</span>
-          <p class="title-integral"><span class="span1">40</span><span>积分</span> </p>
+          <!-- <p class="title-integral"><span class="span1">40</span><span>积分</span> </p> -->
         </div>
         <span class="tips">{{ ordermsg }}</span>
         <div class="actions">
@@ -24,6 +24,7 @@
   </div>
 </template>
 <script>
+import { log } from 'util';
 export default {
   data() {
     return {
@@ -32,8 +33,9 @@ export default {
       orderid: '',
     };
   },
-  beforeEnter: (to, from, next) => {
-    if(from.path === 'fillorder?type=1')
+  beforeRouteEnter: (to, from, next) => {
+    console.log(to, from)
+    if(from.path === '/fillorder')
     next(() => {
       this.msg = '支付成功'
     })
@@ -43,31 +45,30 @@ export default {
     this.$store.commit('loadStatus', false)
   },
   created() {
-    // try {
-    //   this.orderid = this.$router.query.id
-    //   if (this.orderid) {
-    //     this.$request.post('/getWechatOrder', { 'out_trade_no': this.orderid }).then((res) => {
-    //       this.msg = res.msg
-    //       if( res.msg === '支付成功' ) {
-    //         this.ordermsg = '感谢您的光顾，宝贝一定准时送到府上！'
-    //       } else if (res.msg === '支付失败') {
-    //         this.ordermsg = '失败了！请重新购买'
-    //       } else if (res.msg === '未支付') {
-    //         this.ordermsg = '去支付！'
-    //       }
-    //     })
-    //   }
-    // }
-    // catch {
-    //   this.msg = '无内容呢'
-    //   this.ordermsg = '未查询到结果'
-    // }
-    console.log(window.location.href)
+    try {
+      this.orderid = window.location.href.split('=')[2]
+      if (this.orderid) {
+        this.$request.post('/getAlipayOrder', { 'out_trade_no': this.orderid }).then((res) => {
+          console.log(res)
+          this.msg = res.msg
+          if( res.msg == '支付成功' ) {
+            this.ordermsg = '感谢您的光顾，宝贝一定准时送到府上！'
+          } else if (res.msg == '支付失败') {
+            this.ordermsg = '失败了！请重新购买'
+          } else if (res.msg == '未支付') {
+            this.ordermsg = '去支付！'
+          }
+        })
+      }
+    }
+    catch {
+    }
+    // console.log(window.location.href)
   },
   methods: {
     back() {},
     handleBackHome() {
-      this.$router.push('/personal')
+      this.$router.push('/store/category')
     },
     viewOrder() {
       this.$router.push('/myorder')
@@ -101,6 +102,7 @@ export default {
         text-align: center;
         .title-msg {
           width: 100%;
+          margin-top: 10px;
           font-size: 14px;
           color: #2C2C2C;
           font-weight: bolder;

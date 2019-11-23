@@ -49,7 +49,7 @@ export default {
                     this.finished = true;
                 }
             }, 500);
-        },    
+        },
         // 获取我点赞的老师数据
         async getTeacherThumbs(page = 1) {
             const data = await this.$request.get('/personal/teacherThumbsUp/6?page=' + page);
