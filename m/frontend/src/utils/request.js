@@ -37,12 +37,9 @@ function handleRequestErr(err) {
 
 // // 处理 responese 报错
 function handleResponeseErr(err) {
-  var message = '未知异常';
+  console.log(err.response.data);
   var response = err.response
   var data = response.data
-  var status = response.status
-  console.log(data.code);
-  
   if(data.code === '0001') {
     request.post('/auth/refresh')
         .then(data => {
@@ -56,19 +53,8 @@ function handleResponeseErr(err) {
         })
         return Promise.resolve();
   }
-  if (status === 404) {
-    message = '接口不存在';
-  } else if (status >= 400 && status < 500) {
-    message = data.msg
-    if (data.msg == 'Too Many Attempts.') {
-      message = '您的操作频率过多，请稍后重试'
-    }
-  } else if (status >= 500) {
-    message = '服务器错误';
-  }
-  Toast.fail(message)
   store.commit('loadStatus', false)
-  return Promise.reject(message);
+  return Promise.reject(err.response.data);
 }
 
 // 处理分页接口中的 meta ,element 分页组件，需要 number 类型

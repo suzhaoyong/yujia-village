@@ -117,39 +117,6 @@ export default {
         discountId: this.name
       };
       return params;
-    },
-    // 选择积分抵扣，折扣价格
-    getId(index, item) {
-      if (this.fraction >= item.consume) {
-        this.name = item.id;
-        const train_discount = this.courseParams.train_discount.积分;
-        this.discountPrice = (
-          this.courseParams.price - train_discount[index].deduction
-        ).toFixed(2);
-        this.consume = train_discount[index].consume;
-      } else {
-        Toast("您的积分不足，快去分享赚积分吧！");
-      }
-    },
-    // 不使用积分的价格
-    noUse() {
-      this.name = "";
-      this.discountPrice = this.courseParams.price.toFixed(2);
-    },
-    // 参数处理
-    paramsDeal(params) {
-      // if(this.name === '') {
-      //     params = {
-      //         id: this.courseParams.id,
-      //     }
-      //     return params
-      // } else {
-      params = {
-        id: this.courseParams.id,
-        fraction: this.consume,
-        discountId: this.name
-      };
-      return params;
       // }
     },
     // 创建订单
