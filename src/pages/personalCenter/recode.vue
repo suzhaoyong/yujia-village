@@ -31,8 +31,8 @@
                   </div>
                   <div class="send">{{item.name}}</div>
                   <div class="g_money">
-                    <div class="all">总额：¥{{good.num * good.sellPrice}}</div>
-                    <div style="color: #2c2c2c;">{{item.status === '待付款' ? '应付' : '实付'}} ¥{{good.num * (good.sellPrice - good.discount)}}</div>
+                    <div class="all">总额：¥{{good.total_sell}}</div>
+                    <div style="color: #2c2c2c;">{{item.status === '待付款' ? '应付' : '实付'}} ¥{{good.total_price}}</div>
                     <!-- <div
                       style="padding-top:0.8rem;color: #2c2c2c;"
                     ></div> -->
