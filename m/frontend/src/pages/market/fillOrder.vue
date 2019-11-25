@@ -510,7 +510,6 @@ export default {
     // 多件支付，创建订单
     manyPay(params) {
       this.$request.post('/goodOrder', params).then(res => {
-        console.log(res);
         if(res.code === 200) {
           Toast("恭喜您，课程购买成功");
            setTimeout(() => {

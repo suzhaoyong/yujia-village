@@ -180,7 +180,6 @@ export default {
     // 获取微信浏览器接口
     payForWexin(orderId) {
       this.$request.get("/alipay/wechat/jsapi/openid").then(res => {
-        console.log(res);
         // window.location.href = res.openid
         var createCallbackName = function() {
           return `callback${(Math.random() * 1000000).toFixed(0)}`;
@@ -210,7 +209,6 @@ export default {
           });
         };
         jsonp(res.openid).then(res => {
-          console.log(res);
         });
         // setTimeout(() =>{
         //     console.log(script.innerHTML)

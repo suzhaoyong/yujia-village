@@ -125,8 +125,7 @@
 import Vue from 'vue';
 import areaList from '../market/goods/area_list'
 import { goAdvertingApi } from '@/api/main'
-import { PullRefresh } from 'vant';
-
+import { PullRefresh, Toast } from 'vant';
 // import { mapGetters } from "vuex";
 Vue.use(PullRefresh)
 
@@ -186,12 +185,11 @@ export default {
     }
   },
   created() {
-    this.messageList()
-    
+    this.getAdvertising()
   },
   mounted () {
+    this.messageList()
     this.PullUpReload()
-    this.getAdvertising()
     this.messagetypeList()
   },
   methods: {
@@ -255,7 +253,6 @@ export default {
     },
     // 地址选择
     changeArea (value) {
-      console.log(value)
       this.selectArea = {
         province:  value[0].name,
         city: value[1].name,
@@ -287,10 +284,18 @@ export default {
     },
     // 获取列表
     messageList (page = 1) {
-      this.$request.get('trains?page=' + page).then((res) => {
-        // console.log(res);
-        this.fenye(this.pages, res);
-      })
+       if(this.$route.query.id) {
+        this.classfly.map((item, index) =>{if(item.id == this.$route.query.id){ this.spanIndex2.push(index)} })
+        this.selectTtype.push(Number(this.$route.query.id))
+        setTimeout(() => {
+          this.searchResult('confirm')
+        }, 50)
+      } else {
+        this.$request.get('trains?page=' + page).then((res) => {
+          // console.log(res);
+          this.fenye(this.pages, res);
+        })
+      }
     },
     fenye(page, res) {
       if (page <= res.last_page ) {
@@ -306,14 +311,7 @@ export default {
     messagetypeList () {
       this.$request.get('trains/type').then((res) => {
         this.classfly = res.course_types
-
-       if(this.$route.query.id) {
-        this.classfly.map((item, index) =>{if(item.id == this.$route.query.id){ this.spanIndex2.push(index)} })
-        this.selectTtype.push(this.$route.query.id)
-        this.searchResult()
-      }
       })
-
     },
     // 我想学的操作
     study(id) {
@@ -350,10 +348,10 @@ export default {
             _this.pages++
             if(_this.keyWord !== '') {
               // 排序
-              _this.getRank(_this.pages,_this.getRankParams(_this.keyWord));
+              _this.getRank(_this.pages,_this.getFiltersParams(_this.keyWord));
             } else if(_this.confirm === 'confirm') {
               // 条件筛选
-              this.getConditiondata(_this.pages, _this.getFiltersParams())
+              _this.getConditiondata(_this.pages, _this.getFiltersParams())
             } else {
               _this.messageList(_this.pages);
             }
