@@ -767,6 +767,10 @@ export default {
           margin-right: 5px;
           .img {
             height: 127px;
+            img {
+                width: 100%;
+                height: 127px;
+              }
           }
           .goods-name {
             margin-top: 5px;

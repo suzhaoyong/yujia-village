@@ -17,7 +17,7 @@
                                 <div class="price">￥{{item.totalPrice}}</div>
                                 <div class="await">{{item.status}}</div>
                             </div>
-                            <div class="order-again" @click="toOrderDetail(item)">{{item.status == '待付款'? '去支付':'再来一单'}}</div>
+                            <!-- <div class="order-again" @click="toOrderDetail(item)">{{item.status == '待付款'? '去支付':'再来一单'}}</div> -->
                         </div>
                     </div>
                     <div class="empty" v-else></div>
@@ -35,7 +35,7 @@
                                 <div class="price">￥{{item.totalPrice}}</div>
                                 <div class="await">{{item.status}}</div>
                             </div>
-                            <div class="order-again" @click="toOrderDetail(item)">去支付</div>
+                            <!-- <div class="order-again" @click="toOrderDetail(item)">去支付</div> -->
                         </div>
                     </div>
                     <div class="empty" v-else></div>

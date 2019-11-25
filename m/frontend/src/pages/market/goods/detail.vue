@@ -83,25 +83,6 @@
             </div>
           </div>
         </div>
-        <!-- 商品尺寸 -->
-        <!-- <div class="detail_item">
-          <div class="detail_item_title">
-            <i></i>
-            <span class="zh_title">商品尺寸</span>
-            <span class="en_title">Detail</span>
-          </div>
-          <div class="detail_item_content">
-            <i></i>
-            <div class="detail_item_content_item">
-              <span class="content_item_title">尺寸</span>
-              <span class="content_item_exp">号型</span>
-            </div>
-            <div class="detail_item_content_item" v-for="(item,index) in goods_copy.size" :key="index">
-              <span class="content_item_title">{{item.name}}</span>
-              <span class="content_item_exp">-</span>
-            </div>
-          </div>
-        </div>-->
         <!-- 细节展示图 -->
         <div class="detail_item" v-if="goods_copy.detail_img.length > 0">
           <div class="detail_item_title">
@@ -674,13 +655,11 @@ $main_color: #b4d565;
           }
         }
         &.imgs {
+          width: 100%;
           border: none;
-          display: flex;
-          justify-content: space-between;
-          flex-wrap: wrap;
           .imgs_item {
-            flex-basis: 49%;
-            flex-shrink: 0;
+            width: 100%;
+            height: 100%;
           }
         }
       }

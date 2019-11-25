@@ -125,7 +125,7 @@
 import Vue from 'vue';
 import areaList from '../market/goods/area_list'
 import { goAdvertingApi } from '@/api/main'
-import { PullRefresh } from 'vant';
+import { PullRefresh, Toast } from 'vant';
 
 // import { mapGetters } from "vuex";
 Vue.use(PullRefresh)
@@ -288,7 +288,6 @@ export default {
     // 获取列表
     messageList (page = 1) {
       this.$request.get('trains?page=' + page).then((res) => {
-        // console.log(res);
         this.fenye(this.pages, res);
       })
     },
@@ -299,6 +298,7 @@ export default {
             item.endTime = item.endTime.replace(/-/g,'.');
             this.messageLists.push(item);
           })
+          window.sessionStorage.setItem('message',JSON.stringify(this.messageLists));
         } else {
           Toast('只有这么多了');
         }
@@ -384,9 +384,8 @@ export default {
       this.confirm = confirm;
       this.pages = 1;
       this.messageLists = [];
+      this.keyWord = '';
       this.getConditiondata(page, this.getFiltersParams());
-      this.isActive = '0';
-      this.isShow = false;
     },
     // 获取条件筛选的数据
     getConditiondata(page =1, params) {
@@ -413,8 +412,28 @@ export default {
     // 课程筛选
     conditionQuery(page, params) {
       this.$request.post('/trains?page=' + page, params).then(res => {
-        this.fenye(page, res);
-      })
+        if(res) {
+          this.fenye(page, res);
+          this.isShow = false;
+          if(this.keyWord === '') {
+            this.isActive = '0';
+          }
+        } 
+      }).catch(error => {
+        if(error.code == 422 && error.msg === 'max price 字段是必须的当 min price 是存在的') {
+          Toast('请输入最大价格');
+        } else if(error.code == 422 && error.msg === 'min price 字段是必须的当 max price 是存在的') {
+          Toast('请输入最低价格');
+        } else if(error.code == 422 && error.msg === 'end time 字段是必须的当 start time 是存在的') {
+          Toast('请输入截止时间');
+        } else if(error.code == 422 && error.msg === 'start time 字段是必须的当 end time 是存在的') {
+          Toast('请输入起始时间');
+        } else if(error.code == 422 && error.msg === 'end time 必须是 start time 之后的一个日期') {
+          Toast('时间选择有误，请重新选择');
+        }
+        // 处理筛选失败时，数据为空的情况
+        this.messageLists = JSON.parse(window.sessionStorage.getItem('message'));
+      }) 
     },
     // 排序传递的参数
     getRankParams (keyWord, params = {}) {
