@@ -70,6 +70,7 @@
                   <el-menu-item index="personal index">个人中心</el-menu-item>
                   <!-- <el-menu-item index="identity">个人信息</el-menu-item> -->
                   <el-menu-item index="personal recode">商品订单</el-menu-item>
+                  <el-menu-item index="personal course order">课程订单</el-menu-item>
                   <el-menu-item
                     v-show="info.user.identity_auth === '认证导师中' || info.user.identity_auth === '认证机构负责人中'"
                     index="hell"
