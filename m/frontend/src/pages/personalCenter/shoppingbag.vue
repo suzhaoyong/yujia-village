@@ -3,9 +3,8 @@
         <van-nav-bar title="购物袋" left-arrow :right-text="rightText" @click-left="onClickLeft" @click-right="onClickRight">
         </van-nav-bar>
         <div class="content">
-            <div class="commodity" v-for="(item,index) in shoppingBagList" :key="index" @click="getGoodsId(item.id)">
-                <van-checkbox v-model="item.check" checked-color="#B3D465" @change="stateSwitch" 
-                label-disabled>
+            <div class="commodity" v-for="(item,index) in shoppingBagList" :key="index">
+                <van-checkbox v-model="item.check" checked-color="#B3D465" label-disabled>
                 </van-checkbox>
                 <div class="order-describe">
                     <div class="img" :style="{backgroundImage: 'url('+item.pic+')'}"></div>
@@ -99,13 +98,6 @@ export default {
                 this.rightText = '编辑';
             }
         },
-        stateSwitch(e) {
-            // console.log(e);
-        },
-        getGoodsId(id) {
-            console.log(id);
-
-        },
         delCommodity() {
             if(!this.hasSomeChecked) return;
             this.$dialog.confirm({
@@ -142,15 +134,13 @@ export default {
                         describe: item.describe,
                         color: item.color,
                         size: item.size,
-                        price: item.sell_price,
+                        price: item.price,
                         pic: item.url,
                         num: item.num,
                         check: true
                     }
                     this.shoppingBagList.push(cart);
                 });
-                console.table(this.shoppingBagList);
-                
             }) 
         },
         //  数量改变

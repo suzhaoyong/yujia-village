@@ -1,898 +1,875 @@
 <template>
   <div>
-    <div class="goods">
-      <aside class="goods_kinds">
-        <ul class="kinds_range">
-          <li :class="clsKindsActive(-1)" @click="changeKinds(-1)">每日推荐</li>
-
-          <van-skeleton title :row="3" :loading="kinds.list.length == 0">
-            <li
-              :class="clsKindsActive(item.id)"
-              @click="changeKinds(item.id)"
-              v-for="(item, index) in kinds.list"
-              :key="index"
-            >{{item.name}}</li>
-          </van-skeleton>
-        </ul>
-      </aside>
-      <!-- 每日推荐 -->
-      <section class="daily" v-show="kinds.curIndex === -1">
-        <!-- 新品 -->
-        <div class="news" @click="viewGoods(goodsRecomment.new[0])">
-          <div class="news_title">新品推荐</div>
-          <div class="news_content">
-            <div
-              class="news_goods_img"
-              :style="`background-image:url(${goodsRecomment.new[0] ? goodsRecomment.new[0].url_one : ''})`"
-            >
-              <!-- <img :src="goodsRecomment.new.new_url_one" alt=""> -->
-            </div>
-            <div class="news_goods_name">{{goodsRecomment.new[0] ? goodsRecomment.new[0].describe : ''}}</div>
+    <!-- <div class="head-top">
+      <form action="/">
+        <van-search
+          placeholder="商品名称/关键词搜索"
+          shape="round"
+          clearable
+          @focus="goSearch"
+        />
+      </form>
+      <img class="search" src="../../assets/img/search.png" alt="">
+      <img class="shopping-bag" src="../../assets/img/shopping.png" alt="">
+    </div> -->
+    <van-nav-bar title="商城" left-arrow @click-left="back" >
+      <img class="img" slot="right" src="../../assets/img/shopping.png" @click="goShopBag"/>
+    </van-nav-bar>
+    <div class="content">
+      <div class="goods">
+        <div class="goods-classify">
+          <div class='goods-classify-item' :class="{'current': active == index}"  v-for="(item,index) in goodsClassify" :key="index"
+          @click="selected(item.id)">
+            {{item.name}}
           </div>
         </div>
-        <!-- 限时优惠 -->
-        <div class="sales">
-          <div class="sales_title">限时优惠</div>
-          <div
-            class="sales_content"
-            v-for="(item, index) in goodsRecomment.discount"
-            @click="viewGoods(item)"
-            :key="index"
-          >
-            <div class="sales_goods_img">
-              <img :src="item.url_one" alt />
-            </div>
-
-            <div class="sales_goods_name">{{item.describe}}</div>
-          </div>
-        </div>
-        <!-- 热销 -->
-        <div class="hot">
-          <div class="hot_title">热销</div>
-          <div
-            class="hot_content"
-            v-for="(item, index) in goodsRecomment.discount"
-            @click="viewGoods(item)"
-            :key="index"
-          >
-            <div class="hot_goods_img">
-              <img :src="item.url_one" alt />
-            </div>
-            <div class="hot_goods_name">{{item.describe}}</div>
-          </div>
-        </div>
-      </section>
-      <section class="goods_content" v-show="kinds.curIndex !== -1">
-        <div class="goods_filters">
-          <div class="filters_range">
-            <!-- <div class="range_price_sell">
-              <div class="range_select_range">
-                <van-tag
-                  style="margin:2px;"
-                  @click="closePriceRange"
-                  plain
-                  round
-                  color="#89b264"
-                  v-if="max_price.value && min_price.value"
-                >{{`${min_price.value}-${max_price.value} x`}}</van-tag>
-
-                <van-tag
-                  style="margin:2px;"
-                  @click="closeAsideTags(item)"
-                  plain
-                  round
-                  color="#89b264"
-                  v-for="(item, index) in selected.tags"
-                  :key="index"
-                >{{`${item.name} x`}}</van-tag>
-                
+        <div class="goods-content">
+          <div class="recommend" v-if="isRecommend">
+            <div class="floor-good">
+              <div class="title">
+                <img src="../../assets/img/title_icon.png" alt=""><span>好物推荐</span>
               </div>
-              
-            </div> -->
-            <span class="filters_btn" style="flex-shrink: 0;position: absolute;right: 20px;top: 0;" @click="aside.isOpen = true">筛选</span>
-            <div class="range_news_size">
-              <span
-                :class="{ active: isSubAsideActive('isPrice') }"
-                @click="handleSubAside('isPrice')"
-              >{{isSubAsideActive('isPrice') ? isSubAsideActive('isPrice') : `价格` }}</span>
-              <span
-                :class="{ active: isSubAsideActive('season') }"
-                @click="handleSubAside('season')"
-              >{{isSubAsideActive('season') ? isSubAsideActive('season') :`适用季节`}}</span>
-              <span
-                :class="{ active: isSubAsideActive('material') }"
-                @click="handleSubAside('material')"
-              >{{isSubAsideActive('material') ? isSubAsideActive('material') : `材质`}}</span>
+              <div class="good">
+                <div class="good-item" v-for="(item,index) in recommendData.good" :key="item.id" 
+                :v-if="index<=1" @click="goGoodsDetail(item.id)">
+                  <div class="img">
+                    <img :src="item.cover_url" alt="">
+                  </div>
+                  <div class="goods-name">{{item.describe}}</div>
+                </div>
+              </div>
             </div>
-            <div class="select_range" v-if="subAside.isOpen">
-              <span
-                :class="{ active: isSelectSubAside(item.name) }"
-                v-for="(item, index) in subAside.list"
-                :key="index"
-                @click="handleChooseSubAsideMenu(item)"
-              >{{item.name}}</span>
-              <div @click="changeSubAside" class="select_sure">确定</div>
+            <div class="floor-fashion">
+              <div class="title">
+                <img src="../../assets/img/title_icon.png" alt=""><span>时尚精品</span>
+              </div>
+              <div class="good">
+                <div class="good-item" v-for="(item,index) in recommendData.fashion" :key="item.id" 
+                :v-if="index<=2" @click="goGoodsDetail(item.id)">
+                  <div class="img">
+                    <img :src="item.cover_url" alt="">
+                  </div>
+                  <div class="goods-name">{{item.describe}}</div>
+                </div>
+              </div>
             </div>
+            <div class="floor-comment">
+              <div class="title">
+                <img src="../../assets/img/title_icon.png" alt=""><span>常用推荐</span>
+              </div>
+              <div class="good">
+                <div class="good-item" v-for="(item,index) in recommendData.comment" :key="item.id" 
+                :v-if="index<=2" @click="goGoodsDetail(item.id)">
+                  <div class="img">
+                    <img :src="item.cover_url" alt="">
+                  </div>
+                  <div class="goods-name">{{item.describe}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div v-else>
+            <div class="fenlei" >
+              <div class="paixu">
+                <div :class="rank_key==='price'?'price-rank':'price'" @click="priceRank('price')">
+                  <span>价格</span>
+                  <div class="isIcon" v-if="isIcon">
+                    <van-icon name="arrow-up" />
+                    <van-icon class="down" name="arrow-down" />
+                  </div>
+                  <div class="price-rank" v-else>
+                    <van-icon v-if="!isAdd" name="arrow-up" />
+                    <van-icon v-else name="arrow-down" />
+                  </div>
+                </div>
+                <div :class="{'select-status': rank_key==='sales'}" @click="salesRank('sales')">销量</div>
+                <div class="shaixuan" @click="show=true">筛选<img class="img" src="../../assets/img/shaixuan.png" alt=""></div>
+              </div>
+              <div class="type" v-if="active!==7&&active!==8&&active!==9">
+                <div class="type-box" :class="{'select-status': isNew}" @click="newGoods">新品</div>
+                <div class="select" :class="{'select-item': isSizeIcon}">
+                  <div :class="['type-box',isSizeName?'select-status':'']" @click="showOverlay('size')">
+                    <div class="item-name">{{isSizeName?selectCondition.sizeName:type.size.des}}</div>
+                    <van-icon name="arrow-up" v-if="isSizeIcon"/>
+                    <van-icon name="arrow-down" v-else/>
+                  </div>
+                </div>
+                <div class="select" :class="{'select-item': isBrandIcon}">
+                  <div :class="['type-box',isBrandName?'select-status':'']" @click="showOverlay('brand')">
+                    <div class="item-name">{{isBrandName?selectCondition.brandName:'品牌'}}</div>
+                    <van-icon name="arrow-up" v-if="isBrandIcon"/>
+                    <van-icon name="arrow-down" v-else/>
+                  </div>
+                </div>
+              </div>
+              <transition name='fade'>
+                <div class="overlay-box" v-if="isShowOverlay" @click="closeOverlay">
+                  <div :class="isShowOverlay?'show':'close'">
+                    <div class="size-brand" v-if="keyword==='size'" @click.stop>
+                      <div class="size-brand-item" :class="{'select-status': params.size===parseInt(item.id)}" 
+                      v-for="(item,index) in type.size.data" 
+                      :key="index" @click.stop="pitchOn(item.id,item.name)">
+                        {{item.name}}
+                      </div>
+                    </div>
+                    <div class="size-brand" v-else @click.stop>
+                      <div class="size-brand-item" :class="{'select-status': params.brand===parseInt(item.id)}" 
+                      v-for="(item,index) in type.brand" 
+                      :key="index" @click.stop="pitchOn(item.id,item.name)">
+                        {{item.name}}
+                      </div>
+                    </div>
+                    <div class="button">
+                      <div @click.stop="reset('local')">重置</div>
+                      <div @click.stop="demand('fast')">选定</div>
+                    </div>
+                  </div>
+                </div>
+              </transition>
+            </div>
+            <div class="commodity">
+              <div class="goods-card" v-for="item in goodsData" :key="item.id" @click="goGoodsDetail(item.id)">
+                <div class="img">
+                  <img :src="item.cover_url" alt="">
+                </div>
+                <div class="goods-name">{{item.describe}}</div>
+                <div class="goods-price">￥{{item.sell_price}}</div>
+              </div>
+            </div>
+            <van-popup class="popup-sx" v-model="show" position="right" :style="{ width: '90%',height: '100%' }" 
+            :get-container="getContainer" @touchmove.prevent>
+              <div class="type-content">
+                <div class="type-content-price">
+                    <div>理想价格</div>
+                    <div class="input">
+                      <input v-model="params.minPrice" class="input-price item" type="number" placeholder="0">
+                      <span class="partition">-</span>
+                      <input v-model="params.maxPrice" class="input-price item" type="number" placeholder="10000">
+                    </div>
+                </div>
+                <div class="type-content-people" v-if="type.person">
+                    <div>适用人群</div>
+                    <div class="people">
+                      <div class="people-item item" v-for="(item,index) in type.person" :key="index"
+                      @click="choose(item.id,item.name,'people')" :class="{'select': params.person==item.id}">
+                        {{item.name}}
+                      </div>
+                    </div>
+                </div>
+                <div class="type-content-size" v-if="type.size">
+                    <div>{{type.size.des}}</div>
+                    <div class="size">
+                      <div class="size-item item" v-for="(item,index) in type.size.data" :key="index"
+                      @click="choose(item.id,item.name,'size')" :class="{'select': params.size===''?false:params.size==item.id}">
+                        {{item.name}}
+                      </div>
+                    </div>
+                </div>
+                <!-- 颜色 -->
+                <div class="type-content-color" v-if="type.color">
+                    <div>颜色</div>
+                    <div class="color">
+                      <div class="color-item item" v-for="(item,index) in type.color" :key="index"
+                      @click="choose(item.id,item.name,'color')" :class="{'select': params.color==item.id}">
+                        {{item.name}}
+                      </div>
+                    </div>
+                </div>
+                <!-- 品牌 -->
+                <div class="type-content-brand" v-if="type.brand">
+                    <div>品牌</div>
+                    <div class="brand">
+                      <div class="brand-item item" v-for="(item,index) in type.brand" :key="index"
+                      @click="choose(item.id,item.name,'brand')" :class="{'select': params.brand==item.id}">
+                        {{item.name}}
+                      </div>
+                    </div>
+                </div>
+                <div class="type-content-season" v-if="type.season">
+                    <div>适用季节</div>
+                    <div class="season">
+                      <div class="season-item item" v-for="(item,index) in type.season" :key="index"
+                      @click="choose(item.id,item.name,'season')" :class="{'select': params.season==item.id}">
+                        {{item.name}}
+                      </div>
+                    </div>
+                </div>
+                <div class="type-content-thickness" v-if="type.thickness">
+                    <div>厚度</div>
+                    <div class="thickness">
+                      <div class="thickness-item item" v-for="(item,index) in type.thickness" :key="index"
+                      @click="choose(item.id,item.name,'thickness')" :class="{'select': params.thickness==item.id}">
+                        {{item.name}}
+                      </div>
+                    </div>
+                </div>
+              </div>
+              <div class="inquire-button">
+                <div @click="reset('both')">重置</div>
+                <div @click="demand('precise')">确定</div>
+              </div>
+            </van-popup>
+            
           </div>
         </div>
-        <div class="goods_search_result">
-          <!-- <van-overlay
-            :show="subAside.isOpen"
-            @click="subAside.isOpen = false"
-            :custom-style="{ position: 'absolute'}"
-          />-->
-          <!-- <van-skeleton v-for="item in 4" :key="item" title title-width="100" :row="6" /> -->
-          <div
-            v-if="showGoods.list.length === 0"
-            class="empty"
-            style="background-size: 100% 100%;width: 7rem;margin-top:1rem;"
-          >
-          <span class="empty_tips">暂未查到</span>
-          </div>
-          <div
-            class="goods-box"
-            @click="viewGoods(item)"
-            v-for="(item, index) of showGoods.list"
-            :key="index"
-          >
-            <div class="goods_pic">
-              <img :src="item.cover_url" alt />
-            </div>
-            <span class="goods_name">{{item.describe}}</span>
-            <span class="goods_price">￥{{(item.sell_price - item.discount).toFixed(2)}}</span>
-          </div>
-        </div>
-      </section>
+      </div>
+      
     </div>
-    <van-popup
-      v-model="aside.isOpen"
-      round
-      position="right"
-      :style="{ width: '85%', height: '85%'}"
-    >
-      <van-number-keyboard
-        :show="min_price.show"
-        extra-key="."
-        v-model="min_price.value"
-        close-button-text="完成"
-        @blur="min_price.show = false"
-      />
-      <van-number-keyboard
-        :show="max_price.show"
-        extra-key="."
-        v-model="max_price.value"
-        close-button-text="完成"
-        @blur="max_price.show = false"
-      />
-      <!-- 筛选条件 -->
-      <!-- 理想价格 -->
-      <aside class="filters_right">
-        <div class="filters_right_wrap">
-          <div class="filters_right_title">理想价格</div>
-          <div class="filters_right_content">
-            <div class="min_price">
-              <van-field
-                readonly
-                clickable
-                :value="min_price.value"
-                @touchstart.native.stop="min_price.show = true"
-              />
-            </div>-
-            <div class="max_price">
-              <van-field
-                readonly
-                clickable
-                :value="max_price.value"
-                @touchstart.native.stop="max_price.show = true"
-              />
-            </div>
-            <div class="max_price" style="opacity:0"></div>
-          </div>
-          <!-- 适用类别 -->
-          <div class="filters_right_title" @click="iconPullDown('type')">
-            <span>适用类别</span>
-            <div :class="['arrow', {down: filters.type.isActive}]">
-              <i :class="['iconfont','icon-pull_right']"></i>
-            </div>
-          </div>
-          <div class="filters_right_content" v-if="filters.type.isActive">
-            <span
-              :class="{active:isTagActive(item)}"
-              @click="chooseTagsFor('type', item)"
-              v-for="(item, index) in goodsFilters.type"
-              :key="index"
-            >{{item.name}}</span>
-          </div>
-          <!-- 适用人群 -->
-          <div class="filters_right_title" @click="iconPullDown('person')">
-            <span>适用人群</span>
-            <div :class="['arrow', {down: filters.person.isActive}]">
-              <i :class="['iconfont','icon-pull_right']"></i>
-            </div>
-          </div>
-          <div class="filters_right_content" v-if="filters.person.isActive">
-            <span
-              :class="{active:isTagActive(item)}"
-              @click="chooseTagsFor('person', item)"
-              v-for="(item, index) in goodsFilters.person"
-              :key="index"
-            >{{item.name}}</span>
-          </div>
-          <!-- 材质 -->
-          <div class="filters_right_title" @click="iconPullDown('material')">
-            <span>材质</span>
-            <div :class="['arrow', {down: filters.material.isActive}]">
-              <i :class="['iconfont','icon-pull_right']"></i>
-            </div>
-          </div>
-          <div class="filters_right_content" v-if="filters.material.isActive">
-            <span
-              :class="{active:isTagActive(item)}"
-              @click="chooseTagsFor('material', item)"
-              v-for="(item, index) in goodsFilters.material"
-              :key="index"
-            >{{item.name}}</span>
-          </div>
-          <!-- 适用季节 -->
-          <div class="filters_right_title" @click="iconPullDown('season')">
-            <span>适用季节</span>
-            <div :class="['arrow', {down: filters.season.isActive}]">
-              <i :class="['iconfont','icon-pull_right']"></i>
-            </div>
-          </div>
-          <div class="filters_right_content" v-if="filters.season.isActive">
-            <span
-              :class="{active:isTagActive(item)}"
-              @click="chooseTagsFor('season', item)"
-              v-for="(item, index) in goodsFilters.season"
-              :key="index"
-            >{{item.name}}</span>
-          </div>
-          <!-- 颜色 -->
-          <div class="filters_right_title" @click="iconPullDown('color')">
-            <span>颜色</span>
-            <div :class="['arrow', {down: filters.color.isActive}]">
-              <i :class="['iconfont','icon-pull_right']"></i>
-            </div>
-          </div>
-          <div class="filters_right_content" v-if="filters.color.isActive">
-            <span
-              :class="{active:isTagActive(item)}"
-              @click="chooseTagsFor('color', item)"
-              v-for="(item, index) in goodsFilters.color"
-              :key="index"
-            >{{item.name}}</span>
-          </div>
-        </div>
-        <div class="filters_action">
-          <div class="filters_action_item" @click="asideReset">重置</div>
-          <div class="filters_action_item" @click="asideSure">确定</div>
-        </div>
-      </aside>
-    </van-popup>
   </div>
 </template>
 <script>
-import {
-  Button,
-  Popup,
-  Tag,
-  Overlay,
-  NumberKeyboard,
-  Skeleton,
-  Toast
-} from "vant";
-import {
-  getGoodsFilter,
-  getGoodRecomment,
-  postShowGoodList
-} from "@/api/category.js";
 export default {
   data() {
     return {
-      min_price: {
-        show: false,
-        value: ""
+      type: '',
+      goodsClassify: [],
+      recommendData: [],
+      active: 0,
+      isRecommend: true,
+      goodsData: [],
+      // 排序关键词
+      rank_key: '',
+      isIcon: true,
+      // 是否升序
+      isAdd: true,
+      // 是否是新品
+      isNew: false,
+      // 是否弹出筛选条件框
+      show: false,
+      // 尺码图标状态
+      isSizeIcon: false,
+      isBrandIcon: false,
+      isShowOverlay: false,
+      // 当前点击的筛选条件关键字
+      keyword: '',
+      pitch_on_size: '',
+      pitch_on_brand: '',
+      // 是否展示选中的条件
+      isSizeName: false,
+      isBrandName: false,
+      // 选中的条件
+      selectCondition: {
+        sizeName: '',
+        brandName: '',
       },
-      max_price: {
-        show: false,
-        value: ""
+      sizeName: '',
+      brandName: '',
+      // 筛选条件
+      params: {
+        sort: '',
+        minPrice: '',
+        maxPrice: '',
+        person: '',
+        size: '',
+        color: '',
+        brand: '',
+        season: '',
+        thickness: ''
       },
-      isActive: false,
-      kinds: {
-        list: [],
-        curIndex: -1
-      },
-      subAside: {
-        isOpen: false,
-        list: [],
-        selected: {
-          isPrice: {},
-          season: {},
-          material: {}
-        }
-      },
-      aside: {
-        isOpen: false
-      },
-      cur_discount_index: 0,
-      goodsRecomment: {
-        comments: {},
-        new: {},
-        discount: {
-          double: [],
-          single: []
-        }
-      },
-      filters: {
-        type: {
-          isActive: false
-        },
-        person: {
-          isActive: false
-        },
-        season: {
-          isActive: false
-        },
-        color: {
-          isActive: false
-        },
-        material: {
-          isActive: false
-        }
-      },
-      goodsFilters: {
-        color: [],
-        material: [],
-        person: [],
-        price: [],
-        reason: [],
-        type: []
-      },
-      selected: {
-        tags: []
-      },
-      showGoods: {
-        list: []
-      }
-    };
-  },
-  computed: {
-    clsKindsActive() {
-      return index => ({
-        active: this.kinds.curIndex === index
-      });
-    },
-    isTagActive() {
-      return item => {
-        if (item.name !== "全部") {
-          return (
-            this.selected.tags.findIndex(tag => tag.name === item.name) >= 0
-          );
-        }
-      };
-    },
-    isSubAsideActive() {
-      return item => {
-        return this.subAside.selected[item].name;
-      };
+      
     }
   },
-  components: {
-    [Button.name]: Button,
-    [Popup.name]: Popup,
-    [Overlay.name]: Overlay,
-    [NumberKeyboard.name]: NumberKeyboard,
-    [Skeleton.name]: Skeleton,
-    [Tag.name]: Tag
-  },
-  mounted() {
-    getGoodRecomment().then(response => {
-      this.goodsRecomment = response;
-    });
-    getGoodsFilter().then(response => {
-      this.kinds.list = response.sort.splice(0);
-      const mapTag = (tag, name) =>
-        tag.map(item => {
-          item.type = name;
-          return item;
-        });
-
-      for (const item of Object.keys(response)) {
-        response[item] = mapTag(response[item], item);
-      }
-      this.goodsFilters = response;
-    });
-    this.showGoodsList();
+  created() {
+    this.getGoodsClassify();
+    this.getRecommendData();
   },
   methods: {
-    // 顶部筛选项-金额范围
-    closePriceRange() {
-      this.min_price.value = "";
-      this.max_price.value = "";
+    back() {
+      this.$router.go(-1);
     },
-    // 顶部筛选-确定关闭
-    changeSubAside() {
-      this.subAside.isOpen = false;
-      const { isPrice, season, material } = this.subAside.selected;
-
-      this.asideSure({
-        isPrice: isPrice.id,
-        season: season.id,
-        material: material.id
-      });
+    goShopBag() {
+      this.$router.push('/shoppingbag');
     },
-    // 因为要显示出被选择的那一项
-    isSelectSubAside(item) {
-      const { isPrice, season, material } = this.subAside.selected;
-      if (
-        item === isPrice.name ||
-        item === season.name ||
-        item === material.name
-      ) {
-        return true;
-      }
+    goSearch() {
+      this.$router.push('/searchgoods');
     },
-    // 选择菜单项
-    handleChooseSubAsideMenu(item) {
-      this.subAside.selected[item.type] = item;
-      if (item.name === "全部") {
-        this.subAside.selected[item.type] = {};
-      }
-      // this.$nextTick(() => {
-      //   this.isSelectSubAside(item.name)
-      // });
+    // 获取商品分类
+    getGoodsClassify() {
+      this.$request.get('/goods').then(res => {
+        this.goodsClassify = res.sort;
+      })
     },
-    // 顶部筛选-展开
-    handleSubAside(type) {
-      this.subAside.isOpen = true;
-      if (type === "isPrice") {
-        this.subAside.list = [
-          { name: "全部", id: "1", type: "isPrice" },
-          { name: "从高到低", id: true, type: "isPrice" },
-          { name: "从低到高", id: false, type: "isPrice" }
-        ];
+    // 筛选条件的请求
+    byConditionGetGoods(params) {
+      return this.$request.post('/goods/showGoodListMobile',params);
+    },
+    // 获取推荐商品数据
+    getRecommendData() {
+      this.byConditionGetGoods({sort: 0}).then(res => {
+        this.recommendData = res;
+      })
+    },
+    // 获取分类筛选
+    selected(id) {
+      this.isShowOverlay = false;
+      this.isSizeIcon = false;
+      this.isBrandIcon = false;
+      this.active = id;
+      this.params.sort = id;
+      this.isIcon = true;
+      this.rank_key = '';
+      this.isNew = false;
+      this.params.isPrice = '';
+      this.params.isSales = '';
+      this.params.new = '';
+      if(id === 0) {
+        return this.isRecommend = true;
       } else {
-        this.subAside.list = this.goodsFilters[type];
+        this.isRecommend = false;
       }
-    },
-    // 筛选 - 确定
-    asideSure(args = {}) {
-      const params = {};
-      this.selected.tags.map(item => {
-        params[item.type] = item.id;
+      this.byConditionGetGoods({sort: id}).then(res => {
+        this.goodsData = res.data;
       });
-      params.sort = this.kinds.curIndex;
-      const { min_price, max_price } = this;
-      if (min_price.value - max_price.value > 0) {
-        Toast("输入金额有误");
-        return;
-      }
-      if (min_price.value) {
-        params.minPrice = min_price.value;
-      }
-      if (max_price.value) {
-        params.maxPrice = max_price.value;
-      }
-
-      this.showGoodsList({ ...params, ...args });
-      this.aside.isOpen = false;
+      // 根据商品种类，获取筛选条件
+      this.$request.get('/goods/select/moblie/'+id).then(res => {
+        console.log(res);
+        this.type = res;
+      })
+      this.reset();
     },
-    // 筛选 - 重置
-    asideReset() {
-      this.min_price.value = "";
-      this.max_price.value = "";
-      this.selected.tags = [];
+    // 跳转到商品详情
+    goGoodsDetail(id) {
+      this.$router.push("/goods/detail/"+id);
     },
-    // 移除筛选项
-    closeAsideTags(item) {
-      this.chooseTagsFor(item.name, { name: "全部", type: item.type });
+    // 价格排序
+    priceRank(key) {
+      this.rank_key = key;
+      this.params = Object.assign({}, this.params, { isPrice: this.isAdd,isSales:''});
+      this.getGoods(this.params);
+      this.isAdd = !this.isAdd;
+      this.isIcon = false;
     },
-    chooseTagsFor(name, tag) {
-      if (this.isTagActive(tag)) return;
-      if (tag.name === "全部") {
-        this.selected.tags = this.selected.tags.filter(
-          item => item.type !== tag.type
-        );
-        return;
-      }
-      const checkHaveArray = this.selected.tags.filter(
-        item => item.type === tag.type
-      );
-      if (checkHaveArray.length === 0) {
-        this.selected.tags.push(tag);
+    // 销量排序
+    salesRank(key) {
+      this.rank_key = key;
+      this.params = Object.assign({}, this.params, { isSales: false,isPrice: '' });
+      this.getGoods(this.params);
+      this.isIcon = true;
+      this.isAdd = true;
+    },
+    // 新品
+    newGoods() {
+      this.isNew = !this.isNew;
+      if(this.isNew) {
+        this.params = Object.assign({}, this.params, { new: 1 });
       } else {
-        checkHaveArray.map((item, index) => this.removeTags(item, index));
-        this.selected.tags.push(tag);
+        this.params = Object.assign({}, this.params, { new: '' });
+      }
+      this.getGoods(this.params);
+    },
+    // 编辑筛选，选中项 
+    pitchOn(id,name) {
+      if(this.keyword === 'size') {
+        this.params.size = parseInt(id);
+        this.sizeName = name;
+      } else {
+        this.params.brand = parseInt(id);
+        this.brandName = name;
       }
     },
-    removeTags(tag) {
-      this.selected.tags = this.selected.tags.filter(
-        item => item.name !== tag.name
-      );
-      if (this.selected.tags.length === 0) {
-        // this.showGoodsList();
+    // 重置
+    reset(word) {
+      if(word==='local') {
+        if(this.keyword === 'size') {
+          this.params.size = '';
+          this.sizeName = '';
+          this.isSizeName = false;
+        } else {
+          this.params.brand = '';
+          this.brandName = '';
+          this.isBrandName = false;
+        } 
+        this.closeOverlay();
+      } else {
+        let params = {
+          minPrice: '',
+          maxPrice: '',
+          person: '',
+          size: '',
+          color: '',
+          brand: '',
+          season: '',
+          thickness: ''
+        }
+        this.params = Object.assign({}, this.params, params);
+        this.sizeName = '';
+        this.brandName = '';
+        this.isSizeName = false;
+        this.isBrandName = false;
       }
+      this.getGoods(this.params);
     },
-    showGoodsList(params = {}) {
-      postShowGoodList(params).then(response => {
-        this.showGoods.list = response.data;
-      });
+    // 选定筛选条件，筛选商品 
+    demand(value) {
+      if(this.sizeName) {
+        this.selectCondition.sizeName = this.sizeName;
+        // 展示选中的筛选条件
+        this.isSizeName = true;
+      }
+      if(this.brandName) {
+        this.selectCondition.brandName = this.brandName;
+        this.isBrandName = true;
+      }
+      this.getGoods(this.params);
+      if(value === 'fast') {
+        this.closeOverlay();
+      } else {
+        console.log( this.params);
+        this.show = false;
+      }
+      
     },
-    iconPullDown(name) {
-      this.filters[name].isActive = !this.filters[name].isActive;
-    },
-
-    viewGoods(goods) {
-      this.$router.push({
-        name: "detail",
-        params: {
-          goods_id: goods.id
+    // 根据筛选条件获取商品数据（筛选商品）
+    getGoods(params) {
+      this.byConditionGetGoods(params).then(res => {
+        this.goodsData = res.data;
+        if(res.data.length == 0) {
+          this.$toast('暂无该商品')
         }
       });
     },
-    changeKinds(index) {
-      this.kinds.curIndex = index;
-      index >= 0 ? this.showGoodsList({ sort: index }) : "";
-      if (this.selected.tags.length > 0) {
-        this.asideReset();
+    // 选择筛选条件
+    choose(id,name,value) {
+      console.log(id);
+      if(value=='people') {
+        this.params.person = id;
+      } else if(value=='size') {
+        this.params.size = id;
+        this.sizeName = name;
+      } else if(value=='color') {
+        this.params.color = id;
+      } else if(value=='brand') {
+        this.params.brand = parseInt(id);
+        this.brandName = name;
+      } else if(value=='season') {
+        this.params.season = id;
+      } else if(value=='thickness') {
+        this.params.thickness = id;
       }
+    },
+    // 显示遮罩层
+    showOverlay(word) {
+      this.keyword = word;
+      if(word==='size') {
+        this.isSizeIcon = !this.isSizeIcon;
+        if(this.isBrandIcon) return this.isBrandIcon = !this.isBrandIcon;
+      } else {
+        this.isBrandIcon = !this.isBrandIcon;
+        if(this.isSizeIcon) return this.isSizeIcon = !this.isSizeIcon;
+      }
+      this.isShowOverlay = !this.isShowOverlay;
+    },
+    // 关闭遮罩层
+    closeOverlay() {
+      this.isShowOverlay = false;
+      if(this.keyword==='size') {
+        this.isSizeIcon = !this.isSizeIcon;
+      } else {
+        this.isBrandIcon = !this.isBrandIcon;
+      }
+    },
+    // 将其挂载到 main_content节点下
+    getContainer() {
+      return document.querySelector('.main_content');
     }
   }
 };
 </script>
 <style lang="scss" scoped>
-* {
-  margin: 0;
-  border: 0;
-  box-sizing: border-box;
-  font-size: 13px;
-  color: #2c2c2c;
-}
-img {
-  width: 100%;
-  height: 100%;
-}
-$main_color: #eff7e0;
-$main_bg_color: #89b264;
-.daily {
-  width: 100%;
-  height: 100%;
-  padding-bottom: 30px;
-  overflow-x: hidden;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch; /* 解决 ios 滑动不流畅问题 */
-  .news,
-  .sales,
-  .hot {
-    // display: flex;
-    // flex-direction: column;
-    padding: 16px;
-    border-bottom: 2px solid #eee;
-    &_title {
-      position: relative;
-      padding-left: 20px;
-      margin-bottom: 10px;
-      height: 15px;
-      line-height: 15px;
-      font-size: 14px;
-      &::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 10px;
-        height: 15px;
-        background-size: 100% 100%;
-        background-repeat: no-repeat;
-        background-image: url("~@/assets/img/title_icon.png");
-      }
-    }
-  }
-  .news {
-    .news_content {
-      display: inline-block;
-      .news_goods_img {
-        width: 260px;
-        height: 165px;
-        border-radius: 3px;
-        background: #eee;
-        margin-bottom: 1em;
-      }
-      .news_goods_name {
-        line-height: 1.4em;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-      }
-    }
-  }
-  .sales {
-    .sales_content {
-      display: inline-block;
-      margin: 3px;
-      .sales_goods_img {
-        width: 82px;
-        height: 92px;
-        border-radius: 3px;
-        overflow: hidden;
-        background: #eee;
-        margin-bottom: 1em;
-      }
-      .sales_goods_name {
-        width: 82px;
-        line-height: 1.4em;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-      }
-    }
-  }
-  .hot {
-    .hot_content {
-      display: inline-block;
-      margin: 3px;
-      .hot_goods_img {
-        width: 126px;
-        height: 116px;
-        border-radius: 3px;
-        overflow: hidden;
-        background: #eee;
-        margin-bottom: 1em;
-      }
-      .hot_goods_name {
-        width: 82px;
-        line-height: 1.4em;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-      }
-    }
-  }
-}
-.goods {
-  display: flex;
-  height: 100%;
-  background: #fff;
-  overflow: hidden;
-  .goods_kinds {
-    flex-basis: 84px;
-    padding-bottom: 40px;
-    border-right: 1px solid #eee;
-    // background: #ccc;
-    .kinds_range {
-      height: 100%;
-      overflow-x: hidden;
-      overflow-y: auto;
-      li {
-        display: inline-block;
-        width: 6em;
-        flex-shrink: 0;
-        height: 30px;
-        line-height: 30px;
-        padding: 2px 10px;
-        text-align: justify;
-        text-align-last: justify;
-        overflow: hidden;
-        &::after {
-          content: "";
-          display: inline-block;
-          width: 100%;
-        }
-        &:nth-of-type(1) {
-          color: #89b264;
-        }
-        &.active {
-          background: $main_color;
-        }
-      }
-    }
-  }
-  .goods_content {
-    flex-grow: 1;
-    padding: 16px;
-    padding-right: 0;
-    padding-bottom: 40px;
-    height: 100%;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    -webkit-overflow-scrolling: touch; /* 解决 ios 滑动不流畅问题 */
-    // background: #ddd;
-    .goods_filters {
-      position: relative;
-      .filters_range {
-        position: relative;
-        padding-bottom: 10px;
-        .range_price_sell {
-          padding-right: 16px;
-          display: flex;
-          justify-content: space-between;
-          margin-bottom: 14px;
-          span {
-            &.active {
-              color: $main_bg_color;
-            }
-          }
-        }
-        .range_news_size {
-          margin-bottom: 10px;
-          span {
-            background: #eee;
-            padding: 2px 10px;
-            border-radius: 10px;
-            margin-right: 14px;
-            &.active {
-              color: $main_bg_color;
-            }
-          }
-        }
-        .select_range {
-          background: #eee;
-          padding: 12px 20px 0;
-          display: flex;
-          flex-wrap: wrap;
-          z-index: 10;
-          width: 100%;
-          position: absolute;
-          span {
-            flex-basis: 50%;
-            margin-bottom: 20px;
-            &.active {
-              color: $main_bg_color;
-            }
-          }
-          .select_sure {
-            width: 100%;
-            height: 30px;
-            line-height: 30px;
-            position: absolute;
-            z-index: 10;
-            left: 0;
-            top: 100%;
-            background: #fff;
-            text-align: center;
-            color: #7abd6a;
-            border-bottom-left-radius: 10px;
-            border-bottom-right-radius: 10px;
-          }
-        }
-      }
-    }
-    .goods_search_result {
-      position: absolute;
-      padding-bottom: 150px;
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      padding-right: 16px;
-      height: 100%;
-      overflow-x: hidden;
-      overflow-y: auto;
-      .goods-box {
-        margin-bottom: 16px;
-        &:nth-child(odd) {
-          margin-right: 5px;
-        }
-        .goods_pic {
-          width: 124px;
-          height: 148px;
-          border-radius: 3px;
-          overflow: hidden;
-          margin-bottom: 8px;
-          background: #eee;
-        }
-        .goods_name {
-          display: block;
-          width: 124px;
-          line-height: 1.4em;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-        }
-        .goods_price {
-          display: block;
-          padding-top: 0.5em;
-          color: #d30606;
-        }
-      }
-    }
-  }
-}
-.filters_right {
-  padding-left: 24px;
-  padding-top: 12px;
-  padding-bottom: 44px;
-  height: 100%;
-  position: relative;
-  z-index: 90;
-  width: 100%;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
-  .filters_right_wrap {
-    padding-right: 18px;
-    height: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
-    .filters_right_title {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 10px;
-      margin-bottom: 10px;
-      span {
-      }
-      .arrow {
-        &.down {
-          transform: rotate(90deg);
-        }
-        transition: all 0.3s ease-out;
-      }
-    }
-    .filters_right_content {
-      transition: display 0.3s ease-out;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-
-      .min_price {
-        flex-basis: 30%;
-        border: 1px solid #e5e5e5;
-        border-radius: 15px;
-        overflow: hidden;
-      }
-      .max_price {
-        flex-basis: 30%;
-        border: 1px solid #e5e5e5;
-        border-radius: 15px;
-        overflow: hidden;
-      }
-      span {
-        flex-basis: 30%;
-        border: 1px solid #e5e5e5;
-        border-radius: 15px;
-        text-align: center;
-        padding: 10px 0;
-        margin-bottom: 10px;
-        &.active {
-          background: $main_color;
-          // color: #fff;
-        }
-      }
-    }
-  }
-  .filters_action {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    z-index: 10;
-    width: 100%;
-    height: 40px;
+.van-nav-bar {
+  .van-nav-bar__right {
     display: flex;
     align-items: center;
-    box-shadow: 1px 2px 10px #eee;
-    background: #fff;
-    .filters_action_item {
-      display: inline-block;
-      padding: 0 10px;
-      flex-grow: 1;
-      height: 100%;
-      line-height: 40px;
-      text-align: center;
-      &:nth-of-type(2) {
-        color: #fff;
-        height: 100%;
-        line-height: 40px;
-        background: $main_bg_color;
+    height: 44px;
+    bottom: 2px;
+  }
+  .img {
+    width: 22px;
+    height: 22px;
+  }
+}
+.head-top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 44px;
+  padding: 0 16px;
+  background-color: #fff;
+  .van-search {
+    padding: 0;
+    .van-search__content {
+      padding-left: 46px;
+      width: 295px;
+      height: 30px;
+      .van-cell {
+        padding-top: 3px;
+        padding-bottom: 0;
+        font-size: 12px;
+        /deep/ .van-field__left-icon {
+          display: none;
+        }
+      }
+    }
+    .van-search__action {
+      padding: 0;
+    }
+  }
+  .search {
+    position: absolute;
+    top: 14px;
+    left: 34px;
+    width: 15px;
+    height: 16px;
+  }
+  .shopping-bag {
+    width: 22px;
+    height: 22px;
+  }
+}
+.content {
+  .goods {
+    position: fixed;
+    top: 47px;
+    bottom: 50px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    &-classify {
+      width: 83px;
+      background-color: #fff;
+      overflow: scroll;
+      &-item {
+        height: 50px;
+        line-height: 50px;
+        font-size: 12px;
+        text-align: center;
+      }
+      .current {
+        border-left: 5px solid #89B264;
+        background-color: #eee;
+        color: #89B264;
+        font-size: 14px;
+      }
+    }
+    &-content {
+      width: 288px;
+      padding: 0 15px;
+      background-color: #fff;
+      overflow: scroll;
+      .recommend {
+        .title {
+          display: flex;
+          align-items: center;
+          margin: 10px 0;
+          img {
+            width: 10px;
+            height: 15px;
+            margin-right: 5px;
+          }
+          span {
+            font-size: 14px;
+            font-weight: 600;
+          }
+        }
+        .good {
+          width: 268px;
+          margin-bottom: 18px;
+          overflow: hidden;
+          &-item {
+            float: left;
+            width: 124px;
+            margin-right: 10px;
+            .img {
+              height: 124px;
+              img {
+                width: 100%;
+                height: 124px;
+              }
+            }
+            .goods-name {
+              margin-top: 8px;
+              font-size: 11px;
+              overflow: hidden;
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 2;
+            }
+          }
+        }
+        .floor-fashion,
+        .floor-comment {
+          .good-item {
+            width: 83px;
+            margin-right: 6px;
+            .img {
+              height: 83px;
+              img {
+                width: 100%;
+                height: 83px;
+              }
+            }
+          }
+        }
+        
+      }
+      .fenlei {
+        .select-status {
+          color: #7BBB62;
+        }
+        .paixu {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          height: 20px;
+          font-size: 12px;
+          font-weight: 600;
+          .price {
+            display: flex;
+            align-items: center;
+            .isIcon {
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              height: 16px;
+              margin-left: 2px;
+              .down {
+                margin-top: -6px;
+              }
+            }
+          }
+          .price-rank {
+            display: flex;
+            align-items: center;
+            color: #7BBB62;
+            .van-icon {
+              margin-left: 2px;
+            }
+          }
+          .shaixuan {
+            display: flex;
+            align-items: center;
+            .img {
+              width: 11px;
+              height: 11px;
+              margin-top: 2px;
+            }
+          }
+        }
+        .type {
+          display: flex;
+          justify-content: space-between;
+          margin-top: 16px;
+          .select {
+            height: 29px;
+          }
+          .select-item {
+            background-color: #eee;
+            border-radius: 10px 10px 0 0;
+          }
+          &-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 56px;
+            height: 20px;
+            padding: 0 5px;
+            background-color: #eee;
+            border-radius: 10px;
+            font-size: 12px;
+            .item-name {
+              overflow: hidden;
+              white-space: nowrap; 
+              text-overflow:ellipsis;
+            }
+          }
+        }
+        .overlay-box {
+          position: absolute;
+          top: 64px;
+          bottom: 0;
+          left: 87px;
+          width: 288px;
+          background-color: rgba(0,0,0,.3);
+          .show {
+            position: relative;
+            height: 240px;
+            animation: showed 0.4s;
+            background-color: #EEEEEE;
+            border-radius: 0 0 10px 10px;
+            overflow: hidden;
+          }
+          .close {
+            height: 0;
+            animation: closed 0.5s;
+          }
+          .size-brand {
+            height: 196px;
+            overflow-y: scroll;
+            &-item {
+              float: left;
+              padding-left: 15px;
+              width: 50%;
+              height: 40px;
+              line-height: 40px;
+              font-size: 11px;
+            }
+          }
+          .button {
+            display: flex;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 44px;
+            div {
+              flex: 1;
+              line-height: 44px;
+              font-size: 12px;
+              text-align: center;
+            }
+            div:nth-child(1) {
+              background-color: #fff;
+            }
+            div:nth-child(2) {
+              background-color: #7BBB62;
+              color: #fff;
+            }
+          }
+        }
+        // vue 动画过度
+        .fade-enter-active,.fade-leave-active {
+          transition: opacity 0.5s;
+        }
+        .fade-enter, .fade-leave-to{
+          opacity: 0;
+        }
+        @keyframes showed {
+          from {height: 0;}
+          to {height: 240px;}
+        }
+        @keyframes closed {
+          from {height: 240px;}
+          to {height: 0px;}
+        }
+      }
+      .commodity {
+        width: 264px;
+        margin-top: 5px;
+        overflow: hidden;
+        .goods-card {
+          float: left;
+          width: 127px;
+          margin-bottom: 10px;
+          margin-right: 5px;
+          .img {
+            height: 127px;
+          }
+          .goods-name {
+            margin-top: 5px;
+            font-size: 12px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+          }
+          .goods-price {
+            font-size: 10px;
+            color: #D30606;
+            font-weight: 700;
+          }
+        }
       }
     }
   }
 }
+.popup-sx {
+  border-radius: 10px 0 0 10px;
+  .type-content {
+    position: absolute;
+    top: 0;
+    bottom: 49px;
+    width: 100%;
+    overflow: scroll;
+    margin-left: 20px;
+    .item {
+      width: 89px;
+      height: 29px;
+      line-height: 29px;
+      padding: 0 15px;
+      margin-bottom: 10px;
+      border: 1px solid #eee !important;
+      border-radius: 15px;
+      font-size: 11px;
+    }
+    &-price,&-people,
+    &-size,&-color,&-brand,
+    &-season,&-thickness {
+      margin-top: 11px;
+      font-size: 14px;
+      overflow: hidden;
+    }
+    .input {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      .item {
+        margin-bottom: 0;
+        border: none;
+      }
+      .partition {
+        margin: 0 10px;
+      }
+    }
+    .people,.size,.color,
+    .brand,.season,.thickness {
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 10px;
+      width: 318px;
+      &-item {
+        margin-right: 17px; 
+        text-align: center;
+      }
+      .brand-item {
+        overflow: hidden;
+        white-space: nowrap; 
+        text-overflow:ellipsis;
+      }
+      .select {
+        background-color: #B3D465;
+        color: #fff;
+        border: none;
+      }
+    }
+
+  }
+}
+.inquire-button {
+    display: flex;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    height: 49px;
+    width: 100%;
+    box-shadow: 2px 0px 3px 0px rgba(0, 0, 0, 0.15);
+    div {
+      flex: 1;
+      line-height: 49px;
+      text-align: center;
+      font-size: 14px;
+    }
+    div:nth-child(1) {
+      background-color: #fff;
+      color: #999;
+    }
+    div:nth-child(2) {
+      background-color: #B3D465;
+      color: #fff;
+    }
+  }
 </style>

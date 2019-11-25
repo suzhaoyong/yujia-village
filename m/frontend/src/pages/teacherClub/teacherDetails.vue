@@ -65,12 +65,6 @@ export default {
         base64img:"",
     };
   },
-  beforeRouteLeave  (to, from, next) {
-    //   console.log(to, from, next)
-      if(to.path === this.$route.path || to.path == '') {
-        //   this.$router.replace('/teacherClub/list')
-      }
-  },
   components: {
       shareIng
   },
@@ -110,7 +104,7 @@ export default {
         });
       },
       goback() {
-        this.$router.replace('/teacherClub/list')
+        this.$router.push('/teacherClub/list')
       },
   }
 };

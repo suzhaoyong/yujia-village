@@ -377,6 +377,9 @@ export default {
     this.loadFile("sy");
     this.loadFile("ys");
   },
+  beforeDestroy() {
+      window.sessionStorage.removeItem('personal');
+  },
   methods: {
     // 登录验证验证输入框
     Verificationinput (type, value) {

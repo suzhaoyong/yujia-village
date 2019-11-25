@@ -1,11 +1,15 @@
 <template>
   <div class="messagedetail">
     <van-nav-bar title="课程详情" left-arrow @click-left="goback">
-      <van-icon slot="right" name="star-o" @click="study(detailData.id)"></van-icon>
-      <share-ing slot="right"
-        type="train"
-        @listenToShow="getChildShow"
-      ></share-ing>
+      <div slot="right" class="paralleling">
+        <van-icon  name="star-o" @click="study(detailData.id)">
+        </van-icon>
+        <share-ing
+          type="train"
+          @listenToShow="getChildShow"
+        ></share-ing>
+      </div>
+
     </van-nav-bar>
     <main class="messagedetail-main" style="-webkit-overflow-scrolling:touch">
       <div class="banner-train-img">
@@ -142,7 +146,6 @@ export default {
     shareIng
   },
   beforeRouteLeave  (to, from, next) {
-    console.log(to, from, next)
     if(to.path === this.$route.path || to.path == '') {
         this.$router.replace('/yogamessage/list')
     }
@@ -193,7 +196,6 @@ export default {
     // 购买跳到支付页面
     buyCourse() {
       if(!window.sessionStorage.getItem('access')) {
-        // this.$this.$toast('请登录');
         Toast('请登录')
         this.$router.push('/login');
         return;
@@ -218,7 +220,6 @@ export default {
     study(id) {
       if (!JSON.parse(sessionStorage.getItem("user"))) {
         this.$router.push('/login')
-        // this.$this.$toast('请登录')
         Toast('请登录')
         return;
       }
@@ -229,7 +230,6 @@ export default {
       // 调用我想学接口
       getFollowTrain(id)
         .then(data => {
-          // this.$this.$toast(data.msg);
           Toast(data.msg)
         })
     },
@@ -245,11 +245,12 @@ export default {
   .van-nav-bar {
     position: fixed;
     top: 0;
-    .van-icon {
-      margin-left: 8px;
-    }
-    .van-icon:nth-child(1) {
-      margin-bottom: 5px;
+    .paralleling {
+      width: 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      
     }
   }
   &-main {

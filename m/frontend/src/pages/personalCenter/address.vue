@@ -50,7 +50,6 @@ export default {
         },
         getAddress() {
             this.$request.get('/goodOrder/create').then(data => {
-                // console.log(data.address);
                 this.userAddress = data.address;
             })
             .then(() => {

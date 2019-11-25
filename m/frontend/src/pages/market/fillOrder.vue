@@ -1,17 +1,8 @@
 <template>
   <div class="order">
     <!-- <header>填写订单</header> -->
-    <van-nav-bar title="填写订单" left-arrow @click-left="back" fixed />
+    <van-nav-bar title="填写订单" left-arrow @click-left="back" />
     <main class="order-main">
-      <div class="order-main-edit" v-show="false">
-        <div class="order-main-edit-sonsignee">收货人</div>
-        <div class="order-main-edit-phone">手机号码</div>
-        <div class="order-main-edit-adress">地址</div>
-        <span class="order-main-edit-icon">
-          <van-icon name="arrow" />
-        </span>
-      </div>
-      <!-- <div class="add_address" @click="changeAddress"><span style="font-size:26px;">+</span>新增地址</div> -->
       <div class="add-address" @click="changeAddress" v-if="!selectAddress.name">
         <van-icon name="plus" />
         <span>添加地址</span>
@@ -20,9 +11,11 @@
         <div class="order-main-editdefalut-p1" v-if="selectAddress.is_default == 1">默认地址</div>
         <div class="order-main-editdefalut-name">
           {{selectAddress.name}}
-          <span>{{selectAddress.tel}}</span>
         </div>
-        <div class="order-main-editdefalut-adress">{{selectAddress.userAddress}}</div>
+        <div class="order-main-editdefalut-adress">
+          <div>{{selectAddress.tel}}</div>
+          <div>{{selectAddress.userAddress}}</div>
+        </div>
         <span class="order-main-editdefalut-icon">
           <van-icon @click="changeAddress" name="arrow" />
         </span>
@@ -35,7 +28,7 @@
         <div class="order-main-shop-message">
           <div class="order-main-shop-message-num">
             <span class="num-span1">{{item.describe}}</span>
-            <span>x {{item.num}}</span>
+            <span>x {{item.num}}</span> 
           </div>
           <div class="color">
             <span>{{item.color}}</span>
@@ -46,20 +39,29 @@
             <span
               v-if="item.discount > 0"
               style="margin-left:10px;text-decoration:line-through;"
-            >￥ {{item.sell_price}}</span>
+            >￥ {{item.sell_price}}</span> 
           </div>
         </div>
+        <div class="jifen-use">
+          <div class="title">积分使用</div>
+          <div class="jifen-use-rules" v-if="item.good_discount.积分.length!==0" @click="showJifen(index)">
+              <span v-if="!jf_id[index]&&!single_jfid">不使用积分</span>
+              <span v-else>
+                {{info[index]}}
+              </span>
+            <van-icon name="arrow" />
+          </div>
+          <div v-else>非积分可优惠商品，积分不参与减免</div>
+        </div>
+        <div class="subtotal">
+          <span class="one">共<span class="num">{{item.num}}</span>件</span>
+          <span>小计：
+            <span class="price">
+              ￥{{!jf_id[index]&&!single_jfid?item.price:subtotal[index]}}
+            </span>
+          </span>
+        </div>
         <!-- </div> -->
-      </div>
-      <div class="order-main-shop">
-        <input
-          v-model="userMessage"
-          class="order-main-shop-leave"
-          style="margin-top: 0.3rem;"
-          type="text"
-          placeholder="如果有需要，请给卖家留言"
-          v-show="true"
-        />
       </div>
       <div class="order-main-discounts">
         <van-cell-group v-show="true">
@@ -69,7 +71,7 @@
               <van-tag>{{payway.value ? payway.value : '请选择支付方式'}}</van-tag>
             </template>
           </van-cell>
-          <van-cell is-link @click="showPopup('cash')">
+          <!-- <van-cell is-link @click="showPopup('cash')">
             <template slot="title">
               <span class="custom-title">现金券：</span>
               <van-tag v-if="cash.columns.length > 0">{{cash.value.name ? cash.value.name : '请选择现金券'}}</van-tag>
@@ -84,7 +86,7 @@
               >{{coupon.value ? `${coupon.value.name}` : '请选择优惠券'}}</van-tag>
               <van-tag v-if="coupon.columns.length == 0">{{'暂无可用优惠券'}}</van-tag>
             </template>
-          </van-cell>
+          </van-cell> -->
           <!-- <van-cell is-link>
             <template slot="title">
               <span class="custom-title">积分：</span>
@@ -92,19 +94,20 @@
             </template>
           </van-cell> -->
         </van-cell-group>
-        <div class="freight">
+        <!-- <div class="freight">
           <van-cell-group>
             <van-cell title="商品总金额" :value="`￥ ${countPrice.toFixed(2)}`" size="large" />
             <van-cell title="运费" value="￥ 0.00" size="large" />
           </van-cell-group>
-        </div>
+        </div> -->
       </div>
     </main>
     <footer class="order-foot">
       <div class="order-foot-message">
-        <p class="order-foot-message-p1">实际支付：¥{{(countPrice - countDiscount).toFixed(2)>0 ? (countPrice - countDiscount).toFixed(2):0}}</p>
-        <p>免减总额：¥{{countDiscount.toFixed(2)}}</p>
+        <p class="order-foot-message-p1">共 {{totalNum}} 件</p>
+        <span>免减总额：¥{{deductionTotal}}</span>
       </div>
+      <div class="order-foot-pay">实际支付：￥{{countPrice}}</div>
       <div
         class="order-foot-buybtn"
         :style="`background:${ isAllowPay ?'':'#ccc'}`"
@@ -120,8 +123,29 @@
         @confirm="onChangePayway"
       />
     </van-popup>
+    <van-popup class="jifen-integral"
+      v-model="show"
+      round
+      position="bottom"
+      :style="{ height: '60%' }"
+    >
+      <div class="jifen-integral-use">积分使用</div>
+      <van-radio-group v-model="radio">
+        <van-cell-group :border="false">
+          <van-cell :title="item.consume+'积分,减免'+item.deduction +'元'" :border="false" 
+          clickable @click="radio = item.id"
+          v-for="(item,index) in goods_integral[goods_id]" :key="index">
+            <van-radio slot="right-icon" :name="item.id" />
+          </van-cell>
+          <van-cell title="不使用积分" :border="false" clickable @click="radio = 0">
+            <van-radio slot="right-icon" :name="0" />
+          </van-cell>
+        </van-cell-group>
+      </van-radio-group>
+      <div class="button" @click="comfirm">确定</div>
+    </van-popup>
     <!-- 可使用现金券 -->
-    <van-popup
+    <!-- <van-popup
       v-model="aside.isOpen"
       round
       position="right"
@@ -162,9 +186,7 @@
           <div class="btn" @click="chooseCoupon(item)">{{item.id == coupon.value.id ? '正在使用' :'使用'}}</div>
         </div>
       </div>
-    </van-popup>
-    <div>
-    </div>
+    </van-popup> -->
     <div v-html="form"></div>
   </div>
 </template>
@@ -190,7 +212,8 @@ export default {
     return {
       payway: {
         show: false,
-        columns: ["支付宝", '微信'],
+        // columns: ["支付宝", '微信'],
+        columns: ["支付宝"],
         value: ""
       },
       coupon: {
@@ -208,6 +231,7 @@ export default {
       aside: {
         isOpen: false
       },
+      type: '',
       userAddress: [],
       selectAddress: {},
       userMessage: "",
@@ -215,6 +239,24 @@ export default {
       url: "",
       newWin: null, // 新窗口的引用
       form: '' ,  // 支付宝提交的表单数据
+      show: false,
+      radio: 0,
+      goods_id: '',
+      goods_integral: [],
+      // 多件商品折扣 id
+      jf_id: [],
+      // 单间折扣
+      single_jfid: 0,
+      info: [],
+      // 商品小计价格
+      subtotal: [],
+      // 减免总额
+      deductionTotal: 0,
+      deduction: [],
+      // 总价
+      totalPrice: [],
+      total_price: 0
+
     };
   },
   watch: {
@@ -234,13 +276,25 @@ export default {
         this.url = "";
         this.newWin = null;
       }
-    }
+    },
+    
   },
   computed: {
+    // 实际支付价格
     countPrice() {
-      return this.goods.reduce((pre, next) => {
-        return pre + next.price * next.num;
-      }, 0);
+      var s =0;
+      this.goods.forEach(item => {
+        s += parseFloat(item.price);
+      })
+      return (s - this.deductionTotal).toFixed(2);
+    },
+    // 商品总件数
+    totalNum() {
+      var num = 0;
+      this.goods.forEach(item => {
+        num += item.num;
+      })
+      return num;
     },
     countDiscount() {
       let total = 0;
@@ -255,7 +309,6 @@ export default {
         } else {
           total += surplus
         }
-        
       }
       return this.goods.reduce((pre, next) => {
         return pre + next.discount * next.num;
@@ -263,29 +316,40 @@ export default {
     },
     isAllowPay() {
       return this.payway.value && this.selectAddress.name;
-    }
+    },
+    
   },
-  created() {},
-  mounted() {
+  created() {
     const address = sessionStorage.getItem("select address");
     if (address) {
       this.selectAddress = JSON.parse(address);
-      this.goods = JSON.parse(sessionStorage.getItem("roder good"));
+      if(sessionStorage.getItem("roder good")) {
+        this.goods = JSON.parse(sessionStorage.getItem("roder good"));
+      }
       store.commit('loadStatus', false)
     } else {
       this.getAddress();
     }
-
+    // 获取单件商品的数据
     const buyGoods = sessionStorage.getItem("buy goods");
     const { type } = this.$route.query;
-    if (buyGoods && type == 1) {
+    this.type = type;
+    if (type == 1 && buyGoods ) {
       this.goods = [JSON.parse(buyGoods)];
+      let that = this;
+      this.goods.forEach(item => {
+        that.goods_integral.push(item.good_discount.积分);
+      })
     }
+  },
+  mounted() {
+    
   },
   beforeDestroy() {
     sessionStorage.removeItem("select address");
   },
   methods: {
+    
     // 现金券的输入金额
     useCashVal(item) {      
       if(item.surplus < item.use_val) {
@@ -313,6 +377,52 @@ export default {
       this.coupon.value = item;
       this.aside.isOpen = false;
     },
+    // 展示积分选择 
+    showJifen(index) {
+      this.show = true;
+      if(this.goods_id!==index) {
+        this.radio = 0;
+      }
+      this.goods_id = index;
+    },
+    // 展示所选折扣
+    consume() {
+      var that = this;
+      this.goods.forEach((good_item,index) => {
+        if(this.goods_id===index) {
+          good_item.good_discount.积分.forEach(item => {
+            if(item.id===that.radio) {
+              that.info[this.goods_id] = item.consume+'积分 减免'+item.deduction+'元';
+              var price = good_item.price - item.deduction;
+              that.subtotal[this.goods_id] = price<=0?0:price.toFixed(2);
+              that.deduction[this.goods_id] = good_item.price - that.subtotal[this.goods_id];
+            } 
+            if(that.radio==0) {
+              that.deduction[this.goods_id] = 0;
+            }
+          })
+        }
+      })
+    },
+    // 减免总额 
+    totalDeduction() {
+      var s = 0;
+      this.deduction.forEach( item => {
+        s += item;
+      })
+      this.deductionTotal = s.toFixed(2);
+    },
+    // 确定
+    comfirm() {
+      this.show = false;
+      if(!this.type) {
+        this.jf_id[this.goods_id] = this.radio;
+      } else {
+        this.single_jfid = this.radio;
+      }
+      this.consume();
+      this.totalDeduction();
+    },
     // 选择支付方式
     onChangePayway(value) {
       this.payway.value = value;
@@ -327,39 +437,10 @@ export default {
         }
       }
     },
-    // 直接下单
-    // directGoodsOrder(params = {}) {
-    //   let _this = this;
-    //   // 先打开一个空的新窗口，再请求
-    //   this.newWin = window.open();
-    //   postDirectGoodOrder(params).then(response => {
-    //     let { out_trade_no, body, totalPrice } = response;
-    //     let url = `http://testapi.aomengyujia.com/api/alipay/wappay/get?out_trade_no=${out_trade_no}&body=${body}&totalPrice=${totalPrice}`;
-    //     _this.url = url || "";
-    //   });
-    // },
-    // // 订单下单
-    // goodsOrder(params) {
-    //   let _this = this;
-    //   // 先打开一个空的新窗口，再请求
-    //   this.newWin = window.open();
-    //   postGoodOrder(params).then(response => {
-    //     let { out_trade_no, body, totalPrice } = response;
-    //     let url = `http://testapi.aomengyujia.com/api/alipay/wappay/get?out_trade_no=${out_trade_no}&body=${body}&totalPrice=${totalPrice}`;
-    //     _this.url = url || "";
-    //   });
-    // },
-
-    // 创建订单
-    creatOrder() {
-        const orderParams = this.paramsDeal();
-
-    },
     // 支付
     pay() {
       if (!this.isAllowPay) return
-      const buyGoods = sessionStorage.getItem("buy goods");
-      const { type } = this.$route.query;
+      const buyGoods = JSON.parse(sessionStorage.getItem("buy goods"));
       const ids = this.goods.map(item => item.id);
       const goodsIds = this.goods.map(item => item.goodListId) ;
       const nums = this.goods.map(item => item.num);
@@ -370,75 +451,81 @@ export default {
         id: ids,
         lid: goodsIds,
         num: nums,
+        discountId: this.jf_id,
+        status: 0, 
         userName: name,
         userTel: tel,
         province,
         area,
         city,
-        userAddress: address,
-        userMessage: this.userMessage,
-        status: "0", // 0不是新增地址 1是新增地址
+        address,
         addressId: this.selectAddress.id,
-        cashId: cashId || "", //现金券编号
-        cashMoney: (use_val >= surplus ? surplus : use_val) || "", //现金券使用金额
-        couponId: couponId || "", //优惠券编号
-        fraction: "" //使用积分
       };
-      if (buyGoods && type == 1) {
-        const m_params = {
-          id: ids,
-          num: nums,
-          size: this.goods.map(item => item.size),
-          color: this.goods.map(item => item.color),
+      if (buyGoods && this.type == 1) {
+        var m_params = {
+          id: buyGoods.id,
+          num: buyGoods.num,
+          size: buyGoods.size,
+          color:buyGoods.color,
+          status: 0,
+          userName: name,
+          userTel: tel,
+          province,
+          area,
+          city,
+          address,
           addressId: this.selectAddress.id,
-          cashId: cashId || "", //现金券编号
-          cashMoney: (use_val >= surplus ? surplus : use_val) || "", //现金券使用金额
-          couponId: couponId || "", //优惠券编号
-          fraction: "" //	使用积分
+          discountId: this.single_jfid,
         };
+      } 
+      if(this.type) {
+        this.singlePay(m_params);
+      } else {
+        this.manyPay(params);
       }
-      // 支付宝支付
-        this.$request.post('/goodOrder', params).then(res => {
-          console.log(res)
-          if (this.payway.value === "支付宝") {
-          //   if(res.code === 200) {
-          //     if (this.fraction === 0) {
-          //         Toast("已购买")
-          //     } else {
-          //         this.payMoney(res.out_trade_no);
-          //     }
-          // } 
-          if(res.msg === 'OK') {
-              if (this.fraction === 0 || res.code === 200) {
-                  Toast('恭喜您，课程购买成功');
-                  setTimeout(() => {
-                      this.$router.go(-1)
-                  }, 2000)
-              } else {
-                  this.payMoney(res.out_trade_no);
-              }
-          } 
-          else {
-              this.$toast({
-                  message: res.msg,
-              });
-              // setTimeout(() => {
-              //         this.$router.go(-1)
-              //     }, 2000)
-          }
-          }
       if (this.payway.value === "微信") {
-        // Toast('暂未开通微信支付')
-      //   console.log(1)
-        if (this.isWeiXin) {
-          // this.payForWexin(res.out_trade_no)
-          this.payForWexinw(res.out_trade_no)
-        } else {
-          this.payForWexinw(res.out_trade_no)
+        if (isWeiXin) {
         }
       }
+    },
+    // 单件支付，创建订单
+    singlePay(params) {
+      this.$request.post('/goods/order/mobile', params).then(res => {
+        if(res.code === 200) {
+          Toast("恭喜您，课程购买成功");
+           setTimeout(() => {
+              this.$router.push('/order');
+            }, 2000);
+        } else if(res.msg === 'OK'&&res.code===201) {
+          this.payMoney(res.out_trade_no);
+        } 
+      }).catch(error => {
+        if(error.code === 403) {
+          Toast("订单生成失败，您的积分不足");
+        } else {
+          Toast("抱歉，网络出了点问题，请检查你的网络！");
+        }
       })
-
+    },
+    // 多件支付，创建订单
+    manyPay(params) {
+      this.$request.post('/goodOrder', params).then(res => {
+        console.log(res);
+        if(res.code === 200) {
+          Toast("恭喜您，课程购买成功");
+           setTimeout(() => {
+              this.$router.push('/order');
+            }, 2000);
+        } else if(res.msg === 'OK'&&res.code===201) {
+          this.payMoney(res.out_trade_no);
+        }
+      }).catch(error => {
+        if(error.code === 403) {
+          Toast("订单生成失败，您的积分不足");
+        } else {
+          Toast("抱歉，网络出了点问题，请检查你的网络！");
+        }
+      })
     },
     isWeiXin () {
       var ua = window.navigator.userAgent.toLowerCase();
@@ -459,32 +546,21 @@ export default {
     },
     // 获取微信外部接口
     payForWexinw (orderId) {
-      this.$request.get('/alipay/wechat/h5?out_trade_no=' + orderId ).then((res) => {
-        let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res, body: res.body, id: res.out_trade_no }});
-        window.open(routeData.href, '_blank')
-        // console.log(res.innerHTML)
-        // window.location.href = res
-      })
-    },
-    // 获取微信浏览器接口
-    payForWexin (orderId) {
-      this.$request.get('/alipay/wechat/h/test?out_trade_no=' + orderId ).then((res) => {
-        let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res.mweb_url }});
+      this.$request.get('/alipay/wechat/h/test?out_trade_no=' + orderId ).then((res) => {
+        let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res.mweb_url, body: res.body, id: res.out_trade_no }});
         window.open(routeData.href, '_blank')
       }).catch((error) => {
         Toast(error)
       })
-      // window.location.href = 'http://testapi.aomengyujia.com/api/alipay/wechat/h5?out_trade_no=' + orderId 
-      // .then((res) => {
-      //   // if(res.msg === 'ok') {
-      //   //   let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res }});
-      //   //   window.open(routeData.href, '_blank')
-      //   //   // console.log(res.innerHTML)
-      //   //   // window.location.href = res
-      //   // } else {
-      //   //   Toast(res.msg)
-      //   // }
-      // })
+    },
+    // 获取微信浏览器接口
+    payForWexin (orderId) {
+      this.$request.get('/alipay/wechat/jsapi/test?out_trade_no=' + orderId ).then((res) => {
+        let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res.mweb_url, body: res.body, id: res.out_trade_no }});
+        window.open(routeData.href, '_blank')
+      }).catch((error) => {
+        Toast(error)
+      })
     },
     // 返回
     back() {
@@ -495,21 +571,28 @@ export default {
     changeAddress() {
       this.$router.push("/address?type=1");
     },
+    // 获取收货地址 和 多件商品的数据
     getAddress() {
       this.$request.get("/goodOrder/create").then(data => {
         const { type } = this.$route.query;
-        if (!type) {
-          sessionStorage.setItem("roder good", JSON.stringify(data.goods));
+        // 多件商品时的数据
+        if(!type) {
           this.goods = data.goods;
-        }
+          // 处理未支付，跳到订单页面
+          if(this.goods.length===0) {
+            this.$router.push('/myorder?order=1');
+            return
+          }
+          sessionStorage.setItem("roder good", JSON.stringify(data.goods));
+          // 处理积分规则数据
+          let that = this;
+          this.goods.forEach(item => {
+            that.goods_integral.push(item.good_discount.积分);
+            that.jf_id.push(0);
+          })
+        } 
 
-
-        this.coupon.columns = data.coupon;
-        this.cash.columns = data.cash.map(item => {
-          item.use_val = ''
-          return item
-        });
-
+        // 进入页面，将已有的地址展示到页面
         if (data.address.length === 0) {
           return;
         }
@@ -520,7 +603,6 @@ export default {
         if (!default_address) {
           this.selectAddress = data.address[0];
         }
-        // this.userAddress = data.address;
       });
     }
   }
@@ -533,6 +615,10 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
+.van-nav-bar {
+  position: fixed;
+  top: 0;
+}
 .add-address {
     display: flex;
     justify-content: center;
@@ -560,29 +646,7 @@ export default {
   align-items: center;
   justify-content: center;
   font-size: 18px;
-  // background: linear-gradient(white, white) padding-box,
-  //   repeating-linear-gradient(
-  //       -45deg,
-  //       red 0,
-  //       red 12.5%,
-  //       transparent 0,
-  //       transparent 25%,
-  //       #58a 0,
-  //       #58a 37.5%,
-  //       transparent 0,
-  //       transparent 50%
-  //     )
-  //     0 / 6em 6em;
 }
-* {
-  margin: 0;
-  border: 0;
-  box-sizing: border-box;
-  font-size: 13px;
-  color: #2c2c2c;
-  max-width: 100%;
-}
-
 .custom-title {
   width: 5em;
   text-align: right;
@@ -745,44 +809,22 @@ export default {
     line-height: 35px;
   }
   &-main {
-    // width: 100%;
+    width: 100%;
     // height: 100%;
     background: #eeeeee;
     font-size: 12px;
-    margin-top: 1px;
+    margin-top: 47px;
     margin-bottom: 50px;
     overflow: hidden;
     overflow-y: scroll;
-    &-edit {
-      width: 100%;
-      height: 106px;
-      background: white;
-      position: relative;
-      div {
-        width: 317px;
-        height: 29px;
-        border-bottom: 1px solid #e5e5e5;
-        margin-left: 17px;
-        line-height: 29px;
-      }
-      &-adress {
-        color: #999999;
-      }
-      &-icon {
-        position: absolute;
-        font-size: 18px;
-        top: 38%;
-        right: 3%;
-      }
-    }
     &-editdefalut {
       width: 100%;
       height: 106px;
       padding-top: 30px;
-      background: #f1f8e2;
+      background-color: #fff;
       position: relative;
       overflow: hidden;
-
+      display: flex;
       &-p1 {
         position: absolute;
         left: 0;
@@ -797,35 +839,35 @@ export default {
       }
       &-name {
         margin-left: 20px;
-        span {
-          margin-left: 26px;
-        }
+        width: 62px;
       }
       &-adress {
-        margin: 17px 0 0 81px;
+        div:nth-child(1) {
+          margin-bottom: 17px;
+        }
       }
       &-icon {
         position: absolute;
-        font-size: 18px;
         top: 38%;
         right: 3%;
         display: inline-block;
+        .van-icon {
+          font-size: 24px;
+        }
       }
     }
     &-shop {
+      display: flex;
+      flex-wrap: wrap;
       width: 100%;
-      height: auto;
       background: white;
       margin-top: 3px;
-      overflow: hidden;
       &-img {
         width: 78px;
         height: 79px;
-        margin: 11px 18px 11px 15px;
-        float: left;
+        margin: 11px 18px 15px 16px;
       }
       &-message {
-        float: left;
         width: 245px;
         height: 79px;
         margin-top: 11px;
@@ -847,6 +889,7 @@ export default {
             line-height: 30px;
             padding: 0 8px;
             color: #999999;
+            font-size: 10px;
           }
           &-span2 {
             margin-left: 9px;
@@ -862,6 +905,48 @@ export default {
         background: #eeeeee;
         margin: 0 0 13px 16px;
         padding: 12px;
+      }
+      .jifen-use {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        height: 20px;
+        padding: 0 16px;
+        margin-bottom: 40px;
+        font-size: 13px;
+        .title {
+          width: 78px;
+          margin-right: 18px;
+          text-align: right;
+        }
+        &-rules {
+          flex: 1;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          height: 20px;
+          color: #E02121;
+          .van-icon {
+            font-size: 15px;
+          }
+        }
+      }
+      .subtotal {
+        width: 100%;
+        padding-right: 28px;
+        margin-bottom: 19px;
+        text-align: right;
+        font-size: 10px;
+        .one {
+          margin-right: 9px;
+          color: #999;
+        }
+        .num {
+          color: #E02121;
+        }
+        .price {
+          color: #96BB3F;
+        }
       }
     }
     &-discounts {
@@ -882,15 +967,25 @@ export default {
     width: 100%;
     height: 49px;
     display: flex;
+    justify-content: space-between;
+    color: #999;
+    background: white;
     &-message {
-      flex: 1;
-      background: white;
-      padding: 0 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 9px 0;
+      padding-left: 16px;
       &-p1 {
-        margin: 8px 0 4px 0;
         font-size: 13px;
-        color: #a3c554;
       }
+    }
+    &-pay {
+      display: flex;
+      align-items: flex-end;
+      padding-bottom: 9px;
+      font-size: 13px;
+      color: #A3C554;
     }
     &-buybtn {
       width: 104px;
@@ -901,6 +996,28 @@ export default {
       color: white;
       background: #b3d465;
     }
+  }
+}
+.jifen-integral {
+  &-use {
+    margin-top: 26px;
+    margin-bottom: 50px;
+    font-size: 16px;
+    font-weight: 700;
+    text-align: center;
+  }
+  .button {
+    position: absolute;
+    left: 16px;
+    bottom: 9px;
+    width: 343px;
+    height: 44px;
+    line-height: 44px;
+    background-color: #B3D465;
+    border-radius: 10px;
+    font-size: 14px;
+    color: #fff;
+    text-align: center;
   }
 }
 </style>
