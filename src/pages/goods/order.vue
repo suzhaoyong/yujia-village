@@ -90,7 +90,7 @@
                 <div class="Integraluse_bottom">
                   <el-radio-group v-model="goods[index].jifen" style="cursor: pointer;">
                     <div class="use_one" v-for="(jifen, index) in item.good_discount['积分']" :key="index">
-                        <el-radio :disabled="isDisableChooseChonsume(jifen)" :label="jifen.id">{{`${jifen.consume}${jifen.remake}${jifen.deduction}元`}}</el-radio>
+                        <el-radio :disabled="isDisableChooseChonsumeIdentity(jifen, item.discount_sign)||isDisableChooseChonsume(jifen)" :label="jifen.id">{{`${jifen.consume}${jifen.remake}${jifen.deduction}元`}}</el-radio>
                     </div>
                     <div class="use_three">
                         <el-radio :label="0">不使用积分</el-radio>
@@ -327,8 +327,10 @@ export default {
     getAllSelectNumberAndPrice() {
       let allGoods = this.goods;
       let allPrice = allGoods.reduce((pre, cur) => {
+        let price = cur.sell_price - cur.discount
+        price = price > 0 ? price : 0
         return (
-          parseFloat(pre) + parseInt(cur.num) * (cur.sell_price - cur.discount)
+          parseFloat(pre) + parseInt(cur.num) * (price)
         );
       }, 0);
       return { allPrice: allPrice.toFixed(2), allGoodsNumber: allGoods.length };
@@ -354,6 +356,25 @@ export default {
           return jifen_select && jifen_select[0] || {id: 0}
         }).map(item => item.id)
     },
+    getRealyDiscount() {
+      return this.goods
+        .map(item => {
+          if(!item.jifen) return 0;
+          const jifen_id = item.jifen;
+          const jifen_select = item.good_discount['积分'].filter(item => item.id === jifen_id)[0]
+          const goods_price = (item.sell_price - item.discount)
+
+          if(jifen_select && jifen_select.deduction) {
+            if(goods_price > jifen_select.deduction) {
+              return (jifen_select.deduction)
+            } else {
+              return goods_price;
+            }
+          }
+          return 0;
+        })
+        .reduce((pre, cur) => pre + cur, 0)
+    },
     isDisableChooseChonsume() {
       return (item) => {
         if(this.fraction < item.consume) {
@@ -365,14 +386,21 @@ export default {
         }
       }
     },
+    isDisableChooseChonsumeIdentity(){
+      return (item, discount_sign) => {
+        if(item.user_limit == 1 && discount_sign == 1) return false;
+
+        return true;
+      }
+    },
     getCountConsume() {
         return  this.getDeductionArr.map(item => item.consume).reduce((pre, cur) => pre + cur, 0)
     },
     getRealCountPrice() {
-      if(this.getCountDiscount > this.getAllSelectNumberAndPrice.allPrice) {
+      if(this.getRealyDiscount > this.getAllSelectNumberAndPrice.allPrice) {
         return '0.00'
       }
-      return (this.getAllSelectNumberAndPrice.allPrice - this.getCountDiscount).toFixed(2)
+      return (this.getAllSelectNumberAndPrice.allPrice - this.getRealyDiscount).toFixed(2)
     },
     getAddress() {
       if (this.address.length === 0) {
@@ -622,7 +650,7 @@ export default {
       }
       params = Object.assign({}, params, { id, lid, num, discountId });
       console.log(params);
-      // return;
+      return;
       this.$request.post(`/goodOrder`, params)
       .then(resopnse => {
         const {body = "", out_trade_no = "", totalPrice, msg = "" } = resopnse
