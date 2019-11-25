@@ -133,7 +133,7 @@
                   <img :src="item.cover_url" alt="">
                 </div>
                 <div class="goods-name">{{item.describe}}</div>
-                <div class="goods-price">￥{{item.sell_price}}</div>
+                <div class="goods-price">￥{{(item.sell_price-item.discount).toFixed(2) }}</div>
               </div>
             </div>
             <van-popup class="popup-sx" v-model="show" position="right" :style="{ width: '90%',height: '100%' }" 

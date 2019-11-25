@@ -487,8 +487,8 @@ export default {
             this.getPersonalData()
           })
         })
-        .catch(err => {
-          Notify(err);
+        .catch(error => {
+          Notify(error.msg);
         });
     },
     register() {
@@ -629,7 +629,7 @@ export default {
           Notify({ message: "修改成功, 请登录", type: "success" });
         })
         .catch(err => {
-          Notify(err);
+          Notify(err.msg);
         });
     },
 
@@ -721,7 +721,7 @@ export default {
           .catch(err => {
             this.codeTips.count = 0;
             clearInterval(timer);
-            Notify(err);
+            Notify(err.msg);
           });
     },
     /* 图形验证码 */
@@ -739,7 +739,7 @@ export default {
           this.reset.key = key;
         })
         .catch(err => {
-          Notify(err);
+          Notify(err.msg);
         });
     },
 

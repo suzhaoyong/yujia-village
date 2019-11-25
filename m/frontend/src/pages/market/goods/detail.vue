@@ -10,7 +10,7 @@
     <van-skeleton v-if="goods_copy.describe === ''" title title-width="100" :row="6" />
     <!-- 商品 -->
     <!-- 商品轮播图 -->
-    <div class="goods-pic">
+    <div class="goods-pic" >
       <img :src="goods.picture" alt />
     </div>
     <div class="goods">
@@ -37,7 +37,7 @@
       </div>
       <div class="goods_select">
         <!-- 选择规格 -->
-        <div class="select_item" @click.stop="goodsShow = true">
+        <div class="select_item" @click.stop="goodsShow = true;openWay = 'choose'">
           <span class="select_tips">{{selectedGoods}}</span>
           <div class="arrow">
             <i class="iconfont icon-pull_right"></i>
@@ -98,11 +98,7 @@
         </div>
       </div>
     </div>
-    <!-- 地区 -->
-    <van-popup v-model="area.isOpen" position="bottom">
-      <van-area @confirm="changeArea" @cancel="area.isOpen = false" :area-list="area.list" />
-    </van-popup>
-    <!-- SKU -->
+    <!-- SKU 商品规格弹出框-->
     <van-sku
       v-if="this.sku.list.length > 0"
       v-model="goodsShow"
@@ -111,10 +107,14 @@
       :goods-id="goodsId"
       :close-on-click-overlay="true"
       :hide-stock="sku.hide_stock"
-      @buy-clicked="onAddCartClicked"
+      @buy-clicked="onBuyClicked"
     >
       <template slot="sku-actions" slot-scope="props">
-        <div class="van-sku-actions" @click="props.skuEventBus.$emit('sku:buy')">
+        <div v-if="openWay==='choose'" class="bottom-btn">
+          <div @click="props.skuEventBus.$emit('sku:buy')">加入购物车</div>
+          <div @click="buy(props)">立即购买</div>
+        </div>
+        <div v-else class="van-sku-actions" @click="props.skuEventBus.$emit('sku:buy')">
           <div class="buy_button">确定</div>
         </div>
       </template>
@@ -130,10 +130,9 @@
         </div>
       </div>
       <div class="car_rh">
-        <div class="car_rh_item" @click="handleAddCart">加入购物车</div>
+        <div class="car_rh_item" @click="goodsShow = true;openWay = ''">加入购物车</div>
         <div
           class="car_rh_item"
-          :style="`background:${ isAllowBuy ?'':'#ccc'}`"
           @click="handleBuyGoods"
         >立即购买</div>
       </div>
@@ -171,6 +170,8 @@ export default {
       goods_img: "/assets/img/bg.png",
       changeGoods: {},
       goodsShow: false,
+      // 确定弹出框
+      openWay: '',
       goodsId: 10,
       goods: {
         // 商品标题
@@ -228,7 +229,6 @@ export default {
     }
   },
   mounted() {
-    this.getShoppingBag();
     this.viewGoods();
   },
   beforeDestroy() {
@@ -237,7 +237,7 @@ export default {
     });
   },
   methods: {
-    getChildShow (data) {
+    getChildShow (data,id) {
       this.childShow = data
     },
     // 查看商品详情
@@ -311,16 +311,6 @@ export default {
         this.goods = { title: describe, picture: cover };
       });
     },
-    // 获取购物袋数据
-    getShoppingBag() {
-      if (this.isUserNeedLogin) {
-        // this.$router.push("/login");
-        return;
-      }
-      this.$request.get("/userCart/create").then(data => {
-        this.shoppingBagNumber = data.length;
-      });
-    },
     // 点击加入购物车
     handleAddCart() {
       if (this.isUserNeedLogin) {
@@ -342,13 +332,9 @@ export default {
           this.clock = false;
         });
     },
+    // 处理加入购物车的数据
     getSelectParams(params = {}) {
-      const { selectedSkuComb, selectedNum } = this.changeGoods;
-      if (!(selectedSkuComb && selectedNum)) {
-        Toast("请选择规格");
-        this.clock = false;
-        return "";
-      }
+      const {selectedSkuComb, selectedNum} = this.changeGoods;
       this.clock = true;
       const { tree } = this.sku;
 
@@ -409,20 +395,21 @@ export default {
       sessionStorage.setItem("buy goods", JSON.stringify(params));
       this.$router.push(`/fillorder?type=1`);
     },
-    changeArea(val) {
-      this.area.change = val;
-      this.area.isOpen = false;
-    },
-    onAddCartClicked(val) {
-      this.changeGoods = val;
+    // 商品规格框，确定加入购物车 
+    onBuyClicked(val) {
+      this.changeGoods = val; 
+      this.handleAddCart();
       this.goodsShow = false;
     },
+    buy(val) {
+      this.changeGoods = val; 
+      if(val.selectedSkuComb) {
+        this.handleBuyGoods();
+      } else {
+        Toast('请先选择商品规格');
+      }
+    },
     back() {
-      this.sku.tree = [];
-      this.sku.list = [];
-      this.$nextTick(() => {
-        // this.sku.tree = [];
-      });
       this.$router.go(-1);
     }
   }
@@ -660,6 +647,9 @@ $main_color: #b4d565;
           .imgs_item {
             width: 100%;
             height: 100%;
+            img {
+              vertical-align: top;
+            }
           }
         }
       }
@@ -668,13 +658,41 @@ $main_color: #b4d565;
 }
 .van-sku-actions {
   background: $main_color;
-  height: 44px;
+  width: 343px;
+  height: 40px;
+  margin: 8px 0;
+  margin-left: 16px;
+  border-radius: 20px;
   .buy_button {
     width: 100%;
     line-height: 28px;
     text-align: center;
     font-size: 14px;
     color: #fff;
+  }
+}
+.bottom-btn {
+  height: 56px;
+  width: 343px;
+  display: flex;
+  margin-left: 16px;
+  div {
+    margin: 8px 0;
+    width: 50%;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+  }
+  div:nth-of-type(1) {
+    border-radius: 20px 0 0 20px;
+    background: #effaea;
+    color: $main_color;
+    font-weight: 600;
+  }
+  div:nth-of-type(2) {
+    border-radius: 0 20px 20px 0;
+    color: #fff;
+    background-color: $main_color;
   }
 }
 .car {
@@ -717,11 +735,16 @@ $main_color: #b4d565;
       height: 100%;
       line-height: 40px;
       text-align: center;
+      color: #fff;
+      &:nth-of-type(1) {
+        background: #effaea;
+        color: $main_color;
+        font-weight: 600;
+      }
       &:nth-of-type(2) {
-        color: #fff;
         height: 100%;
         line-height: 40px;
-        background: $main_color;
+        background-color:  $main_color;
       }
     }
   }

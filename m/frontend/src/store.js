@@ -16,7 +16,9 @@ const store = new Vuex.Store({
       user: {
         name: ''
       }
-    }
+    },
+    // 文案参数
+    wenan: ''
   },
   getters: {
     info: state => state.info,
