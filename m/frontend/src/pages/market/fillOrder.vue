@@ -309,7 +309,6 @@ export default {
         } else {
           total += surplus
         }
-        
       }
       return this.goods.reduce((pre, next) => {
         return pre + next.discount * next.num;
