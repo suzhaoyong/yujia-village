@@ -97,12 +97,7 @@ export default {
     },
     methods: {
         onClickLeft() {
-            const {order} = this.$route.query;
-            if(order) {
-                this.$router.push('/personal');
-            } else {
-                this.$router.go(-1);
-            }
+            this.$router.push('/personal');
         },
         // 删除功能，暂时不做
         // deleted() {
