@@ -154,6 +154,9 @@ export default {
         number: 1
       },
       goods: {
+        good_discount: {
+          积分: []
+        },
         color_size: []
       }
     };

@@ -39,10 +39,11 @@
                   </div>
                   <div class="operate">
                     <!-- <div class="time">剩余23小时57分钟</div> -->
-                    <div class="pay" v-if="item.status === '待付款'" @click="pay(item)">{{item.status}}</div>
+                    <div class="pay" style="display: inline-block; border: 1px solid #ccc; border-radius: 4px; padding: 0 4px;" v-if="item.status === '待付款'" @click="pay(item)">{{item.status}}</div>
                     <div class="pay" v-else>
                       <div style="cursor: initial;" class>{{item.status}}</div>
                       <div
+                        v-if="item.status !== '已取消'"
                         style="padding-top:0.8rem;"
                         @click.stop="expressage(item, g_index, 'view')"
                       >查看物流信息</div>
