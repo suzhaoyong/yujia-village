@@ -5,9 +5,7 @@
       <div class="my_body">
         <div class="tags">
           <div @click="activeType = 'all'" :class="['tag', isActive('all')]">全部订单</div>
-          <div @click="activeType = 'pay'" :class="['tag', isActive('pay')]">待付款</div>
-          <div @click="activeType = 'send'" :class="['tag', isActive('send')]">待发货</div>
-          <div @click="activeType = 'receive'" :class="['tag', isActive('receive')]">待收货</div>
+          <div @click="activeType = 'waitpay'" :class="['tag', isActive('waitpay')]">待付款</div>
           <div @click="activeType = 'success'" :class="['tag', isActive('success')]">已完成</div>
         </div>
         <div class="table">
