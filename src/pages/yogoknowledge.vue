@@ -152,7 +152,7 @@ export default {
                 break;
             case 6:
                 this.$router.push({
-                    path: "/cultivate/index",
+                    path: `/cultivate/index?ids=${item.relation_id}`,
                 });
                 break;
             case 7:

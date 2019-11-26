@@ -65,6 +65,7 @@
                                         </div>
                                         <div class="yogoswiper-text">
                                             <h3>{{namelist.headline}}</h3>
+                                            <div class="date">{{namelist.created_at}}</div>
                                             <div class="yogoswiper-butt">
                                             <el-button type="text" @click="ViewAll(namelist)">查看详情</el-button>
                                             </div>
@@ -249,9 +250,9 @@ export default {
         return pages;
       },
       pages2(){
-        const pages2 = []; // pages是为二维数组
+        const pages2 = [];
         this.info.forEach((item, index) => {
-          const page2 = Math.floor(index / 4); // page本质是0.1.2.3分别表示第1,2,3,4页
+          const page2 = Math.floor(index / 4);
           if (!pages2[page2]) {
             pages2[page2] = [];
           }
@@ -745,6 +746,15 @@ a{
                             -webkit-line-clamp:2 !important;// 限制快级元素的文本行数
                             overflow: hidden !important;
                             width: 67%;
+                        }
+                        .date{
+                            text-align: left;
+                            color: #2c2c2c;
+                            font-size:14px;
+                            font-family:Source Han Sans CN;
+                            font-weight:400;
+                            margin-left: 50px;
+                            width: 80%;
                         }
                     }
                     .p1{

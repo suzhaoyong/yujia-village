@@ -30,8 +30,15 @@
                 <div class="goods_info-title">{{item.desc}}</div>
                 <div class="goods_info-tips">{{item.describe}}</div>
                 <div class="goods_info-border"></div>
-                <div class="goods_info-price">{{item.sell_price}}<span class="rmb">RMB</span></div>
-                <div class="goods_buy-btn" style="cursor: pointer;" @click="viewGoodsDetail(item)" >立即购买</div>
+                <div class="goods_info-price">
+                  <div class="old-price">
+                  {{item.sell_price}}<span class="rmb">RMB</span>
+                  </div>
+                  <div class="new-price">
+                  {{item.sell_price - item.discount}}<span class="rmb">RMB</span>
+                  </div>
+                </div>
+                <div class="goods_buy-btn" style="cursor: pointer;" @click="viewGoodsDetail(item)" >查看详情</div>
               </div>
             </div>
           </div>
@@ -40,9 +47,10 @@
 
       <div class="market_time">
         <div class="market_time_pull">
-          <div class="time_title">时尚精品</div>
+          <div class="time_title"><img src="../../assets/yujia.png"/>时尚精品</div>
           <div class="time_brief">Sometimes beauty is so simple</div>
           <div class="time_border"></div>
+          <div class="time_border2"></div>
         </div>
         <div class="market_time-content" v-for="item in good_recomment.discount" :key="item.id">
           <div class="after"></div>
@@ -58,8 +66,15 @@
                 <div class="goods_info-title">{{item.desc}}</div>
                 <div class="goods_info-tips">{{item.describe}}</div>
                 <div class="goods_info-border"></div>
-                <div class="goods_info-price">{{item.sell_price}}<span class="rmb">RMB</span></div>
-                <div class="goods_buy-btn" style="cursor: pointer;" @click="viewGoodsDetail(item)" >立即购买</div>
+                <div class="goods_info-price">
+                  <div class="old-price">
+                  {{item.sell_price}}<span class="rmb">RMB</span>
+                  </div>
+                  <div class="new-price">
+                  {{item.sell_price - item.discount}}<span class="rmb">RMB</span>
+                  </div>
+                </div>
+                <div class="goods_buy-btn" style="cursor: pointer;" @click="viewGoodsDetail(item)" >查看详情</div>
               </div>
               <div class="goods_subimg">
                 <img :src="item.url_two" alt="商品" />
@@ -401,7 +416,7 @@ img {
       width: 100%;
       background: #eee;
       margin-bottom: 3rem;
-      height: 40.1rem;
+      height: 36rem;
       overflow: hidden;
       .market_news-content_box{
         width: 60rem;
@@ -415,7 +430,7 @@ img {
           right: 0;
           .goods_img {
             width: 30rem;
-            height: 40rem;
+            height: 35rem;
             background: #ccc;
             img{
               width: 100%;
@@ -431,7 +446,7 @@ img {
           flex-direction: column;
           .goods_subimg {
             width: 24rem;
-            height: 24rem;
+            height: 23rem;
             align-self: flex-end;
             background: #ccc;
             img{
@@ -443,7 +458,7 @@ img {
           .goods_info{
             width: 24rem;
             text-align: left;
-            padding: 68px 0px 0px;
+            padding: 50px 0px 0px;
             .goods_info-title{
               color: #2c2c2c;
               font-size:18px;
@@ -461,17 +476,35 @@ img {
               background-color: #BFBFBF;
             }
             .goods_info-price{
-               align-self: flex-end;
-              font-size:24px;
-              font-family:FZChaoCuHei-M10S;
-              font-weight:bold;
-              color:#2C2C2C;
-              margin-top: 1rem;
-              .rmb{
+              align-self: flex-end;
+              margin-top: 0.5rem;
+              display: flex;
+              margin-bottom: 0.5rem;
+              .old-price{
+                 text-decoration: line-through;
+                 font-size:24px;
+                  font-family:FZChaoCuHei-M10S;
+                  font-weight:bold;
+                  color:#999;
+                .rmb{
+                font-size:16px;
+                font-family:FZChaoCuHei-M10S;
+                font-weight:bold;
+                color:#999;
+              }
+              }
+              .new-price{
+                font-size:24px;
+                font-family:FZChaoCuHei-M10S;
+                font-weight:bold;
+                color:#2C2C2C;
+                padding-left: 15px;
+                .rmb{
                 font-size:16px;
                 font-family:FZChaoCuHei-M10S;
                 font-weight:bold;
                 color:#2C2C2C;
+              }
               }
             }
             .goods_buy-btn{
@@ -502,7 +535,7 @@ img {
           position: relative;
           .goods_img {
             width: 30rem;
-            height: 40rem;
+            height: 35rem;
             background: #ccc;
             img{
               width: 100%;
@@ -518,7 +551,7 @@ img {
           flex-direction: column;
           .goods_subimg {
             width: 24rem;
-            height: 24rem;
+            height: 23rem;
             align-self: flex-end;
             background: #ccc;
             img{
@@ -530,7 +563,7 @@ img {
           .goods_info{
             width: 24rem;
             text-align: left;
-            padding: 68px 0px 0px;
+            padding: 50px 0px 0px;
             .goods_info-title{
               color: #2c2c2c;
               font-size:18px;
@@ -548,17 +581,35 @@ img {
               background-color: #BFBFBF;
             }
             .goods_info-price{
-               align-self: flex-end;
-              font-size:24px;
-              font-family:FZChaoCuHei-M10S;
-              font-weight:bold;
-              color:#2C2C2C;
-              margin-top: 1rem;
-              .rmb{
+              align-self: flex-end;
+              margin-top: 0.5rem;
+              display: flex;
+              margin-bottom: 0.5rem;
+              .old-price{
+                 text-decoration: line-through;
+                 font-size:24px;
+                  font-family:FZChaoCuHei-M10S;
+                  font-weight:bold;
+                  color:#999;
+                .rmb{
+                font-size:16px;
+                font-family:FZChaoCuHei-M10S;
+                font-weight:bold;
+                color:#999;
+              }
+              }
+              .new-price{
+                font-size:24px;
+                font-family:FZChaoCuHei-M10S;
+                font-weight:bold;
+                color:#2C2C2C;
+                padding-left: 15px;
+                .rmb{
                 font-size:16px;
                 font-family:FZChaoCuHei-M10S;
                 font-weight:bold;
                 color:#2C2C2C;
+              }
               }
             }
             .goods_buy-btn{
@@ -579,8 +630,8 @@ img {
   }
   &_time {
     .market_time_pull{
-      text-align: right;
-      padding-bottom: 1rem;
+      text-align: center;
+      padding-bottom: 3rem;
       padding-top: 5rem;
       position: relative;
       width: 60rem;
@@ -590,6 +641,14 @@ img {
         font-family:Microsoft YaHei;
         font-weight:bold;
         color:rgba(44,44,44,1);
+        position: relative;
+        img{
+          width: 28px;
+          height: 28px;
+          position: absolute;
+          left: 42%;
+          top: 4%;
+        }
       }
       .time_brief{
         font-size:14px;
@@ -599,10 +658,18 @@ img {
       }
       .time_border{
         height: 1px;
-        width: 8rem;
+        width: 10rem;
         background: #BFBFBF;
         position: absolute;
-        right: 6rem;
+        right: 16rem;
+        top: 6rem;
+      }
+      .time_border2{
+        height: 1px;
+        width: 10rem;
+        background: #BFBFBF;
+        position: absolute;
+        left: 14rem;
         top: 6rem;
       }
     }
@@ -703,11 +770,11 @@ img {
           position: relative;
           .goods_subimg {
             width: 24rem;
-            height: 19rem;
+            height:20rem;
             align-self: flex-end;
             background: #ccc;
             position: absolute;
-            top: 15rem;
+            top: 14rem;
             img{
               width: 100%;
               height: 100%;
@@ -717,7 +784,7 @@ img {
           .goods_info{
             width: 24rem;
             text-align: left;
-            padding: 68px 0px 0px;
+            padding: 50px 0px 0px;
             .goods_info-title{
               color: #2c2c2c;
               font-size:18px;
@@ -735,17 +802,35 @@ img {
               background-color: #BFBFBF;
             }
             .goods_info-price{
-               align-self: flex-end;
-              font-size:24px;
-              font-family:FZChaoCuHei-M10S;
-              font-weight:bold;
-              color:#2C2C2C;
-              margin-top: 1rem;
-              .rmb{
+              align-self: flex-end;
+              margin-top: 0.5rem;
+              display: flex;
+              margin-bottom: 0.5rem;
+              .old-price{
+                 text-decoration: line-through;
+                 font-size:24px;
+                  font-family:FZChaoCuHei-M10S;
+                  font-weight:bold;
+                  color:#999;
+                .rmb{
+                font-size:16px;
+                font-family:FZChaoCuHei-M10S;
+                font-weight:bold;
+                color:#999;
+              }
+              }
+              .new-price{
+                font-size:24px;
+                font-family:FZChaoCuHei-M10S;
+                font-weight:bold;
+                color:#2C2C2C;
+                padding-left: 15px;
+                .rmb{
                 font-size:16px;
                 font-family:FZChaoCuHei-M10S;
                 font-weight:bold;
                 color:#2C2C2C;
+              }
               }
             }
             .goods_buy-btn{
@@ -858,11 +943,11 @@ img {
           position: relative;
           .goods_subimg {
             width: 24rem;
-            height: 19rem;
+            height: 20rem;
             align-self: flex-end;
             background: #ccc;
             position: absolute;
-            top: 15rem;
+            top: 14rem;
             img{
               width: 100%;
               height: 100%;
@@ -872,7 +957,7 @@ img {
           .goods_info{
             width: 24rem;
             text-align: left;
-            padding: 68px 0px 0px;
+            padding: 50px 0px 0px;
             .goods_info-title{
               color: #2c2c2c;
               font-size:18px;
@@ -890,17 +975,35 @@ img {
               background-color: #BFBFBF;
             }
             .goods_info-price{
-               align-self: flex-end;
-              font-size:24px;
-              font-family:FZChaoCuHei-M10S;
-              font-weight:bold;
-              color:#2C2C2C;
-              margin-top: 1rem;
-              .rmb{
+              align-self: flex-end;
+              margin-top: 0.5rem;
+              margin-bottom: 0.5rem;
+              display: flex;
+              .old-price{
+                 text-decoration: line-through;
+                 font-size:24px;
+                  font-family:FZChaoCuHei-M10S;
+                  font-weight:bold;
+                  color:#999;
+                .rmb{
+                font-size:16px;
+                font-family:FZChaoCuHei-M10S;
+                font-weight:bold;
+                color:#999;
+              }
+              }
+              .new-price{
+                font-size:24px;
+                font-family:FZChaoCuHei-M10S;
+                font-weight:bold;
+                color:#2C2C2C;
+                padding-left: 15px;
+                .rmb{
                 font-size:16px;
                 font-family:FZChaoCuHei-M10S;
                 font-weight:bold;
                 color:#2C2C2C;
+              }
               }
             }
             .goods_buy-btn{

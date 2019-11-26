@@ -4,7 +4,7 @@
       <div class="header-main">
          <div class="sub_box">
             <div class="subjects3" v-if="subjectbanner.length > 0">
-                <el-carousel height="60px" :interval="5000" :autoplay="true" arrow="never">
+                <el-carousel height="60px" :interval="5000" :autoplay="true" arrow="never" indicator-position="none">
                     <el-carousel-item v-for="(item,index) in subjectbanner" :key="index">
                         <img :src="item.path" alt  @click="subclick(item)"/>
                         <div class="advertisement">广告</div>
@@ -371,7 +371,7 @@ export default {
                 break;
             case 6:
                 this.$router.push({
-                    path: "/cultivate/index",
+                    path: `/cultivate/index?ids=${item.relation_id}`,
                 });
                 break;
             case 7:
