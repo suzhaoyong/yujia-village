@@ -130,10 +130,10 @@
         </div>
       </div>
       <div class="car_rh">
-        <div class="car_rh_item" @click="goodsShow = true;openWay = ''">加入购物车</div>
+        <div class="car_rh_item" @click="addCartAndBuy('addCart')">加入购物车</div>
         <div
           class="car_rh_item"
-          @click="handleBuyGoods"
+          @click="addCartAndBuy('buy')"
         >立即购买</div>
       </div>
     </footer>
@@ -317,6 +317,7 @@ export default {
         this.$router.push("/login");
         return;
       }
+      
       if (this.clock) {
         Toast("正在加入购物车");
         return;
@@ -370,11 +371,11 @@ export default {
     },
     // 点击立即购买
     handleBuyGoods() {
-      if (this.getSelectParams() == "") return;
       if (this.isUserNeedLogin) {
         this.$router.push("/login");
         return;
       }
+      if (this.getSelectParams() == "") return;
       const {
         describe,
         discount,
@@ -398,8 +399,26 @@ export default {
     // 商品规格框，确定加入购物车 
     onBuyClicked(val) {
       this.changeGoods = val; 
-      this.handleAddCart();
+      if(this.status) {
+        this.handleBuyGoods();
+      } else {
+        this.handleAddCart();
+      }
       this.goodsShow = false;
+    },
+    // 判定是否登录
+    addCartAndBuy(word) {
+      if (this.isUserNeedLogin) {
+        this.$router.push("/login");
+        return;
+      }
+      this.goodsShow = true;
+      this.openWay = '';
+      if(word==='buy') {
+        this.status = true;
+      } else {
+        this.status = false
+      }
     },
     buy(val) {
       this.changeGoods = val; 
