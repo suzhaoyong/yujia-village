@@ -88,6 +88,7 @@
           :area-list="areaList"
           @confirm="changeArea" 
           @cancel="isShowPopup = false"
+          :columns-placeholder="['请选择', '请选择', '请选择']"
         />
       </van-popup>
       <div class="message-main-container" :style="swiper? 'padding-top: 80px': 'padding-top: 40px'">
@@ -262,14 +263,14 @@ export default {
     changeArea (value) {
       this.selectArea = {
         province:  value[0].name,
-        city: value[1].name,
-        area: value[2].name
+        city: value[1]?value[1].name: '',
+        area: value[2]?value[2].name: ''
       }
       const tag = {
         val: {
-        province: value[0].name,
-        city: value[1].name,
-        area: value[2].name
+        province:  value[0].name,
+        city: value[1]?value[1].name: '',
+        area: value[2]?value[2].name: ''
         },
         type: 'area',
         isArray: false,
