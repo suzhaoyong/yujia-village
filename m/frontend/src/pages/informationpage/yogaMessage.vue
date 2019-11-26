@@ -185,12 +185,14 @@ export default {
     }
   },
   created() {
+    this.messagetypeList()
     this.getAdvertising()
   },
   mounted () {
-    this.messageList()
+    setTimeout(() => {
+      this.messageList()
+    }, 200)
     this.PullUpReload()
-    this.messagetypeList()
   },
   methods: {
     // 广告位
@@ -219,6 +221,11 @@ export default {
     // 选择难度
     changediff (num) {
       this.stardiff = num
+    },
+    messagetypeList () {
+      this.$request.get('trains/type').then((res) => {
+        this.classfly = res.course_types
+      })
     },
     // 重置按钮功能
     resetlist () {
@@ -285,11 +292,9 @@ export default {
     // 获取列表
     messageList (page = 1) {
        if(this.$route.query.id) {
-        this.classfly.map((item, index) =>{if(item.id == this.$route.query.id){ this.spanIndex2.push(index)} })
-        this.selectTtype.push(Number(this.$route.query.id))
-        setTimeout(() => {
+          this.classfly.map((item, index) =>{if(item.id == this.$route.query.id){ this.spanIndex2.push(index)} })
+          this.selectTtype.push(Number(this.$route.query.id))
           this.searchResult('confirm')
-        }, 50)
       } else {
         this.$request.get('trains?page=' + page).then((res) => {
           // console.log(res);
@@ -304,14 +309,10 @@ export default {
             item.endTime = item.endTime.replace(/-/g,'.');
             this.messageLists.push(item);
           })
+          window.sessionStorage.setItem('message',JSON.stringify(this.messageLists));
         } else {
           Toast('只有这么多了');
         }
-    },
-    messagetypeList () {
-      this.$request.get('trains/type').then((res) => {
-        this.classfly = res.course_types
-      })
     },
     // 我想学的操作
     study(id) {
@@ -382,9 +383,8 @@ export default {
       this.confirm = confirm;
       this.pages = 1;
       this.messageLists = [];
+      this.keyWord = '';
       this.getConditiondata(page, this.getFiltersParams());
-      this.isActive = '0';
-      this.isShow = false;
     },
     // 获取条件筛选的数据
     getConditiondata(page =1, params) {
@@ -411,8 +411,28 @@ export default {
     // 课程筛选
     conditionQuery(page, params) {
       this.$request.post('/trains?page=' + page, params).then(res => {
-        this.fenye(page, res);
-      })
+        if(res) {
+          this.fenye(page, res);
+          this.isShow = false;
+          if(this.keyWord === '') {
+            this.isActive = '0';
+          }
+        } 
+      }).catch(error => {
+        if(error.code == 422 && error.msg === 'max price 字段是必须的当 min price 是存在的') {
+          Toast('请输入最大价格');
+        } else if(error.code == 422 && error.msg === 'min price 字段是必须的当 max price 是存在的') {
+          Toast('请输入最低价格');
+        } else if(error.code == 422 && error.msg === 'end time 字段是必须的当 start time 是存在的') {
+          Toast('请输入截止时间');
+        } else if(error.code == 422 && error.msg === 'start time 字段是必须的当 end time 是存在的') {
+          Toast('请输入起始时间');
+        } else if(error.code == 422 && error.msg === 'end time 必须是 start time 之后的一个日期') {
+          Toast('时间选择有误，请重新选择');
+        }
+        // 处理筛选失败时，数据为空的情况
+        this.messageLists = JSON.parse(window.sessionStorage.getItem('message'));
+      }) 
     },
     // 排序传递的参数
     getRankParams (keyWord, params = {}) {

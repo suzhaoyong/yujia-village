@@ -21,7 +21,6 @@
         </span>
       </div>
       <div v-for="(item, index) in goods" :key="index" class="order-main-shop">
-        <!-- <div > -->
         <div class="order-main-shop-img">
           <img :src="item.url" />
         </div>
@@ -61,45 +60,18 @@
             </span>
           </span>
         </div>
-        <!-- </div> -->
       </div>
       <div class="order-main-discounts">
         <van-cell-group v-show="true">
           <van-cell is-link @click="showPopup('payway')">
             <template slot="title">
               <span class="custom-title">支付方式：</span>
-              <van-tag>{{payway.value ? payway.value : '请选择支付方式'}}</van-tag>
+              <!-- <van-tag>{{payway.value ? payway.value : '请选择支付方式'}}</van-tag> -->
+              <van-tag>支付宝</van-tag>
             </template>
           </van-cell>
-          <!-- <van-cell is-link @click="showPopup('cash')">
-            <template slot="title">
-              <span class="custom-title">现金券：</span>
-              <van-tag v-if="cash.columns.length > 0">{{cash.value.name ? cash.value.name : '请选择现金券'}}</van-tag>
-              <van-tag v-if="cash.columns.length == 0">{{'暂无可用现金券'}}</van-tag>
-            </template>
-          </van-cell>
-          <van-cell is-link @click="showPopup('coupon')">
-            <template slot="title">
-              <span class="custom-title">优惠券：</span>
-              <van-tag
-                v-if="coupon.columns.length > 0"
-              >{{coupon.value ? `${coupon.value.name}` : '请选择优惠券'}}</van-tag>
-              <van-tag v-if="coupon.columns.length == 0">{{'暂无可用优惠券'}}</van-tag>
-            </template>
-          </van-cell> -->
-          <!-- <van-cell is-link>
-            <template slot="title">
-              <span class="custom-title">积分：</span>
-              <van-tag>标签</van-tag>
-            </template>
-          </van-cell> -->
         </van-cell-group>
-        <!-- <div class="freight">
-          <van-cell-group>
-            <van-cell title="商品总金额" :value="`￥ ${countPrice.toFixed(2)}`" size="large" />
-            <van-cell title="运费" value="￥ 0.00" size="large" />
-          </van-cell-group>
-        </div> -->
+       
       </div>
     </main>
     <footer class="order-foot">
@@ -110,19 +82,18 @@
       <div class="order-foot-pay">实际支付：￥{{countPrice}}</div>
       <div
         class="order-foot-buybtn"
-        :style="`background:${ isAllowPay ?'':'#ccc'}`"
         @click="pay"
       >去付款</div>
     </footer>
     <!-- 支付方式 -->
-    <van-popup v-model="payway.show" position="bottom">
+    <!-- <van-popup v-model="payway.show" position="bottom">
       <van-picker
         :columns="payway.columns"
         show-toolbar
         @cancel="payway.show = false"
         @confirm="onChangePayway"
       />
-    </van-popup>
+    </van-popup> -->
     <van-popup class="jifen-integral"
       v-model="show"
       round
@@ -144,49 +115,6 @@
       </van-radio-group>
       <div class="button" @click="comfirm">确定</div>
     </van-popup>
-    <!-- 可使用现金券 -->
-    <!-- <van-popup
-      v-model="aside.isOpen"
-      round
-      position="right"
-      :style="{ width: '85%', height: '85%'}"
-      class="popup"
-    >
-      <div class="title">
-        可用{{cash.show?'现金券':'优惠券'}}
-        <span>仅可使用其中一张</span>
-      </div>
-      <div class="xianJianQuan-body" v-if="cash.show">
-        <div class="xianJinQuan" v-for="(item, index) in cash.columns" :key="index">
-          <div class="number_btn">
-            <div class="number">
-              <span class="price_used">{{item.surplus}}</span>
-              /
-              <span class="price_all">{{item.money}}</span>
-            </div>
-            <div class="btn" @click="chooseCash(item)">{{item.id == cash.value.id ? '正在使用' :'使用'}}</div>
-          </div>
-          <div class="inputbox_time">
-            <div class="inputbox">
-              <input type="tel" v-model.lazy.number.trim="item.use_val" @change="useCashVal(item, index)" placeholder="请输入使用券值" />
-            </div>
-            <div class="time">有效期至：{{item.endDate}}</div>
-          </div>
-        </div>
-      </div>
-      <div class="youHuiQuan-body" v-if="coupon.show">
-        <div class="youHuiQuan" v-for="(item, index) in coupon.columns" :key="index">
-          <div class="number_tips">
-            <div class="number">{{item.money}}</div>
-            <div class="tips">
-              <span class="name">{{item.name}}</span>
-              <span class="time">有效期至 {{item.endDate}}</span>
-            </div>
-          </div>
-          <div class="btn" @click="chooseCoupon(item)">{{item.id == coupon.value.id ? '正在使用' :'使用'}}</div>
-        </div>
-      </div>
-    </van-popup> -->
     <div v-html="form"></div>
   </div>
 </template>
@@ -315,7 +243,7 @@ export default {
       }, 0) + total;
     },
     isAllowPay() {
-      return this.payway.value && this.selectAddress.name;
+      return this.selectAddress.name;
     },
     
   },
@@ -349,34 +277,6 @@ export default {
     sessionStorage.removeItem("select address");
   },
   methods: {
-    
-    // 现金券的输入金额
-    useCashVal(item) {      
-      if(item.surplus < item.use_val) {
-        Toast('输入的券值不能超过剩余券值')
-      }
-      if(item.use_val < 0) {
-        Toast('输入的券值不能为负数')
-      }
-    },
-    // 选择现金券
-    chooseCash(item) {
-      if(item.surplus < item.use_val) {
-        Toast('输入的券值不能超过剩余券值')
-        return;
-      }
-      if(item.use_val < 0) {
-        Toast('输入的券值不能为负数')
-        return;
-      }
-      this.cash.value = item
-      this.aside.isOpen = false;
-    },
-    // 选择优惠券
-    chooseCoupon(item) {
-      this.coupon.value = item;
-      this.aside.isOpen = false;
-    },
     // 展示积分选择 
     showJifen(index) {
       this.show = true;
@@ -430,12 +330,12 @@ export default {
     },
     // 选择弹出层
     showPopup(type) {
-      this[type].show = true;
-      if (["coupon", "cash"].indexOf(type) >= 0) {
-        if (this[type].columns.length > 0) {
-          this.aside.isOpen = true;
-        }
-      }
+      // this[type].show = true;
+      // if (["coupon", "cash"].indexOf(type) >= 0) {
+      //   if (this[type].columns.length > 0) {
+      //     this.aside.isOpen = true;
+      //   }
+      // }
     },
     // 支付
     pay() {
@@ -865,6 +765,9 @@ export default {
         width: 78px;
         height: 79px;
         margin: 11px 18px 15px 16px;
+        img {
+          height: 79px;
+        }
       }
       &-message {
         width: 245px;

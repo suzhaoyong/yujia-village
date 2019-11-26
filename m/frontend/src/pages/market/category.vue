@@ -133,7 +133,7 @@
                   <img :src="item.cover_url" alt="">
                 </div>
                 <div class="goods-name">{{item.describe}}</div>
-                <div class="goods-price">￥{{item.sell_price}}</div>
+                <div class="goods-price">￥{{(item.sell_price-item.discount).toFixed(2) }}</div>
               </div>
             </div>
             <van-popup class="popup-sx" v-model="show" position="right" :style="{ width: '90%',height: '100%' }" 
@@ -767,6 +767,10 @@ export default {
           margin-right: 5px;
           .img {
             height: 127px;
+            img {
+                width: 100%;
+                height: 127px;
+              }
           }
           .goods-name {
             margin-top: 5px;
