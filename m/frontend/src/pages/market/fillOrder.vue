@@ -34,7 +34,7 @@
             <span class="color-span2">{{item.size}}</span>
           </div>
           <div class="price">
-            <span>￥ {{item.price}}</span>
+            <span>￥ {{(item.sell_price-item.discount).toFixed(2)}}</span>
             <span
               v-if="item.discount > 0"
               style="margin-left:10px;text-decoration:line-through;"
@@ -43,13 +43,15 @@
         </div>
         <div class="jifen-use">
           <div class="title">积分使用</div>
-          <div class="jifen-use-rules" v-if="item.good_discount.积分.length!==0" @click="showJifen(index)">
+          <div class="jifen-use-rules" v-if="item.good_discount.积分.length!==0&&item.discount_sign==1" 
+          @click="showJifen(index)">
               <span v-if="!jf_id[index]&&!single_jfid">不使用积分</span>
               <span v-else>
                 {{info[index]}}
               </span>
             <van-icon name="arrow" />
           </div>
+          <div v-else-if="item.discount_sign==0">您已购买过该商品，不能再次享受积分减免</div>
           <div v-else>非积分可优惠商品，积分不参与减免</div>
         </div>
         <div class="subtotal">
@@ -104,12 +106,13 @@
       <van-radio-group v-model="radio">
         <van-cell-group :border="false">
           <van-cell :title="item.consume+'积分,减免'+item.deduction +'元'" :border="false" 
-          clickable @click="radio = item.id"
+          clickable @click="checkIntegral(item.id,item.user_limit)"
           v-for="(item,index) in goods_integral[goods_id]" :key="index">
-            <van-radio slot="right-icon" :name="item.id" />
+            <van-radio slot="right-icon" :name="item.id" checked-color="#B3D465"
+            :disabled="item.user_limit==0?true:false"/>
           </van-cell>
           <van-cell title="不使用积分" :border="false" clickable @click="radio = 0">
-            <van-radio slot="right-icon" :name="0" />
+            <van-radio slot="right-icon" :name="0" checked-color="#B3D465"/>
           </van-cell>
         </van-cell-group>
       </van-radio-group>
@@ -279,21 +282,35 @@ export default {
   methods: {
     // 展示积分选择 
     showJifen(index) {
+      console.log(this.goods_integral);
+      
       this.show = true;
       if(this.goods_id!==index) {
         this.radio = 0;
       }
       this.goods_id = index;
     },
+    // 切换积分减免
+    checkIntegral(id,user_limit) {
+      if(user_limit == 0) {
+        return
+      }
+      this.radio = id;
+    },
     // 展示所选折扣
     consume() {
       var that = this;
+      var price = 0;
       this.goods.forEach((good_item,index) => {
         if(this.goods_id===index) {
           good_item.good_discount.积分.forEach(item => {
             if(item.id===that.radio) {
               that.info[this.goods_id] = item.consume+'积分 减免'+item.deduction+'元';
-              var price = good_item.price - item.deduction;
+              if(good_item.is_repeat_dis == 1) {
+                price = good_item.price - item.deduction*good_item.num;
+              } else {
+                price = good_item.price - item.deduction;
+              }
               that.subtotal[this.goods_id] = price<=0?0:price.toFixed(2);
               that.deduction[this.goods_id] = good_item.price - that.subtotal[this.goods_id];
             } 
@@ -339,7 +356,7 @@ export default {
     },
     // 支付
     pay() {
-      if (!this.isAllowPay) return
+      if (!this.isAllowPay) return Toast('请填写收货地址')
       const buyGoods = JSON.parse(sessionStorage.getItem("buy goods"));
       const ids = this.goods.map(item => item.id);
       const goodsIds = this.goods.map(item => item.goodListId) ;

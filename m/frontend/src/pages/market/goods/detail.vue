@@ -37,7 +37,7 @@
       </div>
       <div class="goods_select">
         <!-- 选择规格 -->
-        <div class="select_item" @click.stop="goodsShow = true;openWay = 'choose'">
+        <div class="select_item" @click.stop="goodsShow = true;openWay = 'choose';status=false">
           <span class="select_tips">{{selectedGoods}}</span>
           <div class="arrow">
             <i class="iconfont icon-pull_right"></i>
@@ -145,7 +145,7 @@ import shareIng from '@/components/shareing'
 import { mapGetters } from "vuex";
 import { Area, Popup, Sku, Skeleton, Toast } from "vant";
 import area_list from "./area_list.js";
-import { getGoodsById, postUserCart } from "@/api/category.js";
+import { getGoodsById, getLoginGoodsById, postUserCart } from "@/api/category.js";
 export default {
   components: {
     shareIng,
@@ -243,8 +243,19 @@ export default {
     // 查看商品详情
     viewGoods() {
       const { goods_id } = this.$route.params;
-      getGoodsById(goods_id).then(response => {
-        const {
+      if (this.isUserNeedLogin) {
+        getGoodsById(goods_id).then(res => {
+          this.disposeGoodsParams(res);
+        });
+      } else {
+        getLoginGoodsById(goods_id).then(res => {
+          this.disposeGoodsParams(res);
+        })
+      }
+    },
+    // 处理获取的商品参数
+    disposeGoodsParams(response) {
+      const {
           cover,
           describe,
           sell_price,
@@ -253,17 +264,18 @@ export default {
           size,
           is_new_good,
           good_discount,
+          discount_sign,
+          is_repeat_dis,
           path1,
           path2,
           path3,
           path4
-        } = response;
-        console.log(response);
-        this.goods_copy = response;
-        this.goods_copy.detail_img = [path1, path2, path3, path4].filter(
-          item => item
-        );
-        this.sku.tree = [
+      } = response;
+      this.goods_copy = response;
+      this.goods_copy.detail_img = [path1, path2, path3, path4].filter(
+        item => item
+      );
+      this.sku.tree = [
           {
             k: "颜色", // skuKeyName：规格类目名称
             v: [
@@ -290,9 +302,9 @@ export default {
             ],
             k_s: "s2" // skuKeyStr：sku 组合列表（下方 list）中当前类目对应的 key 值，value 值会是从属于当前类目的一个规格值 id
           }
-        ];
-        const RADIX_PRE = 100; //分进制
-        color_size.map(item => {
+      ];
+      const RADIX_PRE = 100; //分进制
+      color_size.map(item => {
           this.sku.list.push(
             ...item.data.map((sub_item, sub_index) => ({
               id: item.id,
@@ -303,13 +315,12 @@ export default {
               stock_num: sub_item.num
             }))
           );
-        });
-        this.sku.stock_num = color_size.reduce((pre, next) => {
-          return pre + next.data.reduce((pre, next) => pre + next.num, 0);
-        }, 0);
-        this.sku.price = (sell_price - discount).toFixed(2);
-        this.goods = { title: describe, picture: cover };
       });
+      this.sku.stock_num = color_size.reduce((pre, next) => {
+        return pre + next.data.reduce((pre, next) => pre + next.num, 0);
+      }, 0);
+      this.sku.price = (sell_price - discount).toFixed(2);
+      this.goods = { title: describe, picture: cover };
     },
     // 点击加入购物车
     handleAddCart() {
@@ -382,7 +393,9 @@ export default {
         sell_price,
         cover,
         color_size,
-        good_discount
+        good_discount,
+        discount_sign,
+        is_repeat_dis
       } = this.goods_copy;
       const params = {
         ...this.getSelectParams(),
@@ -390,8 +403,10 @@ export default {
         discount,
         sell_price,
         url: cover,
-        price: (sell_price - discount).toFixed(2),
-        good_discount
+        price: ((sell_price - discount)*this.changeGoods.selectedNum).toFixed(2),
+        good_discount,
+        discount_sign,
+        is_repeat_dis
       };
       sessionStorage.setItem("buy goods", JSON.stringify(params));
       this.$router.push(`/fillorder?type=1`);

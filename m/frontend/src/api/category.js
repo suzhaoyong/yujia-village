@@ -22,9 +22,13 @@ export function postShowGoodList(args = {}) {
   params = Object.assign({}, params, args)
   return request.post('/goods/showGoodListMobile', params)
 }
-/* 查询指定商品 */
+/* 查询指定商品,未登录状态 */
 export function getGoodsById(id) {
   return request(`/goods/${id}`)
+}
+/* 查询指定商品，登录状态 */
+export function getLoginGoodsById(id) {
+  return request(`/goods/by/login/${id}`)
 }
 /* 添加购物车 */
 export function postUserCart(args = {}) {
