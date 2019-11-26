@@ -198,7 +198,6 @@
                     style="width:300px;" placeholder="请输入联系电话"></el-input>
                   <span class="input_error-tips" style="color:#ce551a;">{{blurInputError('userTel', 'addressForm', 'addressFormErrorRule')}}</span>
                 </span>
-                </span>
               </span>
             </div>
             <div class="receiver_item">
@@ -649,8 +648,8 @@ export default {
         discountId = this.getDiscountIds
       }
       params = Object.assign({}, params, { id, lid, num, discountId });
-      console.log(params);
-      return;
+      // console.log(params);
+      // return;
       this.$request.post(`/goodOrder`, params)
       .then(resopnse => {
         const {body = "", out_trade_no = "", totalPrice, msg = "" } = resopnse
