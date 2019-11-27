@@ -201,8 +201,9 @@ export default {
         }
         .style {
             position: absolute;
-            top: 24px;
+            top: 30px;
             left: 98px;
+            width: 100%;
             color: #999;
             font-size: 10px;
             span {
