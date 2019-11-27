@@ -43,6 +43,11 @@ export default {
   },
   mounted() {
     this.$store.commit('loadStatus', false)
+    var adress = 'http://testapi.aomengyujia.com/?out_trade_no=111&code=033yCCJ52PGP3S0AbRM52xBiJ52yCCJm&state=STATE'
+    console.log(adress.split('&')[1].split('=')[1])
+
+
+
   },
   created() {
     try {
