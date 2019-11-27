@@ -12,28 +12,37 @@
       敬请期待!
     </div>
     </div>
-    
+    <footer class="footer">
+      <div @click="goAdvertising(mold, relation_id)">查看详情 </div>
+    </footer>
   </div>
 </template>
 <script>
+import { goAdvertingApi } from '@/api/main.js'
 export default {
   data() {
     return {
       imgs: [],
+      mold: '',
+      relation_id: '',
     }
   },  
-    mounted() {
-      this.getadvertisementimg()
-    },
+  mounted() {
+    this.getadvertisementimg()
+  },
   methods: {
     goback(){
         this.$router.go(-1)
     },
-
+    // 广告位跳转
+    goAdvertising (mold, relation_id) {
+      goAdvertingApi(mold, relation_id)
+    },
     getadvertisementimg() {
       this.$request.get(`advertisement/customize/${this.$route.query.id}`).then((res) => {
         this.imgs = res.images
-        // console.log(res)
+        this.mold = res.mold || ''
+        this.relation_id = res.relation_id || ''
       })
     },
   }
@@ -70,10 +79,28 @@ header {
     display: inline-block;
     margin-top: 44px;
     width: 100%;
+    margin-bottom: 49px;
     img {
       display: block;
       width: 100%;
     }
   }
-
+  .footer {
+    display: flex;
+    width: 100%;
+    height: 49px;
+    position: fixed;
+    bottom: 0;
+    z-index: 10;
+    line-height: 49px;
+    background: white;
+    text-align: center;
+    font-size: 16px;
+    color: #7BBB62;
+    div {
+      flex: 1;
+      height: 100%;
+      font-weight: 900;
+    }
+  }
 </style>

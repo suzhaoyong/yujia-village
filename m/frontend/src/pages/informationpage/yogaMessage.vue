@@ -88,6 +88,7 @@
           :area-list="areaList"
           @confirm="changeArea" 
           @cancel="isShowPopup = false"
+          :columns-placeholder="['请选择', '请选择', '请选择']"
         />
       </van-popup>
       <div class="message-main-container" :style="swiper? 'padding-top: 80px': 'padding-top: 40px'">
@@ -126,7 +127,6 @@ import Vue from 'vue';
 import areaList from '../market/goods/area_list'
 import { goAdvertingApi } from '@/api/main'
 import { PullRefresh, Toast } from 'vant';
-
 // import { mapGetters } from "vuex";
 Vue.use(PullRefresh)
 
@@ -186,13 +186,14 @@ export default {
     }
   },
   created() {
-    this.messageList()
-    
+    this.messagetypeList()
+    this.getAdvertising()
   },
   mounted () {
+    setTimeout(() => {
+      this.messageList()
+    }, 200)
     this.PullUpReload()
-    this.getAdvertising()
-    this.messagetypeList()
   },
   methods: {
     // 广告位
@@ -221,6 +222,11 @@ export default {
     // 选择难度
     changediff (num) {
       this.stardiff = num
+    },
+    messagetypeList () {
+      this.$request.get('trains/type').then((res) => {
+        this.classfly = res.course_types
+      })
     },
     // 重置按钮功能
     resetlist () {
@@ -255,17 +261,16 @@ export default {
     },
     // 地址选择
     changeArea (value) {
-      console.log(value)
       this.selectArea = {
         province:  value[0].name,
-        city: value[1].name,
-        area: value[2].name
+        city: value[1]?value[1].name: '',
+        area: value[2]?value[2].name: ''
       }
       const tag = {
         val: {
-        province: value[0].name,
-        city: value[1].name,
-        area: value[2].name
+        province:  value[0].name,
+        city: value[1]?value[1].name: '',
+        area: value[2]?value[2].name: ''
         },
         type: 'area',
         isArray: false,
@@ -287,9 +292,16 @@ export default {
     },
     // 获取列表
     messageList (page = 1) {
-      this.$request.get('trains?page=' + page).then((res) => {
-        this.fenye(this.pages, res);
-      })
+       if(this.$route.query.id) {
+          this.classfly.map((item, index) =>{if(item.id == this.$route.query.id){ this.spanIndex2.push(index)} })
+          this.selectTtype.push(Number(this.$route.query.id))
+          this.searchResult('confirm')
+      } else {
+        this.$request.get('trains?page=' + page).then((res) => {
+          // console.log(res);
+          this.fenye(this.pages, res);
+        })
+      }
     },
     fenye(page, res) {
       if (page <= res.last_page ) {
@@ -302,18 +314,6 @@ export default {
         } else {
           Toast('只有这么多了');
         }
-    },
-    messagetypeList () {
-      this.$request.get('trains/type').then((res) => {
-        this.classfly = res.course_types
-
-       if(this.$route.query.id) {
-        this.classfly.map((item, index) =>{if(item.id == this.$route.query.id){ this.spanIndex2.push(index)} })
-        this.selectTtype.push(this.$route.query.id)
-        this.searchResult()
-      }
-      })
-
     },
     // 我想学的操作
     study(id) {
@@ -350,10 +350,10 @@ export default {
             _this.pages++
             if(_this.keyWord !== '') {
               // 排序
-              _this.getRank(_this.pages,_this.getRankParams(_this.keyWord));
+              _this.getRank(_this.pages,_this.getFiltersParams(_this.keyWord));
             } else if(_this.confirm === 'confirm') {
               // 条件筛选
-              this.getConditiondata(_this.pages, _this.getFiltersParams())
+              _this.getConditiondata(_this.pages, _this.getFiltersParams())
             } else {
               _this.messageList(_this.pages);
             }
