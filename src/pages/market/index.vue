@@ -30,14 +30,7 @@
                 <div class="goods_info-title">{{item.desc}}</div>
                 <div class="goods_info-tips">{{item.describe}}</div>
                 <div class="goods_info-border"></div>
-                <div class="goods_info-price">
-                  <div class="old-price">
-                  {{item.sell_price}}<span class="rmb">RMB</span>
-                  </div>
-                  <div class="new-price">
-                  {{item.sell_price - item.discount}}<span class="rmb">RMB</span>
-                  </div>
-                </div>
+                <div class="goods_info-price">{{item.sell_price - item.discount}}<span class="rmb">RMB</span> <span v-if="item.discount > 0" style="color:#ccc;text-decoration: line-through;">{{item.sell_price}}<span style="color:#ccc;" class="rmb">RMB</span></span></div>
                 <div class="goods_buy-btn" style="cursor: pointer;" @click="viewGoodsDetail(item)" >查看详情</div>
               </div>
             </div>
@@ -66,14 +59,7 @@
                 <div class="goods_info-title">{{item.desc}}</div>
                 <div class="goods_info-tips">{{item.describe}}</div>
                 <div class="goods_info-border"></div>
-                <div class="goods_info-price">
-                  <div class="old-price">
-                  {{item.sell_price}}<span class="rmb">RMB</span>
-                  </div>
-                  <div class="new-price">
-                  {{item.sell_price - item.discount}}<span class="rmb">RMB</span>
-                  </div>
-                </div>
+                <div class="goods_info-price">{{item.sell_price -  item.discount}}<span class="rmb">RMB</span> <span v-if="item.discount > 0" style="color:#ccc;text-decoration: line-through;">{{item.sell_price}}<span style="color:#ccc;" class="rmb">RMB</span></span></div> 
                 <div class="goods_buy-btn" style="cursor: pointer;" @click="viewGoodsDetail(item)" >查看详情</div>
               </div>
               <div class="goods_subimg">
@@ -429,13 +415,13 @@ img {
           position: absolute;
           right: 0;
           .goods_img {
-            width: 30rem;
-            height: 35rem;
+            width: 29.5rem;
+            height: 29.5rem;
             background: #ccc;
             img{
               width: 100%;
               height: 100%;
-              object-fit: cover;
+              // object-fit: cover;
             }
           }
         }
@@ -445,14 +431,14 @@ img {
           display: flex;
           flex-direction: column;
           .goods_subimg {
-            width: 24rem;
-            height: 23rem;
+            width: 19rem;
+            height: 19rem;
             align-self: flex-end;
             background: #ccc;
             img{
               width: 100%;
               height: 100%;
-              object-fit: cover;
+                 /* object-fit: cover; */
             }
           }
           .goods_info{
@@ -534,13 +520,13 @@ img {
         .market_news-content_box-lf{
           position: relative;
           .goods_img {
-            width: 30rem;
-            height: 35rem;
+            width: 29.5rem;
+            height: 29.5rem;
             background: #ccc;
             img{
               width: 100%;
               height: 100%;
-              object-fit: cover;
+                 /* object-fit: cover; */
             }
           }
         }
@@ -550,14 +536,14 @@ img {
           display: flex;
           flex-direction: column;
           .goods_subimg {
-            width: 24rem;
-            height: 23rem;
+            width: 19rem;
+            height: 19rem;
             align-self: flex-end;
             background: #ccc;
             img{
               width: 100%;
               height: 100%;
-              object-fit: cover;
+                 /* object-fit: cover; */
             }
           }
           .goods_info{
@@ -637,7 +623,7 @@ img {
       width: 60rem;
       margin: 0 auto;
       .time_title{
-        font-size:24px;
+        font-size:inherit;
         font-family:Microsoft YaHei;
         font-weight:bold;
         color:rgba(44,44,44,1);
@@ -751,14 +737,14 @@ img {
           position: absolute;
           right: 0;
           .goods_img {
-            width: 30rem;
-            height: 31rem;
+            width: 29.5rem;
+            height: 29.5rem;
             background: #ccc;
             margin-top: 3rem;
             img{
               width: 100%;
               height: 100%;
-              object-fit: cover;
+                 /* object-fit: cover; */
             }
           }
         }
@@ -769,8 +755,8 @@ img {
           flex-direction: column;
           position: relative;
           .goods_subimg {
-            width: 24rem;
-            height:20rem;
+            width: 19rem;
+            height: 19rem;
             align-self: flex-end;
             background: #ccc;
             position: absolute;
@@ -778,7 +764,7 @@ img {
             img{
               width: 100%;
               height: 100%;
-              object-fit: cover;
+                 /* object-fit: cover; */
             }
           }
           .goods_info{
@@ -925,13 +911,13 @@ img {
           position: relative;
           .goods_img {
             width: 30rem;
-            height: 31rem;
+            height: 30rem;
             background: #ccc;
             margin-top: 3rem;
             img{
               width: 100%;
               height: 100%;
-              object-fit: cover;
+                 /* object-fit: cover; */
             }
           }
         }
@@ -942,8 +928,8 @@ img {
           flex-direction: column;
           position: relative;
           .goods_subimg {
-            width: 24rem;
-            height: 20rem;
+            width: 19rem;
+            height: 19rem;
             align-self: flex-end;
             background: #ccc;
             position: absolute;
@@ -951,7 +937,7 @@ img {
             img{
               width: 100%;
               height: 100%;
-              object-fit: cover;
+                 /* object-fit: cover; */
             }
           }
           .goods_info{

@@ -43,8 +43,9 @@ const router = new Router({
     {
       path: '/payforwx',
       name: 'payforwx',
-      component: () => import('@/components/payForwx')
+      component: () => import('@/components/payForwx'),
     },
+    // 自定义广告页
     {
       path: '/advertisement',
       name: 'advertisement',
@@ -213,6 +214,12 @@ const router = new Router({
         component: () => import('@/pages/market/category')
       }]
     },
+    // 商品搜索
+    {
+      path: '/searchgoods',
+      name: 'searchgoods',
+      component: () => import('@/pages/market/search')    
+    },
     // 商品
     {
       path: '/goods',
@@ -280,14 +287,13 @@ const router = new Router({
     {
       path: '/teacherClub/teacherDetails',
       name: 'teacherDetails',
-      component: () => import('@/pages/teacherClub/teacherDetails')
+      component: () => import('@/pages/teacherClub/teacherDetails'),
     },
     {
       path: '/teacherClub/clubhouseDetails',
       name: 'clubhouseDetails',
       component: () => import('@/pages/teacherClub/clubhouseDetails')
     },
-    
     {
       path: '/informationdetail/:id',
       name: 'informationdetail',

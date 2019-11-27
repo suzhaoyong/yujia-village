@@ -33,13 +33,21 @@
             <div class="price" style="font-weight:800;">
               {{goods.describe}}
             </div>
-            <div class="price">
-              吊牌价：
-              <span>￥{{goods.sell_price}}</span>
+            <div style="background:#F6F6F6;padding:0.6rem;margin-left:-0.6rem;">
+              <div class="price" style="margin-top:0.2rem;">
+                吊牌价：
+                <span>￥{{goods.sell_price}}</span>
+              </div>
+              <div class="preferential">
+                优惠价：
+                <span>￥{{(goods.sell_price - goods.discount).toFixed(2)}}</span>
+              </div>
             </div>
-            <div class="preferential">
-              折扣价：
-              <span>￥{{(goods.sell_price - goods.discount).toFixed(2)}}</span>
+            <div class="preferential" style="margin-top:0.4rem;">
+              积分使用：
+              <div style="margin-bottom: 0.3rem; border:1px solid #EEEEEE;display:inline-block; padding:0.2rem 0.4rem;margin-right:0.3rem;" v-for="(sitem, index) in goods.good_discount['积分']" :key="index">
+                <span>{{sitem.consume}}</span> {{sitem.type}}*减免<span>{{sitem.deduction}}</span> 元
+              </div>
             </div>
             <div class="colors">
               <span>颜色:</span>
@@ -64,7 +72,7 @@
                   v-for="(item, index) in sizeList"
                   :key="index"
                   @click="chooseSize(item)"
-                >{{item.size}}</div>
+                >{{item.size||'暂无'}}</div>
               </div>
               <div v-else class="size-list">暂无</div>
             </div>
@@ -146,6 +154,9 @@ export default {
         number: 1
       },
       goods: {
+        good_discount: {
+          积分: []
+        },
         color_size: []
       }
     };
@@ -164,6 +175,14 @@ export default {
         const [name, value] = Object.entries(item)[0];
         return enums[name];
       };
+    },
+    getCountPrice() {
+      return (item) => {
+        if(item.deduction > this.goods.sell_price) {
+          return '0.00';
+        }
+        return (this.goods.sell_price - item.deduction).toFixed(2)
+      }
     },
     getParamsValue() {
       return item => {
@@ -380,7 +399,7 @@ img {
           }
         }
         .colors {
-          margin-top: 2rem;
+          margin-top: 0.3rem;
           display: flex;
           align-items: flex-end;
           span {
@@ -408,10 +427,13 @@ img {
           margin-top: 1.75rem;
           display: flex;
           span {
+            flex-shrink: 0;
             padding-right: 1.15rem;
           }
           .size-list {
             display: flex;
+            width: 30rem;
+           flex-wrap: wrap;
             .item {
               margin-right: 0.3rem;
               padding: 0 1rem;

@@ -9,14 +9,14 @@
     <van-skeleton v-if="goods_copy.picture === ''" avatar avatar-shape="square" avatar-size="100" />
     <van-skeleton v-if="goods_copy.describe === ''" title title-width="100" :row="6" />
     <!-- 商品 -->
+    <!-- 商品轮播图 -->
+    <div class="goods-pic">
+      <img :src="goods.picture" alt />
+    </div>
     <div class="goods">
-      <!-- 商品轮播图 -->
-      <div class="goods_carousel">
-        <img :src="goods.picture" alt />
-      </div>
       <!-- 商品基本信息 -->
       <div class="goods_base">
-        <div class="goods_tags">
+        <div class="goods_tags" v-if="goods_copy.is_new_good">
           <div class="goods_tag">新品</div>
         </div>
         <div class="goods_price">
@@ -24,6 +24,16 @@
           <span class="old_price" v-if="goods_copy.discount > 0">￥{{goods_copy.sell_price}}</span>
         </div>
         <span class="goods_name">{{goods_copy.describe}}</span>
+      </div>
+      <!-- 积分抵扣 -->
+      <div class="integral" v-if="goods_copy.good_discount.积分.length!==0">
+        <div class="box">
+          <div v-for="(item,index) in goods_copy.good_discount.积分" :key="index">
+            花费
+            <span>{{item.consume}}</span> 积分，价格减免：
+            <span>{{item.deduction}}</span> 元
+          </div>
+        </div>
       </div>
       <div class="goods_select">
         <!-- 选择规格 -->
@@ -42,6 +52,7 @@
           </div>
         </div>
       </div>
+      
       <div class="goods_detail">
         <!-- 产品参数 -->
         <div class="detail_item">
@@ -64,10 +75,16 @@
               <span class="content_item_title">使用季节</span>
               <span class="content_item_exp">{{goods_copy.season}}</span>
             </div>
+            <div class="detail_item_content_item">
+              <span class="content_item_title">商品尺寸</span>
+              <span class="content_item_exp">
+                <span v-for="(item,index) in goods_copy.size" :key="index">{{item.name}}&nbsp;&nbsp;</span>
+              </span>
+            </div>
           </div>
         </div>
         <!-- 商品尺寸 -->
-        <div class="detail_item">
+        <!-- <div class="detail_item">
           <div class="detail_item_title">
             <i></i>
             <span class="zh_title">商品尺寸</span>
@@ -76,19 +93,15 @@
           <div class="detail_item_content">
             <i></i>
             <div class="detail_item_content_item">
-              <span class="content_item_title">尺码</span>
-              <span class="content_item_exp">型号</span>
+              <span class="content_item_title">尺寸</span>
+              <span class="content_item_exp">号型</span>
             </div>
-            <div class="detail_item_content_item">
-              <span class="content_item_title">S</span>
-              <span class="content_item_exp">-</span>
-            </div>
-            <div class="detail_item_content_item">
-              <span class="content_item_title">M</span>
+            <div class="detail_item_content_item" v-for="(item,index) in goods_copy.size" :key="index">
+              <span class="content_item_title">{{item.name}}</span>
               <span class="content_item_exp">-</span>
             </div>
           </div>
-        </div>
+        </div>-->
         <!-- 细节展示图 -->
         <div class="detail_item" v-if="goods_copy.detail_img.length > 0">
           <div class="detail_item_title">
@@ -111,7 +124,6 @@
     <!-- SKU -->
     <van-sku
       v-if="this.sku.list.length > 0"
-      :show-soldout-sku="false"
       v-model="goodsShow"
       :sku="sku"
       :goods="goods"
@@ -121,16 +133,14 @@
       @buy-clicked="onAddCartClicked"
     >
       <template slot="sku-actions" slot-scope="props">
-        <div class="van-sku-actions">
-          <div @click="props.skuEventBus.$emit('sku:buy')" class="buy_button">确定</div>
+        <div class="van-sku-actions" @click="props.skuEventBus.$emit('sku:buy')">
+          <div class="buy_button">确定</div>
         </div>
       </template>
     </van-sku>
     <!-- 加入购物车，立即购买 -->
     <footer class="car" v-show="!childShow">
       <div class="car_lf">
-        <!-- <div class="car_lf_icon"></div>
-        <div class="car_lf_icon"></div>-->
         <div class="good_barige" @click="handleViewGoods">
           <img class="icon" src="../../../assets/img/shopping.png" />
           <div class="numbers" v-if="shoppingBagNumber > 0">
@@ -259,11 +269,15 @@ export default {
           sell_price,
           discount,
           color_size,
+          size,
+          is_new_good,
+          good_discount,
           path1,
           path2,
           path3,
           path4
         } = response;
+        console.log(response);
         this.goods_copy = response;
         this.goods_copy.detail_img = [path1, path2, path3, path4].filter(
           item => item
@@ -286,26 +300,12 @@ export default {
           {
             k: "尺寸", // skuKeyName：规格类目名称
             v: [
-              {
-                id: "S", // skuValueId：规格值 id
-                name: "S" // skuValueName：规格值名称
-              },
-              {
-                id: "M",
-                name: "M"
-              },
-              {
-                id: "X",
-                name: "X"
-              },
-              {
-                id: "L",
-                name: "L"
-              },
-              {
-                id: "XL",
-                name: "XL"
-              }
+              ...size.map(item => {
+                return {
+                  id: item.id,
+                  name: item.name
+                };
+              })
             ],
             k_s: "s2" // skuKeyStr：sku 组合列表（下方 list）中当前类目对应的 key 值，value 值会是从属于当前类目的一个规格值 id
           }
@@ -314,7 +314,7 @@ export default {
         color_size.map(item => {
           this.sku.list.push(
             ...item.data.map((sub_item, sub_index) => ({
-              id: sub_index + item.id,
+              id: item.id,
               price: (sell_price - discount).toFixed(2) * RADIX_PRE + "",
               s1: item.id,
               s2: sub_item.size,
@@ -388,9 +388,13 @@ export default {
       params.num = selectedNum;
       params.size = selectedSkuComb.s2;
       params.id = goods_id;
-      var sizedata = this.goods_copy.color_size.filter((item) => item.name === params.color)[0].data
-      var sizedata = sizedata.filter((item) => item.size === selectedSkuComb.s2)[0]
-      params.goodListId = sizedata.lid
+      var sizedata = this.goods_copy.color_size.filter(
+        item => item.name === params.color
+      )[0].data;
+      var sizedata = sizedata.filter(
+        item => item.size === selectedSkuComb.s2
+      )[0];
+      params.goodListId = sizedata.lid;
       return params;
     },
     // 查看列表
@@ -404,15 +408,22 @@ export default {
         this.$router.push("/login");
         return;
       }
-      const { describe, discount, sell_price, cover, color_size } = this.goods_copy;
+      const {
+        describe,
+        discount,
+        sell_price,
+        cover,
+        color_size,
+        good_discount
+      } = this.goods_copy;
       const params = {
         ...this.getSelectParams(),
-        // goodList: color_size[0].data,
         describe,
         discount,
         sell_price,
         url: cover,
-        price: sell_price - discount
+        price: (sell_price - discount).toFixed(2),
+        good_discount
       };
       sessionStorage.setItem("buy goods", JSON.stringify(params));
       this.$router.push(`/fillorder?type=1`);
@@ -443,14 +454,8 @@ export default {
 </style>
 <style lang="scss" scoped>
 * {
-  margin: 0;
-  border: 0;
-  box-sizing: border-box;
   font-size: 13px;
-  color: #2c2c2c;
-  max-width: 100%;
 }
-
 img {
   width: 100%;
   // height: 100%;
@@ -496,73 +501,38 @@ img {
 }
 $main_color: #b4d565;
 .warp {
-  position: absolute;
-  height: 100%;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  overflow: hidden;
+  // position: absolute;
+  // top: 0;
+  // left: 0;
   width: 100%;
-  // padding-top: 46px;
-  padding-bottom: 1.06667rem;
-  background: #fff;
-  -webkit-overflow-scrolling: touch; /* 解决 ios 滑动不流畅问题 */
-}
-.navigator {
-  position: absolute;
-  z-index: 10;
-  left: 0;
-  top: 0;
-  width: 100%;
-  background: #fff;
-  display: flex;
-  justify-content: space-between;
-  height: 30px;
-  align-items: center;
-  .left_arrow {
-    transform: rotate(180deg);
+  padding-bottom: 40px;
+  background-color: #fff;
+  overflow-x: hidden;
+  .van-nav-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
   }
-  .title_tabs {
-    .tab_item {
-    }
-  }
-  .right_icon {
-    .icon_item {
-      width: 20px;
-      height: 20px;
-      // background: #ccc;
-      img {
-        width: 100%;
-        height: 100%;
-      }
+  .goods-pic {
+    width: 100%;
+    height: 344px;
+    margin-top: 46px;
+    img {
+      width: 100%;
+      height: 344px;
     }
   }
 }
 .goods {
   user-select: none;
-  // background: #eee;
-  // width: 344px;
-  // margin: 0 auto;
-  padding: 20px 15px;
-  height: 100%;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  display: flex;
-  flex-direction: column;
-  .goods_carousel {
-    height: 344px;
-    border-radius: 3px;
-    // overflow: hidden;
-    img {
-      height: 344px;
-      border-radius: 4px;
-    }
-  }
+  margin: 0 16px;
+  width: 343px;
+  margin-top: 13px;
+  background-color: #fff;
   // 商品信息
   .goods_base {
     position: relative;
-    margin-top: 1em;
     .goods_tags {
       position: absolute;
       top: 0;
@@ -623,11 +593,28 @@ $main_color: #b4d565;
       .select_tips {
         color: #b1b1b1;
       }
-      .arrow {
+    }
+    
+  }
+  .integral {
+      display: flex;
+      justify-content: center;
+      width: 343px;
+      margin: 10px auto;
+      padding-bottom: 6px;
+      background-color: #effaea;
+      border-radius: 12px;
+      font-size: 12px;
+      color: #999;
+      .box {
+        div {
+          margin-top: 6px;
+          span {
+            color: #96c55b;
+          }
+        }
       }
     }
-  }
-
   // 商品详情
   .goods_detail {
     .detail_item {
@@ -648,8 +635,6 @@ $main_color: #b4d565;
           height: 100%;
           background: $main_color;
         }
-        .zh_title {
-        }
         .en_title {
           color: #ddd;
           font-size: 10px;
@@ -661,14 +646,11 @@ $main_color: #b4d565;
         i {
           position: absolute;
           top: 0;
-          // left: 4em;
-          // width: 1px;
           background: #ddd;
           height: 100%;
         }
         .detail_item_content_item {
           display: flex;
-
           .content_item_title {
             display: inline-block;
             width: 4em;
@@ -697,11 +679,8 @@ $main_color: #b4d565;
           justify-content: space-between;
           flex-wrap: wrap;
           .imgs_item {
-            margin-bottom: 10px;
             flex-basis: 49%;
             flex-shrink: 0;
-            height: 100px;
-            background: #ccc;
           }
         }
       }
@@ -710,14 +689,17 @@ $main_color: #b4d565;
 }
 .van-sku-actions {
   background: $main_color;
+  height: 44px;
   .buy_button {
     width: 100%;
+    line-height: 28px;
     text-align: center;
+    font-size: 14px;
     color: #fff;
   }
 }
 .car {
-  position: absolute;
+  position: fixed;
   z-index: 10;
   left: 0;
   bottom: 0;

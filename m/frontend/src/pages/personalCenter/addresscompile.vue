@@ -127,12 +127,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 .van-nav-bar {
-    background-color: #eee;
-    font-size: 16px;
-    .van-icon {
-        font-size: 20px;
-        color: #2c2c2c;
-    }
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10 !important;
     .van-nav-bar__text {
         color: #2c2c2c;
     }

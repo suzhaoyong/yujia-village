@@ -5,9 +5,7 @@
       <div class="my_body">
         <div class="tags">
           <div @click="activeType = 'all'" :class="['tag', isActive('all')]">全部订单</div>
-          <div @click="activeType = 'pay'" :class="['tag', isActive('pay')]">待付款</div>
-          <div @click="activeType = 'send'" :class="['tag', isActive('send')]">待发货</div>
-          <div @click="activeType = 'receive'" :class="['tag', isActive('receive')]">待收货</div>
+          <div @click="activeType = 'waitpay'" :class="['tag', isActive('waitpay')]">待付款</div>
           <div @click="activeType = 'success'" :class="['tag', isActive('success')]">已完成</div>
         </div>
         <div class="table">
@@ -15,45 +13,31 @@
             <div class="table_header">
               <div class="t_title">订单详情</div>
               <div class="t_title">订单号: {{item.out_trade_no}}</div>
-              <div class="t_title">收货人</div>
+              <div class="t_title">教练名称</div>
               <div class="t_title">金额</div>
               <div class="t_title">操作</div>
             </div>
             <div class="table_body">
               <div>
-                <div class="goods" v-for="(good, g_index) in item.data" :key="g_index">
+                <div class="goods" >
                   <div class="info">
-                    <div class="img" @click="viewGoodsDetail(good)">
-                      <img :src="good.url" alt />
+                    <div class="img" @click="viewGoodsDetail(item)">
+                      <img :src="item.teacher_img" alt />
                     </div>
-                    <div class="g_title" @click="viewGoodsDetail(good)">{{good.name}}</div>
-                    <div class="number">{{good.num}}</div>
+                    <div class="g_title" @click="viewGoodsDetail(item)">{{item.theme}}</div>
+                    <div class="number">{{item.num}}</div>
                   </div>
                   <div class="send">{{item.name}}</div>
                   <div class="g_money">
-                    <div class="all">总额：¥{{good.total_sell}}</div>
-                    <div style="color: #2c2c2c;">{{item.status === '待付款' ? '应付' : '实付'}} ¥{{good.total_price}}</div>
-                    <!-- <div
-                      style="padding-top:0.8rem;color: #2c2c2c;"
-                    ></div> -->
+                    <div class="all">总额：¥{{item.price}}</div>
+                    <div style="color: #2c2c2c;">{{item.status === '未支付' ? '应付' : '实付'}} ¥{{item.total_price}}</div>
                   </div>
                   <div class="operate">
                     <!-- <div class="time">剩余23小时57分钟</div> -->
-                    <div class="pay" style="display: inline-block; border: 1px solid #ccc; border-radius: 4px; padding: 0 4px;" v-if="item.status === '待付款'" @click="pay(item)">{{item.status}}</div>
+                    <div class="pay weizhifu" style="display: inline-block; border: 1px solid #ccc; border-radius: 4px; padding: 0 4px;" v-if="item.status === '未支付'" @click="pay(item)">{{'去付款'}}</div>
                     <div class="pay" v-else>
                       <div style="cursor: initial;" class>{{item.status}}</div>
-                      <div
-                        v-if="item.status !== '已取消'"
-                        style="padding-top:0.8rem;"
-                        @click.stop="expressage(item, g_index, 'view')"
-                      >查看物流信息</div>
                     </div>
-                    <div
-                      @click="expressage(item, g_index, 'sure')"
-                      style="padding-top:0.4rem;cursor: pointer;"
-                      v-if="item.status === '待收货'"
-                    >确认收货</div>
-                    <!-- <div class="cancel" v-if="item.status === '待付款'">取消订单</div> -->
                   </div>
                 </div>
               </div>
@@ -66,24 +50,6 @@
     <div class="payway" v-if="playcode.show">
       <payway @close="payResult" @back="viewOrder" v-if="playcode.show" :order="playcode.order"></payway>
     </div>
-    <el-dialog title="物流信息" :visible.sync="express.show" v-if="express.show">
-      <div class="block">
-        <el-timeline>
-          <!-- :icon="activity.icon"
-            :type="activity.type"
-            :color="activity.color"
-          :size="activity.size"-->
-          <el-timeline-item
-            v-for="(activity, index) in express.info"
-            :key="index"
-            :timestamp="activity.accept_time"
-          >{{activity.accept_station}}</el-timeline-item>
-        </el-timeline>
-      </div>
-      <span slot="footer">
-        <el-button type="primary" @click="express.show=false">确 定</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 <script>
@@ -139,9 +105,10 @@ export default {
     }
   },
   mounted() {
-    getUserOrder().then(data => {
-      this.orders = data;
-    });
+    this.$request(`/get/train/order`).then(response => {
+      console.log(response);
+      this.orders = response
+    })
   },
   methods: {
     viewOrder() {
@@ -337,6 +304,12 @@ img {
             .pay {
               cursor: pointer;
               padding-top: 0.8rem;
+              &.weizhifu{
+                &:hover{
+                  // background: #eee;
+                  // color: #fff;
+                }
+              }
             }
             .cancel {
               padding-top: 0.8rem;

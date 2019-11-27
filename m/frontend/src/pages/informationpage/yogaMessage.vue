@@ -20,7 +20,7 @@
         </ul>
       </div>
       <div class="shade-layer" v-show="isShow" @click="isShow = false">
-        <div class="right-box" @click.stop="">
+        <div class="right-box" @click.stop="" >
           <div class="popup">
             <p>理想价格</p>
             <div class="popup-price"> 
@@ -418,6 +418,7 @@ export default {
     },
     // 排序传递的参数
     getRankParams (keyWord, params = {}) {
+      params = this.getFiltersParams()
       if (keyWord === 'host') {
         params =Object.assign({}, params, {follow: false})
       } else if (keyWord === 'default') { 
@@ -480,11 +481,11 @@ export default {
   margin-top: 160px;
   img {
     width: 100%;
-    height: 40px;
+    height: 100%;
   }
   span {
     position: relative;
-    left: 56%;
+    left: 36%;
     top: -105%;
     font-size: 16px;
     color: #999999;
@@ -542,7 +543,7 @@ export default {
       left: 0;
       bottom: 50px;
       z-index: 1024;
-      // height: 100%;
+      width: 100%;
       background-color: rgba(0,0,0,.7);
       .right-box {
         width: 335px;

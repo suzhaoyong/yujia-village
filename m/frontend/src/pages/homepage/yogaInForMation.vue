@@ -55,6 +55,7 @@ export default {
       informationLists: [],
       spanIndex: 0,
       current_page: 1,
+      current_to: 0,
       last_page: 2,
       classifyImg: [
         {
@@ -166,20 +167,9 @@ export default {
     this.$nextTick(() => {
       setTimeout(() => {
         this.waterFall(this.$refs.box)
-      }, 100)
-      
+      }, 150)
     })
   })
-  .catch(error => {
-      // let { response: { data: { errorCode, msg } } } = error;
-      // if (errorCode != 0) {
-      // this.$message({
-      //     message: msg,
-      //     type: "error"
-      // });
-      // return;
-      // }
-  });
   },
     waterFall(parent) { // 瀑布流
       this.$nextTick(() => {
