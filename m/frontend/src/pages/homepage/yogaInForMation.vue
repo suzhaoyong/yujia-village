@@ -20,7 +20,7 @@
       </ul>
     </div>
     <main class="information-main">
-      <div class="watefullbox" ref="box">
+      <div class="watefullbox" ref="box" >
         <div class="information-main-count" v-for="(list, index) in informationLists" :key="index" @click="viewdetail(list.id)" ref="boxchildren">
           <div class="information-main-count-img"><img :src="list.icon_url"></div>
           <div class="information-main-count-text">
@@ -33,7 +33,7 @@
         </div>
       </div>
       <div class="morebtn" @click="loadmore">
-        {{  current_page >= last_page? informationLists.length > 0? "": "没有这个哦！" : ""}}
+        {{ current_page >= last_page? informationLists.length > 0? "": "没有这个哦！" : ""}}
       </div>
     </main>
   </div>
@@ -43,7 +43,6 @@
 <script>
 import Vue from 'vue';
 import { Button, Toast } from 'vant';
-import { setInterval } from 'timers';
 import { goAdvertingApi } from '@/api/main'
 
 Vue.use(Button).use(Toast);
@@ -57,6 +56,7 @@ export default {
       current_page: 1,
       current_to: 0,
       last_page: 2,
+      showLoading: false,
       classifyImg: [
         {
           img: require('../../../static/img/mationclassfiy/recommend.png')
@@ -172,7 +172,6 @@ export default {
   })
   },
     waterFall(parent) { // 瀑布流
-      this.$nextTick(() => {
         var items = parent.children;
         var gap = 10; // 定义每一列之间的间隙 为10像素
         var pad = 10;
@@ -181,32 +180,33 @@ export default {
           var itemWidth = items[0].offsetWidth;
           var columns = parseInt(pageWidth / (itemWidth + gap));
           var arr = [];
-            for (var i = 0; i < items.length; i++) {
-              if (i < columns) {
-                items[i].style.top = 0;
-                items[i].style.left = (itemWidth + gap) * i + 'px';
-                arr.push(items[i].offsetHeight);
-              } else {
-                var minHeight = arr[0];
-                var index = 0;
-                for (var j = 0; j < arr.length; j++) {
-                  if (minHeight > arr[j]) {
-                    minHeight = arr[j];
-                    index = j;
-                  }
+          for (var i = 0; i < items.length; i++) {
+            if (i < columns) {
+              items[i].style.top = 0;
+              items[i].style.left = (itemWidth + gap) * i + 'px';
+              arr.push(items[i].offsetHeight);
+            } else {
+              var minHeight = arr[0];
+              var index = 0;
+              for (var j = 0; j < arr.length; j++) {
+                if (minHeight > arr[j]) {
+                  minHeight = arr[j];
+                  index = j;
                 }
-                // 4- 设置下一行的第一个盒子位置
-                // top值就是最小列的高度 + gap
-                items[i].style.top = arr[index] + gap + 'px';
-                // left值就是最小列距离左边的距离
-                items[i].style.left = items[index].offsetLeft + 'px';
-                // 5- 修改最小列的高度 
-                // 最小列的高度 = 当前自己的高度 + 拼接过来的高度 + 间隙的高度
-                arr[index] = arr[index] + items[i].offsetHeight + gap;
-            }
+              }
+              // 4- 设置下一行的第一个盒子位置
+              // top值就是最小列的高度 + gap
+              items[i].style.top = arr[index] + gap + 'px';
+              // left值就是最小列距离左边的距离
+              items[i].style.left = items[index].offsetLeft + 'px';
+              // 5- 修改最小列的高度 
+              // 最小列的高度 = 当前自己的高度 + 拼接过来的高度 + 间隙的高度
+              arr[index] = arr[index] + items[i].offsetHeight + gap;
           }
         }
-      })
+
+        
+        }
     }
   }
 }
@@ -290,6 +290,10 @@ export default {
         // -moz-page-break-inside: avoid;
         // -webkit-column-break-inside: avoid;
         // break-inside: avoid;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0px 1px 4px rgba(0,0,0,0.3),
+                0px 0px 20px rgba(0,0,0,0.1) inset;
         &-img {
           width: 100%;
           background: white;

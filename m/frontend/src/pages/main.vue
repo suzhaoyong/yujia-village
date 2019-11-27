@@ -33,6 +33,12 @@
           </van-swipe>
         </div>
       </div>
+      <!-- 消息滚动 -->
+      <div class="msgscroll" >
+        <div class="msgscrollbox" ref="box">
+          <p class="span1" v-for="(list, index) in msgscrollList" :key="index">{{list}}</p>
+        </div>
+      </div>
       <!-- tab 导航 -->
       <div class="tab-wrap">
         <div class="tab-box">
@@ -156,6 +162,7 @@ import Vue from 'vue';
 import { mapGetters } from "vuex";
 import { getMainDetail, goAdvertingApi } from '@/api/main.js'
 import { Swipe, SwipeItem, Overlay } from 'vant';
+import { setInterval } from 'timers';
 Vue.use(Swipe).use(SwipeItem).use(Overlay);
 export default {
   data() {
@@ -177,17 +184,24 @@ export default {
       },
       swiper: false, // 广告位1
       advertis2: false, // 广告位2
-      advertis3: false // // 广告位2
+      advertis3: false,  // 广告位2
+      msgscrollList: '', // 滚动数据
+      timer2: null,
     }
   },
   computed: {
   ...mapGetters(["info", "isUserNeedLogin"]),
   },
   mounted() {
+    this.getMsgscroll()
+    this.messagefunction()
     getMainDetail().then(response => {
       this.main = response
     })
     this.getAdvertising()
+  },
+  beforeDestroy () {
+    window.clearInterval(this.timer2)
   },
   methods: {
     goAdvertising (mold, relation_id) {
@@ -221,8 +235,30 @@ export default {
     },
     viewTrain(item) {
       this.$router.push(`/messagedetail/${item.id}`)
-    } 
+    },
+    // 气泡消息数据
+    getMsgscroll () {
+      this.$request.get('/message/overall_situation').then((res) => {
+        this.msgscrollList = res
+      })
+    },
+    messagefunction () {
+      var box = this.$refs.box
+      var top = 0
+      this.timer2 = setInterval(() => {
+        if(top < -2000) {
+          window.clearInterval(this.timer2); 
+        } else {
+          top -= 40
+          box.style.top = top + 'px'
+        }
+      }, 2500)
+    this.$once('hook:beforeDestroy', () => {            
+        window.clearInterval(this.timer2);                                    
+    })
+    }
   }
+
 }
 </script>
 
@@ -301,6 +337,32 @@ img{
           min-height: 142px;
         }
       }
+    }
+    .msgscroll {
+      // width: 200px;
+      height: 80px;
+      position: absolute;
+      // background: #638C0B;
+      top: 110px;
+      left: 16px;
+      overflow: hidden;
+      .msgscrollbox {
+        position: relative;
+        transition: 0.5s;
+        .span1 {
+          width: 180px;
+          margin-top: 8px;
+          color: white;
+          font-size: 12px;
+          padding-left: 8px;
+          background: #2c2c2c;
+          opacity: 0.3;
+          border-radius: 10px;
+          // height: 32px;
+          text-align: center;
+        }
+      }
+
     }
     .tab-wrap{
       padding-top: 20px;

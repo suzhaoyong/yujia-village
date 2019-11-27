@@ -415,6 +415,7 @@ export default {
             }, 2000);
         } else if(res.msg === 'OK'&&res.code===201) {
           this.payMoney(res.out_trade_no);
+          // this.payForWexin(res.out_trade_no)
         } 
       }).catch(error => {
         if(error.code === 403) {
@@ -427,7 +428,6 @@ export default {
     // 多件支付，创建订单
     manyPay(params) {
       this.$request.post('/goodOrder', params).then(res => {
-        console.log(res);
         if(res.code === 200) {
           Toast("恭喜您，课程购买成功");
            setTimeout(() => {
@@ -472,9 +472,11 @@ export default {
     },
     // 获取微信浏览器接口
     payForWexin (orderId) {
-      this.$request.get('/alipay/wechat/jsapi/test?out_trade_no=' + orderId ).then((res) => {
-        let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res.mweb_url, body: res.body, id: res.out_trade_no }});
-        window.open(routeData.href, '_blank')
+      var userid = sessionStorage.getItem('user')? JSON.parse(sessionStorage.getItem('user')).id: ''
+      this.$request.get('/alipay/wechat/jsapi/code?out_trade_no=' + orderId + '&id=' + userid ).then((res) => {
+        window.location.href = res.code
+        // let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res.mweb_url, body: res.body, id: res.out_trade_no }});
+        // window.open(routeData.href, '_blank')
       }).catch((error) => {
         Toast(error)
       })
