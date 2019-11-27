@@ -10,7 +10,7 @@
     <van-skeleton v-if="goods_copy.describe === ''" title title-width="100" :row="6" />
     <!-- 商品 -->
     <!-- 商品轮播图 -->
-    <div class="goods-pic">
+    <div class="goods-pic" >
       <img :src="goods.picture" alt />
     </div>
     <div class="goods">
@@ -37,7 +37,7 @@
       </div>
       <div class="goods_select">
         <!-- 选择规格 -->
-        <div class="select_item" @click.stop="goodsShow = true">
+        <div class="select_item" @click.stop="goodsShow = true;openWay = 'choose';status=false">
           <span class="select_tips">{{selectedGoods}}</span>
           <div class="arrow">
             <i class="iconfont icon-pull_right"></i>
@@ -83,25 +83,6 @@
             </div>
           </div>
         </div>
-        <!-- 商品尺寸 -->
-        <!-- <div class="detail_item">
-          <div class="detail_item_title">
-            <i></i>
-            <span class="zh_title">商品尺寸</span>
-            <span class="en_title">Detail</span>
-          </div>
-          <div class="detail_item_content">
-            <i></i>
-            <div class="detail_item_content_item">
-              <span class="content_item_title">尺寸</span>
-              <span class="content_item_exp">号型</span>
-            </div>
-            <div class="detail_item_content_item" v-for="(item,index) in goods_copy.size" :key="index">
-              <span class="content_item_title">{{item.name}}</span>
-              <span class="content_item_exp">-</span>
-            </div>
-          </div>
-        </div>-->
         <!-- 细节展示图 -->
         <div class="detail_item" v-if="goods_copy.detail_img.length > 0">
           <div class="detail_item_title">
@@ -117,11 +98,7 @@
         </div>
       </div>
     </div>
-    <!-- 地区 -->
-    <van-popup v-model="area.isOpen" position="bottom">
-      <van-area @confirm="changeArea" @cancel="area.isOpen = false" :area-list="area.list" />
-    </van-popup>
-    <!-- SKU -->
+    <!-- SKU 商品规格弹出框-->
     <van-sku
       v-if="this.sku.list.length > 0"
       v-model="goodsShow"
@@ -130,10 +107,14 @@
       :goods-id="goodsId"
       :close-on-click-overlay="true"
       :hide-stock="sku.hide_stock"
-      @buy-clicked="onAddCartClicked"
+      @buy-clicked="onBuyClicked"
     >
       <template slot="sku-actions" slot-scope="props">
-        <div class="van-sku-actions" @click="props.skuEventBus.$emit('sku:buy')">
+        <div v-if="openWay==='choose'" class="bottom-btn">
+          <div @click="props.skuEventBus.$emit('sku:buy')">加入购物车</div>
+          <div @click="buy(props)">立即购买</div>
+        </div>
+        <div v-else class="van-sku-actions" @click="props.skuEventBus.$emit('sku:buy')">
           <div class="buy_button">确定</div>
         </div>
       </template>
@@ -149,11 +130,10 @@
         </div>
       </div>
       <div class="car_rh">
-        <div class="car_rh_item" @click="handleAddCart">加入购物车</div>
+        <div class="car_rh_item" @click="addCartAndBuy('addCart')">加入购物车</div>
         <div
           class="car_rh_item"
-          :style="`background:${ isAllowBuy ?'':'#ccc'}`"
-          @click="handleBuyGoods"
+          @click="addCartAndBuy('buy')"
         >立即购买</div>
       </div>
     </footer>
@@ -165,7 +145,7 @@ import shareIng from '@/components/shareing'
 import { mapGetters } from "vuex";
 import { Area, Popup, Sku, Skeleton, Toast } from "vant";
 import area_list from "./area_list.js";
-import { getGoodsById, postUserCart } from "@/api/category.js";
+import { getGoodsById, getLoginGoodsById, postUserCart } from "@/api/category.js";
 export default {
   components: {
     shareIng,
@@ -190,6 +170,8 @@ export default {
       goods_img: "/assets/img/bg.png",
       changeGoods: {},
       goodsShow: false,
+      // 确定弹出框
+      openWay: '',
       goodsId: 10,
       goods: {
         // 商品标题
@@ -247,7 +229,6 @@ export default {
     }
   },
   mounted() {
-    this.getShoppingBag();
     this.viewGoods();
   },
   beforeDestroy() {
@@ -256,14 +237,25 @@ export default {
     });
   },
   methods: {
-    getChildShow (data) {
+    getChildShow (data,id) {
       this.childShow = data
     },
     // 查看商品详情
     viewGoods() {
       const { goods_id } = this.$route.params;
-      getGoodsById(goods_id).then(response => {
-        const {
+      if (this.isUserNeedLogin) {
+        getGoodsById(goods_id).then(res => {
+          this.disposeGoodsParams(res);
+        });
+      } else {
+        getLoginGoodsById(goods_id).then(res => {
+          this.disposeGoodsParams(res);
+        })
+      }
+    },
+    // 处理获取的商品参数
+    disposeGoodsParams(response) {
+      const {
           cover,
           describe,
           sell_price,
@@ -272,17 +264,18 @@ export default {
           size,
           is_new_good,
           good_discount,
+          discount_sign,
+          is_repeat_dis,
           path1,
           path2,
           path3,
           path4
-        } = response;
-        console.log(response);
-        this.goods_copy = response;
-        this.goods_copy.detail_img = [path1, path2, path3, path4].filter(
-          item => item
-        );
-        this.sku.tree = [
+      } = response;
+      this.goods_copy = response;
+      this.goods_copy.detail_img = [path1, path2, path3, path4].filter(
+        item => item
+      );
+      this.sku.tree = [
           {
             k: "颜色", // skuKeyName：规格类目名称
             v: [
@@ -309,9 +302,9 @@ export default {
             ],
             k_s: "s2" // skuKeyStr：sku 组合列表（下方 list）中当前类目对应的 key 值，value 值会是从属于当前类目的一个规格值 id
           }
-        ];
-        const RADIX_PRE = 100; //分进制
-        color_size.map(item => {
+      ];
+      const RADIX_PRE = 100; //分进制
+      color_size.map(item => {
           this.sku.list.push(
             ...item.data.map((sub_item, sub_index) => ({
               id: item.id,
@@ -322,23 +315,12 @@ export default {
               stock_num: sub_item.num
             }))
           );
-        });
-        this.sku.stock_num = color_size.reduce((pre, next) => {
-          return pre + next.data.reduce((pre, next) => pre + next.num, 0);
-        }, 0);
-        this.sku.price = (sell_price - discount).toFixed(2);
-        this.goods = { title: describe, picture: cover };
       });
-    },
-    // 获取购物袋数据
-    getShoppingBag() {
-      if (this.isUserNeedLogin) {
-        // this.$router.push("/login");
-        return;
-      }
-      this.$request.get("/userCart/create").then(data => {
-        this.shoppingBagNumber = data.length;
-      });
+      this.sku.stock_num = color_size.reduce((pre, next) => {
+        return pre + next.data.reduce((pre, next) => pre + next.num, 0);
+      }, 0);
+      this.sku.price = (sell_price - discount).toFixed(2);
+      this.goods = { title: describe, picture: cover };
     },
     // 点击加入购物车
     handleAddCart() {
@@ -346,6 +328,7 @@ export default {
         this.$router.push("/login");
         return;
       }
+      
       if (this.clock) {
         Toast("正在加入购物车");
         return;
@@ -361,13 +344,9 @@ export default {
           this.clock = false;
         });
     },
+    // 处理加入购物车的数据
     getSelectParams(params = {}) {
-      const { selectedSkuComb, selectedNum } = this.changeGoods;
-      if (!(selectedSkuComb && selectedNum)) {
-        Toast("请选择规格");
-        this.clock = false;
-        return "";
-      }
+      const {selectedSkuComb, selectedNum} = this.changeGoods;
       this.clock = true;
       const { tree } = this.sku;
 
@@ -403,18 +382,20 @@ export default {
     },
     // 点击立即购买
     handleBuyGoods() {
-      if (this.getSelectParams() == "") return;
       if (this.isUserNeedLogin) {
         this.$router.push("/login");
         return;
       }
+      if (this.getSelectParams() == "") return;
       const {
         describe,
         discount,
         sell_price,
         cover,
         color_size,
-        good_discount
+        good_discount,
+        discount_sign,
+        is_repeat_dis
       } = this.goods_copy;
       const params = {
         ...this.getSelectParams(),
@@ -422,26 +403,47 @@ export default {
         discount,
         sell_price,
         url: cover,
-        price: (sell_price - discount).toFixed(2),
-        good_discount
+        price: ((sell_price - discount)*this.changeGoods.selectedNum).toFixed(2),
+        good_discount,
+        discount_sign,
+        is_repeat_dis
       };
       sessionStorage.setItem("buy goods", JSON.stringify(params));
       this.$router.push(`/fillorder?type=1`);
     },
-    changeArea(val) {
-      this.area.change = val;
-      this.area.isOpen = false;
-    },
-    onAddCartClicked(val) {
-      this.changeGoods = val;
+    // 商品规格框，确定加入购物车 
+    onBuyClicked(val) {
+      this.changeGoods = val; 
+      if(this.status) {
+        this.handleBuyGoods();
+      } else {
+        this.handleAddCart();
+      }
       this.goodsShow = false;
     },
+    // 判定是否登录
+    addCartAndBuy(word) {
+      if (this.isUserNeedLogin) {
+        this.$router.push("/login");
+        return;
+      }
+      this.goodsShow = true;
+      this.openWay = '';
+      if(word==='buy') {
+        this.status = true;
+      } else {
+        this.status = false
+      }
+    },
+    buy(val) {
+      this.changeGoods = val; 
+      if(val.selectedSkuComb) {
+        this.handleBuyGoods();
+      } else {
+        Toast('请先选择商品规格');
+      }
+    },
     back() {
-      this.sku.tree = [];
-      this.sku.list = [];
-      this.$nextTick(() => {
-        // this.sku.tree = [];
-      });
       this.$router.go(-1);
     }
   }
@@ -674,13 +676,14 @@ $main_color: #b4d565;
           }
         }
         &.imgs {
+          width: 100%;
           border: none;
-          display: flex;
-          justify-content: space-between;
-          flex-wrap: wrap;
           .imgs_item {
-            flex-basis: 49%;
-            flex-shrink: 0;
+            width: 100%;
+            height: 100%;
+            img {
+              vertical-align: top;
+            }
           }
         }
       }
@@ -689,13 +692,41 @@ $main_color: #b4d565;
 }
 .van-sku-actions {
   background: $main_color;
-  height: 44px;
+  width: 343px;
+  height: 40px;
+  margin: 8px 0;
+  margin-left: 16px;
+  border-radius: 20px;
   .buy_button {
     width: 100%;
     line-height: 28px;
     text-align: center;
     font-size: 14px;
     color: #fff;
+  }
+}
+.bottom-btn {
+  height: 56px;
+  width: 343px;
+  display: flex;
+  margin-left: 16px;
+  div {
+    margin: 8px 0;
+    width: 50%;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+  }
+  div:nth-of-type(1) {
+    border-radius: 20px 0 0 20px;
+    background: #effaea;
+    color: $main_color;
+    font-weight: 600;
+  }
+  div:nth-of-type(2) {
+    border-radius: 0 20px 20px 0;
+    color: #fff;
+    background-color: $main_color;
   }
 }
 .car {
@@ -738,11 +769,16 @@ $main_color: #b4d565;
       height: 100%;
       line-height: 40px;
       text-align: center;
+      color: #fff;
+      &:nth-of-type(1) {
+        background: #effaea;
+        color: $main_color;
+        font-weight: 600;
+      }
       &:nth-of-type(2) {
-        color: #fff;
         height: 100%;
         line-height: 40px;
-        background: $main_color;
+        background-color:  $main_color;
       }
     }
   }

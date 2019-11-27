@@ -29,7 +29,7 @@
               <div class="title">
                 <img src="../../assets/img/title_icon.png" alt=""><span>好物推荐</span>
               </div>
-              <div class="good">
+              <div class="good" v-if="recommendData.good.length>0">
                 <div class="good-item" v-for="(item,index) in recommendData.good" :key="item.id" 
                 :v-if="index<=1" @click="goGoodsDetail(item.id)">
                   <div class="img">
@@ -38,6 +38,7 @@
                   <div class="goods-name">{{item.describe}}</div>
                 </div>
               </div>
+              <div v-else class="default-page"></div>
             </div>
             <div class="floor-fashion">
               <div class="title">
@@ -89,7 +90,7 @@
                 <div class="type-box" :class="{'select-status': isNew}" @click="newGoods">新品</div>
                 <div class="select" :class="{'select-item': isSizeIcon}">
                   <div :class="['type-box',isSizeName?'select-status':'']" @click="showOverlay('size')">
-                    <div class="item-name">{{isSizeName?selectCondition.sizeName:type.size.des}}</div>
+                    <div class="item-name">{{isSizeName?selectCondition.sizeName:'尺寸'}}</div>
                     <van-icon name="arrow-up" v-if="isSizeIcon"/>
                     <van-icon name="arrow-down" v-else/>
                   </div>
@@ -127,15 +128,17 @@
                 </div>
               </transition>
             </div>
-            <div class="commodity">
+            <van-loading v-if="isLoading" size="24px" type="spinner" vertical>玩儿命加载中...</van-loading>
+            <div class="commodity" v-if="goodsData.length>0&&!isLoading">
               <div class="goods-card" v-for="item in goodsData" :key="item.id" @click="goGoodsDetail(item.id)">
                 <div class="img">
                   <img :src="item.cover_url" alt="">
                 </div>
                 <div class="goods-name">{{item.describe}}</div>
-                <div class="goods-price">￥{{item.sell_price}}</div>
+                <div class="goods-price">￥{{(item.sell_price-item.discount).toFixed(2) }}</div>
               </div>
             </div>
+            <div v-if="goodsData.length===0&&!isLoading" class="default-page"></div>
             <van-popup class="popup-sx" v-model="show" position="right" :style="{ width: '90%',height: '100%' }" 
             :get-container="getContainer" @touchmove.prevent>
               <div class="type-content">
@@ -221,6 +224,7 @@
 export default {
   data() {
     return {
+      isLoading: false,
       type: '',
       goodsClassify: [],
       recommendData: [],
@@ -301,6 +305,7 @@ export default {
     },
     // 获取分类筛选
     selected(id) {
+      this.isLoading = true;
       this.isShowOverlay = false;
       this.isSizeIcon = false;
       this.isBrandIcon = false;
@@ -319,10 +324,10 @@ export default {
       }
       this.byConditionGetGoods({sort: id}).then(res => {
         this.goodsData = res.data;
+        this.isLoading = false;
       });
       // 根据商品种类，获取筛选条件
       this.$request.get('/goods/select/moblie/'+id).then(res => {
-        console.log(res);
         this.type = res;
       })
       this.reset();
@@ -414,7 +419,6 @@ export default {
       if(value === 'fast') {
         this.closeOverlay();
       } else {
-        console.log( this.params);
         this.show = false;
       }
       
@@ -430,7 +434,6 @@ export default {
     },
     // 选择筛选条件
     choose(id,name,value) {
-      console.log(id);
       if(value=='people') {
         this.params.person = id;
       } else if(value=='size') {
@@ -560,6 +563,13 @@ export default {
       padding: 0 15px;
       background-color: #fff;
       overflow: scroll;
+      .default-page {
+        width: 191px;
+        height: 85px;
+        margin: 30px 33px;
+        background: url('../../assets/img/none_goods.png') no-repeat;
+        background-size: cover;
+      }
       .recommend {
         .title {
           display: flex;
@@ -577,6 +587,7 @@ export default {
         }
         .good {
           width: 268px;
+          height: 148px;
           margin-bottom: 18px;
           overflow: hidden;
           &-item {
@@ -600,8 +611,12 @@ export default {
             }
           }
         }
+        
         .floor-fashion,
         .floor-comment {
+          .good {
+            height: 123px;
+          }
           .good-item {
             width: 83px;
             margin-right: 6px;
@@ -617,6 +632,7 @@ export default {
         
       }
       .fenlei {
+        margin-top: 15px;
         .select-status {
           color: #7BBB62;
         }
@@ -625,6 +641,7 @@ export default {
           justify-content: space-between;
           align-items: center;
           height: 20px;
+          margin-bottom: 16px;
           font-size: 12px;
           font-weight: 600;
           .price {
@@ -662,7 +679,6 @@ export default {
         .type {
           display: flex;
           justify-content: space-between;
-          margin-top: 16px;
           .select {
             height: 29px;
           }
@@ -689,7 +705,7 @@ export default {
         }
         .overlay-box {
           position: absolute;
-          top: 64px;
+          top: 79px;
           bottom: 0;
           left: 87px;
           width: 288px;
@@ -756,6 +772,9 @@ export default {
           to {height: 0px;}
         }
       }
+      .van-loading {
+        margin-top: 70px;
+      }
       .commodity {
         width: 264px;
         margin-top: 5px;
@@ -767,6 +786,10 @@ export default {
           margin-right: 5px;
           .img {
             height: 127px;
+            img {
+                width: 100%;
+                height: 127px;
+              }
           }
           .goods-name {
             margin-top: 5px;

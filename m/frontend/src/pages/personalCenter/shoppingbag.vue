@@ -14,7 +14,7 @@
                     </div>
                     <div class="price">￥{{item.price}}</div>
                 </div>
-                <van-stepper v-model="item.num" integer @change="numChange"/>
+                <van-stepper v-model="item.num" integer />
             </div>
             <div
             v-if="shoppingBagList.length === 0"
@@ -63,7 +63,7 @@ export default {
         countCheckedPrice(){
             return this.shoppingBagList.filter( item => item.check ).reduce((pre, next) => {                
                 return (pre) + (next.price * next.num)
-            }, 0)
+            }, 0) 
         }
     },
     methods: {
@@ -134,18 +134,14 @@ export default {
                         describe: item.describe,
                         color: item.color,
                         size: item.size,
-                        price: item.price,
+                        price: (item.sell_price-item.discount).toFixed(2),
                         pic: item.url,
                         num: item.num,
-                        check: true
+                        check: true,
                     }
                     this.shoppingBagList.push(cart);
                 });
             }) 
-        },
-        //  数量改变
-        numChange(val) {
-            console.log(val);
         }
     }
 }

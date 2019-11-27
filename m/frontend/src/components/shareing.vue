@@ -17,16 +17,16 @@
         </div>
       </div>
     </van-popup>
-      <van-popup class="popup" v-model="wenanIsShow" round closeable position="bottom"
-        :style="{ height: '80%' }">
-          <div class="wenan-title">选择分享文案</div>
-          <div class="wenan-box">
-              <div class="wenan-box-item" v-for="(item,index) in wenanData" :key="index" 
-              @click="selectItem(item.content)">{{item.content}}</div>
-          </div>
-          <button id="copy" v-clipboard:copy="copy_content" 
-              v-clipboard:success="onCopy"  v-clipboard:error="onError">一键复制</button>
-      </van-popup>
+    <van-popup class="popup" v-model="wenanIsShow" round closeable position="bottom"
+      :style="{ height: '80%' }">
+        <div class="wenan-title">选择分享文案</div>
+        <div class="wenan-box">
+            <div class="wenan-box-item" v-for="(item,index) in wenanData" :key="index" 
+            @click="selectItem(item.content)">{{item.content}}</div>
+        </div>
+        <button id="copy" v-clipboard:copy="copy_content" 
+            v-clipboard:success="onCopy"  v-clipboard:error="onError">一键复制</button>
+    </van-popup>
   </div>
 </template>
 <script>
@@ -46,7 +46,8 @@ export default {
       // 文案数据
       wenanData: [],
       // 复制的内容
-      copy_content: ''
+      copy_content: '',
+      code: ''
     }
   },
   computed: {
@@ -62,7 +63,26 @@ export default {
       }
   },
   methods: {
+    // 判断参数
+    check() {
+      if(this.type === 'club') {
+        this.code = 3;
+      } else if(this.type === 'teacher') {
+        this.code = 4;
+      } else if(this.type === 'train') {
+        this.code = 2;
+      } else if(this.type === 'knowledge') {
+        this.code = 5;
+      } else if(this.type === 'information') {
+        this.code = 5;
+      } else if(this.type === 'person') {
+        this.code = 1;
+      } else {
+        this.code = 6;
+      }
+    },
     shareMessage () {
+      this.check();
       // console.log()
       if(!JSON.parse(sessionStorage.getItem("user")) &&
        (this.type == 'good'  || this.type === "train")
@@ -85,7 +105,7 @@ export default {
     // 获取文案
     getWenan() {
         this.wenanIsShow = true;
-        this.$request.get('/personal/share/word/2').then(res => {
+        this.$request.get('/personal/share/word/'+this.code).then(res => {
             this.wenanData = res;
         })
     },
@@ -174,7 +194,7 @@ export default {
 }
 .wenan-box {
   position: absolute;
-  top: 41px;
+  top: 56px;
   left: 16px;
   bottom: 64px;
   width: 343px;

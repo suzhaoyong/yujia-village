@@ -21,7 +21,6 @@
         </span>
       </div>
       <div v-for="(item, index) in goods" :key="index" class="order-main-shop">
-        <!-- <div > -->
         <div class="order-main-shop-img">
           <img :src="item.url" />
         </div>
@@ -35,7 +34,7 @@
             <span class="color-span2">{{item.size}}</span>
           </div>
           <div class="price">
-            <span>￥ {{item.price}}</span>
+            <span>￥ {{(item.sell_price-item.discount).toFixed(2)}}</span>
             <span
               v-if="item.discount > 0"
               style="margin-left:10px;text-decoration:line-through;"
@@ -44,13 +43,15 @@
         </div>
         <div class="jifen-use">
           <div class="title">积分使用</div>
-          <div class="jifen-use-rules" v-if="item.good_discount.积分.length!==0" @click="showJifen(index)">
+          <div class="jifen-use-rules" v-if="item.good_discount.积分.length!==0&&item.discount_sign==1" 
+          @click="showJifen(index)">
               <span v-if="!jf_id[index]&&!single_jfid">不使用积分</span>
               <span v-else>
                 {{info[index]}}
               </span>
             <van-icon name="arrow" />
           </div>
+          <div v-else-if="item.discount_sign==0">您已购买过该商品，不能再次享受积分减免</div>
           <div v-else>非积分可优惠商品，积分不参与减免</div>
         </div>
         <div class="subtotal">
@@ -61,45 +62,18 @@
             </span>
           </span>
         </div>
-        <!-- </div> -->
       </div>
       <div class="order-main-discounts">
         <van-cell-group v-show="true">
           <van-cell is-link @click="showPopup('payway')">
             <template slot="title">
               <span class="custom-title">支付方式：</span>
-              <van-tag>{{payway.value ? payway.value : '请选择支付方式'}}</van-tag>
+              <!-- <van-tag>{{payway.value ? payway.value : '请选择支付方式'}}</van-tag> -->
+              <van-tag>支付宝</van-tag>
             </template>
           </van-cell>
-          <!-- <van-cell is-link @click="showPopup('cash')">
-            <template slot="title">
-              <span class="custom-title">现金券：</span>
-              <van-tag v-if="cash.columns.length > 0">{{cash.value.name ? cash.value.name : '请选择现金券'}}</van-tag>
-              <van-tag v-if="cash.columns.length == 0">{{'暂无可用现金券'}}</van-tag>
-            </template>
-          </van-cell>
-          <van-cell is-link @click="showPopup('coupon')">
-            <template slot="title">
-              <span class="custom-title">优惠券：</span>
-              <van-tag
-                v-if="coupon.columns.length > 0"
-              >{{coupon.value ? `${coupon.value.name}` : '请选择优惠券'}}</van-tag>
-              <van-tag v-if="coupon.columns.length == 0">{{'暂无可用优惠券'}}</van-tag>
-            </template>
-          </van-cell> -->
-          <!-- <van-cell is-link>
-            <template slot="title">
-              <span class="custom-title">积分：</span>
-              <van-tag>标签</van-tag>
-            </template>
-          </van-cell> -->
         </van-cell-group>
-        <!-- <div class="freight">
-          <van-cell-group>
-            <van-cell title="商品总金额" :value="`￥ ${countPrice.toFixed(2)}`" size="large" />
-            <van-cell title="运费" value="￥ 0.00" size="large" />
-          </van-cell-group>
-        </div> -->
+       
       </div>
     </main>
     <footer class="order-foot">
@@ -110,19 +84,18 @@
       <div class="order-foot-pay">实际支付：￥{{countPrice}}</div>
       <div
         class="order-foot-buybtn"
-        :style="`background:${ isAllowPay ?'':'#ccc'}`"
         @click="pay"
       >去付款</div>
     </footer>
     <!-- 支付方式 -->
-    <van-popup v-model="payway.show" position="bottom">
+    <!-- <van-popup v-model="payway.show" position="bottom">
       <van-picker
         :columns="payway.columns"
         show-toolbar
         @cancel="payway.show = false"
         @confirm="onChangePayway"
       />
-    </van-popup>
+    </van-popup> -->
     <van-popup class="jifen-integral"
       v-model="show"
       round
@@ -133,60 +106,18 @@
       <van-radio-group v-model="radio">
         <van-cell-group :border="false">
           <van-cell :title="item.consume+'积分,减免'+item.deduction +'元'" :border="false" 
-          clickable @click="radio = item.id"
+          clickable @click="checkIntegral(item.id,item.user_limit)"
           v-for="(item,index) in goods_integral[goods_id]" :key="index">
-            <van-radio slot="right-icon" :name="item.id" />
+            <van-radio slot="right-icon" :name="item.id" checked-color="#B3D465"
+            :disabled="item.user_limit==0?true:false"/>
           </van-cell>
           <van-cell title="不使用积分" :border="false" clickable @click="radio = 0">
-            <van-radio slot="right-icon" :name="0" />
+            <van-radio slot="right-icon" :name="0" checked-color="#B3D465"/>
           </van-cell>
         </van-cell-group>
       </van-radio-group>
       <div class="button" @click="comfirm">确定</div>
     </van-popup>
-    <!-- 可使用现金券 -->
-    <!-- <van-popup
-      v-model="aside.isOpen"
-      round
-      position="right"
-      :style="{ width: '85%', height: '85%'}"
-      class="popup"
-    >
-      <div class="title">
-        可用{{cash.show?'现金券':'优惠券'}}
-        <span>仅可使用其中一张</span>
-      </div>
-      <div class="xianJianQuan-body" v-if="cash.show">
-        <div class="xianJinQuan" v-for="(item, index) in cash.columns" :key="index">
-          <div class="number_btn">
-            <div class="number">
-              <span class="price_used">{{item.surplus}}</span>
-              /
-              <span class="price_all">{{item.money}}</span>
-            </div>
-            <div class="btn" @click="chooseCash(item)">{{item.id == cash.value.id ? '正在使用' :'使用'}}</div>
-          </div>
-          <div class="inputbox_time">
-            <div class="inputbox">
-              <input type="tel" v-model.lazy.number.trim="item.use_val" @change="useCashVal(item, index)" placeholder="请输入使用券值" />
-            </div>
-            <div class="time">有效期至：{{item.endDate}}</div>
-          </div>
-        </div>
-      </div>
-      <div class="youHuiQuan-body" v-if="coupon.show">
-        <div class="youHuiQuan" v-for="(item, index) in coupon.columns" :key="index">
-          <div class="number_tips">
-            <div class="number">{{item.money}}</div>
-            <div class="tips">
-              <span class="name">{{item.name}}</span>
-              <span class="time">有效期至 {{item.endDate}}</span>
-            </div>
-          </div>
-          <div class="btn" @click="chooseCoupon(item)">{{item.id == coupon.value.id ? '正在使用' :'使用'}}</div>
-        </div>
-      </div>
-    </van-popup> -->
     <div v-html="form"></div>
   </div>
 </template>
@@ -315,7 +246,7 @@ export default {
       }, 0) + total;
     },
     isAllowPay() {
-      return this.payway.value && this.selectAddress.name;
+      return this.selectAddress.name;
     },
     
   },
@@ -349,51 +280,37 @@ export default {
     sessionStorage.removeItem("select address");
   },
   methods: {
-    
-    // 现金券的输入金额
-    useCashVal(item) {      
-      if(item.surplus < item.use_val) {
-        Toast('输入的券值不能超过剩余券值')
-      }
-      if(item.use_val < 0) {
-        Toast('输入的券值不能为负数')
-      }
-    },
-    // 选择现金券
-    chooseCash(item) {
-      if(item.surplus < item.use_val) {
-        Toast('输入的券值不能超过剩余券值')
-        return;
-      }
-      if(item.use_val < 0) {
-        Toast('输入的券值不能为负数')
-        return;
-      }
-      this.cash.value = item
-      this.aside.isOpen = false;
-    },
-    // 选择优惠券
-    chooseCoupon(item) {
-      this.coupon.value = item;
-      this.aside.isOpen = false;
-    },
     // 展示积分选择 
     showJifen(index) {
+      console.log(this.goods_integral);
+      
       this.show = true;
       if(this.goods_id!==index) {
         this.radio = 0;
       }
       this.goods_id = index;
     },
+    // 切换积分减免
+    checkIntegral(id,user_limit) {
+      if(user_limit == 0) {
+        return
+      }
+      this.radio = id;
+    },
     // 展示所选折扣
     consume() {
       var that = this;
+      var price = 0;
       this.goods.forEach((good_item,index) => {
         if(this.goods_id===index) {
           good_item.good_discount.积分.forEach(item => {
             if(item.id===that.radio) {
               that.info[this.goods_id] = item.consume+'积分 减免'+item.deduction+'元';
-              var price = good_item.price - item.deduction;
+              if(good_item.is_repeat_dis == 1) {
+                price = good_item.price - item.deduction*good_item.num;
+              } else {
+                price = good_item.price - item.deduction;
+              }
               that.subtotal[this.goods_id] = price<=0?0:price.toFixed(2);
               that.deduction[this.goods_id] = good_item.price - that.subtotal[this.goods_id];
             } 
@@ -430,16 +347,16 @@ export default {
     },
     // 选择弹出层
     showPopup(type) {
-      this[type].show = true;
-      if (["coupon", "cash"].indexOf(type) >= 0) {
-        if (this[type].columns.length > 0) {
-          this.aside.isOpen = true;
-        }
-      }
+      // this[type].show = true;
+      // if (["coupon", "cash"].indexOf(type) >= 0) {
+      //   if (this[type].columns.length > 0) {
+      //     this.aside.isOpen = true;
+      //   }
+      // }
     },
     // 支付
     pay() {
-      if (!this.isAllowPay) return
+      if (!this.isAllowPay) return Toast('请填写收货地址')
       const buyGoods = JSON.parse(sessionStorage.getItem("buy goods"));
       const ids = this.goods.map(item => item.id);
       const goodsIds = this.goods.map(item => item.goodListId) ;
@@ -866,6 +783,9 @@ export default {
         width: 78px;
         height: 79px;
         margin: 11px 18px 15px 16px;
+        img {
+          height: 79px;
+        }
       }
       &-message {
         width: 245px;
