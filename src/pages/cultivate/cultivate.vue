@@ -226,11 +226,10 @@
             </div>
             <session-title name="最新发布" brief="Sometimes beauty is so simple"></session-title>
             <div
-              :class="['cultivate-count-div5',{left: index%2 == 1}]"
               v-for="(item, index) in newList"
               :key="index"
             >
-              <a :href="`/cultivate/detail/${item.id}`" onclick="return false;">
+              <a :class="['cultivate-count-div5',{left: index%2 == 1}]" :href="`/cultivate/detail/${item.id}`" onclick="return false;">
                 <div class="news_bg_img" :style="`backgroundImage: url(${item.teacher_img})`" @click="selectItem(item)">
                   <!-- <img :src="item.teacher_img" /> -->
                 </div>
@@ -1613,8 +1612,8 @@ img {
       align-items: flex-end;
       position: relative;
       .news_bg_img {
-        width: 25rem;
-        height: 18rem;
+        width: 19.2rem;
+        height: 17.7rem;
         background-size: cover;
         background-repeat: no-repeat;
         background-position: top center;
