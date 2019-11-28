@@ -10,8 +10,12 @@
                     </div>
                     <template>
                        <div class="bg_img3" v-if="cationbanner.length > 0">
-                         <img :src="item.path" alt v-for="(item,index) in cationbanner" :key="index" @click="cationclick(item)"/>
-                        <div class="advertisement">广告</div>
+                         <el-carousel :height="bannerHeight+'px'" :interval="3000" arrow="hover" trigger="click" direction="horizontal" :autoplay="true">
+                            <el-carousel-item v-for="(item,index) in cationbanner" :key="index">
+                                <img :src="item.path" alt @click="cationclick(item)"/>
+                                <div class="advertisement">广告</div>
+                            </el-carousel-item>
+                        </el-carousel>
                        </div>
                         <div class="bg_img2" v-else>
                          <img :src="banner" alt />
@@ -105,7 +109,9 @@ export default {
         navLists:[],
         changeRed:0,
         listid:0,
-        cationbanner:[]
+        cationbanner:[],
+        bannerHeight:488,
+        screenWidth :0,
     };
   },
   created(){
@@ -113,7 +119,20 @@ export default {
       this.yujiarmation();
       this.classification();
   },
+   mounted(){
+        // 首次加载时,需要调用一次
+        this.screenWidth =  window.innerWidth;
+        this.setSize();
+        // 窗口大小发生改变时,调用一次
+        window.onresize = () =>{
+        this.screenWidth =  window.innerWidth;
+        this.setSize();
+    }
+  },
   methods:{
+       setSize:function () {
+        this.bannerHeight = 488 / 1920 * this.screenWidth;
+        },
     //根据页面查广告数据
     classification(){
       this.$request.get(`/advertisement/data/10`).then(data => {

@@ -5,8 +5,12 @@
                 <div class="yogo-main">
                     <template>
                     <div class="bg_img2" v-if="cationbanner.length > 0">
-                         <img :src="item.path" alt v-for="(item,index) in cationbanner" :key="index" @click="cationclick(item)"/>
-                        <div class="advertisement">广告</div>
+                        <el-carousel :height="bannerHeight+'px'" :interval="3000" arrow="hover" trigger="click" direction="horizontal" :autoplay="true">
+                            <el-carousel-item v-for="(item,index) in cationbanner" :key="index">
+                                <img :src="item.path" alt @click="cationclick(item)"/>
+                                <div class="advertisement">广告</div>
+                            </el-carousel-item>
+                        </el-carousel>
                     </div>
                     <div class="bg_img" v-else>
                         <img :src="banner" alt />
@@ -15,8 +19,12 @@
                     <div class="yogo-count">
                         <el-col :span="24" class="bg-tupian1">
                         <div class="subject" v-if="cationmoad.length > 0">
-                            <img :src="item.path" v-for="(item,index) in cationmoad" :key="index" @click="cationclick(item)"/>
-                            <div class="advertisement">广告</div>
+                            <el-carousel :height="bannerHeight2+'px'" :interval="3000" arrow="hover" trigger="click" direction="horizontal" :autoplay="true">
+                            <el-carousel-item v-for="(item,index) in cationmoad" :key="index">
+                                <img :src="item.path" alt @click="cationclick(item)"/>
+                                <div class="advertisement">广告</div>
+                            </el-carousel-item>
+                        </el-carousel>
                         </div>
                         <div class="yogo-cont-div1">
                             <h2><img src="../assets/yujia.png"/>名师推荐</h2>
@@ -154,6 +162,9 @@ export default {
     return {
         cationmoad:[],
         cationbanner:[],
+        bannerHeight:488,
+        screenWidth :0,
+        bannerHeight2:126,
          formInline: {
           user: '',
         },
@@ -213,7 +224,20 @@ export default {
       this.choiceness();
       this.classification();
   },
+   mounted(){
+        // 首次加载时,需要调用一次
+        this.screenWidth =  window.innerWidth;
+        this.setSize();
+        // 窗口大小发生改变时,调用一次
+        window.onresize = () =>{
+        this.screenWidth =  window.innerWidth;
+        this.setSize();
+    }
+  },
   methods:{
+      setSize:function () {
+        this.bannerHeight = 488 / 1920 * this.screenWidth;
+        },
     //根据页面查广告数据
     classification(){
       this.$request.get(`/advertisement/data/8`).then(data => {
