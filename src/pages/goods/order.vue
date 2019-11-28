@@ -127,7 +127,7 @@
             </div>
             <div class="use_six">
               <span class="span_use">商品优惠</span>
-              <span class="span_uses">{{getCountDiscount}}元</span>
+              <span class="span_uses">{{getCountDiscount.toFixed(2)}}元</span>
             </div>
           </div>
         </div>
@@ -359,13 +359,22 @@ export default {
       //   }, 0)
         return  this.goods
           .map(item => {
-            if(!item.jifen) return {deduction: 0, num: 1, is_repeat_dis: 0}
-            return item
+            if(!item.jifen) return 0;
+            const jifen_id = item.jifen;
+            const jifen_select = item.good_discount['积分'].filter(item => item.id === jifen_id)[0]
+            const goods_price = (item.sell_price - item.discount)
+            let num = 1
+            if (parseInt(item.is_repeat_dis) === 1) {
+              num = item.num
+            }
+            if(jifen_select && jifen_select.deduction) {
+              if(goods_price > jifen_select.deduction) {
+                return (jifen_select.deduction) * num
+              } else {
+                return goods_price * num;
+              }
+            }
           })
-          .map(item => {
-            console.log(item);
-            return item
-            })
           .reduce((pre, cur) => pre + cur, 0)
     },
     getDiscountIds() {
