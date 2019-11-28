@@ -45,14 +45,72 @@
   </body>
 </html>
 <script language="javascript"> 
+// /*
   (function() {
+    function wapDetailRouter() {
+      var match_reg = {
+        cultivate: /(\/cultivate\/detail\/)(\d+)/, // 培训信息
+        joinclubhouse: /(\/joinclubhouse\/joinclubhousedetails\?id=)(\d+)/, // 培训机构
+        yogoteacher: /(\/yogoteacher\/yogoteacherdetails\?id=)(\d+)/, // 名师
+        yogoknowledge: /(\/yogoknowledge\/yogoknowledgedetails\?id=)(\d+)/, // 瑜伽知识
+        yogoinformation: /(\/yogoinformation\/yogoinformationdetails\?id=)(\d+)/, // 瑜伽信息
+        goods: /(\/goods\/detail\/)(\d+)/, // 商城
+      }
+      var match_map = {
+        cultivate: function cultivate(id) {
+          return "/wap/index.html#/messagedetail/".concat(id);
+        },
+        joinclubhouse: function joinclubhouse(id) {
+          return "/wap/index.html#/teacherClub/clubhouseDetails?id=".concat(id);
+        },
+        yogoteacher: function yogoteacher(id) {
+          return "/wap/index.html#//teacherClub/teacherDetails?id=".concat(id);
+        },
+        yogoknowledge: function yogoknowledge(id) {
+          return "/wap/index.html#/knowledgedetail/".concat(id);
+        },
+        yogoinformation: function yogoinformation(id) {
+          return "/wap/index.html#/informationdetail/".concat(id);
+        },
+        goods: function goods(id) {
+          return "/wap/index.html#/goods/detail/".concat(id);
+        }
+      }
+      var match_reg_arr = Object.keys(match_reg)
+      for(let i = 0; i < match_reg_arr.length - 1; i ++){
+        var has_match = location.href.match(match_reg[match_reg_arr[i]])
+        if(has_match) {
+          var page_id = has_match[2]
+          return match_map[match_reg_arr[i]](page_id)
+          break; 
+        }
+      }
+      return null;
+    }
+
     var sUserAgent = navigator.userAgent;
-    console.log(sUserAgent);
     if (sUserAgent.indexOf('Android') > -1 || sUserAgent.indexOf('iPhone') > -1 || sUserAgent.indexOf('iPad') > -1 || sUserAgent.indexOf('iPod') > -1 || sUserAgent.indexOf('Symbian') > -1) {
+      var obj = {
+        '/': '/wap/index.html#/main', //  首页
+        '/main': '/wap/index.html#/main', //  首页
+        '/joinclubhouse': '/wap/index.html#/teacherClub/list', // 培训机构
+        '/yogoteacher': '/wap/index.html#/teacherClub/list', // 瑜伽名师 
+        '/yogoknowledge': '/wap/index.html#/yogaknowledge',  // 瑜伽知识
+        '/yogoinformation': '/wap/index.html#/yagainformation', // 瑜伽资讯
+        '/market/index': '/wap/index.html#/store/category',  // 商城
+        '/cultivate/index': '/wap/index.html#/yogamessage/list', // 培训信息
+        '/aboutus': '/wap/index.html#/aboutUs'
+      }
+      if(obj[location.pathname]){
+        location.href =  window.location.origin + obj[location.pathname];
+      } else if(wapDetailRouter()) {
+        location.href =  window.location.origin + wapDetailRouter()
+      } else {
         location.href =  window.location.origin + '/wap/index.html';
+      }
     } else {}
   })(); 
-
+// */
 </script>
 <script>
 !(function(){
