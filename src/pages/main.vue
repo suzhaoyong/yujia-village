@@ -67,7 +67,9 @@
                                             <h3>{{namelist.headline}}</h3>
                                             <div class="date">{{namelist.created_at}}</div>
                                             <div class="yogoswiper-butt">
-                                            <el-button type="text" @click="ViewAll(namelist)">查看详情</el-button>
+                                            <el-button type="text" @click="ViewAll(namelist)">
+                                                <a :href="`/yogoinformation/yogoinformationdetails?id=${namelist.id}`" onclick="return false;" style="color:#fff;text-decoration:none">查看详情</a>
+                                            </el-button>
                                             </div>
                                         </div>
                                         <p class="p1">{{namelist.summary}}</p>
@@ -97,7 +99,7 @@
                         <swiper class="carousel5" :options="swiperOption" style="height:707px;width:1200px;">
                             <swiper-slide class="carousel5-item" v-for="(page,index) of pages" :key="index">
                             <div class="carousel-explain2" v-for="item of page" :key="item.id" @click="carouselswiper(item)">
-                              <a :href='`/yogoteacher/yogoteacherdetails/${item.id}`' onclick="return false;" style="display: flex;">
+                              <a :href='`/yogoteacher/yogoteacherdetails?id=${item.id}`' onclick="return false;" style="display: flex;">
                                 <img :src="item.first_img" alt="头像"/>
                                 <div class="explain2-div">
                                     <h3>{{item.name}}</h3>
@@ -156,7 +158,7 @@
                     <div class="nav-contunt-div11">
                         <div class="explain4">
                             <div class="explain4-img" v-for="(item,index) in clubInfo" :key="index">
-                              <a :href="`/joinclubhouse/joinclubhousedetails/${item.id}`" onclick="return false;">
+                              <a :href="`/joinclubhouse/joinclubhousedetails?id=${item.id}`" onclick="return false;">
                                 <img class="nav-div7-img" :src="item.logo" @click="ImgItem(item)" :alt="item.club_name"/>
                               </a>
                             </div>

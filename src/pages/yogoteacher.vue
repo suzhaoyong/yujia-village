@@ -41,6 +41,7 @@
                                 <swiper-slide v-for="(page,index) of pages" :key="index" style="margin-top:40px">
                                     <div class="yogocontunt-swiper" v-for="(item,idx) in page" :key="idx" @click="yogolink(item)">
                                     <figure class="test5">
+                                         <a :href='`/yogoteacher/yogoteacherdetails?id=${item.id}`' onclick="return false;" style="color:#2c2c2c;text-decoration:none">
                                         <img :src="item.first_img" class="yogocontunt2-img" :alt="item.name"/>
                                         <div class="test5-title2">
                                             <h4>{{item.name}}</h4>
@@ -52,6 +53,7 @@
                                             <div class="div01"></div>
                                             <div class="div02"></div>
                                         </figcaption>
+                                        </a>
                                     </figure>
                                     </div>
                                 </swiper-slide>
@@ -101,6 +103,7 @@
                            <div class="yogocontunt2" v-if="this.yogolist.length > 0">
                                <div class="yogocontunt2-list" v-for="(item, index) in yogolist" :key="index" @mouseenter="onMouseOver(index)" @click="yogolink(item)">
                                     <figure class="test5">
+                                        <a :href='`/yogoteacher/yogoteacherdetails?id=${item.id}`' onclick="return false;" style="color:#2c2c2c;text-decoration:none">
                                         <img :src="item.first_img" class="yogocontunt2-img" :alt="item.name"/>
                                         <div class="test5-title">
                                             <h4>{{item.name}}</h4>
@@ -112,6 +115,7 @@
                                             <div class="div01"></div>
                                             <div class="div02"></div>
                                         </figcaption>
+                                        </a>
                                     </figure>
                                </div>
                                <div class="block">

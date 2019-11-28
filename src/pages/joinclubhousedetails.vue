@@ -51,11 +51,13 @@
                     <swiper class="carousel5" :options="swiperOption2" style="height:660px">
                         <swiper-slide class="carousel5-item" v-for="(page2,index) of pages2" :key="index">
                         <div class="carousel-explain2" v-for="item of page2" :key="item.id" @click="explain2swiper(item)">
+                            <a :href='`/yogoteacher/yogoteacherdetails?id=${item.id}`' onclick="return false;" style="display: flex;color:#fff;text-decoration:none">
                             <img :src="item.first_img" alt="头像"/>
                             <div class="explain2-div">
                                 <h3>{{item.name}}</h3>
                                 <span class="explain2-span2" v-html="item.good_at">{{item.good_at}}</span>
                             </div>
+                            </a>
                         </div>
                         </swiper-slide>
                         <div class="swiper-pagination" slot="pagination"></div>
@@ -80,6 +82,7 @@
                         <swiper :options="swiperOption" style="height:530px">
                             <swiper-slide v-for="(page,index) of pages" :key="index">
                                 <div class="clubhouse-swiper" v-for="item of page" :key="item.id" @click="clubhouseItem(item)">
+                                    <a :href="`/cultivate/detail/${item.id}`" onclick="return false;" style="color:#2c2c2c;text-decoration:none">
                                     <div class="clubhouse-swiper-img">
                                         <img :src="item.teacher_img" :alt="item.theme"/>
                                     </div>
@@ -90,6 +93,7 @@
                                         <p class="name-p1">{{item.name}}</p>
                                         <p class="name-p2">￥{{item.price}}</p>
                                     </div>
+                                    </a>
                                     <!-- <el-rate :value="item.diff" disabled disabled-void-color="#ccc" :colors="['#58B708']"></el-rate> -->
                                 </div>
                             </swiper-slide>
@@ -693,7 +697,7 @@ export default {
                     height: 100%;
                     padding-top: 35px;
                     padding-left: 13px;
-                    width: 55%;
+                    width: 70%;
                     text-align: left;
                     h3{
                         font-size: 14px;
@@ -726,12 +730,14 @@ export default {
                     background-color: #DCD9CC;
                 }
                 .explain2-div{
-                    height: 100%;
+                    height: auto;
                     padding-top: 35px;
                     padding-left: 0px;
                     padding-right: 13px;
-                    margin-left: 18%;
-                    width: 55%;
+                    margin-right: 16px;
+                    width: 36%;
+                    position: absolute;
+                    right: 13%;
                     text-align: right;
                     h3{
                         font-size: 14px;
