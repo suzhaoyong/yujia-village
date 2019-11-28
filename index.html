@@ -77,7 +77,7 @@
         }
       }
       var match_reg_arr = Object.keys(match_reg)
-      for(let i = 0; i < match_reg_arr.length - 1; i ++){
+      for(let i = 0; i < match_reg_arr.length; i ++){
         var has_match = location.href.match(match_reg[match_reg_arr[i]])
         if(has_match) {
           var page_id = has_match[2]
@@ -87,6 +87,7 @@
       }
       return null;
     }
+    console.log(wapDetailRouter());
 
     var sUserAgent = navigator.userAgent;
     if (sUserAgent.indexOf('Android') > -1 || sUserAgent.indexOf('iPhone') > -1 || sUserAgent.indexOf('iPad') > -1 || sUserAgent.indexOf('iPod') > -1 || sUserAgent.indexOf('Symbian') > -1) {
@@ -104,7 +105,8 @@
       if(obj[location.pathname]){
         location.href =  window.location.origin + obj[location.pathname];
       } else if(wapDetailRouter()) {
-        location.href =  window.location.origin + wapDetailRouter()
+        console.log(wapDetailRouter());
+        // location.href =  window.location.origin + wapDetailRouter()
       } else {
         location.href =  window.location.origin + '/wap/index.html';
       }
