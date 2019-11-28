@@ -433,7 +433,7 @@ img {
           .goods_subimg {
             width: 19rem;
             height: 19rem;
-            align-self: flex-end;
+            // align-self: flex-end;
             background: #ccc;
             img{
               width: 100%;
@@ -538,7 +538,7 @@ img {
           .goods_subimg {
             width: 19rem;
             height: 19rem;
-            align-self: flex-end;
+            // align-self: flex-end;
             background: #ccc;
             img{
               width: 100%;
@@ -632,8 +632,8 @@ img {
           width: 28px;
           height: 28px;
           position: absolute;
-          left: 42%;
-          top: 4%;
+          left: 43%;
+          top: -15%;
         }
       }
       .time_brief{
@@ -757,7 +757,7 @@ img {
           .goods_subimg {
             width: 19rem;
             height: 19rem;
-            align-self: flex-end;
+            // align-self: flex-end;
             background: #ccc;
             position: absolute;
             top: 14rem;
@@ -930,7 +930,7 @@ img {
           .goods_subimg {
             width: 19rem;
             height: 19rem;
-            align-self: flex-end;
+            // align-self: flex-end;
             background: #ccc;
             position: absolute;
             top: 14rem;
