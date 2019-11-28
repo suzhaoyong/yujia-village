@@ -2,6 +2,11 @@
     <div>
         <el-col :span="24">
             <div class="joinclubdetails-main">
+                <div class="pointup">
+                    <img class="pointup-img" src="../assets/green_up.png" v-if="Giveupimg1" @click="Giveuppraise" :title="'人气:'+(club.praise||100)"/>
+                    <img class="pointup-img" src="../assets/gray_up.png" v-if="Giveupimg" @click="Giveuppraise" :title="'人气:'+(club.praise||100)"/>
+                    <div class="pointup-text">{{club.praise||100}}</div>
+                </div>
                 <div class="joinclubdetails-cont-div6">
                     <span><router-link to="/joinclubhouse" style="color:#2c2c2c;text-decoration: none;">培训机构</router-link></span>
                     <span>/ &nbsp;&nbsp;</span>
@@ -115,12 +120,17 @@
 </template>
 <script>
 import { getTrains, postTrains, getTrainsById } from "@/api/trains";
+import Bus from "@/utils/Bus";
+import { mapGetters } from "vuex";
 export default {
     inject: ["reload"],
   data() {
     return {
         club:{},
         clubs:{},
+        msg:"",
+        Giveupimg:true,
+        Giveupimg1:false,
         swiperOption: {
           slidesPerView: 3,
           spaceBetween: 30,
@@ -182,12 +192,39 @@ export default {
           pages2[page2].push(item);
         });
         return pages2;
-      }
+      },
+      ...mapGetters(["info"])
   },
   created(){
       this.joindatalist();
   },
   methods:{
+      Giveuppraise(){
+        if(!this.info.user.name){
+        Bus.$emit("login", true);
+        return;
+       }
+        let _this = this;
+        this.$request.get(`/personal/thumbsUpClub/${_this.$route.query.id}`).then(data => {
+            _this.msg = data.msg;
+            if(_this.msg == "OK"){
+            this.$message({type:'success', message: '点赞成功'});
+            _this.Giveupimg1 = true;
+            _this.Giveupimg = false;
+            this.joindatalist();
+            }
+        })
+        .catch(error => {
+            let { response: { data: { errorCode, msg } } } = error;
+            if (errorCode != 0) {
+            this.$message({
+                message: msg,
+                type: "error"
+            });
+            return;
+            }
+        });
+      },
       joindatalist(){
         let _this = this;
         this.$request(`/clubs/${_this.$route.query.id}`).then(res => {
@@ -236,6 +273,33 @@ export default {
     height: 100%;
     margin: 0 auto;
     overflow: hidden;
+    .pointup{
+        width: 6%;
+        height: 42px;
+        border-radius: 21px;
+        box-shadow:0px 1px 6px 0px rgba(50,50,50,0.29);
+        display: flex;
+        line-height: 42px;
+        padding: 0px 10px;
+        position: fixed;
+        background-color: #fff;
+        z-index: 999;
+        top: 50%;
+        right: 4%;
+        cursor: pointer;
+        .pointup-text{
+            color: #81C16A;
+            font-size:14px;
+            font-family:FZLanTingHei-H-GBK;
+            font-weight:400;
+        }
+        .pointup-img{
+            width: 18px;
+            height: 16px;
+            margin-top: 13px;
+            margin-right: 5px;
+        }
+    }
     .joinclubdetails-cont-div1{
             width: 1200px;
             height: 150px;

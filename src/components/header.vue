@@ -12,10 +12,6 @@
                 </el-carousel>
             </div>
         </div>
-          <!-- <div class="notice" v-if="info.user.name">
-            <img class="icon-notice" src="../assets/notice.png"/>
-            <marquee :listData="listData"></marquee>
-          </div> -->
         <div class="head-quan">
           <div class="head-right">
             <el-button type="text" class="span2"></el-button>
@@ -84,6 +80,14 @@
             </el-menu>
           </div>
         </div>
+         <div class="notice" v-if="info.user.name">
+            <!-- <marquee :listData="listData"></marquee> -->
+            <div class="text-container">
+              <transition-group tg="div" appear name="list" class="list-container" mode="out-in">
+                <div v-for="text in arr2" :key="text" class="list-item">{{text}}</div>
+              </transition-group>
+            </div>
+          </div>
       </div>
     </el-col>
     <div v-if="account.type==='login'">
@@ -106,6 +110,7 @@
   </div>
 </template>
 <script>
+const totalDuration = 3000;
 import Login from "@/pages/Login/login";
 import Register from "@/pages/Login/register";
 import Reset from "@/pages/Login/reset";
@@ -131,11 +136,13 @@ export default {
       activeIndex: "",
       classid:"",
       username: "",
+      number2: -1,
+      arr2:[],
       subjectbanner:[],
       account: {
         type: ""
       },
-      // listData:[],
+      listData:[],
       icon: {
         identity_g,
         identity_j,
@@ -195,16 +202,17 @@ export default {
         this.classification(this.classid = 6);
     }
     // this.getPersonal();
+    this.startMove2()
   },
   created() {
     this.fetchData();
-    // this.messcroll();
+    this.messcroll();
     let info = sessionStorage.getItem('user')
     if(info) {
       store.dispatch("INFO", JSON.parse(info))
-      // setInterval(() => {
-      //   this.messcroll();
-      // },300000)
+      setInterval(() => {
+        this.messcroll();
+      },300000)
     }
   },
   beforeUpdate() {
@@ -214,6 +222,18 @@ export default {
     Bus.$off("login");
   },
   methods: {
+     startMove2(){
+      let timer = setTimeout(() => {
+        this.number2 += 1;
+        if (this.number2 > 3) {
+          const target = this.arr2.splice(3, 1);
+          this.arr2.unshift(target[0])
+        } else {
+          this.arr2.unshift(this.listData[this.number2]);
+        }
+        this.startMove2();
+      }, totalDuration)
+    },
     gotoPersonal() {
       if(this.isUserNeedLogin) {
         this.account.type = 'login';
@@ -315,11 +335,11 @@ export default {
       };
     },
     //消息滚动
-    // messcroll(){
-    //   this.$request.get(`/message/overall_situation/20`).then(data => {
-    //       this.listData = data;
-    //   });
-    // },
+    messcroll(){
+      this.$request.get(`/message/overall_situation/20`).then(data => {
+          this.listData = data;
+      });
+    },
     //根据页面查广告数据
     classification(classid){
       this.subjectbanner = [];
@@ -499,6 +519,7 @@ a:hover{
   width: 100%;
   height: 100%;
   padding: 0;
+  position: relative;
    .sub_box{
     width: 100%;
     .info{
@@ -579,15 +600,44 @@ a:hover{
     }
   }
   .notice{
-    padding:0rem 1rem;
-    font-size:15px;
-    color:#929292;
-    display: flex;
-    align-items: center;
-    .icon-notice {
-      width: 27px;
-      height: 27px;
-      margin-right:1rem;
+    position: absolute;
+    left: 6%;
+    top: 96%;
+    z-index: 999;
+    .text-container{
+    .list-container {
+      position: relative;
+      overflow: hidden;
+      .list-item {
+        margin: 0;
+        transition: all 1s;
+        overflow: hidden;
+        background:rgba(0,0,0,1);
+        opacity:0.6;
+        border-radius:28px;
+        color: #fff;
+        font-size:14px;
+        font-family:Source Han Sans CN;
+        font-weight:500;
+        height: 56px;
+        padding: 0px 25px;
+        line-height: 56px;
+        margin-top: 6px;
+      }
+    }
+    .list-enter {
+      transform: translateY(30px);
+    }
+    .list-enter-to, .list-leave {
+      transform: translateY(0);
+    }
+    .list-leave-to {
+      transform: translateY(-30px)
+    }
+    .list-leave-active {
+      position: absolute;
+      width: 0;
+    }
     }
   }
 .nikeHeader{

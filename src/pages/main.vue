@@ -124,29 +124,21 @@
                     <el-col :span="24" class="bg-pic7">
                     <div class="nav-contunt-div6">
                         <div class="navcount">
-                        <el-carousel height="590px" :interval="3000" arrow="hover" trigger="click" direction="horizontal" :autoplay="true">
-                        <el-carousel-item v-for="item in newtrains" :key="item.id">
-                          <a :href="`/cultivate/detail/${item.id}`" onclick="return false;">
-                            <div class="explain3">
-                            <div class="explain3-border">
-                                <img :src="item.teacher_img" class="bg-border-img" :alt="item.theme">
-                                <img src="../assets/image62.png" class="bg-border-img2">
+                        <swiper class="carousel6" :options="swiperNewOption" style="height:730px;width:1200px;">
+                            <swiper-slide v-for="(page,index) of pages3" :key="index">
+                            <div class="explain3" v-for="item of page" :key="item.id" @click="explaindetail(item)">
+                                <a :href="`/cultivate/detail/${item.id}`" onclick="return false;" style="text-decoration:none">
+                                <div class="explain3-text">{{item.theme}}</div>
+                                <div class="explain3-text2">{{item.type}}</div>
+                                <div class="explain3-text3">授 课 老 师：{{item.name}}</div>
+                                <div class="explain3-text4">课 程 难 度：<el-rate :value="item.diff" disabled disabled-void-color="#ddd" :colors="['#58B708']"></el-rate></div>
+                                <div class="explain3-text5">开 课 时 间：{{item.startTime}}</div>
+                                <div class="explain3-text6"><img :src="item.teacher_img" class="bg-border-img" :alt="item.theme"></div>
+                                </a>
                             </div>
-                            <div class="explain3-text">
-                                <p class="text-p">{{item.theme}}</p>
-                                <h4 class="text-h4">{{item.type}}</h4>
-                                <p class="text-p2">老师名字：{{item.name}}</p>
-                                <div class="text-p3">课程难度：<el-rate :value="item.diff" disabled disabled-void-color="#fff" :colors="['#58B708']"></el-rate></div>
-                                <p class="text-p4">开课时间：{{item.startTime}}</p>
-                                <img src="../assets/image63.png" class="bg-border-img3">
-                                <div class="text-butt">
-                                    <el-button type="text" class="text-button" @click="explaindetail(item)">详情</el-button>
-                                </div>
-                            </div>
-                            </div>
-                          </a>
-                        </el-carousel-item>
-                        </el-carousel>
+                            </swiper-slide>
+                            <div class="swiper-pagination" slot="pagination"></div>
+                        </swiper>
                         </div>
                     </div>
                     <div class="nav-contunt-div12">
@@ -227,6 +219,19 @@ export default {
             prevEl: '.swiper-button-prev1'
           },
         },
+        swiperNewOption:{
+          spaceBetween: 30,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+            renderBullet: function (index, className) {
+            return '<span class="' + className + '">' + (index + 1) + '</span>';
+            },
+          },
+          loop: false,
+          loopFillGroupWithBlank: true,
+          autoplay: true,
+        }
     };
   },
   mounted(){
@@ -261,6 +266,17 @@ export default {
           pages2[page2].push(item);
         });
         return pages2;
+      },
+      pages3(){
+        const pages3 = [];
+        this.newtrains.forEach((item, index) => {
+          const page = Math.floor(index / 3);
+          if (!pages3[page]) {
+            pages3[page] = [];
+          }
+          pages3[page].push(item);
+        });
+        return pages3;
       },
   },
     created(){
@@ -1078,136 +1094,142 @@ a{
             margin-bottom: -30px;
         .nav-contunt-div6{
             width: 100%;
-            height: 690px;
+            height: 750px;
             margin: 0 auto;
             margin-top: 40px;
             .navcount{
                 width: 1280px;
                 margin: 0 auto;
                 height: 100%;
-            .explain3{
-                width: 1200px;
-                margin:0 auto;
-                height: 590px;
-                display: flex;
+                .carousel6{
+                width: 1200px !important;
+                height:730px;
+                margin: 0 auto;
                 cursor:pointer;
-                .explain3-border{
-                    width: 67%;
-                    border: 10px solid #fff;
-                    height: 85%;
-                    margin: 0 auto;
-                    margin-top: 30px;
-                    margin-left: 14%;
-                    position: relative;
-                    .bg-border-img{
-                        width: 85%;
-                        height: 425px;
-                        position: absolute;
-                        top: 7%;
-                        left: -16%;
-                        object-fit: cover;
-                        border: 6px solid #fff;
-                    }
-                    .bg-border-img2{
-                        width: 134px;
-                        height: 36px;
-                        position: absolute;
-                        top: 58%;
-                        left: -27%;
-                    }
-                }
+            .explain3{
+                width: 397px;
+                margin:0 auto;
+                height: 658px;
+                float: left;
+                background-color: #fff;
+                cursor:pointer;
+                margin-left: 20px;
+                margin-right: 20px;
+                border-radius: 5px;
+                padding: 23px;
+                box-shadow: 2px 2px 8px 2px rgba(22,27,27,0.2);
                 .explain3-text{
-                    width: 32%;
-                    height: 82%;
-                    position: relative;
-                    .text-p{
-                        font-size: 20px;
-                        color: #2c2c2c;
-                        position: absolute;
-                        left: -53%;
-                        top: 20%;
-                        display: -webkit-box !important;
-                        -webkit-box-orient: vertical !important;
-                        -webkit-line-clamp:1 !important;// 限制快级元素的文本行数
-                        overflow: hidden !important;
-                    }
-                    .text-p2{
-                        font-size: 14px;
-                        color: #2c2c2c;
-                        position: absolute;
-                        left: 7%;
-                        top: 54%;
-                    }
-                    .text-p3{
-                        font-size: 14px;
-                        color: #2c2c2c;
-                        position: absolute;
-                        left: 7%;
-                        top: 62%;
-                        display: flex;
-                        .el-rate{
-                            margin-top: 1px;
-                        }
-                    }
-                     .text-p4{
-                        font-size: 14px;
-                        color: #2c2c2c;
-                        position: absolute;
-                        left: 7%;
-                        top: 70%;
-                    }
-                    .text-h4{
-                        font-size: 20px;
-                        color: #2c2c2c;
-                        position: absolute;
-                        left: -53%;
-                        top: 30%;
-                        display: -webkit-box !important;
-                        -webkit-box-orient: vertical !important;
-                        -webkit-line-clamp:1 !important;// 限制快级元素的文本行数
-                        overflow: hidden !important;
-                    }
-                    .bg-border-img3{
-                        width: 134px;
-                        height: 34px;
-                        position: absolute;
-                        top: 40%;
-                        right: 0%;
-                    }
-                    .text-butt{
-                        width: 122px;
-                        height: 53px;
-                        background-color: #ffffff;
-                        position: absolute;
-                        left: 7%;
-                        top: 90%;
-                        line-height: 52px;
-                        text-align: center;
-                        transition: all 1s;
-                        .text-button{
-                            color: #2c2c2c;
-                            width: 100%;
-                        }
-                    }
-                    .text-butt:hover{
-                        width: 122px;
-                        height: 53px;
-                        background-color: #ffffff;
-                        position: absolute;
-                        left: 7%;
-                        top: 90%;
-                        line-height: 52px;
-                        text-align: center;
+                    font-size:20px;
+                    font-family:Source Han Sans CN;
+                    font-weight:bold;
+                    color:#2c2c2c;
+                    padding-top: 1.5rem;
+                    display: -webkit-box !important;
+                    -webkit-box-orient: vertical !important;
+                    -webkit-line-clamp:1 !important;// 限制快级元素的文本行数
+                    overflow: hidden !important;
+                }
+                .explain3-text2{
+                    color:#999;
+                    font-size:14px;
+                    padding-top: 10px;
+                }
+                .explain3-text3{
+                    color:#999;
+                    font-size:14px;
+                    padding-top: 3rem;
+                    display: -webkit-box !important;
+                    -webkit-box-orient: vertical !important;
+                    -webkit-line-clamp:1 !important;// 限制快级元素的文本行数
+                    overflow: hidden !important;
+                }
+                .explain3-text4{
+                    color:#999;
+                    font-size:14px;
+                    display: flex;
+                    padding-top: 10px;
+                }
+                .explain3-text5{
+                    color:#999;
+                    font-size:14px;
+                    padding-top: 10px;
+                }
+                .explain3-text6{
+                    background-color: #ebebeb;
+                    color:#2c2c2c;
+                    font-size:14px;
+                    height: 332px;
+                    border-radius: 5px;
+                    margin-top: 2rem;
+                    .bg-border-img{
+                        width: 100%;
+                        height: 100%;
                         border-radius: 5px;
-                        transform: scale(.9);
-                        .text-button{
-                            color: #2c2c2c;
-                            font-size: 14px;
-                            width: 100%;
-                        }
                     }
                 }
             }
+            .explain3:nth-child(2n+1){
+                width: 380px;
+                margin:0 auto;
+                height: 630px;
+                float: left;
+                background-color: #fff;
+                cursor:pointer;
+                border-radius: 5px;
+                opacity: 0.8;
+                padding: 23px;
+                margin-top: 17px;
+                .explain3-text{
+                    font-size:20px;
+                    font-family:Source Han Sans CN;
+                    font-weight:bold;
+                    color:#2c2c2c;
+                    padding-top: 10px;
+                    display: -webkit-box !important;
+                    -webkit-box-orient: vertical !important;
+                    -webkit-line-clamp:1 !important;// 限制快级元素的文本行数
+                    overflow: hidden !important;
+                }
+                .explain3-text2{
+                    color:#999;
+                    font-size:14px;
+                    padding-top: 10px;
+                }
+                .explain3-text3{
+                    color:#999;
+                    font-size:14px;
+                    padding-top: 3rem;
+                    display: -webkit-box !important;
+                    -webkit-box-orient: vertical !important;
+                    -webkit-line-clamp:1 !important;// 限制快级元素的文本行数
+                    overflow: hidden !important;
+                }
+                .explain3-text4{
+                    color:#999;
+                    font-size:14px;
+                    display: flex;
+                    padding-top: 10px;
+                }
+                .explain3-text5{
+                    color:#999;
+                    font-size:14px;
+                    padding-top: 10px;
+                }
+                .explain3-text6{
+                    background-color: #ebebeb;
+                    color:#2c2c2c;
+                    font-size:14px;
+                    height: 332px;
+                    margin-top: 2rem;
+                    border-radius: 5px;
+                    .bg-border-img{
+                        width: 100%;
+                        height: 100%;
+                        border-radius: 5px;
+                    }
+                }
+            }
+          }
           }
         }
         .nav-contunt-div12{
