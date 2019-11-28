@@ -153,7 +153,9 @@
                       <!-- <img :src="item.teacher_img" /> -->
                     </div>
                     <div class="fruit-list-li-text"  @click="selectItem(item)">
+                      <a :href='`/cultivate/detail/${item.id}`' onclick="return false;" style="color:#2c2c2c;text-decoration:none">
                       <div>{{item.theme}}</div>
+                      </a>
                     </div>
                     <div class="fruit-list-li-text2">
                       <el-rate :colors="['#58B708','#58B708','#58B708']" disabled :value="item.diff"></el-rate>
@@ -196,7 +198,9 @@
                   <!-- <img :src="item.teacher_img" /> -->
                   </div>
                   <div class="fruit-list-li-text" @click="selectItem(item)">
+                    <a :href='`/cultivate/detail/${item.id}`' onclick="return false;" style="color:#2c2c2c;text-decoration:none">
                     <div>{{item.theme}}</div>
+                    </a>
                   </div>
                   <div class="fruit-list-li-text2">
                     <el-rate :colors="['#58B708','#58B708','#58B708']" disabled :value="item.diff"></el-rate>

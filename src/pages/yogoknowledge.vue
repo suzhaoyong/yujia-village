@@ -35,8 +35,10 @@
                                 <p class="p-title">关键字：{{item.keyword}}</p>
                                 <p class="p-desc">{{item.summary}}</p>
                                 <div class="count-button">
-                                    <div  class="count-button-but">
-                                        <el-button type="text" @click="selectItem(item)">查看全部</el-button>
+                                    <div class="count-button-but">
+                                        <el-button type="text" @click="selectItem(item)">
+                                            <a :href='`/yogoknowledge/yogoknowledgedetails?id=${item.id}`' onclick="return false;" style="color:#fff;text-decoration:none">查看全部</a>
+                                        </el-button>
                                     </div>
                                     <div class="count-button-right">
                                         <!-- <img class="img1" src="../assets/share.png"/> -->
@@ -46,6 +48,7 @@
                                 </div>
                             </div>
                             </div>
+                            
                         </div>
                         <div class="block">
                             <el-pagination
