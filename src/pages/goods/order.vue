@@ -278,7 +278,7 @@ export default {
       pay: {
         type: ''
       },
-      fraction: 200,
+      fraction: 0,
       goods: [],
       address: [],
       addressActive: {},
@@ -458,7 +458,7 @@ export default {
       } else {
         // this.addressActive = data.address[data.address.length-1];
       }
-      // this.fraction = response.fraction
+      this.fraction = response.fraction
       this.goods = response.goods;
     });
   },

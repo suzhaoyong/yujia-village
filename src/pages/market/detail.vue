@@ -261,20 +261,22 @@
             v-for="(item, index) in result.list"
             :key="index"
           >
-            <div class="pic">
-              <img :src="item.cover_url" alt />
-            </div>
-            <div class="gtitle">{{item.describe}}</div>
-            <div class="price-views-collenct">
-              <div class="price">
-                <div class="old-price">￥{{item.sell_price}}</div>
-                <div class="new-price">￥{{(item.sell_price - item.discount).toFixed(2)}}</div>
+            <a :href="`/goods/detail/${item.id}`" onclick="return false;">
+              <div class="pic">
+                <img :src="item.cover_url" alt />
               </div>
-              <div class="views-collenct">
-                <div class="views">{{item.views}}</div>
-                <div class="collenct" @click="addCollect">收藏</div>
+              <div class="gtitle">{{item.describe}}</div>
+              <div class="price-views-collenct">
+                <div class="price">
+                  <div class="old-price">￥{{item.sell_price}}</div>
+                  <div class="new-price">￥{{(item.sell_price - item.discount).toFixed(2)}}</div>
+                </div>
+                <div class="views-collenct">
+                  <div class="views">{{item.views}}</div>
+                  <div class="collenct" @click="addCollect">收藏</div>
+                </div>
               </div>
-            </div>
+            </a>
           </div>
           <div class="no_result" style="width:100%;" v-if="result.list.length === 0">
             <not-found v-if="result.list.length === 0" type="not-fond" msg="暂无相关信息"></not-found>
@@ -310,20 +312,22 @@
             v-for="(item, index) in resenView.data"
             :key="index"
           >
-            <div class="pic">
-              <img :src="item.cover_url" alt />
-            </div>
-            <div class="g-title">{{item.describe}}</div>
-            <div class="price-views-collenct">
-              <div class="price">
-                <div class="old-price">￥{{item.sell_price}}</div>
-                <div class="new-price">￥{{(item.sell_price - item.discount).toFixed(2)}}</div>
+            <a :href="`/goods/detail/${item.id}`" onclick="return false;">
+              <div class="pic">
+                <img :src="item.cover_url" alt />
               </div>
-              <div class="views-collenct">
-                <div class="views">{{item.views}}</div>
-                <div class="collenct">收藏</div>
+              <div class="g-title">{{item.describe}}</div>
+              <div class="price-views-collenct">
+                <div class="price">
+                  <div class="old-price">￥{{item.sell_price}}</div>
+                  <div class="new-price">￥{{(item.sell_price - item.discount).toFixed(2)}}</div>
+                </div>
+                <div class="views-collenct">
+                  <div class="views">{{item.views}}</div>
+                  <div class="collenct">收藏</div>
+                </div>
               </div>
-            </div>
+            </a>
           </div>
         </div>
         <not-found v-if="resenView.data.length === 0" type="not-fond" msg="暂无相关信息"></not-found>
@@ -521,6 +525,14 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+a:hover{
+  color: inherit;
+  text-decoration:none;
+}
+a {
+  color: inherit;
+}
+
 @mixin no_select() {
   -moz-user-select: -moz-none;
   -moz-user-select: none;

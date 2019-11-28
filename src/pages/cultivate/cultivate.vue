@@ -170,7 +170,9 @@
                       <a class="hd" href="javascript:;" :title="'想学:'+(item.follow||100)"></a>
                       <span>{{item.follow||100}}</span>
                     </span>
-                    <span class="study" @click="study(item.id)">我想学</span>
+                    <a :href="`/cultivate/detail/${item.id}`" onclick="return false;">
+                      <span class="study" @click="study(item.id)">我想学</span>
+                    </a>
                   </div>
                 </div>
                 <not-found v-if="fruit.length === 0" type="not-fond" msg="暂无相关信息"></not-found>
@@ -215,7 +217,9 @@
                     <a class="hd" href="javascript:;" :title="'想学:'+(item.follow||100)"></a>
                     <span>{{item.follow||100}}</span>
                   </span>
-                  <span class="study" @click="study(item.id)">我想学</span>
+                  <a :href="`/cultivate/detail/${item.id}`" onclick="return false;">
+                    <span class="study" @click="study(item.id)">我想学</span>
+                  </a>
                 </div>
               </div>
               <not-found v-if="fruitclasslist.length === 0" type="not-fond" msg="暂无相关信息"></not-found>
@@ -226,26 +230,28 @@
               v-for="(item, index) in newList"
               :key="index"
             >
-              <div class="news_bg_img" :style="`backgroundImage: url(${item.teacher_img})`" @click="selectItem(item)">
-                <!-- <img :src="item.teacher_img" /> -->
-              </div>
-              <div class="bian">
-                <div class="div5-list">
-                  <div class="li-text">
-                    <h4 @click="selectItem(item)">{{item.theme}}</h4>
-                    <div class="list-eye">￥{{item.price}}</div>
-                  </div>
-                  <el-rate :value="item.diff" :colors="['#58B708','#58B708','#58B708']" disabled></el-rate>
-                  <div class="li-text2">
-                    适用人群：
-                    <pre>{{item.crowd}}</pre>
-                  </div>
-                  <div class="li-text3">开课时间：{{item.startTime}}/{{item.endTime}}</div>
-                  <div class="li-text4">地 址：{{item.address}}</div>
+              <a :href="`/cultivate/detail/${item.id}`" onclick="return false;">
+                <div class="news_bg_img" :style="`backgroundImage: url(${item.teacher_img})`" @click="selectItem(item)">
+                  <!-- <img :src="item.teacher_img" /> -->
                 </div>
-                <img class="border-img" src="../../assets/image47.png" />
-              </div>
-              <div class="color-box"></div>
+                <div class="bian">
+                  <div class="div5-list">
+                    <div class="li-text">
+                      <h4 @click="selectItem(item)">{{item.theme}}</h4>
+                      <div class="list-eye">￥{{item.price}}</div>
+                    </div>
+                    <el-rate :value="item.diff" :colors="['#58B708','#58B708','#58B708']" disabled></el-rate>
+                    <div class="li-text2">
+                      适用人群：
+                      <pre>{{item.crowd}}</pre>
+                    </div>
+                    <div class="li-text3">开课时间：{{item.startTime}}/{{item.endTime}}</div>
+                    <div class="li-text4">地 址：{{item.address}}</div>
+                  </div>
+                  <img class="border-img" src="../../assets/image47.png" />
+                </div>
+                <div class="color-box"></div>
+              </a>
             </div>
             <not-found v-if="newList.length === 0" type="not-fond" msg="暂无相关信息"></not-found>
           </div>
@@ -821,6 +827,13 @@ export default {
 };
 </script>
 <style scoped>
+a:hover{
+  color: inherit;
+  text-decoration:none;
+}
+a {
+  color: inherit;
+}
 .cultivate-main >>> .el-date-table td.available.in-range.start-date {
 }
 .cultivate-main >>> .el-pager li:not(.disabled).active {

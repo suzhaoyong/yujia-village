@@ -16,25 +16,27 @@
       <div class="market_news">
         <session-title name="好物推荐"></session-title>
         <div class="market_news-content" v-for="item in good_recomment.new" :key="item.id">
-          <div class="market_news-content_box">
-            <div class="market_news-content_box-lf">
-              <div class="goods_img">
-                <img :src="item.url_one" alt="商品" />
+          <a :href="`/goods/detail/${item.id}`" onclick="return false;">
+            <div class="market_news-content_box">
+              <div class="market_news-content_box-lf">
+                <div class="goods_img">
+                  <img :src="item.url_one" alt="商品" />
+                </div>
+              </div>
+              <div class="market_news-content_box-rh">
+                <div class="goods_subimg">
+                  <img :src="item.url_two" alt="商品" />
+                </div>
+                <div class="goods_info">
+                  <div class="goods_info-title">{{item.desc}}</div>
+                  <div class="goods_info-tips">{{item.describe}}</div>
+                  <div class="goods_info-border"></div>
+                  <div class="goods_info-price">{{item.sell_price - item.discount}}<span class="rmb">RMB</span> <span v-if="item.discount > 0" style="color:#ccc;text-decoration: line-through;">{{item.sell_price}}<span style="color:#ccc;" class="rmb">RMB</span></span></div>
+                  <div class="goods_buy-btn" style="cursor: pointer;" @click="viewGoodsDetail(item)" >查看详情</div>
+                </div>
               </div>
             </div>
-            <div class="market_news-content_box-rh">
-              <div class="goods_subimg">
-                <img :src="item.url_two" alt="商品" />
-              </div>
-              <div class="goods_info">
-                <div class="goods_info-title">{{item.desc}}</div>
-                <div class="goods_info-tips">{{item.describe}}</div>
-                <div class="goods_info-border"></div>
-                <div class="goods_info-price">{{item.sell_price - item.discount}}<span class="rmb">RMB</span> <span v-if="item.discount > 0" style="color:#ccc;text-decoration: line-through;">{{item.sell_price}}<span style="color:#ccc;" class="rmb">RMB</span></span></div>
-                <div class="goods_buy-btn" style="cursor: pointer;" @click="viewGoodsDetail(item)" >查看详情</div>
-              </div>
-            </div>
-          </div>
+          </a>
         </div>
       </div>
 
@@ -46,27 +48,29 @@
           <div class="time_border2"></div>
         </div>
         <div class="market_time-content" v-for="item in good_recomment.discount" :key="item.id">
-          <div class="after"></div>
-          <div class="rhomb"></div>
-          <div class="market_time-content_box">
-            <div class="market_time-content_box-lf">
-              <div class="goods_img">
-                <img :src="item.url_one" alt="商品" />
+          <a :href="`/goods/detail/${item.id}`" onclick="return false;">
+            <div class="after"></div>
+            <div class="rhomb"></div>
+            <div class="market_time-content_box">
+              <div class="market_time-content_box-lf">
+                <div class="goods_img">
+                  <img :src="item.url_one" alt="商品" />
+                </div>
+              </div>
+              <div class="market_time-content_box-rh">
+                <div class="goods_info">
+                  <div class="goods_info-title">{{item.desc}}</div>
+                  <div class="goods_info-tips">{{item.describe}}</div>
+                  <div class="goods_info-border"></div>
+                  <div class="goods_info-price">{{item.sell_price -  item.discount}}<span class="rmb">RMB</span> <span v-if="item.discount > 0" style="color:#ccc;text-decoration: line-through;">{{item.sell_price}}<span style="color:#ccc;" class="rmb">RMB</span></span></div> 
+                  <div class="goods_buy-btn" style="cursor: pointer;" @click="viewGoodsDetail(item)" >查看详情</div>
+                </div>
+                <div class="goods_subimg">
+                  <img :src="item.url_two" alt="商品" />
+                </div>
               </div>
             </div>
-            <div class="market_time-content_box-rh">
-              <div class="goods_info">
-                <div class="goods_info-title">{{item.desc}}</div>
-                <div class="goods_info-tips">{{item.describe}}</div>
-                <div class="goods_info-border"></div>
-                <div class="goods_info-price">{{item.sell_price -  item.discount}}<span class="rmb">RMB</span> <span v-if="item.discount > 0" style="color:#ccc;text-decoration: line-through;">{{item.sell_price}}<span style="color:#ccc;" class="rmb">RMB</span></span></div> 
-                <div class="goods_buy-btn" style="cursor: pointer;" @click="viewGoodsDetail(item)" >查看详情</div>
-              </div>
-              <div class="goods_subimg">
-                <img :src="item.url_two" alt="商品" />
-              </div>
-            </div>
-          </div>
+          </a>
         </div>
       </div>
       <div class="market_often-btn">
@@ -110,17 +114,19 @@
                 v-for="(item, index) in recommend_list"
                 :key="index"
               >
-                <div class="img">
-                  <img :src="item.cover_url" alt />
-                </div>
-                <div class="info">
-                  <div class="title">{{item.desc}}</div>
-                  <div class="subtitle">{{item.describe}}</div>
-                  <div class="price">
-                    <div class="price-old">￥{{item.sell_price}}</div>
-                    <div class="price-new">￥{{item.sell_price - item.discount}}</div>
+                <a :href="`/goods/detail/${item.good_id}`" onclick="return false;">
+                  <div class="img">
+                    <img :src="item.cover_url" alt />
                   </div>
-                </div>
+                  <div class="info">
+                    <div class="title">{{item.desc}}</div>
+                    <div class="subtitle">{{item.describe}}</div>
+                    <div class="price">
+                      <div class="price-old">￥{{item.sell_price}}</div>
+                      <div class="price-new">￥{{item.sell_price - item.discount}}</div>
+                    </div>
+                  </div>
+                </a>
               </div>
             </div>
           </div>
@@ -254,6 +260,13 @@ export default {
 };
 </script>
 <style scoped>
+a:hover{
+  color: inherit;
+  text-decoration:none;
+}
+a {
+  color: inherit;
+}
 .hvr-underline-from-left:before {
   background: #2c2c2c;
   overflow: visible;
