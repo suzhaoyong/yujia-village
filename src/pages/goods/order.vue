@@ -90,7 +90,7 @@
                 <div class="Integraluse_bottom">
                   <el-radio-group v-model="goods[index].jifen" style="cursor: pointer;">
                     <div class="use_one" v-for="(jifen, index) in item.good_discount['积分']" :key="index">
-                        <el-radio :disabled="isDisableChooseChonsumeIdentity(jifen, item.discount_sign)||isDisableChooseChonsume(jifen)" :label="jifen.id">{{`${jifen.consume}${jifen.remake}${jifen.deduction}元`}}</el-radio>
+                        <el-radio :disabled="isDisableChooseChonsumeIdentity(jifen, item)||isDisableChooseChonsume(jifen)" :label="jifen.id">{{`${jifen.consume}${jifen.remake}${jifen.deduction}元`}}</el-radio>
                     </div>
                     <div class="use_three">
                         <el-radio :label="0">不使用积分</el-radio>
@@ -278,7 +278,7 @@ export default {
       pay: {
         type: ''
       },
-      fraction: 0,
+      fraction: 200,
       goods: [],
       address: [],
       addressActive: {},
@@ -344,19 +344,6 @@ export default {
         .filter(item => item)
     },
     getCountDiscount() {
-      // return this.goods
-      //   .map(item => {
-      //     if(!item.jifen) return {deduction: 0, num: 1, is_repeat_dis: 0}
-      //     const jifen_id = item.jifen;
-      //     const jifen_select = item.good_discount['积分'].filter(item => item.id === jifen_id)
-      //     return jifen_select && jifen_select[0] || {deduction: 0, num: 1, is_repeat_dis: 0}
-      //   })
-      //   .reduce((pre, cur) => {
-      //     let num = 1
-      //     if (parseInt(cur.is_repeat_dis) === 1) {
-      //       num = cur.num
-      //     }
-      //   }, 0)
         return  this.goods
           .map(item => {
             if(!item.jifen) return 0;
@@ -364,6 +351,7 @@ export default {
             const jifen_select = item.good_discount['积分'].filter(item => item.id === jifen_id)[0]
             const goods_price = (item.sell_price - item.discount)
             let num = 1
+            // 优惠券可重叠
             if (parseInt(item.is_repeat_dis) === 1) {
               num = item.num
             }
@@ -419,9 +407,17 @@ export default {
         }
       }
     },
+    getResiduFraction() {
+      const sumConsume = this.getDeductionArr.map(item => item.consume).reduce((pre, cur) => pre + cur, 0)
+      if (sumConsume > this.fraction) {
+        return 0
+      } 
+      return this.fraction - sumConsume
+    },
     isDisableChooseChonsumeIdentity(){
-      return (item, discount_sign) => {
-        if(item.user_limit == 1 && discount_sign == 1) return false;
+      return (item, goods) => {
+        if (item.consume * goods.num > this.getResiduFraction) return true;
+        if(item.user_limit == 1 && goods.discount_sign == 1) return false;
 
         return true;
       }
@@ -462,7 +458,7 @@ export default {
       } else {
         // this.addressActive = data.address[data.address.length-1];
       }
-      this.fraction = response.fraction
+      // this.fraction = response.fraction
       this.goods = response.goods;
     });
   },
