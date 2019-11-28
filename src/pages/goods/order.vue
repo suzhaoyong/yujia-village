@@ -81,7 +81,7 @@
                   </div>
                 </div>
                 <div class="price-number">
-                  <div class="price">￥{{item.sell_price - item.discount}}</div>
+                  <div class="price">￥{{(item.sell_price - item.discount).toFixed(2)}}</div>
                   <div class="number">x{{item.num}}</div>
                 </div>
               </div>
@@ -344,7 +344,29 @@ export default {
         .filter(item => item)
     },
     getCountDiscount() {
-        return  this.getDeductionArr.map(item => item.deduction).reduce((pre, cur) => pre + cur, 0)
+      // return this.goods
+      //   .map(item => {
+      //     if(!item.jifen) return {deduction: 0, num: 1, is_repeat_dis: 0}
+      //     const jifen_id = item.jifen;
+      //     const jifen_select = item.good_discount['积分'].filter(item => item.id === jifen_id)
+      //     return jifen_select && jifen_select[0] || {deduction: 0, num: 1, is_repeat_dis: 0}
+      //   })
+      //   .reduce((pre, cur) => {
+      //     let num = 1
+      //     if (parseInt(cur.is_repeat_dis) === 1) {
+      //       num = cur.num
+      //     }
+      //   }, 0)
+        return  this.goods
+          .map(item => {
+            if(!item.jifen) return {deduction: 0, num: 1, is_repeat_dis: 0}
+            return item
+          })
+          .map(item => {
+            console.log(item);
+            return item
+            })
+          .reduce((pre, cur) => pre + cur, 0)
     },
     getDiscountIds() {
       return this.goods
@@ -362,12 +384,15 @@ export default {
           const jifen_id = item.jifen;
           const jifen_select = item.good_discount['积分'].filter(item => item.id === jifen_id)[0]
           const goods_price = (item.sell_price - item.discount)
-
+          let num = 1
+          if (parseInt(item.is_repeat_dis) === 1) {
+            num = item.num
+          }
           if(jifen_select && jifen_select.deduction) {
             if(goods_price > jifen_select.deduction) {
-              return (jifen_select.deduction)
+              return (jifen_select.deduction) * num
             } else {
-              return goods_price;
+              return goods_price * num;
             }
           }
           return 0;
