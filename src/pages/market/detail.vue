@@ -268,7 +268,7 @@
             <div class="price-views-collenct">
               <div class="price">
                 <div class="old-price">￥{{item.sell_price}}</div>
-                <div class="new-price">￥{{item.sell_price - item.discount}}</div>
+                <div class="new-price">￥{{(item.sell_price - item.discount).toFixed(2)}}</div>
               </div>
               <div class="views-collenct">
                 <div class="views">{{item.views}}</div>
@@ -317,7 +317,7 @@
             <div class="price-views-collenct">
               <div class="price">
                 <div class="old-price">￥{{item.sell_price}}</div>
-                <div class="new-price">￥{{item.sell_price - item.discount}}</div>
+                <div class="new-price">￥{{(item.sell_price - item.discount).toFixed(2)}}</div>
               </div>
               <div class="views-collenct">
                 <div class="views">{{item.views}}</div>
