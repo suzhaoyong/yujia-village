@@ -30,7 +30,7 @@ export default {
       order: {
         out_trade_no: ''
       },
-      total_fee: '',
+      total_fee: 0,
       payway: {
         show: false,
         success: false,
@@ -47,7 +47,9 @@ export default {
   created() {
     const { orderId } = this.$route.query
     this.order.out_trade_no = orderId
-    this.total_fee = sessionStorage.getItem('total_fee') || '0.00'
+    if(sessionStorage.getItem('total_fee')) {
+      this.total_fee = parseFloat(sessionStorage.getItem('total_fee')).toFixed(2) || '0.00'
+    }
   },
   mounted() {
     const loading = this.$loading({

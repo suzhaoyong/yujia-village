@@ -677,6 +677,12 @@ export default {
       if (this.getDiscountIds.length > 0) {
         discountId = this.getDiscountIds
       }
+      if(this.pay.type === 'alipay') {
+        params.payment = 2
+      }
+      if(this.pay.type === 'wechat') {
+        params.payment = 3
+      }
       params = Object.assign({}, params, { id, lid, num, discountId });
       // console.log(params);
       // return;
@@ -688,12 +694,12 @@ export default {
         } else if (msg === '支付完成') {
           this.$message.success(msg)
           setTimeout(() => {
-           this.$router.push({
-             name: 'thank you page',
-             params: {
-               orderId: 1
-             }
-           }) 
+            this.$router.push({
+              name: 'thank you page',
+              params: {
+                orderId: 1
+              }
+            }) 
           }, 1000);
         } else {
           this.$message.error(msg)

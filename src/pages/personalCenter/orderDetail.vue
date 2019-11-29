@@ -110,10 +110,10 @@
         </div>
         <div class="Integraluse">
           <div class="Integraluse_bottom">
-             <div class="use_five" v-show="false">
+            <div class="use_five">
               <span style="font-size:0.9rem;"><strong>积分使用：</strong></span>
-              <span class="">2000 积分</span>
-              <span class="span_uses">商品减免 100 元</span>
+              <span class="">{{detail.total_fractiond}} 积分</span>
+              <span class="span_uses">商品减免 {{detail.total_deduction}} 元</span>
             </div>
             <div class="use_four">
               <span class="span_use">{{goods.length}}件商品，总商品金额</span>
@@ -140,7 +140,7 @@
             <span class="tips">(不含运费)</span>
             <div class="price">¥{{detail.totalPrice}}</div>
           </div>
-          <div v-if="detail.status === '待付款'" :class="['sumbit']" @click="payOrder">{{detail.payment}}支付</div>
+          <div v-if="detail.status === '待付款'" :class="['sumbit']" @click="payOrder">{{detail.payment}}支付&nbsp;&nbsp;&nbsp;&nbsp;{{countdownTime}}</div>
         </div>
       </div>
     </div>
@@ -256,6 +256,8 @@ export default {
   },
   data() {
     return {
+      countdownTime: '',
+
       discount: [],
       radio:'',
       icon: {
@@ -456,8 +458,6 @@ export default {
     clearTimeout(timer)
   },
   mounted() {
-    let xxx = new Date().getTime()
-    this.countdown(xxx, 2080000)
     const { no = '' } = this.$route.params
     this.$request(`/order/good/${no}`)
       .then(response => {
@@ -469,25 +469,19 @@ export default {
             ...response
           }
         ]
+        if(Date.parse(new Date()) - Date.parse(response.updateTime) <= 0) {
+          this.countdown(new Date(), response.updateTime)
+        }
       })
-    // getUserAddress().then(response => {
-    //   this.address = response.address;
-    //   if (response.address.length === 0) {
-    //   } else {
-    //     // this.addressActive = data.address[data.address.length-1];
-    //   }
-    //   this.fraction = response.fraction
-    //   this.goods = response.goods;
-    // });
   },
   methods: {
-     countdown (newTime, duretion) {
+    countdown (startTime, endTime) {
       // 目标日期时间戳
-      const end = newTime + duretion
+      const end = Date.parse(endTime)
       // 当前时间戳
-      const now = newTime
+      const start = Date.parse(startTime) 
       // 相差的毫秒数
-      const msec = end - now
+      const msec = end - start
       // 计算时分秒数
       let day = parseInt(msec / 1000 / 60 / 60 / 24)
       let hr = parseInt(msec / 1000 / 60 / 60 % 24)
@@ -499,13 +493,15 @@ export default {
       sec = sec > 9 ? sec : '0' + sec
       // 控制台打印
       console.log(`${day}天 ${hr}小时 ${min}分钟 ${sec}秒`)
+      this.countdownTime = `${min}:${sec}`
       // 一秒后递归
       timer = setTimeout( () =>  {
-        this.countdown(newTime, msec - 1000)
+        this.countdown(new Date(start + 1000), endTime)
       }, 1000)
 
       if(msec == 0) {
         clearTimeout(timer)
+        this.detail.status = '已取消'
       }
     },
     payOrder() {
@@ -1369,7 +1365,7 @@ img {
         position: absolute;
         top: 0;
         right: 0;
-        width: 7rem;
+        width: 8rem;
         display: flex;
         justify-content: center;
         align-items: center;
