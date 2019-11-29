@@ -395,7 +395,9 @@ const router = new Router({
     // 404
     {
       path: '*',
-      redirect: '/not_found_page'
+      // redirect: '/not_found_page'
+      name: 'error',
+      component: () => import('@/components/404.vue')
     }
   ]
 })
