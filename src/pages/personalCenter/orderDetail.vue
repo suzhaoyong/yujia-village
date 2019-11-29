@@ -240,7 +240,6 @@
 import VDistpicker from "v-distpicker";
 import backIcon from "@/assets/market/back.png";
 import Validator from '@/utils/Validator.js';
-import Tictac from 'tictac.js';
 import {
   getUserAddress,
   getUserOrder,
