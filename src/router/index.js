@@ -105,6 +105,14 @@ const router = new Router({
           component: () => import('@/pages/personalCenter/recode')
         },
         {
+          path: 'orderDetail/:no',
+          name: 'personal order detail',
+          meta: {
+            header_name: 'personal'
+          },
+          component: () => import('@/pages/personalCenter/orderDetail')
+        },
+        {
           path: 'courseOrder',
           name: 'personal course order',
           meta: {

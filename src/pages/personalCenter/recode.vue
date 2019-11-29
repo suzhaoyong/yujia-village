@@ -14,7 +14,7 @@
           <div v-for="(item, index) in showOrder" :key="index">
             <div class="table_header">
               <div class="t_title">订单详情</div>
-              <div class="t_title">订单号: {{item.out_trade_no}}</div>
+              <div class="t_title" style="cursor: pointer;" @click="viewOrderDetailById(item)">订单号: {{item.out_trade_no}}</div>
               <div class="t_title">收货人</div>
               <div class="t_title">金额</div>
               <div class="t_title">操作</div>
@@ -31,7 +31,7 @@
                   </div>
                   <div class="send">{{item.name}}</div>
                   <div class="g_money">
-                    <div class="all">总额：¥{{good.total_sell}}</div>
+                    <div class="all">总额：¥{{good.total_sell * good.num}}</div>
                     <div style="color: #2c2c2c;">{{item.status === '待付款' ? '应付' : '实付'}} ¥{{good.total_price}}</div>
                     <!-- <div
                       style="padding-top:0.8rem;color: #2c2c2c;"
@@ -144,6 +144,14 @@ export default {
     });
   },
   methods: {
+    viewOrderDetailById(item) {
+      this.$router.push({
+        name: 'personal order detail',
+        params: {
+          no: item.out_trade_no
+        }
+      })
+    },
     viewOrder() {
       this.playcode.show = false;
     },
