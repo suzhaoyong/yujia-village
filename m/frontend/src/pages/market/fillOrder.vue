@@ -82,10 +82,7 @@
         <span>免减总额：¥{{deductionTotal}}</span>
       </div>
       <div class="order-foot-pay">实际支付：￥{{countPrice}}</div>
-      <div
-        class="order-foot-buybtn"
-        @click="pay"
-      >去付款</div>
+      <div class="order-foot-buybtn" @click="pay" >去付款</div>
     </footer>
     <!-- 支付方式 -->
     <!-- <van-popup v-model="payway.show" position="bottom">
@@ -105,9 +102,9 @@
       <div class="jifen-integral-use">积分使用</div>
       <van-radio-group v-model="radio">
         <van-cell-group :border="false">
-          <van-cell :title="item.consume+'积分,减免'+item.deduction +'元'" :border="false" 
+          <van-cell :title="item.consume+'积分,减免'+item.deduction +'元'+integralUse" :border="false" 
           clickable @click="checkIntegral(item.id,item.user_limit)"
-          v-for="(item,index) in goods_integral[goods_id]" :key="index">
+          v-for="(item,index) in goods_integral.integral[goods_id]" :key="index">
             <van-radio slot="right-icon" :name="item.id" checked-color="#B3D465"
             :disabled="item.user_limit==0?true:false"/>
           </van-cell>
@@ -173,7 +170,10 @@ export default {
       show: false,
       radio: 0,
       goods_id: '',
-      goods_integral: [],
+      goods_integral: {
+        is_repeat_dis: [],
+        integral: []
+      },
       // 多件商品折扣 id
       jf_id: [],
       // 单间折扣
@@ -227,28 +227,19 @@ export default {
       })
       return num;
     },
-    countDiscount() {
-      let total = 0;
-      let { money: p_money = 0 } = this.coupon.value
-      let { money: s_money = 0, surplus, use_val } = this.cash.value
-      if(p_money) {
-        total += p_money
-      }
-      if(surplus) {
-        if(use_val && use_val < surplus){
-          total += parseInt(use_val)
-        } else {
-          total += surplus
-        }
-      }
-      return this.goods.reduce((pre, next) => {
-        return pre + next.discount * next.num;
-      }, 0) + total;
-    },
     isAllowPay() {
       return this.selectAddress.name;
     },
-    
+    // 商品积分优惠使用说明
+    integralUse() {
+      var isRepeat = this.goods_integral.is_repeat_dis[this.goods_id];
+      if(isRepeat) {
+        return ' (每件商品)'
+      } else {
+        return ' (限一件商品)'
+      }
+    }
+
   },
   created() {
     const address = sessionStorage.getItem("select address");
@@ -269,7 +260,8 @@ export default {
       this.goods = [JSON.parse(buyGoods)];
       let that = this;
       this.goods.forEach(item => {
-        that.goods_integral.push(item.good_discount.积分);
+        that.goods_integral.integral.push(item.good_discount.积分);
+        that.goods_integral.is_repeat_dis.push(item.is_repeat_dis);
       })
     }
   },
@@ -305,7 +297,11 @@ export default {
         if(this.goods_id===index) {
           good_item.good_discount.积分.forEach(item => {
             if(item.id===that.radio) {
-              that.info[this.goods_id] = item.consume+'积分 减免'+item.deduction+'元';
+              if(good_item.is_repeat_dis) {
+                that.info[this.goods_id] = item.consume+'积分 减免'+item.deduction+'元'+' (每件商品)';
+              } else {
+                that.info[this.goods_id] = item.consume+'积分 减免'+item.deduction+'元'+' (限一件商品)';
+              }
               if(good_item.is_repeat_dis == 1) {
                 price = good_item.price - item.deduction*good_item.num;
               } else {
@@ -377,6 +373,7 @@ export default {
         city,
         address,
         addressId: this.selectAddress.id,
+        payment: 2
       };
       if (buyGoods && this.type == 1) {
         var m_params = {
@@ -393,6 +390,7 @@ export default {
           address,
           addressId: this.selectAddress.id,
           discountId: this.single_jfid,
+          payment: 2
         };
       } 
       if(this.type) {
@@ -417,10 +415,10 @@ export default {
           this.payMoney(res.out_trade_no);
         } 
       }).catch(error => {
-        if(error.code === 403) {
+        if(error.code === 430) {
           Toast("订单生成失败，您的积分不足");
         } else {
-          Toast("抱歉，网络出了点问题，请检查你的网络！");
+          Toast("抱歉，订单生成失败");
         }
       })
     },
@@ -503,7 +501,8 @@ export default {
           // 处理积分规则数据
           let that = this;
           this.goods.forEach(item => {
-            that.goods_integral.push(item.good_discount.积分);
+            that.goods_integral.integral.push(item.good_discount.积分);
+            that.goods_integral.is_repeat_dis.push(item.is_repeat_dis);
             that.jf_id.push(0);
           })
         } 
@@ -552,181 +551,10 @@ export default {
       color: #A3C554;
     }
 }
-.add_address {
-  padding: 1em;
-  text-align: center;
-  border: 10px solid transparent;
-  background: #fff;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-}
-.custom-title {
-  width: 5em;
-  text-align: right;
-  display: inline-block;
-}
-.popup {
-  padding: 10px;
-  .title {
-    padding: 10px 0;
-    font-size: 14px;
-    span {
-      font-size: 11px;
-      color: #999;
-      margin-left: 10px;
-    }
-  }
-  .xianJianQuan-body {
-    .xianJinQuan {
-      margin: 5px 0;
-      background-image: url("~@/assets/img/coup_bg.png");
-      background-size: 100% 100%;
-      background-repeat: no-repeat;
-      width: 294px;
-      height: 108px;
-      padding: 15px 6px 6px 15px;
-      .number_btn {
-        padding-bottom: 10px;
-        display: flex;
-        justify-content: space-between;
-
-        .number {
-          color: #fff;
-          font-size: 30px;
-          position: relative;
-          &::after {
-            content: "剩余券值/总券值";
-            display: back;
-            position: absolute;
-            width: 8em;
-            left: 50%;
-            bottom: -1em;
-            transform: translateX(-70%);
-            font-size: 11px;
-          }
-          .price_used,
-          .price_all {
-            margin: 0 10px;
-            font-size: 30px;
-            color: #fff;
-            position: relative;
-            &::after {
-              content: "¥";
-              display: back;
-              position: absolute;
-              top: 50%;
-              left: -0.5em;
-              transform: translateY(-50%);
-              font-size: 20px;
-            }
-          }
-          .price_all {
-            font-size: 30px;
-            margin-left: 14px;
-            color: #fff;
-          }
-        }
-        .btn {
-          padding: 6px 18px;
-          border-radius: 18px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: #fff;
-          color: #83b74d;
-        }
-      }
-      .inputbox_time {
-        padding-top: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        .inputbox {
-          input {
-            padding-left: 10px;
-            width: 120px;
-            height: 24px;
-            border-radius: 24px;
-          }
-        }
-        .time {
-          color: #fff;
-        }
-      }
-    }
-  }
-  .youHuiQuan-body {
-    .youHuiQuan {
-      margin: 5px 0;
-      background-image: url("~@/assets/img/coup_bg.png");
-      background-size: 100% 100%;
-      background-repeat: no-repeat;
-      width: 294px;
-      // height: 68px;
-      padding: 15px 6px 6px 15px;
-      display: flex;
-      justify-content: space-between;
-      .number_tips {
-        display: flex;
-        .number {
-          margin: 0 10px;
-          font-size: 30px;
-          color: #fff;
-          display: inline-block;
-          position: relative;
-          &::after {
-            content: "¥";
-            display: back;
-            position: absolute;
-            top: 50%;
-            left: -0.5em;
-            transform: translateY(-50%);
-            font-size: 20px;
-          }
-        }
-        .tips {
-          .name {
-            color: #fff;
-            display: block;
-          }
-          .time {
-            // display: block;
-            padding-top: 1em;
-            color: #fff;
-            font-size: 11px;
-          }
-        }
-      }
-      .btn {
-        padding: 6px 18px;
-        border-radius: 18px;
-        height: 24px;
-        display: flex;
-        flex-shrink: 0;
-        align-items: center;
-        justify-content: center;
-        background: #fff;
-        color: #83b74d;
-      }
-    }
-  }
-}
 .order {
   width: 100%;
-  // height: 100%;
-  header {
-    height: 35px;
-    text-align: center;
-    background: #eeeeee;
-    font-size: 16px;
-    line-height: 35px;
-  }
   &-main {
     width: 100%;
-    // height: 100%;
     background: #eeeeee;
     font-size: 12px;
     margin-top: 47px;
@@ -760,6 +588,9 @@ export default {
       &-adress {
         div:nth-child(1) {
           margin-bottom: 17px;
+        }
+        div:nth-child(2) {
+          width: 256px;
         }
       }
       &-icon {

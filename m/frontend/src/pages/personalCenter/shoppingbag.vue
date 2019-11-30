@@ -108,7 +108,6 @@ export default {
                 closeOnPopstate: true,
                 beforeClose: (action, done) => {
                     if(action === 'confirm') {
-                        console.log('confirm');
                         this.delShoppingBag(this.shoppingBagList.filter(item => item.check).map(item => item.id))
                         done(); 
                     } else {
