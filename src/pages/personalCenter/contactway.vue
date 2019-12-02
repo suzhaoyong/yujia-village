@@ -20,7 +20,7 @@
                                     <el-checkbox v-for="i in cities" :label="i" :key="i">允许向我邀请的好友展示联系方式</el-checkbox>
                                 </el-checkbox-group>
                                  <img src="../../assets/personal/interro.png" class="img" @click="showCont"/>
-                                 <div class="bubble" v-if="show">
+                                 <div class="bubble" v-show="show">
                                      <p class="p2">例如：您邀请了张三、李四、王五、则他们可以看到您的联系方式，否则，隐藏信息。</p>
                                  </div>
                             </div>
@@ -29,7 +29,7 @@
                                     <el-checkbox v-for="i in cities2" :label="i" :key="i">允许向推荐人展示联系方式</el-checkbox>
                                 </el-checkbox-group>
                                  <img src="../../assets/personal/interro.png" class="img" @click="showCont2"/>
-                                 <div class="bubble2" v-if="show2">
+                                 <div class="bubble2" v-show="show2">
                                      <p class="p2">例如：您的邀请人是张三，如果勾选，他将可以看到您的联系方式，否则，隐藏信息。</p>
                                  </div>
                             </div>
@@ -38,7 +38,7 @@
                                     <el-checkbox v-for="i in cities3" :label="i" :key="i">我是一个高冷的人，拒绝“抛头露面”</el-checkbox>
                                 </el-checkbox-group>
                                  <img src="../../assets/personal/interro.png" class="img" @click="showCont3"/>
-                                 <div class="bubble3" v-if="show3">
+                                 <div class="bubble3" v-show="show3">
                                      <p class="p2">如果勾选，您的信息将始终隐藏。</p>
                                  </div>
                             </div>
@@ -56,6 +56,12 @@
                                 <div class="from_item">
                                     <div class="from_item_title">QQ</div>
                                     <el-input v-model.number="useridqq" placeholder="请输入QQ" maxlength="11" @change="getFullqq" onKeyUp="value=value.replace(/\D/g,'')" onafterpaste="value=value.replace(/\D/g,'')" ></el-input>
+                                </div>
+                                <div class="bottom-botton">
+                                    <div class="btn-wrap">
+                                        <span class="view" @click="sureChange">确认修改</span>
+                                        <!-- <span class="back" @click="back">返回首页</span> -->
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -89,9 +95,31 @@ export default {
         ...mapGetters(["info","isUserNeedLogin"]),
     },
     created () {
-        this.information();
+    },
+    mounted() {
+        if(this.isUserNeedLogin) {
+            this.getPersonal()
+                .then(() => {
+                    this.information();
+                })
+        } else {
+            this.information();
+        }
     },
     methods:{
+        /** 个人信息 */
+        getPersonal() {
+            return this.$request("/personal/home").then(data => {
+                store.dispatch("INFO", data);
+            });
+        },
+        sureChange() {
+            if(this.checked.length === 0) {
+                this.$message.warning('请选择展示方式');
+                return;
+            }
+            this.currentevent();
+        },
         currentevent(){
             let params = {
                 type:this.checked,
@@ -111,16 +139,16 @@ export default {
                    this.disabled=true;
                }
             }
-            this.currentevent();
+            // this.currentevent();
         },
         getFullweixin(val) {
-            this.currentevent();
+            // this.currentevent();
           },
         getFulltel(val){
-            this.currentevent();
+            // this.currentevent();
         },
         getFullqq(val){
-            this.currentevent();
+            // this.currentevent();
         },
         showCont(){
             this.show = !this.show;
@@ -172,8 +200,8 @@ export default {
     width: 100%;
     background-image: url("../../assets/personal/bg.png");
     background-repeat: no-repeat;
-    background-size: 100% 100%;
-    height: 100%;
+    height: 100vh;
+    background-size: cover;
     display: inline-block;
     @include full-width(margin, 960px);
     .contactway_mian{
@@ -184,7 +212,8 @@ export default {
             margin-top: 1.8rem;
         }
         .contactway_setting{
-            height: 34rem;
+            // height: 34rem;
+            padding-bottom: 2rem;
             background-image: url("../../assets/personal/share.png");
             background-repeat: no-repeat;
             background-size: 100% 60%;
@@ -225,7 +254,7 @@ export default {
                 background-repeat: no-repeat;
                 background-size: 100% 100%;
                 width: 86%;
-                height:22rem;
+                // height:22rem;
                 margin: 0 auto;
                 overflow: hidden;
                 display: flex;
@@ -259,6 +288,12 @@ export default {
                         width: 18px;
                         height: 18px;
                         cursor: pointer;
+                        &:hover + .bubble, &:hover + .bubble2, &:hover + .bubble3 {
+                                display: block!important;
+                            }
+                        & + .bubble, & + .bubble2, & + .bubble3 {
+                            display: none;
+                        }
                      }
                      .bubble{
                         background-image: url("../../assets/personal/bubble.png");
@@ -342,6 +377,39 @@ export default {
                                 font-weight:400;
                                 color: #2c2c2c;
                                 margin-bottom: 12px;
+                            }
+                        }
+                        .bottom-botton{
+                            .btn-wrap{
+                                padding-top: 1.25rem;
+                                padding-bottom: 0.9rem;
+                                // border-top: 1px solid #eee;
+                                .view{
+                                width: 7rem;
+                                height: 3rem;
+                                line-height: 3rem;
+                                color: #fff;
+                                text-align: center;
+                                background: #68B75B;
+                                display: inline-block;
+                                cursor: pointer;
+                                border-radius: 0.2rem;
+                                font-size: 0.9rem;
+                                }
+                                .back{
+                                border-radius: 0.2rem;
+                                font-size: 0.9rem;
+                                cursor: pointer;
+                                width: 7rem;
+                                height: 3rem;
+                                margin-left: 2rem;
+                                line-height: 3rem;
+                                color: #68B75B;
+                                text-align: center;
+                                background: #fff;
+                                border: 1px solid #eee;
+                                display: inline-block;
+                                }
                             }
                         }
                     }

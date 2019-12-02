@@ -138,8 +138,11 @@
                 <span class="fruit-item" :class="hostFw ? 'fw':'' " @click="hostRank('host')">热度</span>
                 <span class="fruit-item" :class="priceFW ? 'fw':'' " @click="priceRank('price')">价格</span>
                 <span>
-                  <span class="trigon-top el-icon-caret-top"></span>
-                  <span class="trigon-bottom el-icon-caret-bottom"></span>
+                  <span v-if="priceFlag === ''" class="el-icon-sort"></span>
+                  <div v-else style="display:inline-block;">
+                    <span v-show="priceFlag" style="margin-top: -0.4rem;" class="trigon-top el-icon-sort-down"></span>
+                    <span v-show="!priceFlag"  style="margin-top: -0.2rem;" class="trigon-bottom el-icon-sort-up"></span>
+                  </div>
                 </span>
               </div>
               <div class="fruit-list">
@@ -412,7 +415,7 @@ export default {
       // 排序关键字
       keyWord: '',
       // 控制价格排序的 flag
-      priceFlag: true,
+      priceFlag: '',
       position:'',
     };
   },
@@ -640,6 +643,7 @@ export default {
       this.defaultFw = true;
       this.hostFw = false;
       this.priceFW = false;
+      this.priceFlag = '';
       this.resultFw = false;
       this.keyWord = keyWord;
       this.getRank(this.getRankParams(keyWord, this.getFiltersParams()))
@@ -655,6 +659,7 @@ export default {
       this.defaultFw = false;
       this.priceFW = false;
       this.resultFw = false;
+      this.priceFlag = '';
       this.keyWord = keyWord;
       this.getRank(this.getRankParams(keyWord, this.getFiltersParams()))
     },

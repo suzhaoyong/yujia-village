@@ -13,7 +13,7 @@
         <div class="take-delivery">
           <div class="delivery">
             <div class="header"><span>订单信息</span></div>
-            <div class="body">
+            <div class="body" style="padding-bottom:1rem;">
               
               <div class="personal" v-if="getAddress">
                 <div class="personal_left" >
@@ -25,6 +25,9 @@
                   </div>
                   <div class="receiver_item">
                   <span class="receiver">收货地址：<span class="receiver_name">{{getAddress.userAddress || `${ getAddress.zone + getAddress.address}`}}</span></span>
+                  </div>
+                  <div class="receiver_item">
+                  <span class="receiver">下单日期：<span class="receiver_name">{{detail.createTime}}</span></span>
                   </div>
                 </div>
                 <div class="personal_right" v-show="false">

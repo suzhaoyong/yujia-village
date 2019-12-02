@@ -76,7 +76,7 @@
                     index="hell"
                   >机构信息</el-menu-item>
                   <el-menu-item index="safety-center">个人信息与安全</el-menu-item>
-                  <!-- <el-menu-item index="contactway">联系方式设置</el-menu-item> -->
+                  <el-menu-item index="contactway">联系方式设置</el-menu-item>
                   <el-menu-item index="share">分享邀请好友</el-menu-item>
                   <el-menu-item index="out" @click="logout">退出</el-menu-item>
                 </div>

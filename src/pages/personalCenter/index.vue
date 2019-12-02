@@ -3,7 +3,7 @@
     <div class="personal">
       <!-- <session-title name="已购买的课程"></session-title>
       <cloud :arr="[1,2,3,4, 5]"></cloud> -->
-      <div class="my-class" v-show="false">
+      <div class="my-class" v-if="false">
         <div
           class="goods-box"
           @click="viewWantDetail(item)"
@@ -62,8 +62,6 @@
             <div class="price-views-collenct">
               <div class="price"></div>
               <div class="views-collenct">
-                <!-- <div class="views">{{item.views}}</div>
-                <div class="collenct" @click="addCollect">收藏</div>-->
               </div>
             </div>
           </div>
@@ -73,10 +71,10 @@
             background
             :hide-on-single-page="true"
             layout="prev, pager, next, jumper"
-            :page-size="want.per_page"
+            :page-size="parseInt(want.per_page)"
             @current-change="changeWantPage"
-            :current-page="want.current_page"
-            :total="want.total"
+            :current-page="parseInt(want.current_page)"
+            :total="parseInt(want.total)"
           ></el-pagination>
         </div>
       </div>
@@ -99,11 +97,9 @@
           <div class="price-views-collenct">
             <div class="price">
               <div class="old-price">￥{{item.sell_price}}</div>
-              <div class="new-price">￥{{item.sell_price - item.discount}}</div>
+              <div class="new-price">￥{{(item.sell_price - item.discount).toFixed(2)}}</div>
             </div>
             <div class="views-collenct">
-              <!-- <div class="views">{{item.views}}</div>
-              <div class="collenct" @click="addCollect">收藏</div>-->
             </div>
           </div>
         </div>
@@ -112,16 +108,56 @@
             background
             :hide-on-single-page="true"
             layout="prev, pager, next, jumper"
-            :page-size="collect.per_page"
+            :page-size="parseInt(collect.per_page)"
             @current-change="changeCollectPage"
-            :current-page="collect.current_page"
-            :total="collect.total"
+            :current-page="parseInt(collect.current_page)"
+            :total="parseInt(collect.total)"
           ></el-pagination>
         </div>
       </div>
       <div>
         <not-found v-if="collect.data.length === 0" type="not-fond_2" msg="我寻寻觅觅却找不见您收藏的踪迹"></not-found>
       </div>
+
+      <session-title name="我点赞的机构"></session-title>
+      <cloud :arr="[1,2,3,4, 5]"></cloud>
+      <div class="my-class">
+        <div
+          class="goods-box"
+          @click="viewClubDetail(item)"
+          v-for="(item, index) in club.data"
+          :key="index"
+        >
+          <div class="pic">
+            <img :src="item.first_img" alt />
+          </div>
+          <div class="gtitle" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{item.club_name}}</div>
+          <div class="teacher_name"><span style="color:#22ac38;">{{item.custom_address}}</span></div>
+          <div class="price-views-collenct">
+            <div class="price">
+              <!-- <div class="old-price">￥{{item.sell_price}}</div>
+              <div class="new-price">￥{{(item.sell_price - item.discount).toFixed(2)}}</div> -->
+            </div>
+            <div class="views-collenct">
+            </div>
+          </div>
+        </div>
+        <div class="pages">
+          <el-pagination
+            background
+            :hide-on-single-page="true"
+            layout="prev, pager, next, jumper"
+            :page-size="parseInt(club.per_page)"
+            @current-change="changeClubPage"
+            :current-page="parseInt(club.current_page)"
+            :total="parseInt(club.total)"
+          ></el-pagination>
+        </div>
+      </div>
+      <div>
+        <not-found v-if="club.data.length === 0" type="not-fond_2" msg="我寻寻觅觅却找不见您点赞的机构"></not-found>
+      </div>
+
       <div style="position:relative;overflow:hidden; z-index:-1;">
         <session-title name="我点赞的老师"></session-title>
         <cloud :arr="[1,3,4, 5]"></cloud>
@@ -139,14 +175,10 @@
           </div>
           <div class="teacher-content">
             <div class="teacher_theme" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{item.good_at}}</div>
-            <!-- <div class="teacher_theme" style="font-size:14px;">￥{{item.price}}</div> -->
             <div class="teacher_name">培训老师：<span style="color:#22ac38;">{{item.name}}</span></div>
-            <!-- <div class="teacher_name">培训时间：{{item.startTime}}/{{item.endTime}}</div> -->
             <div class="price-views-collenct">
               <div class="price"></div>
               <div class="views-collenct">
-                <!-- <div class="views">{{item.views}}</div>
-                <div class="collenct" @click="addCollect">收藏</div>-->
               </div>
             </div>
           </div>
@@ -156,10 +188,10 @@
             background
             :hide-on-single-page="true"
             layout="prev, pager, next, jumper"
-            :page-size="like.per_page"
+            :page-size="parseInt(like.per_page)"
             @current-change="changeLikePage"
-            :current-page="like.current_page"
-            :total="like.total"
+            :current-page="parseInt(like.current_page)"
+            :total="parseInt(like.total)"
           ></el-pagination>
         </div>
       </div>
@@ -342,6 +374,13 @@ export default {
         current_page: 0, // 当前页,
         total: 0
       },
+      club: {
+        data: [],
+        per_page: 12, // 每页显示行数
+        totalPage: 0, // 总页数
+        current_page: 0, // 当前页,
+        total: 0
+      },
       used: { show: false },
       icon: {
         yun: {
@@ -408,6 +447,7 @@ export default {
       this.followTrain()
       this.teacherThumbsUp()
       this.userCollect()
+      this.getMyThumbsUpClub()
     })
 
     // getFollowTrain(424)
@@ -428,6 +468,14 @@ export default {
       getUserCollect(page).then(data => {
         this.collect = data
       })
+    },
+    getMyThumbsUpClub(page = 1) {
+      this.$request.get(`/personal/myThumbsUpClub/${page}`).then(data => {
+        this.club = data
+      })
+    },
+    changeClubPage(val) {
+      this.getMyThumbsUpClub(val)
     },
     changeWantPage(val) {
       this.followTrain(val)
