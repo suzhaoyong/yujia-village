@@ -226,26 +226,28 @@
               v-for="(item, index) in newList"
               :key="index"
             >
-              <div class="news_bg_img" :style="`backgroundImage: url(${item.teacher_img})`" @click="selectItem(item)">
-                <!-- <img :src="item.teacher_img" /> -->
+              <div class="news_bg_img" :style="`backgroundImage: url(${item.teacher_img});background-size: cover;background-repeat: no-repeat;background-position: top center;`" @click="selectItem(item)">
               </div>
+              <div class="news_bg_img2"><img src="../../assets/quan.png"/></div>
               <div class="bian">
                 <div class="div5-list">
                   <div class="li-text">
                     <h4 @click="selectItem(item)">{{item.theme}}</h4>
-                    <div class="list-eye">￥{{item.price}}</div>
+                    <!-- <div class="list-eye">￥{{item.price}}</div> -->
                   </div>
-                  <el-rate :value="item.diff" :colors="['#58B708','#58B708','#58B708']" disabled></el-rate>
-                  <div class="li-text2">
+                  <div class="rate-text">难度：<el-rate :value="item.diff" :colors="['#58B708','#58B708','#58B708']" disabled></el-rate></div>
+                  <!-- <div class="li-text2">
                     适用人群：
                     <pre>{{item.crowd}}</pre>
-                  </div>
-                  <div class="li-text3">开课时间：{{item.startTime}}/{{item.endTime}}</div>
+                  </div> -->
+                  <div class="list-eye">{{item.price}}<span class="rmby">RMB</span></div> 
+                  <div class="list-but" @click="selectItem(item)">查看详情</div>
+                  <div class="li-text3">开课时间：{{item.startTime}} - {{item.endTime}}</div>
                   <div class="li-text4">地 址：{{item.address}}</div>
                 </div>
-                <img class="border-img" src="../../assets/image47.png" />
+                <!-- <img class="border-img" src="../../assets/image47.png" /> -->
               </div>
-              <div class="color-box"></div>
+              <!-- <div class="color-box"></div> -->
             </div>
             <not-found v-if="newList.length === 0" type="not-fond" msg="暂无相关信息"></not-found>
           </div>
@@ -925,7 +927,7 @@ img {
   margin: 0 auto;
   overflow: hidden;
   font-size: 0.7rem;
-  background: rgba(244, 244, 244, 1);
+  background:#fff;
   .cultivate-count {
     width: 60rem;
     margin: 0 auto;
@@ -1195,6 +1197,7 @@ img {
           float: left;
           margin-right: 1.11rem;
           margin-top: 1rem;
+          box-shadow:3px 1px 6px 1px rgba(0, 0, 0, 0.16);
           font-size: 0.7rem;
           &:hover {
             box-shadow: 0.1rem 0.2rem 1.3rem 0.1rem rgba(164, 164, 164, 0.39);
@@ -1378,6 +1381,7 @@ img {
         margin-right: 1.11rem;
         margin-top: 1rem;
         font-size: 0.7rem;
+        box-shadow:3px 1px 6px 1px rgba(0, 0, 0, 0.16);
         &:hover {
           box-shadow: 0.1rem 0.2rem 1.3rem 0.1rem rgba(164, 164, 164, 0.39);
           transition: box-shadow 0.75s;
@@ -1558,15 +1562,26 @@ img {
       .news_bg_img {
         order: 3;
         cursor: pointer;
+        margin: 0 auto;
+        margin-left: 4rem;
+      }
+      .news_bg_img2{
+        position:absolute;
+        top: 6%;
+        transform: rotate(180deg);
+        img{
+          width: 100%;
+          height: 100%;
+        }
       }
       .bian {
-        background: linear-gradient(
-          to right,
-          #F4F4F4 0%,
-          #F4F4F4 50%,
-          #eef5dd 50%,
-          #eef5dd 100%
-        );
+        // background: linear-gradient(
+        //   to right,
+        //   #F4F4F4 0%,
+        //   #F4F4F4 50%,
+        //   #eef5dd 50%,
+        //   #eef5dd 100%
+        // );
         &::after {
           left: 0;
           right: 100%;
@@ -1584,6 +1599,9 @@ img {
         left: 0;
         background-color: #EEF5DD;
       }
+      .div5-list {
+        margin-left: 8rem;
+      }
       .li-text4 {
         &::after {
           left: 0;
@@ -1599,46 +1617,49 @@ img {
       display: flex;
       align-items: flex-end;
       position: relative;
+      margin-bottom: 5rem;
       .news_bg_img {
-        width: 25rem;
-        height: 18rem;
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: top center;
+        width: 23.2rem;
+        height: 21.3rem;
         background: #eee;
         cursor: pointer;
-        img {
-          object-fit: cover;
-          height: 100%;
+        margin: 0 auto;
+        margin-right: 4rem;
+      }
+      .news_bg_img2{
+        position:absolute;
+        top: 6%;
+        img{
           width: 100%;
+          height: 100%;
         }
       }
       .bian {
         width: 22rem;
-        // height: 14rem;
+        height: 21rem;
         // padding: 3rem 4rem;
         // background-color: #cce198;
-        background: linear-gradient(
-          to right,
-          #eef5dd 0%,
-          #eef5dd 50%,
-          #F4F4F4 50%,
-          #F4F4F4 100%
-        );
+        // background: linear-gradient(
+        //   to right,
+        //   #eef5dd 0%,
+        //   #eef5dd 50%,
+        //   #F4F4F4 50%,
+        //   #F4F4F4 100%
+        // );
         z-index: 1;
         position: relative;
         // opacity: 0.33;
-        &::after {
-          display: block;
-          position: absolute;
-          right: 0;
-          top: 50%;
-          transform: translateY(-50%);
-          content: "";
-          width: 1px;
-          height: 11rem;
-          background: #bfbfbf;
-        }
+        // &::after {
+        //   display: block;
+        //   position: absolute;
+        //   right: 0;
+        //   top: 50%;
+        //   transform: translateY(-50%);
+        //   content: "";
+        //   width: 1px;
+        //   height: 11rem;
+        //   background: #bfbfbf;
+        // }
       }
       .color-box {
         width: 8.4rem;
@@ -1652,12 +1673,13 @@ img {
         // position: absolute;
         // left: 51%;
         // top: 24%;
-        margin: 2rem 4rem;
+        // margin: 2rem 4rem;
         width: 20em;
         .li-text {
           display: flex;
           justify-content: space-between;
           cursor: pointer;
+          margin-top: 0.6rem;
           h4 {
             display: -webkit-box;
             -webkit-box-orient: vertical;
@@ -1666,10 +1688,37 @@ img {
             font-size: 1rem;
             color: #2c2c2c;
           }
-          .list-eye {
+        }
+        .list-but{
+          width:82px;
+          height:24px;
+          background:rgba(49,49,49,1);
+          border-radius:12px;
+          color: #fff;
+          text-align: center;
+          font-size: 12px;
+          line-height: 24px;
+          margin-top: 5px;
+          cursor: pointer;
+        }
+        .list-eye {
             font-size: 1.1rem;
             color: #2c2c2c;
+            font-family:FZChaoCuHei-M10S;
+            font-weight:bold;
+            margin-top: 1rem;
+            .rmby{
+              color: #2c2c2c;
+              font-size: 14px;
+              padding-left: 5px;
+            }
           }
+        .rate-text{
+          color: #999;
+          font-size: 0.8rem;
+          display: flex;
+          border-bottom: 2px solid #BFBFBF;
+          padding-bottom: 5px;
         }
         .li-text2 {
           font-size: 0.7rem;
@@ -1683,20 +1732,20 @@ img {
         .li-text3 {
           font-size: 0.7rem;
           color: #2c2c2c;
-          margin-top: 1rem;
+          margin-top: 4rem;
         }
         .li-text4 {
           font-size: 0.7rem;
           color: #2c2c2c;
-          margin-top: 0.2rem;
+          margin-top: 1rem;
           position: relative;
           &::after {
             position: absolute;
             content: "";
             height: 1.5rem;
             width: 0.8rem;
-            bottom: -2em;
-            right: 0;
+            bottom: -4rem;
+            left: 0;
             z-index: 112;
             background-repeat: no-repeat;
             background-image: url("../../assets/image-jiao.png");

@@ -51,7 +51,7 @@
               <el-menu-item index="cultivate"><a href="/cultivate" onclick="return false;">培训信息</a></el-menu-item>
               <el-menu-item index="yogoknowledge"><a href="/yogoknowledge" onclick="return false;">瑜伽知识</a></el-menu-item>
               <el-menu-item index="yogoinformation"><a href="/yogoinformation" onclick="return false;">瑜伽资讯</a></el-menu-item>
-              <el-menu-item index="market">商城</el-menu-item>
+              <el-menu-item index="market"><a href="/market" onclick="return false;">商城</a></el-menu-item>
               <el-menu-item index="aboutus"><a href="/aboutus" onclick="return false;">关于我们</a></el-menu-item>
               <el-submenu index="personal">
                 <template slot="title">
@@ -72,7 +72,7 @@
                     index="hell"
                   >机构信息</el-menu-item>
                   <el-menu-item index="safety-center">个人信息与安全</el-menu-item>
-                  <!-- <el-menu-item index="contactway">联系方式设置</el-menu-item> -->
+                  <el-menu-item index="contactway">联系方式设置</el-menu-item>
                   <el-menu-item index="share">分享邀请好友</el-menu-item>
                   <el-menu-item index="out" @click="logout">退出</el-menu-item>
                 </div>
@@ -80,14 +80,14 @@
             </el-menu>
           </div>
         </div>
-         <div class="notice" v-if="info.user.name">
+        <div class="notice" v-if="info.user.name">
             <!-- <marquee :listData="listData"></marquee> -->
-            <div class="text-container">
-              <transition-group tg="div" appear name="list" class="list-container" mode="out-in">
-                <div v-for="text in arr2" :key="text" class="list-item">{{text}}</div>
+            <div class="text-container" v-if="noticeShow">
+              <transition-group tg="div" name="list" class="list-container" mode="out-in">
+                <div v-for="text in listData" :key="text+99" class="list-item">{{text}}</div>
               </transition-group>
             </div>
-          </div>
+        </div>
       </div>
     </el-col>
     <div v-if="account.type==='login'">
@@ -110,7 +110,6 @@
   </div>
 </template>
 <script>
-const totalDuration = 3000;
 import Login from "@/pages/Login/login";
 import Register from "@/pages/Login/register";
 import Reset from "@/pages/Login/reset";
@@ -136,8 +135,7 @@ export default {
       activeIndex: "",
       classid:"",
       username: "",
-      number2: -1,
-      arr2:[],
+      noticeShow:false,
       subjectbanner:[],
       account: {
         type: ""
@@ -202,7 +200,7 @@ export default {
         this.classification(this.classid = 6);
     }
     // this.getPersonal();
-    this.startMove2()
+    this.startMove2();
   },
   created() {
     this.fetchData();
@@ -223,16 +221,12 @@ export default {
   },
   methods: {
      startMove2(){
-      let timer = setTimeout(() => {
-        this.number2 += 1;
-        if (this.number2 > 3) {
-          const target = this.arr2.splice(3, 1);
-          this.arr2.unshift(target[0])
-        } else {
-          this.arr2.unshift(this.listData[this.number2]);
-        }
+      setTimeout(() => {
+        this.listData.push(this.listData[0]);
+        this.listData.shift();
         this.startMove2();
-      }, totalDuration)
+      }, 3000)
+      
     },
     gotoPersonal() {
       if(this.isUserNeedLogin) {
@@ -267,10 +261,28 @@ export default {
       this.activeIndex = currNav;
     },
     fetchData() { 
+       if(this.$route.path == '/main'){
+        this.noticeShow = true;
+      }else if(this.$route.path == '/joinclubhouse'){
+        this.noticeShow = true;
+      }else if(this.$route.path == '/yogoteacher'){
+        this.noticeShow = true;
+      }else if(this.$route.path == '/yogoknowledge'){
+        this.noticeShow = true;
+      }else if(this.$route.path == '/yogoinformation'){
+        this.noticeShow = true;
+      }else if(this.$route.path == '/aboutus'){
+        this.noticeShow = true;
+      }else if(this.$route.path == '/cultivate/index'){
+        this.noticeShow = true;
+      }else{
+        this.noticeShow = false;
+      }
       this.activeIndex = this.$route.meta.header_name || "main" ;
       return;
       if (this.$route.name == "main") {
         this.activeIndex = "main";
+        this.noticeShow = true;
       } else if (this.$route.name == "joinclubhouse") {
         this.activeIndex = "joinclubhouse";
       } else if (this.$route.name == "yogoteacher") {
@@ -336,6 +348,7 @@ export default {
     },
     //消息滚动
     messcroll(){
+      this.listData = [];
       this.$request.get(`/message/overall_situation/20`).then(data => {
           this.listData = data;
       });
@@ -601,16 +614,18 @@ a:hover{
   }
   .notice{
     position: absolute;
-    left: 6%;
-    top: 96%;
+    left: 2%;
+    top: 300px;
     z-index: 999;
     .text-container{
+      height: 250px;
+      overflow: hidden;
     .list-container {
       position: relative;
       overflow: hidden;
       .list-item {
         margin: 0;
-        transition: all 1s;
+        transition: all 0.3s;
         overflow: hidden;
         background:rgba(0,0,0,1);
         opacity:0.6;
@@ -626,17 +641,20 @@ a:hover{
       }
     }
     .list-enter {
-      transform: translateY(30px);
+      opacity: 0; 
+      transform: translateY(56px);
     }
     .list-enter-to, .list-leave {
       transform: translateY(0);
     }
     .list-leave-to {
-      transform: translateY(-30px)
+      opacity: 0; 
+      transform: translateY(56px);
     }
-    .list-leave-active {
+    .list-enter-active, .list-leave-active {
       position: absolute;
       width: 0;
+      transition: all 1s
     }
     }
   }

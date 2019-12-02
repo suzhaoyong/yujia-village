@@ -2,10 +2,11 @@
     <div>
         <el-col :span="24">
             <div class="joinclubdetails-main">
-                <div class="pointup">
-                    <img class="pointup-img" src="../assets/green_up.png" v-if="Giveupimg1" @click="Giveuppraise" :title="'人气:'+(club.praise||100)"/>
-                    <img class="pointup-img" src="../assets/gray_up.png" v-if="Giveupimg" @click="Giveuppraise" :title="'人气:'+(club.praise||100)"/>
-                    <div class="pointup-text">{{club.praise||100}}</div>
+                <div class="pointup" @click="Giveuppraise">
+                    <img class="pointup-img" src="../assets/green_up.png" v-if="Giveupimg1" :title="'人气:'+(club.praise||100)"/>
+                    <img class="pointup-img" src="../assets/gray_up.png" v-if="Giveupimg" :title="'人气:'+(club.praise||100)"/>
+                    <div class="pointup-text2" v-if="Giveupimg">{{club.praise||100}}</div>
+                    <div class="pointup-text" v-if="Giveupimg1">{{club.praise||100}}</div>
                 </div>
                 <div class="joinclubdetails-cont-div6">
                     <span><router-link to="/joinclubhouse" style="color:#2c2c2c;text-decoration: none;">培训机构</router-link></span>
@@ -208,10 +209,14 @@ export default {
         this.$request.get(`/personal/thumbsUpClub/${_this.$route.query.id}`).then(data => {
             _this.msg = data.msg;
             if(_this.msg == "OK"){
-            this.$message({type:'success', message: '点赞成功'});
-            _this.Giveupimg1 = true;
-            _this.Giveupimg = false;
-            this.joindatalist();
+                if(_this.Giveupimg1 == true){
+                    this.$message({type:'success', message: '取消成功'});
+                }else{
+                    this.$message({type:'success', message: '点赞成功'});
+                }
+                _this.Giveupimg1 = !_this.Giveupimg1;
+                _this.Giveupimg = !_this.Giveupimg;
+                this.joindatalist();
             }
         })
         .catch(error => {
@@ -289,6 +294,12 @@ export default {
         cursor: pointer;
         .pointup-text{
             color: #81C16A;
+            font-size:14px;
+            font-family:FZLanTingHei-H-GBK;
+            font-weight:400;
+        }
+        .pointup-text2{
+            color: #bfbfbf;
             font-size:14px;
             font-family:FZLanTingHei-H-GBK;
             font-weight:400;
