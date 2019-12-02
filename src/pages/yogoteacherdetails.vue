@@ -112,13 +112,17 @@ export default {
         let params ={
             id:_this.$route.query.id
         }
-        this.$request.post(`/teachers/thumbsUp`,params).then(data => {
+        this.$request.post(`/personal/teachers/thumbsUp`,params).then(data => {
             _this.msg = data.msg;
             if(_this.msg == "OK"){
-            this.$message({type:'success', message: '点赞成功'});
-            _this.Giveupimg1 = true;
-            _this.Giveupimg = false;
-            this.yogoteacherdata();
+                if(_this.Giveupimg1 == true){
+                    this.$message({type:'success', message: '取消成功'});
+                }else{
+                    this.$message({type:'success', message: '点赞成功'});
+                }
+                _this.Giveupimg1 = !_this.Giveupimg1;
+                _this.Giveupimg = !_this.Giveupimg;
+                this.yogoteacherdata();
             }
         })
         .catch(error => {

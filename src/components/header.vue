@@ -12,10 +12,6 @@
                 </el-carousel>
             </div>
         </div>
-          <!-- <div class="notice" v-if="info.user.name">
-            <img class="icon-notice" src="../assets/notice.png"/>
-            <marquee :listData="listData"></marquee>
-          </div> -->
         <div class="head-quan">
           <div class="head-right">
             <el-button type="text" class="span2"></el-button>
@@ -55,7 +51,7 @@
               <el-menu-item index="cultivate"><a href="/cultivate" onclick="return false;">培训信息</a></el-menu-item>
               <el-menu-item index="yogoknowledge"><a href="/yogoknowledge" onclick="return false;">瑜伽知识</a></el-menu-item>
               <el-menu-item index="yogoinformation"><a href="/yogoinformation" onclick="return false;">瑜伽资讯</a></el-menu-item>
-              <el-menu-item index="market">商城</el-menu-item>
+              <el-menu-item index="market"><a href="/market" onclick="return false;">商城</a></el-menu-item>
               <el-menu-item index="aboutus"><a href="/aboutus" onclick="return false;">关于我们</a></el-menu-item>
               <el-submenu index="personal">
                 <template slot="title">
@@ -83,6 +79,14 @@
               </el-submenu>
             </el-menu>
           </div>
+        </div>
+        <div class="notice" v-if="info.user.name">
+            <!-- <marquee :listData="listData"></marquee> -->
+            <div class="text-container" v-if="noticeShow">
+              <transition-group tg="div" name="list" class="list-container" mode="out-in">
+                <div v-for="text in listData" :key="text+99" class="list-item">{{text}}</div>
+              </transition-group>
+            </div>
         </div>
       </div>
     </el-col>
@@ -131,11 +135,12 @@ export default {
       activeIndex: "",
       classid:"",
       username: "",
+      noticeShow:false,
       subjectbanner:[],
       account: {
         type: ""
       },
-      // listData:[],
+      listData:[],
       icon: {
         identity_g,
         identity_j,
@@ -195,16 +200,17 @@ export default {
         this.classification(this.classid = 6);
     }
     // this.getPersonal();
+    this.startMove2();
   },
   created() {
     this.fetchData();
-    // this.messcroll();
+    this.messcroll();
     let info = sessionStorage.getItem('user')
     if(info) {
       store.dispatch("INFO", JSON.parse(info))
-      // setInterval(() => {
-      //   this.messcroll();
-      // },300000)
+      setInterval(() => {
+        this.messcroll();
+      },300000)
     }
   },
   beforeUpdate() {
@@ -214,6 +220,14 @@ export default {
     Bus.$off("login");
   },
   methods: {
+     startMove2(){
+      setTimeout(() => {
+        this.listData.push(this.listData[0]);
+        this.listData.shift();
+        this.startMove2();
+      }, 3000)
+      
+    },
     gotoPersonal() {
       if(this.isUserNeedLogin) {
         this.account.type = 'login';
@@ -247,10 +261,28 @@ export default {
       this.activeIndex = currNav;
     },
     fetchData() { 
+       if(this.$route.path == '/main'){
+        this.noticeShow = true;
+      }else if(this.$route.path == '/joinclubhouse'){
+        this.noticeShow = true;
+      }else if(this.$route.path == '/yogoteacher'){
+        this.noticeShow = true;
+      }else if(this.$route.path == '/yogoknowledge'){
+        this.noticeShow = true;
+      }else if(this.$route.path == '/yogoinformation'){
+        this.noticeShow = true;
+      }else if(this.$route.path == '/aboutus'){
+        this.noticeShow = true;
+      }else if(this.$route.path == '/cultivate/index'){
+        this.noticeShow = true;
+      }else{
+        this.noticeShow = false;
+      }
       this.activeIndex = this.$route.meta.header_name || "main" ;
       return;
       if (this.$route.name == "main") {
         this.activeIndex = "main";
+        this.noticeShow = true;
       } else if (this.$route.name == "joinclubhouse") {
         this.activeIndex = "joinclubhouse";
       } else if (this.$route.name == "yogoteacher") {
@@ -315,11 +347,12 @@ export default {
       };
     },
     //消息滚动
-    // messcroll(){
-    //   this.$request.get(`/message/overall_situation/20`).then(data => {
-    //       this.listData = data;
-    //   });
-    // },
+    messcroll(){
+      this.listData = [];
+      this.$request.get(`/message/overall_situation/20`).then(data => {
+          this.listData = data;
+      });
+    },
     //根据页面查广告数据
     classification(classid){
       this.subjectbanner = [];
@@ -499,6 +532,7 @@ a:hover{
   width: 100%;
   height: 100%;
   padding: 0;
+  position: relative;
    .sub_box{
     width: 100%;
     .info{
@@ -579,15 +613,49 @@ a:hover{
     }
   }
   .notice{
-    padding:0rem 1rem;
-    font-size:15px;
-    color:#929292;
-    display: flex;
-    align-items: center;
-    .icon-notice {
-      width: 27px;
-      height: 27px;
-      margin-right:1rem;
+    position: absolute;
+    left: 2%;
+    top: 300px;
+    z-index: 999;
+    .text-container{
+      height: 250px;
+      overflow: hidden;
+    .list-container {
+      position: relative;
+      overflow: hidden;
+      .list-item {
+        margin: 0;
+        transition: all 0.3s;
+        overflow: hidden;
+        background:rgba(0,0,0,1);
+        opacity:0.6;
+        border-radius:28px;
+        color: #fff;
+        font-size:14px;
+        font-family:Source Han Sans CN;
+        font-weight:500;
+        height: 56px;
+        padding: 0px 25px;
+        line-height: 56px;
+        margin-top: 6px;
+      }
+    }
+    .list-enter {
+      opacity: 0; 
+      transform: translateY(56px);
+    }
+    .list-enter-to, .list-leave {
+      transform: translateY(0);
+    }
+    .list-leave-to {
+      opacity: 0; 
+      transform: translateY(56px);
+    }
+    .list-enter-active, .list-leave-active {
+      position: absolute;
+      width: 0;
+      transition: all 1s
+    }
     }
   }
 .nikeHeader{
