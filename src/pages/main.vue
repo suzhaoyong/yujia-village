@@ -1303,7 +1303,6 @@ a{
                     margin-top: 5px;
                     transition: all 1s;
                     // object-fit: cover;
-                    transition: all 1s;
                 }
                 .nav-div7-img:hover{
                     width: 100%;

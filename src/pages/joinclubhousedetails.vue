@@ -2,12 +2,6 @@
     <div>
         <el-col :span="24">
             <div class="joinclubdetails-main">
-                <div class="pointup" @click="Giveuppraise">
-                    <img class="pointup-img" src="../assets/green_up.png" v-if="Giveupimg1" :title="'人气:'+(club.praise||100)"/>
-                    <img class="pointup-img" src="../assets/gray_up.png" v-if="Giveupimg" :title="'人气:'+(club.praise||100)"/>
-                    <div class="pointup-text2" v-if="Giveupimg">{{club.praise||100}}</div>
-                    <div class="pointup-text" v-if="Giveupimg1">{{club.praise||100}}</div>
-                </div>
                 <div class="joinclubdetails-cont-div6">
                     <span><router-link to="/joinclubhouse" style="color:#2c2c2c;text-decoration: none;">培训机构</router-link></span>
                     <span>/ &nbsp;&nbsp;</span>
@@ -28,9 +22,17 @@
                         <div class="left4">
                             地址：{{club.club_address}}
                         </div>
+                        <div class="pointup-share">
                         <div class="share4" v-if="config.url">
                           <share :config="config"></share>
                        </div>
+                        <div class="pointup" @click="Giveuppraise">
+                            <img class="pointup-img" src="../assets/green_up.png" v-if="Giveupimg1" :title="'人气:'+(club.praise||100)"/>
+                            <img class="pointup-img" src="../assets/gray_up.png" v-if="Giveupimg" :title="'人气:'+(club.praise||100)"/>
+                            <div class="pointup-text2" v-if="Giveupimg">{{club.praise||100}}</div>
+                            <div class="pointup-text" v-if="Giveupimg1">{{club.praise||100}}</div>
+                        </div>
+                        </div>
                     </div>
                     <div class="joinclubdetails-right">
                         <div class="imgpic">
@@ -278,39 +280,6 @@ export default {
     height: 100%;
     margin: 0 auto;
     overflow: hidden;
-    .pointup{
-        width: 6%;
-        height: 42px;
-        border-radius: 21px;
-        box-shadow:0px 1px 6px 0px rgba(50,50,50,0.29);
-        display: flex;
-        line-height: 42px;
-        padding: 0px 10px;
-        position: fixed;
-        background-color: #fff;
-        z-index: 999;
-        top: 50%;
-        right: 4%;
-        cursor: pointer;
-        .pointup-text{
-            color: #81C16A;
-            font-size:14px;
-            font-family:FZLanTingHei-H-GBK;
-            font-weight:400;
-        }
-        .pointup-text2{
-            color: #bfbfbf;
-            font-size:14px;
-            font-family:FZLanTingHei-H-GBK;
-            font-weight:400;
-        }
-        .pointup-img{
-            width: 18px;
-            height: 16px;
-            margin-top: 13px;
-            margin-right: 5px;
-        }
-    }
     .joinclubdetails-cont-div1{
             width: 1200px;
             height: 150px;
@@ -623,6 +592,45 @@ export default {
                      font-size: 14px;
                      color: #2c2c2c;
                      line-height: 50px;
+                 }
+                 .pointup-share{
+                     display: flex;
+                     .pointup{
+                        border-radius: 21px;
+                        box-shadow:0px 1px 6px 0px rgba(50,50,50,0.29);
+                        display: flex;
+                        line-height: 42px;
+                        padding: 0px 20px;
+                        background-color: #fff;
+                        margin-left: 10px;
+                        cursor: pointer;
+                        transition: all 1s;
+                        .pointup-text{
+                            color: #81C16A;
+                            font-size:14px;
+                            font-family:FZLanTingHei-H-GBK;
+                            font-weight:400;
+                        }
+                        .pointup-text2{
+                            color: #bfbfbf;
+                            font-size:14px;
+                            font-family:FZLanTingHei-H-GBK;
+                            font-weight:400;
+                        }
+                        .pointup-img{
+                            width: 18px;
+                            height: 16px;
+                            margin-top: 13px;
+                            margin-right: 5px;
+                        }
+                    }
+                    .pointup:hover{
+                            transform:scale(0.97);
+                            -ms-transform:rotate(0.97); 	/* IE 9 */
+                            -moz-transform:rotate(0.97); 	/* Firefox */
+                            -webkit-transform:rotate(0.97); /* Safari 和 Chrome */
+                            -o-transform:rotate(0.97); 	/* Opera */
+                        }
                  }
              }
              .joinclubdetails-right{
