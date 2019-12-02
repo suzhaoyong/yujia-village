@@ -124,6 +124,7 @@
       <div class="my-class">
         <div
           class="goods-box"
+          style="position:relative"
           @click="viewClubDetail(item)"
           v-for="(item, index) in club.data"
           :key="index"
@@ -131,13 +132,10 @@
           <div class="pic">
             <img :src="item.first_img" alt />
           </div>
-          <div class="gtitle" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{item.club_name}}</div>
-          <div class="teacher_name"><span style="color:#22ac38;">{{item.custom_address}}</span></div>
+          <div class="gtitle" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;padding-left:1rem;">机构名称：{{item.club_name}}</div>
+          <div class="teacher_name" style="padding-left:1rem;">机构地址：<span style="color:#22ac38;">{{item.custom_address}}</span></div>
           <div class="price-views-collenct">
-            <div class="price">
-              <!-- <div class="old-price">￥{{item.sell_price}}</div>
-              <div class="new-price">￥{{(item.sell_price - item.discount).toFixed(2)}}</div> -->
-            </div>
+            <div @click.stop="cancelClubUp(item, index)" style="width: 1rem; height: 1rem;position: absolute;right: 0.8rem;bottom: 0.8rem; cursor: pointer;"><img style="object-fit: contain;" src="~@/assets/green_up.png" alt=""></div>
             <div class="views-collenct">
             </div>
           </div>
@@ -178,7 +176,7 @@
             <div class="teacher_theme" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{item.good_at}}</div>
             <div class="teacher_name">培训老师：<span style="color:#22ac38;">{{item.name}}</span></div>
             <div class="price-views-collenct">
-              <div @click.stop="cancelTeacherUp(item, index)" style="width: 1rem; height: 1rem;position: absolute;left: 0.8rem;bottom: 0.8rem;"><img src="~@/assets/Givecolor.png" alt=""></div>
+              <div @click.stop="cancelTeacherUp(item, index)" style="width: 1rem; height: 1rem;position: absolute;right: 0.8rem;bottom: 0.8rem;"><img src="~@/assets/Givecolor.png" alt=""></div>
               <div class="views-collenct">
               </div>
             </div>
@@ -545,6 +543,13 @@ export default {
     /** 现金券使用记录 */
     usedRecord(id) {
       this.$request(`/personal/home/${id}`).then(data => {});
+    },
+    cancelClubUp(item, index) {
+      this.$request.get(`/personal/thumbsUpClub/${item.id}`)
+        .then(response => {
+          this.$message.success('操作成功')
+          this.club.data.splice(index, 1)
+        })
     },
     cancelTeacherUp(item, index) {
       this.$request.post(`/personal/teachers/thumbsUp`, {id: item.id})
