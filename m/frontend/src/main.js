@@ -14,7 +14,7 @@ import Share from 'vue-social-share'
 import 'vue-social-share/dist/client.css';
 import {
   Tab, Tabs, Tabbar, TabbarItem, 
-  Collapse, CollapseItem, 
+  Collapse, CollapseItem,
   NavBar, Icon, Cell, CellGroup, Button, 
   AddressEdit, Dialog, Checkbox, CheckboxGroup,
   Stepper, Rate, Field, Popup, Area ,Toast ,
@@ -73,6 +73,7 @@ Vue.use(Loading);
 Vue.use(RadioGroup);
 Vue.use(Radio);
 Vue.use(Search);
+
 require('./mock')
 
 Object.defineProperty(Vue.prototype, '$request', { value: request })

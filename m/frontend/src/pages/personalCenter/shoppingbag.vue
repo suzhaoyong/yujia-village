@@ -108,7 +108,6 @@ export default {
                 closeOnPopstate: true,
                 beforeClose: (action, done) => {
                     if(action === 'confirm') {
-                        console.log('confirm');
                         this.delShoppingBag(this.shoppingBagList.filter(item => item.check).map(item => item.id))
                         done(); 
                     } else {
@@ -201,8 +200,9 @@ export default {
         }
         .style {
             position: absolute;
-            top: 24px;
+            top: 30px;
             left: 98px;
+            width: 100%;
             color: #999;
             font-size: 10px;
             span {

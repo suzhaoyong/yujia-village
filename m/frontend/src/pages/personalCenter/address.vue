@@ -43,7 +43,7 @@ export default {
           if( type == 1 ) {
             sessionStorage.setItem('select address', JSON.stringify(item));
             this.$router.go(-1);
-          }
+          } 
         },
         onClickLeft() {
             this.$router.go(-1)

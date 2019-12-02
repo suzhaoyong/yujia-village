@@ -254,6 +254,16 @@ const router = new Router({
           keepAlive: false
         },
         component: () => import('@/pages/market/order/success')
+      },
+      { // 订单详情
+        path: 'detail/:orderId/:oid',
+        name: 'detail',
+        component: () => import('@/pages/market/order/orderdetail')
+      },
+      { // 物流
+        path: 'wuliu/:oid',
+        name: 'wuliu',
+        component: () => import('@/pages/market/order/wuliu')
       }]
     },
     {

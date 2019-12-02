@@ -9,15 +9,20 @@
                         <div class="order-item" v-for="(item,index) in orderDataList.all" :key="index">
                             <div class="order-num">
                                 <span>订单号：{{item.out_trade_no}}</span>
-                                <!-- <van-icon name="delete" @click="deleted"/> -->
-                            </div>
-                            <div class="order-describe">
-                                <div class="img" :style="{backgroundImage: 'url('+item.data[0].url+')'}"></div>
-                                <div class="name">{{item.data[0].name}}</div>
-                                <div class="price">￥{{item.totalPrice}}</div>
                                 <div class="await">{{item.status}}</div>
                             </div>
-                            <!-- <div class="order-again" @click="toOrderDetail(item)">{{item.status == '待付款'? '去支付':'再来一单'}}</div> -->
+                            <div class="order-describe" v-for="(item2,index) in item.data" :key="index" @click="goOrderDetail(item.out_trade_no,item.data[0].oid)">
+                                <div class="img" :style="{backgroundImage: 'url('+item2.url+')'}"></div>
+                                <div class="name">{{item2.name}}</div>
+                                <div class="num">x {{item2.num}}</div>
+                            </div>
+                            <div class="number">
+                                <span>共{{totalNum.all[index]}}件</span>
+                                <span>合计：￥{{item.totalPrice}}</span>
+                            </div>
+                            <div class="order-again" v-if="item.status==='待付款'" @click="pay(item.out_trade_no)">去支付</div>
+                            <div class="wuliu" v-if="item.status==='待收货'" @click="look(item.data[0].oid,item.data)">查看物流</div>
+                            <div class="order-again" v-if="item.status==='待收货'" @click="confirmReceipt(item.data[0].oid)">确认收货</div>
                         </div>
                     </div>
                     <div class="empty" v-else></div>
@@ -27,15 +32,18 @@
                         <div class="order-item" v-for="(item,index) in orderDataList.pay" :key="index">
                             <div class="order-num">
                                 <span>订单号：{{item.out_trade_no}}</span>
-                                <!-- <van-icon name="delete" @click="deleted"/> -->
-                            </div>
-                            <div class="order-describe">
-                                <div class="img" :style="{backgroundImage: 'url('+item.data[0].url+')'}"></div>
-                                <div class="name">{{item.data[0].name}}</div>
-                                <div class="price">￥{{item.totalPrice}}</div>
                                 <div class="await">{{item.status}}</div>
                             </div>
-                            <!-- <div class="order-again" @click="toOrderDetail(item)">去支付</div> -->
+                            <div class="order-describe" v-for="(item2,index) in item.data" :key="index" @click="goOrderDetail(item.out_trade_no,item.data[0].oid)">
+                                <div class="img" :style="{backgroundImage: 'url('+item2.url+')'}"></div>
+                                <div class="name">{{item2.name}}</div>
+                                <div class="num">x {{item2.num}}</div>
+                            </div>
+                            <div class="number">
+                                <span>共{{totalNum.pay[index]}}件</span>
+                                <span>合计：￥{{item.totalPrice}}</span>
+                            </div>
+                            <div class="order-again" @click="pay(item.out_trade_no)">去支付</div>
                         </div>
                     </div>
                     <div class="empty" v-else></div>
@@ -45,13 +53,16 @@
                         <div class="order-item" v-for="(item,index) in orderDataList.send" :key="index">
                             <div class="order-num">
                                 <span>订单号：{{item.out_trade_no}}</span>
-                                <!-- <van-icon name="delete" @click="deleted"/> -->
-                            </div>
-                            <div class="order-describe">
-                                <div class="img" :style="{backgroundImage: 'url('+item.data[0].url+')'}"></div>
-                                <div class="name">{{item.data[0].name}}</div>
-                                <div class="price">￥{{item.totalPrice}}</div>
                                 <div class="await">{{item.status}}</div>
+                            </div>
+                            <div class="order-describe" v-for="(item2,index) in item.data" :key="index" @click="goOrderDetail(item.out_trade_no,item.data[0].oid)">
+                                <div class="img" :style="{backgroundImage: 'url('+item2.url+')'}"></div>
+                                <div class="name">{{item2.name}}</div>
+                                <div class="num">x {{item2.num}}</div>
+                            </div>
+                            <div class="number">
+                                <span>共{{totalNum.send[index]}}件</span>
+                                <span>合计：￥{{item.totalPrice}}</span>
                             </div>
                         </div>
                     </div>
@@ -62,24 +73,30 @@
                         <div class="order-item" v-for="(item,index) in orderDataList.receive" :key="index">
                             <div class="order-num">
                                 <span>订单号：{{item.out_trade_no}}</span>
-                                <!-- <van-icon name="delete" @click="deleted"/> -->
-                            </div>
-                            <div class="order-describe">
-                                <div class="img" :style="{backgroundImage: 'url('+item.data[0].url+')'}"></div>
-                                <div class="name">{{item.data[0].name}}</div>
-                                <div class="price">￥{{item.totalPrice}}</div>
                                 <div class="await">{{item.status}}</div>
                             </div>
-                            <div class="order-again">确认收货</div>
+                            <div class="order-describe" v-for="(item2,index) in item.data" :key="index" @click="goOrderDetail(item.out_trade_no,item.data[0].oid)">
+                                <div class="img" :style="{backgroundImage: 'url('+item2.url+')'}"></div>
+                                <div class="name">{{item2.name}}</div>
+                                <div class="num">x {{item2.num}}</div>
+                            </div>
+                            <div class="number">
+                                <span>共{{totalNum.receive[index]}}件</span>
+                                <span>合计：￥{{item.totalPrice}}</span>
+                            </div>
+                            <div class="wuliu" @click="look(item.data[0].oid,item.data)">查看物流</div>
+                            <div class="order-again" @click="confirmReceipt(item.data[0].oid)">确认收货</div>
                         </div>
                     </div>
                     <div class="empty" v-else></div>
                 </div>
             </van-tab>
         </van-tabs>
+        <div v-html="form"></div>
     </div>
 </template>
 <script>
+import { Toast } from 'vant';
 export default {
     data() {
         return {
@@ -89,7 +106,13 @@ export default {
             ],
             // 订单数据
             orderDataList: {},
-
+            totalNum: {
+                all: [],
+                pay: [],
+                send: [],
+                receive: []
+            },
+            form: ''
         }
     },
     created() {
@@ -99,41 +122,60 @@ export default {
         onClickLeft() {
             this.$router.push('/personal');
         },
-        // 删除功能，暂时不做
-        // deleted() {
-        //     this.$dialog.confirm({
-        //         message: '是否删除当前订单？',
-        //         confirmButtonText: '是',
-        //         cancelButtonText: '否',
-        //         closeOnClickOverlay: true,
-        //         closeOnPopstate: true,
-        //         beforeClose: (action, done) => {
-        //             if(action === 'confirm') {
-        //                 console.log('confirm');
-        //                 done(); 
-        //             } else {
-        //                 done(); 
-        //             }
-        //         }
-        //     });
-        // },
         getUserGoodsOrder() {
             this.$request.get('/goodOrder/userOrder').then(data => {
-                console.log(data);
                 const { all, pay, receive, send, success } = data;
                 const orderList = {
                     all,
                     pay,
                     receive,
                     send
-                } 
+                }
                 this.orderDataList = orderList;
+                this.calculateNumber(all,'all');
+                this.calculateNumber(pay,'pay');
+                this.calculateNumber(send,'send');
+                this.calculateNumber(receive,'receive');
             })
         },
-        toOrderDetail(item) {
-            console.log(item);
-            
-            // this.$router.push("/fillorder/?" + id);
+        // 遍历计算 订单商品的数量
+        calculateNumber(value,key) {
+            value.forEach(ele => {
+                var num = 0;
+                ele.data.forEach(item => {
+                    num += item.num;
+                })
+                this.totalNum[key].push(num);
+            })
+        },
+        // 去到订单详情页
+        goOrderDetail(orderId,oid) {
+            this.$router.push('/order/detail/'+orderId+'/'+oid);
+        },
+        // 查看物流
+        look(oid,goodsData) {
+            sessionStorage.setItem('receive-goods',JSON.stringify(goodsData));
+            this.$router.push('/order/wuliu/'+oid);
+        },
+        // 确认收货 
+        confirmReceipt(oid) {
+            this.$request.post('/confirmOrder',{id: oid}).then(res => {
+                if(res.mag == 'ok') {
+                    Toast('收货成功');
+                }
+            })
+            .catch(err => {
+                Toast('收货失败');
+            })
+        },
+        // 支付宝支付
+        pay(orderId) {
+            this.$request.get('/alipay/wappay/get?out_trade_no=' + orderId).then(res => {
+                this.form = res;
+                this.$nextTick(() => {
+                    document.forms['alipaysubmit'].submit() //渲染支付宝支付页面 
+                })
+            })
         }
     }
 }
@@ -171,7 +213,6 @@ export default {
 .order-item {
     position: relative;
     width: 343px;
-    height: 156px;
     margin: 0 auto;
     margin-bottom: 16px;
     padding: 12px 12px 12px 21px;
@@ -184,10 +225,13 @@ export default {
         .van-icon {
             font-size: 18px;
         }
+        .await {
+            color: #90B240;
+        }
     }
     .order-describe {
         position: relative;
-        top: 20px;
+        margin-top: 20px;
         font-size: 12px;
         .img {
             width: 72px;
@@ -196,9 +240,12 @@ export default {
             background-size: cover;
             background-position: center;
         }
-        .name {
+        .name,.num {
             position: absolute;
-            top: 0;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        .name {
             left: 88px;
             width: 165px;
             overflow: hidden;
@@ -206,32 +253,38 @@ export default {
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 2; 
         }
-        .price {
-            position: absolute;
-            bottom: 0;
-            left: 88px;
-        }
-        .await {
-            position: absolute;
-            top: -36px;
-            right: 10px;
-            color: #90B240;
-            font-size: 10px;
+        .num {
+            right: 0;
         }
     }
-    .order-again {
+    .number {
+        margin-top: 10px;
+        span:nth-child(1) {
+            margin-right: 15px;
+            font-size: 12px;
+            color: #999;
+        }
+        span:nth-child(2) {
+            font-size: 14px;
+        }
+    }
+    .order-again,
+    .wuliu {
         position: absolute;
         right: 12px;
         bottom: 12px;
         width: 67px;
-        height: 22px;
-        line-height: 22px;
-        border-radius: 10px;
-        background-color: #B3D465;
+        height: 29px;
+        line-height: 29px;
+        border-radius: 15px;
+        border: 1px solid #B3D465;
         text-align: center;
         font-size: 12px;
-        color: #fff;
+        color: #B3D465;
     }
-    
+    .wuliu {
+        position: absolute;
+        right: 89px;
+    }
 }
 </style>
