@@ -166,6 +166,7 @@
       <div class="my-class">
         <div
           class="goods-box"
+          style="position:relative"
           @click="viewTeacher(item)"
           v-for="(item, index) in like.data"
           :key="index"
@@ -177,7 +178,7 @@
             <div class="teacher_theme" style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{item.good_at}}</div>
             <div class="teacher_name">培训老师：<span style="color:#22ac38;">{{item.name}}</span></div>
             <div class="price-views-collenct">
-              <div class="price"></div>
+              <div @click.stop="cancelTeacherUp(item, index)" style="width: 1rem; height: 1rem;position: absolute;left: 0.8rem;bottom: 0.8rem;"><img src="~@/assets/Givecolor.png" alt=""></div>
               <div class="views-collenct">
               </div>
             </div>
@@ -531,6 +532,11 @@ export default {
         }
       });
     },
+    viewClubDetail(item) {
+      this.$router.push({
+        path: `/joinclubhouse/joinclubhousedetails?id=${item.id}`
+      });
+    },
     viewWantDetail(item) {
       this.$router.push({
         path: `/cultivate/detail/${item.id}`
@@ -539,7 +545,14 @@ export default {
     /** 现金券使用记录 */
     usedRecord(id) {
       this.$request(`/personal/home/${id}`).then(data => {});
-    }
+    },
+    cancelTeacherUp(item, index) {
+      this.$request.post(`/personal/teachers/thumbsUp`, {id: item.id})
+        .then(response => {
+          this.$message.success('操作成功')
+          this.like.data.splice(index, 1)
+        })
+    },
   }
 };
 </script>
