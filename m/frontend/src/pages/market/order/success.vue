@@ -1,18 +1,10 @@
 <template>
   <div class="wrap">
-    <van-nav-bar title="查看结果"  fixed>
-      <!-- <div class="" slot="right" @click="handleShareGoods">
-        <img class="icon" src="../../../assets/img/share.png" />
-      </div>-->
-      <div class="" slot="left" @click="handleBackHome">
-        <span> <van-icon name="arrow-left"/> </span>
-      </div>
-    </van-nav-bar>
+    <van-nav-bar title="支付结果" left-arrow @click-left="back"></van-nav-bar>
     <div class="order_body">
       <div class="pay_success">
         <div class="title">
           <span class="title-msg">{{ msg }}</span>
-          <!-- <p class="title-integral"><span class="span1">40</span><span>积分</span> </p> -->
         </div>
         <span class="tips">{{ ordermsg }}</span>
         <div class="actions">
@@ -30,56 +22,42 @@ export default {
     return {
       msg: '支付成功',
       ordermsg: '感谢您的光顾，宝贝一定准时送到府上！',
-      orderid: '',
     };
   },
+  // 展示价格为 0 时，支付成功的状态
   beforeRouteEnter: (to, from, next) => {
-    console.log(to, from)
     if(from.path === '/fillorder')
     next(() => {
       this.msg = '支付成功'
     })
     next()
   },
-  mounted() {
-    this.$store.commit('loadStatus', false)
-    var adress = 'http://testapi.aomengyujia.com/?out_trade_no=111&code=033yCCJ52PGP3S0AbRM52xBiJ52yCCJm&state=STATE'
-    console.log(adress.split('&')[1].split('=')[1])
-
-
-
-  },
   created() {
-    try {
-      this.orderid = window.location.href.split('=')[2]
-      if (this.orderid) {
-        this.$request.post('/getAlipayOrder', { 'out_trade_no': this.orderid }).then((res) => {
-          console.log(res)
-          this.msg = res.msg
-          if( res.msg == '支付成功' ) {
-            this.ordermsg = '感谢您的光顾，宝贝一定准时送到府上！'
-          } else if (res.msg == '支付失败') {
-            this.ordermsg = '失败了！请重新购买'
-          } else if (res.msg == '未支付') {
-            this.ordermsg = '去支付！'
-          }
-        })
+      var params = this.$route.query;
+      if(params.out_trade_no) {
+        this.getOrderStatus(params.out_trade_no);
+      } else {
+        this.msg = '您已取消支付，请尽快到订单页面支付哟~~~';
       }
-    }
-    catch {
-    }
-    // console.log(window.location.href)
   },
   methods: {
-    back() {},
-    handleBackHome() {
-      this.$router.push('/store/category')
+    back() {
+      this.$router.push('/store/category');
     },
     viewOrder() {
       this.$router.push('/myorder')
     },
     goOn() {
       this.$router.push('/store/category')
+    },
+    getOrderStatus(orderId) {
+      this.$request.post('/getOrderStatus', { out_trade_no: orderId }).then(res => {
+        console.log(res);
+        this.msg = res.msg
+        if( res.msg == '支付成功' ) this.ordermsg = '感谢您的光顾，宝贝一定准时送到府上！';
+        else if (res.msg == '支付失败') this.ordermsg = '失败了！请重新购买';
+        else if (res.msg == '暂未支付') this.ordermsg = '请尽快完成订单哦~~~';
+      })
     }
   }
 };

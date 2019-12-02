@@ -18,7 +18,7 @@
         <p class="address-detail">地址：{{goodsOrderData.zone+goodsOrderData.address}}</p>
       </div>
       <!-- 商品展示 -->
-      <div class="order-main-shop" v-for="(item, index) in goodsOrderData.data" :key="index">
+      <div class="order-main-shop" v-for="(item, index) in goodsOrderData.data" :key="index" @click="goGoodsDetail(item.id)">
         <div class="order-main-shop-img">
           <img :src="item.url" />
         </div>
@@ -53,7 +53,7 @@
     <footer class="footer">
       <!-- <div class="delete" @click="delOrder">删除订单</div> -->
       <div class="hint" v-if="goodsOrderData.status==='待付款'">温馨提示：倒计时结束将自动取消订单</div>
-      <div class="payment" v-if="goodsOrderData.status==='待付款'" @click="pay">
+      <div class="payment" v-if="goodsOrderData.status==='待付款'" @click="pay(orderId,goodsOrderData.payment)">
         <span>付款</span><van-count-down :time="time" format="mm:ss" @finish="timeEnd"/>
       </div>
       <div class="hint2" v-if="goodsOrderData.status==='已取消'">
@@ -97,6 +97,9 @@ export default {
     onClickLeft() {
       this.$router.go(-1);
     },
+    goGoodsDetail(id) {
+      this.$router.push('/goods/detail/'+id);
+    },
     // 获取商品的订单详情
     getOrderDetail(orderId) {
       this.$request.get("/order/good/" + orderId)
@@ -138,17 +141,49 @@ export default {
     },
     // 倒计时结束 
     timeEnd() {
-      
+      this.$router.go(-1);
     },
     // 支付宝支付
-    pay() {
-      this.$request.get('/alipay/wappay/get?out_trade_no=' + this.orderId).then(res => {
-        this.form = res;
-        this.$nextTick(() => {
-            document.forms['alipaysubmit'].submit() //渲染支付宝支付页面
-        })
-      })
+    pay(orderId,payment) {
+      if(payment === '支付宝') {
+          this.payAlipay(orderId);
+      } else {
+          if(this.isWeiXin()) this.payForWexin(orderId);
+          else this.payForWexinOut(orderId);
+      }
     },
+    // 支付宝支付 
+    payAlipay(orderId) {
+        this.$request.get('/alipay/wappay/get?out_trade_no=' + orderId).then(res => {
+            this.form = res;
+            this.$nextTick(() => {
+                document.forms['alipaysubmit'].submit() //渲染支付宝支付页面 
+            })
+        })
+    },
+    // 判断是否在微信内
+    isWeiXin () {
+        var ua = window.navigator.userAgent.toLowerCase();
+        if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+            return true;
+        } else{
+            return false;
+        }
+    },
+    // 微信外部浏览器支付
+    payForWexinOut (orderId) {
+        this.$request.get('/alipay/wechat/h/test?out_trade_no=' + orderId ).then((res) => {
+            window.location.replace(res.mweb_url);
+        })
+    },
+    // 微信内置浏览器支付
+    payForWexin (orderId) {
+        var userid = sessionStorage.getItem('user')? JSON.parse(sessionStorage.getItem('user')).id: '';
+        this.$request.get('/alipay/wechat/jsapi/url?out_trade_no=' + orderId + '&id=' + userid ).then((res) => {
+            window.location.replace(res.url);
+        })
+    },
+
     look() {
       this.$router.push('/order/wuliu/'+this.oid);
     },
