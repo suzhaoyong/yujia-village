@@ -442,12 +442,14 @@ export default {
         params =Object.assign({}, params, {follow: false})
       } else if (keyWord === 'default') { 
         params = Object.assign({}, params, {time: false})
-      } else {
+      } else if(keyWord === 'price') {
         if(this.priceFlag) {
           params = Object.assign({}, params, {money: true})
         } else {
           params = Object.assign({}, params, {money: false})
         }
+      } else {
+        return 
       }
       return params
     },

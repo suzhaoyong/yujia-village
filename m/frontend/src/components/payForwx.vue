@@ -3,11 +3,11 @@
     <van-nav-bar title="订单支付" left-arrow @click-left="goback" fixed>
     </van-nav-bar>
     <div v-show="false">
-    <div class="payback">
-      <div class="payback-count">
-        支付成功
+      <div class="payback">
+        <div class="payback-count">
+          支付成功
+        </div>
       </div>
-    </div>
     </div>
 
     <div class="payon" v-show="true">

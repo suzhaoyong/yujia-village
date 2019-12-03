@@ -20,7 +20,7 @@
                                 <span>共{{totalNum.all[index]}}件</span>
                                 <span>合计：￥{{item.totalPrice}}</span>
                             </div>
-                            <div class="order-again" v-if="item.status==='待付款'" @click="pay(item.out_trade_no)">去支付</div>
+                            <div class="order-again" v-if="item.status==='待付款'" @click="pay(item.out_trade_no,item.payment)">去支付</div>
                             <div class="wuliu" v-if="item.status==='待收货'" @click="look(item.data[0].oid,item.data)">查看物流</div>
                             <div class="order-again" v-if="item.status==='待收货'" @click="confirmReceipt(item.data[0].oid)">确认收货</div>
                         </div>
@@ -43,7 +43,7 @@
                                 <span>共{{totalNum.pay[index]}}件</span>
                                 <span>合计：￥{{item.totalPrice}}</span>
                             </div>
-                            <div class="order-again" @click="pay(item.out_trade_no)">去支付</div>
+                            <div class="order-again" @click="pay(item.out_trade_no,item.payment)">去支付</div>
                         </div>
                     </div>
                     <div class="empty" v-else></div>
@@ -168,15 +168,46 @@ export default {
                 Toast('收货失败');
             })
         },
-        // 支付宝支付
-        pay(orderId) {
+        // 支付
+        pay(orderId,payment) {
+            if(payment === '支付宝') {
+                this.payAlipay(orderId);
+            } else {
+                if(this.isWeiXin()) this.payForWexin(orderId);
+                else this.payForWexinOut(orderId);
+            }
+        },
+        // 支付宝支付 
+        payAlipay(orderId) {
             this.$request.get('/alipay/wappay/get?out_trade_no=' + orderId).then(res => {
                 this.form = res;
                 this.$nextTick(() => {
                     document.forms['alipaysubmit'].submit() //渲染支付宝支付页面 
                 })
             })
-        }
+        },
+        // 判断是否在微信内
+        isWeiXin () {
+            var ua = window.navigator.userAgent.toLowerCase();
+            if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+                return true;
+            } else{
+                return false;
+            }
+        },
+        // 微信外部浏览器支付
+        payForWexinOut (orderId) {
+            this.$request.get('/alipay/wechat/h/test?out_trade_no=' + orderId ).then((res) => {
+                window.location.replace(res.mweb_url);
+            })
+        },
+        // 微信内置浏览器支付
+        payForWexin (orderId) {
+            var userid = sessionStorage.getItem('user')? JSON.parse(sessionStorage.getItem('user')).id: '';
+            this.$request.get('/alipay/wechat/jsapi/url?out_trade_no=' + orderId + '&id=' + userid ).then((res) => {
+                window.location.replace(res.url);
+            })
+        },
     }
 }
 </script>

@@ -64,16 +64,8 @@
         </div>
       </div>
       <div class="order-main-discounts">
-        <van-cell-group v-show="true">
-          <van-cell is-link @click="showPopup('payway')">
-            <template slot="title">
-              <span class="custom-title">支付方式：</span>
-              <!-- <van-tag>{{payway.value ? payway.value : '请选择支付方式'}}</van-tag> -->
-              <van-tag>支付宝</van-tag>
-            </template>
-          </van-cell>
-        </van-cell-group>
-       
+        <van-cell title="支付方式：" is-link @click="showPopup('payway')" :value="payway.value">
+        </van-cell>
       </div>
     </main>
     <footer class="order-foot">
@@ -85,14 +77,14 @@
       <div class="order-foot-buybtn" @click="pay" >去付款</div>
     </footer>
     <!-- 支付方式 -->
-    <!-- <van-popup v-model="payway.show" position="bottom">
+    <van-popup v-model="payway.show" position="bottom">
       <van-picker
         :columns="payway.columns"
         show-toolbar
         @cancel="payway.show = false"
         @confirm="onChangePayway"
       />
-    </van-popup> -->
+    </van-popup>
     <van-popup class="jifen-integral"
       v-model="show"
       round
@@ -140,24 +132,8 @@ export default {
     return {
       payway: {
         show: false,
-        // columns: ["支付宝", '微信'],
-        columns: ["支付宝"],
-        value: ""
-      },
-      coupon: {
-        show: false,
-        columns: [
-        ],
-        value: ""
-      },
-      cash: {
-        show: false,
-        columns: [
-        ],
-        value: ""
-      },
-      aside: {
-        isOpen: false
+        columns: ["支付宝", '微信'],
+        value: "微信"
       },
       type: '',
       userAddress: [],
@@ -191,15 +167,6 @@ export default {
     };
   },
   watch: {
-    "aside.isOpen": {
-      handler: function(newVal, oldVal) {
-        if (newVal) {
-        } else {
-          this.coupon.show = newVal;
-          this.cash.show = newVal;
-        }
-      }
-    },
     url(newVal, oldVal) {
       if (newVal && this.newWin) {
         this.newWin.location.href = newVal;
@@ -228,7 +195,13 @@ export default {
       return num;
     },
     isAllowPay() {
-      return this.selectAddress.name;
+      if(!this.selectAddress.name) {
+        return '请填写收货地址';
+      }
+      if(!this.payway.value) {
+        return '请选择支付方式';
+      }
+      return 0;
     },
     // 商品积分优惠使用说明
     integralUse() {
@@ -343,23 +316,16 @@ export default {
     },
     // 选择弹出层
     showPopup(type) {
-      // this[type].show = true;
-      // if (["coupon", "cash"].indexOf(type) >= 0) {
-      //   if (this[type].columns.length > 0) {
-      //     this.aside.isOpen = true;
-      //   }
-      // }
+      this[type].show = true;
     },
     // 支付
     pay() {
-      if (!this.isAllowPay) return Toast('请填写收货地址')
+      if (this.isAllowPay) return Toast(this.isAllowPay)
       const buyGoods = JSON.parse(sessionStorage.getItem("buy goods"));
       const ids = this.goods.map(item => item.id);
       const goodsIds = this.goods.map(item => item.goodListId) ;
       const nums = this.goods.map(item => item.num);
       const { tel, address, area, city, province, name } = this.selectAddress;
-      const { id: couponId } = this.coupon.value;
-      const { id: cashId, use_val, surplus } = this.cash.value;
       let params = {
         id: ids,
         lid: goodsIds,
@@ -393,28 +359,23 @@ export default {
           payment: 2
         };
       } 
+      
       if(this.type) {
+        if (this.payway.value === "微信") {
+          m_params.payment = 3;
+        }
         this.singlePay(m_params);
       } else {
-        this.manyPay(params);
-      }
-      if (this.payway.value === "微信") {
-        if (isWeiXin) {
+        if (this.payway.value === "微信") {
+          params.payment = 3;
         }
+        this.manyPay(params);
       }
     },
     // 单件支付，创建订单
     singlePay(params) {
       this.$request.post('/goods/order/mobile', params).then(res => {
-        if(res.code === 200) {
-          Toast("恭喜您，课程购买成功");
-           setTimeout(() => {
-              this.$router.push('/order');
-            }, 2000);
-        } else if(res.msg === 'OK'&&res.code===201) {
-          this.payMoney(res.out_trade_no);
-          // this.payForWexin(res.out_trade_no)
-        } 
+        this.payFunction(res);
       }).catch(error => {
         if(error.code === 430) {
           Toast("订单生成失败，您的积分不足");
@@ -426,22 +387,33 @@ export default {
     // 多件支付，创建订单
     manyPay(params) {
       this.$request.post('/goodOrder', params).then(res => {
-        if(res.code === 200) {
-          Toast("恭喜您，课程购买成功");
-           setTimeout(() => {
-              this.$router.push('/order');
-            }, 2000);
-        } else if(res.msg === 'OK'&&res.code===201) {
-          this.payMoney(res.out_trade_no);
-        }
+        this.payFunction(res);
       }).catch(error => {
-        if(error.code === 403) {
+        if(error.code === 430) {
           Toast("订单生成失败，您的积分不足");
         } else {
-          Toast("抱歉，网络出了点问题，请检查你的网络！");
+          Toast("抱歉，订单生成失败");
         }
       })
     },
+    // 支付功能
+    payFunction(res) {
+      if(res.code === 200) {
+       Toast("恭喜您，课程购买成功");
+        setTimeout(() => {
+           this.$router.push('/order');
+         }, 2000);
+     } else if(res.msg === 'OK'&&res.code===201) {
+       if(this.payway.value === "微信") {
+         if(this.isWeiXin()) this.payForWexin(res.out_trade_no);
+         else this.payForWexinOut(res.out_trade_no);
+       } else {
+         if(this.isWeiXin()) Toast('微信内不能使用支付宝支付！');
+         else this.payMoney(res.out_trade_no);
+       }
+     }
+    },
+    // 判断是否在微信内
     isWeiXin () {
       var ua = window.navigator.userAgent.toLowerCase();
       if(ua.match(/MicroMessenger/i) == 'micromessenger'){
@@ -459,24 +431,17 @@ export default {
           })
         })
     },
-    // 获取微信外部接口
-    payForWexinw (orderId) {
+    // 微信外部浏览器支付
+    payForWexinOut (orderId) {
       this.$request.get('/alipay/wechat/h/test?out_trade_no=' + orderId ).then((res) => {
-        let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res.mweb_url, body: res.body, id: res.out_trade_no }});
-        window.open(routeData.href, '_blank')
-      }).catch((error) => {
-        Toast(error)
+        window.location.replace(res.mweb_url);
       })
     },
-    // 获取微信浏览器接口
+    // 微信内置浏览器支付
     payForWexin (orderId) {
-      var userid = sessionStorage.getItem('user')? JSON.parse(sessionStorage.getItem('user')).id: ''
-      this.$request.get('/alipay/wechat/jsapi/code?out_trade_no=' + orderId + '&id=' + userid ).then((res) => {
-        window.location.href = res.code
-        // let routeData = this.$router.resolve({ path: 'payforwx', query: { htmls: res.mweb_url, body: res.body, id: res.out_trade_no }});
-        // window.open(routeData.href, '_blank')
-      }).catch((error) => {
-        Toast(error)
+      var userid = sessionStorage.getItem('user')? JSON.parse(sessionStorage.getItem('user')).id: '';
+      this.$request.get('/alipay/wechat/jsapi/url?out_trade_no=' + orderId + '&id=' + userid ).then((res) => {
+        window.location.replace(res.url);
       })
     },
     // 返回
@@ -704,13 +669,6 @@ export default {
     }
     &-discounts {
       margin-top: 3px;
-      .van-tag--default {
-        background: none;
-        color: #999999;
-      }
-      .freight {
-        margin-top: 3px;
-      }
     }
   }
   .order-foot {
