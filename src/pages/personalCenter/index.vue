@@ -47,6 +47,7 @@
       <div class="my-class">
         <div
           class="goods-box"
+          style="position:relative"
           @click="viewWantDetail(item)"
           v-for="(item, index) in want.data"
           :key="index"
@@ -60,7 +61,8 @@
             <div class="teacher_name">培训老师：<span style="color:#22ac38;">{{item.name}}</span></div>
             <div class="teacher_name">培训时间：{{item.startTime}}/{{item.endTime}}</div>
             <div class="price-views-collenct">
-              <div class="price"></div>
+              <div @click.stop="cancelFollowTrainUp(item, index)" style="width: 1rem; height: 1rem;position: absolute;right: 0.8rem;bottom: 0.8rem; cursor: pointer;"><img style="object-fit: contain;" src="~@/assets/green_up.png" alt=""></div>
+              <!-- <div class="price"></div> -->
               <div class="views-collenct">
               </div>
             </div>
@@ -544,6 +546,13 @@ export default {
     usedRecord(id) {
       this.$request(`/personal/home/${id}`).then(data => {});
     },
+    cancelFollowTrainUp(item, index) {
+      this.$request.get(`/personal/followTrain/${item.id}`)
+        .then(response => {
+          this.$message.success('操作成功')
+          this.want.data.splice(index, 1)
+        })
+    },
     cancelClubUp(item, index) {
       this.$request.get(`/personal/thumbsUpClub/${item.id}`)
         .then(response => {
@@ -552,7 +561,7 @@ export default {
         })
     },
     cancelTeacherUp(item, index) {
-      this.$request.post(`/personal/teachers/thumbsUp`, {id: item.id})
+      this.$request.get(`/personal/teachers/thumbsUp/${item.id}`)
         .then(response => {
           this.$message.success('操作成功')
           this.like.data.splice(index, 1)
