@@ -81,7 +81,8 @@ export default {
     return {
         teacher:{},
         showList:[],
-        msg:"",
+        status:"",
+        praise:"",
         Giveupimg:true,
         Giveupimg1:false,
         config: {
@@ -101,6 +102,7 @@ export default {
   },
   created () {
     this.yogoteacherdata();
+    this.yogoteacherdatalogin();
   },
   methods:{
       Giveuppraise(){
@@ -109,20 +111,19 @@ export default {
         return;
        }
         let _this = this;
-        let params ={
-            id:_this.$route.query.id
-        }
-        this.$request.post(`/personal/teachers/thumbsUp`,params).then(data => {
-            _this.msg = data.msg;
-            if(_this.msg == "OK"){
-                if(_this.Giveupimg1 == true){
-                    this.$message({type:'success', message: '取消成功'});
-                }else{
-                    this.$message({type:'success', message: '点赞成功'});
-                }
-                _this.Giveupimg1 = !_this.Giveupimg1;
-                _this.Giveupimg = !_this.Giveupimg;
-                this.yogoteacherdata();
+        this.$request.get(`/personal/teachers/thumbsUp/${_this.$route.query.id}`).then(data => {
+            _this.status = data.status;
+            if(_this.status == 0){
+                this.$message({type:'success', message: '已取消点赞'});
+                _this.Giveupimg1 = false;
+                _this.Giveupimg = true;
+                this.yogoteacherdatalogin();
+            }
+            if(_this.status == 1){
+                this.$message({type:'success', message: '点赞成功'});
+                _this.Giveupimg1 = true;
+                _this.Giveupimg = false;
+                this.yogoteacherdatalogin();
             }
         })
         .catch(error => {
@@ -136,12 +137,43 @@ export default {
             }
         });
       },
+      //登录前
       yogoteacherdata(){
         let _this = this;
         this.$request(`/teachers/${_this.$route.query.id}`).then(res => {
             let { teacher,course} = res;
             _this.showList = res.course;
             _this.teacher = res.teacher;
+            _this.praise = res.praise;
+            if(_this.praise == 0){
+             _this.Giveupimg1 = false;
+             _this.Giveupimg = true;
+            }
+            if(_this.praise == 1){
+                _this.Giveupimg1 = true;
+                _this.Giveupimg = false;
+            }
+        })
+        .then(_ => {
+          this.initSocialConfig();
+        });
+      },
+      //登陆后
+      yogoteacherdatalogin(){
+        let _this = this;
+        this.$request(`/teachers/show/login/${_this.$route.query.id}`).then(res => {
+            let { teacher,course} = res;
+            _this.showList = res.course;
+            _this.teacher = res.teacher;
+            _this.praise = res.praise;
+            if(_this.praise == 0){
+             _this.Giveupimg1 = false;
+             _this.Giveupimg = true;
+            }
+            if(_this.praise == 1){
+                _this.Giveupimg1 = true;
+                _this.Giveupimg = false;
+            }
         })
         .then(_ => {
           this.initSocialConfig();
