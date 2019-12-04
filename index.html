@@ -24,16 +24,34 @@
 
   </head>
   <script>
-    var isProd = '<%= process.env.NODE_ENV %>' === 'production'
-    console.log(isProd);
-    if (isProd) {
-      var _hmt = _hmt || [];
-      (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?37e253bf0a8429a614c7b3ac76807f14";
-      var s = document.getElementsByTagName("script")[0]; 
-      s.parentNode.insertBefore(hm, s);
-      })();
+    baidugongneng();
+    baidutongji();
+
+    // 百度功能
+    function baidugongneng() {
+      var isProd = '<%= process.env.NODE_ENV %>' === 'production'
+      if (isProd) {
+        var _hmt = _hmt || [];
+        (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?85109188323e2bfc68e8fbe01f717cfb";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+        })();
+      }
+    }
+    // 百度统计
+    function baidutongji() {
+      var isProd = '<%= process.env.NODE_ENV %>' === 'production'
+      if (isProd) {
+        var _hmt = _hmt || [];
+        (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?37e253bf0a8429a614c7b3ac76807f14";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+        })();
+      }
     }
   </script>
   <body>
