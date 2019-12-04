@@ -66,7 +66,7 @@
                     :province="selectArea.province"
                     :city="selectArea.city"
                     :area="selectArea.area"
-                    @selected="onSelected"
+                    @province="onChangeProvince" @city="onChangeCity" @area="onChangeArea" 
                   ></v-distpicker>
                 </div>
                 <div class="cultivate1-four">
@@ -150,6 +150,7 @@
                   class="fruit-list-li"
                   v-for="(item,index) in fruit"
                   :key="index"
+                  style="padding-bottom: 0.5rem;"
                 >
                   <div>
                     <div class="fruit-list-li-img" :style="`backgroundImage: url(${item.teacher_img})`"  @click="selectItem(item)" >
@@ -453,6 +454,7 @@ export default {
     }
   },
   methods: {
+
     setSize:function () {
             this.bannerHeight = 542 / 1920 * this.screenWidth;
           },
@@ -520,7 +522,7 @@ export default {
     wantStudy(id) {
       getFollowTrain(id)
         .then(data => {
-          this.$message({type:'success', message: '已为您收藏至个人中心'})
+          this.$message({type:'success', message: '已为您添加到个人中心'})
         })
     },
     //类型和banner
@@ -716,6 +718,50 @@ export default {
         this.priceInput.name = name;
         this.selected(this.priceInput);
       }
+    },
+    onChangeProvince(data) {
+      this.selectArea.province = data.value;
+      this.selectArea.city = ''
+      this.selectArea.area = ''
+      const tag = {
+        value: {
+          province: data.value,
+        },
+        type: "area",
+        isArray: false,
+        name: `${data.value}`
+      };
+      this.selected(tag)
+    },
+    onChangeCity(data) {
+      this.selectArea.city = data.value;
+      this.selectArea.area = ''
+      const { province, city } = this.selectArea
+      const tag = {
+        value: {
+          province,
+          city
+        },
+        type: "area",
+        isArray: false,
+        name: `${province} ${city}`
+      };
+      this.selected(tag)
+    },
+    onChangeArea(data){
+      this.selectArea.area = data.value;
+      const { province, city, area } = this.selectArea
+      const tag = {
+        value: {
+          province,
+          city,
+          area
+        },
+        type: "area",
+        isArray: false,
+        name: `${province} ${city} ${area}`
+      };
+      this.selected(tag)
     },
     onSelected(data) {
       const { province, city, area } = data;
@@ -1204,7 +1250,7 @@ img {
         margin: 0 auto;
         .fruit-list-li {
           width: 19.2rem;
-          height: 29rem;
+          // height: 29rem;
           // height: 100%;
           // padding-bottom: 1rem;
           background-color: #ffffff;
@@ -1387,7 +1433,7 @@ img {
       margin: 0 auto;
       .fruit-list-li {
         width: 19.2rem;
-        height: 29rem;
+        // height: 29rem;
         // height: 100%;
         // padding-bottom: 1rem;
         background-color: #ffffff;

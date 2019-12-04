@@ -50,6 +50,7 @@
                 <div class="button" @click="buyTrain">立即购买</div>
               </div>
               <div style="display: flex;justify-content: flex-start;" v-if="config.url" class="count-div2-text-share">
+                <div style="width: 1rem; height: 1rem;position: absolute;right: 0.8rem;bottom: 0.8rem; cursor: pointer;"><img style="object-fit: contain;" src="~@/assets/green_up.png" alt=""></div>
                   <share :config="config"></share>
                 </div>
               <!-- <img class="imgpic1" src="../../assets/image69.png" /> -->
