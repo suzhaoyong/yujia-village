@@ -471,7 +471,7 @@ export default {
       })
     },
     getMyThumbsUpClub(page = 1) {
-      this.$request.get(`/personal/myThumbsUpClub/${page}`).then(data => {
+      this.$request.get(`/personal/myThumbsUpClub?pag=${page}`).then(data => {
         this.club = data
       })
     },
