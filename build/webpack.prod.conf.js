@@ -67,7 +67,7 @@ const webpackConfig = merge(baseWebpackConfig, {
         renderAfterDocumentEvent: 'render-event',
         // Other puppeteer options.
         // (See here: https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#puppeteerlaunchoptions)
-        headless: false // Display the browser window when rendering. Useful for debugging.
+        headless: true // Display the browser window when rendering. Useful for debugging.
       })
     }),
     // extract css into its own file
