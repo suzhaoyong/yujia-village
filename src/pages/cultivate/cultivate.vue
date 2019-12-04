@@ -234,26 +234,21 @@
               :key="index"
             >
               <a :class="['cultivate-count-div5',{left: index%2 == 1}]" :href="`/cultivate/detail/${item.id}`" onclick="return false;">
-                <div class="news_bg_img" :style="`backgroundImage: url(${item.teacher_img})`" @click="selectItem(item)">
-                  <!-- <img :src="item.teacher_img" /> -->
+                <div class="news_bg_img" :style="`backgroundImage: url(${item.teacher_img});background-size: cover;background-repeat: no-repeat;background-position: top center;`" @click="selectItem(item)">
                 </div>
+                <div class="news_bg_img2"><img src="../../assets/quan.png"/></div>
                 <div class="bian">
                   <div class="div5-list">
                     <div class="li-text">
                       <h4 @click="selectItem(item)">{{item.theme}}</h4>
-                      <div class="list-eye">￥{{item.price}}</div>
                     </div>
-                    <el-rate :value="item.diff" :colors="['#58B708','#58B708','#58B708']" disabled></el-rate>
-                    <div class="li-text2">
-                      适用人群：
-                      <pre>{{item.crowd}}</pre>
-                    </div>
-                    <div class="li-text3">开课时间：{{item.startTime}}/{{item.endTime}}</div>
+                    <div class="rate-text">难度：<el-rate :value="item.diff" :colors="['#58B708','#58B708','#58B708']" disabled></el-rate></div>
+                    <div class="list-eye">{{item.price}}<span class="rmby">RMB</span></div> 
+                    <div class="list-but" @click="selectItem(item)">查看详情</div>
+                    <div class="li-text3">开课时间：{{item.startTime}} - {{item.endTime}}</div>
                     <div class="li-text4">地 址：{{item.address}}</div>
                   </div>
-                  <img class="border-img" src="../../assets/image47.png" />
                 </div>
-                <div class="color-box"></div>
               </a>
             </div>
             <not-found v-if="newList.length === 0" type="not-fond" msg="暂无相关信息"></not-found>
