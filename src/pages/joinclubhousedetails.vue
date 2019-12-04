@@ -131,7 +131,8 @@ export default {
     return {
         club:{},
         clubs:{},
-        msg:"",
+        status:"",
+        praise:"",
         Giveupimg:true,
         Giveupimg1:false,
         swiperOption: {
@@ -200,6 +201,7 @@ export default {
   },
   created(){
       this.joindatalist();
+      this.joindatalistlogin();
   },
   methods:{
       Giveuppraise(){
@@ -209,16 +211,18 @@ export default {
        }
         let _this = this;
         this.$request.get(`/personal/thumbsUpClub/${_this.$route.query.id}`).then(data => {
-            _this.msg = data.msg;
-            if(_this.msg == "OK"){
-                if(_this.Giveupimg1 == true){
-                    this.$message({type:'success', message: '取消成功'});
-                }else{
-                    this.$message({type:'success', message: '点赞成功'});
-                }
-                _this.Giveupimg1 = !_this.Giveupimg1;
-                _this.Giveupimg = !_this.Giveupimg;
-                this.joindatalist();
+            _this.status = data.status;
+            if(_this.status == 0){
+                this.$message({type:'success', message: '已取消点赞'});
+                _this.Giveupimg1 = false;
+                _this.Giveupimg = true;
+                this.joindatalistlogin();
+            }
+            if(_this.status == 1){
+                this.$message({type:'success', message: '点赞成功'});
+                _this.Giveupimg1 = true;
+                _this.Giveupimg = false;
+                this.joindatalistlogin();
             }
         })
         .catch(error => {
@@ -232,14 +236,47 @@ export default {
             }
         });
       },
+      //登录前
       joindatalist(){
         let _this = this;
         this.$request(`/clubs/${_this.$route.query.id}`).then(res => {
             let { club } = res;
             _this.club = club;
+            _this.praise = res.praise;
             _this.clubs = club.club_img;
             _this.famousteach = res.teacher;
             _this.swiperList= res.trains;
+            if(_this.praise == 0){
+             _this.Giveupimg1 = false;
+             _this.Giveupimg = true;
+            }
+            if(_this.praise == 1){
+                _this.Giveupimg1 = true;
+                _this.Giveupimg = false;
+            }
+        })
+        .then(_ => {
+          this.initSocialConfig();
+        });
+      },
+      //登录后
+      joindatalistlogin(){
+        let _this = this;
+        this.$request(`/clubs/show/login/${_this.$route.query.id}`).then(res => {
+            let { club } = res;
+            _this.club = club;
+            _this.praise = res.praise;
+            _this.clubs = club.club_img;
+            _this.famousteach = res.teacher;
+            _this.swiperList= res.trains;
+            if(_this.praise == 0){
+             _this.Giveupimg1 = false;
+             _this.Giveupimg = true;
+            }
+            if(_this.praise == 1){
+                _this.Giveupimg1 = true;
+                _this.Giveupimg = false;
+            }
         })
         .then(_ => {
           this.initSocialConfig();
