@@ -151,31 +151,38 @@ export default {
   },
   methods: {
     choosePayWay() {
+      this.isPayWay = true
+      
+    },
+    postOrder() {
       const { id } = this.$route.params;
       this.orderTrain.id = id
+      let params = {}
       if(this.usedDiscount) {
         const { id: discountId, consume:fraction } = this.checkedDiscount[0]
-        this.orderTrain = Object.assign({}, this.orderTrain, { discountId, fraction })
+        params = Object.assign({}, this.orderTrain, { discountId, fraction })
+      } else {
+        params = Object.assign({}, this.orderTrain)
       }
+       if(this.pay.type === 'wechat') {
+         params.payment = 3
+       }
+       if(this.pay.type === 'alipay') {
+         params.payment = 2
+       }
       
-      postTrainsOrder(this.orderTrain)
+      return postTrainsOrder(params)
         .then(response => {
-          console.log(response);
           const { body, out_trade_no = '' } = response
 
           if(out_trade_no == '') {
             this.$message({type:'warning', message: response.msg})
           } else {
             this.form = { body, out_trade_no, total_fee: this.payPrice }
-            this.isPayWay = true
           }
         })
-      
     },
-    payMoney() {
-      if(this.forbidPay) {
-        return;
-      }
+    postTrandeNo() {
       if(this.pay.type === 'alipay') {
         const { body, out_trade_no, total_fee } = this.form
         let url = `${window.location.origin}/api/alipay/web/get?out_trade_no=${out_trade_no}`;
@@ -202,6 +209,16 @@ export default {
         // this.playcode.order = { out_trade_no, body, totalPrice: total_fee }
         // this.playcode.show = true;
       }
+
+    },
+    payMoney() {
+      if(this.forbidPay) {
+        return;
+      }
+      this.postOrder()
+        .then(() => {
+          this.postTrandeNo()
+        })
     },
   }
 }
