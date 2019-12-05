@@ -297,8 +297,7 @@ export default {
           this.selectTtype.push(Number(this.$route.query.id))
           this.searchResult('confirm')
       } else {
-        this.$request.get('trains?page=' + page).then((res) => {
-          // console.log(res);
+        this.$request.post('trains?page=' + page,{time: false}).then((res) => {
           this.fenye(this.pages, res);
         })
       }
@@ -384,8 +383,9 @@ export default {
       this.confirm = confirm;
       this.pages = 1;
       this.messageLists = [];
+      var word = this.keyWord;
       this.keyWord = '';
-      this.getConditiondata(page, this.getFiltersParams());
+      this.getConditiondata(page, this.getRankParams(word));
     },
     // 获取条件筛选的数据
     getConditiondata(page =1, params) {
@@ -449,7 +449,7 @@ export default {
           params = Object.assign({}, params, {money: false})
         }
       } else {
-        return 
+        return params
       }
       return params
     },

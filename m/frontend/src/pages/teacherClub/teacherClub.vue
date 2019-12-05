@@ -1,12 +1,6 @@
 <template>
 <div>
     <div class="club_warp">
-        <!-- <div class="club_warp_head">名师&机构</div> -->
-        <!-- <div class="club_warp_list"> -->
-          <!-- <span class="liList" v-for="(item,index) in liList" :key="index" v-on:click="addClass(index)" :class="{ischeck:index==current}">{{item}}</span> -->
-          <!-- <div class="stylelist"></div> -->
-        <!-- </div> -->
-        <!-- <van-tabs title-active-color="#8FCD71" color="#8FCD71" v-model="current" line-width="70px" sticky @click="getPullUpReload"> -->
         <van-tabs title-active-color="#8FCD71" color="#8FCD71" v-model="current" line-width="70px" sticky>
             <van-tab title="培训机构">
                 <div class="list_teacher">
@@ -71,9 +65,8 @@
                                         <div class="texts van-ellipsis">{{item.good_at}}</div>
                                         <div class="Rotation_zan">
                                         <div class="Rotation_zan_items">教龄：{{item.num}}年</div>
-                                        <div class="Rotation_zan_tips">
-                                            <img src="../../assets/teacherclub/Give.png" v-if="item.is_prais == 0" @click="Giveuppraise(item,index, 'teacher2')"/>
-                                            <img src="../../assets/teacherclub/Give2.png" v-if="item.is_prais == 1" @click="Giveuppraise(item,index, 'teacher2')"/>
+                                        <div class="Rotation_zan_tips" :class="item.is_prais?'thumbColor':''" @click="Giveuppraise(item.id,index,'choiceness')">
+                                            <van-icon name="good-job"/> 
                                             <span class="span">{{item.praise}}</span>
                                         </div>
                                         </div>
@@ -119,16 +112,16 @@
                         <div class="exhibition_content">
                             <div class="exhibition_box" v-for="(item,index) in exhibitionBox" :key="index">
                                 <div class="exhibition_img" @click="exhibition(item)">
-                                <img :src="item.first_img" :alt="item.name"/>
+                                    <img :src="item.first_img" :alt="item.name"/>
                                 </div>
                                 <div class="exhibition_title">
                                     <h3 class="van-ellipsis">{{item.name}}</h3>
                                     <div class="texts van-ellipsis">{{item.good_at}}</div>
                                     <div class="exhibition_zan">
                                     <div class="exhibition_zan_items">教龄：{{item.num}}年</div>
-                                    <div class="exhibition_zan_tips">
-                                        <img src="../../assets/teacherclub/Give.png" v-if="item.is_prais == 0" @click="Giveuppraise(item,index, 'teacher')"/>
-                                        <img src="../../assets/teacherclub/Give2.png" v-if="item.is_prais == 1" @click="Giveuppraise(item,index, 'teacher')"/>
+                                    <div class="exhibition_zan_tips" @click="Giveuppraise(item.id,index)"
+                                     :class="item.is_prais?'thumbColor':''">
+                                        <van-icon name="good-job"/>
                                         <span class="span">{{item.praise}}</span>
                                     </div>
                                 </div>
@@ -163,85 +156,86 @@ import { Notify, Toast, Swipe, SwipeItem } from "vant";
 Vue.use(Notify).use(Toast).use(Swipe).use(SwipeItem);
 export default {
     data() {
-    return {
-        isOpen: false,
-        isOpen2: false,
-        isOpen3:false,
-        launch:true,
-        current:0,
-        curritem:0,
-        banner:'',
-        finished: false,
-        loading: false,
-        finished2: false,
-        loading2: false,
-        visible:false,
-        banner2:'',
-        isActive: 0,
-        value1:'',
-        option1: [
-        { text: '北京', value: '北京' },
-        { text: '上海', value: '上海' },
-        { text: '深圳', value: '深圳' },
-        { text: '成都', value: '成都' },
-        { text: '武汉', value: '武汉' },
-        { text: '厦门', value: '厦门' },
-        { text: '天津', value: '天津' },
-        { text: '广州', value: '广州' },
-        { text: '重庆', value: '重庆' },
-        { text: '长沙', value: '长沙' },
-        { text: '南京', value: '南京' },
-        { text: '杭州', value: '杭州' },
-       ],
-        name:"",
-        // 传入的资历参数
-        num:"",
-        record:"",
-        // 显示资历
-        seniority: '',
-        items:["全部"],
-        clubBox:[],
-        value:"",
-        ids:"",
-        areaList,
-        actions:[
-        { name: '不限'},
-        { name: '0-5' },
-        { name: '5-10' },
-        { name: '10-15' },
-        { name: '15-20' },
-        { name: '20-30' },
-        { name: '30-40' },
-        { name: '40以上' },
-        ],
-        houseType:[],
-        exhibitionBox:[],
-        exhibitionBox2:[],
-        province:"",
-        city:"",
-        area:"",
-        // 选择的城市
-        region: '',
-        current_page:1,
-        last_page: 2,
-        total:'',
-        current_page2:1,
-        last_page2: 2,
-        total2:'',
-        id:0,
-        id2:0,
-        routecurrent:'',
-        isupdate: false,
-        isKey: '',
-        swiper: '', // 广告位1
-    };
+        return {
+            isOpen: false,
+            isOpen2: false,
+            isOpen3:false,
+            launch:true,
+            current:0,
+            curritem:0,
+            banner:'',
+            // 上拉加载的状态
+            finished: false,
+            loading: false,
+            finished2: false,
+            loading2: false,
+
+            visible:false,
+            banner2:'',
+            isActive: 0,
+            value1:'',
+            option1: [
+                { text: '北京', value: '北京' },
+                { text: '上海', value: '上海' },
+                { text: '深圳', value: '深圳' },
+                { text: '成都', value: '成都' },
+                { text: '武汉', value: '武汉' },
+                { text: '厦门', value: '厦门' },
+                { text: '天津', value: '天津' },
+                { text: '广州', value: '广州' },
+                { text: '重庆', value: '重庆' },
+                { text: '长沙', value: '长沙' },
+                { text: '南京', value: '南京' },
+                { text: '杭州', value: '杭州' },
+            ],
+            name:"",
+            // 传入的资历参数
+            num:"",
+            record:"",
+            // 显示资历
+            seniority: '',
+            items:["全部"],
+            clubBox:[],
+            value:"",
+            ids:"",
+            areaList,
+            actions:[
+                { name: '不限'},
+                { name: '0-5' },
+                { name: '5-10' },
+                { name: '10-15' },
+                { name: '15-20' },
+                { name: '20-30' },
+                { name: '30-40' },
+                { name: '40以上' },
+            ],
+            houseType:[],
+            exhibitionBox:[],
+            exhibitionBox2:[],
+            province:"",
+            city:"",
+            area:"",
+            // 选择的城市
+            region: '',
+            current_page:1,
+            last_page: 2,
+            total:'',
+            current_page2:1,
+            last_page2: 2,
+            total2:'',
+            id:0,
+            id2:0,
+            routecurrent:'',
+            isupdate: false,
+            isKey: '',
+            swiper: '', // 广告位1
+        };
   },
    computed: {
     ...mapGetters(["info", "isUserNeedLogin"]),
   },
   created(){
       this.joindata();
-      // this.exhibitionList();
       this.getAdvertising()
   },
   watch:{
@@ -447,45 +441,29 @@ export default {
         });
     },
       //点赞
-      Giveuppraise(item,index, type){
+      Giveuppraise(id,index,type){
         if (this.isUserNeedLogin) {
             this.$router.push('/login')
              Toast('请登录')
              return;
-        } else if (item.is_prais == 1) {
-            Toast('已经赞过啦')
-            // 点赞后取消
-            // const { praise } = type === 'teacher'?this.exhibitionBox[index] : this.exhibitionBox2[index]
-            // if (type === 'teacher') {
-            //     this.$set(this.exhibitionBox, index, {...this.exhibitionBox[index], is_prais: 0, praise: praise - 1 })
-            // } else {
-            //     this.$set(this.exhibitionBox2, index, {...this.exhibitionBox2[index], is_prais: 0, praise: praise - 1 })
-            // }
-            return  }
-        let params ={
-            id:item.id
-        }
-        this.$request.post(`/teachers/thumbsUp`,params).then(data => {
-            // this.msg = data.msg;
-            if(data.msg == "OK"){
-            Notify({ message: "点赞成功", type: "success" });
-            const { praise } = type === 'teacher'?this.exhibitionBox[index] : this.exhibitionBox2[index]
-            if (type === 'teacher') {
-                this.$set(this.exhibitionBox, index, {...this.exhibitionBox[index], is_prais: 1, praise: praise + 1 })
-            } else {
-                this.$set(this.exhibitionBox2, index, {...this.exhibitionBox2[index], is_prais: 1, praise: praise + 1 })
-            }
+        } 
+        this.$request.get(`/personal/teachers/thumbsUp/${id}`).then(data => {
+            if(type==='choiceness'&&data.status == 1) {
+                this.exhibitionBox2[index].praise = this.exhibitionBox2[index].praise + 1;
+                this.exhibitionBox2[index].is_prais = 1;
+            } else if(type!=='choiceness'&&data.status == 1) {
+                this.exhibitionBox[index].praise = this.exhibitionBox[index].praise + 1;
+                this.exhibitionBox[index].is_prais = 1;
+            } else if(type!=='choiceness'&&data.status == 0) {
+                this.exhibitionBox[index].praise = this.exhibitionBox[index].praise - 1;
+                this.exhibitionBox[index].is_prais = 0;
+            } else if(type==='choiceness'&&data.status == 0) {
+                this.exhibitionBox2[index].praise = this.exhibitionBox2[index].praise - 1;
+                this.exhibitionBox2[index].is_prais = 0;
             }
         })
         .catch(error => {
-            let { response: { data: { errorCode, msg } } } = error;
-            if (errorCode != 0) {
-            this.$message({
-                message: msg,
-                type: "error"
-            });
-            return;
-            }
+           Toast(error);
         });
       },
     //申请加盟
@@ -836,107 +814,107 @@ input:-ms-input-placeholder{
             }
         }
         .club_item_count{
-        width: 100%;
-        height: 100%;
-        background: #eee !important;
-        display: inline-block;
-        .club_item{
-            width: 93%;
-            margin: 0 auto;
-            display: flow-root;
-            .club_item_box{
-                width: 48%;
-                height: 100%;
-                float: left;
-                margin-bottom: 10px;
-                overflow: hidden;
-                border-radius: 7px;
-                .club_item_img{
-                    width: 100%;
-                    height: 146px;
-                    background-color: #E5E5E5;
-                    img{
+            width: 100%;
+            height: 100%;
+            background: #eee !important;
+            display: inline-block;
+            .club_item{
+                width: 93%;
+                margin: 0 auto;
+                display: flow-root;
+                .club_item_box{
+                    width: 48%;
+                    height: 100%;
+                    float: left;
+                    margin-bottom: 10px;
+                    overflow: hidden;
+                    border-radius: 7px;
+                    .club_item_img{
                         width: 100%;
-                        height: 100%;
-                        display: block;
-                        object-fit: cover;
+                        height: 146px;
+                        background-color: #E5E5E5;
+                        img{
+                            width: 100%;
+                            height: 100%;
+                            display: block;
+                            object-fit: cover;
+                        }
                     }
-                }
-                .club_item_title{
-                    width: 100%;
-                    height: 75px;
-                    background-color: #fff;
-                    display: inline-block;
-                    h3{
-                        font-size:12px;
-                        font-family:Microsoft YaHei;
-                        font-weight:400;
-                        color:rgba(44,44,44,1);
-                        margin-top: 15px;
-                        text-indent: 10px;
-                        width: 93%;
-                    }
-                    .text{
-                        font-size: 10px;
-                        font-family:PingFang SC;
-                        font-weight:400;
-                        color: #999;
-                        margin-top: 10px;
-                        text-indent: 10px;
-                        width: 93%;
-                    }
-                }
-            }
-            .club_item_box:nth-child(2n){
-                width: 48%;
-                height: 222px;
-                margin-bottom: 10px;
-                margin-left: 13px;
-                .club_item_img{
-                    width: 100%;
-                    height: 146px;
-                    img{
+                    .club_item_title{
                         width: 100%;
-                        height: 100%;
-                        display: block;
-                        object-fit: cover;
+                        height: 75px;
+                        background-color: #fff;
+                        display: inline-block;
+                        h3{
+                            font-size:12px;
+                            font-family:Microsoft YaHei;
+                            font-weight:400;
+                            color:rgba(44,44,44,1);
+                            margin-top: 15px;
+                            text-indent: 10px;
+                            width: 93%;
+                        }
+                        .text{
+                            font-size: 10px;
+                            font-family:PingFang SC;
+                            font-weight:400;
+                            color: #999;
+                            margin-top: 10px;
+                            text-indent: 10px;
+                            width: 93%;
+                        }
                     }
                 }
-                .club_item_title{
-                    width: 100%;
-                    height: 75px;
-                    background-color: #fff;
-                    display: inline-block;
-                    h3{
-                        font-size:12px;
-                        font-family:Microsoft YaHei;
-                        font-weight:400;
-                        color:rgba(44,44,44,1);
-                        margin-top: 15px;
-                        text-indent: 10px;
-                        width: 93%;
+                .club_item_box:nth-child(2n){
+                    width: 48%;
+                    height: 222px;
+                    margin-bottom: 10px;
+                    margin-left: 13px;
+                    .club_item_img{
+                        width: 100%;
+                        height: 146px;
+                        img{
+                            width: 100%;
+                            height: 100%;
+                            display: block;
+                            object-fit: cover;
+                        }
                     }
-                    .text{
-                        font-size: 10px;
-                        font-family:PingFang SC;
-                        font-weight:400;
-                        color: #999;
-                        margin-top: 10px;
-                        text-indent: 10px;
-                        width: 93%;
+                    .club_item_title{
+                        width: 100%;
+                        height: 75px;
+                        background-color: #fff;
+                        display: inline-block;
+                        h3{
+                            font-size:12px;
+                            font-family:Microsoft YaHei;
+                            font-weight:400;
+                            color:rgba(44,44,44,1);
+                            margin-top: 15px;
+                            text-indent: 10px;
+                            width: 93%;
+                        }
+                        .text{
+                            font-size: 10px;
+                            font-family:PingFang SC;
+                            font-weight:400;
+                            color: #999;
+                            margin-top: 10px;
+                            text-indent: 10px;
+                            width: 93%;
+                        }
                     }
                 }
+                .tips_text{
+                    text-align: center;
+                    color: #999;
+                    font-size:12px;
+                    font-family:PingFang SC;
+                    font-weight:500;
+                    margin-top: 70%;
+                    margin-bottom: 30px;
+                }
             }
-            .tips_text{
-                text-align: center;
-                color: #999;
-                font-size:12px;
-                font-family:PingFang SC;
-                font-weight:500;
-                margin-top: 70%;
-                margin-bottom: 30px;
-            }
-        }
         }
         .Default-page4{
             width: 100%;
@@ -976,7 +954,6 @@ input:-ms-input-placeholder{
                     font-size:12px;
                     font-family:Microsoft YaHei;
                     font-weight:400;
-                    color:rgba(44,44,44,1);
                     padding-right: 16px;
                   }
                   .house_title_img {
@@ -991,7 +968,6 @@ input:-ms-input-placeholder{
                     font-size:12px;
                     font-family:Microsoft YaHei;
                     font-weight:400;
-                    color:rgba(44,44,44,1);
                     padding-right: 16px;
                   }
                   .house_title_img{
@@ -1006,7 +982,6 @@ input:-ms-input-placeholder{
                     font-size:12px;
                     font-family:Microsoft YaHei;
                     font-weight:400;
-                    color:rgba(44,44,44,1);
                     padding-right: 16px;
                   }
                   .house_title_img{
@@ -1025,7 +1000,6 @@ input:-ms-input-placeholder{
                     font-size:12px;
                     font-family:Microsoft YaHei;
                     font-weight:400;
-                    color:rgba(44,44,44,1);
                     padding-right: 16px;
                   }
                   .house_title_img{
@@ -1157,9 +1131,7 @@ input:-ms-input-placeholder{
                         }
                         .Rotation_zan{
                             font-size:12px;
-                            font-family:PingFang SC;
                             font-weight:400;
-                            color:rgba(44,44,44,1);
                             display: flex;
                             justify-content: space-between;
                             margin-top: 5px;
@@ -1177,12 +1149,13 @@ input:-ms-input-placeholder{
                                 }
                                 .span{
                                     font-size:12px;
-                                    font-family:PingFang SC;
                                     font-weight:400;
-                                    color:rgba(44,44,44,1);
                                     margin-left: 4px;
                                     margin-top: -2px;
                                 }
+                            }
+                            .thumbColor {
+                                color: rgb(143, 205, 113);
                             }
                         }
                     }
@@ -1261,7 +1234,6 @@ input:-ms-input-placeholder{
                             font-size:14px;
                             font-family:PingFang SC;
                             font-weight:bold;
-                            color:rgba(44,44,44,1);
                             text-indent: 10px;
                             margin-top: 8%;
                             width: 95%;
@@ -1270,7 +1242,6 @@ input:-ms-input-placeholder{
                             font-size:12px;
                             font-family:PingFang SC;
                             font-weight:400;
-                            color:rgba(44,44,44,1);
                             padding-top: 2px;
                             text-indent: 10px;
                             width: 95%;
@@ -1279,7 +1250,6 @@ input:-ms-input-placeholder{
                             font-size:12px;
                             font-family:PingFang SC;
                             font-weight:400;
-                            color:rgba(44,44,44,1);
                             display: flex;
                             justify-content: space-between;
                             margin-top: 12px;
@@ -1295,13 +1265,14 @@ input:-ms-input-placeholder{
                                     display: block;
                                 }
                                 .span{
-                                    font-size:12px;
-                                    font-family:PingFang SC;
+                                    font-size: 12px;
                                     font-weight:400;
-                                    color:rgba(44,44,44,1);
                                     margin-top: -2px;
                                     margin-left: 4px;
                                 }
+                            }
+                            .thumbColor {
+                                color: rgb(143, 205, 113);
                             }
                         }
                     }
@@ -1331,25 +1302,19 @@ input:-ms-input-placeholder{
                         display: inline-block;
                         h3{
                             font-size:14px;
-                            font-family:PingFang SC;
                             font-weight:bold;
-                            color:rgba(44,44,44,1);
                             text-indent: 10px;
                             margin-top: 8%;
                         }
                         .texts{
                             font-size:12px;
-                            font-family:PingFang SC;
                             font-weight:400;
-                            color:rgba(44,44,44,1);
                             padding-top: 2px;
                             text-indent: 10px;
                         }
                         .exhibition_zan{
                             font-size:12px;
-                            font-family:PingFang SC;
                             font-weight:400;
-                            color:rgba(44,44,44,1);
                             display: flex;
                             justify-content: space-between;
                             margin-top: 12px;
@@ -1359,16 +1324,9 @@ input:-ms-input-placeholder{
                             .exhibition_zan_tips{
                                 display: flex;
                                 padding-right: 10px;
-                                img{
-                                    width: 11px;
-                                    height: 11px;
-                                    display: block;
-                                }
+                                font-size: 14px;
                                 .span{
-                                    font-size:12px;
-                                    font-family:PingFang SC;
                                     font-weight:400;
-                                    color:rgba(44,44,44,1);
                                 }
                             }
                         }

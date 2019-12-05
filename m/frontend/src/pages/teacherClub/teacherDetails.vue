@@ -16,6 +16,9 @@
                     </div>
                 </div>
             </div>
+            <div :class="[isThumb?'heartThumb':'',praise==1?'thumb-status':'thumb']" @click="thumb">
+
+            </div>
             <div class="details_center">
                 <div class="yogofigcaption-title">
                     <h2>个人简介</h2>
@@ -56,13 +59,16 @@ import Bus from "@/utils/Bus";
 import shareIng from '../../components/shareing'
 import { mapGetters } from "vuex"
 import Swiper from 'swiper';
+import { Toast } from 'vant';
 
 export default {
   data() {
     return {
+        praise: '',
         footlist:[],
         teacher:{},
         base64img:"",
+        isThumb: ''
     };
   },
   components: {
@@ -72,19 +78,24 @@ export default {
     ...mapGetters(["info","isUserNeedLogin"]),
   },
   created(){
-      this.yogoteacherdata();
+    if (this.isUserNeedLogin) {
+        this.yogoteacherdata();
+    } else {
+        this.yogoteacherdataLogin();
+    }
   },
   methods:{
-      swiperInit() {
-            new Swiper('.swiper1', {
-                slidesPerView: 'auto',
-                freeMode: true,
-                observer: true,
-            });
-      },
-       yogoteacherdata(){
+    swiperInit() {
+          new Swiper('.swiper1', {
+              slidesPerView: 'auto',
+              freeMode: true,
+              observer: true,
+          });
+    },
+    // 登录前
+     yogoteacherdata(){
         this.$request.get(`/teachers/${this.$route.query.id}`).then(res => {
-            let { teacher,course} = res;
+            let { teacher} = res;
             this.footlist = res.teacher.teacher_img;
             this.teacher = res.teacher;
             this.teacherid = res.teacher.id;
@@ -93,19 +104,44 @@ export default {
             })
         })
         .catch(error => {
-            let { response: { data: { errorCode, msg } } } = error;
-            if (errorCode != 0) {
-            this.$message({
-                message: msg,
-                type: "error"
-            });
-            return;
-            }
+            Toast('暂无数据！');
         });
-      },
-      goback() {
-        this.$router.push('/teacherClub/list')
-      },
+    },
+    // 登录后
+    yogoteacherdataLogin() {
+        this.$request.get(`/teachers/show/login/${this.$route.query.id}`).then(res => {
+            let { teacher, praise} = res;
+            this.praise = praise;
+            this.footlist = res.teacher.teacher_img;
+            this.teacher = res.teacher;
+            this.teacherid = res.teacher.id;
+            this.$nextTick(function() {
+                this.swiperInit();
+            })
+        })
+    },
+    goback() {
+      this.$router.push('/teacherClub/list')
+    },
+    // 点赞
+    thumb() {
+        if (this.isUserNeedLogin) {
+            this.$router.push('/login')
+             Toast('请登录')
+             return;
+        } 
+        this.$request.get(`/personal/teachers/thumbsUp/${this.$route.query.id}`).then(res => {
+            if(res.status==1) {
+                this.isThumb = true;
+                this.praise=1;
+            } else {
+                this.isThumb = false;
+                this.praise=0;
+            }
+        }).catch(err => {
+            Toast('点赞失败!');
+        })
+    }
   }
 };
 </script>
@@ -186,6 +222,51 @@ export default {
                 }
             }
         }
+    }
+    .thumb,
+    .thumb-status {
+        position: fixed;
+        top: 265px;
+        right: 30px;
+        z-index: 99;
+        width: 44px;
+        height: 44px;
+        border-radius: 22px;
+        box-shadow:0px 1px 6px 0px rgba(50,50,50,0.29);
+        background: url('../../assets/img/xin.png') no-repeat;
+        background-color: #fff;
+        background-position: left;
+        background-size: 2900%;
+    }
+    .thumb-status {
+        background-position: right;
+    }
+    @-webkit-keyframes heartBlast {
+        0% {
+            background-position: left;
+        }
+        100% {
+            background-position: right;
+        }
+    }
+    @keyframes heartBlast {
+        0% {
+            background-position: left;
+        }
+        100% {
+            background-position: right;
+        }
+    }
+    .heartThumb  {
+        -webkit-animation-name: heartBlast;
+        animation-name: heartBlast;
+        -webkit-animation-duration: .8s;
+        animation-duration: .8s;
+        -webkit-animation-iteration-count: 1;
+        animation-iteration-count: 1;
+        -webkit-animation-timing-function: steps(28); //共28个背景图片帧
+        animation-timing-function: steps(28);
+        background-position: right;
     }
     .details_center{
         width: 100%;
