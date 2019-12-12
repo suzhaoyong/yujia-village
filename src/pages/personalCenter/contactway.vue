@@ -171,7 +171,6 @@ export default {
                 this.useridtel = data.tel;
                 this.useridqq = data.qq;
                 this.checked = data.type;
-                this.disabled=true;
             });
         }
     }
