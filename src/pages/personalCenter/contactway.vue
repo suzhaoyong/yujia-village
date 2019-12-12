@@ -51,7 +51,17 @@
                                 </div>
                                 <div class="from_item">
                                     <div class="from_item_title">电话 / PHONE</div>
-                                    <el-input v-model.number="useridtel" placeholder="请输入电话" maxlength="11" @change="getFulltel" onKeyUp="value=value.replace(/\D/g,'')" onafterpaste="value=value.replace(/\D/g,'')" ></el-input>
+                                    <!-- <el-input v-model.number="useridtel" placeholder="请输入电话" maxlength="11" @change="getFulltel" onKeyUp="value=value.replace(/\D/g,'')" onafterpaste="value=value.replace(/\D/g,'')" ></el-input> -->
+                                    <div class="form_input">
+                                        <input
+                                            class="input"
+                                            v-model.trim="useridtel"
+                                            type="text"
+                                            placeholder="请输入电话"
+                                            style="outline:none;"
+                                        />
+                                        <div class="form_input-tips">{{blurInputError('useridtel', '', 'accountErrorRule')}}</div>
+                                     </div>
                                 </div>
                                 <div class="from_item">
                                     <div class="from_item_title">QQ</div>
@@ -74,6 +84,7 @@
 <script>
 import { mapGetters } from "vuex";
 import store from "@/store";
+import Validator from '@/utils/Validator.js'
 import Bus from "@/utils/Bus";
 export default {
     data(){
@@ -89,10 +100,18 @@ export default {
              useridweixin: '',
              useridtel:'',
              useridqq:'',
-        }
-    },
+            accountErrorRule: {
+                useridtel: { show: false, msg: "" },
+            },
+            }
+            },
     computed:{
         ...mapGetters(["info","isUserNeedLogin"]),
+        blurInputError() {
+            return (key, ruleName, errorName) => {
+                return this[errorName][key].show?this.validatorBlurRuleForm(key, ruleName):''
+            }
+        }        
     },
     created () {
     },
@@ -107,6 +126,95 @@ export default {
         }
     },
     methods:{
+        blurRuleForm(item, ruleName, errorName) {
+        let error = ruleName ? this.validatorBlurRuleForm(item, ruleName) : this.validatorBlurRuleForm(item)
+        if (error.length === 0){
+            this[errorName][item].show = false;
+        } else {
+            this[errorName][item].show = true;
+            this[errorName][item].msg = error;
+        }
+        },
+        validatorBlurRuleForm(key, ruleName = '') {
+            let rules = {
+                useridtel: [{
+                    strategy: 'isNonEmpty',
+                    errorMsg: '手机号码不能为空！'
+                    }, {
+                    strategy: 'isMoblie',
+                    errorMsg: '手机号码格式不正确！'
+                    }],
+                verification_code: [{
+                        strategy: 'isNonEmpty',
+                        errorMsg: '短信验证码不能为空！'
+                    }, {
+                        strategy: 'minLength:6',
+                        errorMsg: '短信验证码长度不能小于 6 位！'
+                    }, {
+                        strategy: 'maxLength:6',
+                        errorMsg: '短信验证码长度不能大于 6 位！'
+                    }],
+                    captcha: [{
+                        strategy: 'isNonEmpty',
+                        errorMsg: '图形验证码不能为空！'
+                    }, {
+                        strategy: 'minLength:4',
+                        errorMsg: '图形验证码不能小于 4 位！'
+                    }, {
+                        strategy: 'maxLength:4',
+                        errorMsg: '图形验证码不能大于 4 位！'
+                    }],
+                    password: [{
+                        strategy: 'isNonEmpty',
+                        errorMsg: '密码不能为空！'
+                    },{
+                        strategy: 'isPasswordHaveNumberAndAlphabet',
+                        errorMsg: '密码只能是数字和字母的组合，不能包含特殊字符'
+                    },{
+                        strategy: 'minLength:6',
+                        errorMsg: '密码长度不能小于 6 位！'
+                    }, {
+                        strategy: 'maxLength:18',
+                        errorMsg: '密码长度不能大于 18 位！'
+                    }]
+                }
+            const validatorFunc = () => {
+                let validator = new Validator();
+                ruleName ? validator.add(this[ruleName][key], rules[key]) : validator.add(this[key], rules[key])
+                let errorMsg = validator.start()
+                return errorMsg
+            }
+            let errorMsg = validatorFunc()
+            if(errorMsg) {
+                return errorMsg;
+            }
+            return '';
+        },        
+        validatorPass() {
+            let useridtel = this.useridtel
+            const validatorFunc = () => {
+
+                let validator = new Validator();
+
+                validator.add(useridtel, [{
+                    strategy: 'isNonEmpty',
+                    errorMsg: '手机号码不能为空！'
+                }, {
+                    strategy: 'isMoblie',
+                    errorMsg: '手机号码格式不正确！'
+                }])
+
+                let errorMsg = validator.start()
+                return errorMsg
+            }
+            let errorMsg = validatorFunc()
+            if(errorMsg) {
+                console.log(errorMsg);
+                this.$message({ type: 'warning', message: errorMsg })
+                return false;
+            }
+            return true;
+            },
         /** 个人信息 */
         getPersonal() {
             return this.$request("/personal/home").then(data => {
@@ -118,6 +226,7 @@ export default {
                 this.$message.warning('请选择展示方式');
                 return;
             }
+            // if(!this.validatorPass()) return;
             this.currentevent();
         },
         currentevent(){
@@ -176,6 +285,40 @@ export default {
     }
 }
 </script>
+<style lang="scss" scoped>
+   .form_input .input {
+    font-size: 14px;
+    -webkit-appearance: none;
+    background-color: #FFF;
+    background-image: none;
+    border-radius: 4px;
+    border: 1px solid #DCDFE6;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    color: #606266;
+    display: inline-block;
+    // font-size: inherit;
+    height: 40px;
+    line-height: 40px;
+    outline: 0;
+    padding: 0 15px;
+    -webkit-transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+    transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+    width: 100%;
+        &:focus {
+            border-color: #ACD589;
+            outline: 0;
+        }
+   } 
+   .form_input .form_input-tips {
+        height: 1.3rem;
+        padding-top: 2px;
+        font-size: 0.6rem;
+        font-family: MicrosoftYaHei;
+        font-weight: 400;
+        color: rgba(206, 85, 26, 1);
+   }
+</style>
 <style lang="scss" scoped>
 @mixin full-width($support-type: margin, $min-width: null) {
   @if $support-type == "margin" {
@@ -370,6 +513,9 @@ export default {
                         width: 85%;
                         .from_item{
                             margin-bottom: 2rem;
+                            &:nth-child(2) {
+                                margin-bottom: 0.7rem;
+                            }
                             .from_item_title{
                                 font-size:14px;
                                 font-family:Microsoft YaHei;
