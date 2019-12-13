@@ -4,9 +4,9 @@
       <van-loading color="#638C0B" ref="appLoading"  />
     </div>
     <keep-alive>
-      <router-view v-if="$route.meta.keepAlive"></router-view>
+      <router-view v-if="$route.meta.keepAlive&&pageRelode"></router-view>
     </keep-alive>
-    <router-view v-if="!$route.meta.keepAlive"></router-view>
+    <router-view v-if="!$route.meta.keepAlive&&pageRelode"></router-view>
   </div>
 </template>
 
@@ -17,13 +17,16 @@ import { Loading } from "vant";
 Vue.use(Loading);
 export default {
   name: "app",
+  provide () {
+    return {
+      reload: this.reload
+    }
+  },
   data() {
     return {
       callShow: false,
+      pageRelode: true
     }
-  },
-  mounted() {
-      
   },
   computed: {
     loading() {
@@ -31,6 +34,14 @@ export default {
         this.$store.commit("loadStatus", false);
       }, 3000);
       return this.$store.state.loading
+    }
+  },
+  methods: {
+    reload() { // 实现无痕刷新页面
+      this.pageRelode = false;
+      this.$nextTick(() => {
+        this.pageRelode = true;
+      })
     }
   }
 };

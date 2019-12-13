@@ -119,6 +119,12 @@
                     <span class="custom-title">更改绑定手机</span>
                 </template>
             </van-cell>
+            <!-- <van-cell is-link :border="false" to="/contactway">
+                <template slot="title">
+                    <img class="icon" src="../assets/img/contact-way.png" alt="">
+                    <span class="custom-title">设置联系方式</span>
+                </template>
+            </van-cell> -->
         </div>
         <div class="logout" @click="logout">退出登录</div>
     </div>

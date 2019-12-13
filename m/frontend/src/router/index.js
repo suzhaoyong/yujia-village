@@ -171,6 +171,11 @@ const router = new Router({
       component: () => import('@/pages/personalCenter/changephone')
     },
     {
+      // 设置联系方式
+      path: '/contactway',
+      component: () => import('@/pages/personalCenter/contactWay')
+    },
+    {
       // 邀请
       path: '/invitation',
       component: () => import('@/pages/personalCenter/invitation')

@@ -13,7 +13,7 @@
         </div>
         <div class="title">成功邀请</div>
         <div class="success-invitation">
-            <van-list v-model="loading" :offset="30" :finished="finished" finished-text="没有更多了" @load="onLoad">
+            <van-list v-if="userInfo.length>0" v-model="loading" :offset="30" :finished="finished" finished-text="没有更多了" @load="onLoad">
                 <van-collapse v-model="activeName" accordion >
                     <van-collapse-item :border="false" :name="item.id" :value="'他的邀请('+item.sub_level.length+')'" 
                     v-for="(item,index) in userInfo" :key="index">
@@ -33,6 +33,7 @@
                     </van-collapse-item>
                 </van-collapse>
             </van-list>
+            <div class="none" v-else>暂无邀请</div>
         </div>
         <div class="invite-bottom">
             <div class="invite" @click="immediatelyInvitation">立即邀请</div>
@@ -287,6 +288,14 @@ export default {
         .time {
             margin-left: 60px;
         }
+    }
+    .none {
+        width: 100%;
+        height: 46px;
+        text-align: center;
+        line-height: 46px;
+        font-size: 14px;
+        color: #999;
     }
 }
 .invite-bottom {
