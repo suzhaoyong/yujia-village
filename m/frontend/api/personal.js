@@ -211,7 +211,7 @@ export function getMyFollowTrain() {
 }
 /** 关注培训信息(我想学) */
 export function getFollowTrain(id = '') {
-  return request.get(`/personal/followTrain?id=${id}`)
+  return request.get(`/personal/followTrain/${id}`)
 }
 /** 给老师点赞 */
 export function postThumbsUp(id = '') {

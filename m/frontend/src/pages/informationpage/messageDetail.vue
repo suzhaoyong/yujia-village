@@ -119,8 +119,13 @@ export default {
   data () {
     return {
       courseId: '',
-      detailData: [],
-      train_discount: [],
+      detailData: {
+        train_image: [],
+        train_old_image: []
+      },
+      train_discount: {
+        积分: []
+      },
       crowds: [],
       intro: '',
       outline: '',
@@ -167,8 +172,8 @@ export default {
       this.childShow = data
     },
     goback () {
-      // this.$router.go(-1)
-      this.$router.replace('/yogamessage/list')
+      this.$router.go(-1)
+      // this.$router.replace('/yogamessage/list')
     },
     getmessageDetail(id) {
       this.$request.get('trains/' + id).then((res) => {

@@ -93,7 +93,7 @@
       </van-popup>
       <div class="message-main-container" :style="swiper? 'padding-top: 80px': 'padding-top: 40px'">
           <div class="message-main-container-list" v-if="messageLists.length > 0" >
-            <div class="message-main-container-list-count" v-for="list in messageLists" :key="list.id" @click="viewdetail(list.id)">
+            <div class="message-main-container-list-count" v-for="(list, index) in messageLists" :key="list.id" @click="viewdetail(list.id)">
               <div class="message-main-container-list-count-img" :style="{ 'background-image': 'url(' + list.teacher_img + ')','background-repeat':'no-repeat','background-size':'cover' }">
                 <!-- <img :src="list.teacher_img"> -->
               </div>
@@ -109,7 +109,8 @@
                   <span class="p4-hand">观看   {{ list.views  }}</span>
                   <span class="p4-eye">想学   {{ list.follow }}</span>
                 </div>
-                <button class="wantbtn" @click.stop="study(list.id)">想学</button>
+                <button v-if="parseInt(list.state) === 1" class="wantbtn" @click.stop="cancelStudy(list.id, index)">取消</button>
+                <button v-else class="wantbtn" @click.stop="study(list.id, index)">想学</button>
               </div>
             </div>
           </div>
@@ -314,21 +315,37 @@ export default {
           Toast('只有这么多了');
         }
     },
+    cancelStudy(id, index) {
+
+      this.wantStudy(id)
+        .then(() => {
+          this.$set(this.messageLists, index, {...this.messageLists[index], state: 0})
+        })
+    },
     // 我想学的操作
-    study(id) {
+    study(id, index) {
       if (!JSON.parse(sessionStorage.getItem("user"))) {
         this.$router.push('/login')
         Toast('请登录')
         return;
       }
       this.wantStudy(id)
+        .then(() => {
+          this.$set(this.messageLists, index, {...this.messageLists[index], state: 1})
+        })
       return false;
     },
     wantStudy(id) {
       // 调用我想学接口
-      getFollowTrain(id)
+      return getFollowTrain(id)
         .then(data => {
-          Toast('已添加至我的收藏');
+          const {status} = data
+          if(parseInt(status) === 1) {
+            Toast('已添加至我的收藏');
+          }
+          if(parseInt(status) === 0) {
+            Toast('取消成功');
+          }
         })
     },
     // 下拉刷新

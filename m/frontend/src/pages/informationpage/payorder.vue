@@ -38,9 +38,12 @@
     </div>
     <div class="pay-way">
       <div class="pay-way-text">支付方式</div>
-      <van-radio-group v-model="pay">
-        <van-radio name="1" checked-color="#8FCD71">
+      <van-radio-group v-model="payway">
+        <van-radio name="支付宝" checked-color="#8FCD71">
           <img class="pay-way-img" src="../../assets/img/zfb.png" alt />
+        </van-radio>
+        <van-radio name="微信" checked-color="#8FCD71">
+          <img class="pay-way-img" src="../../assets/img/wx.png" alt />
         </van-radio>
       </van-radio-group>
     </div>
@@ -123,13 +126,6 @@ export default {
     creatOrder() {
       const orderParams = this.paramsDeal();
       this.$request.post("/trains/new/order", orderParams).then(res => {
-        //   if(res.code === 200) {
-        //     if (this.fraction === 0) {
-        //         Toast("课程已购买")
-        //     } else {
-        //         this.payMoney(res.out_trade_no);
-        //     }
-        // }
         if (res.msg === "OK") {
           if (this.fraction === 0 || res.code === 200) {
             Toast("恭喜您，课程购买成功");
@@ -155,7 +151,12 @@ export default {
             this.$router.go(-1);
           }, 2000);
         }
-      });
+      })
+      .catch((error) => {
+          this.$toast({
+            message: error.msg
+          });
+      })
     },
     // 获取支付宝接口
     payMoney(orderId) {
@@ -233,6 +234,9 @@ export default {
       this.$request
         .get("/alipay/wechat/h/test?out_trade_no=" + orderId)
         .then(res => {
+          // const { mweb_url } = res
+          // console.log(mweb_url);
+          // window.open(mweb_url, "_blank");
           let routeData = this.$router.resolve({
             path: "payforwx",
             query: { htmls: res.mweb_url, body: res.body, id: res.out_trade_no }
