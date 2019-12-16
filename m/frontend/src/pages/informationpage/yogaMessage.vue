@@ -109,7 +109,7 @@
                   <span class="p4-hand">观看   {{ list.views  }}</span>
                   <span class="p4-eye">想学   {{ list.follow }}</span>
                 </div>
-                <button v-if="parseInt(list.state) === 1" class="wantbtn" @click.stop="cancelStudy(list.id, index)">取消</button>
+                <button v-if="parseInt(list.is_prais) === 1" class="wantbtn" @click.stop="cancelStudy(list.id, index)">取消</button>
                 <button v-else class="wantbtn" @click.stop="study(list.id, index)">想学</button>
               </div>
             </div>
@@ -126,6 +126,7 @@
 <script>
 import Vue from 'vue';
 import areaList from '../market/goods/area_list'
+import { mapGetters } from "vuex"
 import { goAdvertingApi } from '@/api/main'
 import { PullRefresh, Toast } from 'vant';
 // import { mapGetters } from "vuex";
@@ -186,13 +187,20 @@ export default {
       advertis3: {} // // 广告位2
     }
   },
+  computed: {
+    ...mapGetters(["info", "isUserNeedLogin"]),
+  },
   created() {
     this.messagetypeList()
     this.getAdvertising()
   },
   mounted () {
     setTimeout(() => {
-      this.messageList()
+      if(this.isUserNeedLogin) {
+        this.messageList()
+      } else {
+        this.loginMessageList()
+      }
     }, 200)
     this.PullUpReload()
   },
@@ -303,6 +311,18 @@ export default {
         })
       }
     },
+    //登陆成功之后 获取列表
+    loginMessageList (page = 1) {
+       if(this.$route.query.id) {
+          this.classfly.map((item, index) =>{if(item.id == this.$route.query.id){ this.spanIndex2.push(index)} })
+          this.selectTtype.push(Number(this.$route.query.id))
+          this.searchResult('confirm')
+      } else {
+        this.$request.get('/trains/index/login?page=' + page,{time: false}).then((res) => {
+          this.fenye(this.pages, res);
+        })
+      }
+    },
     fenye(page, res) {
       if (page <= res.last_page ) {
           res.data.map((item) => {
@@ -319,7 +339,7 @@ export default {
 
       this.wantStudy(id)
         .then(() => {
-          this.$set(this.messageLists, index, {...this.messageLists[index], state: 0})
+          this.$set(this.messageLists, index, {...this.messageLists[index], is_prais: 0})
         })
     },
     // 我想学的操作
@@ -331,7 +351,7 @@ export default {
       }
       this.wantStudy(id)
         .then(() => {
-          this.$set(this.messageLists, index, {...this.messageLists[index], state: 1})
+          this.$set(this.messageLists, index, {...this.messageLists[index], is_prais: 1})
         })
       return false;
     },
@@ -371,7 +391,11 @@ export default {
               // 条件筛选
               _this.getConditiondata(_this.pages, _this.getFiltersParams())
             } else {
-              _this.messageList(_this.pages);
+              if(this.isUserNeedLogin) {
+                _this.messageList(_this.pages);
+              } else {
+                _this.loginMessageList(_this.pages)
+              }
             }
             isScroll = true
           }
@@ -406,7 +430,11 @@ export default {
     },
     // 获取条件筛选的数据
     getConditiondata(page =1, params) {
-      this.conditionQuery(page, params);
+       if(this.isUserNeedLogin) {
+        this.conditionQuery(page, params);
+      } else {
+        this.loginConditionQuery(page, params)
+      }
     },
     getFiltersParams (params = {}) {
       params = {
@@ -424,11 +452,41 @@ export default {
     },
     // 排序请求
     getRank (page, params) {
-      this.conditionQuery(page, params);
+      if(this.isUserNeedLogin) {
+        this.conditionQuery(page, params);
+      } else {
+        this.loginConditionQuery(page, params)
+      }
     },
     // 课程筛选
     conditionQuery(page, params) {
       this.$request.post('/trains?page=' + page, params).then(res => {
+        if(res) {
+          this.fenye(page, res);
+          this.isShow = false;
+          if(this.keyWord === '') {
+            this.isActive = '0';
+          }
+        } 
+      }).catch(error => {
+        if(error.code == 422 && error.msg === 'max price 字段是必须的当 min price 是存在的') {
+          Toast('请输入最大价格');
+        } else if(error.code == 422 && error.msg === 'min price 字段是必须的当 max price 是存在的') {
+          Toast('请输入最低价格');
+        } else if(error.code == 422 && error.msg === 'end time 字段是必须的当 start time 是存在的') {
+          Toast('请输入截止时间');
+        } else if(error.code == 422 && error.msg === 'start time 字段是必须的当 end time 是存在的') {
+          Toast('请输入起始时间');
+        } else if(error.code == 422 && error.msg === 'end time 必须是 start time 之后的一个日期') {
+          Toast('时间选择有误，请重新选择');
+        }
+        // 处理筛选失败时，数据为空的情况
+        this.messageLists = JSON.parse(window.sessionStorage.getItem('message'));
+      }) 
+    },
+    // 课程筛选
+    loginConditionQuery(page, params) {
+      this.$request.post('/trains/store/login?page=' + page, params).then(res => {
         if(res) {
           this.fenye(page, res);
           this.isShow = false;
