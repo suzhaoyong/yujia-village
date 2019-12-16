@@ -91,8 +91,8 @@
           :columns-placeholder="['请选择', '请选择', '请选择']"
         />
       </van-popup>
-      <div class="message-main-container" :style="swiper? 'padding-top: 80px': 'padding-top: 40px'">
-          <div class="message-main-container-list" v-if="messageLists.length > 0" >
+      <div class="message-main-container" :style="swiper? 'padding-top: 80px': 'padding-top: 40px'" ref="sectionbox" >
+          <div class="message-main-container-list" v-show="messageLists.length > 0" >
             <div class="message-main-container-list-count" v-for="(list, index) in messageLists" :key="list.id" @click="viewdetail(list.id)">
               <div class="message-main-container-list-count-img" :style="{ 'background-image': 'url(' + list.teacher_img + ')','background-repeat':'no-repeat','background-size':'cover' }">
                 <!-- <img :src="list.teacher_img"> -->
@@ -114,7 +114,7 @@
               </div>
             </div>
           </div>
-          <div v-else class="defaultpage">
+          <div v-show="messageLists.length === 0" class="defaultpage">
             <img src="../../../static/img/defaultpage.png">
             <span>没有发现哦(╯▽╰)</span>
           </div>
@@ -193,6 +193,30 @@ export default {
   created() {
     this.messagetypeList()
     this.getAdvertising()
+  },
+  activated () {
+    this.$refs.sectionbox.scrollTop = sessionStorage.getItem('scrollTop')
+  },
+  beforeRouteLeave (to, from, next) {
+    const changeKeepAlive = (parentName, name, keepAlive) => {
+      this.$router.options.routes.map((item) => {
+        // console.log(item);
+        if(item && item.children) {
+          item.children.map(sub_item => {
+            if (sub_item.name === parentName || sub_item.name === name) {
+              sub_item.meta.keepAlive = keepAlive
+            }
+          })
+        }
+      })
+    }
+    if (to.name === 'messagedetail') {
+      changeKeepAlive('', 'yogamessage list', true)
+    } else {
+      changeKeepAlive('', 'yogamessage list', false)
+      sessionStorage.setItem('scrollTop', 0)
+    }
+    next()
   },
   mounted () {
     setTimeout(() => {
@@ -296,6 +320,9 @@ export default {
     },
     // 点击li跳转到详情页
     viewdetail (id) {
+      let sectionboxScrollTop = this.$refs.sectionbox.scrollTop
+      sessionStorage.setItem('scrollTop', sectionboxScrollTop)
+
       this.$router.push('/messagedetail/'+id)
       return false;
     },
@@ -654,7 +681,8 @@ export default {
           bottom: 0;
           z-index: 1025;
           width: 335px;
-          overflow: scroll;
+          overflow-x: hidden;
+          overflow-y: scroll;
           font-size: 14px;
           margin: 32px 10px 60px 24px;
           &-price {
@@ -775,7 +803,9 @@ export default {
       flex: 1;
       height: 100%;
       padding-top: 40px;
-      overflow: auto;
+      // overflow: auto;
+      overflow-x: hidden;
+      overflow-y: scroll;
       &-list {
         width: 100%;
         background: #EEEEEE;

@@ -9,19 +9,19 @@ Vue.use(Router)
 const router = new Router({
   // mode: 'history',
   mode: 'hash',
-  scrollBehavior(to, from, savedPosition) {
-    if (savedPosition) {
-      return savedPosition
-    } else {
-      if (from.meta.keepAlive) {
-        from.meta.savedPosition = document.body.scrollTop;
-      }
-      return {
-        x: 0,
-        y: to.meta.savedPosition || 0
-      }
-    }
-  },
+  // scrollBehavior(to, from, savedPosition) {
+  //   if (savedPosition) {
+  //     return savedPosition
+  //   } else {
+  //     if (from.meta.keepAlive) {
+  //       from.meta.savedPosition = document.body.scrollTop;
+  //     }
+  //     return {
+  //       x: 0,
+  //       y: to.meta.savedPosition || 0
+  //     }
+  //   }
+  // },
   routes: [{
       path: '/',
       redirect: '/main'
@@ -330,7 +330,7 @@ const router = new Router({
         name: 'yogamessage list',
         meta: {
           header_name: 'yogamessage',
-          keepAlive: false
+          keepAlive: true 
         },
         component: () => import('@/pages/informationpage/yogaMessage.vue')
       }]
@@ -359,13 +359,20 @@ const router = new Router({
   ]
 })
 
+// router.beforeEach((to, from, next) => {
+//   // 进入是详情，且从首页过来的，才缓存
+//   console.log(from.path.match('list'));
+//   if (from.path.match('list') || (to.path.match('detail') && from.path.match('store/category'))||(to.path.match('teacherDetails') && from.path.match('teacherClub/list'))){
+//     from.meta.keepAlive = true
+//   } else {
+//     from.meta.keepAlive = false
+//   }
+//   next()
+// })
 router.beforeEach((to, from, next) => {
-  // 进入是详情，且从首页过来的，才缓存
-  if ((to.path.match('detail') && from.path.match('store/category'))||(to.path.match('teacherDetails') && from.path.match('teacherClub/list'))){
-    from.meta.keepAlive = true
-  } else {
-    from.meta.keepAlive = false
-  }
+  document.body.scrollTop = 0
+  document.documentElement.scrollTop = 0
+  window.scrollTo(0, 0)
   next()
 })
 
