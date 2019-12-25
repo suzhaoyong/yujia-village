@@ -418,7 +418,7 @@ export default {
               // 条件筛选
               _this.getConditiondata(_this.pages, _this.getFiltersParams())
             } else {
-              if(this.isUserNeedLogin) {
+              if(_this.isUserNeedLogin) {
                 _this.messageList(_this.pages);
               } else {
                 _this.loginMessageList(_this.pages)
