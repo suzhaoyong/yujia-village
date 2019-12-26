@@ -10,6 +10,7 @@ import './assets/font_jx305aumbc/iconfont.css'
 import store from './store'
 import 'amfe-flexible'
 import 'vant/lib/button/style';
+import './plugins/index'
 import Share from 'vue-social-share'
 import 'vue-social-share/dist/client.css';
 import {
