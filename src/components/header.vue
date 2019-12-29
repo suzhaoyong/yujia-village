@@ -51,6 +51,7 @@
               <el-menu-item index="cultivate"><a href="/cultivate" onclick="return false;">培训信息</a></el-menu-item>
               <el-menu-item index="yogoknowledge"><a href="/yogoknowledge" onclick="return false;">瑜伽知识</a></el-menu-item>
               <el-menu-item index="yogoinformation"><a href="/yogoinformation" onclick="return false;">瑜伽资讯</a></el-menu-item>
+              <el-menu-item index="yogaConvention"><a href="/yogaConvention" onclick="return false;">瑜伽大会</a></el-menu-item>
               <el-menu-item index="market"><a href="/market" onclick="return false;">商城</a></el-menu-item>
               <el-menu-item index="aboutus"><a href="/aboutus" onclick="return false;">关于我们</a></el-menu-item>
               <el-submenu index="personal">
@@ -462,7 +463,7 @@ a:hover{
   }
 }
 .el-menu {
-  width: 82%;
+  width: 84%;
   margin: 0 auto;
   background: #e8f5db;
   height: 64px;
@@ -495,7 +496,7 @@ a:hover{
   height: 65px;
   font-size: 16px;
   color: #2c2c2c;
-  padding: 0 24px;
+  padding: 0 19px;
   cursor: pointer;
   -webkit-transition: border-color 0.3s, background-color 0.3s, color 0.3s;
   transition: border-color 0.3s, background-color 0.3s, color 0.3s;

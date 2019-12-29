@@ -50,6 +50,14 @@
                 </div>
                 </div>
                  <div class="foot-under">
+                     <div class="foot-under-title2">
+                        <div class="link">友情链接：</div>
+                        <div class="link2"  v-for="(item,index) in link" :key="index">
+                            <a target="_blank" :href="item.url">
+                            <span :title="item.title">{{item.title}}</span>
+                            </a>
+                        </div>
+                     </div>
                      <div class="foot-under-title">
                     <span>Copyright © 2017-2022 上海一伽健身服务有限公司 All rights reserved</span>
                     <span class="span3">沪ICP备16052417号-1</span> 
@@ -63,9 +71,18 @@
 export default {
   data() {
     return {
+        link:[]
     };
   },
+  created(){
+      this.friendlylink();
+  },
   methods:{
+    friendlylink(){
+     this.$request.get(`/link`).then(data => {
+         this.link = data;
+      }); 
+    }
   }
 };
 </script>
@@ -193,6 +210,24 @@ export default {
         .span3{
             padding-left: 50px;
          }
+      }
+      .foot-under-title2{
+        width: 57%;
+        float: right;
+        text-align: left;
+        color: #2c2c2c;
+        font-size: 14px;
+        margin-bottom: 1rem;
+        display: flex;
+        .link2{
+            display: flex;
+            cursor: pointer;
+            padding-right: 25px;
+            span{
+            color: #2c2c2c;
+            font-size: 14px;
+            }
+        }
       }
     }
 }
