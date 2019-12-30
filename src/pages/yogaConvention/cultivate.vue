@@ -34,7 +34,7 @@
                     end-placeholder="结束日期"
                   ></el-date-picker>
                 </div>
-                <div class="cultivate1-two">
+                <!-- <div class="cultivate1-two">
                   <span class="span">价格：</span>
                   <div type="text" class="butt" @click="removeTag('price')">全部</div>
                   <div class="button-price">
@@ -58,7 +58,7 @@
                       class="price-input2"
                     ></el-input>
                   </div>
-                </div>
+                </div> -->
                 <div class="cultivate1-three">
                   <span class="span">地区：</span>
                   <div type="text" class="butt" @click="removeTag('area')">全部</div>
@@ -69,7 +69,7 @@
                     @province="onChangeProvince" @city="onChangeCity" @area="onChangeArea" 
                   ></v-distpicker>
                 </div>
-                <div class="cultivate1-four">
+                <!-- <div class="cultivate1-four">
                   <span class="span">难度：</span>
                   <div type="text" class="butt" @click="removeTag('diff')">全部</div>
                   <div class="button-text">
@@ -81,8 +81,8 @@
                       @click="selected(item)"
                     >{{item.name}}</div>
                   </div>
-                </div>
-                <div class="cultivate1-five" style="padding-top: 0.6rem;">
+                </div> -->
+                <!-- <div class="cultivate1-five" style="padding-top: 0.6rem;">
                   <span class="span">类别：</span>
                   <div type="text" class="butt" @click="removeTag('classfiy')">全部</div>
                   <div class="button-classfiy">
@@ -115,7 +115,7 @@
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> -->
                 <div class="cultivate1-six">
                   <span class="span">已选：</span>
                   <el-tag
@@ -134,9 +134,7 @@
               </div>
               <div class="fruit">
                 <span :class="resultFw ? 'fw':'fw' ">找到下列结果</span>
-                <span class="fruit-item" :class="defaultFw ? 'fw':'' " @click="defaultRank('default')">默认排序</span>
-                <span class="fruit-item" :class="hostFw ? 'fw':'' " @click="hostRank('host')">热度</span>
-                <span class="fruit-item" :class="priceFW ? 'fw':'' " @click="priceRank('price')">价格</span>
+                <span class="fruit-item" :class="defaultFw ? 'fw':'' " @click="defaultRank('default')">最新</span>
                 <span>
                   <span v-if="priceFlag === ''" class="el-icon-sort"></span>
                   <div v-else style="display:inline-block;">
@@ -153,7 +151,7 @@
                   style="padding-bottom: 0.5rem;"
                 >
                   <div>
-                    <div class="fruit-list-li-img" :style="`backgroundImage: url(${item.teacher_img})`"  @click="selectItem(item)" >
+                    <div class="fruit-list-li-img" :style="`backgroundImage: url(${item.path})`"  @click="selectItem(item)" >
                       <!-- <img :src="item.teacher_img" /> -->
                     </div>
                     <div class="fruit-list-li-text"  @click="selectItem(item)">
@@ -162,21 +160,21 @@
                       </a>
                     </div>
                     <div class="fruit-list-li-text2">
-                      <el-rate :colors="['#58B708','#58B708','#58B708']" disabled :value="item.diff"></el-rate>
-                      <div class="fruit-price">￥{{item.price}}</div>
+                      <!-- <el-rate :colors="['#58B708','#58B708','#58B708']" disabled :value="item.diff"></el-rate> -->
+                      <div class="fruit-price">{{item.startTime}} / {{item.endTime}}</div>
                     </div>
-                    <div class="fruit-detail">{{item.address}}</div>
+                    <div class="fruit-detail">{{item.custom_address}}</div>
                   </div>
                   <div class="list-eye">
                     <a class="eye" href="javascript:;" :title="'点击率:'+(item.views||100)"></a>
                     <span class="span">{{item.views||100}}</span>
-                    <span class="hand">
+                    <!-- <span class="hand">
                       <a class="hd" href="javascript:;" :title="'想学:'+(item.follow||100)"></a>
                       <span>{{item.follow||100}}</span>
-                    </span>
-                    <a :href="`/cultivate/detail/${item.id}`" onclick="return false;">
+                    </span> -->
+                    <!-- <a :href="`/cultivate/detail/${item.id}`" onclick="return false;">
                       <span class="study" @click="study(item.id)">我想学</span>
-                    </a>
+                    </a> -->
                   </div>
                 </div>
                 <not-found v-if="fruit.length === 0" type="not-fond" msg="暂无相关信息"></not-found>
@@ -193,7 +191,7 @@
                 ></el-pagination>
               </div>
             </div>
-            <session-title name="热门课程" brief="Sometimes beauty is so simple"></session-title>
+            <!-- <session-title name="热门课程" brief="Sometimes beauty is so simple"></session-title>
             <div class="cultivate-count-div3">
               <div
                 class="fruit-list-li"
@@ -201,7 +199,6 @@
                 :key="index">
                 <div>
                   <div class="fruit-list-li-img" :style="`backgroundImage: url(${item.teacher_img})`" @click="selectItem(item)">
-                  <!-- <img :src="item.teacher_img" /> -->
                   </div>
                   <div class="fruit-list-li-text" @click="selectItem(item)">
                     <a :href='`/cultivate/detail/${item.id}`' onclick="return false;" style="color:#2c2c2c;text-decoration:none">
@@ -227,8 +224,8 @@
                 </div>
               </div>
               <not-found v-if="fruitclasslist.length === 0" type="not-fond" msg="暂无相关信息"></not-found>
-            </div>
-            <session-title name="最新发布" brief="Sometimes beauty is so simple"></session-title>
+            </div> -->
+            <!-- <session-title name="最新发布" brief="Sometimes beauty is so simple"></session-title>
             <div
               v-for="(item, index) in newList"
               :key="index"
@@ -251,7 +248,7 @@
                 </div>
               </a>
             </div>
-            <not-found v-if="newList.length === 0" type="not-fond" msg="暂无相关信息"></not-found>
+            <not-found v-if="newList.length === 0" type="not-fond" msg="暂无相关信息"></not-found> -->
           </div>
           </keep-alive>
         </div>
@@ -271,14 +268,14 @@ import {
   getTrainsById,
   postTrainsRank,
   followTrain
-} from "@/api/trains";
+} from "@/api/convention";
 import {
   getFollowTrain
 } from "@/api/personal";
 import { mapGetters } from "vuex";
 export default {
   metaInfo: {
-    title: '培训信息-瑜伽培训课程-中国瑜伽村培训日程表', // set a title
+    title: '瑜伽大会-瑜伽培训课程-中国瑜伽村培训日程表', // set a title
     meta: [{       // set meta
       name: 'keyWords',
       content: '瑜伽培训，瑜伽培训课程，中国瑜伽村培训课程'
@@ -449,7 +446,6 @@ export default {
     }
   },
   methods: {
-
     setSize:function () {
             this.bannerHeight = 542 / 1920 * this.screenWidth;
           },
@@ -532,7 +528,7 @@ export default {
               });
             this.classfiy = mapClassfiy(res.course_types);
             // this.classfiy = res.course_types;
-            this.banner = res.banner;
+            // this.banner = res.banner;
             return this.classfiy;
         })
         .then(classfiy => {
@@ -578,18 +574,20 @@ export default {
     },
     postGetTrainsList(page = this.current_page, params) {
       postTrainsList(page, params).then(data => {
-        this.fruit = data.data;
-        this.per_page = data.per_page;
-        this.current_page = data.current_page;
-        this.total = data.total;
+        this.fruit = data.all.data;
+        this.per_page = data.all.per_page;
+        this.current_page = data.all.current_page;
+        this.total = data.all.total;
+        this.banner = data.banner; 
       });
     },
     getTrainsList(page = this.current_page) {
       getTrains(page).then(data => {
-        this.fruit = data.data;
-        this.per_page = data.per_page;
-        this.current_page = data.current_page;
-        this.total = data.total;
+        this.fruit = data.all.data;
+        this.per_page = data.all.per_page;
+        this.current_page = data.all.current_page;
+        this.total = data.all.total;
+        this.banner = data.banner; 
         if (page > 1) return;
       });
     },
@@ -623,7 +621,7 @@ export default {
         this.fruit = data.data;
         this.per_page = data.per_page;
         this.current_page = data.current_page;
-        this.total = data.total;       
+        this.total = data.total;   
       })
     },
     postGetRank(page=this.current_page, params) {
@@ -861,11 +859,11 @@ export default {
     },
     selectItem(item) {
       this.$router.push({
-        path: `/cultivate/detail/${item.id}`,
+        path: `/yogaConvention/detail/${item.id}`,
       });
     },
     goMarketDetail() {
-      this.$router.push("/cultivate/detail");
+      this.$router.push("/yogaConvention/detail");
     }
   }
 };
@@ -986,7 +984,7 @@ img {
   .cultivate-count {
     width: 60rem;
     margin: 0 auto;
-    margin-top: -24.4rem;
+    margin-top: -12.4rem;
     height: 100%;
     padding-bottom: 3rem;
     // display: inline-block;
@@ -1298,7 +1296,8 @@ img {
             // align-items: center;
             width: 90%;
             margin: 0 auto;
-            margin-top: 0.5rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
             h4 {
               font-size: 1.3rem;
               color: #2c2c2c;
@@ -1306,7 +1305,7 @@ img {
           }
           .fruit-detail {
             width: 90%;
-            height: 57px;
+            height: 50px;
             margin: 0 auto;
             margin-top: 1rem;
           }
@@ -1491,7 +1490,8 @@ img {
           // align-items: center;
           width: 90%;
           margin: 0 auto;
-          margin-top: 0.5rem;
+          margin-top: 1rem;
+          margin-bottom: 1rem;
           h4 {
             font-size: 1.3rem;
             color: #2c2c2c;

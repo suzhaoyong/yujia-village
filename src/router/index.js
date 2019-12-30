@@ -268,6 +268,27 @@ const router = new Router({
       ]
     },
     {
+      path: '/yogaConvention',
+      name: 'yogaConvention',
+      component: Home,
+      children: [{
+          path: '/yogaConvention/index',
+          name: 'yogaConvention',
+          meta: {
+            header_name: 'yogaConvention'
+          },
+          component: () => import('@/pages/yogaConvention/cultivate')
+        }, //瑜伽大会
+        {
+          path: '/yogaConvention/detail/:id',
+          meta: {
+            header_name: 'yogaConvention'
+          },
+          component: () => import('@/pages/yogaConvention/detail')
+        }, //瑜伽大会-----详情
+      ]
+    },
+    {
       path: '/main',
       name: 'Main',
       component: Home, //首页
